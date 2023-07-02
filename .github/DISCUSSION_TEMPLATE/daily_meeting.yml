@@ -1,0 +1,12 @@
+title: "2023-XX-XX"
+body:
+  - type: textarea
+    attributes:
+      label: 데일리 미팅
+      description: "데일리 미팅 내용을 작성해주세요"
+      value: |
+        ### 어제의 회고
+        
+        ### 오늘의 할 일
+        
+        ### 내일의 할 일
