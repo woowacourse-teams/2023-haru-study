@@ -6,7 +6,8 @@
   "scripts": {
     "prod": "NODE_ENV=production webpack serve",
     "dev": "NODE_ENV=development webpack serve",
-    "build": "NODE_ENV=production webpack",
+    "test": "jest",
+    "build": "yarn test && NODE_ENV=production webpack",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -16,6 +17,8 @@
     "styled-components": "^6.0.2"
   },
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.22.5",
+    "@babel/plugin-transform-runtime": "^7.22.6",
     "@babel/preset-env": "^7.22.6",
     "@babel/preset-react": "^7.22.5",
     "@babel/preset-typescript": "^7.22.5",
@@ -26,6 +29,9 @@
     "@storybook/react": "^7.0.25",
     "@storybook/react-webpack5": "^7.0.25",
     "@storybook/testing-library": "^0.0.14-next.2",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@types/jest": "^29.5.2",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "@types/styled-components": "^5.1.26",
@@ -39,6 +45,10 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "html-webpack-plugin": "^5.5.3",
+    "jest": "^29.6.0",
+    "jest-environment-jsdom": "^29.6.0",
+    "jest-fetch-mock": "^3.0.3",
+    "msw": "^1.2.2",
     "prettier": "^2.8.8",
     "storybook": "^7.0.25",
     "ts-loader": "^9.4.4",
@@ -46,5 +56,8 @@
     "webpack": "^5.88.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
