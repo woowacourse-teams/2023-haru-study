@@ -12,11 +12,14 @@ defaults:
     working-directory: ./backend
 
 jobs:
-  if: contains(github.event.pull_request.labels.*.id, 5686155001) && contains(github.event.pull_request.labels.*.id, 5681142648)
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout source code
-      uses: actions/checkout@v3
+  build-test:
+    if: |
+      contains(github.event.pull_request.labels.*.id, 5686155001) &&
+      contains(github.event.pull_request.labels.*.id, 5681142648)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
 
-    - name: Build Test
-      run: ./gradlew build
+      - name: Build Test
+        run: ./gradlew build
