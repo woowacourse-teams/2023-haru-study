@@ -1,5 +1,12 @@
+import GlobalStyles from './styles/globalStyle';
+
 const App = () => {
-  return <></>;
+  return (
+    <>
+      <GlobalStyles />
+      Welcome Haru Study!
+    </>
+  );
 };
 
 export default App;
