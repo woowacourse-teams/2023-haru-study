@@ -6,7 +6,6 @@ on:
   pull_request:
     branches:
       - develop
-    # pr이 생성 되었을 때, 담당 유저가 등록되었을 때, PR에 코드가 머지되었을 때, 라벨이 달렸을 때 동작
     types: [ opened, synchronize, reopened ]
   workflow_dispatch:
 
