@@ -15,9 +15,9 @@ jobs:
   build-test:
     # label이 (BE && feature) || (BE && refactor)일 경우 실행
     if: |
-      (contains(github.event.pull_request.labels.*.id, 5686155001) &&
+      (contains(github.event.pull_request.labels.*.id, 5681136383) &&
       contains(github.event.pull_request.labels.*.id, 5681142648)) ||
-      (contains(github.event.pull_request.labels.*.id, 5686155001) &&
+      (contains(github.event.pull_request.labels.*.id, 5681136383) &&
       contains(github.event.pull_request.labels.*.id, 5681143873))
 
     runs-on: ubuntu-latest
