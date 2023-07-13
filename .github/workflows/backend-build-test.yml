@@ -1,0 +1,24 @@
+# workflow의 이름
+name: backend-build-test
+
+# PR 요청에 대해
+on:
+  pull_request:
+    branches:
+      - develop
+    # pr이 생성 되었을 때, 담당 유저가 등록되었을 때, PR에 코드가 머지되었을 때, 라벨이 달렸을 때 동작
+    types: [ opened, synchronize, reopened ]
+  workflow_dispatch:
+
+# 실행 해야할 job
+jobs:
+  check-label-id:
+    runs-on: ubuntu-latest
+    # 각 단계
+    steps:
+      # 소스코드 체크아웃
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      # 빌드
+      - name: label Test
+        run: cat $GITHUB_EVENT_PATH
