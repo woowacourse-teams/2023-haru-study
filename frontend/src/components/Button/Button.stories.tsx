@@ -20,7 +20,7 @@ export default meta;
  */
 export const DefaultButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'primary',
     size: 'medium',
   },
@@ -31,7 +31,7 @@ export const DefaultButton: Story = {
  */
 export const SecondaryButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'secondary',
     size: 'medium',
   },
@@ -42,7 +42,7 @@ export const SecondaryButton: Story = {
  */
 export const StudyingButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'studying',
     size: 'medium',
   },
@@ -53,7 +53,7 @@ export const StudyingButton: Story = {
  */
 export const RetrospectButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'retrospect',
     size: 'medium',
   },
@@ -64,7 +64,7 @@ export const RetrospectButton: Story = {
  */
 export const XSmallButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'primary',
     size: 'x-small',
     $block: false,
@@ -76,7 +76,7 @@ export const XSmallButton: Story = {
  */
 export const SmallButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'primary',
     size: 'small',
     $block: false,
@@ -88,7 +88,7 @@ export const SmallButton: Story = {
  */
 export const LargeButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'primary',
     size: 'large',
     $block: false,
@@ -100,7 +100,7 @@ export const LargeButton: Story = {
  */
 export const XLargeButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'primary',
     size: 'x-large',
     $block: false,
@@ -112,7 +112,7 @@ export const XLargeButton: Story = {
  */
 export const NoneBlockButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'primary',
     size: 'medium',
     $block: false,
@@ -124,7 +124,7 @@ export const NoneBlockButton: Story = {
  */
 export const OutlineButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'primary',
     size: 'medium',
     concept: 'outlined',
@@ -136,7 +136,7 @@ export const OutlineButton: Story = {
  */
 export const TextButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'primary',
     size: 'medium',
     concept: 'text',
@@ -148,7 +148,7 @@ export const TextButton: Story = {
  */
 export const DisableButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'primary',
     size: 'medium',
     disabled: true,
@@ -160,7 +160,7 @@ export const DisableButton: Story = {
  */
 export const CustomButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'primary',
     size: 'medium',
     css: css`
@@ -176,7 +176,7 @@ export const CustomButton: Story = {
  */
 export const LoadingButton: Story = {
   args: {
-    text: 'button',
+    children: 'button',
     variant: 'primary',
     size: 'medium',
     isLoading: true,

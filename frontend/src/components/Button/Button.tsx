@@ -1,12 +1,11 @@
 import { CSSProp, styled } from 'styled-components';
 import color from '../../styles/color';
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import CircularProgress from '../CircularProgress/CircularProgress';
 import { SIZE } from '../../constants/style';
 import { Size } from '../../types/style';
 
 type Props = {
-  text: string;
   variant: 'primary' | 'secondary' | 'studying' | 'retrospect';
   size: Size;
   isLoading?: boolean;
@@ -16,7 +15,7 @@ type Props = {
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = ({
-  text,
+  children,
   variant,
   size,
   onClick,
@@ -25,7 +24,7 @@ const Button = ({
   $block = true,
   concept = 'contained',
   css,
-}: Props) => {
+}: PropsWithChildren<Props>) => {
   return (
     <StyledButton
       onClick={onClick}
@@ -37,7 +36,7 @@ const Button = ({
       concept={concept}
       css={css}
     >
-      {isLoading ? <CircularProgress size={size} /> : text}
+      {isLoading ? <CircularProgress size={size} /> : children}
     </StyledButton>
   );
 };

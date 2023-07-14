@@ -1,7 +1,7 @@
 export const SIZE = {
-  'x-small': '16px',
-  small: '20px',
-  medium: '24px',
-  large: '28px',
-  'x-large': '32px',
+  'x-small': '1.6rem',
+  small: '2rem',
+  medium: '2.4rem',
+  large: '2.8rem',
+  'x-large': '3.2rem',
 } as const;
