@@ -60,7 +60,7 @@ export const RetrospectButton: Story = {
 };
 
 /**
- * `RetrospectButton`는 회고중일 때 보여지는 `Button` 스토립니다.
+ * `XSmallButton`는 font-size가 16px인 `Button` 스토립니다.
  */
 export const XSmallButton: Story = {
   args: {
@@ -72,7 +72,7 @@ export const XSmallButton: Story = {
 };
 
 /**
- * `RetrospectButton`는 회고중일 때 보여지는 `Button` 스토립니다.
+ * `SmallButton`는 font-size가 20px인 `Button` 스토립니다.
  */
 export const SmallButton: Story = {
   args: {
@@ -84,7 +84,7 @@ export const SmallButton: Story = {
 };
 
 /**
- * `RetrospectButton`는 회고중일 때 보여지는 `Button` 스토립니다.
+ * `LargeButton`는 font-size가 28px인 `Button` 스토립니다.
  */
 export const LargeButton: Story = {
   args: {
@@ -96,7 +96,7 @@ export const LargeButton: Story = {
 };
 
 /**
- * `RetrospectButton`는 회고중일 때 보여지는 `Button` 스토립니다.
+ * `XLargeButton`는 font-size가 32px인 `Button` 스토립니다.
  */
 export const XLargeButton: Story = {
   args: {
