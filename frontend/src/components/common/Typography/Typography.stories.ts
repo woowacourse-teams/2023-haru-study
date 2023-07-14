@@ -4,7 +4,7 @@ import Typography from './Typography';
 type Story = StoryObj<typeof Typography>;
 
 const meta: Meta<typeof Typography> = {
-  title: 'INPUTS/Typography',
+  title: 'DATA DISPLAY/Typography',
   component: Typography,
 };
 
