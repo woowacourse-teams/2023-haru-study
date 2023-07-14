@@ -1,38 +1,19 @@
 import { CSSProp, styled } from 'styled-components';
 import color from '../../styles/color';
 import { ButtonHTMLAttributes } from 'react';
-
-const SIZE = {
-  'x-small': '16px',
-  small: '20px',
-  medium: '24px',
-  large: '28px',
-  'x-large': '32px',
-} as const;
-
-type SIZE = keyof typeof SIZE;
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { SIZE } from '../../constants/style';
+import { Size } from '../../types/style';
 
 type Props = {
   text: string;
   variant: 'primary' | 'secondary' | 'studying' | 'retrospect';
-  size: SIZE;
+  size: Size;
   isLoading?: boolean;
   $block?: boolean;
   concept?: 'text' | 'contained' | 'outlined';
   css?: CSSProp;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
-
-const LoadingSpinner = () => {
-  return (
-    <StyledLoadingSinner>
-      <span>Loading</span>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </StyledLoadingSinner>
-  );
-};
 
 const Button = ({
   text,
@@ -56,7 +37,7 @@ const Button = ({
       concept={concept}
       css={css}
     >
-      {isLoading ? <LoadingSpinner /> : text}
+      {isLoading ? <LoadingSpinner size={size} /> : text}
     </StyledButton>
   );
 };
@@ -90,41 +71,4 @@ const StyledButton = styled.button<StyledButtonProps>`
   cursor: ${(props) => (props.isLoading ? 'progress' : props.disabled ? 'not-allowed' : 'pointer')};
 
   ${(props) => props.css}
-`;
-
-const StyledLoadingSinner = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  span {
-    color: transparent;
-  }
-
-  div {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #fff transparent transparent transparent;
-  }
-  div:nth-child(1) {
-    animation-delay: -0.45s;
-  }
-  div:nth-child(2) {
-    animation-delay: -0.3s;
-  }
-  div:nth-child(3) {
-    animation-delay: -0.15s;
-  }
-  @keyframes lds-ring {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 `;
