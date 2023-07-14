@@ -21,7 +21,7 @@ export default meta;
 export const DefaultButton: Story = {
   args: {
     children: 'button',
-    color: 'primary',
+    variant: 'primary',
   },
 };
 
@@ -31,27 +31,27 @@ export const DefaultButton: Story = {
 export const SecondaryButton: Story = {
   args: {
     children: 'button',
-    color: 'secondary',
+    variant: 'secondary',
   },
 };
 
 /**
- * `StudyingButton`는 학습중일 때 보여지는 `Button` 스토리입니다.
+ * `SuccessButton`는 성공에 관한 `Button` 스토리입니다.
  */
-export const StudyingButton: Story = {
+export const SuccessButton: Story = {
   args: {
     children: 'button',
-    color: 'studying',
+    variant: 'success',
   },
 };
 
 /**
- * `RetrospectButton`는 회고중일 때 보여지는 `Button` 스토립니다.
+ * `DangerButton`는 에러에 관한 `Button` 스토립니다.
  */
-export const RetrospectButton: Story = {
+export const DangerButton: Story = {
   args: {
     children: 'button',
-    color: 'retrospect',
+    variant: 'dander',
   },
 };
 
@@ -61,7 +61,7 @@ export const RetrospectButton: Story = {
 export const XSmallButton: Story = {
   args: {
     children: 'button',
-    color: 'primary',
+    variant: 'primary',
     size: 'x-small',
     $block: false,
   },
@@ -73,7 +73,7 @@ export const XSmallButton: Story = {
 export const SmallButton: Story = {
   args: {
     children: 'button',
-    color: 'primary',
+    variant: 'primary',
     size: 'small',
     $block: false,
   },
@@ -85,7 +85,7 @@ export const SmallButton: Story = {
 export const LargeButton: Story = {
   args: {
     children: 'button',
-    color: 'primary',
+    variant: 'primary',
     size: 'large',
     $block: false,
   },
@@ -97,7 +97,7 @@ export const LargeButton: Story = {
 export const XLargeButton: Story = {
   args: {
     children: 'button',
-    color: 'primary',
+    variant: 'primary',
     size: 'x-large',
     $block: false,
   },
@@ -109,8 +109,7 @@ export const XLargeButton: Story = {
 export const NoneBlockButton: Story = {
   args: {
     children: 'button',
-    color: 'primary',
-
+    variant: 'primary',
     $block: false,
   },
 };
@@ -121,19 +120,7 @@ export const NoneBlockButton: Story = {
 export const OutlineButton: Story = {
   args: {
     children: 'button',
-    color: 'primary',
     variant: 'outlined',
-  },
-};
-
-/**
- * `TextButton`는 텍스트 표현된 `Button` 스토리입니다.
- */
-export const TextButton: Story = {
-  args: {
-    children: 'button',
-    color: 'primary',
-    variant: 'text',
   },
 };
 
@@ -143,33 +130,57 @@ export const TextButton: Story = {
 export const DisableButton: Story = {
   args: {
     children: 'button',
-    color: 'primary',
+    variant: 'primary',
     disabled: true,
   },
 };
 
 /**
- * `CustomButton`는 버튼을 커스튬을 한 `Button` 스토리입니다.
+ * `CustomButton1`는 버튼을 커스튬을 한 `Button` 스토리입니다.
  */
-export const CustomButton: Story = {
+export const CustomButton1: Story = {
   args: {
     children: 'button',
-    color: 'primary',
+    variant: 'primary',
     $style: css`
       background-color: ${color.blue[100]};
       color: ${color.blue[500]};
       border: 1px solid ${color.blue[500]};
+      &:hover {
+        &:enabled {
+          background-color: ${color.blue[200]};
+        }
+      }
     `,
   },
 };
 
 /**
- * `CustomButton`는 로딩중일 때를 나타내는 `Button` 스토리입니다.
+ * `CustomButton2`는 버튼을 커스튬을 한 `Button` 스토리입니다.
+ */
+export const CustomButton2: Story = {
+  args: {
+    children: 'button',
+    variant: 'outlined',
+    $style: css`
+      color: ${color.red[500]};
+      border: 1px solid ${color.red[500]};
+      &:hover {
+        &:enabled {
+          background-color: ${color.white};
+        }
+      }
+    `,
+  },
+};
+
+/**
+ * `LoadingButton`는 로딩중일 때를 나타내는 `Button` 스토리입니다.
  */
 export const LoadingButton: Story = {
   args: {
     children: 'button',
-    color: 'primary',
+    variant: 'primary',
     isLoading: true,
   },
 };

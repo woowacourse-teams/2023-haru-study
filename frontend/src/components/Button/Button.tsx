@@ -1,42 +1,105 @@
 import { CSSProp, css, styled } from 'styled-components';
-import globalColor from '../../styles/color';
+import color from '../../styles/color';
 import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import CircularProgress from '../CircularProgress/CircularProgress';
 import { SIZE } from '../../constants/style';
 import { Size } from '../../types/style';
 
+const extractAndConvertNumbersFromText = (string: string) => Number(string.replace(/[^0-9]/g, ''));
+
+const VARIANT_TYPE = {
+  primary: css`
+    background-color: ${color.blue[500]};
+    color: ${color.white};
+    border: 1px solid transparent;
+    &:hover {
+      &:enabled {
+        background-color: ${color.blue[600]};
+      }
+    }
+  `,
+
+  secondary: css`
+    background-color: ${color.neutral[100]};
+    color: ${color.neutral[950]};
+    border: 1px solid transparent;
+    &:hover {
+      &:enabled {
+        background-color: ${color.neutral[200]};
+      }
+    }
+  `,
+
+  success: css`
+    background-color: ${color.teal[500]};
+    color: ${color.white};
+    border: 1px solid transparent;
+    &:hover {
+      &:enabled {
+        background-color: ${color.teal[600]};
+      }
+    }
+  `,
+
+  dander: css`
+    background-color: ${color.red[500]};
+    color: ${color.white};
+    border: 1px solid transparent;
+    &:hover {
+      &:enabled {
+        background-color: ${color.red[600]};
+      }
+    }
+  `,
+
+  outlined: css`
+    background-color: ${color.white};
+    color: ${color.blue[500]};
+    border: 1px solid ${color.blue[500]};
+    &:hover {
+      &:enabled {
+        background-color: ${color.white};
+      }
+    }
+  `,
+} as const;
+
+type Variant = keyof typeof VARIANT_TYPE;
+
 type Props = {
-  color: 'primary' | 'secondary' | 'studying' | 'retrospect';
+  variant: Variant;
   size?: Size;
   isLoading?: boolean;
   $block?: boolean;
-  variant?: 'text' | 'contained' | 'outlined';
   $style?: CSSProp;
 };
 
 const Button = ({
+  variant,
   children,
-  color,
   onClick,
   disabled,
   isLoading,
   size = 'medium',
   $block = true,
-  variant = 'contained',
   $style,
 }: PropsWithChildren<Props> & ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <StyledButton
       onClick={onClick}
+      variant={variant}
       isLoading={isLoading}
-      color={color}
       size={size}
       $block={$block}
       disabled={disabled}
-      variant={variant}
       $style={$style}
     >
-      {isLoading ? <CircularProgress size={size} /> : children}
+      {isLoading && (
+        <CircularProgressLayout>
+          <CircularProgress size={size} />
+        </CircularProgressLayout>
+      )}
+      <ButtonText isLoading={isLoading}>{children}</ButtonText>
     </StyledButton>
   );
 };
@@ -48,35 +111,45 @@ const StyledButton = styled.button<Props>`
 
   border-radius: 14px;
 
-  ${({ $block, $style, disabled, size = 'medium', color, variant, isLoading, theme }) => css`
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  ${({ $block, $style, size = 'medium', variant }) => css`
+    ${VARIANT_TYPE[variant]}
+
     width: ${$block ? '100%' : 'auto'};
 
-    padding: calc(${`${Number(SIZE[size].replace(/[^0-9]/g, '')) - 8}px`})
-      calc(${`${Number(SIZE[size].replace(/[^0-9]/g, '')) + 20}px`});
-
-    background-color: ${variant === 'contained' ? theme.background[color] : 'transparent'};
-    border: 1px solid ${variant === 'outlined' ? theme.background[color] : 'transparent'};
+    padding: calc(${`${extractAndConvertNumbersFromText(SIZE[size]) - 8}px`})
+      calc(${`${extractAndConvertNumbersFromText(SIZE[size]) + 20}px`});
 
     font-size: ${SIZE[size]};
-    color: ${variant === 'contained'
-      ? color === 'secondary'
-        ? globalColor.black
-        : globalColor.white
-      : theme.background[color]};
 
-    opacity: ${disabled || isLoading ? '0.4' : '1'};
-    cursor: ${isLoading ? 'progress' : disabled ? 'not-allowed' : 'pointer'};
+    cursor: pointer;
 
     transition: background-color 0.2s ease;
 
-    &:hover {
-      background-color: ${variant === 'contained' && !$style
-        ? theme.hoverBackground[color]
-        : variant === 'outlined' && !$style
-        ? globalColor.neutral[100]
-        : !$style && 'transparent'};
-    }
-
     ${$style}
   `}
+`;
+
+type ButtonTextProps = Pick<Props, 'isLoading'>;
+
+const ButtonText = styled.p<ButtonTextProps>`
+  ${({ isLoading }) => css`
+    color: ${isLoading && 'transparent'};
+  `}
+`;
+
+const CircularProgressLayout = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
