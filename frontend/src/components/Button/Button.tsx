@@ -12,7 +12,7 @@ type Props = {
   $block?: boolean;
   concept?: 'text' | 'contained' | 'outlined';
   $style?: CSSProp;
-} & ButtonHTMLAttributes<HTMLButtonElement>;
+};
 
 const Button = ({
   children,
@@ -24,7 +24,7 @@ const Button = ({
   $block = true,
   concept = 'contained',
   $style,
-}: PropsWithChildren<Props>) => {
+}: PropsWithChildren<Props> & ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <StyledButton
       onClick={onClick}
@@ -43,9 +43,7 @@ const Button = ({
 
 export default Button;
 
-type StyledButtonProps = Omit<Props, 'text' | 'handleClick'>;
-
-const StyledButton = styled.button<StyledButtonProps>`
+const StyledButton = styled.button<Props>`
   position: relative;
 
   width: ${(props) => (props.$block ? '100%' : 'auto')};
