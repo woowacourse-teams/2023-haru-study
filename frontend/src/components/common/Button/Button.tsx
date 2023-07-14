@@ -1,9 +1,9 @@
 import { CSSProp, css, styled } from 'styled-components';
-import color from '../../styles/color';
+import color from '../../../styles/color';
 import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import CircularProgress from '../CircularProgress/CircularProgress';
-import { SIZE } from '../../constants/style';
-import { Size } from '../../types/style';
+import { SIZE } from '../../../constants/style';
+import { Size } from '../../../types/style';
 
 const extractAndConvertNumbersFromText = (string: string) => Number(string.replace(/[^0-9]/g, ''));
 

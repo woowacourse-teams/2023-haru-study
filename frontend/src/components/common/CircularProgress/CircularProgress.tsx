@@ -1,7 +1,7 @@
 import { CSSProp, css, styled } from 'styled-components';
-import { Size } from '../../types/style';
-import { SIZE } from '../../constants/style';
-import color from '../../styles/color';
+import { Size } from '../../../types/style';
+import { SIZE } from '../../../constants/style';
+import color from '../../../styles/color';
 
 type Props = {
   size?: Size;
