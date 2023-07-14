@@ -5,12 +5,12 @@ import color from '../../styles/color';
 
 type Props = {
   size: Size;
-  css?: CSSProp;
+  $style?: CSSProp;
 };
 
-const CircularProgress = ({ size, css }: Props) => {
+const CircularProgress = ({ size, $style }: Props) => {
   return (
-    <StyledCircularProgress size={size} css={css}>
+    <StyledCircularProgress size={size} $style={$style}>
       <LoadingText>Loading</LoadingText>
       <div></div>
       <div></div>
@@ -36,7 +36,7 @@ const StyledCircularProgress = styled.div<Props>`
     animation: loading-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     border-color: ${color.white} transparent transparent transparent;
 
-    ${(props) => props.css}
+    ${(props) => props.$style}
   }
 
   div:nth-child(1) {

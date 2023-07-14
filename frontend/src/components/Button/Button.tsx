@@ -11,7 +11,7 @@ type Props = {
   isLoading?: boolean;
   $block?: boolean;
   concept?: 'text' | 'contained' | 'outlined';
-  css?: CSSProp;
+  $style?: CSSProp;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = ({
@@ -23,7 +23,7 @@ const Button = ({
   isLoading,
   $block = true,
   concept = 'contained',
-  css,
+  $style,
 }: PropsWithChildren<Props>) => {
   return (
     <StyledButton
@@ -34,7 +34,7 @@ const Button = ({
       $block={$block}
       disabled={disabled}
       concept={concept}
-      css={css}
+      $style={$style}
     >
       {isLoading ? <CircularProgress size={size} /> : children}
     </StyledButton>
@@ -69,5 +69,5 @@ const StyledButton = styled.button<StyledButtonProps>`
   opacity: ${(props) => (props.disabled || props.isLoading ? '0.4' : '1')};
   cursor: ${(props) => (props.isLoading ? 'progress' : props.disabled ? 'not-allowed' : 'pointer')};
 
-  ${(props) => props.css}
+  ${(props) => props.$style}
 `;

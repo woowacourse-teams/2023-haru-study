@@ -21,7 +21,7 @@ export default meta;
 export const DefaultCircularProgress: Story = {
   args: {
     size: 'medium',
-    css: css`
+    $style: css`
       border: 2px solid ${color.black};
       border-color: ${color.black} transparent transparent transparent;
     `,
@@ -34,7 +34,7 @@ export const DefaultCircularProgress: Story = {
 export const XSmallCircularProgress: Story = {
   args: {
     size: 'x-small',
-    css: css`
+    $style: css`
       border: 2px solid ${color.black};
       border-color: ${color.black} transparent transparent transparent;
     `,
@@ -47,7 +47,7 @@ export const XSmallCircularProgress: Story = {
 export const SmallCircularProgress: Story = {
   args: {
     size: 'small',
-    css: css`
+    $style: css`
       border: 2px solid ${color.black};
       border-color: ${color.black} transparent transparent transparent;
     `,
@@ -60,7 +60,7 @@ export const SmallCircularProgress: Story = {
 export const LargeCircularProgress: Story = {
   args: {
     size: 'large',
-    css: css`
+    $style: css`
       border: 2px solid ${color.black};
       border-color: ${color.black} transparent transparent transparent;
     `,
@@ -73,7 +73,7 @@ export const LargeCircularProgress: Story = {
 export const XLargeCircularProgress: Story = {
   args: {
     size: 'x-large',
-    css: css`
+    $style: css`
       border: 2px solid ${color.black};
       border-color: ${color.black} transparent transparent transparent;
     `,

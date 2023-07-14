@@ -163,7 +163,7 @@ export const CustomButton: Story = {
     children: 'button',
     variant: 'primary',
     size: 'medium',
-    css: css`
+    $style: css`
       background-color: ${color.blue[100]};
       color: ${color.blue[500]};
       border: 1px solid ${color.blue[500]};
