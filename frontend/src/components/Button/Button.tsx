@@ -1,4 +1,4 @@
-import { CSSProp, styled } from 'styled-components';
+import { CSSProp, css, styled } from 'styled-components';
 import color from '../../styles/color';
 import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import CircularProgress from '../CircularProgress/CircularProgress';
@@ -46,26 +46,27 @@ export default Button;
 const StyledButton = styled.button<Props>`
   position: relative;
 
-  width: ${(props) => (props.$block ? '100%' : 'auto')};
-
-  padding: calc(${(props) => `${Number(SIZE[props.size].replace(/[^0-9]/g, '')) - 8}px`})
-    calc(${(props) => `${Number(SIZE[props.size].replace(/[^0-9]/g, '')) + 20}px`});
   border-radius: 14px;
 
-  background-color: ${(props) =>
-    props.concept === 'contained' ? props.theme.background[props.variant] : 'transparent'};
-  border: 1px solid ${(props) => (props.concept === 'outlined' ? props.theme.background[props.variant] : 'transparent')};
+  ${({ $block, $style, disabled, size, variant, concept, isLoading, theme }) => css`
+    width: ${$block ? '100%' : 'auto'};
 
-  font-size: ${(props) => SIZE[props.size]};
-  color: ${(props) =>
-    props.concept === 'contained'
-      ? props.variant === 'secondary'
+    padding: calc(${`${Number(SIZE[size].replace(/[^0-9]/g, '')) - 8}px`})
+      calc(${`${Number(SIZE[size].replace(/[^0-9]/g, '')) + 20}px`});
+
+    background-color: ${concept === 'contained' ? theme.background[variant] : 'transparent'};
+    border: 1px solid ${concept === 'outlined' ? theme.background[variant] : 'transparent'};
+
+    font-size: ${SIZE[size]};
+    color: ${concept === 'contained'
+      ? variant === 'secondary'
         ? color.black
         : color.white
-      : props.theme.background[props.variant]};
+      : theme.background[variant]};
 
-  opacity: ${(props) => (props.disabled || props.isLoading ? '0.4' : '1')};
-  cursor: ${(props) => (props.isLoading ? 'progress' : props.disabled ? 'not-allowed' : 'pointer')};
+    opacity: ${disabled || isLoading ? '0.4' : '1'};
+    cursor: ${isLoading ? 'progress' : disabled ? 'not-allowed' : 'pointer'};
 
-  ${(props) => props.$style}
+    ${$style}
+  `}
 `;
