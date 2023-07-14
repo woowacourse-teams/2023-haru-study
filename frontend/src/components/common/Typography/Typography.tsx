@@ -8,7 +8,7 @@ type Props = {
   fontWeight?: string;
   color?: string;
 
-  style?: CSSProp;
+  $style?: CSSProp;
 };
 
 const TAG_MAPPING = {
@@ -45,7 +45,7 @@ const FONT_STYLE = {
   },
 } as const;
 
-const Typography = ({ variant, fontSize, fontWeight, color, style, children }: PropsWithChildren<Props>) => {
+const Typography = ({ variant, fontSize, fontWeight, color, $style, children }: PropsWithChildren<Props>) => {
   return (
     <StyledTypography
       as={TAG_MAPPING[variant]}
@@ -53,7 +53,7 @@ const Typography = ({ variant, fontSize, fontWeight, color, style, children }: P
       fontSize={fontSize}
       fontWeight={fontWeight}
       color={color}
-      style={style}
+      $style={$style}
     >
       {children}
     </StyledTypography>
@@ -61,12 +61,12 @@ const Typography = ({ variant, fontSize, fontWeight, color, style, children }: P
 };
 
 const StyledTypography = styled.div<Props>`
-  ${({ variant, fontSize, fontWeight, color, style }) => css`
+  ${({ variant, fontSize, fontWeight, color, $style }) => css`
     font-size: ${fontSize || FONT_STYLE.fontSize[variant]};
     font-weight: ${fontWeight || FONT_STYLE.fontWeight[variant]};
     color: ${color || '#000'};
 
-    ${style};
+    ${$style};
   `};
 `;
 
