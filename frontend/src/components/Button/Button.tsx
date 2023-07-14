@@ -67,6 +67,16 @@ const StyledButton = styled.button<Props>`
     opacity: ${disabled || isLoading ? '0.4' : '1'};
     cursor: ${isLoading ? 'progress' : disabled ? 'not-allowed' : 'pointer'};
 
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: ${concept === 'contained' && !$style
+        ? theme.hoverBackground[variant]
+        : concept === 'outlined' && !$style
+        ? color.neutral[100]
+        : !$style && 'transparent'};
+    }
+
     ${$style}
   `}
 `;

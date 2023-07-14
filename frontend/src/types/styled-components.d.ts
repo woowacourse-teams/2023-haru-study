@@ -15,6 +15,13 @@ declare module 'styled-components' {
       studying: string;
       retrospect: string;
     };
+    hoverBackground: {
+      basic: string;
+      primary: string;
+      secondary: string;
+      studying: string;
+      retrospect: string;
+    };
     border: {
       primary: string;
       secondary: string;
