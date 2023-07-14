@@ -7,21 +7,21 @@ type Props = {
   size: Size;
 };
 
-const LoadingSpinner = ({ size }: Props) => {
+const CircularProgress = ({ size }: Props) => {
   return (
-    <StyledLoadingSinner size={size}>
+    <StyledCircularProgress size={size}>
       <LoadingText>Loading</LoadingText>
       <div></div>
       <div></div>
       <div></div>
       <div></div>
-    </StyledLoadingSinner>
+    </StyledCircularProgress>
   );
 };
 
-export default LoadingSpinner;
+export default CircularProgress;
 
-const StyledLoadingSinner = styled.div<Props>`
+const StyledCircularProgress = styled.div<Props>`
   display: flex;
   align-items: center;
   justify-content: center;

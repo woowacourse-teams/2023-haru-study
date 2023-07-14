@@ -1,7 +1,7 @@
 import { CSSProp, styled } from 'styled-components';
 import color from '../../styles/color';
 import { ButtonHTMLAttributes } from 'react';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import CircularProgress from '../CircularProgress/CircularProgress';
 import { SIZE } from '../../constants/style';
 import { Size } from '../../types/style';
 
@@ -37,7 +37,7 @@ const Button = ({
       concept={concept}
       css={css}
     >
-      {isLoading ? <LoadingSpinner size={size} /> : text}
+      {isLoading ? <CircularProgress size={size} /> : text}
     </StyledButton>
   );
 };
