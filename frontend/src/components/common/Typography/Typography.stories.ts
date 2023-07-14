@@ -3,9 +3,6 @@ import Typography from './Typography';
 
 type Story = StoryObj<typeof Typography>;
 
-/**
- * `Typography` 컴포넌트는 특정 이벤트 실행, 라우팅을 위한 컴포넌트입니다.
- */
 const meta: Meta<typeof Typography> = {
   title: 'INPUTS/Typography',
   component: Typography,
@@ -13,9 +10,6 @@ const meta: Meta<typeof Typography> = {
 
 export default meta;
 
-/**
- * `DefaultButton`는 메인 색상을 가지는 `Typography` 스토리입니다.
- */
 export const Heading1: Story = {
   args: {
     variant: 'h1',
