@@ -1,6 +1,8 @@
 import { PropsWithChildren } from 'react';
 import { CSSProp, css, styled } from 'styled-components';
 
+import colorStyle from '../../../styles/color';
+
 type Props = {
   variant: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p1' | 'p2';
 
@@ -64,7 +66,7 @@ const StyledTypography = styled.div<Props>`
   ${({ variant, fontSize, fontWeight, color, $style }) => css`
     font-size: ${fontSize || FONT_STYLE.fontSize[variant]};
     font-weight: ${fontWeight || FONT_STYLE.fontWeight[variant]};
-    color: ${color || '#000'};
+    color: ${color || colorStyle.black};
 
     ${$style};
   `};
