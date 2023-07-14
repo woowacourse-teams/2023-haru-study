@@ -22,7 +22,6 @@ export const DefaultButton: Story = {
   args: {
     children: 'button',
     variant: 'primary',
-    size: 'medium',
   },
 };
 
@@ -33,7 +32,6 @@ export const SecondaryButton: Story = {
   args: {
     children: 'button',
     variant: 'secondary',
-    size: 'medium',
   },
 };
 
@@ -44,7 +42,6 @@ export const StudyingButton: Story = {
   args: {
     children: 'button',
     variant: 'studying',
-    size: 'medium',
   },
 };
 
@@ -55,7 +52,6 @@ export const RetrospectButton: Story = {
   args: {
     children: 'button',
     variant: 'retrospect',
-    size: 'medium',
   },
 };
 
@@ -114,7 +110,7 @@ export const NoneBlockButton: Story = {
   args: {
     children: 'button',
     variant: 'primary',
-    size: 'medium',
+
     $block: false,
   },
 };
@@ -126,7 +122,7 @@ export const OutlineButton: Story = {
   args: {
     children: 'button',
     variant: 'primary',
-    size: 'medium',
+
     concept: 'outlined',
   },
 };
@@ -138,7 +134,7 @@ export const TextButton: Story = {
   args: {
     children: 'button',
     variant: 'primary',
-    size: 'medium',
+
     concept: 'text',
   },
 };
@@ -150,7 +146,7 @@ export const DisableButton: Story = {
   args: {
     children: 'button',
     variant: 'primary',
-    size: 'medium',
+
     disabled: true,
   },
 };
@@ -162,7 +158,7 @@ export const CustomButton: Story = {
   args: {
     children: 'button',
     variant: 'primary',
-    size: 'medium',
+
     $style: css`
       background-color: ${color.blue[100]};
       color: ${color.blue[500]};
@@ -178,7 +174,7 @@ export const LoadingButton: Story = {
   args: {
     children: 'button',
     variant: 'primary',
-    size: 'medium',
+
     isLoading: true,
   },
 };

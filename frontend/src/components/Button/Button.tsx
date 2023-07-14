@@ -7,7 +7,7 @@ import { Size } from '../../types/style';
 
 type Props = {
   variant: 'primary' | 'secondary' | 'studying' | 'retrospect';
-  size: Size;
+  size?: Size;
   isLoading?: boolean;
   $block?: boolean;
   concept?: 'text' | 'contained' | 'outlined';
@@ -17,10 +17,10 @@ type Props = {
 const Button = ({
   children,
   variant,
-  size,
   onClick,
   disabled,
   isLoading,
+  size = 'medium',
   $block = true,
   concept = 'contained',
   $style,
@@ -48,7 +48,7 @@ const StyledButton = styled.button<Props>`
 
   border-radius: 14px;
 
-  ${({ $block, $style, disabled, size, variant, concept, isLoading, theme }) => css`
+  ${({ $block, $style, disabled, size = 'medium', variant, concept, isLoading, theme }) => css`
     width: ${$block ? '100%' : 'auto'};
 
     padding: calc(${`${Number(SIZE[size].replace(/[^0-9]/g, '')) - 8}px`})
