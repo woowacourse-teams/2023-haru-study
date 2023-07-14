@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyles from './styles/globalStyle';
 import { lightTheme } from './styles/theme';
-import Button from './components/Button/Button';
+import Button from './components/common/Button/Button';
 import Typography from './components/common/Typography/Typography';
 
 const App = () => {
@@ -10,7 +10,7 @@ const App = () => {
     <>
       <GlobalStyles />
       <ThemeProvider theme={lightTheme}>
-        <Typography variant="p1">Welcome Haru Study!</Typography>
+        <Typography variant="h1">Welcome Haru Study!</Typography>
         <Outlet />
       </ThemeProvider>
     </>
