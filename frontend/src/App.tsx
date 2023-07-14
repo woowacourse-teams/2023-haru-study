@@ -8,7 +8,7 @@ const App = () => {
     <>
       <GlobalStyles />
       <ThemeProvider theme={lightTheme}>
-        Welcome Haru Study!
+        <h1>Welcome Haru Study!</h1>
         <Outlet />
       </ThemeProvider>
     </>
