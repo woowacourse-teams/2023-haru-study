@@ -9,7 +9,7 @@ const App = () => {
     <>
       <GlobalStyles />
       <ThemeProvider theme={lightTheme}>
-        <Typography variant="p1">Welcome Haru Study!</Typography>
+        <Typography variant="h1">Welcome Haru Study!</Typography>
         <Outlet />
       </ThemeProvider>
     </>
