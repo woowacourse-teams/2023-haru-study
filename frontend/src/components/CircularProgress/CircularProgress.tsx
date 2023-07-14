@@ -11,7 +11,6 @@ type Props = {
 const CircularProgress = ({ size = 'medium', $style }: Props) => {
   return (
     <StyledCircularProgress size={size} $style={$style}>
-      <LoadingText>Loading</LoadingText>
       <div></div>
       <div></div>
       <div></div>
@@ -63,8 +62,4 @@ const StyledCircularProgress = styled.div<Props>`
       transform: rotate(360deg);
     }
   }
-`;
-
-const LoadingText = styled.span`
-  color: transparent;
 `;
