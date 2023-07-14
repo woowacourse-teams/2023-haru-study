@@ -38,7 +38,7 @@ export const SecondaryButton: Story = {
 };
 
 /**
- * `StudyingButton`는 학습중일 때 보여지는 `Button` 스토리입니다..
+ * `StudyingButton`는 학습중일 때 보여지는 `Button` 스토리입니다.
  */
 export const StudyingButton: Story = {
   args: {
