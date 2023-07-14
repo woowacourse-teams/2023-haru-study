@@ -64,10 +64,8 @@ const VARIANT_TYPE = {
   `,
 } as const;
 
-type Variant = keyof typeof VARIANT_TYPE;
-
 type Props = {
-  variant: Variant;
+  variant: keyof typeof VARIANT_TYPE;
   size?: Size;
   isLoading?: boolean;
   $block?: boolean;
