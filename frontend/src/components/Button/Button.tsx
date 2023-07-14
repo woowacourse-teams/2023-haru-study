@@ -1,39 +1,39 @@
 import { CSSProp, css, styled } from 'styled-components';
-import color from '../../styles/color';
+import globalColor from '../../styles/color';
 import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import CircularProgress from '../CircularProgress/CircularProgress';
 import { SIZE } from '../../constants/style';
 import { Size } from '../../types/style';
 
 type Props = {
-  variant: 'primary' | 'secondary' | 'studying' | 'retrospect';
+  color: 'primary' | 'secondary' | 'studying' | 'retrospect';
   size?: Size;
   isLoading?: boolean;
   $block?: boolean;
-  concept?: 'text' | 'contained' | 'outlined';
+  variant?: 'text' | 'contained' | 'outlined';
   $style?: CSSProp;
 };
 
 const Button = ({
   children,
-  variant,
+  color,
   onClick,
   disabled,
   isLoading,
   size = 'medium',
   $block = true,
-  concept = 'contained',
+  variant = 'contained',
   $style,
 }: PropsWithChildren<Props> & ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <StyledButton
       onClick={onClick}
       isLoading={isLoading}
-      variant={variant}
+      color={color}
       size={size}
       $block={$block}
       disabled={disabled}
-      concept={concept}
+      variant={variant}
       $style={$style}
     >
       {isLoading ? <CircularProgress size={size} /> : children}
@@ -48,21 +48,21 @@ const StyledButton = styled.button<Props>`
 
   border-radius: 14px;
 
-  ${({ $block, $style, disabled, size = 'medium', variant, concept, isLoading, theme }) => css`
+  ${({ $block, $style, disabled, size = 'medium', color, variant, isLoading, theme }) => css`
     width: ${$block ? '100%' : 'auto'};
 
     padding: calc(${`${Number(SIZE[size].replace(/[^0-9]/g, '')) - 8}px`})
       calc(${`${Number(SIZE[size].replace(/[^0-9]/g, '')) + 20}px`});
 
-    background-color: ${concept === 'contained' ? theme.background[variant] : 'transparent'};
-    border: 1px solid ${concept === 'outlined' ? theme.background[variant] : 'transparent'};
+    background-color: ${variant === 'contained' ? theme.background[color] : 'transparent'};
+    border: 1px solid ${variant === 'outlined' ? theme.background[color] : 'transparent'};
 
     font-size: ${SIZE[size]};
-    color: ${concept === 'contained'
-      ? variant === 'secondary'
-        ? color.black
-        : color.white
-      : theme.background[variant]};
+    color: ${variant === 'contained'
+      ? color === 'secondary'
+        ? globalColor.black
+        : globalColor.white
+      : theme.background[color]};
 
     opacity: ${disabled || isLoading ? '0.4' : '1'};
     cursor: ${isLoading ? 'progress' : disabled ? 'not-allowed' : 'pointer'};
@@ -70,10 +70,10 @@ const StyledButton = styled.button<Props>`
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: ${concept === 'contained' && !$style
-        ? theme.hoverBackground[variant]
-        : concept === 'outlined' && !$style
-        ? color.neutral[100]
+      background-color: ${variant === 'contained' && !$style
+        ? theme.hoverBackground[color]
+        : variant === 'outlined' && !$style
+        ? globalColor.neutral[100]
         : !$style && 'transparent'};
     }
 

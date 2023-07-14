@@ -10,7 +10,7 @@ const App = () => {
       <GlobalStyles />
       <ThemeProvider theme={lightTheme}>
         <h1>Welcome Haru Study!</h1>
-        <Button variant="primary">Button</Button>
+        <Button color="primary">Button</Button>
         <Outlet />
       </ThemeProvider>
     </>

@@ -21,7 +21,7 @@ export default meta;
 export const DefaultButton: Story = {
   args: {
     children: 'button',
-    variant: 'primary',
+    color: 'primary',
   },
 };
 
@@ -31,7 +31,7 @@ export const DefaultButton: Story = {
 export const SecondaryButton: Story = {
   args: {
     children: 'button',
-    variant: 'secondary',
+    color: 'secondary',
   },
 };
 
@@ -41,7 +41,7 @@ export const SecondaryButton: Story = {
 export const StudyingButton: Story = {
   args: {
     children: 'button',
-    variant: 'studying',
+    color: 'studying',
   },
 };
 
@@ -51,7 +51,7 @@ export const StudyingButton: Story = {
 export const RetrospectButton: Story = {
   args: {
     children: 'button',
-    variant: 'retrospect',
+    color: 'retrospect',
   },
 };
 
@@ -61,7 +61,7 @@ export const RetrospectButton: Story = {
 export const XSmallButton: Story = {
   args: {
     children: 'button',
-    variant: 'primary',
+    color: 'primary',
     size: 'x-small',
     $block: false,
   },
@@ -73,7 +73,7 @@ export const XSmallButton: Story = {
 export const SmallButton: Story = {
   args: {
     children: 'button',
-    variant: 'primary',
+    color: 'primary',
     size: 'small',
     $block: false,
   },
@@ -85,7 +85,7 @@ export const SmallButton: Story = {
 export const LargeButton: Story = {
   args: {
     children: 'button',
-    variant: 'primary',
+    color: 'primary',
     size: 'large',
     $block: false,
   },
@@ -97,7 +97,7 @@ export const LargeButton: Story = {
 export const XLargeButton: Story = {
   args: {
     children: 'button',
-    variant: 'primary',
+    color: 'primary',
     size: 'x-large',
     $block: false,
   },
@@ -109,7 +109,7 @@ export const XLargeButton: Story = {
 export const NoneBlockButton: Story = {
   args: {
     children: 'button',
-    variant: 'primary',
+    color: 'primary',
 
     $block: false,
   },
@@ -121,9 +121,8 @@ export const NoneBlockButton: Story = {
 export const OutlineButton: Story = {
   args: {
     children: 'button',
-    variant: 'primary',
-
-    concept: 'outlined',
+    color: 'primary',
+    variant: 'outlined',
   },
 };
 
@@ -133,9 +132,8 @@ export const OutlineButton: Story = {
 export const TextButton: Story = {
   args: {
     children: 'button',
-    variant: 'primary',
-
-    concept: 'text',
+    color: 'primary',
+    variant: 'text',
   },
 };
 
@@ -145,8 +143,7 @@ export const TextButton: Story = {
 export const DisableButton: Story = {
   args: {
     children: 'button',
-    variant: 'primary',
-
+    color: 'primary',
     disabled: true,
   },
 };
@@ -157,8 +154,7 @@ export const DisableButton: Story = {
 export const CustomButton: Story = {
   args: {
     children: 'button',
-    variant: 'primary',
-
+    color: 'primary',
     $style: css`
       background-color: ${color.blue[100]};
       color: ${color.blue[500]};
@@ -173,8 +169,7 @@ export const CustomButton: Story = {
 export const LoadingButton: Story = {
   args: {
     children: 'button',
-    variant: 'primary',
-
+    color: 'primary',
     isLoading: true,
   },
 };
