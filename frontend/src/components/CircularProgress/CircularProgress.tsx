@@ -4,11 +4,11 @@ import { SIZE } from '../../constants/style';
 import color from '../../styles/color';
 
 type Props = {
-  size: Size;
+  size?: Size;
   $style?: CSSProp;
 };
 
-const CircularProgress = ({ size, $style }: Props) => {
+const CircularProgress = ({ size = 'medium', $style }: Props) => {
   return (
     <StyledCircularProgress size={size} $style={$style}>
       <LoadingText>Loading</LoadingText>
@@ -32,7 +32,7 @@ const StyledCircularProgress = styled.div<Props>`
     border-radius: 50%;
     animation: loading-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 
-    ${({ size, $style }) => css`
+    ${({ size = 'medium', $style }) => css`
       width: ${SIZE[size]};
       height: ${SIZE[size]};
 

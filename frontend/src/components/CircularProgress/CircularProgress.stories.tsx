@@ -20,7 +20,6 @@ export default meta;
  */
 export const DefaultCircularProgress: Story = {
   args: {
-    size: 'medium',
     $style: css`
       border: 2px solid ${color.black};
       border-color: ${color.black} transparent transparent transparent;
