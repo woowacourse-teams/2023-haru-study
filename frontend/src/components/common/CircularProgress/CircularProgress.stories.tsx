@@ -78,3 +78,18 @@ export const XLargeCircularProgress: Story = {
     `,
   },
 };
+
+/**
+ * `CustomCircularProgress`는 width와 height를 커스튬한 `CircularProgress` 스토리입니다.
+ */
+export const CustomCircularProgress: Story = {
+  args: {
+    size: 'x-large',
+    $style: css`
+      border: 2px solid ${color.black};
+      border-color: ${color.black} transparent transparent transparent;
+      width: 5rem;
+      height: 5rem;
+    `,
+  },
+};
