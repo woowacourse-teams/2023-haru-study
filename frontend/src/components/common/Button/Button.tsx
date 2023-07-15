@@ -1,11 +1,40 @@
-import { CSSProp, css, styled } from 'styled-components';
+import { CSSProp, RuleSet, css, styled } from 'styled-components';
 import color from '../../../styles/color';
 import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import CircularProgress from '../CircularProgress/CircularProgress';
 import { SIZE } from '../../../constants/style';
 import { Size } from '../../../types/style';
 
-const extractAndConvertNumbersFromText = (string: string) => Number(string.replace(/[^0-9]/g, ''));
+type Include<T, U> = T extends U ? T : never;
+
+type ButtonSizeType = Include<Size, 'x-small' | 'small' | 'medium' | 'large' | 'x-large'>;
+
+const SIZE_TYPE: Record<ButtonSizeType, RuleSet<object>> = {
+  'x-small': css`
+    padding: 8px 20px;
+    font-size: ${SIZE['x-small']};
+  `,
+
+  small: css`
+    padding: 12px 24px;
+    font-size: ${SIZE['small']};
+  `,
+
+  medium: css`
+    padding: 16px 28px;
+    font-size: ${SIZE['medium']};
+  `,
+
+  large: css`
+    padding: 20px 32px;
+    font-size: ${SIZE['large']};
+  `,
+
+  'x-large': css`
+    padding: 24px 48px;
+    font-size: ${SIZE['x-large']};
+  `,
+};
 
 const VARIANT_TYPE = {
   primary: css`
@@ -41,7 +70,7 @@ const VARIANT_TYPE = {
     }
   `,
 
-  dander: css`
+  danger: css`
     background-color: ${color.red[500]};
     color: ${color.white};
     border: 1px solid transparent;
@@ -66,7 +95,7 @@ const VARIANT_TYPE = {
 
 type Props = {
   variant: keyof typeof VARIANT_TYPE;
-  size?: Size;
+  size?: ButtonSizeType;
   isLoading?: boolean;
   $block?: boolean;
   $style?: CSSProp;
@@ -88,8 +117,8 @@ const Button = ({
       variant={variant}
       isLoading={isLoading}
       size={size}
-      $block={$block}
       disabled={disabled}
+      $block={$block}
       $style={$style}
     >
       {isLoading && (
@@ -109,6 +138,10 @@ const StyledButton = styled.button<Props>`
 
   border-radius: 14px;
 
+  transition: background-color 0.2s ease;
+
+  cursor: pointer;
+
   &:disabled {
     opacity: 0.4;
     cursor: not-allowed;
@@ -116,17 +149,9 @@ const StyledButton = styled.button<Props>`
 
   ${({ $block, $style, size = 'medium', variant }) => css`
     ${VARIANT_TYPE[variant]}
+    ${SIZE_TYPE[size]}
 
     width: ${$block ? '100%' : 'auto'};
-
-    padding: calc(${`${extractAndConvertNumbersFromText(SIZE[size]) - 8}px`})
-      calc(${`${extractAndConvertNumbersFromText(SIZE[size]) + 20}px`});
-
-    font-size: ${SIZE[size]};
-
-    cursor: pointer;
-
-    transition: background-color 0.2s ease;
 
     ${$style}
   `}

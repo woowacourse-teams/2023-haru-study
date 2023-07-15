@@ -51,7 +51,7 @@ export const SuccessButton: Story = {
 export const DangerButton: Story = {
   args: {
     children: 'button',
-    variant: 'dander',
+    variant: 'danger',
   },
 };
 
