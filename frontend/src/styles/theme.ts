@@ -1,11 +1,11 @@
 import color from './color';
 
 export const lightTheme = {
-  background: color.black,
-  text: color.white,
+  background: color.white,
+  text: color.black,
 };
 
 export const darkTheme = {
-  background: color.white,
-  text: color.black,
+  background: color.black,
+  text: color.white,
 };
