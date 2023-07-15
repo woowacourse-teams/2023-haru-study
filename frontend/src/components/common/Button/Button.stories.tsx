@@ -80,6 +80,17 @@ export const SmallButton: Story = {
 };
 
 /**
+ * `SmallButton`는 font-size가 24px인 `Button` 스토립니다.
+ */
+export const MediumButton: Story = {
+  args: {
+    children: 'button',
+    variant: 'primary',
+    $block: false,
+  },
+};
+
+/**
  * `LargeButton`는 font-size가 28px인 `Button` 스토립니다.
  */
 export const LargeButton: Story = {

@@ -21,17 +21,17 @@ const SIZE_TYPE: Record<ButtonSizeType, RuleSet<object>> = {
   `,
 
   medium: css`
-    padding: 16px 28px;
+    padding: 16px 32px;
     font-size: ${SIZE['medium']};
   `,
 
   large: css`
-    padding: 20px 32px;
+    padding: 20px 48px;
     font-size: ${SIZE['large']};
   `,
 
   'x-large': css`
-    padding: 24px 48px;
+    padding: 24px 60px;
     font-size: ${SIZE['x-large']};
   `,
 };
