@@ -1,5 +1,6 @@
 package harustudy.backend.entity;
 
+import harustudy.backend.exception.StudyNameLengthException;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -20,6 +21,9 @@ import lombok.NoArgsConstructor;
 @DiscriminatorColumn(name = "study_type")
 public abstract class Study {
 
+    private static final int MIN_NAME_LENGTH = 1;
+    private static final int MAX_NAME_LENGTH = 10;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,4 +31,15 @@ public abstract class Study {
     @NotNull
     @Column(length = 10)
     private String name;
+
+    public Study(@NotNull String name) {
+        validateName(name);
+        this.name = name;
+    }
+
+    private void validateName(String name) {
+        if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH) {
+            throw new StudyNameLengthException();
+        }
+    }
 }
