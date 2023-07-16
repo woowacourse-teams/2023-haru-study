@@ -8,9 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class ParticipantCode {
 
@@ -24,7 +27,4 @@ public class ParticipantCode {
 
     @Column(unique = true, length = 6)
     private String code;
-
-    protected ParticipantCode() {
-    }
 }
