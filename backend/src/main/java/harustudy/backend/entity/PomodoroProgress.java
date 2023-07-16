@@ -4,9 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class PomodoroProgress extends MemberProgress {
 
@@ -15,7 +18,4 @@ public class PomodoroProgress extends MemberProgress {
 
     @Enumerated(value = EnumType.STRING)
     private StudyStatus studyStatus;
-
-    protected PomodoroProgress() {
-    }
 }

@@ -1,5 +1,5 @@
 package harustudy.backend.entity;
 
-public enum Version {
+public enum TemplateVersion {
     V1, V2
 }
