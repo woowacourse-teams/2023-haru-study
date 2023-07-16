@@ -3,10 +3,13 @@ package harustudy.backend.entity;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import harustudy.backend.exception.StudyCycleCountException;
 import harustudy.backend.exception.StudyNameLengthException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -19,15 +22,6 @@ class PomodoroTest {
                 .doesNotThrowAnyException();
     }
 
-   @Test
-    void 스터디명이_1자_미만이면_예외를_던진다() {
-        // given
-        String name = "";
-        // when, then
-        assertThatThrownBy(() -> new Pomodoro(name, 3, 20))
-                .isInstanceOf(StudyNameLengthException.class);
-    }
-
     @Test
     void 스터디명이_1자_이상_10자_이하이면_정상_케이스이다() {
         // given
@@ -37,12 +31,27 @@ class PomodoroTest {
                 .doesNotThrowAnyException();
     }
 
-    @Test
-    void 스터디명이_10자_초과라면_예외를_던진다() {
-        // given
-        String name = "12345678910";
-        // when, then
+    @ParameterizedTest
+    @ValueSource(strings = {"", "01234567890"})
+    void 스터디명이_1자_미만이거나_10자_초과라면_예외를_던진다(String name) {
+        // given, when, then
         assertThatThrownBy(() -> new Pomodoro(name, 3, 20))
                 .isInstanceOf(StudyNameLengthException.class);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 8})
+    void 사이클은_최소_1번_최대_8번이_정상_케이스이다(int cycle) {
+        // given, when, then
+        assertThatCode(() -> new Pomodoro("teo", cycle, 20))
+                .doesNotThrowAnyException();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 9})
+    void 사이클은_1번_미만이거나_8번_초과라면_예외를_던진다(int cycle) {
+        // given, when, then
+        assertThatThrownBy(() -> new Pomodoro("teo", cycle, 20))
+                .isInstanceOf(StudyCycleCountException.class);
     }
 }
