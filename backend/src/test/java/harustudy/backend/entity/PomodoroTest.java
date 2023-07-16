@@ -3,8 +3,9 @@ package harustudy.backend.entity;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import harustudy.backend.exception.StudyCycleCountException;
+import harustudy.backend.exception.StudyTotalCycleException;
 import harustudy.backend.exception.StudyNameLengthException;
+import harustudy.backend.exception.StudyTimePerCycleException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -52,6 +53,22 @@ class PomodoroTest {
     void 사이클은_1번_미만이거나_8번_초과라면_예외를_던진다(int cycle) {
         // given, when, then
         assertThatThrownBy(() -> new Pomodoro("teo", cycle, 20))
-                .isInstanceOf(StudyCycleCountException.class);
+                .isInstanceOf(StudyTotalCycleException.class);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {20, 40})
+    void 스터디_시간은_최소_20분_최대_40분이_정상_케이스이다(int timePerCycle) {
+        // given, when, then
+        assertThatCode(() -> new Pomodoro("teo", 5, timePerCycle))
+                .doesNotThrowAnyException();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {19, 41})
+    void 스터디_시간은_20분_미만이거나_40분_초과라면_예외를_던진다(int timePerCycle) {
+        // given, when, then
+        assertThatThrownBy(() -> new Pomodoro("teo", 5, timePerCycle))
+                .isInstanceOf(StudyTimePerCycleException.class);
     }
 }
