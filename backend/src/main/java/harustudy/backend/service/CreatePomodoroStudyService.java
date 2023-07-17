@@ -6,7 +6,7 @@ import harustudy.backend.entity.Pomodoro;
 import harustudy.backend.entity.Study;
 import harustudy.backend.repository.ParticipantCodeRepository;
 import harustudy.backend.repository.StudyRepository;
-import harustudy.backend.service.dto.CreatePomodoroStudyRequest;
+import harustudy.backend.controller.CreatePomodoroStudyRequest;
 import harustudy.backend.service.dto.CreatePomodoroStudyDto;
 import java.util.Optional;
 import lombok.AllArgsConstructor;

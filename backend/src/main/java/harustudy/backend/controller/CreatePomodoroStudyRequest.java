@@ -1,4 +1,4 @@
-package harustudy.backend.service.dto;
+package harustudy.backend.controller;
 
 public record CreatePomodoroStudyRequest(String name, Integer totalCycle, Integer timePerCycle) {
 
