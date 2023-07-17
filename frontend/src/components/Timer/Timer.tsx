@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 import Typography from '../common/Typography/Typography';
 import useTimer from '../../hooks/useTimer';
@@ -7,9 +7,10 @@ import Button from '../common/Button/Button';
 
 type Props = {
   minutes: number;
+  buttonColor: string;
 };
 
-const Timer = ({ minutes }: Props) => {
+const Timer = ({ minutes, buttonColor }: Props) => {
   const { start, stop, getFormattedTime, isTicking } = useTimer(minutes);
 
   const formattedTime = getFormattedTime();
@@ -23,14 +24,28 @@ const Timer = ({ minutes }: Props) => {
         {formattedTime}
       </Typography>
       {isTicking ? (
-        <Button variant="outlined" size="small" onClick={stop}>
-          <Typography variant="h5" color={color.blue[500]}>
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={stop}
+          $style={css`
+            border: none;
+          `}
+        >
+          <Typography variant="h5" color={buttonColor}>
             정지
           </Typography>
         </Button>
       ) : (
-        <Button variant="outlined" size="small" onClick={start}>
-          <Typography variant="h5" color={color.blue[500]}>
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={start}
+          $style={css`
+            border: none;
+          `}
+        >
+          <Typography variant="h5" color={buttonColor}>
             시작
           </Typography>
         </Button>
@@ -47,7 +62,4 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  // 임시로 넣은 background -> 지울 예정
-  background-color: ${color.blue[500]};
 `;
