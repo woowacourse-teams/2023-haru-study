@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "progress_type")
 @Entity
-public abstract class MemberProgress {
+public abstract class MemberProgress extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

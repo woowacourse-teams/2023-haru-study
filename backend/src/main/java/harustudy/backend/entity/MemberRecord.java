@@ -16,7 +16,7 @@ import lombok.Getter;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "record_type")
 @Entity
-public abstract class MemberRecord {
+public abstract class MemberRecord extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
