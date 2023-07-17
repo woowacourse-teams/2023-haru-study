@@ -1,7 +1,8 @@
 import { PropsWithChildren } from 'react';
-import { CSSProp, css, styled } from 'styled-components';
+import { css, styled } from 'styled-components';
+import type { CSSProp } from 'styled-components';
 
-import colorStyle from '../../../styles/color';
+import colorStyle from '@Styles/color';
 
 type Props = {
   variant: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p1' | 'p2';

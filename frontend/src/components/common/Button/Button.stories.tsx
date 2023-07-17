@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Button from './Button';
 import { css } from 'styled-components';
-import color from '../../../styles/color';
+
+import color from '@Styles/color';
+
+import Button from './Button';
 
 type Story = StoryObj<typeof Button>;
 

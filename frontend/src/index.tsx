@@ -1,5 +1,5 @@
-import { RouterProvider } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
 
 import { worker } from './mocks/worker';
 import router from './router';
