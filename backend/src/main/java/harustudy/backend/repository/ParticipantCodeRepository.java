@@ -1,4 +1,4 @@
-package harustudy.backend.service;
+package harustudy.backend.repository;
 
 import harustudy.backend.entity.ParticipantCode;
 import java.util.Optional;

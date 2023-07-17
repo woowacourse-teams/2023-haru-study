@@ -4,9 +4,10 @@ import harustudy.backend.entity.GenerationStrategy;
 import harustudy.backend.entity.ParticipantCode;
 import harustudy.backend.entity.Pomodoro;
 import harustudy.backend.entity.Study;
+import harustudy.backend.repository.ParticipantCodeRepository;
 import harustudy.backend.repository.StudyRepository;
 import harustudy.backend.service.dto.CreatePomodoroStudyRequest;
-import harustudy.backend.service.dto.CreatePomodoroStudyResponse;
+import harustudy.backend.service.dto.CreatePomodoroStudyDto;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,13 @@ public class CreatePomodoroStudyService {
     private ParticipantCodeRepository participantCodeRepository;
     private GenerationStrategy generationStrategy;
 
-    public CreatePomodoroStudyResponse createStudy(CreatePomodoroStudyRequest request) {
+    public CreatePomodoroStudyDto createStudy(CreatePomodoroStudyRequest request) {
         Study study = new Pomodoro(request.name(), request.totalCycle(), request.timePerCycle());
         ParticipantCode participantCode = new ParticipantCode(study, generationStrategy);
-        studyRepository.save(new Pomodoro(request.name(), request.totalCycle(),
+        Study savedStudy = studyRepository.save(new Pomodoro(request.name(), request.totalCycle(),
                 request.timePerCycle()));
         regenerateCodeUntilUnique(participantCode);
-        return CreatePomodoroStudyResponse.of(participantCode);
+        return CreatePomodoroStudyDto.from(savedStudy, participantCode);
     }
 
     private void regenerateCodeUntilUnique(ParticipantCode participantCode) {
