@@ -49,9 +49,23 @@ const useTimer = (minutes: number) => {
     setIsTicking(false);
   };
 
+  const getFormattedTime = () => {
+    const minutes = Math.floor(leftTime / 60)
+      .toString()
+      .padStart(2, '0');
+    const seconds = Math.floor(leftTime % 60)
+      .toString()
+      .padStart(2, '0');
+
+    const formattedTime = `${minutes}:${seconds}`;
+
+    return formattedTime;
+  };
+
   return {
     start,
     stop,
+    getFormattedTime,
     leftTime,
     isTicking,
   };
