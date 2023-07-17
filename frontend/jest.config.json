@@ -1,4 +1,8 @@
 {
   "testEnvironment": "jsdom",
-  "setupFilesAfterEnv": ["./jest.setup.ts"]
+  "setupFilesAfterEnv": ["./jest.setup.ts"],
+  "transform": {
+    "\\.[jt]sx?$": "babel-jest",
+    "\\.css$": "jest-transform-css"
+  }
 }
