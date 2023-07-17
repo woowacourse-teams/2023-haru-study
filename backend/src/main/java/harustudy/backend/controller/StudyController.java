@@ -1,15 +1,16 @@
 package harustudy.backend.controller;
 
 import harustudy.backend.service.CreatePomodoroStudyService;
-import harustudy.backend.service.dto.CreatePomodoroStudyRequest;
 import harustudy.backend.service.dto.CreatePomodoroStudyDto;
 import jakarta.validation.Valid;
 import java.net.URI;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@AllArgsConstructor
 @RestController
 public class StudyController {
 
