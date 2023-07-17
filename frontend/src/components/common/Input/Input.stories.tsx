@@ -19,7 +19,6 @@ export default meta;
 export const DefaultInput: Story = {
   args: {
     children: <Input.TextField />,
-    variant: 'default',
   },
 };
 
@@ -29,7 +28,6 @@ export const DefaultInput: Story = {
 export const DisabledInput: Story = {
   args: {
     children: <Input.TextField value={1234} disabled />,
-    variant: 'default',
   },
 };
 
@@ -40,7 +38,6 @@ export const InputWithLabel: Story = {
   args: {
     label: 'Label',
     children: <Input.TextField />,
-    variant: 'default',
   },
 };
 
@@ -52,7 +49,6 @@ export const InputWithLabelAndBottomText: Story = {
     label: 'Label',
     bottomText: 'BottomText',
     children: <Input.TextField />,
-    variant: 'default',
   },
 };
 
@@ -64,6 +60,5 @@ export const InputValidationIsError: Story = {
     label: 'Label',
     bottomText: 'BottomText',
     children: <Input.TextField error={true} />,
-    variant: 'default',
   },
 };

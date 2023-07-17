@@ -9,33 +9,44 @@ import {
   cloneElement,
   forwardRef,
 } from 'react';
-import { CSSProp, css, styled } from 'styled-components';
-
+import { CSSProp, RuleSet, css, styled } from 'styled-components';
 import useId from '../../../hooks/useId';
 import colorStyle from '../../../styles/color';
+import { Size } from '../../../types/style';
+import { SIZE } from '../../../constants/style';
 
-const LABEL_STYLE = {
-  fontSize: {
-    default: '24px',
-  },
-  fontWeight: {
-    default: '200',
-  },
-  color: {
-    default: colorStyle.black,
-  },
-} as const;
+type Include<T, U> = T extends U ? T : never;
+
+type LabelSizeType = Include<Size, 'x-small' | 'small' | 'medium' | 'large' | 'x-large'>;
+
+const SIZE_TYPE: Record<LabelSizeType, RuleSet<object>> = {
+  'x-small': css`
+    font-size: ${SIZE['x-small']};
+  `,
+
+  small: css`
+    font-size: ${SIZE['small']};
+  `,
+
+  medium: css`
+    font-size: ${SIZE['medium']};
+  `,
+
+  large: css`
+    font-size: ${SIZE['large']};
+  `,
+
+  'x-large': css`
+    font-size: ${SIZE['x-large']};
+  `,
+};
 
 type InputProps = {
   label?: ReactNode;
   children: ReactElement;
   bottomText?: string;
 
-  variant: 'default';
-
-  fontSize?: string;
-  fontWeight?: string;
-  color?: string;
+  $labelSize?: LabelSizeType;
 
   $style?: CSSProp;
 };
@@ -44,10 +55,7 @@ const Input = ({
   label,
   children,
   bottomText,
-  variant,
-  fontSize,
-  fontWeight,
-  color,
+  $labelSize,
   $style,
   ...props
 }: PropsWithChildren<InputProps> & HTMLAttributes<HTMLDivElement>) => {
@@ -58,12 +66,12 @@ const Input = ({
 
   return (
     <Layout {...props}>
-      <StyledLabel htmlFor={id} variant={variant} $style={$style}>
+      <StyledLabel htmlFor={id} $labelSize="medium" $style={$style}>
         {label}
       </StyledLabel>
       {cloneElement(child, { id, ...child.props })}
       {isError && <StyledBottomText isError={true}>잘못된 입력입니다.</StyledBottomText>}
-      {bottomText !== null ? <StyledBottomText>{bottomText}</StyledBottomText> : null}
+      {bottomText !== null && <StyledBottomText>{bottomText}</StyledBottomText>}
     </Layout>
   );
 };
@@ -77,12 +85,11 @@ const Layout = styled.div`
 `;
 
 const StyledLabel = styled.label<StyledLabel>`
-  ${({ variant, fontSize, fontWeight, color, $style }) => css`
-    font-size: ${fontSize || LABEL_STYLE.fontSize[variant]};
-    font-weight: ${fontWeight || LABEL_STYLE.fontWeight[variant]};
-    color: ${color || LABEL_STYLE.color[variant]};
+  font-weight: 200;
 
-    ${$style}
+  ${({ $labelSize = 'medium', $style, theme }) => css`
+    color: ${theme.text};
+    ${SIZE_TYPE[$labelSize]} ${$style};
   `}
 `;
 
@@ -113,14 +120,13 @@ const StyledInput = styled.input<StyledInputProps>`
   }
 
   width: 100%;
-  height: 70px;
-  padding: 27px 20px;
-  font-size: 24px;
+  padding: 20px;
+  font-size: 2.4rem;
   border-radius: 7px;
   border: 1px solid ${colorStyle.neutral[200]};
-  background-color: ${colorStyle.white};
 
-  ${({ $style }) => css`
+  ${({ $style, theme }) => css`
+    background-color: ${theme.background};
     ${$style}
   `};
 `;
