@@ -38,7 +38,7 @@ public class Pomodoro extends Study {
             throw new StudyTotalCycleException();
         }
     }
-    
+
     private void validateTimePerCycle(Integer timePerCycle) {
         if (timePerCycle < MIN_TIME_PER_CYCLE || timePerCycle > MAX_TIME_PER_CYCLE) {
             throw new StudyTimePerCycleException();
