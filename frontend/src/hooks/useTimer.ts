@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const SECONDS_PER_MINUTE = 60;
 
@@ -16,7 +16,7 @@ const useTimer = (minutes: number) => {
     timerId.current = null;
   };
 
-  const tick = () => {
+  const tick = useCallback(() => {
     if (leftTime > 0) {
       setLeftTime(leftTime - 1);
     }
@@ -24,7 +24,7 @@ const useTimer = (minutes: number) => {
       setIsTicking(false);
       clear();
     }
-  };
+  }, [leftTime]);
 
   useEffect(() => {
     if (isTicking) {
