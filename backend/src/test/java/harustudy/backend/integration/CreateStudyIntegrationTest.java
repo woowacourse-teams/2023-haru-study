@@ -22,14 +22,6 @@ import org.springframework.test.web.servlet.MvcResult;
 class CreateStudyIntegrationTest extends IntegrationTest {
 
     @Autowired
-    private StudyRepository studyRepository;
-    @Autowired
-    private ParticipantCodeRepository participantCodeRepository;
-    @Autowired
-    private CreatePomodoroStudyService createPomodoroStudyService;
-    @Autowired
-    private GenerationStrategy generationStrategy;
-    @Autowired
     private ObjectMapper objectMapper;
 
     @Test
