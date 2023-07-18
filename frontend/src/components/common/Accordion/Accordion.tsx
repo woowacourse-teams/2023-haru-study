@@ -81,22 +81,22 @@ const AccordionHeaderLayout = styled.div`
 Accordion.Panel = ({ children }: PropsWithChildren) => {
   const { isPanelOpen, closePanel } = useAccordionContext();
 
+  if (!isPanelOpen) return;
+
   return (
     <PanelLayout>
-      {isPanelOpen && <PanelContents>{children}</PanelContents>}
-      {isPanelOpen && (
-        <Button
-          variant="secondary"
-          size="x-small"
-          $block={false}
-          $style={css`
-            justify-self: end;
-          `}
-          onClick={closePanel}
-        >
-          접어두기
-        </Button>
-      )}
+      <PanelContents>{children}</PanelContents>
+      <Button
+        variant="secondary"
+        size="x-small"
+        $block={false}
+        $style={css`
+          justify-self: end;
+        `}
+        onClick={closePanel}
+      >
+        접어두기
+      </Button>
     </PanelLayout>
   );
 };
