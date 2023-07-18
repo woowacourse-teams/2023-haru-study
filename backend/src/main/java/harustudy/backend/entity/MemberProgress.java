@@ -34,4 +34,9 @@ public abstract class MemberProgress extends BaseTimeEntity {
     private Member member;
 
     private boolean isDone = false;
+
+    public MemberProgress(Study study, Member member) {
+        this.study = study;
+        this.member = member;
+    }
 }

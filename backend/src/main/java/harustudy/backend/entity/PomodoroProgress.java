@@ -18,4 +18,19 @@ public class PomodoroProgress extends MemberProgress {
 
     @Enumerated(value = EnumType.STRING)
     private StudyStatus studyStatus;
+
+    public PomodoroProgress(Study study, Member member, @NotNull Integer currentCycle,
+            StudyStatus studyStatus) {
+        super(study, member);
+        this.currentCycle = currentCycle;
+        this.studyStatus = studyStatus;
+    }
+
+    public void proceedRetrospect() {
+        studyStatus = studyStatus.getNext();
+    }
+
+    public boolean isNotStudying() {
+        return studyStatus != StudyStatus.STUDYING;
+    }
 }
