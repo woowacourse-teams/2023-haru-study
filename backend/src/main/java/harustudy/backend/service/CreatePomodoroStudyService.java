@@ -1,14 +1,13 @@
 package harustudy.backend.service;
 
+import harustudy.backend.controller.CreatePomodoroStudyRequest;
 import harustudy.backend.entity.GenerationStrategy;
 import harustudy.backend.entity.ParticipantCode;
 import harustudy.backend.entity.Pomodoro;
 import harustudy.backend.entity.Study;
 import harustudy.backend.repository.ParticipantCodeRepository;
 import harustudy.backend.repository.StudyRepository;
-import harustudy.backend.controller.CreatePomodoroStudyRequest;
 import harustudy.backend.service.dto.CreatePomodoroStudyDto;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,21 +22,25 @@ public class CreatePomodoroStudyService {
     private final GenerationStrategy generationStrategy;
 
     public CreatePomodoroStudyDto createStudy(CreatePomodoroStudyRequest request) {
-        Study study = new Pomodoro(request.name(), request.totalCycle(), request.timePerCycle());
-        ParticipantCode participantCode = new ParticipantCode(study, generationStrategy);
-        Study savedStudy = studyRepository.save(new Pomodoro(request.name(), request.totalCycle(),
-                request.timePerCycle()));
-        regenerateCodeUntilUnique(participantCode);
+        Pomodoro pomodoro = new Pomodoro(request.name(), request.totalCycle(),
+                request.timePerCycle());
+        Study savedStudy = studyRepository.save(pomodoro);
+
+        ParticipantCode participantCode = regenerateUniqueCode(pomodoro);
+        participantCodeRepository.save(participantCode);
         return CreatePomodoroStudyDto.from(savedStudy, participantCode);
     }
 
-    private void regenerateCodeUntilUnique(ParticipantCode participantCode) {
-        Optional<ParticipantCode> optionalParticipantCode = participantCodeRepository.findByCode(
-                participantCode.getCode());
-        while (optionalParticipantCode.isPresent()) {
+    private ParticipantCode regenerateUniqueCode(Pomodoro pomodoro) {
+        ParticipantCode participantCode = new ParticipantCode(pomodoro, generationStrategy);
+        while (isParticipantCodePresent(participantCode)) {
             participantCode.regenerate();
-            optionalParticipantCode = participantCodeRepository.findByCode(
-                    participantCode.getCode());
         }
+        return participantCode;
+    }
+
+    private boolean isParticipantCodePresent(ParticipantCode participantCode) {
+        return participantCodeRepository.findByCode(participantCode.getCode())
+                .isPresent();
     }
 }
