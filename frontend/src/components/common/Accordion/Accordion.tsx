@@ -1,21 +1,29 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { PropsWithChildren, createContext, useContext, useMemo, useState } from 'react';
 import { css, styled } from 'styled-components';
+import type { CSSProp } from 'styled-components';
 
 import color from '@Styles/color';
 
 import Button from '../Button/Button';
 
-const Accordion = ({ children }: PropsWithChildren) => {
-  return <AccordionLayout>{children}</AccordionLayout>;
+type Props = {
+  $style?: CSSProp;
+};
+
+const Accordion = ({ children, $style }: PropsWithChildren<Props>) => {
+  return <AccordionLayout $style={$style}>{children}</AccordionLayout>;
 };
 
 export default Accordion;
 
-const AccordionLayout = styled.div`
-  padding: 25px 40px;
-  border: 1px solid ${color.neutral[200]};
-  border-radius: 14px;
+const AccordionLayout = styled.div<Props>`
+  display: grid;
+  row-gap: 40px;
+
+  ${({ $style }) => css`
+    ${$style}
+  `}
 `;
 
 const AccordionContext = createContext({
@@ -35,11 +43,17 @@ Accordion.Item = ({ children }: PropsWithChildren) => {
   const value = useMemo(() => ({ isPanelOpen, openPanel, closePanel }), [isPanelOpen]);
 
   return (
-    <div>
-      <AccordionContext.Provider value={value}>{children}</AccordionContext.Provider>
-    </div>
+    <AccordionContext.Provider value={value}>
+      <AccordionItemLayout>{children} </AccordionItemLayout>
+    </AccordionContext.Provider>
   );
 };
+
+const AccordionItemLayout = styled.div`
+  padding: 10px 30px;
+  border: 1px solid ${color.neutral[200]};
+  border-radius: 14px;
+`;
 
 Accordion.Header = ({ children }: PropsWithChildren) => {
   const { isPanelOpen, openPanel } = useAccordionContext();
