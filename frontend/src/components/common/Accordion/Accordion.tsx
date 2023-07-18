@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { PropsWithChildren, createContext, useContext, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 import color from '@Styles/color';
 
@@ -26,7 +26,7 @@ const AccordionContext = createContext({
 const useAccordionContext = () => useContext(AccordionContext);
 
 Accordion.Item = ({ children }: PropsWithChildren) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggleOpenState = () => setIsOpen((prev) => !prev);
 
@@ -45,20 +45,49 @@ Accordion.Header = ({ children }: PropsWithChildren) => {
   return (
     <AccordionHeaderLayout>
       {children}
-      <Button variant="secondary" size="x-small" onClick={toggleOpenState}>
-        {isOpen ? '접어두기' : '펼처보기'}
-      </Button>
+      {!isOpen && (
+        <Button variant="secondary" size="x-small" onClick={toggleOpenState}>
+          펼처보기
+        </Button>
+      )}
     </AccordionHeaderLayout>
   );
 };
 
 const AccordionHeaderLayout = styled.div`
+  min-height: 50px;
+
   display: grid;
   grid-template-columns: 1fr auto;
+  align-items: center;
 `;
 
 Accordion.Panel = ({ children }: PropsWithChildren) => {
-  const { isOpen } = useAccordionContext();
+  const { isOpen, toggleOpenState } = useAccordionContext();
 
-  return <div>{isOpen && children}</div>;
+  return (
+    <PanelLayout>
+      {isOpen && <PanelContents>{children}</PanelContents>}
+      {isOpen && (
+        <Button
+          variant="secondary"
+          size="x-small"
+          $block={false}
+          $style={css`
+            justify-self: end;
+          `}
+          onClick={toggleOpenState}
+        >
+          접어두기
+        </Button>
+      )}
+    </PanelLayout>
+  );
 };
+
+const PanelLayout = styled.div`
+  display: grid;
+  row-gap: 40px;
+`;
+
+const PanelContents = styled.div``;
