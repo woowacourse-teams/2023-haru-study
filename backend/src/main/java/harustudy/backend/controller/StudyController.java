@@ -4,17 +4,17 @@ import harustudy.backend.service.CreatePomodoroStudyService;
 import harustudy.backend.service.dto.CreatePomodoroStudyDto;
 import jakarta.validation.Valid;
 import java.net.URI;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 public class StudyController {
 
-    private CreatePomodoroStudyService createPomodoroStudyService;
+    private final CreatePomodoroStudyService createPomodoroStudyService;
 
     @PostMapping("/api/studies")
     public ResponseEntity<CreatePomodoroStudyResponse> createStudy(

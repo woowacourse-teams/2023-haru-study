@@ -9,18 +9,18 @@ import harustudy.backend.repository.StudyRepository;
 import harustudy.backend.controller.CreatePomodoroStudyRequest;
 import harustudy.backend.service.dto.CreatePomodoroStudyDto;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional
 @Service
 public class CreatePomodoroStudyService {
 
-    private StudyRepository studyRepository;
-    private ParticipantCodeRepository participantCodeRepository;
-    private GenerationStrategy generationStrategy;
+    private final StudyRepository studyRepository;
+    private final ParticipantCodeRepository participantCodeRepository;
+    private final GenerationStrategy generationStrategy;
 
     public CreatePomodoroStudyDto createStudy(CreatePomodoroStudyRequest request) {
         Study study = new Pomodoro(request.name(), request.totalCycle(), request.timePerCycle());
