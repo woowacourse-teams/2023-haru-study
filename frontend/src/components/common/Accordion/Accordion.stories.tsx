@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import Accordion from './Accordion';
+import Typography from '../Typography/Typography';
 
 type Story = StoryObj<typeof Accordion>;
 
@@ -22,7 +23,9 @@ export const DefaultAccordion: Story = {
     children: (
       <>
         <Accordion.Item>
-          <Accordion.Header>Header</Accordion.Header>
+          <Accordion.Header>
+            <Typography variant="h5">Header</Typography>
+          </Accordion.Header>
           <Accordion.Panel>Panel</Accordion.Panel>
         </Accordion.Item>
       </>
