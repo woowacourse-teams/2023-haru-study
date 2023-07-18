@@ -64,7 +64,7 @@ const Input = ({
   $style,
   ...props
 }: PropsWithChildren<InputProps> & HTMLAttributes<HTMLDivElement>) => {
-  const child = Children.only(children);
+  const child = Children.only<ReactElement<{ error: boolean; id?: string }>>(children);
   const generatedId = useId('input');
   const id = child.props.id ?? generatedId;
   const isError: boolean = child.props.error ?? false;
@@ -113,7 +113,7 @@ type TextFieldProps = {
   $style?: CSSProp;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-Input.TextField = forwardRef(({ $style, ...props }: TextFieldProps, ref: ForwardedRef<HTMLInputElement>) => {
+Input.TextField = forwardRef(({ error, $style, ...props }: TextFieldProps, ref: ForwardedRef<HTMLInputElement>) => {
   return <StyledInput ref={ref} $style={$style} {...props} />;
 });
 
