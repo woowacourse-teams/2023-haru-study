@@ -21,7 +21,7 @@ export const DefaultMenu: Story = {
   args: {
     children: (
       <>
-        <Menu.Item onClick={() => alert('아이템1을 클릭했습니다.')}>아이템1</Menu.Item>
+        <Menu.Item onClick={() => alert('아이템1을 클릭했습니다.')}>아이템1입니다.</Menu.Item>
         <Menu.Item onClick={() => alert('아이템2을 클릭했습니다.')}>아이템2</Menu.Item>
         <Menu.Item onClick={() => alert('아이템3을 클릭했습니다.')}>아이템3</Menu.Item>
         <Menu.Item onClick={() => alert('아이템4을 클릭했습니다.')}>아이템4</Menu.Item>
