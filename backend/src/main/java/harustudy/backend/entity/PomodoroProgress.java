@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,5 +28,11 @@ public class PomodoroProgress extends MemberProgress {
                 .map(record -> (PomodoroRecord) record)
                 .findAny()
                 .orElseThrow(IllegalArgumentException::new);
+    }
+
+    public List<PomodoroRecord> getPomodoroRecords() {
+        return getMemberRecords().stream()
+                .map(record -> (PomodoroRecord) record)
+                .toList();
     }
 }

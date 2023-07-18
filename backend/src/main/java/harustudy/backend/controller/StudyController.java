@@ -1,6 +1,7 @@
 package harustudy.backend.controller;
 
 import harustudy.backend.dto.response.CurrentCyclePlanResponse;
+import harustudy.backend.dto.response.MemberContentResponses;
 import harustudy.backend.dto.response.MemberStudyMetaDataResponse;
 import harustudy.backend.dto.response.StudyMetadataResponse;
 import harustudy.backend.service.PomodoroProgressService;
@@ -41,5 +42,14 @@ public class StudyController {
             @PathVariable Long studyId
     ) {
         return ResponseEntity.ok(pomodoroProgressService.findStudyMetadataByStudyId(studyId));
+    }
+
+    @GetMapping("/api/studies/{studyId}/members/{memberId}/content")
+    public ResponseEntity<MemberContentResponses> findMemberContent(
+            @PathVariable Long studyId,
+            @PathVariable Long memberId
+    ) {
+        return ResponseEntity.ok(
+                pomodoroProgressService.findMemberContentByStudyIdAndMemberId(studyId, memberId));
     }
 }

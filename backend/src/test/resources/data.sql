@@ -111,7 +111,7 @@ insert into pomodoro_record (id, cycle, plan, retrospect, template_version) valu
         'whatCanYouDo': '가능성을 높이기 위해 무엇을 할 수 있을지?'
     ),
     JSON_OBJECT(
-        'doneAsExpected': '예상                                                                                                                                                                                                                                                                                                                                 했던 결과',
+        'doneAsExpected': '예상했던 결과',
         'experiencedDifficulty':'겪었던 어려움',
         'lesson': '교훈'
     ),

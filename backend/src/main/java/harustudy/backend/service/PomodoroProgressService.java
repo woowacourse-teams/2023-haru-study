@@ -1,12 +1,15 @@
 package harustudy.backend.service;
 
+import harustudy.backend.dto.MemberContentResponse;
 import harustudy.backend.dto.MemberDto;
 import harustudy.backend.dto.response.CurrentCyclePlanResponse;
+import harustudy.backend.dto.response.MemberContentResponses;
 import harustudy.backend.dto.response.MemberStudyMetaDataResponse;
 import harustudy.backend.dto.response.StudyMetadataResponse;
 import harustudy.backend.entity.Member;
 import harustudy.backend.entity.Pomodoro;
 import harustudy.backend.entity.PomodoroProgress;
+import harustudy.backend.entity.PomodoroRecord;
 import harustudy.backend.repository.MemberProgressRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,5 +66,21 @@ public class PomodoroProgressService {
                 pomodoro.getTimePerCycle(),
                 members
         );
+    }
+
+    public MemberContentResponses findMemberContentByStudyIdAndMemberId(Long studyId,
+            Long memberId) {
+        PomodoroProgress pomodoroProgress = memberProgressRepository.findByMemberIdWithStudyId(
+                        memberId, studyId)
+                .orElseThrow();
+
+        List<PomodoroRecord> pomodoroRecords = pomodoroProgress.getPomodoroRecords();
+
+        List<MemberContentResponse> memberContentResponses = pomodoroRecords.stream()
+                .map(record -> new MemberContentResponse(record.getCycle(), record.getPlan(),
+                        record.getRetrospect()))
+                .toList();
+
+        return new MemberContentResponses(memberContentResponses);
     }
 }

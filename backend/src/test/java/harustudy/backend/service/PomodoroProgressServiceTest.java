@@ -3,10 +3,14 @@ package harustudy.backend.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import harustudy.backend.dto.MemberContentResponse;
 import harustudy.backend.dto.MemberDto;
 import harustudy.backend.dto.response.CurrentCyclePlanResponse;
+import harustudy.backend.dto.response.MemberContentResponses;
 import harustudy.backend.dto.response.MemberStudyMetaDataResponse;
 import harustudy.backend.dto.response.StudyMetadataResponse;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -18,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SpringBootTest
-@Sql("/data.sql")
+@Sql(value = "/data.sql")
 @Transactional
 class PomodoroProgressServiceTest {
 
@@ -76,5 +80,34 @@ class PomodoroProgressServiceTest {
                         new MemberDto(2L, "member2"))
         );
         System.out.println("response = " + response);
+    }
+
+    @Test
+    void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회한다() {
+        // given
+        MemberContentResponses memberContentResponses = pomodoroProgressService.findMemberContentByStudyIdAndMemberId(
+                1L, 1L);
+
+        Map<String, String> expectedPlan = Map.of(
+                "toDo", "쿠키와 세션",
+                "completionCondition", "완료조건",
+                "expectedProbability", "80%",
+                "expectedDifficulty", "예상되는 어려움",
+                "whatCanYouDo", "가능성을 높이기 위해 무엇을 할 수 있을지?");
+
+        Map<String, String> expectedRetrospect = Map.of(
+                "doneAsExpected", "예상했던 결과",
+                "experiencedDifficulty", "겪었던 어려움",
+                "lesson", "교훈");
+
+        MemberContentResponse expectedMemberContentResponse = new MemberContentResponse(1,
+                expectedPlan,
+                expectedRetrospect);
+
+        // when
+        List<MemberContentResponse> content = memberContentResponses.content();
+
+        // then
+        assertThat(content).containsExactly(expectedMemberContentResponse);
     }
 }
