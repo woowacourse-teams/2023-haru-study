@@ -15,6 +15,9 @@ const Timer = ({ minutes, buttonColor }: Props) => {
 
   const formattedTime = getFormattedTime();
 
+  const buttonText = isTicking ? '정지' : '시작';
+  const buttonAction = isTicking ? stop : start;
+
   return (
     <Layout>
       <Typography variant="p1" fontSize="3.6rem" color={color.white}>
@@ -23,33 +26,18 @@ const Timer = ({ minutes, buttonColor }: Props) => {
       <Typography variant="h1" fontSize="12.8rem" color={color.white}>
         {formattedTime}
       </Typography>
-      {isTicking ? (
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={stop}
-          $style={css`
-            border: none;
-          `}
-        >
-          <Typography variant="h5" color={buttonColor}>
-            정지
-          </Typography>
-        </Button>
-      ) : (
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={start}
-          $style={css`
-            border: none;
-          `}
-        >
-          <Typography variant="h5" color={buttonColor}>
-            시작
-          </Typography>
-        </Button>
-      )}
+      <Button
+        variant="outlined"
+        size="small"
+        onClick={buttonAction}
+        $style={css`
+          border: none;
+        `}
+      >
+        <Typography variant="h5" color={buttonColor}>
+          {buttonText}
+        </Typography>
+      </Button>
     </Layout>
   );
 };
