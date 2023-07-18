@@ -1,12 +1,5 @@
 package harustudy.backend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+public record MemberDto(Long memberId, String nickname) {
 
-@Getter
-@AllArgsConstructor
-public class MemberDto {
-
-    private Long memberId;
-    private String nickname;
 }

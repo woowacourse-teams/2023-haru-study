@@ -3,8 +3,10 @@ package harustudy.backend.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import harustudy.backend.dto.MemberDto;
 import harustudy.backend.dto.response.CurrentCyclePlanResponse;
 import harustudy.backend.dto.response.MemberStudyMetaDataResponse;
+import harustudy.backend.dto.response.StudyMetadataResponse;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -57,5 +59,22 @@ class PomodoroProgressServiceTest {
                 () -> assertThat(memberMetaData.timePerCycle()).isEqualTo(30),
                 () -> assertThat(memberMetaData.step()).isEqualTo("STUDYING")
         );
+    }
+
+    @Test
+    void 스터디_메타데이터_및_참여한_모든_스터디원에_대한_정보를_조회한다() {
+        // given
+        StudyMetadataResponse response = pomodoroProgressService.findStudyMetadataByStudyId(1L);
+
+        // when & then
+        assertAll(
+                () -> assertThat(response.studyName()).isEqualTo("Study 1"),
+                () -> assertThat(response.totalCycle()).isEqualTo(4),
+                () -> assertThat(response.timePerCycle()).isEqualTo(30),
+                () -> assertThat(response.members()).containsExactly(
+                        new MemberDto(1L, "member1"),
+                        new MemberDto(2L, "member2"))
+        );
+        System.out.println("response = " + response);
     }
 }

@@ -2,6 +2,7 @@ package harustudy.backend.controller;
 
 import harustudy.backend.dto.response.CurrentCyclePlanResponse;
 import harustudy.backend.dto.response.MemberStudyMetaDataResponse;
+import harustudy.backend.dto.response.StudyMetadataResponse;
 import harustudy.backend.service.PomodoroProgressService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,5 +34,12 @@ public class StudyController {
     ) {
         return ResponseEntity.ok(
                 pomodoroProgressService.findMemberMetaDataByStudyIdAndMemberId(studyId, memberId));
+    }
+
+    @GetMapping("/api/studies/{studyId}/metadata")
+    public ResponseEntity<StudyMetadataResponse> findStudyMetaData(
+            @PathVariable Long studyId
+    ) {
+        return ResponseEntity.ok(pomodoroProgressService.findStudyMetadataByStudyId(studyId));
     }
 }
