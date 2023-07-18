@@ -23,7 +23,7 @@ public class StudyController {
         return ResponseEntity.ok(pomodoroProgressService.findStudyMetadata(studyId));
     }
 
-    @GetMapping("/api/stuides/{studyId}/content/plans")
+    @GetMapping("/api/studies/{studyId}/content/plans")
     public ResponseEntity<CurrentCyclePlanResponse> findCurrentCyclePlan(
             @PathVariable Long studyId,
             @RequestParam Integer cycle,

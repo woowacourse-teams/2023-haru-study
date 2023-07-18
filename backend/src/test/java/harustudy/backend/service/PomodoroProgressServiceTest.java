@@ -1,6 +1,7 @@
 package harustudy.backend.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import harustudy.backend.dto.MemberContentResponse;
@@ -79,7 +80,6 @@ class PomodoroProgressServiceTest {
                         new MemberDto(1L, "member1"),
                         new MemberDto(2L, "member2"))
         );
-        System.out.println("response = " + response);
     }
 
     @Test
@@ -109,5 +109,54 @@ class PomodoroProgressServiceTest {
 
         // then
         assertThat(content).containsExactly(expectedMemberContentResponse);
+    }
+
+    @Test
+    void 특정_멤버의_현재_사이클의_계획_조회_시_스터디가_없으면_예외를_던진다() {
+        // given & when & then
+        assertThatThrownBy(() -> pomodoroProgressService.findCurrentCyclePlan(1, 10L, 1L))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void 특정_멤버의_현재_사이클의_계획_조회_시_멤버가_없으면_예외를_던진다() {
+        // given & when & then
+        assertThatThrownBy(() -> pomodoroProgressService.findCurrentCyclePlan(1, 1L, 10L))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void 스터디에_속하는_특정_멤버에_대한_정보를_조회_시_스터디가_없으면_예외를_던진다() {
+        // given & when & then
+        assertThatThrownBy(() -> pomodoroProgressService.findMemberMetaData(10L, 1L))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void 스터디에_속하는_특정_멤버에_대한_정보를_조회_시_멤버가_없으면_예외를_던진다() {
+        // given & when & then
+        assertThatThrownBy(() -> pomodoroProgressService.findMemberMetaData(1L, 10L))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void 스터디_메타데이터_및_참여한_모든_스터디원에_대한_정보를_조회_시_스터디가_없으면_예외를_던진다() {
+        // given & when & then
+        assertThatThrownBy(() -> pomodoroProgressService.findStudyMetadata(10L))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회시_스터디가_없으면_예외를_던진다() {
+        // given & when & then
+        assertThatThrownBy(() -> pomodoroProgressService.findMemberContent(10L, 1L))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회_시_멤버가_없으면_예외를_던진다() {
+        // given & when & then
+        assertThatThrownBy(() -> pomodoroProgressService.findMemberContent(1L, 10L))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
