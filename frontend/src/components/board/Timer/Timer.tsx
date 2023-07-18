@@ -1,9 +1,11 @@
 import { css, styled } from 'styled-components';
 
-import Typography from '../common/Typography/Typography';
-import useTimer from '../../hooks/useTimer';
-import color from '../../styles/color';
-import Button from '../common/Button/Button';
+import Button from '@Components/common/Button/Button';
+import Typography from '@Components/common/Typography/Typography';
+
+import useTimer from '@Hooks/useTimer';
+
+import color from '@Styles/color';
 
 type Props = {
   minutes: number;

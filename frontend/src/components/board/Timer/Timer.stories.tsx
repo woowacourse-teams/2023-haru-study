@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { styled } from 'styled-components';
 
+import color from '@Styles/color';
+
 import Timer from './Timer';
-import color from '../../styles/color';
 
 type Story = StoryObj<typeof TimerWithBackground>;
 
