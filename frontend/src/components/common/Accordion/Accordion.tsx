@@ -27,7 +27,7 @@ Accordion.Header = AccordionHeader;
 Accordion.Panel = AccordionPanel;
 Accordion.Item = AccordionItem;
 
-const AccordionLayout = styled.div<Props>`
+const AccordionLayout = styled.ul<Props>`
   display: grid;
   row-gap: 40px;
 

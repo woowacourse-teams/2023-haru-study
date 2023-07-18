@@ -28,7 +28,7 @@ const AccordionItem = ({ children }: PropsWithChildren) => {
 
 export default AccordionItem;
 
-const AccordionItemLayout = styled.div`
+const AccordionItemLayout = styled.li`
   padding: 10px 30px;
   border: 1px solid ${color.neutral[200]};
   border-radius: 14px;
