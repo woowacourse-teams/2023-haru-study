@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+
+  datasource:
+    url: jdbc:h2:mem:local;MODE=MySQL;
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver

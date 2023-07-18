@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,4 +28,22 @@ public class ParticipantCode extends BaseTimeEntity {
 
     @Column(unique = true, length = 6)
     private String code;
+
+    @Transient
+    private GenerationStrategy generationStrategy;
+
+    public ParticipantCode(Study study, GenerationStrategy generationStrategy) {
+        this.study = study;
+        this.generationStrategy = generationStrategy;
+        this.code = generationStrategy.generate();
+    }
+
+    // TODO: 참여코드 생성에 대한 충돌 문제 개선
+    public void regenerate() {
+        String generated = code;
+        while (code.equals(generated)) {
+            generated = generationStrategy.generate();
+        }
+        code = generated;
+    }
 }
