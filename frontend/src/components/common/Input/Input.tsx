@@ -9,11 +9,16 @@ import {
   cloneElement,
   forwardRef,
 } from 'react';
-import { CSSProp, RuleSet, css, styled } from 'styled-components';
-import useId from '../../../hooks/useId';
-import colorStyle from '../../../styles/color';
-import { Size } from '../../../types/style';
-import { SIZE } from '../../../constants/style';
+import { css, styled } from 'styled-components';
+import type { CSSProp, RuleSet } from 'styled-components';
+
+import { Size } from '@Types/style';
+
+import useId from '@Hooks/useId';
+
+import color from '@Styles/color';
+
+import { SIZE } from '@Constants/style';
 
 type Include<T, U> = T extends U ? T : never;
 
@@ -25,15 +30,15 @@ const SIZE_TYPE: Record<LabelSizeType, RuleSet<object>> = {
   `,
 
   small: css`
-    font-size: ${SIZE['small']};
+    font-size: ${SIZE.small};
   `,
 
   medium: css`
-    font-size: ${SIZE['medium']};
+    font-size: ${SIZE.medium};
   `,
 
   large: css`
-    font-size: ${SIZE['large']};
+    font-size: ${SIZE.large};
   `,
 
   'x-large': css`
@@ -59,14 +64,14 @@ const Input = ({
   $style,
   ...props
 }: PropsWithChildren<InputProps> & HTMLAttributes<HTMLDivElement>) => {
-  const child = Children.only(children);
+  const child = Children.only<ReactElement<{ error: boolean; id?: string }>>(children);
   const generatedId = useId('input');
   const id = child.props.id ?? generatedId;
   const isError: boolean = child.props.error ?? false;
 
   return (
     <Layout {...props}>
-      <StyledLabel htmlFor={id} $labelSize="medium" $style={$style}>
+      <StyledLabel htmlFor={id} $labelSize={$labelSize} $style={$style}>
         {label}
       </StyledLabel>
       {cloneElement(child, { id, ...child.props })}
@@ -99,7 +104,7 @@ const StyledBottomText = styled.p<{ isError?: boolean }>`
   font-weight: 200;
 
   ${({ isError }) => css`
-    color: ${isError ? colorStyle.red[600] : colorStyle.neutral[400]};
+    color: ${isError ? color.red[600] : color.neutral[400]};
   `};
 `;
 
@@ -116,14 +121,14 @@ type StyledInputProps = Pick<TextFieldProps, '$style'>;
 
 const StyledInput = styled.input<StyledInputProps>`
   &:disabled {
-    background-color: ${colorStyle.neutral[200]};
+    background-color: ${color.neutral[200]};
   }
 
   width: 100%;
   padding: 20px;
   font-size: 2.4rem;
   border-radius: 7px;
-  border: 1px solid ${colorStyle.neutral[200]};
+  border: 1px solid ${color.neutral[200]};
 
   ${({ $style, theme }) => css`
     background-color: ${theme.background};

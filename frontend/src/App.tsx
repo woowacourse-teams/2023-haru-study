@@ -1,9 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import GlobalStyles from './styles/globalStyle';
-import { lightTheme } from './styles/theme';
-import Button from './components/common/Button/Button';
-import Typography from './components/common/Typography/Typography';
+
+import Button from '@Components/common/Button/Button';
+import Typography from '@Components/common/Typography/Typography';
+
+import GlobalStyles from '@Styles/globalStyle';
+import { lightTheme } from '@Styles/theme';
 
 const App = () => {
   return (
@@ -11,6 +13,7 @@ const App = () => {
       <GlobalStyles />
       <ThemeProvider theme={lightTheme}>
         <Typography variant="h1">Welcome Haru Study!</Typography>
+        <Button variant="secondary">Button</Button>
         <Outlet />
       </ThemeProvider>
     </>

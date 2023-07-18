@@ -13,6 +13,17 @@ module.exports = () => {
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.jsx'],
+      alias: {
+        '@Components': path.resolve(__dirname, 'src/components'),
+        '@Types': path.resolve(__dirname, 'src/types'),
+        '@Hooks': path.resolve(__dirname, 'src/hooks'),
+        '@Pages': path.resolve(__dirname, 'src/pages'),
+        '@Styles': path.resolve(__dirname, 'src/styles'),
+        '@Constants': path.resolve(__dirname, 'src/constants'),
+        '@Contexts': path.resolve(__dirname, 'src/contexts'),
+        '@Assets': path.resolve(__dirname, 'src/assets'),
+        '@Utils': path.resolve(__dirname, 'src/utils'),
+      },
     },
     devServer: {
       port: 3000,
