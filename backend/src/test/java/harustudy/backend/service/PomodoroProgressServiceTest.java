@@ -32,7 +32,7 @@ class PomodoroProgressServiceTest {
     @Test
     void 특정_멤버의_현재_사이클의_계획을_조회한다() {
         // given
-        CurrentCyclePlanResponse currentCyclePlan = pomodoroProgressService.findCurrentCyclePlanByStudyIdAndMemberIdAndCycle(
+        CurrentCyclePlanResponse currentCyclePlan = pomodoroProgressService.findCurrentCyclePlan(
                 1, 1L, 1L);
 
         // when & then
@@ -52,7 +52,7 @@ class PomodoroProgressServiceTest {
     @Test
     void 스터디에_속하는_특정_멤버에_대한_정보를_조회한다() {
         // given
-        MemberStudyMetaDataResponse memberMetaData = pomodoroProgressService.findMemberMetaDataByStudyIdAndMemberId(
+        MemberStudyMetaDataResponse memberMetaData = pomodoroProgressService.findMemberMetaData(
                 1L, 1L);
 
         // when & then
@@ -68,7 +68,7 @@ class PomodoroProgressServiceTest {
     @Test
     void 스터디_메타데이터_및_참여한_모든_스터디원에_대한_정보를_조회한다() {
         // given
-        StudyMetadataResponse response = pomodoroProgressService.findStudyMetadataByStudyId(1L);
+        StudyMetadataResponse response = pomodoroProgressService.findStudyMetadata(1L);
 
         // when & then
         assertAll(
@@ -85,7 +85,7 @@ class PomodoroProgressServiceTest {
     @Test
     void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회한다() {
         // given
-        MemberContentResponses memberContentResponses = pomodoroProgressService.findMemberContentByStudyIdAndMemberId(
+        MemberContentResponses memberContentResponses = pomodoroProgressService.findMemberContent(
                 1L, 1L);
 
         Map<String, String> expectedPlan = Map.of(

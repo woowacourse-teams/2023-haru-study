@@ -16,8 +16,8 @@ public interface MemberProgressRepository<T extends MemberProgress> extends JpaR
                 and mp.member.id = :memberId
                 and mp.study.id = :studyId
             """)
-    Optional<T> findByMemberIdWithStudyId(@Param("memberId") Long memberId,
-            @Param("studyId") Long studyId);
+    Optional<T> findByStudyIdAndMemberId(@Param("studyId") Long studyId,
+            @Param("memberId") Long memberId);
 
     @Query("""
                 select mp from MemberProgress mp
