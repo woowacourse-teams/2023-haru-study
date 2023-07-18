@@ -21,14 +21,12 @@ export default meta;
 export const DefaultAccordion: Story = {
   args: {
     children: (
-      <>
-        <Accordion.Item>
-          <Accordion.Header>
-            <Typography variant="h5">Title</Typography>
-          </Accordion.Header>
-          <Accordion.Panel>Panel</Accordion.Panel>
-        </Accordion.Item>
-      </>
+      <Accordion.Item>
+        <Accordion.Header>
+          <Typography variant="h5">Title</Typography>
+        </Accordion.Header>
+        <Accordion.Panel>Panel</Accordion.Panel>
+      </Accordion.Item>
     ),
   },
 };
@@ -38,23 +36,19 @@ export const DefaultAccordion: Story = {
  */
 export const MultipleAccordion: Story = {
   args: {
-    children: (
-      <>
-        {[
-          { title: 'Title1', panel: 'Panel1', id: 1 },
-          { title: 'Title2', panel: 'Panel2', id: 2 },
-          { title: 'Title3', panel: 'Panel3', id: 3 },
-        ].map((item) => {
-          return (
-            <Accordion.Item key={item.id}>
-              <Accordion.Header>
-                <Typography variant="h5">{item.title}</Typography>
-              </Accordion.Header>
-              <Accordion.Panel>{item.panel}</Accordion.Panel>
-            </Accordion.Item>
-          );
-        })}
-      </>
-    ),
+    children: [
+      { title: 'Title1', panel: 'Panel1', id: 1 },
+      { title: 'Title2', panel: 'Panel2', id: 2 },
+      { title: 'Title3', panel: 'Panel3', id: 3 },
+    ].map((item) => {
+      return (
+        <Accordion.Item key={item.id}>
+          <Accordion.Header>
+            <Typography variant="h5">{item.title}</Typography>
+          </Accordion.Header>
+          <Accordion.Panel>{item.panel}</Accordion.Panel>
+        </Accordion.Item>
+      );
+    }),
   },
 };
