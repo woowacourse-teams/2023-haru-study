@@ -18,5 +18,14 @@ export default meta;
  * `DefaultAccordion`는 아코디언 컴포넌트의 기본 `Accordion` 스토리입니다.
  */
 export const DefaultAccordion: Story = {
-  args: {},
+  args: {
+    children: (
+      <>
+        <Accordion.Item>
+          <Accordion.Header>Header</Accordion.Header>
+          <Accordion.Panel>Panel</Accordion.Panel>
+        </Accordion.Item>
+      </>
+    ),
+  },
 };
