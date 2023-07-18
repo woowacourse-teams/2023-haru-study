@@ -29,7 +29,7 @@ public class PomodoroProgressService {
             Long memberId) {
         PomodoroProgress pomodoroProgress = memberProgressRepository.findByMemberIdWithStudyId(
                         memberId, studyId)
-                .orElseThrow();
+                .orElseThrow(IllegalArgumentException::new);
 
         return new CurrentCyclePlanResponse(
                 pomodoroProgress.findPomodoroRecordByCycle(cycle).getPlan());
@@ -39,7 +39,7 @@ public class PomodoroProgressService {
             Long studyId) {
         PomodoroProgress pomodoroProgress = memberProgressRepository.findByMemberIdWithStudyId(
                         memberId, studyId)
-                .orElseThrow();
+                .orElseThrow(IllegalArgumentException::new);
 
         Pomodoro study = (Pomodoro) pomodoroProgress.getStudy();
 
@@ -50,6 +50,10 @@ public class PomodoroProgressService {
 
     public StudyMetadataResponse findStudyMetadataByStudyId(Long studyId) {
         List<PomodoroProgress> pomodoroProgresses = memberProgressRepository.findByStudyId(studyId);
+
+        if (pomodoroProgresses.size() == 0) {
+            throw new IllegalArgumentException();
+        }
 
         List<MemberDto> members = new ArrayList<>();
 
