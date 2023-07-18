@@ -19,7 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 public class IntegrationTest {
 
     @Autowired
-    WebApplicationContext webApplicationContext;
+    private WebApplicationContext webApplicationContext;
 
     protected MockMvc mockMvc;
 

@@ -22,15 +22,15 @@ import org.springframework.test.web.servlet.MvcResult;
 class CreateStudyIntegrationTest extends IntegrationTest {
 
     @Autowired
-    StudyRepository studyRepository;
+    private StudyRepository studyRepository;
     @Autowired
-    ParticipantCodeRepository participantCodeRepository;
+    private ParticipantCodeRepository participantCodeRepository;
     @Autowired
-    CreatePomodoroStudyService createPomodoroStudyService;
+    private CreatePomodoroStudyService createPomodoroStudyService;
     @Autowired
-    GenerationStrategy generationStrategy;
+    private GenerationStrategy generationStrategy;
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Test
     void 스터디가_생성된다() throws Exception {

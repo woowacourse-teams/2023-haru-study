@@ -27,13 +27,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CreatePomodoroStudyServiceTest {
 
     @Mock
-    StudyRepository studyRepository;
+    private StudyRepository studyRepository;
     @Mock
-    ParticipantCodeRepository participantCodeRepository;
+    private ParticipantCodeRepository participantCodeRepository;
     @Mock
-    GenerationStrategy generationStrategy;
+    private GenerationStrategy generationStrategy;
     @InjectMocks
-    CreatePomodoroStudyService createPomodoroStudyService;
+    private CreatePomodoroStudyService createPomodoroStudyService;
 
     @Test
     void 스터디_개설시_참여코드가_생성된다() {

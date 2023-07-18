@@ -26,11 +26,11 @@ import org.springframework.test.web.servlet.MockMvc;
 class StudyControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
     @MockBean
-    CreatePomodoroStudyService createPomodoroStudyService;
+    private CreatePomodoroStudyService createPomodoroStudyService;
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @ParameterizedTest
     @ValueSource(strings = {"", "12345678910"})
