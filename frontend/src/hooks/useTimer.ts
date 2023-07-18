@@ -57,9 +57,7 @@ const useTimer = (minutes: number) => {
       .toString()
       .padStart(2, '0');
 
-    const formattedTime = `${minutes}:${seconds}`;
-
-    return formattedTime;
+    return `${minutes}:${seconds}`;
   };
 
   return {
