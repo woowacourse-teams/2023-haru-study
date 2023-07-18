@@ -19,18 +19,20 @@ const AccordionLayout = styled.div`
 `;
 
 const AccordionContext = createContext({
-  isOpen: false,
-  toggleOpenState: () => {},
+  isPanelOpen: false,
+  openPanel: () => {},
+  closePanel: () => {},
 });
 
 const useAccordionContext = () => useContext(AccordionContext);
 
 Accordion.Item = ({ children }: PropsWithChildren) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  const toggleOpenState = () => setIsOpen((prev) => !prev);
+  const openPanel = () => setIsPanelOpen(true);
+  const closePanel = () => setIsPanelOpen(false);
 
-  const value = useMemo(() => ({ isOpen, toggleOpenState }), [isOpen]);
+  const value = useMemo(() => ({ isPanelOpen, openPanel, closePanel }), [isPanelOpen]);
 
   return (
     <div>
@@ -40,13 +42,13 @@ Accordion.Item = ({ children }: PropsWithChildren) => {
 };
 
 Accordion.Header = ({ children }: PropsWithChildren) => {
-  const { isOpen, toggleOpenState } = useAccordionContext();
+  const { isPanelOpen, openPanel } = useAccordionContext();
 
   return (
     <AccordionHeaderLayout>
       {children}
-      {!isOpen && (
-        <Button variant="secondary" size="x-small" onClick={toggleOpenState}>
+      {!isPanelOpen && (
+        <Button variant="secondary" size="x-small" onClick={openPanel}>
           펼처보기
         </Button>
       )}
@@ -63,12 +65,12 @@ const AccordionHeaderLayout = styled.div`
 `;
 
 Accordion.Panel = ({ children }: PropsWithChildren) => {
-  const { isOpen, toggleOpenState } = useAccordionContext();
+  const { isPanelOpen, closePanel } = useAccordionContext();
 
   return (
     <PanelLayout>
-      {isOpen && <PanelContents>{children}</PanelContents>}
-      {isOpen && (
+      {isPanelOpen && <PanelContents>{children}</PanelContents>}
+      {isPanelOpen && (
         <Button
           variant="secondary"
           size="x-small"
@@ -76,7 +78,7 @@ Accordion.Panel = ({ children }: PropsWithChildren) => {
           $style={css`
             justify-self: end;
           `}
-          onClick={toggleOpenState}
+          onClick={closePanel}
         >
           접어두기
         </Button>
