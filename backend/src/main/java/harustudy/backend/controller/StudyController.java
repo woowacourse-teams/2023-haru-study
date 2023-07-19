@@ -23,17 +23,17 @@ public class StudyController {
 
     @GetMapping("/api/studies/{studyId}/metadata")
     public ResponseEntity<StudyMetadataResponse> findStudyMetaData(@PathVariable Long studyId) {
-      return ResponseEntity.ok(pomodoroProgressService.findStudyMetadata(studyId));
+        return ResponseEntity.ok(pomodoroProgressService.findStudyMetadata(studyId));
     }
 
     @PostMapping("/api/studies")
     public ResponseEntity<CreatePomodoroStudyResponse> createStudy(
-        @Valid @RequestBody CreatePomodoroStudyRequest request
+            @Valid @RequestBody CreatePomodoroStudyRequest request
     ) {
-      CreatePomodoroStudyDto createPomodoroStudyDto =
-          createPomodoroStudyService.createStudy(request);
-      return ResponseEntity.created(URI.create("/api/studies/" + createPomodoroStudyDto.studyId()))
-          .body(CreatePomodoroStudyResponse.of(createPomodoroStudyDto));
+        CreatePomodoroStudyDto createPomodoroStudyDto =
+                createPomodoroStudyService.createStudy(request);
+        return ResponseEntity.created(URI.create("/api/studies/" + createPomodoroStudyDto.studyId()))
+                .body(CreatePomodoroStudyResponse.of(createPomodoroStudyDto));
     }
 }
   
