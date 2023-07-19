@@ -34,7 +34,7 @@ public class PomodoroProgressService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        PomodoroProgress pomodoroProgress = memberProgressRepository.findByStudyIdAndMemberId(
+        PomodoroProgress pomodoroProgress = memberProgressRepository.findByStudyAndMember(
                         study, member)
                 .orElseThrow(IllegalArgumentException::new);
 
@@ -47,7 +47,7 @@ public class PomodoroProgressService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        PomodoroProgress pomodoroProgress = memberProgressRepository.findByStudyIdAndMemberId(
+        PomodoroProgress pomodoroProgress = memberProgressRepository.findByStudyAndMember(
                         study, member)
                 .orElseThrow(IllegalArgumentException::new);
 
@@ -60,7 +60,7 @@ public class PomodoroProgressService {
 
     public StudyMetadataResponse findStudyMetadata(Long studyId) {
         Study study = studyRepository.findById(studyId).orElseThrow(IllegalArgumentException::new);
-        List<PomodoroProgress> pomodoroProgresses = memberProgressRepository.findByStudyId(study);
+        List<PomodoroProgress> pomodoroProgresses = memberProgressRepository.findByStudy(study);
 
         if (pomodoroProgresses.isEmpty()) {
             throw new IllegalArgumentException();
@@ -87,7 +87,7 @@ public class PomodoroProgressService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        PomodoroProgress pomodoroProgress = memberProgressRepository.findByStudyIdAndMemberId(
+        PomodoroProgress pomodoroProgress = memberProgressRepository.findByStudyAndMember(
                         study, member)
                 .orElseThrow(IllegalArgumentException::new);
 

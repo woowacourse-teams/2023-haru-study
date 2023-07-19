@@ -1,8 +1,11 @@
 package harustudy.backend.controller;
 
+import harustudy.backend.dto.request.StudyAuthRequest;
+import harustudy.backend.dto.response.StudyAuthResponse;
 import harustudy.backend.dto.response.StudyMetadataResponse;
 import harustudy.backend.service.CreatePomodoroStudyService;
 import harustudy.backend.service.PomodoroProgressService;
+import harustudy.backend.service.StudyAuthService;
 import harustudy.backend.service.dto.CreatePomodoroStudyDto;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -20,6 +23,7 @@ public class StudyController {
 
     private final PomodoroProgressService pomodoroProgressService;
     private final CreatePomodoroStudyService createPomodoroStudyService;
+    private final StudyAuthService studyAuthService;
 
     @GetMapping("/api/studies/{studyId}/metadata")
     public ResponseEntity<StudyMetadataResponse> findStudyMetaData(@PathVariable Long studyId) {
@@ -32,8 +36,18 @@ public class StudyController {
     ) {
         CreatePomodoroStudyDto createPomodoroStudyDto =
                 createPomodoroStudyService.createStudy(request);
-        return ResponseEntity.created(URI.create("/api/studies/" + createPomodoroStudyDto.studyId()))
+        return ResponseEntity.created(
+                        URI.create("/api/studies/" + createPomodoroStudyDto.studyId()))
                 .body(CreatePomodoroStudyResponse.of(createPomodoroStudyDto));
+    }
+
+    @PostMapping("/api/studies/authenticate")
+    public ResponseEntity<StudyAuthResponse> checkAuth(
+            @RequestBody StudyAuthRequest request
+    ) {
+        StudyAuthResponse response = studyAuthService.checkAuthCode(
+                request.participantCode(), request.memberId());
+        return ResponseEntity.ok(response);
     }
 }
   

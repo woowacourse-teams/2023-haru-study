@@ -76,11 +76,13 @@ create table study (
                        primary key (id)
 );
 
-insert into study (id, name, study_type) values (1, 'Study 1', 'Pomodoro');
-insert into pomodoro(id, total_cycle, time_per_cycle) values(1, 4, 30);
+insert into participant_code (id, code) values(1, 'ASDFGH');
+insert into study (id, participant_code_id, name, study_type) values (1, 1, 'Study 1', 'Pomodoro');
+insert into pomodoro (id, total_cycle, time_per_cycle) values(1, 4, 30);
 
-insert into study (id, name, study_type) values (2, 'Study 2', 'Pomodoro');
-insert into pomodoro(id, total_cycle, time_per_cycle) values(2, 6, 25);
+insert into participant_code (id, code) values(2, 'QWERTY');
+insert into study (id, participant_code_id, name, study_type) values (2, 2, 'Study 2', 'Pomodoro');
+insert into pomodoro (id, total_cycle, time_per_cycle) values(2, 6, 25);
 
 -- member
 

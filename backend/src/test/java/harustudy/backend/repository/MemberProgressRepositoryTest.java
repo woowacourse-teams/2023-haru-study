@@ -34,7 +34,7 @@ class MemberProgressRepositoryTest {
                 .orElseThrow(IllegalArgumentException::new);
 
         // when
-        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByStudyIdAndMemberId(
+        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByStudyAndMember(
                 study, member).get();
 
         // then
@@ -47,7 +47,7 @@ class MemberProgressRepositoryTest {
         Study study = studyRepository.findById(1L).orElseThrow(IllegalArgumentException::new);
 
         // when
-        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findByStudyId(
+        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findByStudy(
                 study);
 
         // then

@@ -42,4 +42,8 @@ public abstract class MemberProgress extends BaseTimeEntity {
     private List<MemberRecord> memberRecords = new ArrayList<>();
 
     private boolean isDone = false;
+
+    public boolean isOwnedBy(Member member) {
+        return getMember().equals(member);
+    }
 }

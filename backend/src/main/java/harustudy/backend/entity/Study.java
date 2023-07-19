@@ -11,8 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +38,9 @@ public abstract class Study extends BaseTimeEntity {
     @Column(length = 10)
     private String name;
 
+    @OneToMany(mappedBy = "study")
+    private List<MemberProgress> memberProgresses = new ArrayList<>();
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participant_code_id")
     private ParticipantCode participantCode;
@@ -49,5 +55,10 @@ public abstract class Study extends BaseTimeEntity {
         if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH) {
             throw new StudyNameLengthException();
         }
+    }
+
+    public boolean isParticipatedMember(Member member) {
+        return memberProgresses.stream()
+                .anyMatch(memberProgress -> memberProgress.isOwnedBy(member));
     }
 }

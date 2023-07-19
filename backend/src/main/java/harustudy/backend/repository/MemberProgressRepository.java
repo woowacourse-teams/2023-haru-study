@@ -18,7 +18,7 @@ public interface MemberProgressRepository<T extends MemberProgress> extends JpaR
                 and mp.study = :study
                 and mp.member = :member
             """)
-    Optional<T> findByStudyIdAndMemberId(@Param("study") Study study,
+    Optional<T> findByStudyAndMember(@Param("study") Study study,
             @Param("member") Member member);
 
     @Query("""
@@ -28,5 +28,5 @@ public interface MemberProgressRepository<T extends MemberProgress> extends JpaR
                 where type(mp) = (PomodoroProgress)
                 and mp.study = :study
             """)
-    List<T> findByStudyId(@Param("study") Study study);
+    List<T> findByStudy(@Param("study") Study study);
 }
