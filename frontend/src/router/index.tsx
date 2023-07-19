@@ -1,7 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import MakingStudy from '@Pages/MakingStudy';
+import StudyBoard from '@Pages/StudyBoard';
+
 import App from '../App';
-import StudyBoard from '../pages/StudyBoard';
 
 const router = createBrowserRouter([
   {
@@ -11,6 +13,10 @@ const router = createBrowserRouter([
       {
         path: 'studyboard',
         element: <StudyBoard />,
+      },
+      {
+        path: 'makingstudy',
+        element: <MakingStudy />,
       },
     ],
   },
