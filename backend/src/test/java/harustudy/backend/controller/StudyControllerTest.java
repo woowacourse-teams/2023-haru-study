@@ -1,12 +1,8 @@
 package harustudy.backend.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import harustudy.backend.service.CreatePomodoroStudyService;
+import harustudy.backend.service.PomodoroProgressService;
 import harustudy.backend.service.dto.CreatePomodoroStudyDto;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -19,6 +15,11 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @MockBean(JpaMetamodelMappingContext.class)
@@ -29,6 +30,8 @@ class StudyControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private CreatePomodoroStudyService createPomodoroStudyService;
+    @MockBean
+    private PomodoroProgressService pomodoroProgressService;
     @Autowired
     private ObjectMapper objectMapper;
 
