@@ -50,6 +50,7 @@ type InputProps = {
   label?: ReactNode;
   children: ReactElement;
   bottomText?: string;
+  errorMessage?: string;
 
   $labelSize?: LabelSizeType;
 
@@ -60,6 +61,7 @@ const Input = ({
   label,
   children,
   bottomText,
+  errorMessage = '잘못된 입력입니다.',
   $labelSize,
   $style,
   ...props
@@ -75,7 +77,7 @@ const Input = ({
         {label}
       </StyledLabel>
       {cloneElement(child, { id, ...child.props })}
-      {isError && <StyledBottomText $error={true}>잘못된 입력입니다.</StyledBottomText>}
+      {isError && <StyledBottomText $error={true}>{errorMessage}</StyledBottomText>}
       {bottomText !== null && <StyledBottomText>{bottomText}</StyledBottomText>}
     </Layout>
   );

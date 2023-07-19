@@ -8,6 +8,8 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
+import { ERROR_MESSAGE } from '@Constants/errorMessage';
+
 const SubmitContents = () => {
   const [studyName, setStudyName] = useState<string | null>(null);
   const [totalCycle, setTotalCycle] = useState<number | null>(null);
@@ -65,7 +67,10 @@ const SubmitContents = () => {
   return (
     <Layout>
       <Container>
-        <Input label={<Typography variant="p1">스터디의 이름은 무엇인가요?</Typography>}>
+        <Input
+          label={<Typography variant="p1">스터디의 이름은 무엇인가요?</Typography>}
+          errorMessage={ERROR_MESSAGE.studyName}
+        >
           <Input.TextField
             $style={css`
               padding: 10px;
