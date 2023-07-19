@@ -4,8 +4,10 @@ import harustudy.backend.entity.Member;
 import harustudy.backend.entity.PomodoroProgress;
 import harustudy.backend.entity.PomodoroRecord;
 import harustudy.backend.entity.Study;
+import harustudy.backend.exception.EntityNotFoundException;
 import harustudy.backend.exception.EntityNotFoundException.MemberNotFound;
 import harustudy.backend.exception.EntityNotFoundException.PomodoroProgressNotFound;
+import harustudy.backend.exception.EntityNotFoundException.PomodoroRecordNotFound;
 import harustudy.backend.exception.EntityNotFoundException.StudyNotFound;
 import harustudy.backend.exception.InvalidProgressException.UnavailableToProceed;
 import harustudy.backend.exception.StudyProgressException;
@@ -72,7 +74,7 @@ public class ProceedPomodoroStudyService {
         return pomodoroRecords.stream()
                 .filter(pomodoroRecord -> pomodoroRecord.hasSameCycleWith(pomodoroProgress))
                 .findAny()
-                .orElseThrow();
+                .orElseThrow(PomodoroRecordNotFound::new);
     }
 
     private PomodoroProgress findPomodoroProgressFrom(Long studyId, Long memberId) {

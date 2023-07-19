@@ -13,4 +13,8 @@ public class EntityNotFoundException extends RuntimeException {
     public static class PomodoroProgressNotFound extends EntityNotFoundException {
 
     }
+
+    public static class PomodoroRecordNotFound extends EntityNotFoundException {
+
+    }
 }
