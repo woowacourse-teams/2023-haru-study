@@ -22,4 +22,8 @@ public class Member extends BaseTimeEntity {
     @NotNull
     @Column(length = 10)
     private String nickname;
+
+    public Member(@NotNull String nickname) {
+        this.nickname = nickname;
+    }
 }
