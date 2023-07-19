@@ -12,6 +12,7 @@ const SubmitContents = () => {
   const [studyName, setStudyName] = useState<string | null>(null);
   const [totalCycle, setTotalCycle] = useState<number | null>(null);
   const [timePerCycle, setTimePerCycle] = useState<number | null>(null);
+  const [isInputValidate, setIsInputValidate] = useState<boolean>(false);
 
   const totalTime = ((timePerCycle ?? 0) + 20) * (totalCycle ?? 0);
   const hour = Math.floor(totalTime / 60);
@@ -19,7 +20,14 @@ const SubmitContents = () => {
 
   const handleChangeOnInput = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+
+      if (value.length < 1 || value.length > 10) {
+        return setIsInputValidate(true);
+      }
+
       setStudyName(e.target.value);
+      setIsInputValidate(false);
     },
     [setStudyName],
   );
@@ -48,6 +56,8 @@ const SubmitContents = () => {
 
   const isDisabled = () => {
     if (!studyName || !totalCycle || !timePerCycle) return true;
+    if (studyName.length < 1 || studyName.length > 10) return true;
+    if (isInputValidate) return true;
 
     return false;
   };
@@ -63,6 +73,7 @@ const SubmitContents = () => {
               border: none;
               border-bottom: 1px solid ${color.blue[500]};
             `}
+            error={isInputValidate}
             onChange={handleChangeOnInput}
           />
         </Input>
