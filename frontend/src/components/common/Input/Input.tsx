@@ -75,7 +75,7 @@ const Input = ({
         {label}
       </StyledLabel>
       {cloneElement(child, { id, ...child.props })}
-      {isError && <StyledBottomText isError={true}>잘못된 입력입니다.</StyledBottomText>}
+      {isError && <StyledBottomText $error={true}>잘못된 입력입니다.</StyledBottomText>}
       {bottomText !== null && <StyledBottomText>{bottomText}</StyledBottomText>}
     </Layout>
   );
@@ -98,13 +98,13 @@ const StyledLabel = styled.label<StyledLabel>`
   `}
 `;
 
-const StyledBottomText = styled.p<{ isError?: boolean }>`
+const StyledBottomText = styled.p<{ $error?: boolean }>`
   margin-top: 10px;
   font-size: 16px;
   font-weight: 200;
 
-  ${({ isError }) => css`
-    color: ${isError ? color.red[600] : color.neutral[400]};
+  ${({ $error }) => css`
+    color: ${$error ? color.red[600] : color.neutral[400]};
   `};
 `;
 
