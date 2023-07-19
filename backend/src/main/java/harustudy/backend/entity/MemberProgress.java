@@ -14,13 +14,11 @@ import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "progress_type")
 @Entity
@@ -43,7 +41,17 @@ public abstract class MemberProgress extends BaseTimeEntity {
 
     private boolean isDone = false;
 
+    public MemberProgress(Study study, Member member) {
+        this.study = study;
+        this.member = member;
+    }
+
     public boolean isOwnedBy(Member member) {
         return getMember().equals(member);
     }
+
+    public boolean hasSameNicknameMember(Member member) {
+        return getMember().hasSameNickname(member);
+    }
+
 }

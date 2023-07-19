@@ -6,21 +6,23 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
 public class PomodoroProgress extends MemberProgress {
 
     @NotNull
-    private Integer currentCycle;
+    private Integer currentCycle = 1;
 
     @Enumerated(value = EnumType.STRING)
-    private StudyStatus studyStatus;
+    private StudyStatus studyStatus = StudyStatus.PLANNING;
+
+    public PomodoroProgress(Study study, Member member) {
+        super(study, member);
+    }
 
     public PomodoroRecord findPomodoroRecordByCycle(Integer cycle) {
         return getMemberRecords().stream()

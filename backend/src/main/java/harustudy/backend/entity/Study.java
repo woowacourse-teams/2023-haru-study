@@ -1,5 +1,6 @@
 package harustudy.backend.entity;
 
+import harustudy.backend.exception.DuplicatedNicknameException;
 import harustudy.backend.exception.StudyNameLengthException;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
@@ -60,5 +61,18 @@ public abstract class Study extends BaseTimeEntity {
     public boolean isParticipatedMember(Member member) {
         return memberProgresses.stream()
                 .anyMatch(memberProgress -> memberProgress.isOwnedBy(member));
+    }
+
+    public void participate(Member member) {
+        validateDuplicatedNickname(member);
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(this, member);
+        memberProgresses.add(pomodoroProgress);
+    }
+
+    private void validateDuplicatedNickname(Member member) {
+        if (memberProgresses.stream()
+                .anyMatch(memberProgress -> memberProgress.hasSameNicknameMember(member))) {
+            throw new DuplicatedNicknameException();
+        }
     }
 }

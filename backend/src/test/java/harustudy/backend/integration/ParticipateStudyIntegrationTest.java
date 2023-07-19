@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import harustudy.backend.dto.request.ParticipateRequest;
 import harustudy.backend.dto.request.StudyAuthRequest;
 import harustudy.backend.dto.response.StudyAuthResponse;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -74,5 +75,27 @@ public class ParticipateStudyIntegrationTest extends IntegrationTest {
                 () -> assertThat(response.studyName()).isEqualTo("Study 1"),
                 () -> assertThat(response.nickname()).isNull()
         );
+    }
+
+    @Test
+    void 신규멤버_닉네임을_통해_멤버_생성하고_스터디에_참여한다() throws Exception {
+        // given
+        ParticipateRequest request = new ParticipateRequest("newName");
+        String jsonRequest = objectMapper.writeValueAsString(request);
+
+        // when
+        MvcResult result = mockMvc.perform(
+                        post("/api/studies/1/members")
+                                .content(jsonRequest)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        // then
+        String locationHeader = result.getResponse().getHeader("Location");
+        String expectedLocation = "/api/studies/1/members/";
+
+        assert locationHeader != null;
+        assertThat(locationHeader.contains(expectedLocation)).isTrue();
     }
 }
