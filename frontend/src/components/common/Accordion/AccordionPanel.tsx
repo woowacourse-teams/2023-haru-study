@@ -1,11 +1,12 @@
 import { PropsWithChildren } from 'react';
 import { css, styled } from 'styled-components';
 
-import { useAccordion } from './AccordionContext';
+import { useVision } from '@Contexts/VisionContext';
+
 import Button from '../Button/Button';
 
 const AccordionPanel = ({ children }: PropsWithChildren) => {
-  const { closePanel } = useAccordion();
+  const { close } = useVision();
 
   return (
     <PanelLayout>
@@ -18,7 +19,7 @@ const AccordionPanel = ({ children }: PropsWithChildren) => {
           justify-self: end;
           align-self: flex-end;
         `}
-        onClick={closePanel}
+        onClick={close}
       >
         접어두기
       </Button>

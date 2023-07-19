@@ -1,17 +1,18 @@
 import { PropsWithChildren } from 'react';
 import { styled } from 'styled-components';
 
-import { useAccordion } from './AccordionContext';
+import { useVision } from '@Contexts/VisionContext';
+
 import Button from '../Button/Button';
 
 const AccordionHeader = ({ children }: PropsWithChildren) => {
-  const { isPanelOpen, openPanel } = useAccordion();
+  const { isOpen, open } = useVision();
 
   return (
     <AccordionHeaderLayout>
       {children}
-      {!isPanelOpen && (
-        <Button variant="secondary" size="x-small" onClick={openPanel}>
+      {!isOpen && (
+        <Button variant="secondary" size="x-small" onClick={open}>
           펼처보기
         </Button>
       )}

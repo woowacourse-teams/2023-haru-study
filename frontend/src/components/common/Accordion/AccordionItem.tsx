@@ -3,13 +3,13 @@ import { css, styled } from 'styled-components';
 
 import color from '@Styles/color';
 
-import { useAccordion } from './AccordionContext';
+import { useVision } from '@Contexts/VisionContext';
 
 const ACCORDION_HEADER_INDEX = 0;
 const ACCORDION_PANEL_INDEX = 1;
 
 const AccordionItem = ({ children }: PropsWithChildren) => {
-  const { isPanelOpen } = useAccordion();
+  const { isOpen } = useVision();
 
   return (
     <AccordionItemLayout>
@@ -18,7 +18,7 @@ const AccordionItem = ({ children }: PropsWithChildren) => {
 
         if (index === ACCORDION_HEADER_INDEX) return item;
 
-        if (index === ACCORDION_PANEL_INDEX && isPanelOpen) return item;
+        if (index === ACCORDION_PANEL_INDEX && isOpen) return item;
 
         return null;
       })}

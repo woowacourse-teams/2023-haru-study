@@ -2,7 +2,8 @@ import { Children, PropsWithChildren } from 'react';
 import { css, styled } from 'styled-components';
 import type { CSSProp } from 'styled-components';
 
-import { AccordionProvider } from './AccordionContext';
+import { VisionProvider } from '@Contexts/VisionContext';
+
 import AccordionHeader from './AccordionHeader';
 import AccordionItem from './AccordionItem';
 import AccordionPanel from './AccordionPanel';
@@ -15,7 +16,7 @@ const Accordion = ({ children, $style }: PropsWithChildren<Props>) => {
   return (
     <AccordionLayout $style={$style}>
       {Children.map(children, (child) => (
-        <AccordionProvider>{child}</AccordionProvider>
+        <VisionProvider>{child}</VisionProvider>
       ))}
     </AccordionLayout>
   );
