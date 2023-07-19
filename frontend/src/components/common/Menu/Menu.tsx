@@ -22,7 +22,7 @@ const MENU_LIST_POSITION = {
 } as const;
 
 type Props = {
-  $style: CSSProp;
+  $style?: CSSProp;
   menuListPosition?: keyof typeof MENU_LIST_POSITION;
 };
 
