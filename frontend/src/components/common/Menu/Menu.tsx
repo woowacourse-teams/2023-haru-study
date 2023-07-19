@@ -1,7 +1,8 @@
-import { Children, PropsWithChildren, ReactElement, cloneElement, useState } from 'react';
+import { Children, PropsWithChildren, ReactElement, cloneElement } from 'react';
 import { css, styled } from 'styled-components';
 import type { CSSProp } from 'styled-components';
 
+import useDisplay from '@Hooks/useDisplay';
 import useOutsideClick from '@Hooks/useOutsideClick';
 
 import color from '@Styles/color';
@@ -27,24 +28,20 @@ type Props = {
 };
 
 const Menu = ({ menuListPosition = 'right', $style, children }: PropsWithChildren<Props>) => {
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const { isShow, toggleShow, hide } = useDisplay();
 
-  const ref = useOutsideClick<HTMLDivElement>(() => setIsOpenMenu(false));
-
-  const toggleMenu = () => setIsOpenMenu((prev) => !prev);
-
-  const closeMenu = () => setIsOpenMenu(false);
+  const ref = useOutsideClick<HTMLDivElement>(hide);
 
   return (
     <MenuLayout ref={ref} $style={$style}>
-      <MenuIconWrapper onClick={toggleMenu}>
+      <MenuIconWrapper onClick={toggleShow}>
         <HamburgerIcon />
       </MenuIconWrapper>
-      {isOpenMenu && (
+      {isShow && (
         <MenuList menuListPosition={menuListPosition}>
           {Children.map(children, (child) => {
             const item = child as ReactElement;
-            return cloneElement(item, { closeMenu });
+            return cloneElement(item, { hide });
           })}
         </MenuList>
       )}
