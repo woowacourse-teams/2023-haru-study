@@ -6,7 +6,7 @@ import Landing from '@Pages/Landing';
 test('test', async () => {
   render(<Landing />);
 
-  const title = await screen.findByRole('heading');
+  const title = await screen.findAllByRole('button');
 
-  expect(title).toHaveTextContent('하루 스터디');
+  expect(title[0]).toHaveTextContent('스터디 개설하기');
 });
