@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
-import App from '../src/App';
+import Landing from '@Pages/Landing';
 
 test('test', async () => {
-  render(<App />);
+  render(<Landing />);
 
   const title = await screen.findByRole('heading');
 
-  expect(title).toHaveTextContent('Welcome Haru Study!');
+  expect(title).toHaveTextContent('하루 스터디');
 });
