@@ -1,4 +1,5 @@
 import { ChangeEvent, MouseEvent, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
@@ -10,11 +11,15 @@ import color from '@Styles/color';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 
+import { createStudy } from '../../../api/index';
+
 const SubmitContents = () => {
   const [studyName, setStudyName] = useState<string | null>(null);
   const [totalCycle, setTotalCycle] = useState<number | null>(null);
   const [timePerCycle, setTimePerCycle] = useState<number | null>(null);
   const [isInputValidate, setIsInputValidate] = useState<boolean>(false);
+
+  const navigator = useNavigate();
 
   const totalTime = ((timePerCycle ?? 0) + 20) * (totalCycle ?? 0);
   const hour = Math.floor(totalTime / 60);
@@ -55,6 +60,12 @@ const SubmitContents = () => {
     },
     [setTimePerCycle],
   );
+
+  const handleOnClickMakeButton = () => {
+    createStudy(studyName, totalCycle, timePerCycle).then((result) => {
+      navigator('/study-participating-host', { state: { participantCode: result.participantCode } });
+    });
+  };
 
   const isDisabled = () => {
     if (!studyName || !totalCycle || !timePerCycle) return true;
@@ -141,7 +152,7 @@ const SubmitContents = () => {
         </TimeText>
         이에요.
       </Typography>
-      <Button variant="primary" disabled={isDisabled()}>
+      <Button variant="primary" onClick={handleOnClickMakeButton} disabled={isDisabled()}>
         스터디 개설하기
       </Button>
     </Layout>
