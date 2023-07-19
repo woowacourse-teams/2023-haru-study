@@ -4,18 +4,18 @@ import { styled } from 'styled-components';
 import color from '@Styles/color';
 
 type Props = {
-  closeMenu?: () => void;
+  hide?: () => void;
   onClick: () => void;
 };
 
 const MenuItem = ({
   children,
   onClick,
-  closeMenu,
+  hide,
   ...props
 }: PropsWithChildren<Props> & LiHTMLAttributes<HTMLLIElement>) => {
   const handleClick = () => {
-    if (closeMenu) closeMenu();
+    if (hide) hide();
     onClick();
   };
 
