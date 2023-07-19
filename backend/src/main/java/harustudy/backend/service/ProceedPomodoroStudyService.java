@@ -29,6 +29,20 @@ public class ProceedPomodoroStudyService {
     private final MemberProgressRepository<PomodoroProgress> memberProgressRepository;
     private final MemberRecordRepository<PomodoroRecord> memberRecordRepository;
 
+    public void writePlan(Long studyId, Long memberId, Map<String, String> plan) {
+        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(studyId, memberId);
+        PomodoroRecord recentRecord = findRecordWithSameCycle(pomodoroProgress);
+        validateProgressIsPlanning(pomodoroProgress);
+        pomodoroProgress.proceed();
+        recentRecord.changePlan(plan);
+    }
+
+    private void validateProgressIsPlanning(PomodoroProgress pomodoroProgress) {
+        if (pomodoroProgress.isNotPlanning()) {
+            throw new StudyProgressException();
+        }
+    }
+
     public void proceedToRetrospect(Long studyId, Long memberId) {
         PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(studyId, memberId);
         validateProgressIsStudying(pomodoroProgress);
@@ -44,23 +58,21 @@ public class ProceedPomodoroStudyService {
     // TODO: 나중에 ID 반환할지 말지 고민해보기
     public void writeRetrospect(Long studyId, Long memberId, Map<String, String> retrospect) {
         PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(studyId, memberId);
-        List<PomodoroRecord> pomodoroRecords = memberRecordRepository.findByMemberProgress(
-                pomodoroProgress);
-
-        PomodoroRecord recentRecord = pomodoroRecords.stream()
-                .filter(pomodoroRecord -> pomodoroRecord.hasSameCycleWith(pomodoroProgress))
-                .findAny()
-                .orElseThrow();
+        PomodoroRecord recentRecord = findRecordWithSameCycle(pomodoroProgress);
         validateProgressIsRetrospect(pomodoroProgress);
         validateIsPlanFilled(recentRecord);
         pomodoroProgress.proceed();
         recentRecord.changeRetrospect(retrospect);
     }
 
-    private void validateProgressIsRetrospect(PomodoroProgress pomodoroProgress) {
-        if (pomodoroProgress.isRetrospect()) {
-            throw new UnavailableToProceed(); // TODO: 예외 세분화
-        }
+    private PomodoroRecord findRecordWithSameCycle(PomodoroProgress pomodoroProgress) {
+        List<PomodoroRecord> pomodoroRecords = memberRecordRepository.findByMemberProgress(
+                pomodoroProgress);
+
+        return pomodoroRecords.stream()
+                .filter(pomodoroRecord -> pomodoroRecord.hasSameCycleWith(pomodoroProgress))
+                .findAny()
+                .orElseThrow();
     }
 
     private PomodoroProgress findPomodoroProgressFrom(Long studyId, Long memberId) {
@@ -70,6 +82,12 @@ public class ProceedPomodoroStudyService {
                 .orElseThrow(MemberNotFound::new);
         return memberProgressRepository.findByStudyAndMember(study, member)
                 .orElseThrow(PomodoroProgressNotFound::new);
+    }
+
+    private void validateProgressIsRetrospect(PomodoroProgress pomodoroProgress) {
+        if (pomodoroProgress.isNotRetrospect()) {
+            throw new UnavailableToProceed(); // TODO: 예외 세분화
+        }
     }
 
     private void validateIsPlanFilled(PomodoroRecord recentRecord) {

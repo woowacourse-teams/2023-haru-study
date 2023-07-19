@@ -30,11 +30,15 @@ public class PomodoroProgress extends MemberProgress {
         studyStatus = studyStatus.getNext();
     }
 
+    public boolean isNotPlanning() {
+        return studyStatus != StudyStatus.PLANNING;
+    }
+
     public boolean isNotStudying() {
         return studyStatus != StudyStatus.STUDYING;
     }
 
-    public boolean isRetrospect() {
+    public boolean isNotRetrospect() {
         return studyStatus != StudyStatus.RETROSPECT;
     }
 }

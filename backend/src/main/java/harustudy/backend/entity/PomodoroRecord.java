@@ -44,6 +44,10 @@ public class PomodoroRecord extends MemberRecord {
         this.templateVersion = templateVersion;
     }
 
+    public void changePlan(Map<String, String> plan) {
+        this.plan = plan;
+    }
+
     public void changeRetrospect(Map<String, String> retrospect) {
         this.retrospect = retrospect;
     }

@@ -34,6 +34,28 @@ class ProceedPomodoroStudyServiceTest {
     @Autowired
     private ProceedPomodoroStudyService proceedPomodoroStudyService;
 
+    @Test
+    void 계획_단계가_아닐_때_계획을_작성하려_하면_예외를_던진다() {
+        // given
+        Study study = new Pomodoro("studyName", 1, 20);
+        Member member = new Member("nickname");
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(study, member, 1,
+                StudyStatus.RETROSPECT);
+        PomodoroRecord pomodoroRecord = new PomodoroRecord(pomodoroProgress, 1, Map.of(),
+                Map.of(), TemplateVersion.V1);
+
+        // when
+        testEntityManager.persist(study);
+        testEntityManager.persist(member);
+        testEntityManager.persist(pomodoroProgress);
+        testEntityManager.persist(pomodoroRecord);
+
+        // then
+        assertThatThrownBy(() -> proceedPomodoroStudyService.writePlan(study.getId(),
+                member.getId(), Map.of("plan", "abc")))
+                .isInstanceOf(StudyProgressException.class);
+    }
+
     @ParameterizedTest
     @EnumSource(value = StudyStatus.class, names = {"PLANNING", "RETROSPECT"})
     void 스터디_중_상태가_아니라면_회고_상태로_넘어갈_수_없다(StudyStatus studyStatus) {
