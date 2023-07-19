@@ -1,12 +1,13 @@
 import { render, screen } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
-import Landing from '@Pages/Landing';
+
+import Showcase from '@Components/landing/Showcase';
 
 test('test', async () => {
-  render(<Landing />);
+  render(<Showcase />);
 
-  const title = await screen.findAllByRole('button');
+  const text = await screen.findByRole('heading');
 
-  expect(title[0]).toHaveTextContent('스터디 개설하기');
+  expect(text).toHaveTextContent('스터디');
 });
