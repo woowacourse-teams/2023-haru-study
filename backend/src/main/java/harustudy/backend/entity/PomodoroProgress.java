@@ -26,11 +26,15 @@ public class PomodoroProgress extends MemberProgress {
         this.studyStatus = studyStatus;
     }
 
-    public void proceedRetrospect() {
+    public void proceed() {
         studyStatus = studyStatus.getNext();
     }
 
     public boolean isNotStudying() {
         return studyStatus != StudyStatus.STUDYING;
+    }
+
+    public boolean isRetrospect() {
+        return studyStatus != StudyStatus.RETROSPECT;
     }
 }

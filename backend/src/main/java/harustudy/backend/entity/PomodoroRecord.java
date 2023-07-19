@@ -29,7 +29,26 @@ public class PomodoroRecord extends MemberRecord {
     @Column(name = "retrospect", columnDefinition = "longtext")
     private Map<String, String> retrospect = new HashMap<>();
 
+    // TODO: 삭제 예정
     @NotNull
     @Enumerated(EnumType.STRING)
     private TemplateVersion templateVersion;
+
+    public PomodoroRecord(MemberProgress memberProgress, @NotNull Integer cycle,
+            Map<String, String> plan, Map<String, String> retrospect,
+            @NotNull TemplateVersion templateVersion) {
+        super(memberProgress);
+        this.cycle = cycle;
+        this.plan = plan;
+        this.retrospect = retrospect;
+        this.templateVersion = templateVersion;
+    }
+
+    public void changeRetrospect(Map<String, String> retrospect) {
+        this.retrospect = retrospect;
+    }
+
+    public boolean hasSameCycleWith(PomodoroProgress pomodoroProgress) {
+        return cycle.equals(pomodoroProgress.getCurrentCycle());
+    }
 }
