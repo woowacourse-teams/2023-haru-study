@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 const DEFAULT_PANEL_INDEX = 0;
 
@@ -41,47 +41,88 @@ const Tabs = ({ children }: PropsWithChildren) => {
 
 export default Tabs;
 
-const TabsLayout = styled.div``;
+const TabsLayout = styled.div`
+  display: grid;
+  row-gap: 40px;
+`;
 
 const TabList = ({ children }: PropsWithChildren) => {
   return (
-    <div>
+    <TabListLayout>
       {Children.map(children, (child, index) => {
         const item = child as ReactElement;
 
         return cloneElement(item, { index });
       })}
-    </div>
+    </TabListLayout>
   );
 };
+
+const TabListLayout = styled.ul`
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  row-gap: 20px;
+`;
 
 type TabItemProps = {
   index?: number;
 };
 
-const TabItem = ({ children, index }: PropsWithChildren<TabItemProps>) => {
-  const { selectPanel } = useTabs();
-  return <div onClick={() => selectPanel(index)}>{children}</div>;
+const TAB_ITEM_STYLE = {
+  selected: css`
+    opacity: 1;
+  `,
+  unSelected: css`
+    opacity: 0.2;
+  `,
+} as const;
+
+const TabItem = ({ children, index = 0 }: PropsWithChildren<TabItemProps>) => {
+  const { selectedPanelIndex, selectPanel } = useTabs();
+  const selectedState = selectedPanelIndex === index ? 'selected' : 'unSelected';
+  return (
+    <TabItemLayout selectedState={selectedState} onClick={() => selectPanel(index)}>
+      {children}
+    </TabItemLayout>
+  );
 };
 
-type TabPanelProps = {
-  value: string | number;
+type TabItemLayoutProps = {
+  selectedState: keyof typeof TAB_ITEM_STYLE;
 };
+
+const TabItemLayout = styled.li<TabItemLayoutProps>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding-bottom: 5px;
+
+  text-align: center;
+
+  cursor: pointer;
+
+  ${({ selectedState, theme }) => css`
+    border-bottom: 2px solid ${theme.text};
+
+    ${TAB_ITEM_STYLE[selectedState]}
+  `}
+`;
 
 const TabPanels = ({ children }: PropsWithChildren) => {
   const { selectedPanelIndex } = useTabs();
   return (
-    <div>
+    <>
       {Children.map(children, (child, index) => {
         if (selectedPanelIndex === index) return child;
         return null;
       })}
-    </div>
+    </>
   );
 };
 
-const TabPanel = ({ children }: PropsWithChildren<TabPanelProps>) => {
-  return <div>{children}</div>;
+const TabPanel = ({ children }: PropsWithChildren) => {
+  return children;
 };
 
 Tabs.List = TabList;
