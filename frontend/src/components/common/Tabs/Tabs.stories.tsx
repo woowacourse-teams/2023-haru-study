@@ -81,9 +81,9 @@ export const OverFitTabs: Story = {
 };
 
 /**
- * `LongTabs`은 Tab의 길이가 긴 `Tabs` 스토리입니다.
+ * `LongTextTabs`은 Tab의 길이가 긴 `Tabs` 스토리입니다.
  */
-export const LongTabs: Story = {
+export const LongTextTabs: Story = {
   args: {
     children: (
       <>
