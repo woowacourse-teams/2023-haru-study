@@ -1,5 +1,5 @@
 import { ReactNode, useCallback, useState } from 'react';
-import { styled } from 'styled-components';
+import { CSSProp, css, styled } from 'styled-components';
 
 import SelectContext from './SelectContext';
 import SelectItem from './SelectItem';
@@ -9,11 +9,14 @@ import SelectTrigger from './SelectTrigger';
 type Props = {
   children: ReactNode;
   label?: ReactNode;
+
+  $style?: CSSProp;
 };
 
-const Select = ({ children, label }: Props) => {
+const Select = ({ children, label, $style }: Props) => {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [triggerSuffixText, setTriggerSuffixText] = useState<string>('');
 
   const changeSelectedItem = useCallback(
     (value: string) => {
@@ -22,22 +25,37 @@ const Select = ({ children, label }: Props) => {
     [setSelectedItem],
   );
 
+  const changeTriggerSuffixText = useCallback(
+    (value: string) => {
+      setTriggerSuffixText(value);
+    },
+    [setTriggerSuffixText],
+  );
+
   const toggleOpen = useCallback(() => {
     setIsOpen(!isOpen);
   }, [isOpen, setIsOpen]);
 
   return (
-    <SelectContext.Provider value={{ selectedItem, isOpen, changeSelectedItem, toggleOpen }}>
-      {label}
-      <Layout>{children}</Layout>
+    <SelectContext.Provider
+      value={{ selectedItem, isOpen, changeSelectedItem, toggleOpen, triggerSuffixText, changeTriggerSuffixText }}
+    >
+      <Layout $style={$style}>
+        <label>{label}</label>
+        {children}
+      </Layout>
     </SelectContext.Provider>
   );
 };
 
 export default Select;
 
-const Layout = styled.div`
+const Layout = styled.div<Pick<Props, '$style'>>`
   width: 100%;
+
+  ${({ $style }) => css`
+    ${$style};
+  `}
 `;
 
 Select.Trigger = SelectTrigger;
