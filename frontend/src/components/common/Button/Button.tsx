@@ -1,9 +1,14 @@
-import { CSSProp, RuleSet, css, styled } from 'styled-components';
-import color from '../../../styles/color';
 import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
+import { css, styled } from 'styled-components';
+import type { CSSProp, RuleSet } from 'styled-components';
+
+import { Size } from '@Types/style';
+
+import color from '@Styles/color';
+
+import { SIZE } from '@Constants/style';
+
 import CircularProgress from '../CircularProgress/CircularProgress';
-import { SIZE } from '../../../constants/style';
-import { Size } from '../../../types/style';
 
 type Include<T, U> = T extends U ? T : never;
 
@@ -17,17 +22,17 @@ const SIZE_TYPE: Record<ButtonSizeType, RuleSet<object>> = {
 
   small: css`
     padding: 12px 24px;
-    font-size: ${SIZE['small']};
+    font-size: ${SIZE.small};
   `,
 
   medium: css`
     padding: 16px 32px;
-    font-size: ${SIZE['medium']};
+    font-size: ${SIZE.medium};
   `,
 
   large: css`
     padding: 20px 48px;
-    font-size: ${SIZE['large']};
+    font-size: ${SIZE.large};
   `,
 
   'x-large': css`

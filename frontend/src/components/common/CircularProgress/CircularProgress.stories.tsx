@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import CircularProgress from './CircularProgress';
 import { css } from 'styled-components';
-import color from '../../../styles/color';
+
+import color from '@Styles/color';
+
+import CircularProgress from './CircularProgress';
 
 type Story = StoryObj<typeof CircularProgress>;
 

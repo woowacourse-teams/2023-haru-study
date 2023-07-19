@@ -1,7 +1,8 @@
 import { PropsWithChildren } from 'react';
-import { CSSProp, css, styled } from 'styled-components';
+import { css, styled } from 'styled-components';
+import type { CSSProp } from 'styled-components';
 
-import colorStyle from '../../../styles/color';
+import colorStyle from '@Styles/color';
 
 type Props = {
   variant: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p1' | 'p2';
@@ -39,9 +40,9 @@ const FONT_STYLE = {
     h1: 700,
     h2: 700,
     h3: 700,
-    h4: 700,
-    h5: 700,
-    h6: 700,
+    h4: 500,
+    h5: 500,
+    h6: 500,
     p1: 300,
     p2: 300,
   },
