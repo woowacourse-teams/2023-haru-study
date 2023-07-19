@@ -156,7 +156,7 @@ const StyledButton = styled.button<Props>`
     ${VARIANT_TYPE[variant]}
     ${SIZE_TYPE[size]}
 
-    width: ${$block ? '100%' : 'auto'};
+    width: ${$block ? '100%' : 'fit-content'};
 
     ${$style}
   `}
