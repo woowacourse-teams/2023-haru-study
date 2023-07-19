@@ -129,6 +129,7 @@ const StyledInput = styled.input<StyledInputProps>`
   font-size: 2.4rem;
   border-radius: 7px;
   border: 1px solid ${color.neutral[200]};
+  margin-top: 10px;
 
   ${({ $style, theme }) => css`
     background-color: ${theme.background};
