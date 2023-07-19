@@ -9,7 +9,7 @@ const AccordionPanel = ({ children }: PropsWithChildren) => {
 
   return (
     <PanelLayout>
-      <PanelContents>{children}</PanelContents>
+      <div>{children}</div>
       <Button
         variant="secondary"
         size="x-small"
@@ -34,5 +34,3 @@ const PanelLayout = styled.div`
 
   margin-bottom: 10px;
 `;
-
-const PanelContents = styled.div``;

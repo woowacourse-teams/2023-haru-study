@@ -1,4 +1,4 @@
-import { Children, PropsWithChildren, ReactElement } from 'react';
+import { Children, PropsWithChildren } from 'react';
 import { css, styled } from 'styled-components';
 import type { CSSProp } from 'styled-components';
 
@@ -14,9 +14,9 @@ type Props = {
 const Accordion = ({ children, $style }: PropsWithChildren<Props>) => {
   return (
     <AccordionLayout $style={$style}>
-      {Children.map(children, (child) => {
-        return <AccordionProvider>{child as ReactElement}</AccordionProvider>;
-      })}
+      {Children.map(children, (child) => (
+        <AccordionProvider>{child}</AccordionProvider>
+      ))}
     </AccordionLayout>
   );
 };
