@@ -1,14 +1,7 @@
-import React, {
-  Children,
-  LiHTMLAttributes,
-  PropsWithChildren,
-  ReactElement,
-  cloneElement,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { Children, LiHTMLAttributes, PropsWithChildren, ReactElement, cloneElement, useState } from 'react';
 import { styled } from 'styled-components';
+
+import useOutsideClick from '@Hooks/useOutsideClick';
 
 import color from '@Styles/color';
 
@@ -16,24 +9,12 @@ import HamburgerIcon from '@Assets/icons/HamburgerIcon';
 
 const Menu = ({ children }: PropsWithChildren) => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+
+  const ref = useOutsideClick<HTMLDivElement>(() => setIsOpenMenu(false));
 
   const toggleMenu = () => setIsOpenMenu((prev) => !prev);
 
   const closeMenu = () => setIsOpenMenu(false);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        closeMenu();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref]);
 
   return (
     <MenuLayout ref={ref}>
