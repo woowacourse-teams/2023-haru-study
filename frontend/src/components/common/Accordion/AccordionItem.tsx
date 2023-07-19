@@ -1,15 +1,15 @@
 import { Children, PropsWithChildren, ReactElement } from 'react';
 import { css, styled } from 'styled-components';
 
-import color from '@Styles/color';
+import { useAccordion } from '@Components/common/Accordion/AccordionContext';
 
-import { useVision } from '@Contexts/VisionContext';
+import color from '@Styles/color';
 
 const ACCORDION_HEADER_INDEX = 0;
 const ACCORDION_PANEL_INDEX = 1;
 
 const AccordionItem = ({ children }: PropsWithChildren) => {
-  const { isOpen } = useVision();
+  const { isShow } = useAccordion();
 
   return (
     <AccordionItemLayout>
@@ -18,7 +18,7 @@ const AccordionItem = ({ children }: PropsWithChildren) => {
 
         if (index === ACCORDION_HEADER_INDEX) return item;
 
-        if (index === ACCORDION_PANEL_INDEX && isOpen) return item;
+        if (index === ACCORDION_PANEL_INDEX && isShow) return item;
 
         return null;
       })}

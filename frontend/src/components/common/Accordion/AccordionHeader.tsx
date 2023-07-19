@@ -1,18 +1,18 @@
 import { PropsWithChildren } from 'react';
 import { styled } from 'styled-components';
 
-import { useVision } from '@Contexts/VisionContext';
+import { useAccordion } from '@Components/common/Accordion/AccordionContext';
 
 import Button from '../Button/Button';
 
 const AccordionHeader = ({ children }: PropsWithChildren) => {
-  const { isOpen, open } = useVision();
+  const { isShow, show } = useAccordion();
 
   return (
     <AccordionHeaderLayout>
       {children}
-      {!isOpen && (
-        <Button variant="secondary" size="x-small" onClick={open}>
+      {!isShow && (
+        <Button variant="secondary" size="x-small" onClick={show}>
           펼처보기
         </Button>
       )}
