@@ -13,6 +13,10 @@ const SubmitContents = () => {
   const [totalCycle, setTotalCycle] = useState<number | null>(null);
   const [timePerCycle, setTimePerCycle] = useState<number | null>(null);
 
+  const totalTime = ((timePerCycle ?? 0) + 20) * (totalCycle ?? 0);
+  const hour = Math.floor(totalTime / 60);
+  const minute = totalTime % 60;
+
   const handleChangeOnInput = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setStudyName(e.target.value);
@@ -78,7 +82,7 @@ const SubmitContents = () => {
             `}
             onChange={handleOnTotalCycleChange}
           >
-            {[2, 3, 4, 5, 6, 7, 8].map((el, index) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((el, index) => (
               <Select.Item key={index + el} value={el} suffix="회" />
             ))}
           </Select.List>
@@ -117,7 +121,7 @@ const SubmitContents = () => {
             alert('예상시간에는 학습시간 외에 목표설정시간과 회고시간이 포함되어있습니다.');
           }}
         >
-          1시간 40분
+          {hour}시간 {minute}분
         </TimeText>
         이에요.
       </Typography>
