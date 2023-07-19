@@ -32,8 +32,8 @@ public class ProceedPomodoroStudyIntegrationTest extends IntegrationTest {
         System.out.println(member.getId());
         // when
         mockMvc.perform(
-                post("/api/studies/{studyId}/members/{memberId}/next-step",
-                        study.getId(), member.getId()))
+                        post("/api/studies/{studyId}/members/{memberId}/next-step",
+                                study.getId(), member.getId()))
                 .andExpect(status().isOk());
     }
 }

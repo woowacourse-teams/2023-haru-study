@@ -60,7 +60,7 @@ class ProceedPomodoroStudyServiceTest {
         Study study = new Pomodoro("studyName", 1, 20);
         Member member = new Member("nickname");
         PomodoroProgress pomodoroProgress = new PomodoroProgress(study, member, 1,
-                 StudyStatus.RETROSPECT);
+                StudyStatus.RETROSPECT);
         PomodoroRecord pomodoroRecord = new PomodoroRecord(pomodoroProgress, 1, Map.of(),
                 Map.of(), TemplateVersion.V1);
 

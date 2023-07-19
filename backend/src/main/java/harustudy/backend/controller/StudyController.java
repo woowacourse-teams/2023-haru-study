@@ -22,7 +22,8 @@ public class StudyController {
     ) {
         CreatePomodoroStudyDto createPomodoroStudyDto =
                 createPomodoroStudyService.createStudy(request);
-        return ResponseEntity.created(URI.create("/api/studies/" + createPomodoroStudyDto.studyId()))
+        return ResponseEntity.created(
+                        URI.create("/api/studies/" + createPomodoroStudyDto.studyId()))
                 .body(CreatePomodoroStudyResponse.of(createPomodoroStudyDto));
     }
 }
