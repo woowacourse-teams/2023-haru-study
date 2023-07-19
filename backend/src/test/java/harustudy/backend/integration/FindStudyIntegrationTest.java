@@ -11,7 +11,7 @@ import harustudy.backend.dto.MemberContentResponse;
 import harustudy.backend.dto.MemberDto;
 import harustudy.backend.dto.response.CurrentCyclePlanResponse;
 import harustudy.backend.dto.response.MemberContentResponses;
-import harustudy.backend.dto.response.MemberStudyMetaDataResponse;
+import harustudy.backend.dto.response.StudyMemberMetaDataResponse;
 import harustudy.backend.dto.response.StudyMetadataResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -43,8 +43,8 @@ public class FindStudyIntegrationTest extends IntegrationTest {
 
         // then
         String jsonResponse = result.getResponse().getContentAsString();
-        MemberStudyMetaDataResponse response = objectMapper.readValue(jsonResponse,
-                MemberStudyMetaDataResponse.class);
+        StudyMemberMetaDataResponse response = objectMapper.readValue(jsonResponse,
+                StudyMemberMetaDataResponse.class);
         // then
         assertThat(response.studyName()).isEqualTo("Study 1");
     }
@@ -113,7 +113,7 @@ public class FindStudyIntegrationTest extends IntegrationTest {
     void 특정_멤버의_현재_사이클의_계획을_조회한다() throws Exception {
         // given & when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/1/content/plans?memberId=1&cycle=1")
+                        get("/api/studies/1/members/1/content/plans?cycle=1")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();

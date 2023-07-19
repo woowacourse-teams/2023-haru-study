@@ -8,7 +8,7 @@ import harustudy.backend.dto.MemberContentResponse;
 import harustudy.backend.dto.MemberDto;
 import harustudy.backend.dto.response.CurrentCyclePlanResponse;
 import harustudy.backend.dto.response.MemberContentResponses;
-import harustudy.backend.dto.response.MemberStudyMetaDataResponse;
+import harustudy.backend.dto.response.StudyMemberMetaDataResponse;
 import harustudy.backend.dto.response.StudyMetadataResponse;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +34,7 @@ class PomodoroProgressServiceTest {
     void 특정_멤버의_현재_사이클의_계획을_조회한다() {
         // given
         CurrentCyclePlanResponse currentCyclePlan = pomodoroProgressService.findCurrentCyclePlan(
-                1, 1L, 1L);
+                1L, 1L, 1);
 
         // when & then
         assertAll(
@@ -53,7 +53,7 @@ class PomodoroProgressServiceTest {
     @Test
     void 스터디에_속하는_특정_멤버에_대한_정보를_조회한다() {
         // given
-        MemberStudyMetaDataResponse memberMetaData = pomodoroProgressService.findMemberMetaData(
+        StudyMemberMetaDataResponse memberMetaData = pomodoroProgressService.findMemberMetaData(
                 1L, 1L);
 
         // when & then
@@ -114,14 +114,14 @@ class PomodoroProgressServiceTest {
     @Test
     void 특정_멤버의_현재_사이클의_계획_조회_시_스터디가_없으면_예외를_던진다() {
         // given & when & then
-        assertThatThrownBy(() -> pomodoroProgressService.findCurrentCyclePlan(1, 10L, 1L))
+        assertThatThrownBy(() -> pomodoroProgressService.findCurrentCyclePlan(10L, 1L, 1))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void 특정_멤버의_현재_사이클의_계획_조회_시_멤버가_없으면_예외를_던진다() {
         // given & when & then
-        assertThatThrownBy(() -> pomodoroProgressService.findCurrentCyclePlan(1, 1L, 10L))
+        assertThatThrownBy(() -> pomodoroProgressService.findCurrentCyclePlan(1L, 10L, 1))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

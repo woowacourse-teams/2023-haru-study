@@ -1,6 +1,6 @@
 package harustudy.backend.entity;
 
-import harustudy.backend.repository.dto.MapToStringConverter;
+import harustudy.backend.repository.dto.MapStringConverter;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -24,7 +24,7 @@ public class PomodoroRecord extends MemberRecord {
     private Integer cycle;
 
     @Column(name = "plan", columnDefinition = "longtext")
-    @Convert(converter = MapToStringConverter.class)
+    @Convert(converter = MapStringConverter.class)
     private Map<String, String> plan = new HashMap<>();
 
     @Type(JsonType.class)

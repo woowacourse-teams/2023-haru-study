@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Converter
-public class MapToStringConverter implements AttributeConverter<Map<String, String>, String> {
+public class MapStringConverter implements AttributeConverter<Map<String, String>, String> {
 
     ObjectMapper mapper = new ObjectMapper();
 
