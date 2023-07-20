@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, useCallback, useState } from 'react';
+import { ChangeEventHandler, MouseEventHandler, useCallback, useState } from 'react';
 
 const useStudyMaking = () => {
   const [studyName, setStudyName] = useState<string | null>(null);
@@ -6,8 +6,8 @@ const useStudyMaking = () => {
   const [timePerCycle, setTimePerCycle] = useState<number | null>(null);
   const [isInputValidate, setIsInputValidate] = useState<boolean>(false);
 
-  const handleOnChangeInput = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
+  const handleOnChangeInput: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
       const value = e.target.value;
 
       if (value.length < 1 || value.length > 10) {
@@ -20,8 +20,8 @@ const useStudyMaking = () => {
     [setStudyName],
   );
 
-  const handleOnTotalCycleChange = useCallback(
-    (e: MouseEvent<HTMLDivElement>) => {
+  const handleOnTotalCycleChange: MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
       if ('dataset' in e.target) {
         const value = (e.target.dataset as { value: string }).value;
 
@@ -31,8 +31,8 @@ const useStudyMaking = () => {
     [setTotalCycle],
   );
 
-  const handleOnTimePerCycleChange = useCallback(
-    (e: MouseEvent<HTMLDivElement>) => {
+  const handleOnTimePerCycleChange: MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
       if ('dataset' in e.target) {
         const value = (e.target.dataset as { value: string }).value;
 
