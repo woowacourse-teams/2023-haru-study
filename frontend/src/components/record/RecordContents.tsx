@@ -16,12 +16,18 @@ type StudyMetadata = {
 const RecordContents = () => {
   const { studyId } = useParams<{ studyId: string }>();
 
-  const { data } = useFetch<StudyMetadata>(`/api/studies/${studyId!}/metadata`);
+  const { data, status } = useFetch<StudyMetadata>(`/api/studies/${studyId!}/metadata`);
+  const isLoading = status === 'pending';
 
   return (
     <RecordContentsLayout>
-      <StudyInformation studyName={data?.studyName} totalCycle={data?.totalCycle} timePerCycle={data?.timePerCycle} />
-      <MemberRecordList studyId={studyId} members={data?.members} />
+      <StudyInformation
+        studyName={data?.studyName}
+        totalCycle={data?.totalCycle}
+        timePerCycle={data?.timePerCycle}
+        isLoading={isLoading}
+      />
+      <MemberRecordList studyId={studyId} members={data?.members} isLoading={isLoading} />
     </RecordContentsLayout>
   );
 };

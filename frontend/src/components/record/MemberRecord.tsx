@@ -11,6 +11,7 @@ import GoalIcon from '@Assets/icons/GoalIcon';
 import PencilIcon from '@Assets/icons/PencilIcon';
 
 import AnswerQuestion from './AnswerQuestion';
+import { TextSkeletonStyle } from './StudyInformation';
 
 const PLAN_QUESTION = [
   { key: 'toDo', question: '학습 목표' },
@@ -49,7 +50,12 @@ type Props = {
 };
 
 const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
-  const { data } = useFetch<MemberRecordContent[]>(`/api/studies/${studyId}/members/${memberId}/content`);
+  const { data, status } = useFetch<MemberRecordContent[]>(`/api/studies/${studyId}/members/${memberId}/content`);
+  const isLoading = status === 'pending';
+
+  if (isLoading) {
+    return <TabsLoading />;
+  }
 
   return (
     <MemberRecordLayout>
@@ -116,3 +122,42 @@ const TabItemSection = styled.div`
 `;
 
 export default MemberRecord;
+
+const TabsLoading = () => {
+  return (
+    <TabsLoadingLayout>
+      <TopSkeleton />
+      <MiddleSkeleton />
+      <MiddleSkeleton />
+      <ButtonSkeleton />
+      <ButtonSkeleton />
+    </TabsLoadingLayout>
+  );
+};
+
+const TabsLoadingLayout = styled.div`
+  display: grid;
+  row-gap: 20px;
+
+  padding: 40px 0px;
+`;
+
+const TopSkeleton = styled.div`
+  height: 40px;
+
+  ${TextSkeletonStyle}
+`;
+
+const MiddleSkeleton = styled.div`
+  height: 30px;
+  width: 80%;
+
+  ${TextSkeletonStyle}
+`;
+
+const ButtonSkeleton = styled.div`
+  height: 24px;
+  width: 40%;
+
+  ${TextSkeletonStyle}
+`;
