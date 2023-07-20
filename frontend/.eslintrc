@@ -90,6 +90,11 @@
             "pattern": "@Utils/*",
             "group": "internal",
             "position": "after"
+          },
+          {
+            "pattern": "@Apis/*",
+            "group": "internal",
+            "position": "after"
           }
         ],
         "newlines-between": "always",

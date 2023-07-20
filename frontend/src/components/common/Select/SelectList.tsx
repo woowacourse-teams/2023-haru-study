@@ -1,4 +1,5 @@
 import { Children, HTMLAttributes, MouseEvent, ReactNode, cloneElement, isValidElement } from 'react';
+import { CSSProp, css, styled } from 'styled-components';
 
 import { composeEventHandlers } from '@Utils/domEventHandler';
 
@@ -7,10 +8,13 @@ import { ItemProps } from './SelectItem';
 
 type Props = {
   children: ReactNode;
+
+  $style?: CSSProp;
+
   onChange: (e: MouseEvent<HTMLDivElement>) => void;
 } & HTMLAttributes<HTMLDivElement>;
 
-const SelectList = ({ children, onChange, ...props }: Props) => {
+const SelectList = ({ children, onChange, $style, ...props }: Props) => {
   const { isOpen, changeSelectedItem, toggleOpen } = useSelectContext();
 
   const onClick = (e: MouseEvent<HTMLDivElement>) => {
@@ -24,7 +28,7 @@ const SelectList = ({ children, onChange, ...props }: Props) => {
 
   return (
     isOpen && (
-      <div {...props}>
+      <Layout {...props} $style={$style}>
         {childrenArray.map((child) => {
           if (isValidElement<ItemProps>(child)) {
             return cloneElement(child, {
@@ -34,9 +38,15 @@ const SelectList = ({ children, onChange, ...props }: Props) => {
           }
           return null;
         })}
-      </div>
+      </Layout>
     )
   );
 };
 
 export default SelectList;
+
+const Layout = styled.div<Pick<Props, '$style'>>`
+  ${({ $style }) => css`
+    ${$style}
+  `}
+`;
