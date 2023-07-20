@@ -90,10 +90,10 @@ const STUDY_METADATA = {
 
 export const studyRecordHandlers = [
   rest.get('/api/studies/:studyId/metadata', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(STUDY_METADATA), ctx.delay(500));
+    return res(ctx.status(200), ctx.json(STUDY_METADATA), ctx.delay(800));
   }),
 
   rest.get('/api/studies/:studyId/members/:memberId/content', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(500));
+    return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(800));
   }),
 ];
