@@ -64,4 +64,3 @@ public class StudyController {
                 URI.create("/api/studies/" + studyId + "/members/" + memberId)).build();
     }
 }
-  

@@ -14,10 +14,9 @@ import org.springframework.web.context.WebApplicationContext;
 @Transactional
 public class IntegrationTest {
 
+    protected MockMvc mockMvc;
     @Autowired
     private WebApplicationContext webApplicationContext;
-
-    protected MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {

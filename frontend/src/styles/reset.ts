@@ -54,6 +54,13 @@ const resetStyle = css`
     border-collapse: collapse;
     border-spacing: 0;
   }
+
+  ol,
+  ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+  }
 `;
 
 export default resetStyle;

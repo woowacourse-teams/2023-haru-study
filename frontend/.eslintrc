@@ -82,7 +82,7 @@
             "position": "after"
           },
           {
-            "pattern": "@Assets/*",
+            "pattern": "@Assets/**/*",
             "group": "internal",
             "position": "after"
           },

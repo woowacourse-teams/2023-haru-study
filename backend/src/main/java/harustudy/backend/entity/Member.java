@@ -24,7 +24,7 @@ public class Member extends BaseTimeEntity {
     @Column(length = 10)
     private String nickname;
 
-    public Member(String nickname) {
+    public Member(@NotNull String nickname) {
         validateLength(nickname);
         this.nickname = nickname;
     }
