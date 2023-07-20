@@ -21,9 +21,9 @@ export const DefaultTabs: Story = {
   args: {
     children: (
       <>
-        <Tabs.Item label="ITEM1">CONTENTS1</Tabs.Item>
-        <Tabs.Item label="ITEM2">CONTENTS2</Tabs.Item>
-        <Tabs.Item label="ITEM3">CONTENTS3</Tabs.Item>
+        <Tabs.Item label="TAB1">CONTENTS1</Tabs.Item>
+        <Tabs.Item label="TAB2">CONTENTS2</Tabs.Item>
+        <Tabs.Item label="TAB3">CONTENTS3</Tabs.Item>
       </>
     ),
   },
@@ -36,10 +36,10 @@ export const PerfectFitTabs: Story = {
   args: {
     children: (
       <>
-        {['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT'].map((item, index) => {
+        {['1', '2', '3', '4', '5', '6', '7', '8'].map((item, index) => {
           return (
-            <Tabs.Item key={index} label={item}>
-              CONTENTS {item}
+            <Tabs.Item key={index} label={`TAB${item}`}>
+              CONTENTS{item}
             </Tabs.Item>
           );
         })}
@@ -55,10 +55,10 @@ export const OverFitTabs: Story = {
   args: {
     children: (
       <>
-        {['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'].map((item, index) => {
+        {['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].map((item, index) => {
           return (
-            <Tabs.Item key={index} label={item}>
-              CONTENTS {item}
+            <Tabs.Item key={index} label={`TAB${item}`}>
+              CONTENTS{item}
             </Tabs.Item>
           );
         })}
@@ -74,9 +74,9 @@ export const LongTextTabs: Story = {
   args: {
     children: (
       <>
-        <Tabs.Item label="VERY LONG TITLE">CONTENTS1</Tabs.Item>
-        <Tabs.Item label="ITEM2">CONTENTS2</Tabs.Item>
-        <Tabs.Item label="ITEM3">CONTENTS3</Tabs.Item>
+        <Tabs.Item label="VERY LONG TAB TITLE">CONTENTS1</Tabs.Item>
+        <Tabs.Item label="TAB2">CONTENTS2</Tabs.Item>
+        <Tabs.Item label="TAB3">CONTENTS3</Tabs.Item>
       </>
     ),
   },
