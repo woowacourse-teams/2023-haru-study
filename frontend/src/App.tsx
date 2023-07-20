@@ -6,12 +6,10 @@ import { lightTheme } from '@Styles/theme';
 
 const App = () => {
   return (
-    <>
+    <ThemeProvider theme={lightTheme}>
       <GlobalStyles />
-      <ThemeProvider theme={lightTheme}>
-        <Outlet />
-      </ThemeProvider>
-    </>
+      <Outlet />
+    </ThemeProvider>
   );
 };
 

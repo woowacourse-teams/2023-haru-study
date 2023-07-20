@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, css } from 'styled-components';
 
 import resetStyle from './reset';
 import '../fonts/font.css';
@@ -14,7 +14,11 @@ const GlobalStyles = createGlobalStyle`
     font-size: 1.6rem;
     font-family: "S-Core Dream";
     font-weight: 300;
+
+    ${({ theme }) => css`
+      color: ${theme.text};
+    `}
   }
-`;
+  `;
 
 export default GlobalStyles;

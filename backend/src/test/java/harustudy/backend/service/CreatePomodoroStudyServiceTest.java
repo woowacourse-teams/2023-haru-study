@@ -5,13 +5,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
+import harustudy.backend.controller.CreatePomodoroStudyRequest;
 import harustudy.backend.entity.GenerationStrategy;
 import harustudy.backend.entity.ParticipantCode;
 import harustudy.backend.entity.Pomodoro;
 import harustudy.backend.repository.ParticipantCodeRepository;
 import harustudy.backend.repository.StudyRepository;
 import harustudy.backend.service.dto.CreatePomodoroStudyDto;
-import harustudy.backend.controller.CreatePomodoroStudyRequest;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -39,7 +39,8 @@ class CreatePomodoroStudyServiceTest {
     void 스터디_개설시_참여코드가_생성된다() {
         // given
         CreatePomodoroStudyRequest request = new CreatePomodoroStudyRequest("studyName", 1, 20);
-        Pomodoro pomodoro = new Pomodoro("studyName", 1, 20);
+        Pomodoro pomodoro = new Pomodoro("studyName", 1, 20,
+                new ParticipantCode(generationStrategy));
 
         String code = "ABCDEF";
 
@@ -58,8 +59,9 @@ class CreatePomodoroStudyServiceTest {
     void 중복된_참여코드로_스터디가_생성되면_참여_코드가_재생성된다() {
         // given
         CreatePomodoroStudyRequest request = new CreatePomodoroStudyRequest("studyName", 1, 20);
-        Pomodoro pomodoro = new Pomodoro("studyName", 1, 20);
-        ParticipantCode participantCode = new ParticipantCode(pomodoro, generationStrategy);
+        Pomodoro pomodoro = new Pomodoro("studyName", 1, 20,
+                new ParticipantCode(generationStrategy));
+        ParticipantCode participantCode = new ParticipantCode(generationStrategy);
 
         String originalCode = "ABCDEF";
         String regeneratedCode = "BCDEFG";

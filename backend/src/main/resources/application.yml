@@ -9,7 +9,7 @@ spring:
     show-sql: true
 
   datasource:
-    url: jdbc:h2:mem:local;MODE=MySQL;
+    url: jdbc:h2:mem:testdb;MODE=MySQL
     username: sa
     password:
     driver-class-name: org.h2.Driver
