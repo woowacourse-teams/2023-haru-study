@@ -10,7 +10,8 @@
       "@Constants/*": ["./constants/*"],
       "@Contexts/*": ["./contexts/*"],
       "@Assets/*": ["./assets/*"],
-      "@Utils/*": ["./utils/*"]
+      "@Utils/*": ["./utils/*"],
+      "@Apis/*": ["./api/*"]
     }
   }
 }
