@@ -8,6 +8,7 @@ import harustudy.backend.entity.Study;
 import harustudy.backend.exception.DuplicatedNicknameException;
 import harustudy.backend.repository.MemberRepository;
 import harustudy.backend.repository.StudyRepository;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,8 @@ class ParticipateServiceTest {
     @Autowired
     private StudyRepository studyRepository;
 
+    @Autowired
+    private EntityManager entityManager;
 
     @Test
     void 닉네임을_받아_신규_멤버를_생성하고_스터디에_등록한다() {
@@ -40,6 +43,9 @@ class ParticipateServiceTest {
         // when
         Long participatedMemberId = participateService.participate(existedStudyId,
                 newMemberNickname);
+
+        entityManager.flush();
+        entityManager.clear();
 
         // then
         Member member = memberRepository.findById(participatedMemberId).get();
