@@ -7,6 +7,23 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
+const LANDING_CONTENTS_MENU_ITEMS = [
+  {
+    key: 0,
+    text: '하루스터디 소개',
+    clickEvent: () => {
+      alert('우아한테크코스 5기 - 테오, 히이로, 모디, 마코, 룩소, 엽토, 노아');
+    },
+  },
+  {
+    key: 1,
+    text: '깃허브',
+    clickEvent: () => {
+      window.open('https://github.com/woowacourse-teams/2023-haru-study', 'blank');
+    },
+  },
+];
+
 const Contents = () => {
   return (
     <ContentsContainer>
@@ -16,20 +33,11 @@ const Contents = () => {
           margin: 0 0 0 auto;
         `}
       >
-        <Menu.Item
-          onClick={() => {
-            alert('우아한테크코스 5기 - 테오, 히이로, 모디, 마코, 룩소, 엽토, 노아');
-          }}
-        >
-          하루스터디 소개
-        </Menu.Item>
-        <Menu.Item
-          onClick={() => {
-            window.open('https://github.com/woowacourse-teams/2023-haru-study', 'blank');
-          }}
-        >
-          깃허브
-        </Menu.Item>
+        {LANDING_CONTENTS_MENU_ITEMS.map((menuItem) => (
+          <Menu.Item key={menuItem.key} onClick={menuItem.clickEvent}>
+            {menuItem.text}
+          </Menu.Item>
+        ))}
       </Menu>
       <TopicSummaryContainer>
         <Typography
