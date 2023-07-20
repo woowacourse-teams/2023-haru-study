@@ -13,7 +13,7 @@ const AccordionHeader = ({ children }: PropsWithChildren) => {
       {children}
       {!isShow && (
         <Button variant="secondary" size="x-small" onClick={show}>
-          펼처보기
+          펼쳐보기
         </Button>
       )}
     </AccordionHeaderLayout>

@@ -1,6 +1,7 @@
 import { styled } from 'styled-components';
 
 import Tabs from '@Components/common/Tabs/Tabs';
+import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
 import useFetch from '@Hooks/useFetch';
@@ -11,7 +12,6 @@ import GoalIcon from '@Assets/icons/GoalIcon';
 import PencilIcon from '@Assets/icons/PencilIcon';
 
 import AnswerQuestion from './AnswerQuestion';
-import { TextSkeletonStyle } from './StudyInformation';
 
 const PLAN_QUESTION = [
   { key: 'toDo', question: '학습 목표' },
@@ -54,7 +54,7 @@ const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
   const isLoading = status === 'pending';
 
   if (isLoading) {
-    return <TabsLoading />;
+    return <TabsSkeleton />;
   }
 
   return (
@@ -89,6 +89,8 @@ const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
   );
 };
 
+export default MemberRecord;
+
 const MemberRecordLayout = styled.div`
   padding: 40px 30px;
 
@@ -119,45 +121,4 @@ const TabItemSection = styled.div`
   display: grid;
   row-gap: 45px;
   align-items: flex-start;
-`;
-
-export default MemberRecord;
-
-const TabsLoading = () => {
-  return (
-    <TabsLoadingLayout>
-      <TopSkeleton />
-      <MiddleSkeleton />
-      <MiddleSkeleton />
-      <ButtonSkeleton />
-      <ButtonSkeleton />
-    </TabsLoadingLayout>
-  );
-};
-
-const TabsLoadingLayout = styled.div`
-  display: grid;
-  row-gap: 20px;
-
-  padding: 40px 0px;
-`;
-
-const TopSkeleton = styled.div`
-  height: 40px;
-
-  ${TextSkeletonStyle}
-`;
-
-const MiddleSkeleton = styled.div`
-  height: 30px;
-  width: 80%;
-
-  ${TextSkeletonStyle}
-`;
-
-const ButtonSkeleton = styled.div`
-  height: 24px;
-  width: 40%;
-
-  ${TextSkeletonStyle}
 `;

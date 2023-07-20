@@ -1,8 +1,9 @@
-import { css, keyframes, styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
+import { TextSkeletonStyle } from '@Styles/common';
 
 import CycleIcon from '@Assets/icons/CycleIcon';
 import TimeLineIcon from '@Assets/icons/TimeLineIcon';
@@ -88,27 +89,4 @@ const StudyInfoContainer = styled.div<StudyInfoContainerType>`
       ${TextSkeletonStyle}
     `}
   `}
-`;
-
-const SkeletonAnimation = keyframes`
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-`;
-
-export const TextSkeletonStyle = css`
-  color: transparent;
-
-  border-radius: 10px;
-
-  background: linear-gradient(-90deg, #dee2e6, #f0f0f0, #dee2e6, #f0f0f0);
-  background-size: 400%;
-
-  animation: ${SkeletonAnimation} 5s infinite ease-in-out;
 `;
