@@ -24,6 +24,8 @@ export const TabsProvider = ({ children }: PropsWithChildren) => {
   const changeTab = (label: string) => setSelectedTab(label);
 
   useEffect(() => {
+    if (tabs.length !== new Set(tabs).size) throw Error('Tabs.Item 컴포넌트의 label이 중복되었습니다.');
+
     const firstTab = tabs[0];
 
     setSelectedTab(firstTab);

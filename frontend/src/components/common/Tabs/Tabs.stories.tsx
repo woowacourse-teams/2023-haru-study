@@ -8,7 +8,7 @@ type Story = StoryObj<typeof Tabs>;
  * `Tabs` 컴포넌트는 여러 주제를 선택할 수 있고 주제에 대한 contents를 볼 수 있는 컴포넌트입니다.
  */
 const meta: Meta<typeof Tabs> = {
-  title: 'NAVIGATION/Tabs2',
+  title: 'NAVIGATION/Tabs',
   component: Tabs,
 };
 
