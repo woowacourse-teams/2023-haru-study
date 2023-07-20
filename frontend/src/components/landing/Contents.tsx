@@ -21,7 +21,7 @@ const Contents = () => {
             alert('우아한테크코스 5기 - 테오, 히이로, 모디, 마코, 룩소, 엽토, 노아');
           }}
         >
-          하루 스터디 소개
+          하루스터디 소개
         </Menu.Item>
         <Menu.Item
           onClick={() => {
@@ -67,7 +67,7 @@ const ContentsContainer = styled.div`
   grid-template-rows: auto 1fr auto;
   row-gap: 100px;
 
-  padding: 40px 40px;
+  padding: 40px 60px;
 `;
 
 const TopicSummaryContainer = styled.div`
@@ -77,7 +77,9 @@ const TopicSummaryContainer = styled.div`
   text-align: end;
 
   p {
+    font-size: 2rem;
     font-weight: 200;
+    line-height: 180%;
   }
 `;
 
