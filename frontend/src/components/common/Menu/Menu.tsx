@@ -23,11 +23,12 @@ const MENU_LIST_POSITION = {
 } as const;
 
 type Props = {
+  iconColor?: string;
   $style?: CSSProp;
   menuListPosition?: keyof typeof MENU_LIST_POSITION;
 };
 
-const Menu = ({ menuListPosition = 'right', $style, children }: PropsWithChildren<Props>) => {
+const Menu = ({ menuListPosition = 'right', $style, children, iconColor }: PropsWithChildren<Props>) => {
   const { isShow, toggleShow, hide } = useDisplay();
 
   const ref = useOutsideClick<HTMLDivElement>(hide);
@@ -35,7 +36,7 @@ const Menu = ({ menuListPosition = 'right', $style, children }: PropsWithChildre
   return (
     <MenuLayout ref={ref} $style={$style}>
       <MenuIconWrapper onClick={toggleShow}>
-        <HamburgerIcon />
+        <HamburgerIcon color={iconColor} />
       </MenuIconWrapper>
       {isShow && (
         <MenuList menuListPosition={menuListPosition}>
@@ -90,13 +91,18 @@ const MenuList = styled.ul<MenuListProp>`
   row-gap: 6px;
 
   width: max-content;
+  max-height: 80vh;
+  overflow: auto;
 
   padding: 10px 0px;
   border-radius: 8px;
 
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
-  ${({ menuListPosition }) => css`
+  z-index: 10;
+
+  ${({ menuListPosition, theme }) => css`
     ${MENU_LIST_POSITION[menuListPosition]}
+    background-color: ${theme.background};
   `}
 `;
