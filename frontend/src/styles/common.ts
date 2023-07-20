@@ -15,7 +15,7 @@ const SkeletonAnimation = keyframes`
 export const TextSkeletonStyle = css`
   color: transparent;
 
-  border-radius: 10px;
+  border-radius: 14px;
 
   background: linear-gradient(-90deg, #dee2e6, #f0f0f0, #dee2e6, #f0f0f0);
   background-size: 400%;

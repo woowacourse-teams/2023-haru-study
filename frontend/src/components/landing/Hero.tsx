@@ -21,8 +21,10 @@ const Hero = () => {
         </Typography>
       </SloganContainer>
       <ShowcaseImageContainer>
-        <img src={HeroImage} alt="랜딩 쇼케이스" />
-        <Typography variant="p2">작가 jcomp 출처 Freepik</Typography>
+        <ImageBox>
+          <img src={HeroImage} alt="랜딩 쇼케이스" />
+          <Typography variant="p2">작가 jcomp 출처 Freepik</Typography>
+        </ImageBox>
       </ShowcaseImageContainer>
     </HeroContainer>
   );
@@ -46,7 +48,7 @@ const SloganContainer = styled.div`
   position: relative;
   bottom: -30px;
 
-  padding: 0px 120px;
+  padding: 0px 160px;
 
   h3 {
     font-size: 64px;
@@ -56,12 +58,16 @@ const SloganContainer = styled.div`
   }
 `;
 
-const ShowcaseImageContainer = styled.div`
+const ImageBox = styled.div`
   position: relative;
-
-  display: grid;
-
   padding: 0px 80px;
+
+  width: 80%;
+  margin: 0 auto;
+`;
+
+const ShowcaseImageContainer = styled.div`
+  display: grid;
 
   p {
     position: absolute;
