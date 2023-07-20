@@ -4,7 +4,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import harustudy.backend.entity.CodeGenerationStrategy;
 import harustudy.backend.entity.Member;
+import harustudy.backend.entity.ParticipantCode;
 import harustudy.backend.entity.Pomodoro;
 import harustudy.backend.entity.PomodoroProgress;
 import harustudy.backend.entity.PomodoroRecord;
@@ -46,7 +48,9 @@ public class AcceptanceTest extends IntegrationTest {
     }
 
     private Long 스터디를_개설한다() {
-        Study study = new Pomodoro("studyName", 1, 20);
+        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
+        entityManager.persist(participantCode);
+        Study study = new Pomodoro("studyName", 1, 20, participantCode);
         entityManager.persist(study);
         return study.getId();
     }

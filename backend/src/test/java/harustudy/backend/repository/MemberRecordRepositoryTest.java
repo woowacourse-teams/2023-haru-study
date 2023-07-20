@@ -2,8 +2,10 @@ package harustudy.backend.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import harustudy.backend.entity.CodeGenerationStrategy;
 import harustudy.backend.entity.Member;
 import harustudy.backend.entity.MemberProgress;
+import harustudy.backend.entity.ParticipantCode;
 import harustudy.backend.entity.Pomodoro;
 import harustudy.backend.entity.PomodoroProgress;
 import harustudy.backend.entity.PomodoroRecord;
@@ -12,11 +14,15 @@ import harustudy.backend.entity.StudyStatus;
 import harustudy.backend.entity.TemplateVersion;
 import java.util.List;
 import java.util.Map;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+@SuppressWarnings("NonAsciiCharacters")
+@DisplayNameGeneration(ReplaceUnderscores.class)
 @DataJpaTest
 class MemberRecordRepositoryTest {
 
@@ -29,7 +35,8 @@ class MemberRecordRepositoryTest {
     @Test
     void 특정_멤버의_스터디_계획을_작성할_수_있다() {
         // given
-        Study study = new Pomodoro("studyName", 3, 20);
+        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
+        Study study = new Pomodoro("studyName", 3, 20, participantCode);
         Member member = new Member("member");
         MemberProgress memberProgress = new PomodoroProgress(study, member, 1,
                 StudyStatus.STUDYING);
@@ -39,6 +46,7 @@ class MemberRecordRepositoryTest {
                 TemplateVersion.V1);
 
         // when
+        testEntityManager.persist(participantCode);
         testEntityManager.persist(study);
         testEntityManager.persist(member);
         testEntityManager.persist(memberProgress);
@@ -58,7 +66,8 @@ class MemberRecordRepositoryTest {
     @Test
     void 특정_멤버의_스터디_회고를_작성할_수_있다() {
         // given
-        Study study = new Pomodoro("studyName", 3, 20);
+        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
+        Study study = new Pomodoro("studyName", 3, 20, participantCode);
         Member member = new Member("member");
         MemberProgress memberProgress = new PomodoroProgress(study, member, 1,
                 StudyStatus.STUDYING);
@@ -67,6 +76,7 @@ class MemberRecordRepositoryTest {
         PomodoroRecord pomodoroRecord = new PomodoroRecord(memberProgress, 1, plan, Map.of(),
                 TemplateVersion.V1);
 
+        testEntityManager.persist(participantCode);
         testEntityManager.persist(study);
         testEntityManager.persist(member);
         testEntityManager.persist(memberProgress);

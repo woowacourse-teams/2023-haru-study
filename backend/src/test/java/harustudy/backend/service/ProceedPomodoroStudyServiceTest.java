@@ -2,7 +2,9 @@ package harustudy.backend.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import harustudy.backend.entity.CodeGenerationStrategy;
 import harustudy.backend.entity.Member;
+import harustudy.backend.entity.ParticipantCode;
 import harustudy.backend.entity.Pomodoro;
 import harustudy.backend.entity.PomodoroProgress;
 import harustudy.backend.entity.PomodoroRecord;
@@ -37,7 +39,8 @@ class ProceedPomodoroStudyServiceTest {
     @Test
     void 계획_단계가_아닐_때_계획을_작성하려_하면_예외를_던진다() {
         // given
-        Study study = new Pomodoro("studyName", 1, 20);
+        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
+        Study study = new Pomodoro("studyName", 1, 20, participantCode);
         Member member = new Member("nickname");
         PomodoroProgress pomodoroProgress = new PomodoroProgress(study, member, 1,
                 StudyStatus.RETROSPECT);
@@ -45,6 +48,7 @@ class ProceedPomodoroStudyServiceTest {
                 Map.of(), TemplateVersion.V1);
 
         // when
+        testEntityManager.persist(participantCode);
         testEntityManager.persist(study);
         testEntityManager.persist(member);
         testEntityManager.persist(pomodoroProgress);
@@ -60,12 +64,14 @@ class ProceedPomodoroStudyServiceTest {
     @EnumSource(value = StudyStatus.class, names = {"PLANNING", "RETROSPECT"})
     void 스터디_중_상태가_아니라면_회고_상태로_넘어갈_수_없다(StudyStatus studyStatus) {
         // given
-        Study study = new Pomodoro("studyName", 1, 20);
+        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
+        Study study = new Pomodoro("studyName", 1, 20, participantCode);
         Member member = new Member("nickname");
         PomodoroProgress pomodoroProgress = new PomodoroProgress(study, member, 1,
                 studyStatus);
 
         // when
+        testEntityManager.persist(participantCode);
         testEntityManager.persist(study);
         testEntityManager.persist(member);
         testEntityManager.persist(pomodoroProgress);
@@ -79,7 +85,8 @@ class ProceedPomodoroStudyServiceTest {
     @Test
     void 계획이_작성되어_있지_않은_경우_회고를_작성하려_하면_예외를_던진다() {
         // given
-        Study study = new Pomodoro("studyName", 1, 20);
+        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
+        Study study = new Pomodoro("studyName", 1, 20, participantCode);
         Member member = new Member("nickname");
         PomodoroProgress pomodoroProgress = new PomodoroProgress(study, member, 1,
                 StudyStatus.RETROSPECT);
@@ -87,6 +94,7 @@ class ProceedPomodoroStudyServiceTest {
                 Map.of(), TemplateVersion.V1);
 
         // when
+        testEntityManager.persist(participantCode);
         testEntityManager.persist(study);
         testEntityManager.persist(member);
         testEntityManager.persist(pomodoroProgress);

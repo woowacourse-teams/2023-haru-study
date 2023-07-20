@@ -22,17 +22,18 @@ public class CreatePomodoroStudyService {
     private final GenerationStrategy generationStrategy;
 
     public CreatePomodoroStudyDto createStudy(CreatePomodoroStudyRequest request) {
+        ParticipantCode participantCode = regenerateUniqueCode();
+        participantCodeRepository.save(participantCode);
+
         Pomodoro pomodoro = new Pomodoro(request.name(), request.totalCycle(),
-                request.timePerCycle());
+                request.timePerCycle(), participantCode);
         Study savedStudy = studyRepository.save(pomodoro);
 
-        ParticipantCode participantCode = regenerateUniqueCode(pomodoro);
-        participantCodeRepository.save(participantCode);
         return CreatePomodoroStudyDto.from(savedStudy, participantCode);
     }
 
-    private ParticipantCode regenerateUniqueCode(Pomodoro pomodoro) {
-        ParticipantCode participantCode = new ParticipantCode(pomodoro, generationStrategy);
+    private ParticipantCode regenerateUniqueCode() {
+        ParticipantCode participantCode = new ParticipantCode(generationStrategy);
         while (isParticipantCodePresent(participantCode)) {
             participantCode.regenerate();
         }
