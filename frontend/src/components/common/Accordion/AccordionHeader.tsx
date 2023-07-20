@@ -23,7 +23,7 @@ const AccordionHeader = ({ children }: PropsWithChildren) => {
 export default AccordionHeader;
 
 const AccordionHeaderLayout = styled.div`
-  min-height: 50px;
+  min-height: 60px;
 
   display: grid;
   grid-template-columns: 1fr auto;
