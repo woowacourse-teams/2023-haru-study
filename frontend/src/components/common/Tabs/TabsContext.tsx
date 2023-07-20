@@ -3,7 +3,7 @@ import { PropsWithChildren, createContext, useContext, useEffect, useMemo, useSt
 const TabsContext = createContext({
   tabs: [] as string[],
   selectedTab: null as string | null,
-  registerLabel: (label: string) => {
+  registerTab: (label: string) => {
     alert(`ERROR: ${label}을 호출한 곳이 적절하지 않습니다.`);
   },
   changeTab: (label: string) => {
@@ -17,7 +17,7 @@ export const TabsProvider = ({ children }: PropsWithChildren) => {
   const [tabs, setTabs] = useState<string[]>([]);
   const [selectedTab, setSelectedTab] = useState<string | null>(null);
 
-  const registerLabel = (label: string) => {
+  const registerTab = (label: string) => {
     setTabs((prev) => [...prev, label]);
   };
 
@@ -29,7 +29,7 @@ export const TabsProvider = ({ children }: PropsWithChildren) => {
     setSelectedTab(firstTab);
   }, [tabs]);
 
-  const value = useMemo(() => ({ tabs, selectedTab, registerLabel, changeTab }), [tabs, selectedTab]);
+  const value = useMemo(() => ({ tabs, selectedTab, registerTab, changeTab }), [tabs, selectedTab]);
 
   return <TabsContext.Provider value={value}>{children}</TabsContext.Provider>;
 };

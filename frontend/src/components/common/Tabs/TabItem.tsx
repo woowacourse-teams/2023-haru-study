@@ -8,12 +8,12 @@ type TabItemProps = {
 };
 
 const TabItem = ({ children, label }: PropsWithChildren<TabItemProps>) => {
-  const { selectedTab, registerLabel } = useTabs();
+  const { selectedTab, registerTab } = useTabs();
 
   const isSelected = label === selectedTab;
 
   useEffect(() => {
-    registerLabel(label);
+    registerTab(label);
   }, []);
 
   if (!isSelected) return null;
