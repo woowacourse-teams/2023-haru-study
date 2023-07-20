@@ -20,7 +20,7 @@ const SubmitContents = () => {
     totalCycle,
     timePerCycle,
     isDisabled,
-    isInputValidate,
+    isInputError,
     handleOnTotalCycleChange,
     handleOnTimePerCycleChange,
     handleOnChangeInput,
@@ -52,7 +52,7 @@ const SubmitContents = () => {
               border: none;
               border-bottom: 1px solid ${color.blue[500]};
             `}
-            error={isInputValidate}
+            error={isInputError}
             onChange={handleOnChangeInput}
           />
         </Input>

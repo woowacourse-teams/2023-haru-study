@@ -4,18 +4,18 @@ const useStudyMaking = () => {
   const [studyName, setStudyName] = useState<string | null>(null);
   const [totalCycle, setTotalCycle] = useState<number | null>(null);
   const [timePerCycle, setTimePerCycle] = useState<number | null>(null);
-  const [isInputValidate, setIsInputValidate] = useState<boolean>(false);
+  const [isInputError, setIsInputError] = useState<boolean>(false);
 
   const handleOnChangeInput: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
       const value = e.target.value;
 
       if (value.length < 1 || value.length > 10) {
-        return setIsInputValidate(true);
+        return setIsInputError(true);
       }
 
       setStudyName(e.target.value);
-      setIsInputValidate(false);
+      setIsInputError(false);
     },
     [setStudyName],
   );
@@ -45,7 +45,7 @@ const useStudyMaking = () => {
   const isDisabled = () => {
     if (!studyName || !totalCycle || !timePerCycle) return true;
     if (studyName.length < 1 || studyName.length > 10) return true;
-    if (isInputValidate) return true;
+    if (isInputError) return true;
 
     return false;
   };
@@ -55,7 +55,7 @@ const useStudyMaking = () => {
     studyName,
     totalCycle,
     timePerCycle,
-    isInputValidate,
+    isInputError,
     handleOnChangeInput,
     handleOnTimePerCycleChange,
     handleOnTotalCycleChange,
