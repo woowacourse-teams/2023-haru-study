@@ -71,4 +71,6 @@ const Layout = styled.div<{ background: string }>`
   padding: 80px 90px;
 
   background-color: ${({ background }) => background};
+
+  transition: all 0.5s ease-in-out;
 `;
