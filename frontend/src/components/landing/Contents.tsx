@@ -76,6 +76,10 @@ const ContentsContainer = styled.div`
   row-gap: 100px;
 
   padding: 40px 60px;
+
+  ${({ theme }) => css`
+    background-color: ${theme.background};
+  `}
 `;
 
 const TopicSummaryContainer = styled.div`
