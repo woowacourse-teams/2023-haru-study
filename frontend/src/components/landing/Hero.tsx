@@ -4,11 +4,11 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
-import LandingShowcaseImage from '@Assets/image/showcase.png';
+import HeroImage from '@Assets/image/heroImage.png';
 
-const Showcase = () => {
+const Hero = () => {
   return (
-    <ShowcaseContainer>
+    <HeroContainer>
       <SloganContainer>
         <Typography variant="h3">
           <Emphasis>스터디</Emphasis>에
@@ -21,16 +21,16 @@ const Showcase = () => {
         </Typography>
       </SloganContainer>
       <ShowcaseImageContainer>
-        <img src={LandingShowcaseImage} alt="랜딩 쇼케이스" />
+        <img src={HeroImage} alt="랜딩 쇼케이스" />
         <Typography variant="p2">작가 jcomp 출처 Freepik</Typography>
       </ShowcaseImageContainer>
-    </ShowcaseContainer>
+    </HeroContainer>
   );
 };
 
-export default Showcase;
+export default Hero;
 
-const ShowcaseContainer = styled.div`
+const HeroContainer = styled.div`
   display: grid;
   grid-template-rows: 1fr auto;
 

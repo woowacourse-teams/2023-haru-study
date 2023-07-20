@@ -2,10 +2,10 @@ import { render, screen } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 
-import Showcase from '@Components/landing/Showcase';
+import Hero from '@Components/landing/Hero';
 
 test('test', async () => {
-  render(<Showcase />);
+  render(<Hero />);
 
   const text = await screen.findByRole('heading');
 

@@ -1,12 +1,12 @@
 import { styled } from 'styled-components';
 
 import Contents from '@Components/landing/Contents';
-import Showcase from '@Components/landing/Showcase';
+import Hero from '@Components/landing/Hero';
 
 const Landing = () => {
   return (
     <LandingLayout>
-      <Showcase />
+      <Hero />
       <Contents />
     </LandingLayout>
   );
