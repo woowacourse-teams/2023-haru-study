@@ -6,8 +6,11 @@ import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
 import useCopyClipBoard from '@Hooks/useCopyClipBoard';
+import useHostParticipationInfo from '@Hooks/useHostParticipationInfo';
 
 import color from '@Styles/color';
+
+import { ERROR_MESSAGE } from '@Constants/errorMessage';
 
 import ClipBoard from '@Assets/icons/ClipBoard';
 
@@ -16,6 +19,7 @@ const HostParticipationInfo = () => {
   const studyName = (location.state as { participantCode: string; studyName: string }).studyName;
   const participantCode = (location.state as { participantCode: string; studyName: string }).participantCode;
 
+  const { nickName, isInputError, handleOnChangeInput } = useHostParticipationInfo();
   const { onCopy } = useCopyClipBoard();
 
   const handleOnClickClipBoardButton = () => {
@@ -70,10 +74,13 @@ const HostParticipationInfo = () => {
               <Typography variant="p1">스터디에서 사용할 닉네임</Typography>
             </LabelContainer>
           }
+          errorMessage={ERROR_MESSAGE.nickName}
         >
-          <Input.TextField />
+          <Input.TextField onChange={handleOnChangeInput} error={isInputError} />
         </Input>
-        <Button variant="primary">스터디 시작하기</Button>
+        <Button variant="primary" disabled={isInputError || nickName === null}>
+          스터디 시작하기
+        </Button>
       </Container>
     </Layout>
   );
