@@ -25,7 +25,7 @@ const SubmitContents = () => {
   const hour = Math.floor(totalTime / 60);
   const minute = totalTime % 60;
 
-  const handleChangeOnInput = useCallback(
+  const handleOnChangeInput = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
 
@@ -90,7 +90,7 @@ const SubmitContents = () => {
               border-bottom: 1px solid ${color.blue[500]};
             `}
             error={isInputValidate}
-            onChange={handleChangeOnInput}
+            onChange={handleOnChangeInput}
           />
         </Input>
         <Select
