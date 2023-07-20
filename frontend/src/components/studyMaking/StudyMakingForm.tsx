@@ -12,7 +12,7 @@ import color from '@Styles/color';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 
-import { createStudy } from '../../../api/index';
+import { createStudy } from '@Apis/index';
 
 const SubmitContents = () => {
   const {
