@@ -63,7 +63,7 @@ const SubmitContents = () => {
 
   const handleOnClickMakeButton = () => {
     createStudy(studyName, totalCycle, timePerCycle).then((result) => {
-      navigator('/study-participating-host', { state: { participantCode: result.participantCode } });
+      navigator('/study-participating-host', { state: { participantCode: result.participantCode, studyName } });
     });
   };
 
