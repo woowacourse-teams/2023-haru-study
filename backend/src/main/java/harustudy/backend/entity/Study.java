@@ -2,6 +2,7 @@ package harustudy.backend.entity;
 
 import harustudy.backend.exception.DuplicatedNicknameException;
 import harustudy.backend.exception.StudyNameLengthException;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -39,7 +40,7 @@ public abstract class Study extends BaseTimeEntity {
     @Column(length = 10)
     private String name;
 
-    @OneToMany(mappedBy = "study")
+    @OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
     private List<MemberProgress> memberProgresses = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -59,19 +60,17 @@ public abstract class Study extends BaseTimeEntity {
     }
 
     public boolean isParticipatedMember(Member member) {
-        return memberProgresses.stream()
-                .anyMatch(memberProgress -> memberProgress.isOwnedBy(member));
+        return memberProgresses.stream().anyMatch(memberProgress -> memberProgress.isOwnedBy(member));
     }
 
     public void participate(Member member) {
         validateDuplicatedNickname(member);
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(this, member);
+        MemberProgress pomodoroProgress = new PomodoroProgress(this, member);
         memberProgresses.add(pomodoroProgress);
     }
 
     private void validateDuplicatedNickname(Member member) {
-        if (memberProgresses.stream()
-                .anyMatch(memberProgress -> memberProgress.hasSameNicknameMember(member))) {
+        if (memberProgresses.stream().anyMatch(memberProgress -> memberProgress.hasSameNicknameMember(member))) {
             throw new DuplicatedNicknameException();
         }
     }
