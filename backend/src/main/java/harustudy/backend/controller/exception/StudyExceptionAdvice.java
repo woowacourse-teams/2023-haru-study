@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class StudyExceptionAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleBindException(MethodArgumentNotValidException e) {
+    public ResponseEntity<ExceptionResponse> handleBindException(
+            MethodArgumentNotValidException e) {
         return ResponseEntity.badRequest()
                 .body(new ExceptionResponse(e.getMessage()));
     }

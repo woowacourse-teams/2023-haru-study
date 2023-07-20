@@ -28,7 +28,7 @@ public class StudyController {
 
     @PostMapping("/api/studies")
     public ResponseEntity<CreatePomodoroStudyResponse> createStudy(
-        @Valid @RequestBody CreatePomodoroStudyRequest request
+            @Valid @RequestBody CreatePomodoroStudyRequest request
     ) {
       CreatePomodoroStudyDto createPomodoroStudyDto =
           createPomodoroStudyService.createStudy(request);
@@ -36,4 +36,3 @@ public class StudyController {
           .body(CreatePomodoroStudyResponse.of(createPomodoroStudyDto));
     }
 }
-  

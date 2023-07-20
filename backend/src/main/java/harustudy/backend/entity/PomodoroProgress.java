@@ -22,6 +22,13 @@ public class PomodoroProgress extends MemberProgress {
     @Enumerated(value = EnumType.STRING)
     private StudyStatus studyStatus;
 
+    public PomodoroProgress(Study study, Member member, @NotNull Integer currentCycle,
+            StudyStatus studyStatus) {
+        super(study, member);
+        this.currentCycle = currentCycle;
+        this.studyStatus = studyStatus;
+    }
+
     public PomodoroRecord findPomodoroRecordByCycle(Integer cycle) {
         return getMemberRecords().stream()
                 .filter(pomodoro -> ((PomodoroRecord) pomodoro).getCycle().equals(cycle))
@@ -34,5 +41,21 @@ public class PomodoroProgress extends MemberProgress {
         return getMemberRecords().stream()
                 .map(record -> (PomodoroRecord) record)
                 .toList();
+    }
+
+    public void proceed() {
+        studyStatus = studyStatus.getNext();
+    }
+
+    public boolean isNotPlanning() {
+        return studyStatus != StudyStatus.PLANNING;
+    }
+
+    public boolean isNotStudying() {
+        return studyStatus != StudyStatus.STUDYING;
+    }
+
+    public boolean isNotRetrospect() {
+        return studyStatus != StudyStatus.RETROSPECT;
     }
 }

@@ -42,4 +42,9 @@ public abstract class MemberProgress extends BaseTimeEntity {
     private List<MemberRecord> memberRecords = new ArrayList<>();
 
     private boolean isDone = false;
+
+    public MemberProgress(Study study, Member member) {
+        this.study = study;
+        this.member = member;
+    }
 }

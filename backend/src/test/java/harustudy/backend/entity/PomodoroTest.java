@@ -3,9 +3,9 @@ package harustudy.backend.entity;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import harustudy.backend.exception.StudyTotalCycleException;
 import harustudy.backend.exception.StudyNameLengthException;
 import harustudy.backend.exception.StudyTimePerCycleException;
+import harustudy.backend.exception.StudyTotalCycleException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;

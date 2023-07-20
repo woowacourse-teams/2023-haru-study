@@ -11,6 +11,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface MemberProgressRepository<T extends MemberProgress> extends JpaRepository<T, Long> {
 
+    Optional<T> findByStudyAndMember(Study study, Member member);
+
     @Query("""
                 select mp from MemberProgress mp
                 join fetch mp.study
