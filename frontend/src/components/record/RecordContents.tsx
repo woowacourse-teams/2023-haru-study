@@ -30,10 +30,10 @@ const RecordContentsLayout = styled.div`
   display: grid;
   row-gap: 40px;
 
-  min-width: 1100px;
-  max-width: 1100px;
+  max-width: 1200px;
 
   margin: 0 auto;
+  padding: 0px 60px;
   padding-bottom: 60px;
 `;
 

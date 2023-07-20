@@ -36,7 +36,7 @@ const StudyRecordLayout = styled.div`
 `;
 
 const Header = styled.header`
-  padding: 50px;
+  padding: 60px;
 `;
 
 const Emphasis = styled.span`
