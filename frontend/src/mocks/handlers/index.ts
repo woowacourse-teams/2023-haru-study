@@ -1,3 +1,3 @@
-import { studyMakinghandlers } from './studyMakingHandler';
+import { studyMakingHandlers } from './studyMakingHandler';
 
-export const handlers = [...studyMakinghandlers];
+export const handlers = [...studyMakingHandlers];
