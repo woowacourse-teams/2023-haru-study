@@ -1,4 +1,3 @@
-import { ChangeEvent, MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
@@ -7,6 +6,8 @@ import Input from '@Components/common/Input/Input';
 import Select from '@Components/common/Select/Select';
 import Typography from '@Components/common/Typography/Typography';
 
+import useStudyMaking from '@Hooks/useStudyMaking';
+
 import color from '@Styles/color';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
@@ -14,10 +15,16 @@ import { ERROR_MESSAGE } from '@Constants/errorMessage';
 import { createStudy } from '../../../api/index';
 
 const SubmitContents = () => {
-  const [studyName, setStudyName] = useState<string | null>(null);
-  const [totalCycle, setTotalCycle] = useState<number | null>(null);
-  const [timePerCycle, setTimePerCycle] = useState<number | null>(null);
-  const [isInputValidate, setIsInputValidate] = useState<boolean>(false);
+  const {
+    studyName,
+    totalCycle,
+    timePerCycle,
+    isDisabled,
+    isInputValidate,
+    handleOnTotalCycleChange,
+    handleOnTimePerCycleChange,
+    handleOnChangeInput,
+  } = useStudyMaking();
 
   const navigator = useNavigate();
 
@@ -25,54 +32,10 @@ const SubmitContents = () => {
   const hour = Math.floor(totalTime / 60);
   const minute = totalTime % 60;
 
-  const handleOnChangeInput = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-
-      if (value.length < 1 || value.length > 10) {
-        return setIsInputValidate(true);
-      }
-
-      setStudyName(e.target.value);
-      setIsInputValidate(false);
-    },
-    [setStudyName],
-  );
-
-  const handleOnTotalCycleChange = useCallback(
-    (e: MouseEvent<HTMLDivElement>) => {
-      if ('dataset' in e.target) {
-        const value = (e.target.dataset as { value: string }).value;
-
-        setTotalCycle(Number(value));
-      }
-    },
-    [setTotalCycle],
-  );
-
-  const handleOnTimePerCycleChange = useCallback(
-    (e: MouseEvent<HTMLDivElement>) => {
-      if ('dataset' in e.target) {
-        const value = (e.target.dataset as { value: string }).value;
-
-        setTimePerCycle(Number(value));
-      }
-    },
-    [setTimePerCycle],
-  );
-
   const handleOnClickMakeButton = () => {
     createStudy(studyName, totalCycle, timePerCycle).then((result) => {
       navigator('/study-participating-host', { state: { participantCode: result.participantCode, studyName } });
     });
-  };
-
-  const isDisabled = () => {
-    if (!studyName || !totalCycle || !timePerCycle) return true;
-    if (studyName.length < 1 || studyName.length > 10) return true;
-    if (isInputValidate) return true;
-
-    return false;
   };
 
   return (
