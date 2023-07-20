@@ -48,7 +48,7 @@ const SloganContainer = styled.div`
   position: relative;
   bottom: -30px;
 
-  padding: 0px 160px;
+  padding: 0px 120px;
 
   h3 {
     font-size: 64px;
@@ -62,7 +62,7 @@ const ImageBox = styled.div`
   position: relative;
   padding: 0px 80px;
 
-  width: 80%;
+  min-width: 80%;
   margin: 0 auto;
 `;
 

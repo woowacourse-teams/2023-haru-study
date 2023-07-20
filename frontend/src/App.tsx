@@ -8,7 +8,9 @@ const App = () => {
   return (
     <ThemeProvider theme={lightTheme}>
       <GlobalStyles />
-      <Outlet />
+      <>
+        <Outlet />
+      </>
     </ThemeProvider>
   );
 };

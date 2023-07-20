@@ -23,12 +23,12 @@ const MENU_LIST_POSITION = {
 } as const;
 
 type Props = {
-  iconColor?: string;
+  $iconColor?: string;
   $style?: CSSProp;
-  menuListPosition?: keyof typeof MENU_LIST_POSITION;
+  $menuListPosition?: keyof typeof MENU_LIST_POSITION;
 };
 
-const Menu = ({ menuListPosition = 'right', $style, children, iconColor }: PropsWithChildren<Props>) => {
+const Menu = ({ $menuListPosition = 'right', $style, children, $iconColor }: PropsWithChildren<Props>) => {
   const { isShow, toggleShow, hide } = useDisplay();
 
   const ref = useOutsideClick<HTMLDivElement>(hide);
@@ -36,10 +36,10 @@ const Menu = ({ menuListPosition = 'right', $style, children, iconColor }: Props
   return (
     <MenuLayout ref={ref} $style={$style}>
       <MenuIconWrapper onClick={toggleShow}>
-        <HamburgerIcon color={iconColor} />
+        <HamburgerIcon color={$iconColor} />
       </MenuIconWrapper>
       {isShow && (
-        <MenuList menuListPosition={menuListPosition}>
+        <MenuList $menuListPosition={$menuListPosition}>
           {Children.map(children, (child) => {
             const item = child as ReactElement;
             return cloneElement(item, { hide });
@@ -81,7 +81,7 @@ const MenuIconWrapper = styled.div`
   }
 `;
 
-type MenuListProp = Required<Pick<Props, 'menuListPosition'>>;
+type MenuListProp = Required<Pick<Props, '$menuListPosition'>>;
 
 const MenuList = styled.ul<MenuListProp>`
   position: absolute;
@@ -101,8 +101,8 @@ const MenuList = styled.ul<MenuListProp>`
 
   z-index: 10;
 
-  ${({ menuListPosition, theme }) => css`
-    ${MENU_LIST_POSITION[menuListPosition]}
+  ${({ $menuListPosition, theme }) => css`
+    ${MENU_LIST_POSITION[$menuListPosition]}
     background-color: ${theme.background};
   `}
 `;

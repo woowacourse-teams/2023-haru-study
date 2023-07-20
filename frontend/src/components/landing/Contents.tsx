@@ -28,7 +28,7 @@ const Contents = () => {
   return (
     <ContentsContainer>
       <Menu
-        menuListPosition="left"
+        $menuListPosition="left"
         $style={css`
           margin: 0 0 0 auto;
         `}
