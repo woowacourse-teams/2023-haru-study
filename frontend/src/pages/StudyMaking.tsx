@@ -1,5 +1,5 @@
 import SubmitContents from '@Components/studyMaking/SubmitContents/SubmitContents';
-import BeforeStudyTemplate from '@Components/templates/BeforeStudyTemplate';
+import BeforeStudyTemplate from '@Components/templates/StudyInfoFormLayout';
 
 const StudyMaking = () => {
   return (
