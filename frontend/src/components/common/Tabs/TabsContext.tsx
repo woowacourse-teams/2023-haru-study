@@ -1,22 +1,35 @@
-import { PropsWithChildren, createContext, useContext, useMemo, useState } from 'react';
-
-const DEFAULT_PANEL_INDEX = 0;
+import { PropsWithChildren, createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 const TabsContext = createContext({
-  selectedPanelIndex: DEFAULT_PANEL_INDEX,
-  selectPanel: (index: number) => {
-    alert(`ERROR: ${index}을 호출한 곳이 적절하지 않습니다.`);
+  tabs: [] as string[],
+  selectedTab: null as string | null,
+  registerLabel: (label: string) => {
+    alert(`ERROR: ${label}을 호출한 곳이 적절하지 않습니다.`);
+  },
+  changeTab: (label: string) => {
+    alert(`ERROR: ${label}을 호출한 곳이 적절하지 않습니다.`);
   },
 });
 
 export const useTabs = () => useContext(TabsContext);
 
 export const TabsProvider = ({ children }: PropsWithChildren) => {
-  const [selectedPanelIndex, setSelectedPanelIndex] = useState(DEFAULT_PANEL_INDEX);
+  const [tabs, setTabs] = useState<string[]>([]);
+  const [selectedTab, setSelectedTab] = useState<string | null>(null);
 
-  const selectPanel = (index: number) => setSelectedPanelIndex(index);
+  const registerLabel = (label: string) => {
+    setTabs((prev) => [...prev, label]);
+  };
 
-  const value = useMemo(() => ({ selectedPanelIndex, selectPanel }), [selectedPanelIndex]);
+  const changeTab = (label: string) => setSelectedTab(label);
+
+  useEffect(() => {
+    const firstTab = tabs[0];
+
+    setSelectedTab(firstTab);
+  }, [tabs]);
+
+  const value = useMemo(() => ({ tabs, selectedTab, registerLabel, changeTab }), [tabs, selectedTab]);
 
   return <TabsContext.Provider value={value}>{children}</TabsContext.Provider>;
 };

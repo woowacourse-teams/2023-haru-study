@@ -8,7 +8,7 @@ type Story = StoryObj<typeof Tabs>;
  * `Tabs` 컴포넌트는 여러 주제를 선택할 수 있고 주제에 대한 contents를 볼 수 있는 컴포넌트입니다.
  */
 const meta: Meta<typeof Tabs> = {
-  title: 'NAVIGATION/Tabs',
+  title: 'NAVIGATION/Tabs2',
   component: Tabs,
 };
 
@@ -21,16 +21,9 @@ export const DefaultTabs: Story = {
   args: {
     children: (
       <>
-        <Tabs.List>
-          <Tabs.Item>ITEM ONE</Tabs.Item>
-          <Tabs.Item>ITEM TWO</Tabs.Item>
-          <Tabs.Item>ITEM THREE</Tabs.Item>
-        </Tabs.List>
-        <Tabs.Panels>
-          <Tabs.Panel>PANEL ONE</Tabs.Panel>
-          <Tabs.Panel>PANEL TWO</Tabs.Panel>
-          <Tabs.Panel>PANEL THREE</Tabs.Panel>
-        </Tabs.Panels>
+        <Tabs.Item label="ITEM1">CONTENTS1</Tabs.Item>
+        <Tabs.Item label="ITEM2">CONTENTS2</Tabs.Item>
+        <Tabs.Item label="ITEM3">CONTENTS3</Tabs.Item>
       </>
     ),
   },
@@ -43,16 +36,13 @@ export const PerfectFitTabs: Story = {
   args: {
     children: (
       <>
-        <Tabs.List>
-          {['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT'].map((item, index) => {
-            return <Tabs.Item key={index}>ITEM {item}</Tabs.Item>;
-          })}
-        </Tabs.List>
-        <Tabs.Panels>
-          {['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT'].map((item, index) => {
-            return <Tabs.Panel key={index}>PANEL {item}</Tabs.Panel>;
-          })}
-        </Tabs.Panels>
+        {['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT'].map((item, index) => {
+          return (
+            <Tabs.Item key={index} label={item}>
+              CONTENTS {item}
+            </Tabs.Item>
+          );
+        })}
       </>
     ),
   },
@@ -65,16 +55,13 @@ export const OverFitTabs: Story = {
   args: {
     children: (
       <>
-        <Tabs.List>
-          {['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'].map((item, index) => {
-            return <Tabs.Item key={index}>ITEM {item}</Tabs.Item>;
-          })}
-        </Tabs.List>
-        <Tabs.Panels>
-          {['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'].map((item, index) => {
-            return <Tabs.Panel key={index}>PANEL {item}</Tabs.Panel>;
-          })}
-        </Tabs.Panels>
+        {['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'].map((item, index) => {
+          return (
+            <Tabs.Item key={index} label={item}>
+              CONTENTS {item}
+            </Tabs.Item>
+          );
+        })}
       </>
     ),
   },
@@ -87,16 +74,9 @@ export const LongTextTabs: Story = {
   args: {
     children: (
       <>
-        <Tabs.List>
-          <Tabs.Item>VERY LONG TAB ITEM</Tabs.Item>
-          <Tabs.Item>ITEM TWO</Tabs.Item>
-          <Tabs.Item>ITEM THREE</Tabs.Item>
-        </Tabs.List>
-        <Tabs.Panels>
-          <Tabs.Panel>PANEL ONE</Tabs.Panel>
-          <Tabs.Panel>PANEL TWO</Tabs.Panel>
-          <Tabs.Panel>PANEL THREE</Tabs.Panel>
-        </Tabs.Panels>
+        <Tabs.Item label="VERY LONG TITLE">CONTENTS1</Tabs.Item>
+        <Tabs.Item label="ITEM2">CONTENTS2</Tabs.Item>
+        <Tabs.Item label="ITEM3">CONTENTS3</Tabs.Item>
       </>
     ),
   },
