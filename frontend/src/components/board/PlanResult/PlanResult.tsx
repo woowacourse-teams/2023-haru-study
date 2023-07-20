@@ -38,9 +38,17 @@ const mockData: PlanList = {
   },
 };
 
-const PlanResult = () => {
+type Props = {
+  onClickSubmitButton: () => void;
+};
+
+const PlanResult = ({ onClickSubmitButton }: Props) => {
   const planList = mockData;
 
+  const handleClickButton = () => {
+    // 제출 로직 추가 예정
+    onClickSubmitButton();
+  };
   return (
     <Layout>
       <PlanResultList>
@@ -48,7 +56,9 @@ const PlanResult = () => {
           <QuestionAnswer key={planKey} {...planList[planKey as Plan]} iconColor={color.red[600]} />
         ))}
       </PlanResultList>
-      <Button variant="danger">학습 마치기</Button>
+      <Button variant="danger" onClick={handleClickButton}>
+        학습 마치기
+      </Button>
     </Layout>
   );
 };
