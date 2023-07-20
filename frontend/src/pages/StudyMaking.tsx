@@ -1,7 +1,7 @@
-import SubmitContents from '@Components/starter/SubmitContents/SubmitContents';
+import SubmitContents from '@Components/studyMaking/SubmitContents/SubmitContents';
 import BeforeStudyTemplate from '@Components/templates/BeforeStudyTemplate';
 
-const MakingStudy = () => {
+const StudyMaking = () => {
   return (
     <BeforeStudyTemplate headerText="스터디 개설하기">
       <SubmitContents />
@@ -9,4 +9,4 @@ const MakingStudy = () => {
   );
 };
 
-export default MakingStudy;
+export default StudyMaking;
