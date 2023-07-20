@@ -8,9 +8,10 @@ import useQuestionTextarea from '@Hooks/useQuestionTextarea';
 type Props = {
   cycle: number;
   minutes: number;
+  onClickSubmitButton: () => void;
 };
 
-const PlanningForm = ({ cycle, minutes }: Props) => {
+const PlanningForm = ({ cycle, minutes, onClickSubmitButton }: Props) => {
   const toDoProps = useQuestionTextarea({
     question: `${cycle}번째 사이클(${minutes}분)에서 학습할 것은 무엇인가요?`,
     minLength: 10,
@@ -44,6 +45,11 @@ const PlanningForm = ({ cycle, minutes }: Props) => {
     maxLength: 500,
   });
 
+  const handleClickButton = () => {
+    // 제출 로직 추가 예정
+    onClickSubmitButton();
+  };
+
   return (
     <Layout>
       <QuestionTextarea {...toDoProps} />
@@ -51,7 +57,7 @@ const PlanningForm = ({ cycle, minutes }: Props) => {
       <QuestionTextarea {...expectedProbabilityProps} />
       <QuestionTextarea {...expecetedDifficultyProps} />
       <QuestionTextarea {...whatCanYouDoProps} />
-      <Button variant="primary" type="submit">
+      <Button variant="primary" type="submit" onClick={handleClickButton}>
         학습 시작하기
       </Button>
     </Layout>
