@@ -91,13 +91,18 @@ const MenuList = styled.ul<MenuListProp>`
   row-gap: 6px;
 
   width: max-content;
+  max-height: 80vh;
+  overflow: auto;
 
   padding: 10px 0px;
   border-radius: 8px;
 
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
-  ${({ menuListPosition }) => css`
+  z-index: 10;
+
+  ${({ menuListPosition, theme }) => css`
     ${MENU_LIST_POSITION[menuListPosition]}
+    background-color: ${theme.background};
   `}
 `;
