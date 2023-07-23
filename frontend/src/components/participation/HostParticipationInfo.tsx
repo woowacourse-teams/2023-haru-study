@@ -12,7 +12,7 @@ import color from '@Styles/color';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 
-import ClipBoard from '@Assets/icons/ClipBoard';
+import ClipBoardIcon from '@Assets/icons/ClipBoardIcon';
 
 import { getCookie, setCookie } from '@Utils/cookie';
 
@@ -69,7 +69,7 @@ const HostParticipationInfo = ({ participantCode, studyName }: Props) => {
               disabled
             />
             <ClipBoardButton onClick={handleOnClickClipBoardButton}>
-              <ClipBoard />
+              <ClipBoardIcon />
             </ClipBoardButton>
           </TextFieldContainer>
         </Input>
