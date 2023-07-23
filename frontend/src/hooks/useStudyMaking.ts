@@ -1,10 +1,17 @@
 import { ChangeEventHandler, MouseEventHandler, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { setCookie } from '@Utils/cookie';
+
+import { createStudy } from '@Apis/index';
 
 const useStudyMaking = () => {
   const [studyName, setStudyName] = useState<string | null>(null);
   const [totalCycle, setTotalCycle] = useState<number | null>(null);
   const [timePerCycle, setTimePerCycle] = useState<number | null>(null);
   const [isInputError, setIsInputError] = useState<boolean>(false);
+
+  const navigator = useNavigate();
 
   const handleOnChangeInput: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -42,6 +49,19 @@ const useStudyMaking = () => {
     [setTimePerCycle],
   );
 
+  const handleOnClickMakeButton = async () => {
+    const response = await createStudy(studyName, totalCycle, timePerCycle);
+
+    const locationHeader = response.headers.get('Location');
+    const studyId = locationHeader?.split('/').pop() as string;
+
+    setCookie('studyId', studyId, 1);
+
+    const result = (await response.json()) as { participantCode: string; studyName: string };
+
+    navigator('/study-participating-host', { state: { participantCode: result.participantCode, studyName } });
+  };
+
   const isDisabled = () => {
     if (!studyName || !totalCycle || !timePerCycle) return true;
     if (studyName.length < 1 || studyName.length > 10) return true;
@@ -52,13 +72,13 @@ const useStudyMaking = () => {
 
   return {
     isDisabled,
-    studyName,
     totalCycle,
     timePerCycle,
     isInputError,
     handleOnChangeInput,
     handleOnTimePerCycleChange,
     handleOnTotalCycleChange,
+    handleOnClickMakeButton,
   };
 };
 

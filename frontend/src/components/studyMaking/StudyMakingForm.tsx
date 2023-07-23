@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
@@ -12,11 +11,8 @@ import color from '@Styles/color';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 
-import { createStudy } from '@Apis/index';
-
 const SubmitContents = () => {
   const {
-    studyName,
     totalCycle,
     timePerCycle,
     isDisabled,
@@ -24,19 +20,12 @@ const SubmitContents = () => {
     handleOnTotalCycleChange,
     handleOnTimePerCycleChange,
     handleOnChangeInput,
+    handleOnClickMakeButton,
   } = useStudyMaking();
-
-  const navigator = useNavigate();
 
   const totalTime = ((timePerCycle ?? 0) + 20) * (totalCycle ?? 0);
   const hour = Math.floor(totalTime / 60);
   const minute = totalTime % 60;
-
-  const handleOnClickMakeButton = () => {
-    createStudy(studyName, totalCycle, timePerCycle).then((result) => {
-      navigator('/study-participating-host', { state: { participantCode: result.participantCode, studyName } });
-    });
-  };
 
   return (
     <Layout>
