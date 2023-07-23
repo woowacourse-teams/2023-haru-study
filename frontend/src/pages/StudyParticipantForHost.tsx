@@ -3,16 +3,18 @@ import { useLocation } from 'react-router-dom';
 import HostParticipationInfo from '@Components/participation/HostParticipationInfo';
 import StudyInfoFormLayout from '@Components/templates/StudyInfoFormLayout';
 
-import { StudyParticipantPageType } from '@Types/location';
+type LocationState = {
+  state: { participantCode: string; studyName: string };
+};
 
 const StudyParticipantForHost = () => {
   const {
-    state: { studyName },
-  } = useLocation() as StudyParticipantPageType;
+    state: { participantCode, studyName },
+  } = useLocation() as LocationState;
 
   return (
     <StudyInfoFormLayout headerText={`${studyName} 스터디`}>
-      <HostParticipationInfo />
+      <HostParticipationInfo participantCode={participantCode} studyName={studyName} />
     </StudyInfoFormLayout>
   );
 };
