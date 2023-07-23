@@ -21,6 +21,7 @@ const HostParticipationInfo = () => {
     studyName,
     handleOnClickClipBoardButton,
     handleOnClickHelperMessage,
+    handleOnClickStartButton,
   } = useHostParticipationInfo();
 
   return (
@@ -71,7 +72,7 @@ const HostParticipationInfo = () => {
         >
           <Input.TextField onChange={handleOnChangeInput} error={isInputError} />
         </Input>
-        <Button variant="primary" disabled={isInputError || nickName === null}>
+        <Button variant="primary" disabled={isInputError || nickName === null} onClick={handleOnClickStartButton}>
           스터디 시작하기
         </Button>
       </Container>

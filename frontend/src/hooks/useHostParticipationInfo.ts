@@ -1,5 +1,9 @@
 import { ChangeEventHandler, useCallback, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import { getCookie, setCookie } from '@Utils/cookie';
+
+import { startStudy } from '@Apis/index';
 
 import useCopyClipBoard from './useCopyClipBoard';
 
@@ -12,6 +16,8 @@ const useHostParticipationInfo = () => {
   const participantCode = (location.state as { participantCode: string; studyName: string }).participantCode;
 
   const { onCopy } = useCopyClipBoard();
+
+  const navigator = useNavigate();
 
   const handleOnChangeInput: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -36,6 +42,17 @@ const useHostParticipationInfo = () => {
     alert('참여 코드를 스터디원들과 공유하면 스터디원들의 회고와 기록을 확인할 수 있어요.');
   };
 
+  const handleOnClickStartButton = async () => {
+    const response = await startStudy(nickName, getCookie('studyId'));
+
+    const locationHeader = response.headers.get('Location');
+    const memberId = locationHeader?.split('/').pop() as string;
+
+    setCookie('memberId', memberId, 1);
+
+    navigator('/studyboard');
+  };
+
   return {
     studyName,
     nickName,
@@ -44,6 +61,7 @@ const useHostParticipationInfo = () => {
     handleOnChangeInput,
     handleOnClickClipBoardButton,
     handleOnClickHelperMessage,
+    handleOnClickStartButton,
   };
 };
 

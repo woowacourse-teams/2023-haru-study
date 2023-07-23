@@ -16,3 +16,9 @@ export const createStudy = (studyName: string | null, totalCycle: number | null,
     method: 'POST',
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
   });
+
+export const startStudy = (nickName: string | null, studyId: string | null) =>
+  request(`/api/studies/${studyId ?? ''}/members`, {
+    method: 'POST',
+    body: JSON.stringify({ nickName }),
+  });
