@@ -7,13 +7,17 @@ import { startStudy } from '@Apis/index';
 
 import useCopyClipBoard from './useCopyClipBoard';
 
+type LocationType = {
+  state: { participantCode: string; studyName: string };
+};
+
 const useHostParticipationInfo = () => {
   const [nickName, setNickName] = useState<string | null>(null);
   const [isInputError, setIsInputError] = useState<boolean>(false);
 
-  const location = useLocation();
-  const studyName = (location.state as { participantCode: string; studyName: string }).studyName;
-  const participantCode = (location.state as { participantCode: string; studyName: string }).participantCode;
+  const {
+    state: { participantCode, studyName },
+  } = useLocation() as LocationType;
 
   const { onCopy } = useCopyClipBoard();
 
