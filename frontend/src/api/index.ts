@@ -11,8 +11,8 @@ const request = async (path: string, init?: RequestInit) => {
   return response;
 };
 
-export const createStudy = async (studyName: string | null, totalCycle: number | null, timePerCycle: number | null) =>
+export const createStudy = (studyName: string | null, totalCycle: number | null, timePerCycle: number | null) =>
   request(`/api/studies`, {
     method: 'POST',
-    body: JSON.stringify({ studyName, totalCycle, timePerCycle }),
-  }).then((result): Promise<{participantCode: string}> => result.json());
+    body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
+  });
