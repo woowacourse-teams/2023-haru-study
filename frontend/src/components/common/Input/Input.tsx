@@ -66,7 +66,7 @@ const Input = ({
   $style,
   ...props
 }: PropsWithChildren<InputProps> & HTMLAttributes<HTMLDivElement>) => {
-  const child = Children.only<ReactElement<{ error: boolean; id?: string }>>(children);
+  const child = Children.only<ReactElement<{ error?: boolean; id?: string }>>(children);
   const generatedId = useId('input');
   const id = child.props.id ?? generatedId;
   const isError: boolean = child.props.error ?? false;
@@ -123,7 +123,7 @@ type StyledInputProps = Pick<TextFieldProps, '$style'>;
 
 const StyledInput = styled.input<StyledInputProps>`
   &:disabled {
-    background-color: ${color.neutral[200]};
+    background-color: ${color.neutral[50]};
   }
 
   width: 100%;

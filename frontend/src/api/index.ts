@@ -11,8 +11,14 @@ const request = async (path: string, init?: RequestInit) => {
   return response;
 };
 
-export const createStudy = async (studyName: string | null, totalCycle: number | null, timePerCycle: number | null) =>
+export const createStudy = (studyName: string, totalCycle: number, timePerCycle: number) =>
   request(`/api/studies`, {
     method: 'POST',
-    body: JSON.stringify({ studyName, totalCycle, timePerCycle }),
-  }).then((result): Promise<{participantCode: string}> => result.json());
+    body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
+  });
+
+export const startStudy = (nickName: string | null, studyId: string | null) =>
+  request(`/api/studies/${studyId ?? ''}/members`, {
+    method: 'POST',
+    body: JSON.stringify({ nickName }),
+  });

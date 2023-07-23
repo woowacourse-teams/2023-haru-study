@@ -6,36 +6,53 @@ import Input from '@Components/common/Input/Input';
 import Select from '@Components/common/Select/Select';
 import Typography from '@Components/common/Typography/Typography';
 
-import useStudyMaking from '@Hooks/useStudyMaking';
+import useInput from '@Hooks/useInput';
+import useSelect from '@Hooks/useSelect';
 
 import color from '@Styles/color';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 
-import { createStudy } from '../../../api/index';
+import { setCookie } from '@Utils/cookie';
 
-const SubmitContents = () => {
-  const {
-    studyName,
-    totalCycle,
-    timePerCycle,
-    isDisabled,
-    isInputValidate,
-    handleOnTotalCycleChange,
-    handleOnTimePerCycleChange,
-    handleOnChangeInput,
-  } = useStudyMaking();
+import { createStudy } from '@Apis/index';
 
+const StudyMakingForm = () => {
   const navigator = useNavigate();
 
-  const totalTime = ((timePerCycle ?? 0) + 20) * (totalCycle ?? 0);
+  const studyNameInput = useInput(true);
+  const timePerCycleSelect = useSelect();
+  const totalCycleSelect = useSelect();
+
+  const totalTime = (Number(timePerCycleSelect.state ?? 0) + 20) * Number(totalCycleSelect.state ?? 0);
   const hour = Math.floor(totalTime / 60);
   const minute = totalTime % 60;
 
-  const handleOnClickMakeButton = () => {
-    createStudy(studyName, totalCycle, timePerCycle).then((result) => {
-      navigator('/study-participating-host', { state: { participantCode: result.participantCode, studyName } });
+  const handleOnClickMakeButton = async () => {
+    const response = await createStudy(
+      studyNameInput.state ?? '',
+      Number(timePerCycleSelect.state ?? 0),
+      Number(totalCycleSelect.state ?? 0),
+    );
+
+    const locationHeader = response.headers.get('Location');
+    const studyId = locationHeader?.split('/').pop() as string;
+
+    setCookie('studyId', studyId, 1);
+
+    const result = (await response.json()) as { participantCode: string; studyName: string };
+
+    navigator('/study-participating-host', {
+      state: { participantCode: result.participantCode, studyName: studyNameInput.state },
     });
+  };
+
+  const isDisabled = () => {
+    if (!studyNameInput.state || !timePerCycleSelect.state || !totalCycleSelect.state) return true;
+    if ((studyNameInput.state ?? '').length < 1 || (studyNameInput.state ?? '').length > 10) return true;
+    if (studyNameInput.isInputError) return true;
+
+    return false;
   };
 
   return (
@@ -52,8 +69,8 @@ const SubmitContents = () => {
               border: none;
               border-bottom: 1px solid ${color.blue[500]};
             `}
-            error={isInputValidate}
-            onChange={handleOnChangeInput}
+            error={studyNameInput.isInputError}
+            onChange={studyNameInput.onChangeInput}
           />
         </Input>
         <Select
@@ -70,7 +87,7 @@ const SubmitContents = () => {
               right: 0;
               z-index: 10;
             `}
-            onChange={handleOnTotalCycleChange}
+            onChange={totalCycleSelect.onChangeSelectItem}
           >
             {[1, 2, 3, 4, 5, 6, 7, 8].map((el, index) => (
               <Select.Item key={index + el} value={el} suffix="회" />
@@ -91,7 +108,7 @@ const SubmitContents = () => {
               right: 0;
               z-index: 10;
             `}
-            onChange={handleOnTimePerCycleChange}
+            onChange={timePerCycleSelect.onChangeSelectItem}
           >
             {[20, 25, 30, 35, 40].map((el, index) => (
               <Select.Item key={index + el} value={el} suffix="분" />
@@ -122,7 +139,7 @@ const SubmitContents = () => {
   );
 };
 
-export default SubmitContents;
+export default StudyMakingForm;
 
 const Layout = styled.div`
   display: flex;

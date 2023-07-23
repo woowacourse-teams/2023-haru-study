@@ -1,13 +1,21 @@
 import { useLocation } from 'react-router-dom';
 
+import HostParticipationInfo from '@Components/participation/HostParticipationInfo';
+import StudyInfoFormLayout from '@Components/templates/StudyInfoFormLayout';
+
+type LocationState = {
+  state: { participantCode: string; studyName: string };
+};
+
 const StudyParticipantForHost = () => {
-  const location = useLocation();
+  const {
+    state: { participantCode, studyName },
+  } = useLocation() as LocationState;
 
   return (
-    <div>
-      {(location.state as { participantCode: string; studyName: string }).participantCode}
-      {(location.state as { participantCode: string; studyName: string }).studyName}
-    </div>
+    <StudyInfoFormLayout headerText={`${studyName} 스터디`}>
+      <HostParticipationInfo participantCode={participantCode} studyName={studyName} />
+    </StudyInfoFormLayout>
   );
 };
 
