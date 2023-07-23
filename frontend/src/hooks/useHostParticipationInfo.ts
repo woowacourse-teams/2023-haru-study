@@ -45,14 +45,15 @@ const useHostParticipationInfo = () => {
   };
 
   const handleOnClickStartButton = async () => {
-    const response = await startStudy(nickName, getCookie('studyId'));
+    const studyId = getCookie('studyId');
+    const response = await startStudy(nickName, studyId);
 
     const locationHeader = response.headers.get('Location');
     const memberId = locationHeader?.split('/').pop() as string;
 
     setCookie('memberId', memberId, 1);
 
-    navigator('/studyboard');
+    navigator(`/studyboard/${studyId ?? ''}`);
   };
 
   return {

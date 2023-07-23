@@ -17,7 +17,7 @@ const router = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: 'studyboard',
+        path: 'studyboard/:studyId',
         element: <StudyBoard />,
       },
       {
