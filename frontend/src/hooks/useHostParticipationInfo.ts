@@ -1,15 +1,13 @@
 import { ChangeEventHandler, useCallback, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { StudyParticipantPageType } from '@Types/location';
+
+import useCopyClipBoard from '@Hooks/useCopyClipBoard';
+
 import { getCookie, setCookie } from '@Utils/cookie';
 
 import { startStudy } from '@Apis/index';
-
-import useCopyClipBoard from './useCopyClipBoard';
-
-type LocationType = {
-  state: { participantCode: string; studyName: string };
-};
 
 const useHostParticipationInfo = () => {
   const [nickName, setNickName] = useState<string | null>(null);
@@ -17,7 +15,7 @@ const useHostParticipationInfo = () => {
 
   const {
     state: { participantCode, studyName },
-  } = useLocation() as LocationType;
+  } = useLocation() as StudyParticipantPageType;
 
   const { onCopy } = useCopyClipBoard();
 
