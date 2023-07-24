@@ -11,7 +11,7 @@ const TabList = () => {
         const isSelected = tab === selectedTab;
 
         return (
-          <Tab onClick={() => changeTab(tab)} key={`${tab}${index}`} isSelected={isSelected}>
+          <Tab onClick={() => changeTab(tab)} key={`${tab}${index}`} $isSelected={isSelected}>
             {tab}
           </Tab>
         );
@@ -29,7 +29,7 @@ const TabListLayout = styled.ul`
 `;
 
 type TabProps = {
-  isSelected: boolean;
+  $isSelected: boolean;
 };
 
 const Tab = styled.li<TabProps>`
@@ -43,9 +43,9 @@ const Tab = styled.li<TabProps>`
 
   cursor: pointer;
 
-  ${({ isSelected, theme }) => css`
+  ${({ $isSelected, theme }) => css`
     border-bottom: 2px solid ${theme.text};
 
-    opacity: ${isSelected ? '1' : '0.2'};
+    opacity: ${$isSelected ? '1' : '0.2'};
   `}
 `;
