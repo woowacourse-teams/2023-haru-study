@@ -1,5 +1,6 @@
 package harustudy.backend.entity;
 
+import harustudy.backend.exception.MemberNameLengthException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,4 +23,19 @@ public class Member extends BaseTimeEntity {
     @NotNull
     @Column(length = 10)
     private String nickname;
+
+    public Member(@NotNull String nickname) {
+        validateLength(nickname);
+        this.nickname = nickname;
+    }
+
+    private void validateLength(String nickname) {
+        if (nickname.length() < 1 || nickname.length() > 10) {
+            throw new MemberNameLengthException();
+        }
+    }
+
+    public boolean hasSameNickname(Member member) {
+        return nickname.equals(member.nickname);
+    }
 }

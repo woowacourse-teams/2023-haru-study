@@ -36,6 +36,7 @@
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/no-shadow": "off",
     "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-misused-promises": "off",
     "import/no-unresolved": "off",
     "import/order": [
       "error",
@@ -83,12 +84,17 @@
             "position": "after"
           },
           {
-            "pattern": "@Assets/*",
+            "pattern": "@Assets/**/*",
             "group": "internal",
             "position": "after"
           },
           {
             "pattern": "@Utils/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@Apis/*",
             "group": "internal",
             "position": "after"
           }

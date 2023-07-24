@@ -7,6 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import harustudy.backend.service.CreatePomodoroStudyService;
+import harustudy.backend.service.ParticipateService;
+import harustudy.backend.service.PomodoroProgressService;
+import harustudy.backend.service.StudyAuthService;
 import harustudy.backend.service.dto.CreatePomodoroStudyDto;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -29,6 +32,12 @@ class StudyControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private CreatePomodoroStudyService createPomodoroStudyService;
+    @MockBean
+    private PomodoroProgressService pomodoroProgressService;
+    @MockBean
+    private StudyAuthService studyAuthService;
+    @MockBean
+    private ParticipateService participateService;
     @Autowired
     private ObjectMapper objectMapper;
 

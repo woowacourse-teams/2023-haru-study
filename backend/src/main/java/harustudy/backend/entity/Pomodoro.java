@@ -25,8 +25,8 @@ public class Pomodoro extends Study {
     private Integer timePerCycle;
 
     public Pomodoro(@NotNull String name, @NotNull Integer totalCycle,
-            @NotNull Integer timePerCycle) {
-        super(name);
+            @NotNull Integer timePerCycle, @NotNull ParticipantCode participantCode) {
+        super(name, participantCode);
         validateTotalCycle(totalCycle);
         validateTimePerCycle(timePerCycle);
         this.totalCycle = totalCycle;
