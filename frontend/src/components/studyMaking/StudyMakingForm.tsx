@@ -29,22 +29,27 @@ const StudyMakingForm = () => {
   const minute = totalTime % 60;
 
   const handleOnClickMakeButton = async () => {
-    const response = await createStudy(
-      studyNameInput.state ?? '',
-      Number(timePerCycleSelect.state ?? 0),
-      Number(totalCycleSelect.state ?? 0),
-    );
+    try {
+      const response = await createStudy(
+        studyNameInput.state ?? '',
+        Number(timePerCycleSelect.state ?? 0),
+        Number(totalCycleSelect.state ?? 0),
+      );
 
-    const locationHeader = response.headers.get('Location');
-    const studyId = locationHeader?.split('/').pop() as string;
+      const locationHeader = response.headers.get('Location');
+      const studyId = locationHeader?.split('/').pop() as string;
 
-    setCookie('studyId', studyId, 1);
+      setCookie('studyId', studyId, 1);
 
-    const result = (await response.json()) as { participantCode: string; studyName: string };
+      const result = (await response.json()) as { participantCode: string; studyName: string };
 
-    navigator('/study-participating-host', {
-      state: { participantCode: result.participantCode, studyName: studyNameInput.state },
-    });
+      navigator('/study-participating-host', {
+        state: { participantCode: result.participantCode, studyName: studyNameInput.state },
+      });
+    } catch (error) {
+      console.error(error);
+      alert('이름의 길이와, 사이클 수, 사이클 당 시간을 다시 한번 확인해주세요');
+    }
   };
 
   const isDisabled = () => {

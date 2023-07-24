@@ -40,15 +40,20 @@ const HostParticipationInfo = ({ participantCode, studyName }: Props) => {
   };
 
   const handleOnClickStartButton = async () => {
-    const studyId = getCookie('studyId');
-    const response = await startStudy(nickNameInput.state, studyId);
+    try {
+      const studyId = getCookie('studyId');
+      const response = await startStudy(nickNameInput.state, studyId);
 
-    const locationHeader = response.headers.get('Location');
-    const memberId = locationHeader?.split('/').pop() as string;
+      const locationHeader = response.headers.get('Location');
+      const memberId = locationHeader?.split('/').pop() as string;
 
-    setCookie('memberId', memberId, 1);
+      setCookie('memberId', memberId, 1);
 
-    navigator(`/studyboard/${studyId ?? ''}`);
+      navigator(`/studyboard/${studyId ?? ''}`);
+    } catch (error) {
+      console.error(error);
+      alert('스터디 방이 존재하지 않는 경우이거나, 스터디 방이 존재하지 않습니다');
+    }
   };
 
   return (
