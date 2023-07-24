@@ -5,14 +5,14 @@ import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
 
 import color from '@Styles/color';
 
-type Plan = 'toDo' | 'completionCondition' | 'expectedProbability' | 'expecetedDifficulty' | 'whatCanYouDo';
+type Plan = 'toDo' | 'completionCondition' | 'expectedProbability' | 'expectedDifficulty' | 'whatCanYouDo';
 
-type PlanList = {
-  [key in Plan]: {
-    question: string;
-    answer: string;
-  };
+type PlanItem = {
+  question: string;
+  answer: string;
 };
+
+type PlanList = Record<Plan, PlanItem>;
 
 // 임시 mock 데이터
 const mockData: PlanList = {
@@ -28,7 +28,7 @@ const mockData: PlanList = {
     question: '성공적으로 마칠 확률과 그 이유',
     answer: '60프로, 분량이 좀 많다.',
   },
-  expecetedDifficulty: {
+  expectedDifficulty: {
     question: '학습 중 예상되는 어려움',
     answer: '클래스에 대한 이해도 부족',
   },
