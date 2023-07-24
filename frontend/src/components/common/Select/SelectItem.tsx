@@ -1,25 +1,35 @@
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, useEffect } from 'react';
 import { CSSProp, css, styled } from 'styled-components';
 
 import color from '@Styles/color';
 
+import { useSelectContext } from './SelectContext';
+
 export type ItemProps = {
-  value: string;
+  value: string | number;
+  suffix: string;
 
   $style?: CSSProp;
 } & HTMLAttributes<HTMLDivElement>;
 
-const SelectItem = ({ value, ...props }: ItemProps) => {
+const SelectItem = ({ value, suffix, ...props }: ItemProps) => {
+  const { changeTriggerSuffixText } = useSelectContext();
+
+  useEffect(() => {
+    changeTriggerSuffixText(suffix);
+  }, [suffix, changeTriggerSuffixText]);
+
   return (
     <Layout {...props} data-value={value}>
       {value}
+      {suffix}
     </Layout>
   );
 };
 
 export default SelectItem;
 
-const Layout = styled.div<Omit<ItemProps, 'value'>>`
+const Layout = styled.div<Omit<ItemProps, 'value' | 'suffix'>>`
   &:hover {
     background-color: ${color.neutral[200]};
   }

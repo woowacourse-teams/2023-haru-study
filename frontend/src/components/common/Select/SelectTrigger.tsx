@@ -12,11 +12,11 @@ type Props = {
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const SelectTrigger = ({ triggerText = '선택', ...props }: Props) => {
-  const { isOpen, selectedItem, toggleOpen } = useSelectContext();
+  const { isOpen, selectedItem, toggleOpen, triggerSuffixText } = useSelectContext();
 
   return (
     <Layout {...props} onClick={toggleOpen}>
-      {selectedItem ?? triggerText}
+      {selectedItem === null ? triggerText : selectedItem.toString() + triggerSuffixText}
       {isOpen ? <Mark>&#9650;</Mark> : <Mark>&#9660;</Mark>}
     </Layout>
   );

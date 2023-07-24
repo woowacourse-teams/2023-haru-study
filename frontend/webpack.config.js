@@ -24,6 +24,7 @@ module.exports = () => {
         '@Contexts': path.resolve(__dirname, 'src/contexts'),
         '@Assets': path.resolve(__dirname, 'src/assets'),
         '@Utils': path.resolve(__dirname, 'src/utils'),
+        '@Apis': path.resolve(__dirname, 'src/api'),
       },
     },
     devServer: {

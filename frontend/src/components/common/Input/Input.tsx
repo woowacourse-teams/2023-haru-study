@@ -50,6 +50,7 @@ type InputProps = {
   label?: ReactNode;
   children: ReactElement;
   bottomText?: string;
+  errorMessage?: string;
 
   $labelSize?: LabelSizeType;
 
@@ -60,11 +61,12 @@ const Input = ({
   label,
   children,
   bottomText,
+  errorMessage = '잘못된 입력입니다.',
   $labelSize,
   $style,
   ...props
 }: PropsWithChildren<InputProps> & HTMLAttributes<HTMLDivElement>) => {
-  const child = Children.only<ReactElement<{ error: boolean; id?: string }>>(children);
+  const child = Children.only<ReactElement<{ error?: boolean; id?: string }>>(children);
   const generatedId = useId('input');
   const id = child.props.id ?? generatedId;
   const isError: boolean = child.props.error ?? false;
@@ -75,7 +77,7 @@ const Input = ({
         {label}
       </StyledLabel>
       {cloneElement(child, { id, ...child.props })}
-      {isError && <StyledBottomText isError={true}>잘못된 입력입니다.</StyledBottomText>}
+      {isError && <StyledBottomText $error={true}>{errorMessage}</StyledBottomText>}
       {bottomText !== null && <StyledBottomText>{bottomText}</StyledBottomText>}
     </Layout>
   );
@@ -98,13 +100,13 @@ const StyledLabel = styled.label<StyledLabel>`
   `}
 `;
 
-const StyledBottomText = styled.p<{ isError?: boolean }>`
+const StyledBottomText = styled.p<{ $error?: boolean }>`
   margin-top: 10px;
   font-size: 16px;
   font-weight: 200;
 
-  ${({ isError }) => css`
-    color: ${isError ? color.red[600] : color.neutral[400]};
+  ${({ $error }) => css`
+    color: ${$error ? color.red[600] : color.neutral[400]};
   `};
 `;
 
@@ -121,7 +123,7 @@ type StyledInputProps = Pick<TextFieldProps, '$style'>;
 
 const StyledInput = styled.input<StyledInputProps>`
   &:disabled {
-    background-color: ${color.neutral[200]};
+    background-color: ${color.neutral[50]};
   }
 
   width: 100%;
@@ -129,6 +131,7 @@ const StyledInput = styled.input<StyledInputProps>`
   font-size: 2.4rem;
   border-radius: 7px;
   border: 1px solid ${color.neutral[200]};
+  margin-top: 10px;
 
   ${({ $style, theme }) => css`
     background-color: ${theme.background};
