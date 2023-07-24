@@ -6,9 +6,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.dto.request.ParticipateRequest;
-import harustudy.backend.dto.request.StudyAuthRequest;
-import harustudy.backend.dto.response.StudyAuthResponse;
+import harustudy.backend.participantcode.dto.StudyAuthRequest;
+import harustudy.backend.participantcode.dto.StudyAuthResponse;
+import harustudy.backend.study.dto.ParticipateRequest;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;

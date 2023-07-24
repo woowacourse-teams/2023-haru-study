@@ -7,8 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.controller.CreatePomodoroStudyRequest;
-import harustudy.backend.controller.CreatePomodoroStudyResponse;
+import harustudy.backend.study.dto.CreatePomodoroStudyRequest;
+import harustudy.backend.study.dto.CreatePomodoroStudyResponse;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;

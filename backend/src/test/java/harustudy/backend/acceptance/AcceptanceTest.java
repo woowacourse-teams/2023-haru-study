@@ -4,17 +4,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.entity.CodeGenerationStrategy;
-import harustudy.backend.entity.Member;
-import harustudy.backend.entity.ParticipantCode;
-import harustudy.backend.entity.Pomodoro;
-import harustudy.backend.entity.PomodoroProgress;
-import harustudy.backend.entity.PomodoroRecord;
-import harustudy.backend.entity.Study;
-import harustudy.backend.entity.StudyStatus;
-import harustudy.backend.entity.TemplateVersion;
 import harustudy.backend.integration.IntegrationTest;
-import harustudy.backend.repository.MemberRecordRepository;
+import harustudy.backend.member.domain.Member;
+import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
+import harustudy.backend.participantcode.domain.ParticipantCode;
+import harustudy.backend.progress.domain.PomodoroProgress;
+import harustudy.backend.progress.domain.StudyStatus;
+import harustudy.backend.record.domain.PomodoroRecord;
+import harustudy.backend.record.domain.TemplateVersion;
+import harustudy.backend.record.repository.MemberRecordRepository;
+import harustudy.backend.study.domain.Pomodoro;
+import harustudy.backend.study.domain.Study;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;

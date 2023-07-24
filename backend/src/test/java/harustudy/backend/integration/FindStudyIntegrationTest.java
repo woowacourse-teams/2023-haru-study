@@ -7,12 +7,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.dto.MemberContentResponse;
-import harustudy.backend.dto.MemberDto;
-import harustudy.backend.dto.response.CurrentCyclePlanResponse;
-import harustudy.backend.dto.response.MemberContentResponses;
-import harustudy.backend.dto.response.StudyMemberMetaDataResponse;
-import harustudy.backend.dto.response.StudyMetadataResponse;
+import harustudy.backend.member.dto.StudyMemberMetaDataResponse;
+import harustudy.backend.progress.dto.MemberDto;
+import harustudy.backend.record.dto.CurrentCyclePlanResponse;
+import harustudy.backend.record.dto.MemberContentResponse;
+import harustudy.backend.record.dto.MemberContentResponses;
+import harustudy.backend.study.dto.StudyMetadataResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
