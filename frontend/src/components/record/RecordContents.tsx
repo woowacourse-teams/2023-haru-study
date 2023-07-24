@@ -25,7 +25,7 @@ const RecordContents = () => {
         studyName={data?.studyName}
         totalCycle={data?.totalCycle}
         timePerCycle={data?.timePerCycle}
-        isLoading={isLoading}
+        $isLoading={isLoading}
       />
       <MemberRecordList studyId={studyId} members={data?.members} isLoading={isLoading} />
     </RecordContentsLayout>
