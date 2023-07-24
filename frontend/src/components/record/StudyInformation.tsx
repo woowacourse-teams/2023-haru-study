@@ -12,11 +12,11 @@ type Props = {
   studyName?: string;
   totalCycle?: number;
   timePerCycle?: number;
-  isLoading: boolean;
+  $isLoading: boolean;
 };
 
-const StudyInformation = ({ studyName, totalCycle, timePerCycle, isLoading }: Props) => {
-  const iconColor = isLoading ? 'transparent' : color.neutral[700];
+const StudyInformation = ({ studyName, totalCycle, timePerCycle, $isLoading }: Props) => {
+  const iconColor = $isLoading ? 'transparent' : color.neutral[700];
 
   return (
     <StudyInformationLayout>
@@ -25,7 +25,7 @@ const StudyInformation = ({ studyName, totalCycle, timePerCycle, isLoading }: Pr
         $style={css`
           font-weight: 600;
 
-          ${isLoading &&
+          ${$isLoading &&
           css`
             width: 80%;
             min-width: 400px;
@@ -35,12 +35,12 @@ const StudyInformation = ({ studyName, totalCycle, timePerCycle, isLoading }: Pr
       >
         {studyName} 스터디에서의 기록
       </Typography>
-      <StudyInfoContainer isLoading={isLoading}>
+      <StudyInfoContainer $isLoading={$isLoading}>
         <CycleIcon color={iconColor} />
         <Typography variant="p2">진행한 총 사이클</Typography>
         <Typography variant="p2">{totalCycle}회</Typography>
       </StudyInfoContainer>
-      <StudyInfoContainer isLoading={isLoading}>
+      <StudyInfoContainer $isLoading={$isLoading}>
         <TimeLineIcon color={iconColor} />
         <Typography variant="p2">사이클 당 학습 시간</Typography>
         <Typography variant="p2">{timePerCycle}분</Typography>
@@ -61,7 +61,7 @@ const StudyInformationLayout = styled.div`
 `;
 
 type StudyInfoContainerType = {
-  isLoading: boolean;
+  $isLoading: boolean;
 };
 
 const StudyInfoContainer = styled.div<StudyInfoContainerType>`
@@ -79,8 +79,8 @@ const StudyInfoContainer = styled.div<StudyInfoContainerType>`
     color: ${color.neutral[700]};
   }
 
-  ${({ isLoading }) => css`
-    ${isLoading &&
+  ${({ $isLoading }) => css`
+    ${$isLoading &&
     css`
       width: 300px;
       p {
