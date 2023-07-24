@@ -16,7 +16,7 @@ const AnswerQuestion = ({ answer, question, topic }: Props) => {
   const iconBackgroundColor = topic === 'plan' ? color.blue[500] : color.teal[500];
 
   return (
-    <AnswerQuestionLayout iconBackgroundColor={iconBackgroundColor}>
+    <AnswerQuestionLayout $iconBackgroundColor={iconBackgroundColor}>
       <CheckRound color={color.white} />
       <Typography variant="h6">{question}</Typography>
       <Typography variant="p2">{answer}</Typography>
@@ -27,7 +27,7 @@ const AnswerQuestion = ({ answer, question, topic }: Props) => {
 export default AnswerQuestion;
 
 type AnswerQuestionProps = {
-  iconBackgroundColor: string;
+  $iconBackgroundColor: string;
 };
 
 const AnswerQuestionLayout = styled.div<AnswerQuestionProps>`
@@ -42,8 +42,8 @@ const AnswerQuestionLayout = styled.div<AnswerQuestionProps>`
 
   svg {
     border-radius: 50%;
-    ${({ iconBackgroundColor }) => css`
-      background-color: ${iconBackgroundColor};
+    ${({ $iconBackgroundColor }) => css`
+      background-color: ${$iconBackgroundColor};
     `}
   }
 `;
