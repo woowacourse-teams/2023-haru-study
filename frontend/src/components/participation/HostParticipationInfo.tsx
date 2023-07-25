@@ -1,3 +1,4 @@
+import useParticipateStudy from '@Hooks/fetch/useParticipateStudy';
 import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
@@ -14,9 +15,7 @@ import { ERROR_MESSAGE } from '@Constants/errorMessage';
 
 import ClipBoardIcon from '@Assets/icons/ClipBoardIcon';
 
-import { getCookie, setCookie } from '@Utils/cookie';
-
-import { startStudy } from '@Apis/index';
+import { getCookie } from '@Utils/cookie';
 
 type Props = {
   participantCode: string;
@@ -30,6 +29,8 @@ const HostParticipationInfo = ({ participantCode, studyName }: Props) => {
 
   const { onCopy } = useCopyClipBoard();
 
+  const { participateStudy } = useParticipateStudy();
+
   const handleOnClickClipBoardButton = async () => {
     await onCopy(participantCode);
     alert('클립보드에 복사되었습니다.');
@@ -42,17 +43,13 @@ const HostParticipationInfo = ({ participantCode, studyName }: Props) => {
   const handleOnClickStartButton = async () => {
     try {
       const studyId = getCookie('studyId');
-      const response = await startStudy(nickNameInput.state, studyId);
 
-      const locationHeader = response.headers.get('Location');
-      const memberId = locationHeader?.split('/').pop() as string;
-
-      setCookie('memberId', memberId, 1);
+      await participateStudy(studyId, nickNameInput.state);
 
       navigator(`/studyboard/${studyId ?? ''}`);
     } catch (error) {
       console.error(error);
-      alert('스터디 방이 존재하지 않는 경우이거나, 스터디 방이 존재하지 않습니다');
+      alert('스터디 방이 존재하지 않는 경우이거나, 닉네임에 문제가 있습니다.');
     }
   };
 
