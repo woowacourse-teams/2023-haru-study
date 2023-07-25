@@ -8,16 +8,10 @@ export type StudyData = {
   step: Step;
 };
 
-export type Plan = {
-  toDo: string;
-  completionCondition: string;
-  expectedProbability: string;
-  expectedDifficulty: string;
-  whatCanYouDo: string;
-};
+export type Plan = 'toDo' | 'completionCondition' | 'expectedProbability' | 'expectedDifficulty' | 'whatCanYouDo';
 
-export type Retrospect = {
-  doneAsExpected: string;
-  experiencedDifficulty: string;
-  lesson: string;
-};
+export type PlanList = Record<Plan, string>;
+
+export type Retrospect = 'doneAsExpected' | 'experiencedDifficulty' | 'lesson';
+
+export type RetrospectList = Record<Retrospect, string>;
