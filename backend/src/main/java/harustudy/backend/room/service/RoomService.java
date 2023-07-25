@@ -1,5 +1,7 @@
 package harustudy.backend.room.service;
 
+import harustudy.backend.content.domain.PomodoroContent;
+import harustudy.backend.content.repository.ContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participantcode.domain.GenerationStrategy;
@@ -25,10 +27,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoomService {
 
     private final ParticipantCodeRepository participantCodeRepository;
-    private final MemberProgressRepository<PomodoroProgress> memberProgressRepository;
+    private final MemberProgressRepository<PomodoroProgress> pomodoroProgressRepository;
     private final MemberRepository memberRepository;
     private final RoomRepository roomRepository;
     private final GenerationStrategy generationStrategy;
+    private final ContentRepository<PomodoroContent> pomodoroContentRepository;
 
     public CreatePomodoroRoomDto createRoom(CreatePomodoroRoomRequest request) {
         ParticipantCode participantCode = regenerateUniqueCode();
@@ -57,16 +60,24 @@ public class RoomService {
 
     public Long participate(Long studyId, String nickname) {
         Member member = memberRepository.save(new Member(nickname));
-        Room room = roomRepository.findById(studyId)
+        PomodoroRoom room = (PomodoroRoom) roomRepository.findById(studyId)
                 .orElseThrow(IllegalArgumentException::new);
+        room.validateDuplicatedNickname(member);
 
-        room.participate(member);
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(room, member);
+        pomodoroProgressRepository.save(pomodoroProgress);
+
+        int totalCycle = room.getTotalCycle();
+        for (int i = 1; i <= totalCycle; i++) {
+            PomodoroContent content = new PomodoroContent(pomodoroProgress, i);
+            pomodoroContentRepository.save(content);
+        }
         return member.getId();
     }
 
     public RoomAndMembersResponse findStudyMetadata(Long studyId) {
         Room room = roomRepository.findById(studyId).orElseThrow(IllegalArgumentException::new);
-        List<PomodoroProgress> pomodoroProgresses = memberProgressRepository.findByRoom(room);
+        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findByRoom(room);
 
         if (pomodoroProgresses.isEmpty()) {
             throw new IllegalArgumentException();

@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SpringBootTest
 @Transactional
-class ParticipateServiceTest {
+class RoomServiceTest {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -74,6 +74,9 @@ class ParticipateServiceTest {
     void 한_스터디_내에서_닉네임이_중복되면_예외를_던진다() {
         // given
         roomService.participate(room.getId(), member.getNickname());
+
+        entityManager.flush();
+        entityManager.clear();
 
         // when
         assertThatThrownBy(() -> roomService.participate(room.getId(), member.getNickname()))
