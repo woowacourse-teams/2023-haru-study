@@ -13,3 +13,7 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
