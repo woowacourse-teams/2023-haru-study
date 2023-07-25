@@ -7,16 +7,25 @@ import useTimer from '@Hooks/useTimer';
 
 import color from '@Styles/color';
 
-type Props = {
-  minutes: number;
-  buttonColor: string;
+import type { Step } from '@Constants/study';
+
+const BUTTON_COLOR: Record<Step, string> = {
+  planning: color.blue[500],
+  studying: color.red[600],
+  retrospect: color.teal[600],
 };
 
-const Timer = ({ minutes, buttonColor }: Props) => {
-  const { start, stop, getFormattedTime, isTicking } = useTimer(minutes);
+type Props = {
+  studyMinutes: number;
+  step: Step;
+};
+
+const Timer = ({ studyMinutes, step }: Props) => {
+  const { start, stop, getFormattedTime, isTicking } = useTimer(studyMinutes, step);
 
   const formattedTime = getFormattedTime();
 
+  const buttonColor = BUTTON_COLOR[step];
   const buttonText = isTicking ? '정지' : '시작';
   const buttonAction = isTicking ? stop : start;
 

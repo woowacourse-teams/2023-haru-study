@@ -4,9 +4,9 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
-import Timer from '../Timer/Timer';
+import type { Step } from '@Constants/study';
 
-type Step = 'planning' | 'studying' | 'retrospect';
+import Timer from '../Timer/Timer';
 
 const SIDEBAR_INFO: Record<Step, { theme: string; stepKeyword: string; paragraph: string }> = {
   planning: {
@@ -29,10 +29,10 @@ const SIDEBAR_INFO: Record<Step, { theme: string; stepKeyword: string; paragraph
 type Props = {
   step: Step;
   cycle: number;
-  minutes: number;
+  studyMinutes: number;
 };
 
-const Sidebar = ({ step, cycle, minutes }: Props) => {
+const Sidebar = ({ step, cycle, studyMinutes }: Props) => {
   const theme = SIDEBAR_INFO[step].theme;
   const stepKeyword = SIDEBAR_INFO[step].stepKeyword;
   const paragraph = SIDEBAR_INFO[step].paragraph;
@@ -49,7 +49,7 @@ const Sidebar = ({ step, cycle, minutes }: Props) => {
       >
         {paragraph}
       </Typography>
-      <Timer minutes={minutes} buttonColor={theme} />
+      <Timer studyMinutes={studyMinutes} step={step} />
       <Typography variant="p1" color={color.white}>
         {cycle}번째 사이클 - {stepKeyword}
       </Typography>
