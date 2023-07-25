@@ -1,5 +1,6 @@
+import { studyBoardHandlers } from './studyBoardHandler';
 import { studyMakingHandlers } from './studyMakingHandler';
 import { studyRecordHandlers } from './studyRecordHandlers';
 import { studyStartHandlers } from './studyStartHandlers';
 
-export const handlers = [...studyMakingHandlers, ...studyRecordHandlers, ...studyStartHandlers];
+export const handlers = [...studyMakingHandlers, ...studyRecordHandlers, ...studyStartHandlers, ...studyBoardHandlers];
