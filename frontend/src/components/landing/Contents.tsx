@@ -60,7 +60,7 @@ const Contents = () => {
         <Link to="study-making">
           <Button variant="primary">스터디 개설하기</Button>
         </Link>
-        <Link to="entrance-study">
+        <Link to="study-participating">
           <Button variant="outlined">스터디 입장하기</Button>
         </Link>
       </ButtonContainer>
