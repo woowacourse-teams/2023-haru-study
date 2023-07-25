@@ -19,13 +19,15 @@ import lombok.NoArgsConstructor;
 public class PomodoroProgress extends MemberProgress {
 
     @NotNull
-    private Integer currentCycle = 1;
+    private Integer currentCycle;
 
     @Enumerated(value = EnumType.STRING)
-    private PomodoroStatus pomodoroStatus = PomodoroStatus.PLANNING;
+    private PomodoroStatus pomodoroStatus;
 
     public PomodoroProgress(Room room, Member member) {
         super(room, member);
+        this.currentCycle = 1;
+        this.pomodoroStatus = PomodoroStatus.PLANNING;
     }
 
     // TODO: 없애기

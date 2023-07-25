@@ -4,10 +4,8 @@ import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.progress.domain.MemberProgress;
-import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.room.exception.DuplicatedNicknameException;
 import harustudy.backend.room.exception.RoomNameLengthException;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -45,7 +43,7 @@ public abstract class Room extends BaseTimeEntity {
     @Column(length = 10)
     private String name;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "room")
     private List<MemberProgress> memberProgresses = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -69,13 +67,7 @@ public abstract class Room extends BaseTimeEntity {
                 .anyMatch(memberProgress -> memberProgress.isOwnedBy(member));
     }
 
-    public void participate(Member member) {
-        validateDuplicatedNickname(member);
-        MemberProgress pomodoroProgress = new PomodoroProgress(this, member);
-        memberProgresses.add(pomodoroProgress);
-    }
-
-    private void validateDuplicatedNickname(Member member) {
+    public void validateDuplicatedNickname(Member member) {
         if (memberProgresses.stream()
                 .anyMatch(memberProgress -> memberProgress.hasSameNicknameMember(member))) {
             throw new DuplicatedNicknameException();

@@ -37,6 +37,10 @@ public class PomodoroContent extends MemberContent {
     @Enumerated(EnumType.STRING)
     private TemplateVersion templateVersion;
 
+    public PomodoroContent(MemberProgress memberProgress, @NotNull Integer cycle) {
+        this(memberProgress, cycle, Map.of(), Map.of(), TemplateVersion.V1);
+    }
+
     public PomodoroContent(MemberProgress memberProgress, @NotNull Integer cycle,
             Map<String, String> plan, Map<String, String> retrospect,
             @NotNull TemplateVersion templateVersion) {

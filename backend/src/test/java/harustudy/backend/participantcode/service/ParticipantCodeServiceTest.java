@@ -8,6 +8,7 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participantcode.dto.FindRoomAndNicknameResponse;
+import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.domain.Room;
 import jakarta.persistence.EntityManager;
@@ -42,8 +43,11 @@ class ParticipantCodeServiceTest {
         Member member = new Member("nickname");
         entityManager.persist(member);
 
-        room.participate(member);
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(room, member);
+        entityManager.persist(pomodoroProgress);
 
+        entityManager.flush();
+        entityManager.clear();
         // when
         FindRoomAndNicknameResponse response = participantCodeService.findRoomByCodeWithMemberId(
                 code.getCode(), member.getId());

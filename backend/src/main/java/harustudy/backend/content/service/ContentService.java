@@ -50,6 +50,7 @@ public class ContentService {
     public void writePlan(Long studyId, Long memberId, Map<String, String> plan) {
         PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(studyId, memberId);
         PomodoroContent recentRecord = findRecordWithSameCycle(pomodoroProgress);
+        // 생성 새로운거 만들어서 Repository에 저장
         validateProgressIsPlanning(pomodoroProgress);
         pomodoroProgress.proceed();
         recentRecord.changePlan(plan);
