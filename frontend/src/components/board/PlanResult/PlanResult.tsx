@@ -1,41 +1,20 @@
-import { styled } from 'styled-components';
+import { useEffect, useState } from 'react';
+import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
+import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
 import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
+
+import { Plan, PlanList } from '@Types/study';
 
 import color from '@Styles/color';
 
-type Plan = 'toDo' | 'completionCondition' | 'expectedProbability' | 'expectedDifficulty' | 'whatCanYouDo';
-
-type PlanItem = {
-  question: string;
-  answer: string;
-};
-
-type PlanList = Record<Plan, PlanItem>;
-
-// 임시 mock 데이터
-const mockData: PlanList = {
-  toDo: {
-    question: '학습목표',
-    answer: '자바스크립트의 this',
-  },
-  completionCondition: {
-    question: '완료 조건',
-    answer: '자바스크립트 딥다이브 챕터5 완독',
-  },
-  expectedProbability: {
-    question: '성공적으로 마칠 확률과 그 이유',
-    answer: '60프로, 분량이 좀 많다.',
-  },
-  expectedDifficulty: {
-    question: '학습 중 예상되는 어려움',
-    answer: '클래스에 대한 이해도 부족',
-  },
-  whatCanYouDo: {
-    question: '확률을 높이기 위한 방법',
-    answer: '실제 this 사용 예시를 보면서 공부하기',
-  },
+const questions: PlanList = {
+  toDo: '학습목표',
+  completionCondition: '완료 조건',
+  expectedProbability: '성공적으로 마칠 확률과 그 이유',
+  expectedDifficulty: '학습 중 예상되는 어려움',
+  whatCanYouDo: '확률을 높이기 위한 방법',
 };
 
 type Props = {
@@ -43,20 +22,54 @@ type Props = {
 };
 
 const PlanResult = ({ onClickSubmitButton }: Props) => {
-  const planList = mockData;
+  const [planList, setPlanList] = useState<PlanList | null>(null);
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
-  const handleClickButton = () => {
-    // 제출 로직 추가 예정
+  useEffect(() => {
+    fetch('/api/studies/123/members/1/content/plans')
+      .then((res) => res.json())
+      .then((data: PlanList) => setPlanList(data));
+  }, []);
+
+  const handleClickButton = async () => {
+    setIsSubmitLoading(true);
+    const response = await fetch('/api/studies/123/members/1/next-step', { method: 'POST' });
+    setIsSubmitLoading(false);
+
+    if (!response.ok) {
+      alert('에러 발생');
+      return;
+    }
     onClickSubmitButton();
   };
+
+  if (planList === null) {
+    return (
+      <LoadingLayout>
+        <CircularProgress
+          size="x-large"
+          $style={css`
+            border: 2px solid ${color.red[600]};
+            border-color: ${color.red[600]} transparent transparent transparent;
+          `}
+        />
+      </LoadingLayout>
+    );
+  }
+
   return (
     <Layout>
       <PlanResultList>
         {Object.keys(planList).map((planKey) => (
-          <QuestionAnswer key={planKey} {...planList[planKey as Plan]} iconColor={color.red[600]} />
+          <QuestionAnswer
+            key={planKey}
+            question={questions[planKey as Plan]}
+            answer={planList[planKey as Plan]}
+            iconColor={color.red[600]}
+          />
         ))}
       </PlanResultList>
-      <Button variant="danger" onClick={handleClickButton}>
+      <Button variant="danger" onClick={handleClickButton} isLoading={isSubmitLoading}>
         학습 마치기
       </Button>
     </Layout>
@@ -88,4 +101,13 @@ const PlanResultList = styled.ul`
   padding: 50px;
   background-color: #fff;
   border-radius: 14px;
+`;
+
+const LoadingLayout = styled.div`
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
