@@ -26,7 +26,11 @@ const ParticipationInfo = () => {
     const memberId = getCookie('memberId');
 
     try {
-      await checkParticipantCode(participantCodeInput.state, memberId, setNickNameExistence);
+      const isExistParticipantCode = await checkParticipantCode(participantCodeInput.state, memberId);
+
+      if (!isExistParticipantCode) {
+        return setNickNameExistence('notExist');
+      }
 
       setNickNameExistence('exist');
     } catch (error) {
