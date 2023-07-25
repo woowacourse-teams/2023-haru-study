@@ -56,7 +56,6 @@ public class AcceptanceTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    // TODO: 통합테스트 의미가 없는 것 같아서, 인수테스트로 전환?
     @Test
     void 스터디를_진행한다() throws Exception {
         Long 스터디_아이디 = 스터디를_개설한다();
@@ -100,8 +99,7 @@ public class AcceptanceTest {
     }
 
     private void 스터디_상태를_진행에서_회고로_넘긴다(Long studyId, Long memberId) throws Exception {
-        mockMvc.perform(
-                        post("/api/studies/{studyId}/members/{memberId}/next-step",
+        mockMvc.perform(post("/api/studies/{studyId}/members/{memberId}/next-step",
                                 studyId, memberId))
                 .andExpect(status().isOk());
     }

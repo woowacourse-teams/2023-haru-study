@@ -95,7 +95,7 @@ public class ParticipateRoomIntegrationTest extends IntegrationTest {
         String locationHeader = result.getResponse().getHeader("Location");
         String expectedLocation = "/api/studies/" + room.getId() + "/members/";
 
-        assert locationHeader != null;
-        assertThat(locationHeader.contains(expectedLocation)).isTrue();
+        assertThat(locationHeader).isNotNull();
+        assertThat(locationHeader).contains(expectedLocation);
     }
 }

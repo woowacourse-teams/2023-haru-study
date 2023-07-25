@@ -29,10 +29,9 @@ class CreateRoomIntegrationTest extends IntegrationTest {
         CreatePomodoroRoomRequest request = new CreatePomodoroRoomRequest("studyName", 1, 20);
         String jsonRequest = objectMapper.writeValueAsString(request);
         // when
-        MvcResult result = mockMvc.perform(
-                        post("/api/studies")
-                                .content(jsonRequest)
-                                .contentType(MediaType.APPLICATION_JSON))
+        MvcResult result = mockMvc.perform(post("/api/studies")
+                        .content(jsonRequest)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andReturn();

@@ -12,6 +12,7 @@ import harustudy.backend.room.domain.Room;
 import harustudy.backend.room.exception.DuplicatedNicknameException;
 import harustudy.backend.room.repository.RoomRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -26,15 +27,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class ParticipateServiceTest {
 
+    @PersistenceContext
+    private EntityManager entityManager;
     @Autowired
     private RoomService roomService;
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
     private RoomRepository roomRepository;
-
-    @Autowired
-    private EntityManager entityManager;
 
     private ParticipantCode participantCode;
     private Room room;
@@ -76,8 +76,7 @@ class ParticipateServiceTest {
         roomService.participate(room.getId(), member.getNickname());
 
         // when
-        assertThatThrownBy(() -> roomService.participate(room.getId(),
-                member.getNickname()))
+        assertThatThrownBy(() -> roomService.participate(room.getId(), member.getNickname()))
                 .isInstanceOf(DuplicatedNicknameException.class);
     }
 }
