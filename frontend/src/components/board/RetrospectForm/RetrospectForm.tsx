@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
@@ -11,6 +13,9 @@ type Props = {
 };
 
 const RetrospectForm = ({ isLastCycle, onClickSubmitButton }: Props) => {
+  const navigate = useNavigate();
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
+
   const toDoProps = useQuestionTextarea({
     question: `실제로 학습이 어떻게 됐나요? 예상대로 잘 이루어졌나요?`,
     minLength: 10,
@@ -34,7 +39,34 @@ const RetrospectForm = ({ isLastCycle, onClickSubmitButton }: Props) => {
 
   const buttonText = isLastCycle ? '스터디 종료하기' : '다음 사이클 시작하기';
 
-  const handleClickButton = () => {
+  const isDisabledButton = !!(
+    toDoProps.errorMessage ||
+    completionConditionProps.errorMessage ||
+    expectedProbabilityProps.errorMessage
+  );
+
+  const handleClickButton = async () => {
+    setIsSubmitLoading(true);
+    const response = await fetch('/api/studies/123/members/1/content/retrospects', {
+      method: 'POST',
+      body: JSON.stringify({
+        toDo: toDoProps.value,
+        completionCondition: completionConditionProps.value,
+        expectedProbability: expectedProbabilityProps.value,
+      }),
+    });
+
+    setIsSubmitLoading(false);
+    if (!response.ok) {
+      alert('에러 발생');
+      return;
+    }
+
+    if (isLastCycle) {
+      navigate('/');
+      return;
+    }
+
     onClickSubmitButton();
   };
 
@@ -43,7 +75,13 @@ const RetrospectForm = ({ isLastCycle, onClickSubmitButton }: Props) => {
       <QuestionTextarea {...toDoProps} />
       <QuestionTextarea {...completionConditionProps} />
       <QuestionTextarea {...expectedProbabilityProps} />
-      <Button variant="success" type="submit" onClick={handleClickButton}>
+      <Button
+        variant="success"
+        type="submit"
+        onClick={handleClickButton}
+        isLoading={isSubmitLoading}
+        disabled={isDisabledButton}
+      >
         {buttonText}
       </Button>
     </Layout>
