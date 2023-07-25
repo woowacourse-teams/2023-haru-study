@@ -1,8 +1,8 @@
 package harustudy.backend.progress.domain;
 
+import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
-import harustudy.backend.record.domain.PomodoroRecord;
-import harustudy.backend.study.domain.Study;
+import harustudy.backend.room.domain.Room;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+// TODO: 연관관계 편의 메소드 생성(memberContents에 넣는)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -21,46 +22,47 @@ public class PomodoroProgress extends MemberProgress {
     private Integer currentCycle = 1;
 
     @Enumerated(value = EnumType.STRING)
-    private StudyStatus studyStatus = StudyStatus.PLANNING;
+    private PomodoroStatus pomodoroStatus = PomodoroStatus.PLANNING;
 
-    public PomodoroProgress(Study study, Member member) {
-        super(study, member);
+    public PomodoroProgress(Room room, Member member) {
+        super(room, member);
     }
 
-    public PomodoroProgress(Study study, Member member, @NotNull Integer currentCycle,
-            StudyStatus studyStatus) {
-        super(study, member);
+    // TODO: 없애기
+    public PomodoroProgress(Room room, Member member, @NotNull Integer currentCycle,
+            PomodoroStatus pomodoroStatus) {
+        super(room, member);
         this.currentCycle = currentCycle;
-        this.studyStatus = studyStatus;
+        this.pomodoroStatus = pomodoroStatus;
     }
 
-    public PomodoroRecord findPomodoroRecordByCycle(Integer cycle) {
-        return getMemberRecords().stream()
-                .filter(pomodoro -> ((PomodoroRecord) pomodoro).getCycle().equals(cycle))
-                .map(record -> (PomodoroRecord) record)
+    public PomodoroContent findPomodoroRecordByCycle(Integer cycle) {
+        return getMemberContents().stream()
+                .filter(pomodoro -> ((PomodoroContent) pomodoro).getCycle().equals(cycle))
+                .map(record -> (PomodoroContent) record)
                 .findAny()
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public List<PomodoroRecord> getPomodoroRecords() {
-        return getMemberRecords().stream()
-                .map(record -> (PomodoroRecord) record)
+    public List<PomodoroContent> getPomodoroRecords() {
+        return getMemberContents().stream()
+                .map(record -> (PomodoroContent) record)
                 .toList();
     }
 
     public void proceed() {
-        studyStatus = studyStatus.getNext();
+        pomodoroStatus = pomodoroStatus.getNext();
     }
 
     public boolean isNotPlanning() {
-        return studyStatus != StudyStatus.PLANNING;
+        return pomodoroStatus != PomodoroStatus.PLANNING;
     }
 
     public boolean isNotStudying() {
-        return studyStatus != StudyStatus.STUDYING;
+        return pomodoroStatus != PomodoroStatus.STUDYING;
     }
 
     public boolean isNotRetrospect() {
-        return studyStatus != StudyStatus.RETROSPECT;
+        return pomodoroStatus != PomodoroStatus.RETROSPECT;
     }
 }

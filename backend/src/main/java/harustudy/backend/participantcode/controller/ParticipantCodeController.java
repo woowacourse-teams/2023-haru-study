@@ -1,7 +1,7 @@
 package harustudy.backend.participantcode.controller;
 
-import harustudy.backend.participantcode.dto.StudyAuthRequest;
-import harustudy.backend.participantcode.dto.StudyAuthResponse;
+import harustudy.backend.participantcode.dto.FindRoomAndNicknameRequest;
+import harustudy.backend.participantcode.dto.FindRoomAndNicknameResponse;
 import harustudy.backend.participantcode.service.ParticipantCodeService;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,8 @@ public class ParticipantCodeController {
     private final ParticipantCodeService participantCodeService;
 
     @PostMapping("/api/studies/authenticate")
-    public ResponseEntity<StudyAuthResponse> checkAuth(
-            @RequestBody StudyAuthRequest request
+    public ResponseEntity<FindRoomAndNicknameResponse> checkAuth(
+            @RequestBody FindRoomAndNicknameRequest request
     ) {
         if (Objects.isNull(request.memberId())) {
             return ResponseEntity.ok(

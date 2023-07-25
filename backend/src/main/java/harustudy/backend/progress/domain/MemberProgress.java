@@ -1,9 +1,9 @@
 package harustudy.backend.progress.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
+import harustudy.backend.content.domain.MemberContent;
 import harustudy.backend.member.domain.Member;
-import harustudy.backend.record.domain.MemberRecord;
-import harustudy.backend.study.domain.Study;
+import harustudy.backend.room.domain.Room;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,20 +33,20 @@ public abstract class MemberProgress extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_id")
-    private Study study;
+    @JoinColumn(name = "room_id")
+    private Room room;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(mappedBy = "memberProgress")
-    private List<MemberRecord> memberRecords = new ArrayList<>();
+    private List<MemberContent> memberContents = new ArrayList<>();
 
     private boolean isDone = false;
 
-    public MemberProgress(Study study, Member member) {
-        this.study = study;
+    public MemberProgress(Room room, Member member) {
+        this.room = room;
         this.member = member;
     }
 
@@ -57,5 +57,4 @@ public abstract class MemberProgress extends BaseTimeEntity {
     public boolean hasSameNicknameMember(Member member) {
         return getMember().hasSameNickname(member);
     }
-
 }
