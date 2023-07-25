@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import type { Step } from '@Constants/study';
+
+const PLANNING_MINUTES = 10;
 const SECONDS_PER_MINUTE = 60;
 
-const useTimer = (minutes: number) => {
+const useTimer = (studyMinutes: number, step: Step) => {
   const timerId = useRef<NodeJS.Timer | null>(null);
-  const seconds = minutes * SECONDS_PER_MINUTE;
 
-  const [leftTime, setLeftTime] = useState(seconds);
+  const initialMinutes = PLANNING_MINUTES * SECONDS_PER_MINUTE;
+  const [leftTime, setLeftTime] = useState(initialMinutes);
   const [isTicking, setIsTicking] = useState(false);
 
   const clear = () => {
@@ -35,11 +38,15 @@ const useTimer = (minutes: number) => {
   }, [tick, isTicking]);
 
   useEffect(() => {
-    const seconds = minutes * SECONDS_PER_MINUTE;
-
-    setLeftTime(seconds);
     setIsTicking(false);
-  }, [minutes]);
+
+    if (step === 'planning' || step === 'retrospect') {
+      setLeftTime(PLANNING_MINUTES * SECONDS_PER_MINUTE);
+      return;
+    }
+
+    setLeftTime(studyMinutes * SECONDS_PER_MINUTE);
+  }, [studyMinutes, step]);
 
   const start = () => {
     setIsTicking(true);
