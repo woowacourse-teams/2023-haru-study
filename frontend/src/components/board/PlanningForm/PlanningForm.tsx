@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
@@ -12,6 +13,8 @@ type Props = {
 };
 
 const PlanningForm = ({ cycle, minutes, onClickSubmitButton }: Props) => {
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
+
   const toDoProps = useQuestionTextarea({
     question: `${cycle}번째 사이클(${minutes}분)에서 학습할 것은 무엇인가요?`,
     minLength: 10,
@@ -33,7 +36,7 @@ const PlanningForm = ({ cycle, minutes, onClickSubmitButton }: Props) => {
     required: true,
   });
 
-  const expecetedDifficultyProps = useQuestionTextarea({
+  const expectedDifficultyProps = useQuestionTextarea({
     question: `${minutes}분의 시간 동안 가장 큰 어려움으로 예상되는 것은 무엇인가요?`,
     minLength: 10,
     maxLength: 500,
@@ -45,8 +48,32 @@ const PlanningForm = ({ cycle, minutes, onClickSubmitButton }: Props) => {
     maxLength: 500,
   });
 
-  const handleClickButton = () => {
-    // 제출 로직 추가 예정
+  const isDisabledButton = !!(
+    toDoProps.errorMessage ||
+    completionConditionProps.errorMessage ||
+    expectedDifficultyProps.errorMessage ||
+    expectedProbabilityProps.errorMessage ||
+    whatCanYouDoProps.errorMessage
+  );
+
+  const handleClickButton = async () => {
+    setIsSubmitLoading(true);
+    const response = await fetch('/api/studies/123/members/1/content/plans', {
+      method: 'POST',
+      body: JSON.stringify({
+        toDo: toDoProps.value,
+        completionCondition: completionConditionProps.value,
+        expectedProbability: expectedProbabilityProps.value,
+        expectedDifficulty: expectedDifficultyProps.value,
+        whatCanYouDo: whatCanYouDoProps.value,
+      }),
+    });
+
+    setIsSubmitLoading(false);
+    if (!response.ok) {
+      alert('에러 발생');
+      return;
+    }
     onClickSubmitButton();
   };
 
@@ -55,9 +82,15 @@ const PlanningForm = ({ cycle, minutes, onClickSubmitButton }: Props) => {
       <QuestionTextarea {...toDoProps} />
       <QuestionTextarea {...completionConditionProps} />
       <QuestionTextarea {...expectedProbabilityProps} />
-      <QuestionTextarea {...expecetedDifficultyProps} />
+      <QuestionTextarea {...expectedDifficultyProps} />
       <QuestionTextarea {...whatCanYouDoProps} />
-      <Button variant="primary" type="submit" onClick={handleClickButton}>
+      <Button
+        variant="primary"
+        type="submit"
+        onClick={handleClickButton}
+        isLoading={isSubmitLoading}
+        disabled={isDisabledButton}
+      >
         학습 시작하기
       </Button>
     </Layout>
