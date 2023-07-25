@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 
-import type { Plan, Retrospect, StudyData } from '@Types/study';
+import type { PlanList, Retrospect, StudyData } from '@Types/study';
 
 let studyData: StudyData = {
   studyName: '안오면 지상렬',
@@ -10,7 +10,7 @@ let studyData: StudyData = {
   step: 'planning',
 };
 
-let plan: Plan = {
+let plan: PlanList = {
   toDo: '',
   completionCondition: '',
   expectedProbability: '',
@@ -23,8 +23,9 @@ export const studyBoardHandlers = [
     return res(ctx.status(200), ctx.json(studyData), ctx.delay(1200));
   }),
 
-  rest.post<Plan>('/api/studies/:studyId/members/:memberId/content/plans', async (req, res, ctx) => {
+  rest.post<PlanList>('/api/studies/:studyId/members/:memberId/content/plans', async (req, res, ctx) => {
     plan = await req.json();
+    console.log(plan);
     studyData = {
       ...studyData,
       step: 'studying',
@@ -42,7 +43,7 @@ export const studyBoardHandlers = [
     return res(ctx.status(200), ctx.delay(1500));
   }),
 
-  rest.post<Retrospect>('/api/studies/:studyId/members/:memberId/content/retrostpects', async (req, res, ctx) => {
+  rest.post<Retrospect>('/api/studies/:studyId/members/:memberId/content/retrospects', async (req, res, ctx) => {
     studyData = {
       ...studyData,
       step: 'planning',
