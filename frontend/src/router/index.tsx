@@ -5,6 +5,7 @@ import StudyBoard from '@Pages/StudyBoard';
 import StudyMaking from '@Pages/StudyMaking';
 import StudyParticipant from '@Pages/StudyParticipant';
 import StudyParticipantForHost from '@Pages/StudyParticipantForHost';
+import StudyRecord from '@Pages/StudyRecord';
 
 import App from '../App';
 
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: 'studyboard/:studyId',
         element: <StudyBoard />,
+      },
+      {
+        path: 'study-record/:studyId',
+        element: <StudyRecord />,
       },
       {
         path: 'study-making',

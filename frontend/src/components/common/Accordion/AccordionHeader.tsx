@@ -13,7 +13,7 @@ const AccordionHeader = ({ children }: PropsWithChildren) => {
       {children}
       {!isShow && (
         <Button variant="secondary" size="x-small" onClick={show}>
-          펼처보기
+          펼쳐보기
         </Button>
       )}
     </AccordionHeaderLayout>
@@ -23,7 +23,7 @@ const AccordionHeader = ({ children }: PropsWithChildren) => {
 export default AccordionHeader;
 
 const AccordionHeaderLayout = styled.div`
-  min-height: 50px;
+  min-height: 60px;
 
   display: grid;
   grid-template-columns: 1fr auto;

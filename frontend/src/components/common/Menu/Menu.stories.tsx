@@ -44,7 +44,7 @@ export const RightMenu: Story = {
         <Menu.Item onClick={() => alert('아이템4을 클릭했습니다.')}>아이템4</Menu.Item>
       </>
     ),
-    menuListPosition: 'left',
+    $menuListPosition: 'left',
     $style: css`
       margin: 0 0 0 auto;
     `,
