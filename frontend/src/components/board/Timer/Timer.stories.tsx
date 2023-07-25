@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { styled } from 'styled-components';
 
-import color from '@Styles/color';
+import type { Step } from '@Types/study';
 
-import type { Step } from '@Constants/study';
+import color from '@Styles/color';
 
 import Timer from './Timer';
 

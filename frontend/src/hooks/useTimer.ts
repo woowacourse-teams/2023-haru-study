@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import type { Step } from '@Constants/study';
+import type { Step } from '@Types/study';
 
 const PLANNING_MINUTES = 10;
 const SECONDS_PER_MINUTE = 60;
