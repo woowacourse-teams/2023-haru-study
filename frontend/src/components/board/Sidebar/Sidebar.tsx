@@ -72,5 +72,5 @@ const Layout = styled.div<{ background: string }>`
 
   background-color: ${({ background }) => background};
 
-  transition: all 0.5s ease-in-out;
+  transition: background-color 0.5s ease-in-out;
 `;
