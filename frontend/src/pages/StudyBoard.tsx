@@ -1,42 +1,15 @@
-import { useEffect, useState } from 'react';
 import { css, styled } from 'styled-components';
 
 import GuideContents from '@Components/board/GuideContents/GuideContents';
 import Sidebar from '@Components/board/Sidebar/Sidebar';
 import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
 
-import type { StudyData } from '@Types/study';
+import useStudyBoard from '@Hooks/board/useStudyBoard';
 
 import color from '@Styles/color';
 
 const StudyBoard = () => {
-  const [studyData, setStudyData] = useState<StudyData | null>(null);
-
-  useEffect(() => {
-    fetch('/api/studies/1/members/1/metadata')
-      .then((res) => res.json())
-      .then((data: StudyData) => setStudyData(data));
-  }, []);
-
-  const changeNextStep = () => {
-    if (studyData === null) return;
-
-    switch (studyData.step) {
-      case 'planning':
-        setStudyData({ ...studyData, step: 'studying' });
-        break;
-      case 'studying':
-        setStudyData({ ...studyData, step: 'retrospect' });
-        break;
-      case 'retrospect':
-        setStudyData({
-          ...studyData,
-          currentCycle: studyData.currentCycle + 1,
-          step: 'planning',
-        });
-        break;
-    }
-  };
+  const { studyData, changeNextStep } = useStudyBoard();
 
   if (studyData === null) {
     return (
