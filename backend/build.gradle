@@ -30,7 +30,6 @@ dependencies {
 
 	implementation 'org.flywaydb:flyway-core'
 
-
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 
