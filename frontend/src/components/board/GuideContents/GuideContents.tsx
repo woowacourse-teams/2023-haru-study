@@ -25,7 +25,12 @@ const GuideContents = ({ studyData, changeNextStep }: Props) => {
       );
     case 'studying':
       return (
-        <StudyingForm onClickSubmitButton={changeNextStep} studyId={studyData.studyId} memberId={studyData.memberId} />
+        <StudyingForm
+          onClickSubmitButton={changeNextStep}
+          studyId={studyData.studyId}
+          memberId={studyData.memberId}
+          cycle={studyData.currentCycle}
+        />
       );
     case 'retrospect':
       return (

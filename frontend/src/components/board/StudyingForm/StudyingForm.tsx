@@ -23,11 +23,12 @@ type Props = {
   onClickSubmitButton: () => void;
   studyId: string;
   memberId: string;
+  cycle: number;
 };
 
-const StudyingForm = ({ onClickSubmitButton, studyId, memberId }: Props) => {
+const StudyingForm = ({ onClickSubmitButton, studyId, memberId, cycle }: Props) => {
   const navigate = useNavigate();
-  const { planList, isSubmitLoading, error, submitForm } = useStudyingForm(studyId, memberId);
+  const { planList, isSubmitLoading, error, submitForm } = useStudyingForm(studyId, memberId, cycle);
 
   const handleClickButton = async () => {
     try {

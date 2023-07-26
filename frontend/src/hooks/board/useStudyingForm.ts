@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 
 import { PlanList } from '@Types/study';
 
-const useStudyingForm = (studyId: string, memberId: string) => {
+const useStudyingForm = (studyId: string, memberId: string, cycle: number) => {
   const [planList, setPlanList] = useState<PlanList | null>(null);
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
   const [error, setError] = useState<Error>();
 
   useEffect(() => {
     try {
-      fetch(`/api/studies/${studyId}/members/${memberId}/content/plans`)
+      fetch(`/api/studies/${studyId}/members/${memberId}/content/plans?cycle=${cycle}`)
         .then((res) => res.json())
         .then((data: PlanList) => setPlanList(data))
         .catch(() => {
@@ -19,7 +19,7 @@ const useStudyingForm = (studyId: string, memberId: string) => {
       if (!(error instanceof Error)) return;
       setError(error);
     }
-  }, [memberId, studyId]);
+  }, [memberId, studyId, cycle]);
 
   const submitForm = async () => {
     setIsSubmitLoading(true);
