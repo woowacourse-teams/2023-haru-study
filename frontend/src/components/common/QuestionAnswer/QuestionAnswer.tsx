@@ -1,15 +1,20 @@
-import CircleCheckIcon from '@Assets/icons/CircleCheckIcon';
 import { styled } from 'styled-components';
+
+import color from '@Styles/color';
+
+import CircleCheckIcon from '@Assets/icons/CircleCheckIcon';
 
 import Typography from '../Typography/Typography';
 
 type Props = {
   question: string;
-  answer: string;
+  answer?: string;
   iconColor?: string;
 };
 
 const QuestionAnswer = ({ question, answer, iconColor }: Props) => {
+  const answerText = answer || '답변이 입력되지 않았습니다.';
+  const answerTextColor = answer ? color.black : color.neutral[400];
   return (
     <Layout>
       <IconWrapper>
@@ -17,7 +22,9 @@ const QuestionAnswer = ({ question, answer, iconColor }: Props) => {
       </IconWrapper>
       <TypographyContainer>
         <Typography variant="h5">{question}</Typography>
-        <Typography variant="p2">{answer}</Typography>
+        <Typography variant="p2" color={answerTextColor}>
+          {answerText}
+        </Typography>
       </TypographyContainer>
     </Layout>
   );
