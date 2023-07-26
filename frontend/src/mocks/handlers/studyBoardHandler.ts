@@ -3,6 +3,9 @@ import { rest } from 'msw';
 import type { PlanList, Retrospect, StudyData } from '@Types/study';
 
 let studyData: StudyData = {
+  studyId: '123',
+  memberId: '1',
+
   studyName: '안오면 지상렬',
   totalCycle: 3,
   currentCycle: 1,
@@ -25,7 +28,7 @@ export const studyBoardHandlers = [
 
   rest.post<PlanList>('/api/studies/:studyId/members/:memberId/content/plans', async (req, res, ctx) => {
     plan = await req.json();
-    console.log(plan);
+
     studyData = {
       ...studyData,
       step: 'studying',

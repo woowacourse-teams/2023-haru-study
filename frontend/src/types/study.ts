@@ -1,6 +1,9 @@
 export type Step = 'planning' | 'studying' | 'retrospect';
 
 export type StudyData = {
+  studyId: string;
+  memberId: string;
+
   studyName: string;
   totalCycle: number;
   currentCycle: number;
