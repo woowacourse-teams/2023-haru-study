@@ -3,7 +3,6 @@ package harustudy.backend.content.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.domain.TemplateVersion;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
@@ -42,8 +41,7 @@ class MemberContentRepositoryTest {
                 PomodoroStatus.STUDYING);
         Map<String, String> plan = Map.of("completionCondition", "완료조건",
                 "expectedProbability", "80%");
-        PomodoroContent pomodoroRecord = new PomodoroContent(memberProgress, 1, plan, Map.of(),
-                TemplateVersion.V1);
+        PomodoroContent pomodoroRecord = new PomodoroContent(memberProgress, 1, plan, Map.of());
 
         // when
         testEntityManager.persist(participantCode);
@@ -73,8 +71,7 @@ class MemberContentRepositoryTest {
                 PomodoroStatus.STUDYING);
         Map<String, String> plan = Map.of("completionCondition", "완료조건",
                 "expectedProbability", "80%");
-        PomodoroContent pomodoroRecord = new PomodoroContent(memberProgress, 1, plan, Map.of(),
-                TemplateVersion.V1);
+        PomodoroContent pomodoroRecord = new PomodoroContent(memberProgress, 1, plan, Map.of());
 
         testEntityManager.persist(participantCode);
         testEntityManager.persist(room);

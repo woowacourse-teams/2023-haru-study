@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.domain.TemplateVersion;
 import harustudy.backend.content.repository.ContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
@@ -79,8 +78,7 @@ public class AcceptanceTest {
         Member member = new Member("nickname");
         PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, 1,
                 PomodoroStatus.PLANNING);
-        PomodoroContent pomodoroRecord = new PomodoroContent(pomodoroProgress, 1, Map.of(),
-                Map.of(), TemplateVersion.V1);
+        PomodoroContent pomodoroRecord = new PomodoroContent(pomodoroProgress, 1, Map.of(), Map.of());
         entityManager.persist(member);
         entityManager.persist(pomodoroProgress);
         entityManager.persist(pomodoroRecord);

@@ -3,7 +3,8 @@ package harustudy.backend.content.service;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.domain.TemplateVersion;
+import harustudy.backend.content.dto.MemberContentResponse;
+import harustudy.backend.content.dto.MemberContentResponses;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
@@ -24,8 +25,7 @@ import org.springframework.context.annotation.FilterType;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-@DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
-        value = ContentService.class))
+@DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = ContentService.class))
 class ContentServiceTest {
 
     @Autowired
@@ -42,7 +42,7 @@ class ContentServiceTest {
         PomodoroProgress pomodoroProgress = new PomodoroProgress(room, member, 1,
                 PomodoroStatus.RETROSPECT);
         PomodoroContent pomodoroRecord = new PomodoroContent(pomodoroProgress, 1, Map.of(),
-                Map.of(), TemplateVersion.V1);
+                Map.of());
 
         // when
         testEntityManager.persist(participantCode);
@@ -66,8 +66,7 @@ class ContentServiceTest {
         Member member = new Member("nickname");
         PomodoroProgress pomodoroProgress = new PomodoroProgress(room, member, 1,
                 PomodoroStatus.RETROSPECT);
-        PomodoroContent pomodoroRecord = new PomodoroContent(pomodoroProgress, 1, Map.of(),
-                Map.of(), TemplateVersion.V1);
+        PomodoroContent pomodoroRecord = new PomodoroContent(pomodoroProgress, 1, Map.of(), Map.of());
 
         // when
         testEntityManager.persist(participantCode);
@@ -82,50 +81,49 @@ class ContentServiceTest {
                 .isInstanceOf(StudyProgressException.class);
     }
 
-    // TODO: ISSUE #120 으로 해결 예정
-//    @Test
-//    void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회한다() {
-//        // given
-//        Map<String, String> expectedPlan = Map.of(
-//                "toDo", "쿠키와 세션",
-//                "completionCondition", "완료조건",
-//                "expectedProbability", "80%",
-//                "expectedDifficulty", "예상되는 어려움",
-//                "whatCanYouDo", "가능성을 높이기 위해 무엇을 할 수 있을지?");
-//
-//        Map<String, String> expectedRetrospect = Map.of(
-//                "doneAsExpected", "예상했던 결과",
-//                "experiencedDifficulty", "겪었던 어려움",
-//                "lesson", "교훈");
-//
-//        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-//        Study study = new Pomodoro("studyName", 1, 20, participantCode);
-//        Member member = new Member("nickname");
-//        PomodoroProgress pomodoroProgress = new PomodoroProgress(study, member, 1,
-//                StudyStatus.RETROSPECT);
-//        PomodoroRecord pomodoroRecord = new PomodoroRecord(pomodoroProgress, 1, expectedPlan,
-//                expectedRetrospect, TemplateVersion.V1);
-//
-//        // when
-//        testEntityManager.persist(participantCode);
-//        testEntityManager.persist(study);
-//        testEntityManager.persist(member);
-//        testEntityManager.persist(pomodoroProgress);
-//        testEntityManager.persist(pomodoroRecord);
-//
-//        MemberContentResponses memberContentResponses = proceedPomodoroStudyService.findMemberContent(
-//                study.getId(), member.getId());
-//
-//        MemberContentResponse expectedMemberContentResponse = new MemberContentResponse(1,
-//                expectedPlan,
-//                expectedRetrospect);
-//
-//        // when
-//        List<MemberContentResponse> content = memberContentResponses.content();
-//
-//        // then
-//        assertThat(content).containsExactly(expectedMemberContentResponse);
-//    }
+
+    @Test
+    void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회한다() {
+        // given
+        Map<String, String> expectedPlan = Map.of(
+                "toDo", "쿠키와 세션",
+                "completionCondition", "완료조건",
+                "expectedProbability", "80%",
+                "expectedDifficulty", "예상되는 어려움",
+                "whatCanYouDo", "가능성을 높이기 위해 무엇을 할 수 있을지?");
+
+        Map<String, String> expectedRetrospect = Map.of(
+                "doneAsExpected", "예상했던 결과",
+                "experiencedDifficulty", "겪었던 어려움",
+                "lesson", "교훈");
+
+        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
+        Room room = new PomodoroRoom("studyName", 1, 20, participantCode);
+        Member member = new Member("nickname");
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(room, member, 1, PomodoroStatus.RETROSPECT);
+        PomodoroContent pomodoroContent = new PomodoroContent(pomodoroProgress, 1, expectedPlan, expectedRetrospect);
+
+        // when
+        testEntityManager.persist(participantCode);
+        testEntityManager.persist(room);
+        testEntityManager.persist(member);
+        testEntityManager.persist(pomodoroProgress);
+        testEntityManager.persist(pomodoroContent);
+
+        testEntityManager.flush();
+        testEntityManager.clear();
+
+        MemberContentResponses memberContentResponses = contentService.findMemberContent(room.getId(), member.getId());
+
+        MemberContentResponse expectedMemberContentResponse = new MemberContentResponse(1, expectedPlan,
+                expectedRetrospect);
+
+        // when
+        List<MemberContentResponse> content = memberContentResponses.content();
+
+        // then
+        assertThat(content).containsExactly(expectedMemberContentResponse);
+    }
 
     @Test
     void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회시_스터디가_없으면_예외를_던진다() {
