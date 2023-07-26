@@ -1,7 +1,6 @@
 package harustudy.backend.integration;
 
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.domain.TemplateVersion;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
@@ -58,8 +57,7 @@ public class IntegrationTest {
         room = new PomodoroRoom("room", 3, 20, participantCode);
         member = new Member("name");
         pomodoroProgress = new PomodoroProgress(room, member);
-        pomodoroContent = new PomodoroContent(pomodoroProgress, 1, plan,
-                retrospect, TemplateVersion.V1);
+        pomodoroContent = new PomodoroContent(pomodoroProgress, 1, plan, retrospect);
 
         entityManager.persist(participantCode);
         entityManager.persist(room);
