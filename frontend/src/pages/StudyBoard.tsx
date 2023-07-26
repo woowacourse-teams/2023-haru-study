@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
 import GuideContents from '@Components/board/GuideContents/GuideContents';
@@ -9,7 +10,13 @@ import useStudyBoard from '@Hooks/board/useStudyBoard';
 import color from '@Styles/color';
 
 const StudyBoard = () => {
-  const { studyData, changeNextStep } = useStudyBoard();
+  const navigate = useNavigate();
+  const { studyData, error, changeNextStep } = useStudyBoard();
+
+  if (error) {
+    alert(error.message);
+    navigate('/');
+  }
 
   if (studyData === null) {
     return (
