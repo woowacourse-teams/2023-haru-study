@@ -7,11 +7,11 @@ import { authenticateParticipantCode } from '@Apis/index';
 type StudyInfo = {
   studyId: number;
   studyName: string;
-  nickName: string | null;
+  nickname: string | null;
 };
 
 const useParticipantCode = () => {
-  const [responseNickName, setResponseNickName] = useState<StudyInfo['nickName']>(null);
+  const [responseNickName, setResponseNickName] = useState<StudyInfo['nickname']>(null);
   const [studyName, setStudyName] = useState<StudyInfo['studyName']>('');
 
   const checkParticipantCode = async (participationCode: string | null, memberId: string | null) => {
@@ -21,7 +21,7 @@ const useParticipantCode = () => {
 
     setData(result);
 
-    if (!result.nickName) {
+    if (!result.nickname) {
       return false;
     }
 
@@ -31,7 +31,7 @@ const useParticipantCode = () => {
   const setData = (result: StudyInfo) => {
     setStudyName(result.studyName);
     setCookie('studyId', result.studyId.toString(), 1);
-    setResponseNickName(result.nickName);
+    setResponseNickName(result.nickname);
   };
 
   return { responseNickName, studyName, checkParticipantCode };

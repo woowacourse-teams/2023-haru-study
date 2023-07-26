@@ -20,7 +20,7 @@ export const checkParticipantCodeHandlers = [
       ctx.json({
         studyId: 1,
         studyName: '안오면 지상렬',
-        nickName: '엽토',
+        nickname: '엽토',
       }),
       ctx.delay(1000),
     );
