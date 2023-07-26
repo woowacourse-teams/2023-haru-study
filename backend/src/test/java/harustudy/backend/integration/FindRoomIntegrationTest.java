@@ -6,14 +6,16 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.content.dto.CurrentCyclePlanResponse;
 import harustudy.backend.content.dto.MemberContentResponse;
 import harustudy.backend.content.dto.MemberContentResponses;
 import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
 import harustudy.backend.room.dto.MemberDto;
 import harustudy.backend.room.dto.RoomAndMembersResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -105,19 +107,18 @@ public class FindRoomIntegrationTest extends IntegrationTest {
 
         // then
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        CurrentCyclePlanResponse response = objectMapper.readValue(jsonResponse,
-                CurrentCyclePlanResponse.class);
+        Map<String, String> response = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
 
         // then
         assertAll(
-                () -> Assertions.assertThat(response.plan().get("toDo")).isEqualTo("쿠키와 세션"),
-                () -> Assertions.assertThat(response.plan().get("completionCondition")).isEqualTo(
+                () -> Assertions.assertThat(response.get("toDo")).isEqualTo("쿠키와 세션"),
+                () -> Assertions.assertThat(response.get("completionCondition")).isEqualTo(
                         "완료조건"),
-                () -> Assertions.assertThat(response.plan().get("expectedProbability")).isEqualTo(
+                () -> Assertions.assertThat(response.get("expectedProbability")).isEqualTo(
                         "80%"),
-                () -> Assertions.assertThat(response.plan().get("expectedDifficulty")).isEqualTo(
+                () -> Assertions.assertThat(response.get("expectedDifficulty")).isEqualTo(
                         "예상되는 어려움"),
-                () -> Assertions.assertThat(response.plan().get("whatCanYouDo")).isEqualTo(
+                () -> Assertions.assertThat(response.get("whatCanYouDo")).isEqualTo(
                         "가능성을 높이기 위해 무엇을 할 수 있을지?")
         );
     }

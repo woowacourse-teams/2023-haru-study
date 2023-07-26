@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.dto.CurrentCyclePlanResponse;
 import harustudy.backend.content.service.ContentService;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
@@ -86,19 +85,19 @@ class ProgressServiceTest {
     @Test
     void 특정_멤버의_현재_사이클의_계획을_조회한다() {
         // given, when
-        CurrentCyclePlanResponse currentCyclePlan = contentService.findCurrentCyclePlan(
+        Map<String, String> currentCyclePlan = contentService.findCurrentCyclePlan(
                 room.getId(), member.getId(), 1);
 
         // then
         assertAll(
-                () -> assertThat(currentCyclePlan.plan().get("toDo")).isEqualTo("쿠키와 세션"),
-                () -> assertThat(currentCyclePlan.plan().get("completionCondition")).isEqualTo(
+                () -> assertThat(currentCyclePlan.get("toDo")).isEqualTo("쿠키와 세션"),
+                () -> assertThat(currentCyclePlan.get("completionCondition")).isEqualTo(
                         "완료조건"),
-                () -> assertThat(currentCyclePlan.plan().get("expectedProbability")).isEqualTo(
+                () -> assertThat(currentCyclePlan.get("expectedProbability")).isEqualTo(
                         "80%"),
-                () -> assertThat(currentCyclePlan.plan().get("expectedDifficulty")).isEqualTo(
+                () -> assertThat(currentCyclePlan.get("expectedDifficulty")).isEqualTo(
                         "예상되는 어려움"),
-                () -> assertThat(currentCyclePlan.plan().get("whatCanYouDo")).isEqualTo(
+                () -> assertThat(currentCyclePlan.get("whatCanYouDo")).isEqualTo(
                         "가능성을 높이기 위해 무엇을 할 수 있을지?")
         );
     }
