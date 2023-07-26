@@ -12,13 +12,13 @@ const request = async (path: string, init?: RequestInit) => {
 };
 
 export const createStudy = (studyName: string, totalCycle: number, timePerCycle: number) =>
-  request(`/api/studies`, {
+  request(`http://localhost:8080/api/studies`, {
     method: 'POST',
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
   });
 
 export const startStudy = (nickName: string | null, studyId: string | null) =>
-  request(`/api/studies/${studyId ?? ''}/members`, {
+  request(`api/studies/${studyId ?? ''}/members`, {
     method: 'POST',
     body: JSON.stringify({ nickName }),
   });
