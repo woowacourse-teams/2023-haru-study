@@ -1,5 +1,6 @@
 package harustudy.backend.content.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import harustudy.backend.content.domain.PomodoroContent;
@@ -13,6 +14,8 @@ import harustudy.backend.progress.domain.PomodoroStatus;
 import harustudy.backend.progress.exception.StudyProgressException;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.domain.Room;
+
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
