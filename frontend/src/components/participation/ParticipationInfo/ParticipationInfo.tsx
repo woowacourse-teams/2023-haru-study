@@ -17,6 +17,7 @@ export type NickNameExist = 'default' | 'exist' | 'notExist';
 
 const ParticipationInfo = () => {
   const [nickNameExistence, setNickNameExistence] = useState<NickNameExist>('default');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const participantCodeInput = useInput(false);
 
@@ -26,16 +27,21 @@ const ParticipationInfo = () => {
     const memberId = getCookie('memberId');
 
     try {
+      setIsLoading(true);
+
       const isExistParticipantCode = await checkParticipantCode(participantCodeInput.state, memberId);
 
       if (!isExistParticipantCode) {
         return setNickNameExistence('notExist');
       }
-
+      
       setNickNameExistence('exist');
+      
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
       alert('해당 참여코드는 없는 코드입니다.');
+      setIsLoading(false);
     }
   };
 
@@ -48,7 +54,12 @@ const ParticipationInfo = () => {
         <Input.TextField onChange={participantCodeInput.onChangeInput} disabled={nickNameExistence !== 'default'} />
       </Input>
       {nickNameExistence === 'default' && (
-        <Button variant="primary" onClick={handleOnClickParticipateButton} disabled={!participantCodeInput.state}>
+        <Button
+          variant="primary"
+          onClick={handleOnClickParticipateButton}
+          disabled={!participantCodeInput.state}
+          isLoading={isLoading}
+        >
           스터디 참여하기
         </Button>
       )}

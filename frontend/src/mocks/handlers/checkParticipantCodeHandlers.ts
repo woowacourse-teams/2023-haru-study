@@ -22,6 +22,7 @@ export const checkParticipantCodeHandlers = [
         studyName: '안오면 지상렬',
         nickName: '엽토',
       }),
+      ctx.delay(1000),
     );
   }),
 ];

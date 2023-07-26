@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
@@ -20,13 +21,19 @@ type Props = {
 const NickNameExistence = ({ studyName, responseNickName, changeNickNameExistence }: Props) => {
   const navigator = useNavigate();
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const { participateStudy } = useParticipateStudy();
 
   const handleOnClickContinueStart = async () => {
     try {
+      setIsLoading(true);
+
       const studyId = getCookie('studyId');
 
       await participateStudy(studyId, responseNickName);
+
+      setIsLoading(false);
 
       if (studyId) {
         navigator(`/studyboard/${studyId}`);
@@ -34,6 +41,7 @@ const NickNameExistence = ({ studyName, responseNickName, changeNickNameExistenc
     } catch (error) {
       console.error(error);
       alert('스터디 방이 존재하지 않는 경우이거나, 닉네임에 문제가 있습니다.');
+      setIsLoading(false);
     }
   };
 
@@ -84,6 +92,7 @@ const NickNameExistence = ({ studyName, responseNickName, changeNickNameExistenc
               padding: 16px 28px;
             `}
             onClick={handleOnClickContinueStart}
+            isLoading={isLoading}
           >
             이어서 진행하기
           </Button>
