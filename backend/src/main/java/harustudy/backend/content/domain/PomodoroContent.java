@@ -2,7 +2,6 @@ package harustudy.backend.content.domain;
 
 import harustudy.backend.progress.domain.MemberProgress;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -14,7 +13,6 @@ import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,8 +26,8 @@ public class PomodoroContent extends MemberContent {
     @Convert(converter = MapStringConverter.class)
     private Map<String, String> plan = new HashMap<>();
 
-    @Type(JsonType.class)
     @Column(name = "retrospect", columnDefinition = "longtext")
+    @Convert(converter = MapStringConverter.class)
     private Map<String, String> retrospect = new HashMap<>();
 
     // TODO: 삭제 예정
