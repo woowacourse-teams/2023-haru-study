@@ -115,7 +115,7 @@ class ProgressServiceTest {
                 () -> assertThat(memberMetaData.totalCycle()).isEqualTo(3),
                 () -> assertThat(memberMetaData.currentCycle()).isEqualTo(1),
                 () -> assertThat(memberMetaData.timePerCycle()).isEqualTo(20),
-                () -> assertThat(memberMetaData.step()).isEqualTo("PLANNING")
+                () -> assertThat(memberMetaData.step()).isEqualTo("planning")
         );
     }
 
