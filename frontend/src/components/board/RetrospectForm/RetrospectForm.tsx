@@ -22,7 +22,7 @@ const RetrospectForm = ({ isLastCycle, onClickSubmitButton, studyId, memberId }:
       await submitForm();
 
       if (isLastCycle) {
-        navigate(`study-record/${studyId}`);
+        navigate(`/study-record/${studyId}`);
         return;
       }
       onClickSubmitButton();
