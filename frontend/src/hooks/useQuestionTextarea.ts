@@ -1,14 +1,12 @@
 import { ChangeEventHandler, useState } from 'react';
 
 type Parameters = {
-  question: string;
-
   minLength?: number;
   maxLength?: number;
   required?: boolean;
 };
 
-const useQuestionTextarea = ({ question, minLength, maxLength, required }: Parameters) => {
+const useQuestionTextarea = ({ minLength, maxLength, required }: Parameters) => {
   const [value, setValue] = useState('');
   const [errorMessage, setErrorMessage] = useState(required ? '* 필수입력' : '');
 
@@ -33,7 +31,7 @@ const useQuestionTextarea = ({ question, minLength, maxLength, required }: Param
     setValue(updatedValue);
   };
 
-  return { question, value, errorMessage, minLength, maxLength, required, onChange };
+  return { value, errorMessage, minLength, maxLength, required, onChange };
 };
 
 export default useQuestionTextarea;

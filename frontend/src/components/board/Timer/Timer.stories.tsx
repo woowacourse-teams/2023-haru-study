@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { styled } from 'styled-components';
 
+import type { Step } from '@Types/study';
+
 import color from '@Styles/color';
 
 import Timer from './Timer';
@@ -9,28 +11,29 @@ type Story = StoryObj<typeof TimerWithBackground>;
 
 type Props = {
   minutes: number;
-  color: string;
+  backgroundColor: string;
+  step: Step;
 };
 
-const TimerWithBackground = ({ minutes, color }: Props) => {
+const TimerWithBackground = ({ minutes, backgroundColor, step }: Props) => {
   return (
-    <Background color={color}>
-      <Timer minutes={minutes} buttonColor={color} />
+    <Background backgroundColor={backgroundColor}>
+      <Timer studyMinutes={minutes} step={step} />
     </Background>
   );
 };
 
-const Background = styled.div<{ color: string }>`
+const Background = styled.div<{ backgroundColor: string }>`
   display: flex;
   justify-content: center;
 
   padding: 50px;
 
-  background-color: ${({ color }) => color};
+  background-color: ${({ backgroundColor }) => backgroundColor};
 `;
 
 const meta: Meta<typeof TimerWithBackground> = {
-  title: 'STUDY ROOM/Timer',
+  title: 'STUDY BOARD/Timer',
   component: TimerWithBackground,
 };
 
@@ -39,20 +42,23 @@ export default meta;
 export const Planning: Story = {
   args: {
     minutes: 10,
-    color: color.blue[500],
+    backgroundColor: color.blue[500],
+    step: 'planning',
   },
 };
 
 export const Studying: Story = {
   args: {
     minutes: 30,
-    color: color.red[600],
+    backgroundColor: color.red[600],
+    step: 'studying',
   },
 };
 
 export const Retrospect: Story = {
   args: {
     minutes: 10,
-    color: color.teal[600],
+    backgroundColor: color.teal[600],
+    step: 'retrospect',
   },
 };

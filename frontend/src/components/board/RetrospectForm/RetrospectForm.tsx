@@ -1,49 +1,57 @@
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 import QuestionTextarea from '@Components/common/QuestionTextarea/QuestionTextarea';
 
-import useQuestionTextarea from '@Hooks/useQuestionTextarea';
+import useRetrospectForm from '@Hooks/board/useRetrospectForm';
 
 type Props = {
   isLastCycle: boolean;
   onClickSubmitButton: () => void;
+  studyId: string;
+  memberId: string;
 };
 
-const RetrospectForm = ({ isLastCycle, onClickSubmitButton }: Props) => {
-  const toDoProps = useQuestionTextarea({
-    question: `실제로 학습이 어떻게 됐나요? 예상대로 잘 이루어졌나요?`,
-    minLength: 10,
-    maxLength: 500,
-    required: true,
-  });
+const RetrospectForm = ({ isLastCycle, onClickSubmitButton, studyId, memberId }: Props) => {
+  const navigate = useNavigate();
+  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = useRetrospectForm(studyId, memberId);
 
-  const completionConditionProps = useQuestionTextarea({
-    question: `학습을 진행하면서 겪은 어려움은 어떤 것이 있었나요?`,
-    minLength: 10,
-    maxLength: 500,
-    required: true,
-  });
+  const handleClickButton = async () => {
+    try {
+      await submitForm();
 
-  const expectedProbabilityProps = useQuestionTextarea({
-    question: `학습 과정에서 어떤 교훈을 얻었나요?`,
-    minLength: 10,
-    maxLength: 500,
-    required: true,
-  });
+      if (isLastCycle) {
+        navigate(`study-record/${studyId}`);
+        return;
+      }
+      onClickSubmitButton();
+    } catch (error) {
+      if (!(error instanceof Error)) return;
+      alert(error.message);
+    }
+  };
 
   const buttonText = isLastCycle ? '스터디 종료하기' : '다음 사이클 시작하기';
 
-  const handleClickButton = () => {
-    onClickSubmitButton();
-  };
-
   return (
     <Layout>
-      <QuestionTextarea {...toDoProps} />
-      <QuestionTextarea {...completionConditionProps} />
-      <QuestionTextarea {...expectedProbabilityProps} />
-      <Button variant="success" type="submit" onClick={handleClickButton}>
+      <QuestionTextarea
+        question="실제로 학습이 어떻게 됐나요? 예상대로 잘 이루어졌나요?"
+        {...questionTextareaProps.doneAsExpected}
+      />
+      <QuestionTextarea
+        question="학습을 진행하면서 겪은 어려움은 어떤 것이 있었나요?"
+        {...questionTextareaProps.experiencedDifficulty}
+      />
+      <QuestionTextarea question="학습 과정에서 어떤 교훈을 얻었나요?" {...questionTextareaProps.lesson} />
+      <Button
+        variant="success"
+        type="submit"
+        onClick={handleClickButton}
+        isLoading={isSubmitLoading}
+        disabled={isInvalidForm}
+      >
         {buttonText}
       </Button>
     </Layout>
