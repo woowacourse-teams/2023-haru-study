@@ -1,0 +1,26 @@
+import { styled } from 'styled-components';
+
+import { TextSkeletonStyle } from '@Styles/common';
+
+const AccordionSkeleton = () => {
+  return (
+    <AccordionSkeletonLayout>
+      <SkeletonItem />
+      <SkeletonItem />
+    </AccordionSkeletonLayout>
+  );
+};
+
+export default AccordionSkeleton;
+
+const AccordionSkeletonLayout = styled.div`
+  display: grid;
+  row-gap: 40px;
+
+  max-width: 1200px;
+`;
+
+const SkeletonItem = styled.div`
+  height: 80px;
+  ${TextSkeletonStyle}
+`;

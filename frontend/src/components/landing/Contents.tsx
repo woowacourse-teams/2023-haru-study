@@ -28,7 +28,7 @@ const Contents = () => {
   return (
     <ContentsContainer>
       <Menu
-        menuListPosition="left"
+        $menuListPosition="left"
         $style={css`
           margin: 0 0 0 auto;
         `}
@@ -60,8 +60,8 @@ const Contents = () => {
         <Link to="study-making">
           <Button variant="primary">스터디 개설하기</Button>
         </Link>
-        <Link to="entrance-study">
-          <Button variant="outlined">스터디 입장하기</Button>
+        <Link to="study-participate-host">
+          <Button variant="outlined">스터디 참여하기</Button>
         </Link>
       </ButtonContainer>
     </ContentsContainer>
