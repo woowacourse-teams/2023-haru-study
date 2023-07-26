@@ -8,6 +8,7 @@ export const studyMakingHandlers = [
       ctx.json({
         participantCode: '123456',
       }),
+      ctx.delay(1000),
     );
   }),
 ];

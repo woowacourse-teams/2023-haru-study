@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.domain.TemplateVersion;
 import harustudy.backend.content.dto.CurrentCyclePlanResponse;
 import harustudy.backend.content.service.ContentService;
 import harustudy.backend.member.domain.Member;
@@ -72,8 +71,7 @@ class ProgressServiceTest {
         room = new PomodoroRoom("room", 3, 20, participantCode);
         member = new Member("name");
         pomodoroProgress = new PomodoroProgress(room, member);
-        pomodoroContent = new PomodoroContent(pomodoroProgress, 1, plan,
-                retrospect, TemplateVersion.V1);
+        pomodoroContent = new PomodoroContent(pomodoroProgress, 1, plan, retrospect);
 
         entityManager.persist(participantCode);
         entityManager.persist(room);

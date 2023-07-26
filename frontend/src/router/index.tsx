@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Landing from '@Pages/Landing';
 import StudyBoard from '@Pages/StudyBoard';
 import StudyMaking from '@Pages/StudyMaking';
+import StudyParticipant from '@Pages/StudyParticipant';
 import StudyParticipantForHost from '@Pages/StudyParticipantForHost';
 import StudyRecord from '@Pages/StudyRecord';
 
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: 'study-participating-host',
         element: <StudyParticipantForHost />,
+      },
+      {
+        path: 'study-participating',
+        element: <StudyParticipant />,
       },
     ],
   },
