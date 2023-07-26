@@ -14,7 +14,7 @@ const request = async (path: string, init?: RequestInit) => {
 export const createStudy = (studyName: string, totalCycle: number, timePerCycle: number) =>
   request(`api/studies`, {
     method: 'POST',
-    body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
+    body: JSON.stringify({ nickname: studyName, totalCycle, timePerCycle }),
   });
 
 export const startStudy = (nickName: string | null, studyId: string | null) =>

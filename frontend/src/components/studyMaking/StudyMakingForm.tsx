@@ -37,8 +37,8 @@ const StudyMakingForm = () => {
 
       const response = await createStudy(
         studyNameInput.state ?? '',
-        Number(timePerCycleSelect.state ?? 0),
         Number(totalCycleSelect.state ?? 0),
+        Number(timePerCycleSelect.state ?? 0),
       );
 
       const locationHeader = response.headers.get('Location');

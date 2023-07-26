@@ -23,7 +23,12 @@ const useStudyingForm = (studyId: string, memberId: string) => {
 
   const submitForm = async () => {
     setIsSubmitLoading(true);
-    const response = await fetch(`/api/studies/${studyId}/members/${memberId}/next-step`, { method: 'POST' });
+    const response = await fetch(`/api/studies/${studyId}/members/${memberId}/next-step`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     setIsSubmitLoading(false);
 
     if (!response.ok) {

@@ -33,6 +33,9 @@ const useRetrospectForm = (studyId: string, memberId: string) => {
     setIsSubmitLoading(true);
     const response = await fetch(`/api/studies/${studyId}/members/${memberId}/content/retrospects`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         doneAsExpected: questionTextareaProps.doneAsExpected.value,
         experiencedDifficulty: questionTextareaProps.experiencedDifficulty.value,
