@@ -13,10 +13,10 @@ import { NickNameExist } from './ParticipationInfo';
 type Props = {
   studyName: string;
   responseNickName: string | null;
-  setNickNameExistence: React.Dispatch<React.SetStateAction<NickNameExist>>;
+  changeNickNameExistence: React.Dispatch<React.SetStateAction<NickNameExist>>;
 };
 
-const NickNameExistence = ({ studyName, responseNickName, setNickNameExistence }: Props) => {
+const NickNameExistence = ({ studyName, responseNickName, changeNickNameExistence }: Props) => {
   const navigator = useNavigate();
 
   const { participateStudy } = useParticipateStudy();
@@ -35,7 +35,7 @@ const NickNameExistence = ({ studyName, responseNickName, setNickNameExistence }
   };
 
   const handleOnClickRestartButton = () => {
-    setNickNameExistence('notExist');
+    changeNickNameExistence('notExist');
   };
 
   return (

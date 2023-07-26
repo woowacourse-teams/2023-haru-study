@@ -57,7 +57,7 @@ const ParticipationInfo = () => {
         <NickNameExistence
           studyName={studyName}
           responseNickName={responseNickName}
-          setNickNameExistence={setNickNameExistence}
+          changeNickNameExistence={setNickNameExistence}
         />
       )}
     </Layout>
