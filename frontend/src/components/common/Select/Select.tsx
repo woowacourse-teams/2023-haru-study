@@ -1,6 +1,8 @@
 import { ReactNode, useCallback, useState } from 'react';
 import { CSSProp, css, styled } from 'styled-components';
 
+import useOutsideClick from '@Hooks/useOutsideClick';
+
 import SelectContext from './SelectContext';
 import SelectItem from './SelectItem';
 import SelectList from './SelectList';
@@ -17,6 +19,10 @@ const Select = ({ children, label, $style }: Props) => {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [triggerSuffixText, setTriggerSuffixText] = useState<string>('');
+
+  const closeSelectItems = () => setIsOpen(false);
+
+  const ref = useOutsideClick<HTMLDivElement>(closeSelectItems);
 
   const changeSelectedItem = useCallback(
     (value: string) => {
@@ -40,7 +46,7 @@ const Select = ({ children, label, $style }: Props) => {
     <SelectContext.Provider
       value={{ selectedItem, isOpen, changeSelectedItem, toggleOpen, triggerSuffixText, changeTriggerSuffixText }}
     >
-      <Layout $style={$style}>
+      <Layout $style={$style} ref={ref}>
         <label>{label}</label>
         {children}
       </Layout>
