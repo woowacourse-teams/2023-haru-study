@@ -1,4 +1,3 @@
-import useParticipantCode from '@Hooks/fetch/useParticipantCode';
 import { useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -6,6 +5,7 @@ import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
+import useParticipantCode from '@Hooks/fetch/useParticipantCode';
 import useInput from '@Hooks/useInput';
 
 import { getCookie } from '@Utils/cookie';

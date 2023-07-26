@@ -1,10 +1,11 @@
-import useParticipateStudy from '@Hooks/fetch/useParticipateStudy';
 import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
+
+import useParticipateStudy from '@Hooks/fetch/useParticipateStudy';
 
 import { getCookie } from '@Utils/cookie';
 

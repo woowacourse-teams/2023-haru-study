@@ -59,7 +59,7 @@
             "position": "after"
           },
           {
-            "pattern": "@Hooks/*",
+            "pattern": "@Hooks/**/*",
             "group": "internal",
             "position": "after"
           },
