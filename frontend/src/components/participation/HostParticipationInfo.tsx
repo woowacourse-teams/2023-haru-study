@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
@@ -5,6 +6,7 @@ import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
+import useParticipateStudy from '@Hooks/fetch/useParticipateStudy';
 import useCopyClipBoard from '@Hooks/useCopyClipBoard';
 import useInput from '@Hooks/useInput';
 
@@ -14,9 +16,7 @@ import { ERROR_MESSAGE } from '@Constants/errorMessage';
 
 import ClipBoardIcon from '@Assets/icons/ClipBoardIcon';
 
-import { getCookie, setCookie } from '@Utils/cookie';
-
-import { startStudy } from '@Apis/index';
+import { getCookie } from '@Utils/cookie';
 
 type Props = {
   participantCode: string;
@@ -26,9 +26,13 @@ type Props = {
 const HostParticipationInfo = ({ participantCode, studyName }: Props) => {
   const navigator = useNavigate();
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const nickNameInput = useInput(true);
 
   const { onCopy } = useCopyClipBoard();
+
+  const { participateStudy } = useParticipateStudy();
 
   const handleOnClickClipBoardButton = async () => {
     await onCopy(participantCode);
@@ -40,15 +44,23 @@ const HostParticipationInfo = ({ participantCode, studyName }: Props) => {
   };
 
   const handleOnClickStartButton = async () => {
-    const studyId = getCookie('studyId');
-    const response = await startStudy(nickNameInput.state, studyId);
+    try {
+      setIsLoading(true);
 
-    const locationHeader = response.headers.get('Location');
-    const memberId = locationHeader?.split('/').pop() as string;
+      const studyId = getCookie('studyId');
 
-    setCookie('memberId', memberId, 1);
+      await participateStudy(studyId, nickNameInput.state);
 
-    navigator(`/studyboard/${studyId ?? ''}`);
+      setIsLoading(false);
+
+      if (studyId) {
+        navigator(`/studyboard/${studyId}`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert('스터디 방이 존재하지 않는 경우이거나, 닉네임에 문제가 있습니다.');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -102,6 +114,7 @@ const HostParticipationInfo = ({ participantCode, studyName }: Props) => {
         variant="primary"
         disabled={nickNameInput.isInputError || nickNameInput.state === null}
         onClick={handleOnClickStartButton}
+        isLoading={isLoading}
       >
         스터디 시작하기
       </Button>

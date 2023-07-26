@@ -12,6 +12,7 @@ export const studyStartHandlers = [
     return res(
       ctx.status(201),
       ctx.set({ 'Content-Type': 'application/json', Location: `/api/studies/${studyId}/members/5 ` }),
+      ctx.delay(1000),
     );
   }),
 ];

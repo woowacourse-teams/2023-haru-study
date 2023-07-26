@@ -22,3 +22,9 @@ export const startStudy = (nickName: string | null, studyId: string | null) =>
     method: 'POST',
     body: JSON.stringify({ nickName }),
   });
+
+export const authenticateParticipantCode = (participantCode: string, memberId: number | null) =>
+  request(`api/studies/authenticate`, {
+    method: 'POST',
+    body: JSON.stringify({ participantCode, memberId }),
+  });
