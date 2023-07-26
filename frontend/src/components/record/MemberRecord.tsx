@@ -43,6 +43,10 @@ type MemberRecordContent = {
   };
 };
 
+type MemberRecordContents = {
+  content: MemberRecordContent[];
+};
+
 type Props = {
   studyId: string;
   memberId: number;
@@ -50,8 +54,10 @@ type Props = {
 };
 
 const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
-  const { data, status } = useFetch<MemberRecordContent[]>(`/api/studies/${studyId}/members/${memberId}/content`);
+  const { data, status } = useFetch<MemberRecordContents>(`/api/studies/${studyId}/members/${memberId}/content`);
   const isLoading = status === 'pending';
+
+  const memberContents = data?.content;
 
   if (isLoading) {
     return <TabsSkeleton />;
@@ -60,8 +66,8 @@ const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
   return (
     <MemberRecordLayout>
       <Tabs>
-        {data?.map((contents) => (
-          <Tabs.Item key={contents.cycle} label={`${contents.cycle}번째 사이클`}>
+        {memberContents?.map((content) => (
+          <Tabs.Item key={content.cycle} label={`${content.cycle}번째 사이클`}>
             <TabItemContainer>
               <TabItemSection>
                 <Typography variant="h5">
@@ -69,7 +75,7 @@ const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
                   {nickname}가 작성한 목표
                 </Typography>
                 {PLAN_QUESTION.map(({ question, key }) => (
-                  <AnswerQuestion key={key} question={question} answer={contents.plan[key]} topic="plan" />
+                  <AnswerQuestion key={key} question={question} answer={content.plan[key]} topic="plan" />
                 ))}
               </TabItemSection>
               <TabItemSection>
@@ -78,7 +84,7 @@ const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
                   {nickname}가 작성한 회고
                 </Typography>
                 {RETROSPECT_QUESTION.map(({ question, key }) => (
-                  <AnswerQuestion key={key} question={question} answer={contents.retrospect[key]} topic="retrospect" />
+                  <AnswerQuestion key={key} question={question} answer={content.retrospect[key]} topic="retrospect" />
                 ))}
               </TabItemSection>
             </TabItemContainer>
