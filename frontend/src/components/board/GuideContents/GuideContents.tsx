@@ -1,8 +1,8 @@
 import { StudyData } from '@Types/study';
 
-import PlanResult from '../PlanResult/PlanResult';
 import PlanningForm from '../PlanningForm/PlanningForm';
 import RetrospectForm from '../RetrospectForm/RetrospectForm';
+import StudyingForm from '../StudyingForm/StudyingForm';
 
 type Props = {
   studyData: StudyData;
@@ -22,7 +22,7 @@ const GuideContents = ({ studyData, changeNextStep }: Props) => {
         />
       );
     case 'studying':
-      return <PlanResult onClickSubmitButton={changeNextStep} />;
+      return <StudyingForm onClickSubmitButton={changeNextStep} />;
     case 'retrospect':
       return <RetrospectForm isLastCycle={isLastCycle} onClickSubmitButton={changeNextStep} />;
   }
