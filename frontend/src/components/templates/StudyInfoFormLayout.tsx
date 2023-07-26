@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { css, styled } from 'styled-components';
 
+import Header from '@Components/common/Header/Header';
 import Typography from '@Components/common/Typography/Typography';
 
 type Props = {
@@ -10,17 +11,20 @@ type Props = {
 
 const StudyInfoFormLayout = ({ headerText, children }: Props) => {
   return (
-    <Layout>
-      <Typography
-        variant="h2"
-        $style={css`
-          margin-bottom: 80px;
-        `}
-      >
-        {headerText}
-      </Typography>
-      {children}
-    </Layout>
+    <>
+      <Header />
+      <Layout>
+        <Typography
+          variant="h2"
+          $style={css`
+            margin-bottom: 80px;
+          `}
+        >
+          {headerText}
+        </Typography>
+        {children}
+      </Layout>
+    </>
   );
 };
 

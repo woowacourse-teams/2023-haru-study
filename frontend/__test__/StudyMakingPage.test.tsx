@@ -11,7 +11,7 @@ test('스터디 개설 페이지가 잘 렌더링 되었는지 확인한다.', a
     </MemoryRouter>,
   );
 
-  const title = await screen.findByRole('heading');
+  const title = await screen.findAllByRole('heading');
 
-  expect(title).toHaveTextContent('스터디 개설하기');
+  expect(title[1]).toHaveTextContent('스터디 개설하기');
 });
