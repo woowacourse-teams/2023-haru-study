@@ -9,11 +9,13 @@ import useRetrospectForm from '@Hooks/board/useRetrospectForm';
 type Props = {
   isLastCycle: boolean;
   onClickSubmitButton: () => void;
+  studyId: string;
+  memberId: string;
 };
 
-const RetrospectForm = ({ isLastCycle, onClickSubmitButton }: Props) => {
+const RetrospectForm = ({ isLastCycle, onClickSubmitButton, studyId, memberId }: Props) => {
   const navigate = useNavigate();
-  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = useRetrospectForm();
+  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = useRetrospectForm(studyId, memberId);
 
   const handleClickButton = async () => {
     try {

@@ -19,12 +19,23 @@ const GuideContents = ({ studyData, changeNextStep }: Props) => {
           minutes={studyData.timePerCycle}
           cycle={studyData.currentCycle}
           onClickSubmitButton={changeNextStep}
+          studyId={studyData.studyId}
+          memberId={studyData.memberId}
         />
       );
     case 'studying':
-      return <StudyingForm onClickSubmitButton={changeNextStep} />;
+      return (
+        <StudyingForm onClickSubmitButton={changeNextStep} studyId={studyData.studyId} memberId={studyData.memberId} />
+      );
     case 'retrospect':
-      return <RetrospectForm isLastCycle={isLastCycle} onClickSubmitButton={changeNextStep} />;
+      return (
+        <RetrospectForm
+          isLastCycle={isLastCycle}
+          onClickSubmitButton={changeNextStep}
+          studyId={studyData.studyId}
+          memberId={studyData.memberId}
+        />
+      );
   }
 };
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import useQuestionTextarea from '@Hooks/useQuestionTextarea';
 
-const usePlanningForm = () => {
+const usePlanningForm = (studyId: string, memberId: string) => {
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
   const questionTextareaProps = {
@@ -37,7 +37,7 @@ const usePlanningForm = () => {
 
   const submitForm = async () => {
     setIsSubmitLoading(true);
-    const response = await fetch('/api/studies/123/members/1/content/plans', {
+    const response = await fetch(`/api/studies/${studyId}/members/${memberId}/content/plans`, {
       method: 'POST',
       body: JSON.stringify({
         toDo: questionTextareaProps.toDo.value,

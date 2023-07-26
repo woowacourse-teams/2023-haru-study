@@ -2,19 +2,28 @@ import { useEffect, useState } from 'react';
 
 import { PlanList } from '@Types/study';
 
-const useStudyingForm = () => {
+const useStudyingForm = (studyId: string, memberId: string) => {
   const [planList, setPlanList] = useState<PlanList | null>(null);
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
+  const [error, setError] = useState<Error>();
 
   useEffect(() => {
-    fetch('/api/studies/123/members/1/content/plans')
-      .then((res) => res.json())
-      .then((data: PlanList) => setPlanList(data));
-  }, []);
+    try {
+      fetch(`/api/studies/${studyId}/members/${memberId}/content/plans`)
+        .then((res) => res.json())
+        .then((data: PlanList) => setPlanList(data))
+        .catch(() => {
+          throw new Error('학습 목표를 불러오던 중 문제가 발생했습니다.');
+        });
+    } catch (error) {
+      if (!(error instanceof Error)) return;
+      setError(error);
+    }
+  }, [memberId, studyId]);
 
   const submitForm = async () => {
     setIsSubmitLoading(true);
-    const response = await fetch('/api/studies/123/members/1/next-step', { method: 'POST' });
+    const response = await fetch(`/api/studies/${studyId}/members/${memberId}/next-step`, { method: 'POST' });
     setIsSubmitLoading(false);
 
     if (!response.ok) {
@@ -22,7 +31,7 @@ const useStudyingForm = () => {
     }
   };
 
-  return { planList, isSubmitLoading, submitForm };
+  return { planList, isSubmitLoading, error, submitForm };
 };
 
 export default useStudyingForm;

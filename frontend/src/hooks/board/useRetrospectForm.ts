@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import useQuestionTextarea from '@Hooks/useQuestionTextarea';
 
-const useRetrospectForm = () => {
+const useRetrospectForm = (studyId: string, memberId: string) => {
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
   const questionTextareaProps = {
@@ -31,7 +31,7 @@ const useRetrospectForm = () => {
 
   const submitForm = async () => {
     setIsSubmitLoading(true);
-    const response = await fetch('/api/studies/123/members/1/content/retrospects', {
+    const response = await fetch(`/api/studies/${studyId}/members/${memberId}/content/retrospects`, {
       method: 'POST',
       body: JSON.stringify({
         doneAsExpected: questionTextareaProps.doneAsExpected.value,

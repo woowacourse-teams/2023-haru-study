@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
@@ -20,10 +21,13 @@ const questions: PlanList = {
 
 type Props = {
   onClickSubmitButton: () => void;
+  studyId: string;
+  memberId: string;
 };
 
-const StudyingForm = ({ onClickSubmitButton }: Props) => {
-  const { planList, isSubmitLoading, submitForm } = useStudyingForm();
+const StudyingForm = ({ onClickSubmitButton, studyId, memberId }: Props) => {
+  const navigate = useNavigate();
+  const { planList, isSubmitLoading, error, submitForm } = useStudyingForm(studyId, memberId);
 
   const handleClickButton = async () => {
     try {
@@ -34,6 +38,13 @@ const StudyingForm = ({ onClickSubmitButton }: Props) => {
       alert(error.message);
     }
   };
+
+  if (error) {
+    alert(error.message);
+    if (confirm('메인 페이지로 돌아기시겠습니까?')) {
+      navigate('/');
+    }
+  }
 
   if (planList === null) {
     return (

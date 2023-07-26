@@ -9,10 +9,12 @@ type Props = {
   cycle: number;
   minutes: number;
   onClickSubmitButton: () => void;
+  studyId: string;
+  memberId: string;
 };
 
-const PlanningForm = ({ cycle, minutes, onClickSubmitButton }: Props) => {
-  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = usePlanningForm();
+const PlanningForm = ({ cycle, minutes, onClickSubmitButton, studyId, memberId }: Props) => {
+  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = usePlanningForm(studyId, memberId);
 
   const handleClickButton = async () => {
     try {
