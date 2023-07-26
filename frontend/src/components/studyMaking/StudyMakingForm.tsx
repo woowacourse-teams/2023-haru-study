@@ -115,7 +115,7 @@ const StudyMakingForm = () => {
             `}
             onChange={timePerCycleSelect.onChangeSelectItem}
           >
-            {[20, 25, 30, 35, 40].map((el, index) => (
+            {[20, 25, 30, 35, 40, 45, 50, 55, 60].map((el, index) => (
               <Select.Item key={index + el} value={el} suffix="분" />
             ))}
           </Select.List>
