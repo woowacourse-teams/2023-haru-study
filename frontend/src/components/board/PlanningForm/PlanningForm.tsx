@@ -31,16 +31,12 @@ const PlanningForm = ({ cycle, minutes, onClickSubmitButton }: Props) => {
 
   const expectedProbabilityProps = useQuestionTextarea({
     question: `학습을 ${minutes}분만에 성공적으로 마칠 확률은 몇 %로 예상되나요? 그 이유는 무엇인가요?`,
-    minLength: 10,
     maxLength: 500,
-    required: true,
   });
 
   const expectedDifficultyProps = useQuestionTextarea({
     question: `${minutes}분의 시간 동안 가장 큰 어려움으로 예상되는 것은 무엇인가요?`,
-    minLength: 10,
     maxLength: 500,
-    required: true,
   });
 
   const whatCanYouDoProps = useQuestionTextarea({
