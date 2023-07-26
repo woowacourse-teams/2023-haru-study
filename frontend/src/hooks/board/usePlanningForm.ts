@@ -39,6 +39,9 @@ const usePlanningForm = (studyId: string, memberId: string) => {
     setIsSubmitLoading(true);
     const response = await fetch(`/api/studies/${studyId}/members/${memberId}/content/plans`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         toDo: questionTextareaProps.toDo.value,
         completionCondition: questionTextareaProps.completionCondition.value,
