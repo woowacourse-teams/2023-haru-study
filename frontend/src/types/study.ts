@@ -1,15 +1,17 @@
 export type Step = 'planning' | 'studying' | 'retrospect';
 
-export type StudyData = {
-  studyId: string;
-  memberId: string;
-
+export type StudyFetchingData = {
   studyName: string;
   totalCycle: number;
   currentCycle: number;
   timePerCycle: number;
   step: Step;
 };
+
+export type StudyData = {
+  studyId: string;
+  memberId: string;
+} & StudyFetchingData;
 
 export type Plan = 'toDo' | 'completionCondition' | 'expectedProbability' | 'expectedDifficulty' | 'whatCanYouDo';
 

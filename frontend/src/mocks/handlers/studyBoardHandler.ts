@@ -1,11 +1,8 @@
 import { rest } from 'msw';
 
-import type { PlanList, Retrospect, StudyData } from '@Types/study';
+import type { PlanList, Retrospect, StudyFetchingData } from '@Types/study';
 
-let studyData: StudyData = {
-  studyId: '123',
-  memberId: '1',
-
+let studyData: StudyFetchingData = {
   studyName: '안오면 지상렬',
   totalCycle: 3,
   currentCycle: 1,
