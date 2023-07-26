@@ -8,6 +8,6 @@ public record RoomAndProgressStepResponse(String studyName, Integer totalCycle,
 
     public RoomAndProgressStepResponse(String studyName, Integer totalCycle, Integer currentCycle,
             Integer timePerCycle, PomodoroStatus step) {
-        this(studyName, totalCycle, currentCycle, timePerCycle, step.name());
+        this(studyName, totalCycle, currentCycle, timePerCycle, step.name().toLowerCase());
     }
 }
