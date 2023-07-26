@@ -29,7 +29,9 @@ const NickNameNonExistence = ({ studyName }: Props) => {
 
       await participateStudy(studyId, nickNameInput.state);
 
-      navigator(`/studyboard/${studyId ?? ''}`);
+      if (studyId) {
+        navigator(`/studyboard/${studyId}`);
+      }
     } catch (error) {
       console.error(error);
       alert('스터디 방이 존재하지 않는 경우이거나, 닉네임에 문제가 있습니다.');
