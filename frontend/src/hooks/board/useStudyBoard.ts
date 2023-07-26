@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { StudyData } from '@Types/study';
+import { StudyData, StudyFetchingData } from '@Types/study';
 
 import { getCookie } from '@Utils/cookie';
 
@@ -20,7 +20,7 @@ const useStudyBoard = () => {
 
       fetch(`/api/studies/${studyId}/members/${memberId}/metadata`)
         .then((res) => res.json())
-        .then((data: StudyData) => setStudyData(data))
+        .then((data: StudyFetchingData) => setStudyData({ ...data, studyId: studyId, memberId: memberId }))
         .catch(() => {
           throw new Error('유저 정보를 불러오는 중 문제가 발생했습니다');
         });
