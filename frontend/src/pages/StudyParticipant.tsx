@@ -1,10 +1,10 @@
-import ParticipationInfo from '@Components/participation/ParticipationInfo/ParticipationInfo';
+import ParticipationCodeInput from '@Components/preparation/ParticipationCodeInput/ParticipationCodeInput';
 import StudyInfoFormLayout from '@Components/templates/StudyInfoFormLayout';
 
 const StudyParticipant = () => {
   return (
     <StudyInfoFormLayout headerText={`스터디 참여하기`}>
-      <ParticipationInfo />
+      <ParticipationCodeInput />
     </StudyInfoFormLayout>
   );
 };

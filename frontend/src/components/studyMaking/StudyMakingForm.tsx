@@ -14,12 +14,10 @@ import color from '@Styles/color';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 
-import { setCookie } from '@Utils/cookie';
-
 import { createStudy } from '@Apis/index';
 
 const StudyMakingForm = () => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const studyNameInput = useInput(true);
   const timePerCycleSelect = useSelect();
@@ -44,14 +42,12 @@ const StudyMakingForm = () => {
       const locationHeader = response.headers.get('Location');
       const studyId = locationHeader?.split('/').pop() as string;
 
-      setCookie('studyId', studyId, 1);
-
       const result = (await response.json()) as { participantCode: string; studyName: string };
 
       setIsLoading(false);
 
-      navigator('/study-participating-host', {
-        state: { participantCode: result.participantCode, studyName: studyNameInput.state },
+      navigate(`/study-preparation/${studyId}`, {
+        state: { participantCode: result.participantCode, studyName: studyNameInput.state, isHost: true },
       });
     } catch (error) {
       console.error(error);

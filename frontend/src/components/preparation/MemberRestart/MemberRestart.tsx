@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
@@ -6,47 +5,18 @@ import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
-import useParticipateStudy from '@Hooks/fetch/useParticipateStudy';
-
-import { getCookie } from '@Utils/cookie';
-
-import { NickNameExist } from './ParticipationInfo';
-
 type Props = {
   studyName: string;
-  responseNickName: string | null;
-  changeNickNameExistence: React.Dispatch<React.SetStateAction<NickNameExist>>;
+  nickname: string | null;
+  studyId: string;
+  restart: () => void;
 };
 
-const NickNameExistence = ({ studyName, responseNickName, changeNickNameExistence }: Props) => {
-  const navigator = useNavigate();
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const { participateStudy } = useParticipateStudy();
+const MemberRestart = ({ studyName, nickname, studyId, restart }: Props) => {
+  const navigate = useNavigate();
 
   const handleOnClickContinueStart = async () => {
-    try {
-      setIsLoading(true);
-
-      const studyId = getCookie('studyId');
-
-      await participateStudy(studyId, responseNickName);
-
-      setIsLoading(false);
-
-      if (studyId) {
-        navigator(`/studyboard/${studyId}`);
-      }
-    } catch (error) {
-      console.error(error);
-      alert('스터디 방이 존재하지 않는 경우이거나, 닉네임에 문제가 있습니다.');
-      setIsLoading(false);
-    }
-  };
-
-  const handleOnClickRestartButton = () => {
-    changeNickNameExistence('notExist');
+    navigate(`/studyboard/${studyId}`);
   };
 
   return (
@@ -61,7 +31,7 @@ const NickNameExistence = ({ studyName, responseNickName, changeNickNameExistenc
           <StudyNameText>{studyName}</StudyNameText> 스터디에서 이미 학습을 진행한 기록이 있습니다.
         </Typography>
         <Input label={<Typography variant="p1">닉네임</Typography>}>
-          <Input.TextField value={responseNickName ?? ''} disabled={!!responseNickName} />
+          <Input.TextField value={nickname ?? ''} disabled={!!nickname} />
         </Input>
       </div>
       <div>
@@ -81,7 +51,7 @@ const NickNameExistence = ({ studyName, responseNickName, changeNickNameExistenc
               width: 48%;
               padding: 16px 28px;
             `}
-            onClick={handleOnClickRestartButton}
+            onClick={restart}
           >
             처음부터 진행하기
           </Button>
@@ -92,7 +62,6 @@ const NickNameExistence = ({ studyName, responseNickName, changeNickNameExistenc
               padding: 16px 28px;
             `}
             onClick={handleOnClickContinueStart}
-            isLoading={isLoading}
           >
             이어서 진행하기
           </Button>
@@ -102,7 +71,7 @@ const NickNameExistence = ({ studyName, responseNickName, changeNickNameExistenc
   );
 };
 
-export default NickNameExistence;
+export default MemberRestart;
 
 const ButtonContainer = styled.div`
   display: flex;

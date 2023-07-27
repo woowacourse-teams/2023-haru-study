@@ -6,46 +6,61 @@ import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
-import useParticipateStudy from '@Hooks/fetch/useParticipateStudy';
 import useInput from '@Hooks/useInput';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 
-import { getCookie } from '@Utils/cookie';
+import { setCookie } from '@Utils/cookie';
 
 type Props = {
+  studyId: string;
   studyName: string;
 };
 
-const NickNameNonExistence = ({ studyName }: Props) => {
-  const navigator = useNavigate();
+const MemberRegister = ({ studyId, studyName }: Props) => {
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const nickNameInput = useInput(true);
 
-  const { participateStudy } = useParticipateStudy();
-
   const handleOnClickStartButton = async () => {
     try {
       setIsLoading(true);
 
-      const studyId = getCookie('studyId');
+      if (!nickNameInput.state) {
+        throw Error('닉네임을 입력해주세요.');
+      }
 
-      await participateStudy(studyId, nickNameInput.state);
+      const response = await fetch(`/api/studies/${studyId}/members`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nickname: nickNameInput.state,
+        }),
+      });
+
+      if (!response.ok) {
+        throw Error('사용할 수 없는 닉네임입니다.');
+      }
+
+      const locationHeader = response.headers.get('Location');
+      const memberId = locationHeader?.split('/').pop() as string;
+
+      setCookie('memberId', memberId, 1);
 
       setIsLoading(false);
 
-      if (studyId) {
-        navigator(`/studyboard/${studyId}`);
-      }
+      navigate(`/studyboard/${studyId}`);
     } catch (error) {
       console.error(error);
-      alert('스터디 방이 존재하지 않는 경우이거나, 닉네임에 문제가 있습니다.');
+      if (!(error instanceof Error)) return;
+      alert(error.message);
       setIsLoading(false);
     }
   };
-
   return (
     <>
       <Input
@@ -61,7 +76,7 @@ const NickNameNonExistence = ({ studyName }: Props) => {
       </Input>
       <Button
         variant="primary"
-        disabled={!nickNameInput.state || nickNameInput.isInputError}
+        disabled={nickNameInput.isInputError || nickNameInput.state === null}
         onClick={handleOnClickStartButton}
         isLoading={isLoading}
       >
@@ -71,7 +86,7 @@ const NickNameNonExistence = ({ studyName }: Props) => {
   );
 };
 
-export default NickNameNonExistence;
+export default MemberRegister;
 
 const LabelContainer = styled.div`
   display: flex;
