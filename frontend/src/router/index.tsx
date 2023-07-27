@@ -4,7 +4,7 @@ import Landing from '@Pages/Landing';
 import StudyBoard from '@Pages/StudyBoard';
 import StudyMaking from '@Pages/StudyMaking';
 import StudyParticipant from '@Pages/StudyParticipant';
-import StudyParticipantForHost from '@Pages/StudyParticipantForHost';
+import StudyPreparation from '@Pages/StudyPreparation';
 import StudyRecord from '@Pages/StudyRecord';
 
 import App from '../App';
@@ -31,8 +31,8 @@ const router = createBrowserRouter([
         element: <StudyMaking />,
       },
       {
-        path: 'study-participating-host',
-        element: <StudyParticipantForHost />,
+        path: 'study-preparation/:studyId',
+        element: <StudyPreparation />,
       },
       {
         path: 'study-participating',
