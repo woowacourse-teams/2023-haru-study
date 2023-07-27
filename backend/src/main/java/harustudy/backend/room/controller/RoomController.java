@@ -42,8 +42,8 @@ public class RoomController {
             @PathVariable Long studyId,
             @Valid @RequestBody ParticipateRequest request
     ) {
-        roomService.participate(studyId, request.nickname());
+        Long memberId = roomService.participate(studyId, request.nickname());
         return ResponseEntity.created(
-                URI.create("/api/studies/" + studyId + "/members/")).build();
+                URI.create("/api/studies/" + studyId + "/members/" + memberId)).build();
     }
 }
