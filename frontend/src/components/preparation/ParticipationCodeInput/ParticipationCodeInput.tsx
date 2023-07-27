@@ -27,6 +27,9 @@ const ParticipationCodeInput = () => {
 
       const response = await fetch(`api/studies/authenticate`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ participantCode: participantCodeInput.state }),
       });
 
