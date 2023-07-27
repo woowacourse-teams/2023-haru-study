@@ -14,10 +14,10 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    // TODO: studyId는 API 일관성을 위해 보류(현재는 사용하지 않음)
     @GetMapping("/api/studies/{studyId}/members/{memberId}")
-    public ResponseEntity<NicknameResponse> findNicknameByMemberId(@PathVariable Long memberId) {
-        NicknameResponse response = memberService.findNicknameByMemberId(memberId);
+    public ResponseEntity<NicknameResponse> findNickname(@PathVariable Long studyId,
+            @PathVariable Long memberId) {
+        NicknameResponse response = memberService.findParticipatedMemberNickname(studyId, memberId);
         return ResponseEntity.ok(response);
     }
 }
