@@ -1,6 +1,5 @@
 package harustudy.backend.content.controller;
 
-import harustudy.backend.content.dto.CurrentCyclePlanResponse;
 import harustudy.backend.content.dto.MemberContentResponses;
 import harustudy.backend.content.service.ContentService;
 import jakarta.validation.constraints.NotNull;
@@ -43,7 +42,7 @@ public class ContentController {
     }
 
     @GetMapping("/api/studies/{studyId}/members/{memberId}/content/plans")
-    public ResponseEntity<CurrentCyclePlanResponse> findCurrentCyclePlan(
+    public ResponseEntity<Map<String, String>> findCurrentCyclePlan(
             @PathVariable Long studyId,
             @PathVariable Long memberId,
             @RequestParam @NotNull Integer cycle

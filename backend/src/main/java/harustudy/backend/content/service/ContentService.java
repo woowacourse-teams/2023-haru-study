@@ -5,7 +5,6 @@ import harustudy.backend.common.EntityNotFoundException.PomodoroProgressNotFound
 import harustudy.backend.common.EntityNotFoundException.PomodoroRecordNotFound;
 import harustudy.backend.common.EntityNotFoundException.StudyNotFound;
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.dto.CurrentCyclePlanResponse;
 import harustudy.backend.content.dto.MemberContentResponse;
 import harustudy.backend.content.dto.MemberContentResponses;
 import harustudy.backend.content.repository.ContentRepository;
@@ -33,7 +32,7 @@ public class ContentService {
     private final MemberProgressRepository<PomodoroProgress> memberProgressRepository;
     private final ContentRepository<PomodoroContent> contentRepository;
 
-    public CurrentCyclePlanResponse findCurrentCyclePlan(Long studyId, Long memberId,
+    public Map<String, String> findCurrentCyclePlan(Long studyId, Long memberId,
             Integer cycle) {
         Room room = roomRepository.findById(studyId).orElseThrow(IllegalArgumentException::new);
         Member member = memberRepository.findById(memberId)
@@ -43,8 +42,7 @@ public class ContentService {
                         room, member)
                 .orElseThrow(IllegalArgumentException::new);
 
-        return new CurrentCyclePlanResponse(
-                pomodoroProgress.findPomodoroRecordByCycle(cycle).getPlan());
+        return pomodoroProgress.findPomodoroRecordByCycle(cycle).getPlan();
     }
 
     public void writePlan(Long studyId, Long memberId, Map<String, String> plan) {
