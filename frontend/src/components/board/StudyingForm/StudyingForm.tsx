@@ -64,7 +64,7 @@ const StudyingForm = ({ onClickSubmitButton, studyId, memberId, cycle }: Props) 
   return (
     <Layout>
       <PlanResultList>
-        {Object.keys(planList).map((planKey) => (
+        {Object.keys(questions).map((planKey) => (
           <QuestionAnswer
             key={planKey}
             question={questions[planKey as Plan]}
