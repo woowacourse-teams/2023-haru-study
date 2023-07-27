@@ -4,7 +4,6 @@ import harustudy.backend.room.dto.CreatePomodoroRoomDto;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
 import harustudy.backend.room.dto.ParticipateRequest;
-import harustudy.backend.room.dto.ReParticipateRequest;
 import harustudy.backend.room.dto.RoomAndMembersResponse;
 import harustudy.backend.room.service.RoomService;
 import jakarta.validation.Valid;
