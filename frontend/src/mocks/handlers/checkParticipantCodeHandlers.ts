@@ -6,7 +6,7 @@ type RequestData = {
 };
 
 export const checkParticipantCodeHandlers = [
-  rest.post(`api/studies/authenticate`, async (req, res, ctx) => {
+  rest.post('api/studies/authenticate', async (req, res, ctx) => {
     const testParticipantCode = '123456';
 
     const { participantCode }: RequestData = await req.json();
@@ -20,9 +20,18 @@ export const checkParticipantCodeHandlers = [
       ctx.json({
         studyId: 1,
         studyName: '안오면 지상렬',
-        nickname: '엽토',
       }),
       ctx.delay(1000),
     );
+  }),
+
+  rest.get('/api/studies/:studyId/members/:memberId', (req, res, ctx) => {
+    const memberId = req.params.memberId[0];
+
+    if (memberId !== '5') {
+      return res(ctx.status(404), ctx.delay(1000));
+    }
+
+    return res(ctx.status(200), ctx.json({ nickname: '하루' }), ctx.delay(300));
   }),
 ];

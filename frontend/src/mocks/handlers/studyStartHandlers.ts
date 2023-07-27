@@ -3,6 +3,7 @@ import { rest } from 'msw';
 export const studyStartHandlers = [
   rest.post('/api/studies/:studyId/members', (req, res, ctx) => {
     const studyId = req.params.studyId[0];
+
     const regex = /[^0-9]/g;
 
     if (regex.test(studyId)) {
