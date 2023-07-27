@@ -4,6 +4,7 @@ import harustudy.backend.room.dto.CreatePomodoroRoomDto;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
 import harustudy.backend.room.dto.ParticipateRequest;
+import harustudy.backend.room.dto.ReparticipatedRequest;
 import harustudy.backend.room.dto.RoomAndMembersResponse;
 import harustudy.backend.room.service.RoomService;
 import jakarta.validation.Valid;
@@ -45,5 +46,22 @@ public class RoomController {
         Long memberId = roomService.participate(studyId, request.nickname());
         return ResponseEntity.created(
                 URI.create("/api/studies/" + studyId + "/members/" + memberId)).build();
+    }
+
+    @PostMapping("/api/v2/studies/{studyId}/participate")
+    public ResponseEntity<Void> participateV2(
+            @PathVariable Long studyId,
+            @RequestBody ParticipateRequest request
+    ) {
+        return ResponseEntity.created(
+                URI.create("/api/studies/" + studyId + "/members/")).build();
+    }
+
+    @PostMapping("/api/v2/studies/{studyId}/reparticipate")
+    public ResponseEntity<Void> reparticipateV2(
+            @PathVariable Long studyId,
+            @RequestBody ReparticipatedRequest request
+    ) {
+        return ResponseEntity.ok(null);
     }
 }

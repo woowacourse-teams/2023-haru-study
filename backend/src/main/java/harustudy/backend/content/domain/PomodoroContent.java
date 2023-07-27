@@ -33,7 +33,7 @@ public class PomodoroContent extends MemberContent {
     }
 
     public PomodoroContent(MemberProgress memberProgress, @NotNull Integer cycle,
-                           Map<String, String> plan, Map<String, String> retrospect) {
+            Map<String, String> plan, Map<String, String> retrospect) {
         super(memberProgress);
         this.cycle = cycle;
         this.plan = plan;
