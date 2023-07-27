@@ -41,27 +41,10 @@ public class RoomController {
     @PostMapping("/api/studies/{studyId}/members")
     public ResponseEntity<Void> participate(
             @PathVariable Long studyId,
-            @RequestBody ParticipateRequest request
-    ) {
-        Long memberId = roomService.participate(studyId, request.nickname());
-        return ResponseEntity.created(
-                URI.create("/api/studies/" + studyId + "/members/" + memberId)).build();
-    }
-
-    @PostMapping("/api/v2/studies/{studyId}/participate")
-    public ResponseEntity<Void> participateV2(
-            @PathVariable Long studyId,
             @Valid @RequestBody ParticipateRequest request
     ) {
+        roomService.participate(studyId, request.nickname());
         return ResponseEntity.created(
                 URI.create("/api/studies/" + studyId + "/members/")).build();
-    }
-
-    @PostMapping("/api/v2/studies/{studyId}/reparticipate")
-    public ResponseEntity<Void> reParticipateV2(
-            @PathVariable Long studyId,
-            @Valid @RequestBody ReParticipateRequest request
-    ) {
-        return ResponseEntity.ok(null);
     }
 }
