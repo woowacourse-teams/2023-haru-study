@@ -8,6 +8,7 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participantcode.dto.FindRoomAndNicknameResponse;
+import harustudy.backend.participantcode.dto.FindRoomResponse;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.domain.Room;
@@ -69,14 +70,11 @@ class ParticipantCodeServiceTest {
         entityManager.persist(room);
 
         // when
-        FindRoomAndNicknameResponse response = participantCodeService.findRoomByCode(
+        FindRoomResponse response = participantCodeService.findRoomByCode(
                 code.getCode());
 
         // then
-        assertAll(
-                () -> assertThat(response.studyName()).isEqualTo("room"),
-                () -> assertThat(response.nickname()).isNull()
-        );
+        assertThat(response.studyName()).isEqualTo("room");
     }
 
     @Test
