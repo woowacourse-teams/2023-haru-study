@@ -2,7 +2,10 @@ package harustudy.backend.participantcode.controller;
 
 import harustudy.backend.participantcode.dto.FindRoomAndNicknameRequest;
 import harustudy.backend.participantcode.dto.FindRoomAndNicknameResponse;
+import harustudy.backend.participantcode.dto.FindRoomRequest;
+import harustudy.backend.participantcode.dto.FindRoomResponse;
 import harustudy.backend.participantcode.service.ParticipantCodeService;
+import jakarta.validation.Valid;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +30,12 @@ public class ParticipantCodeController {
         return ResponseEntity.ok(
                 participantCodeService.findRoomByCodeWithMemberId(request.participantCode(),
                         request.memberId()));
+    }
+
+    @PostMapping("/api/v2/studies/authenticate")
+    public ResponseEntity<FindRoomResponse> checkAuthV2(
+            @Valid @RequestBody FindRoomRequest request
+    ) {
+        return ResponseEntity.ok(null);
     }
 }
