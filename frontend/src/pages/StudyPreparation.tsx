@@ -5,9 +5,10 @@ import { styled } from 'styled-components';
 import MemberRegister from '@Components/preparation/MemberRegister/MemberRegister';
 import MemberRestart from '@Components/preparation/MemberRestart/MemberRestart';
 import ParticipationCodeCopier from '@Components/preparation/ParticipationCodeCopier/ParticipationCodeCopier';
-import StudyInfoFormLayout from '@Components/templates/StudyInfoFormLayout';
 
 import { getCookie } from '@Utils/cookie';
+
+import StudyPreparationLayout from './layout/StudyPreparationLayout';
 
 type LocationState = {
   state: { participantCode: string; studyName: string; isHost: boolean };
@@ -50,7 +51,7 @@ const StudyPreparation = () => {
   }
 
   return (
-    <StudyInfoFormLayout headerText={`${studyName} 스터디`}>
+    <StudyPreparationLayout headerText={`${studyName} 스터디`}>
       <Layout>
         {isHost && <ParticipationCodeCopier participantCode={participantCode} />}
         {isExistMember ? (
@@ -59,7 +60,7 @@ const StudyPreparation = () => {
           <MemberRegister studyId={studyId} studyName={studyName} />
         )}
       </Layout>
-    </StudyInfoFormLayout>
+    </StudyPreparationLayout>
   );
 };
 

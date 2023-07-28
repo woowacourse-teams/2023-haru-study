@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { css, styled } from 'styled-components';
 
 import Header from '@Components/common/Header/Header';
@@ -9,7 +9,7 @@ type Props = {
   children: ReactNode;
 };
 
-const StudyInfoFormLayout = ({ headerText, children }: Props) => {
+const StudyPreparationLayout = ({ headerText, children }: Props) => {
   return (
     <>
       <Header />
@@ -28,9 +28,10 @@ const StudyInfoFormLayout = ({ headerText, children }: Props) => {
   );
 };
 
-export default StudyInfoFormLayout;
+export default StudyPreparationLayout;
 
 const Layout = styled.div`
   width: 520px;
   margin: 0 auto;
+  padding-bottom: 60px;
 `;

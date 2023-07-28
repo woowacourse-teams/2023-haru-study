@@ -26,7 +26,7 @@ const LANDING_CONTENTS_MENU_ITEMS = [
   },
 ];
 
-const Contents = () => {
+const LandingContents = () => {
   return (
     <ContentsContainer>
       <Menu
@@ -70,7 +70,7 @@ const Contents = () => {
   );
 };
 
-export default Contents;
+export default LandingContents;
 
 const ContentsContainer = styled.div`
   display: grid;

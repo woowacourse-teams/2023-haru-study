@@ -1,13 +1,13 @@
 import { styled } from 'styled-components';
 
-import Contents from '@Components/landing/Contents';
-import Hero from '@Components/landing/Hero';
+import Hero from '@Components/landing/Hero/Hero';
+import LandingContents from '@Components/landing/LandingContents/LandingContents';
 
 const Landing = () => {
   return (
     <LandingLayout>
       <Hero />
-      <Contents />
+      <LandingContents />
     </LandingLayout>
   );
 };

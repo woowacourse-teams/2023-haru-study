@@ -17,7 +17,7 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import { createStudy } from '@Apis/index';
 
-const StudyMakingForm = () => {
+const CreateStudyForm = () => {
   const navigate = useNavigate();
 
   const studyNameInput = useInput(true);
@@ -149,7 +149,7 @@ const StudyMakingForm = () => {
   );
 };
 
-export default StudyMakingForm;
+export default CreateStudyForm;
 
 const Layout = styled.div`
   display: flex;

@@ -3,8 +3,8 @@ import { styled } from 'styled-components';
 
 import useFetch from '@Hooks/useFetch';
 
-import MemberRecordList from './MemberRecordList';
-import StudyInformation from './StudyInformation';
+import MemberRecordList from '../MemberRecordList/MemberRecordList';
+import StudyInformation from '../StudyInformation/StudyInformation';
 
 type StudyMetadata = {
   members: { memberId: number; nickname: string }[];

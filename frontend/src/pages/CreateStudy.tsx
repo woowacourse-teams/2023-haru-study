@@ -1,11 +1,12 @@
-import StudyMakingForm from '@Components/studyMaking/StudyMakingForm';
-import StudyInfoFormLayout from '@Components/templates/StudyInfoFormLayout';
+import CreateStudyForm from '@Components/create/CreateStudyForm/CreateStudyForm';
+
+import StudyPreparationLayout from './layout/StudyPreparationLayout';
 
 const CreateStudy = () => {
   return (
-    <StudyInfoFormLayout headerText="스터디 개설하기">
-      <StudyMakingForm />
-    </StudyInfoFormLayout>
+    <StudyPreparationLayout headerText="스터디 개설하기">
+      <CreateStudyForm />
+    </StudyPreparationLayout>
   );
 };
 
