@@ -53,7 +53,14 @@ public class PomodoroProgress extends MemberProgress {
     }
 
     public void proceed() {
+        if (isRetrospect()) {
+            currentCycle++;
+        }
         pomodoroStatus = pomodoroStatus.getNext();
+    }
+
+    public boolean isRetrospect() {
+        return pomodoroStatus == PomodoroStatus.RETROSPECT;
     }
 
     public boolean isNotPlanning() {
