@@ -17,7 +17,7 @@ public class PomodoroRoom extends Room {
     private final static int MIN_TOTAL_CYCLE = 1;
     private final static int MAX_TOTAL_CYCLE = 8;
     private final static int MIN_TIME_PER_CYCLE = 20;
-    private final static int MAX_TIME_PER_CYCLE = 40;
+    private final static int MAX_TIME_PER_CYCLE = 60;
 
     @NotNull
     private Integer totalCycle;
