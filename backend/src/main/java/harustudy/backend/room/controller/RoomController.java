@@ -34,7 +34,7 @@ public class RoomController {
         CreatePomodoroRoomDto createPomodoroRoomDto = roomService.createRoom(request);
         return ResponseEntity.created(
                         URI.create("/api/studies/" + createPomodoroRoomDto.studyId()))
-                .body(CreatePomodoroRoomResponse.of(createPomodoroRoomDto));
+                .body(CreatePomodoroRoomResponse.from(createPomodoroRoomDto));
     }
 
     @PostMapping("/api/studies/{studyId}/members")

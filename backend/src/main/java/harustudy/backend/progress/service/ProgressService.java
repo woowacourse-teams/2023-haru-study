@@ -6,6 +6,7 @@ import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
+import harustudy.backend.progress.dto.PomodoroProgressResponse;
 import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
 import harustudy.backend.progress.exception.InvalidProgressException.UnavailableToProceed;
 import harustudy.backend.progress.repository.MemberProgressRepository;
@@ -60,5 +61,15 @@ public class ProgressService {
                 .orElseThrow(MemberNotFound::new);
         return memberProgressRepository.findByRoomAndMember(room, member)
                 .orElseThrow(PomodoroProgressNotFound::new);
+    }
+
+    public PomodoroProgressResponse findPomodoroProgress(Long roomId, Long memberId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(RoomNotFound::new);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFound::new);
+        PomodoroProgress pomodoroProgress = memberProgressRepository.findByRoomAndMember(room, member)
+                .orElseThrow(PomodoroProgressNotFound::new);
+        return PomodoroProgressResponse.from(pomodoroProgress);
     }
 }
