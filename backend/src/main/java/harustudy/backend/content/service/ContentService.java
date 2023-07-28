@@ -14,6 +14,7 @@ import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.exception.InvalidProgressException.UnavailableToProceed;
 import harustudy.backend.progress.exception.StudyProgressException;
 import harustudy.backend.progress.repository.MemberProgressRepository;
+import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.domain.Room;
 import harustudy.backend.room.repository.RoomRepository;
 import java.util.List;
@@ -85,8 +86,13 @@ public class ContentService {
         PomodoroContent recentRecord = findRecordWithSameCycle(pomodoroProgress);
         validateProgressIsRetrospect(pomodoroProgress);
         validateIsPlanFilled(recentRecord);
-        pomodoroProgress.proceed();
         recentRecord.changeRetrospect(retrospect);
+        int totalCycle = ((PomodoroRoom) pomodoroProgress.getRoom()).getTotalCycle();
+        if (pomodoroProgress.getCurrentCycle().equals(totalCycle)) {
+            pomodoroProgress.setDone();
+            return;
+        }
+        pomodoroProgress.proceed();
     }
 
     private PomodoroContent findRecordWithSameCycle(PomodoroProgress pomodoroProgress) {

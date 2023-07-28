@@ -57,4 +57,8 @@ public abstract class MemberProgress extends BaseTimeEntity {
     public boolean hasSameNicknameMember(Member member) {
         return getMember().hasSameNickname(member);
     }
+
+    public void setDone() {
+        this.isDone = true;
+    }
 }
