@@ -28,7 +28,7 @@ public class ParticipateRoomIntegrationTest extends IntegrationTest {
 
         // when
         MvcResult result = mockMvc.perform(
-                        post("/api/studies/{studyId}/members", room.getId())
+                        post("/api/studies/{studyId}/members", pomodoroRoom.getId())
                                 .content(jsonRequest)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -36,7 +36,7 @@ public class ParticipateRoomIntegrationTest extends IntegrationTest {
 
         // then
         String locationHeader = result.getResponse().getHeader("Location");
-        String expectedLocation = "/api/studies/" + room.getId() + "/members/";
+        String expectedLocation = "/api/studies/" + pomodoroRoom.getId() + "/members/";
 
         assertThat(locationHeader).isNotNull();
         assertThat(locationHeader).contains(expectedLocation);

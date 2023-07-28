@@ -1,4 +1,4 @@
-package harustudy.backend.progress.domain;
+package harustudy.backend.room.domain.progress;
 
 public enum PomodoroStatus {
 

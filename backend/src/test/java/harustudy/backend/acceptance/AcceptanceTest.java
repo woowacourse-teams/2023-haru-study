@@ -4,15 +4,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.repository.ContentRepository;
+import harustudy.backend.member.repository.MemberRepository;
+import harustudy.backend.room.domain.content.PomodoroContent;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
-import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.progress.domain.PomodoroStatus;
+import harustudy.backend.room.domain.progress.PomodoroProgress;
+import harustudy.backend.room.domain.progress.PomodoroStatus;
 import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.domain.Room;
+import harustudy.backend.room.dto.content.MemberContentResponses;
+import harustudy.backend.room.repository.PomodoroRoomRepository;
+import harustudy.backend.room.service.ContentService;
+import harustudy.backend.room.service.PomodoroRoomService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
@@ -43,12 +46,19 @@ public class AcceptanceTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private ContentRepository<PomodoroContent> contentRepository;
-    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    private PomodoroRoomRepository pomodoroRoomRepository;
+
+    @Autowired
+    private ContentService contentService;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @BeforeEach
     void setUp() {
@@ -58,24 +68,38 @@ public class AcceptanceTest {
     @Test
     void 스터디를_진행한다() throws Exception {
         Long 스터디_아이디 = 스터디를_개설한다();
-        Long 멤버_아이디 = 스터디에_참여한다(스터디_아이디);
-        스터디_계획을_작성한다(스터디_아이디, 멤버_아이디);
-        스터디_상태를_진행에서_회고로_넘긴다(스터디_아이디, 멤버_아이디);
-        스터디_회고를_작성한다(스터디_아이디, 멤버_아이디);
+        entityManager.flush();
+        entityManager.clear();
+        Long 멤버1_아이디 = 스터디에_참여한다(스터디_아이디, "1번멤버");
+        Long 멤버2_아이디 = 스터디에_참여한다(스터디_아이디, "2번멤버");
+        Long 멤버3_아이디 = 스터디에_참여한다(스터디_아이디, "3번멤버");
+        entityManager.flush();
+        entityManager.clear();
+        스터디_계획을_작성한다(스터디_아이디, 멤버1_아이디);
+        entityManager.flush();
+        entityManager.clear();
+        스터디_상태를_진행에서_회고로_넘긴다(스터디_아이디, 멤버1_아이디);
+        entityManager.flush();
+        entityManager.clear();
+        System.out.println("content 컨텐트 조회 쿼리 시작");
+        MemberContentResponses content = contentService.findMemberContent(스터디_아이디, 멤버3_아이디);
+        System.out.println("content 컨텐트 조회 쿼리 종료");
+        System.out.println("pomodoroContent = " + content.content());
+        스터디_회고를_작성한다(스터디_아이디, 멤버1_아이디);
     }
 
     private Long 스터디를_개설한다() {
         ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
         entityManager.persist(participantCode);
-        Room room = new PomodoroRoom("studyName", 1, 20, participantCode);
+        PomodoroRoom room = new PomodoroRoom("studyName", 3, 20, participantCode);
         entityManager.persist(room);
         return room.getId();
     }
 
-    private Long 스터디에_참여한다(Long studyId) {
+    private Long 스터디에_참여한다(Long roomId, String nickname) {
         // TODO: 스터디 참여 기능 생성되면 대체
-        PomodoroRoom pomodoroRoom = entityManager.find(PomodoroRoom.class, studyId);
-        Member member = new Member("nickname");
+        PomodoroRoom pomodoroRoom = entityManager.find(PomodoroRoom.class, roomId);
+        Member member = new Member(nickname);
         PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, 1,
                 PomodoroStatus.PLANNING);
         PomodoroContent pomodoroRecord = new PomodoroContent(pomodoroProgress, 1, Map.of(), Map.of());
@@ -112,12 +136,16 @@ public class AcceptanceTest {
                         .content(jsonRequest))
                 .andExpect(status().isCreated());
 
-        List<PomodoroContent> pomodoroRecords = contentRepository.findAll();
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(studyId).get();
+        Member member = memberRepository.findById(memberId).get();
+        PomodoroProgress pomodoroProgress = pomodoroRoom.findProgressByMember(member).get();
+
+        List<PomodoroContent> pomodoroContents = pomodoroProgress.getPomodoroContents();
         SoftAssertions.assertSoftly(softly -> {
-                    softly.assertThat(pomodoroRecords.size()).isOne();
-                    softly.assertThat(pomodoroRecords.get(0).getPlan())
+                    softly.assertThat(pomodoroContents.size()).isOne();
+                    softly.assertThat(pomodoroContents.get(0).getPlan())
                             .containsAllEntriesOf(Map.of("plan", "test"));
-                    softly.assertThat(pomodoroRecords.get(0).getRetrospect())
+                    softly.assertThat(pomodoroContents.get(0).getRetrospect())
                             .containsAllEntriesOf(Map.of("retrospect", "test"));
                 }
         );

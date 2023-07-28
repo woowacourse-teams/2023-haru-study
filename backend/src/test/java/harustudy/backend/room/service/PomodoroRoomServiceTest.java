@@ -8,9 +8,8 @@ import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.domain.Room;
 import harustudy.backend.room.exception.DuplicatedNicknameException;
-import harustudy.backend.room.repository.RoomRepository;
+import harustudy.backend.room.repository.PomodoroRoomRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,29 +24,29 @@ import org.springframework.transaction.annotation.Transactional;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SpringBootTest
 @Transactional
-class RoomServiceTest {
+class PomodoroRoomServiceTest {
 
     @PersistenceContext
     private EntityManager entityManager;
     @Autowired
-    private RoomService roomService;
+    private PomodoroRoomService pomodoroRoomService;
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
-    private RoomRepository roomRepository;
+    private PomodoroRoomRepository pomodoroRoomRepository;
 
     private ParticipantCode participantCode;
-    private Room room;
+    private PomodoroRoom pomodoroRoom;
     private Member member;
 
     @BeforeEach
     void setUp() {
         participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        room = new PomodoroRoom("room", 3, 20, participantCode);
+        pomodoroRoom = new PomodoroRoom("room", 3, 20, participantCode);
         member = new Member("name");
 
         entityManager.persist(participantCode);
-        entityManager.persist(room);
+        entityManager.persist(pomodoroRoom);
         entityManager.persist(member);
 
         entityManager.flush();
@@ -57,7 +56,7 @@ class RoomServiceTest {
     @Test
     void 닉네임을_받아_신규_멤버를_생성하고_스터디에_등록한다() {
         // when
-        Long participatedMemberId = roomService.participate(room.getId(),
+        Long participatedMemberId = pomodoroRoomService.participate(pomodoroRoom.getId(),
                 member.getNickname());
 
         entityManager.flush();
@@ -65,7 +64,7 @@ class RoomServiceTest {
 
         // then
         Member member = memberRepository.findById(participatedMemberId).get();
-        Room foundRoom = roomRepository.findById(room.getId()).get();
+        PomodoroRoom foundRoom = pomodoroRoomRepository.findById(pomodoroRoom.getId()).get();
 
         assertThat(foundRoom.isParticipatedMember(member)).isTrue();
     }
@@ -73,13 +72,13 @@ class RoomServiceTest {
     @Test
     void 한_스터디_내에서_닉네임이_중복되면_예외를_던진다() {
         // given
-        roomService.participate(room.getId(), member.getNickname());
+        pomodoroRoomService.participate(pomodoroRoom.getId(), member.getNickname());
 
         entityManager.flush();
         entityManager.clear();
 
         // when
-        assertThatThrownBy(() -> roomService.participate(room.getId(), member.getNickname()))
+        assertThatThrownBy(() -> pomodoroRoomService.participate(pomodoroRoom.getId(), member.getNickname()))
                 .isInstanceOf(DuplicatedNicknameException.class);
     }
 }

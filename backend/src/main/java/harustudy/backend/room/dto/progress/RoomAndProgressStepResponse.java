@@ -1,13 +1,13 @@
-package harustudy.backend.progress.dto;
+package harustudy.backend.room.dto.progress;
 
-import harustudy.backend.progress.domain.PomodoroStatus;
+import harustudy.backend.room.domain.progress.PomodoroStatus;
 
 public record RoomAndProgressStepResponse(String studyName, Integer totalCycle,
                                           Integer currentCycle,
                                           Integer timePerCycle, String step) {
 
     public RoomAndProgressStepResponse(String studyName, Integer totalCycle, Integer currentCycle,
-            Integer timePerCycle, PomodoroStatus step) {
+                                       Integer timePerCycle, PomodoroStatus step) {
         this(studyName, totalCycle, currentCycle, timePerCycle, step.name().toLowerCase());
     }
 }

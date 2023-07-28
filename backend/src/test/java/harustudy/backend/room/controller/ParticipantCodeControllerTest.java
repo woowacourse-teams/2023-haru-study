@@ -7,10 +7,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import harustudy.backend.participantcode.service.ParticipantCodeService;
-import harustudy.backend.progress.service.ProgressService;
+import harustudy.backend.room.service.ProgressService;
 import harustudy.backend.room.dto.CreatePomodoroRoomDto;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
-import harustudy.backend.room.service.RoomService;
+import harustudy.backend.room.service.PomodoroRoomService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,7 +31,7 @@ class ParticipantCodeControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private RoomService roomService;
+    private PomodoroRoomService pomodoroRoomService;
     @MockBean
     private ProgressService progressService;
     @MockBean
@@ -46,7 +46,7 @@ class ParticipantCodeControllerTest {
         CreatePomodoroRoomRequest request = new CreatePomodoroRoomRequest(name, 1, 20);
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        given(roomService.createRoom(any(CreatePomodoroRoomRequest.class)))
+        given(pomodoroRoomService.createRoom(any(CreatePomodoroRoomRequest.class)))
                 .willReturn(new CreatePomodoroRoomDto(1L, "123456"));
         // when, then
         mockMvc.perform(
@@ -63,7 +63,7 @@ class ParticipantCodeControllerTest {
         CreatePomodoroRoomRequest request = new CreatePomodoroRoomRequest("123", totalCycle, 20);
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        given(roomService.createRoom(any(CreatePomodoroRoomRequest.class)))
+        given(pomodoroRoomService.createRoom(any(CreatePomodoroRoomRequest.class)))
                 .willReturn(new CreatePomodoroRoomDto(1L, "123456"));
         // when, then
         mockMvc.perform(
@@ -81,7 +81,7 @@ class ParticipantCodeControllerTest {
                 timePerCycle);
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        given(roomService.createRoom(any(CreatePomodoroRoomRequest.class)))
+        given(pomodoroRoomService.createRoom(any(CreatePomodoroRoomRequest.class)))
                 .willReturn(new CreatePomodoroRoomDto(1L, "123456"));
         // when, then
         mockMvc.perform(

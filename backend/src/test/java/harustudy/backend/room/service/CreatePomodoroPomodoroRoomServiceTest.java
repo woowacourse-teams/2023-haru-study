@@ -11,8 +11,10 @@ import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.dto.CreatePomodoroRoomDto;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
-import harustudy.backend.room.repository.RoomRepository;
+
 import java.util.Optional;
+
+import harustudy.backend.room.repository.PomodoroRoomRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -24,16 +26,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @ExtendWith(MockitoExtension.class)
-class CreatePomodoroRoomServiceTest {
+class CreatePomodoroPomodoroRoomServiceTest {
 
     @Mock
-    private RoomRepository roomRepository;
+    private PomodoroRoomRepository pomodoroRoomRepository;
     @Mock
     private ParticipantCodeRepository participantCodeRepository;
     @Mock
     private GenerationStrategy generationStrategy;
     @InjectMocks
-    private RoomService roomService;
+    private PomodoroRoomService pomodoroRoomService;
 
     @Test
     void 스터디_개설시_참여코드가_생성된다() {
@@ -44,12 +46,12 @@ class CreatePomodoroRoomServiceTest {
 
         String code = "ABCDEF";
 
-        given(roomRepository.save(any(PomodoroRoom.class))).willReturn(pomodoroRoom);
+        given(pomodoroRoomRepository.save(any(PomodoroRoom.class))).willReturn(pomodoroRoom);
         given(participantCodeRepository.findByCode(anyString())).willReturn(Optional.empty());
         given(generationStrategy.generate()).willReturn(code);
 
         // when
-        CreatePomodoroRoomDto response = roomService.createRoom(request);
+        CreatePomodoroRoomDto response = pomodoroRoomService.createRoom(request);
 
         // then
         assertThat(response.participantCode()).isEqualTo(code);
@@ -66,7 +68,7 @@ class CreatePomodoroRoomServiceTest {
         String originalCode = "ABCDEF";
         String regeneratedCode = "BCDEFG";
 
-        given(roomRepository.save(any(PomodoroRoom.class))).willReturn(pomodoroRoom);
+        given(pomodoroRoomRepository.save(any(PomodoroRoom.class))).willReturn(pomodoroRoom);
         given(participantCodeRepository.findByCode(anyString()))
                 .willReturn(Optional.of(participantCode))
                 .willReturn(Optional.empty());
@@ -74,7 +76,7 @@ class CreatePomodoroRoomServiceTest {
                 .willReturn(originalCode, regeneratedCode);
 
         // when
-        CreatePomodoroRoomDto response = roomService.createRoom(request);
+        CreatePomodoroRoomDto response = pomodoroRoomService.createRoom(request);
 
         // then
         assertThat(response.participantCode()).isNotEqualTo(originalCode);

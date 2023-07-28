@@ -1,4 +1,4 @@
-package harustudy.backend.progress.exception;
+package harustudy.backend.room.exception.progress;
 
 public class InvalidProgressException extends RuntimeException {
 

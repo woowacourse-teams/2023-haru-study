@@ -1,7 +1,7 @@
-package harustudy.backend.progress.controller;
+package harustudy.backend.room.controller;
 
-import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
-import harustudy.backend.progress.service.ProgressService;
+import harustudy.backend.room.dto.progress.RoomAndProgressStepResponse;
+import harustudy.backend.room.service.ProgressService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class ProgressController {
 
     @PostMapping("api/studies/{studyId}/members/{memberId}/next-step")
     public ResponseEntity<Void> proceed(@PathVariable("studyId") @NotNull Long studyId,
-            @PathVariable("memberId") @NotNull Long memberId) {
+                                        @PathVariable("memberId") @NotNull Long memberId) {
         progressService.proceedToRetrospect(studyId, memberId);
         return ResponseEntity.ok().build();
     }

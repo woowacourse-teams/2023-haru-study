@@ -9,9 +9,8 @@ import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participantcode.dto.FindRoomAndNicknameResponse;
 import harustudy.backend.participantcode.dto.FindRoomResponse;
-import harustudy.backend.progress.domain.PomodoroProgress;
+import harustudy.backend.room.domain.progress.PomodoroProgress;
 import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.domain.Room;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -38,13 +37,13 @@ class ParticipantCodeServiceTest {
         ParticipantCode code = new ParticipantCode(new CodeGenerationStrategy());
         entityManager.persist(code);
 
-        Room room = new PomodoroRoom("room", 3, 20, code);
-        entityManager.persist(room);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("room", 3, 20, code);
+        entityManager.persist(pomodoroRoom);
 
         Member member = new Member("nickname");
         entityManager.persist(member);
 
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(room, member);
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member);
         entityManager.persist(pomodoroProgress);
 
         entityManager.flush();
@@ -66,7 +65,7 @@ class ParticipantCodeServiceTest {
         ParticipantCode code = new ParticipantCode(new CodeGenerationStrategy());
         entityManager.persist(code);
 
-        Room room = new PomodoroRoom("room", 3, 20, code);
+        PomodoroRoom room = new PomodoroRoom("room", 3, 20, code);
         entityManager.persist(room);
 
         // when
@@ -91,7 +90,7 @@ class ParticipantCodeServiceTest {
         ParticipantCode code = new ParticipantCode(new CodeGenerationStrategy());
         entityManager.persist(code);
 
-        Room room = new PomodoroRoom("room", 3, 20, code);
+        PomodoroRoom room = new PomodoroRoom("room", 3, 20, code);
         entityManager.persist(room);
 
         // when & then

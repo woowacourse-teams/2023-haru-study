@@ -42,8 +42,8 @@ public class AuthenticateIntegrationTest extends IntegrationTest {
                 FindRoomResponse.class);
 
         assertAll(
-                () -> assertThat(response.studyId()).isEqualTo(room.getId()),
-                () -> assertThat(response.studyName()).isEqualTo(room.getName())
+                () -> assertThat(response.studyId()).isEqualTo(pomodoroRoom.getId()),
+                () -> assertThat(response.studyName()).isEqualTo(pomodoroRoom.getName())
         );
     }
 }

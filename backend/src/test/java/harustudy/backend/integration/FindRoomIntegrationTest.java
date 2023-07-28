@@ -8,9 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.content.dto.MemberContentResponse;
-import harustudy.backend.content.dto.MemberContentResponses;
-import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
+import harustudy.backend.room.dto.content.MemberContentResponse;
+import harustudy.backend.room.dto.content.MemberContentResponses;
+import harustudy.backend.room.dto.progress.RoomAndProgressStepResponse;
 import harustudy.backend.room.dto.MemberDto;
 import harustudy.backend.room.dto.RoomAndMembersResponse;
 import java.nio.charset.StandardCharsets;
@@ -35,7 +35,7 @@ public class FindRoomIntegrationTest extends IntegrationTest {
     void 스터디에_속하는_특정_멤버에_대한_정보를_조회한다() throws Exception {
         // given & when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/{studyId}/members/{memberId}/metadata", room.getId(),
+                        get("/api/studies/{studyId}/members/{memberId}/metadata", pomodoroRoom.getId(),
                                 member.getId())
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -53,7 +53,7 @@ public class FindRoomIntegrationTest extends IntegrationTest {
     void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회한다() throws Exception {
         // given, when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/{studyId}/members/{memberId}/content", room.getId(),
+                        get("/api/studies/{studyId}/members/{memberId}/content", pomodoroRoom.getId(),
                                 member.getId())
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -75,7 +75,7 @@ public class FindRoomIntegrationTest extends IntegrationTest {
     void 스터디_메타데이터_및_참여한_모든_스터디원에_대한_정보를_조회한다() throws Exception {
         // given & when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/{studyId}/metadata", room.getId())
+                        get("/api/studies/{studyId}/metadata", pomodoroRoom.getId())
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -99,7 +99,7 @@ public class FindRoomIntegrationTest extends IntegrationTest {
     void 특정_멤버의_현재_사이클의_계획을_조회한다() throws Exception {
         // given & when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/{studyId}/members/{memberId}/content/plans?cycle=1", room.getId(),
+                        get("/api/studies/{studyId}/members/{memberId}/content/plans?cycle=1", pomodoroRoom.getId(),
                                 member.getId())
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

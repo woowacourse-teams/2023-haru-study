@@ -1,7 +1,6 @@
-package harustudy.backend.content.dto;
+package harustudy.backend.room.dto.content;
 
 import java.util.List;
 
 public record MemberContentResponses(List<MemberContentResponse> content) {
-
 }
