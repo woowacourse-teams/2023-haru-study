@@ -6,7 +6,7 @@ import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
-import useInput from '@Hooks/useInput';
+import useInput from '@Hooks/common/useInput';
 
 import { ROUTES_PATH } from '@Constants/routes';
 

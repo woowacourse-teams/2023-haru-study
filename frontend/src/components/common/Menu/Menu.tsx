@@ -2,8 +2,8 @@ import { Children, PropsWithChildren, ReactElement, cloneElement } from 'react';
 import { css, styled } from 'styled-components';
 import type { CSSProp } from 'styled-components';
 
-import useDisplay from '@Hooks/useDisplay';
-import useOutsideClick from '@Hooks/useOutsideClick';
+import useDisplay from '@Hooks/common/useDisplay';
+import useOutsideClick from '@Hooks/common/useOutsideClick';
 
 import color from '@Styles/color';
 

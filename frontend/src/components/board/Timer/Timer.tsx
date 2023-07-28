@@ -5,7 +5,7 @@ import Typography from '@Components/common/Typography/Typography';
 
 import type { Step } from '@Types/study';
 
-import useTimer from '@Hooks/useTimer';
+import useTimer from '@Hooks/board/useTimer';
 
 import color from '@Styles/color';
 

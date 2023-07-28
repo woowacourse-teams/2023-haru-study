@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import useQuestionTextarea from '@Hooks/useQuestionTextarea';
+import useQuestionTextarea from '@Hooks/common/useQuestionTextarea';
 
 const usePlanningForm = (studyId: string, memberId: string) => {
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);

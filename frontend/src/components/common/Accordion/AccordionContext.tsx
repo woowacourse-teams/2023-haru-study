@@ -1,6 +1,6 @@
 import { PropsWithChildren, createContext, useContext, useMemo } from 'react';
 
-import useDisplay from '@Hooks/useDisplay';
+import useDisplay from '@Hooks/common/useDisplay';
 
 const AccordionContext = createContext({
   isShow: false,

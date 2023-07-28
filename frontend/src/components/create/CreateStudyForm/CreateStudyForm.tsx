@@ -7,8 +7,8 @@ import Input from '@Components/common/Input/Input';
 import Select from '@Components/common/Select/Select';
 import Typography from '@Components/common/Typography/Typography';
 
-import useInput from '@Hooks/useInput';
-import useSelect from '@Hooks/useSelect';
+import useInput from '@Hooks/common/useInput';
+import useSelect from '@Hooks/common/useSelect';
 
 import color from '@Styles/color';
 

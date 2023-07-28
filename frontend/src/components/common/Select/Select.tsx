@@ -1,7 +1,7 @@
 import { ReactNode, useCallback, useState } from 'react';
 import { CSSProp, css, styled } from 'styled-components';
 
-import useOutsideClick from '@Hooks/useOutsideClick';
+import useOutsideClick from '@Hooks/common/useOutsideClick';
 
 import SelectContext from './SelectContext';
 import SelectItem from './SelectItem';
