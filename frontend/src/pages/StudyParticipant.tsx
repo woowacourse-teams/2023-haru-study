@@ -1,7 +1,7 @@
 import ParticipationCodeInput from '@Components/preparation/ParticipationCodeInput/ParticipationCodeInput';
 import StudyInfoFormLayout from '@Components/templates/StudyInfoFormLayout';
 
-const StudyParticipant = () => {
+const StudyParticipation = () => {
   return (
     <StudyInfoFormLayout headerText={`스터디 참여하기`}>
       <ParticipationCodeInput />
@@ -9,4 +9,4 @@ const StudyParticipant = () => {
   );
 };
 
-export default StudyParticipant;
+export default StudyParticipation;
