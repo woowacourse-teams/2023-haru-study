@@ -2,10 +2,10 @@ import { useState, useCallback } from 'react';
 
 type CopyFunction = (text: string) => Promise<void>;
 
-const useCopyClipBoard = () => {
+const useClipBoard = () => {
   const [isCopy, setIsCopy] = useState<boolean>(false);
 
-  const onCopy: CopyFunction = useCallback(
+  const copy: CopyFunction = useCallback(
     async (text: string) => {
       try {
         await navigator.clipboard.writeText(text);
@@ -18,7 +18,7 @@ const useCopyClipBoard = () => {
     [setIsCopy],
   );
 
-  return { isCopy, onCopy };
+  return { isCopy, copy };
 };
 
-export default useCopyClipBoard;
+export default useClipBoard;

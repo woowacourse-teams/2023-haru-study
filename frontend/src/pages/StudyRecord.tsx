@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 import Header from '@Components/common/Header/Header';
-import RecordContents from '@Components/record/RecordContents';
+import RecordContents from '@Components/record/RecordContents/RecordContents';
 
 import color from '@Styles/color';
 

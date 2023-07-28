@@ -1,4 +1,5 @@
-import { MouseEventHandler, useCallback, useState } from 'react';
+import type { MouseEventHandler } from 'react';
+import { useCallback, useState } from 'react';
 
 const useSelect = () => {
   const [state, setState] = useState<string | null>(null);

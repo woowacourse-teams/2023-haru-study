@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-import useFetch from '@Hooks/useFetch';
+import useFetch from '@Hooks/api/useFetch';
 
-import MemberRecordList from './MemberRecordList';
-import StudyInformation from './StudyInformation';
+import MemberRecordList from '../MemberRecordList/MemberRecordList';
+import StudyInformation from '../StudyInformation/StudyInformation';
 
 type StudyMetadata = {
   members: { memberId: number; nickname: string }[];

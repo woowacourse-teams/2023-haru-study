@@ -3,7 +3,7 @@ import { css, styled } from 'styled-components';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
-import useCopyClipBoard from '@Hooks/useCopyClipBoard';
+import useClipBoard from '@Hooks/common/useClipBoard';
 
 import color from '@Styles/color';
 
@@ -14,10 +14,10 @@ type Props = {
 };
 
 const ParticipationCodeCopier = ({ participantCode }: Props) => {
-  const { onCopy } = useCopyClipBoard();
+  const { copy } = useClipBoard();
 
   const handleOnClickClipBoardButton = async () => {
-    await onCopy(participantCode);
+    await copy(participantCode);
     alert('클립보드에 복사되었습니다.');
   };
 

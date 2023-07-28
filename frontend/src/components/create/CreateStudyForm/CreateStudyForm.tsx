@@ -7,8 +7,8 @@ import Input from '@Components/common/Input/Input';
 import Select from '@Components/common/Select/Select';
 import Typography from '@Components/common/Typography/Typography';
 
-import useInput from '@Hooks/useInput';
-import useSelect from '@Hooks/useSelect';
+import useInput from '@Hooks/common/useInput';
+import useSelect from '@Hooks/common/useSelect';
 
 import color from '@Styles/color';
 
@@ -17,7 +17,7 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import { createStudy } from '@Apis/index';
 
-const StudyMakingForm = () => {
+const CreateStudyForm = () => {
   const navigate = useNavigate();
 
   const studyNameInput = useInput(true);
@@ -149,7 +149,7 @@ const StudyMakingForm = () => {
   );
 };
 
-export default StudyMakingForm;
+export default CreateStudyForm;
 
 const Layout = styled.div`
   display: flex;

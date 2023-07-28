@@ -1,4 +1,5 @@
-import { ChangeEventHandler, useCallback, useState } from 'react';
+import type { ChangeEventHandler } from 'react';
+import { useCallback, useState } from 'react';
 
 const useInput = (validateOption: boolean) => {
   const [state, setInputState] = useState<string | null>(null);

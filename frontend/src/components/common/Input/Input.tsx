@@ -14,7 +14,7 @@ import type { CSSProp, RuleSet } from 'styled-components';
 
 import { Size } from '@Types/style';
 
-import useId from '@Hooks/useId';
+import useId from '@Hooks/common/useId';
 
 import color from '@Styles/color';
 

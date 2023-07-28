@@ -22,7 +22,7 @@ const Hero = () => {
       </SloganContainer>
       <ShowcaseImageContainer>
         <ImageBox>
-          <img src={HeroImage} alt="랜딩 히로 이미지" />
+          <img src={HeroImage} alt="" />
           <Typography variant="p2">작가 jcomp 출처 Freepik</Typography>
         </ImageBox>
       </ShowcaseImageContainer>

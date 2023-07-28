@@ -4,14 +4,14 @@ import Tabs from '@Components/common/Tabs/Tabs';
 import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
-import useFetch from '@Hooks/useFetch';
+import useFetch from '@Hooks/api/useFetch';
 
 import color from '@Styles/color';
 
 import GoalIcon from '@Assets/icons/GoalIcon';
 import PencilIcon from '@Assets/icons/PencilIcon';
 
-import AnswerQuestion from './AnswerQuestion';
+import AnswerQuestion from '../AnswerQuestion/AnswerQuestion';
 
 const PLAN_QUESTION = [
   { key: 'toDo', question: '학습 목표' },

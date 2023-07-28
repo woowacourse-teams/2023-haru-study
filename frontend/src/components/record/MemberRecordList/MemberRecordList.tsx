@@ -2,7 +2,7 @@ import Accordion from '@Components/common/Accordion/Accordion';
 import AccordionSkeleton from '@Components/common/Accordion/AccordionSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
-import MemberRecord from './MemberRecord';
+import MemberRecord from '../MemberRecord/MemberRecord';
 
 type Props = {
   members?: { memberId: number; nickname: string }[];

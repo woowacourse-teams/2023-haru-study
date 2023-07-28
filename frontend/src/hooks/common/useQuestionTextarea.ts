@@ -1,4 +1,5 @@
-import { ChangeEventHandler, useState } from 'react';
+import type { ChangeEventHandler } from 'react';
+import { useState } from 'react';
 
 type Parameters = {
   minLength?: number;

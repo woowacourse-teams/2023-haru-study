@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 
-import Hero from '@Components/landing/Hero';
+import Hero from '@Components/landing/Hero/Hero';
 
 test('test', async () => {
   render(<Hero />);
