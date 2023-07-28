@@ -9,6 +9,7 @@ import Typography from '@Components/common/Typography/Typography';
 import useInput from '@Hooks/useInput';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
+import { ROUTES_PATH } from '@Constants/routes';
 
 import { setCookie } from '@Utils/cookie';
 
@@ -53,7 +54,7 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
 
       setIsLoading(false);
 
-      navigate(`/studyboard/${studyId}`);
+      navigate(`${ROUTES_PATH.board}/${studyId}`);
     } catch (error) {
       console.error(error);
       if (!(error instanceof Error)) return;

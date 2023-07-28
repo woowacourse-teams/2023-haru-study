@@ -8,6 +8,8 @@ import Typography from '@Components/common/Typography/Typography';
 
 import useInput from '@Hooks/useInput';
 
+import { ROUTES_PATH } from '@Constants/routes';
+
 type StudyInfo = {
   studyId: string;
   studyName: string;
@@ -37,7 +39,7 @@ const ParticipationCodeInput = () => {
 
       setIsLoading(false);
 
-      navigate(`/study-preparation/${studyId}`, {
+      navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
         state: { participantCode: participantCodeInput.state, studyName, isHost: false },
       });
     } catch (error) {

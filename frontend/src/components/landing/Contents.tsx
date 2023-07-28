@@ -7,6 +7,8 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
+import { ROUTES_PATH } from '@Constants/routes';
+
 const LANDING_CONTENTS_MENU_ITEMS = [
   {
     key: 0,
@@ -57,10 +59,10 @@ const Contents = () => {
         </Typography>
       </TopicSummaryContainer>
       <ButtonContainer>
-        <Link to="study-making">
+        <Link to={ROUTES_PATH.create}>
           <Button variant="primary">스터디 개설하기</Button>
         </Link>
-        <Link to="study-participating">
+        <Link to={ROUTES_PATH.participation}>
           <Button variant="outlined">스터디 참여하기</Button>
         </Link>
       </ButtonContainer>
