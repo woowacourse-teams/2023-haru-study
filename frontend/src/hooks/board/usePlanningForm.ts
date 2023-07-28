@@ -54,7 +54,7 @@ const usePlanningForm = (studyId: string, memberId: string) => {
     setIsSubmitLoading(false);
 
     if (!response.ok) {
-      throw new Error('제출 과정에 에러가 발생했습니다. 다시 시도 해주세요.');
+      throw new Error('제출 과정에 에러가 발생했습니다. 다시 시도해주세요.');
     }
   };
 
