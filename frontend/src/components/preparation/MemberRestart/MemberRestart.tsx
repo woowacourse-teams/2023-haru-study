@@ -5,6 +5,8 @@ import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
+import { ROUTES_PATH } from '@Constants/routes';
+
 type Props = {
   studyName: string;
   nickname: string | null;
@@ -16,7 +18,7 @@ const MemberRestart = ({ studyName, nickname, studyId, restart }: Props) => {
   const navigate = useNavigate();
 
   const handleOnClickContinueStart = async () => {
-    navigate(`/studyboard/${studyId}`);
+    navigate(`${ROUTES_PATH.board}/${studyId}`);
   };
 
   return (

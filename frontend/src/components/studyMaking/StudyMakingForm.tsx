@@ -13,6 +13,7 @@ import useSelect from '@Hooks/useSelect';
 import color from '@Styles/color';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
+import { ROUTES_PATH } from '@Constants/routes';
 
 import { createStudy } from '@Apis/index';
 
@@ -46,7 +47,7 @@ const StudyMakingForm = () => {
 
       setIsLoading(false);
 
-      navigate(`/study-preparation/${studyId}`, {
+      navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
         state: { participantCode: result.participantCode, studyName: studyNameInput.state, isHost: true },
       });
     } catch (error) {

@@ -6,6 +6,8 @@ import QuestionTextarea from '@Components/common/QuestionTextarea/QuestionTextar
 
 import useRetrospectForm from '@Hooks/board/useRetrospectForm';
 
+import { ROUTES_PATH } from '@Constants/routes';
+
 type Props = {
   isLastCycle: boolean;
   onClickSubmitButton: () => void;
@@ -22,7 +24,7 @@ const RetrospectForm = ({ isLastCycle, onClickSubmitButton, studyId, memberId }:
       await submitForm();
 
       if (isLastCycle) {
-        navigate(`/study-record/${studyId}`);
+        navigate(`${ROUTES_PATH.record}/${studyId}`);
         return;
       }
       onClickSubmitButton();

@@ -3,12 +3,14 @@ import { css, styled } from 'styled-components';
 
 import color from '@Styles/color';
 
+import { ROUTES_PATH } from '@Constants/routes';
+
 import Typography from '../Typography/Typography';
 
 const Header = () => {
   return (
     <Layout>
-      <Link to="/">
+      <Link to={ROUTES_PATH.landing}>
         <Typography
           variant="h1"
           $style={css`

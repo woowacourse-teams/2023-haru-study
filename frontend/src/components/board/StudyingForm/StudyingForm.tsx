@@ -11,6 +11,8 @@ import useStudyingForm from '@Hooks/board/useStudyingForm';
 
 import color from '@Styles/color';
 
+import { ROUTES_PATH } from '@Constants/routes';
+
 const questions: PlanList = {
   toDo: '학습목표',
   completionCondition: '완료 조건',
@@ -43,7 +45,7 @@ const StudyingForm = ({ onClickSubmitButton, studyId, memberId, cycle }: Props) 
   if (error) {
     alert(error.message);
     if (confirm('메인 페이지로 돌아기시겠습니까?')) {
-      navigate('/');
+      navigate(ROUTES_PATH.landing);
     }
   }
 

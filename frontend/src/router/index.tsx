@@ -1,17 +1,19 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import CreateStudy from '@Pages/CreateStudy';
 import Landing from '@Pages/Landing';
 import StudyBoard from '@Pages/StudyBoard';
-import StudyMaking from '@Pages/StudyMaking';
-import StudyParticipant from '@Pages/StudyParticipant';
+import StudyParticipation from '@Pages/StudyParticipant';
 import StudyPreparation from '@Pages/StudyPreparation';
 import StudyRecord from '@Pages/StudyRecord';
+
+import { ROUTES_PATH } from '@Constants/routes';
 
 import App from '../App';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: ROUTES_PATH.landing,
     element: <App />,
     children: [
       {
@@ -19,24 +21,24 @@ const router = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: 'studyboard/:studyId',
+        path: `${ROUTES_PATH.board}/:studyId`,
         element: <StudyBoard />,
       },
       {
-        path: 'study-record/:studyId',
+        path: `${ROUTES_PATH.record}/:studyId`,
         element: <StudyRecord />,
       },
       {
-        path: 'study-making',
-        element: <StudyMaking />,
+        path: ROUTES_PATH.create,
+        element: <CreateStudy />,
       },
       {
-        path: 'study-preparation/:studyId',
+        path: `${ROUTES_PATH.preparation}/:studyId`,
         element: <StudyPreparation />,
       },
       {
-        path: 'study-participating',
-        element: <StudyParticipant />,
+        path: ROUTES_PATH.participation,
+        element: <StudyParticipation />,
       },
     ],
   },

@@ -9,13 +9,15 @@ import useStudyBoard from '@Hooks/board/useStudyBoard';
 
 import color from '@Styles/color';
 
+import { ROUTES_PATH } from '@Constants/routes';
+
 const StudyBoard = () => {
   const navigate = useNavigate();
   const { studyData, error, changeNextStep } = useStudyBoard();
 
   if (error) {
     alert(error.message);
-    navigate('/');
+    navigate(ROUTES_PATH.landing);
   }
 
   if (studyData === null) {
