@@ -1,4 +1,5 @@
-import { Children, PropsWithChildren, ReactElement } from 'react';
+import type { PropsWithChildren, ReactElement } from 'react';
+import { Children } from 'react';
 import { css, styled } from 'styled-components';
 
 import { useAccordion } from '@Components/common/Accordion/AccordionContext';

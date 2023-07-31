@@ -1,5 +1,7 @@
-import { ReactNode, useCallback, useState } from 'react';
-import { CSSProp, css, styled } from 'styled-components';
+import type { ReactNode } from 'react';
+import { useCallback, useState } from 'react';
+import type { CSSProp } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 import useOutsideClick from '@Hooks/common/useOutsideClick';
 

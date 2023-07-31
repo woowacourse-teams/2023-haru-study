@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { PropsWithChildren, useEffect } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useEffect } from 'react';
 
 import { useTabs } from './TabsContext';
 

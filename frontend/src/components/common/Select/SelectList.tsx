@@ -1,10 +1,12 @@
-import { Children, HTMLAttributes, MouseEvent, ReactNode, cloneElement, isValidElement } from 'react';
-import { CSSProp, css, styled } from 'styled-components';
+import type { HTMLAttributes, MouseEvent, ReactNode } from 'react';
+import { Children, cloneElement, isValidElement } from 'react';
+import type { CSSProp } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 import { composeEventHandlers } from '@Utils/domEventHandler';
 
 import { useSelectContext } from './SelectContext';
-import { ItemProps } from './SelectItem';
+import type { ItemProps } from './SelectItem';
 
 type Props = {
   children: ReactNode;

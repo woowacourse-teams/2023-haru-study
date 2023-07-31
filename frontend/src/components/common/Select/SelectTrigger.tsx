@@ -1,5 +1,6 @@
-import { ButtonHTMLAttributes } from 'react';
-import { CSSProp, css, styled } from 'styled-components';
+import type { ButtonHTMLAttributes } from 'react';
+import type { CSSProp } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 import color from '@Styles/color';
 
