@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { StudyData, StudyFetchingData } from '@Types/study';
-
 import { getCookie } from '@Utils/cookie';
+
+import type { StudyData, StudyFetchingData } from '@Types/study';
 
 const useStudyBoard = () => {
   const [studyData, setStudyData] = useState<StudyData | null>(null);

@@ -1,24 +1,22 @@
-import {
-  Children,
+import type {
   ForwardedRef,
   HTMLAttributes,
   InputHTMLAttributes,
   PropsWithChildren,
   ReactElement,
   ReactNode,
-  cloneElement,
-  forwardRef,
 } from 'react';
+import { Children, cloneElement, forwardRef } from 'react';
 import { css, styled } from 'styled-components';
 import type { CSSProp, RuleSet } from 'styled-components';
-
-import { Size } from '@Types/style';
 
 import useId from '@Hooks/common/useId';
 
 import color from '@Styles/color';
 
 import { SIZE } from '@Constants/style';
+
+import type { Size } from '@Types/style';
 
 type Include<T, U> = T extends U ? T : never;
 

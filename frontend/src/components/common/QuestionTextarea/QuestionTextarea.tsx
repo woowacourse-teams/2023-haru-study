@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from 'react';
+import type { InputHTMLAttributes } from 'react';
 import { styled } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';

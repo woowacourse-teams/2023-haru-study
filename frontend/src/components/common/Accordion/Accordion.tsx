@@ -1,4 +1,5 @@
-import { Children, PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
+import { Children } from 'react';
 import { css, styled } from 'styled-components';
 import type { CSSProp } from 'styled-components';
 

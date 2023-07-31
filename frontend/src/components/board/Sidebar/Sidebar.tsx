@@ -2,9 +2,9 @@ import { css, styled } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
-import type { Step } from '@Types/study';
-
 import color from '@Styles/color';
+
+import type { Step } from '@Types/study';
 
 import Timer from '../Timer/Timer';
 

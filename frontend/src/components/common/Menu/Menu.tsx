@@ -1,4 +1,5 @@
-import { Children, PropsWithChildren, ReactElement, cloneElement } from 'react';
+import type { PropsWithChildren, ReactElement } from 'react';
+import { Children, cloneElement } from 'react';
 import { css, styled } from 'styled-components';
 import type { CSSProp } from 'styled-components';
 
