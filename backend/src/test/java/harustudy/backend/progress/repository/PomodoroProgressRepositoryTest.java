@@ -9,7 +9,7 @@ import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.repository.RoomRepository;
+import harustudy.backend.room.repository.PomodoroRoomRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -22,12 +22,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @DataJpaTest
-class MemberProgressRepositoryTest {
+class PomodoroProgressRepositoryTest {
 
     @Autowired
-    private MemberProgressRepository<PomodoroProgress> pomodoroProgressRepository;
+    private PomodoroProgressRepository pomodoroProgressRepository;
     @Autowired
-    private RoomRepository roomRepository;
+    private PomodoroRoomRepository pomodoroRoomRepository;
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
@@ -37,24 +37,24 @@ class MemberProgressRepositoryTest {
     private TestEntityManager testEntityManager;
 
     @Test
-    void Study와_Member를_통해_MemberProgress를_조회할_수_있다() {
+    void room과_member를_통해_pomodoroProgress를_조회할_수_있다() {
         // given
         Member member = new Member("member");
         ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        PomodoroRoom study = new PomodoroRoom("studyName", 1, 20, participantCode);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 1, 20, participantCode);
         memberRepository.save(member);
         participantCodeRepository.save(participantCode);
-        roomRepository.save(study);
+        pomodoroRoomRepository.save(pomodoroRoom);
 
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(study, member);
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member);
         pomodoroProgressRepository.save(pomodoroProgress);
 
         testEntityManager.flush();
         testEntityManager.clear();
 
         // when
-        Optional<PomodoroProgress> found = pomodoroProgressRepository.findByRoomAndMember(
-                study, member);
+        Optional<PomodoroProgress> found = pomodoroProgressRepository.findByPomodoroRoomAndMember(
+                pomodoroRoom, member);
 
         // then
         assertThat(found).isPresent();
@@ -62,24 +62,24 @@ class MemberProgressRepositoryTest {
     }
 
     @Test
-    void studyId로_MemberProgress_리스트를_조회한다() {
+    void roomId로_pomodoroProgress_리스트를_조회한다() {
         // given
         Member member1 = new Member("member1");
         Member member2 = new Member("member2");
         ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        PomodoroRoom study = new PomodoroRoom("studyName", 1, 20, participantCode);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 1, 20, participantCode);
         memberRepository.save(member1);
         memberRepository.save(member2);
         participantCodeRepository.save(participantCode);
-        roomRepository.save(study);
+        pomodoroRoomRepository.save(pomodoroRoom);
 
-        PomodoroProgress pomodoroProgress1 = new PomodoroProgress(study, member1);
-        PomodoroProgress pomodoroProgress2 = new PomodoroProgress(study, member2);
+        PomodoroProgress pomodoroProgress1 = new PomodoroProgress(pomodoroRoom, member1);
+        PomodoroProgress pomodoroProgress2 = new PomodoroProgress(pomodoroRoom, member2);
         pomodoroProgressRepository.save(pomodoroProgress1);
         pomodoroProgressRepository.save(pomodoroProgress2);
 
         // when
-        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findByRoom(study);
+        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findByPomodoroRoom(pomodoroRoom);
 
         // then
         assertThat(pomodoroProgresses.size()).isEqualTo(2);

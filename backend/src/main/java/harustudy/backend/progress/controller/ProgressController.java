@@ -2,7 +2,7 @@ package harustudy.backend.progress.controller;
 
 import harustudy.backend.progress.dto.PomodoroProgressResponse;
 import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
-import harustudy.backend.progress.service.ProgressService;
+import harustudy.backend.progress.service.PomodoroProgressService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProgressController {
 
-    private final ProgressService progressService;
+    private final PomodoroProgressService pomodoroProgressService;
 
     @PostMapping("api/studies/{studyId}/members/{memberId}/next-step")
     public ResponseEntity<Void> proceed(@PathVariable("studyId") @NotNull Long studyId,
             @PathVariable("memberId") @NotNull Long memberId) {
-        progressService.proceedToRetrospect(studyId, memberId);
+        pomodoroProgressService.proceedToRetrospect(studyId, memberId);
         return ResponseEntity.ok().build();
     }
 
@@ -30,7 +30,7 @@ public class ProgressController {
             @PathVariable Long studyId,
             @PathVariable Long memberId
     ) {
-        return ResponseEntity.ok(progressService.findMemberMetaData(studyId, memberId));
+        return ResponseEntity.ok(pomodoroProgressService.findMemberMetaData(studyId, memberId));
     }
 
     @GetMapping("api/studies/{studyId}/members/{memberId}/progress")
@@ -38,6 +38,6 @@ public class ProgressController {
             @PathVariable Long studyId,
             @PathVariable Long memberId
     ) {
-        return ResponseEntity.ok(progressService.findPomodoroProgress(studyId, memberId));
+        return ResponseEntity.ok(pomodoroProgressService.findPomodoroProgress(studyId, memberId));
     }
 }

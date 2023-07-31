@@ -4,8 +4,8 @@ import harustudy.backend.room.dto.CreatePomodoroRoomDto;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
 import harustudy.backend.room.dto.ParticipateRequest;
-import harustudy.backend.room.dto.RoomAndMembersResponse;
-import harustudy.backend.room.service.RoomService;
+import harustudy.backend.room.dto.PomodoroRoomAndMembersResponse;
+import harustudy.backend.room.service.PomodoroRoomService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -20,18 +20,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RoomController {
 
-    private final RoomService roomService;
+    private final PomodoroRoomService pomodoroRoomService;
 
     @GetMapping("/api/studies/{studyId}/metadata")
-    public ResponseEntity<RoomAndMembersResponse> findStudyMetaData(@PathVariable Long studyId) {
-        return ResponseEntity.ok(roomService.findStudyMetadata(studyId));
+    public ResponseEntity<PomodoroRoomAndMembersResponse> findStudyMetaData(@PathVariable Long studyId) {
+        return ResponseEntity.ok(pomodoroRoomService.findPomodoroRoomMetadata(studyId));
     }
 
     @PostMapping("/api/studies")
     public ResponseEntity<CreatePomodoroRoomResponse> createStudy(
             @Valid @RequestBody CreatePomodoroRoomRequest request
     ) {
-        CreatePomodoroRoomDto createPomodoroRoomDto = roomService.createRoom(request);
+        CreatePomodoroRoomDto createPomodoroRoomDto = pomodoroRoomService.createPomodoroRoom(request);
         return ResponseEntity.created(
                         URI.create("/api/studies/" + createPomodoroRoomDto.studyId()))
                 .body(CreatePomodoroRoomResponse.from(createPomodoroRoomDto));
@@ -42,7 +42,7 @@ public class RoomController {
             @PathVariable Long studyId,
             @Valid @RequestBody ParticipateRequest request
     ) {
-        Long memberId = roomService.participate(studyId, request.nickname());
+        Long memberId = pomodoroRoomService.participate(studyId, request.nickname());
         return ResponseEntity.created(
                 URI.create("/api/studies/" + studyId + "/members/" + memberId)).build();
     }

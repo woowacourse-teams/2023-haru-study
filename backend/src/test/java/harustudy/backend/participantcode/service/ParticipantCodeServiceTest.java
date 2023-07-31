@@ -11,7 +11,6 @@ import harustudy.backend.participantcode.dto.FindRoomAndNicknameResponse;
 import harustudy.backend.participantcode.dto.FindRoomResponse;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.domain.Room;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -38,13 +37,13 @@ class ParticipantCodeServiceTest {
         ParticipantCode code = new ParticipantCode(new CodeGenerationStrategy());
         entityManager.persist(code);
 
-        Room room = new PomodoroRoom("room", 3, 20, code);
-        entityManager.persist(room);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 3, 20, code);
+        entityManager.persist(pomodoroRoom);
 
         Member member = new Member("nickname");
         entityManager.persist(member);
 
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(room, member);
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member);
         entityManager.persist(pomodoroProgress);
 
         entityManager.flush();
@@ -55,7 +54,7 @@ class ParticipantCodeServiceTest {
 
         // then
         assertAll(
-                () -> assertThat(response.studyName()).isEqualTo("room"),
+                () -> assertThat(response.studyName()).isEqualTo("roomName"),
                 () -> assertThat(response.nickname()).isEqualTo("nickname")
         );
     }
@@ -66,15 +65,15 @@ class ParticipantCodeServiceTest {
         ParticipantCode code = new ParticipantCode(new CodeGenerationStrategy());
         entityManager.persist(code);
 
-        Room room = new PomodoroRoom("room", 3, 20, code);
-        entityManager.persist(room);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 3, 20, code);
+        entityManager.persist(pomodoroRoom);
 
         // when
         FindRoomResponse response = participantCodeService.findRoomByCode(
                 code.getCode());
 
         // then
-        assertThat(response.studyName()).isEqualTo("room");
+        assertThat(response.studyName()).isEqualTo("roomName");
     }
 
     @Test
@@ -91,8 +90,8 @@ class ParticipantCodeServiceTest {
         ParticipantCode code = new ParticipantCode(new CodeGenerationStrategy());
         entityManager.persist(code);
 
-        Room room = new PomodoroRoom("room", 3, 20, code);
-        entityManager.persist(room);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 3, 20, code);
+        entityManager.persist(pomodoroRoom);
 
         // when & then
         assertThatThrownBy(() -> participantCodeService.findRoomByCodeWithMemberId(code.getCode(),

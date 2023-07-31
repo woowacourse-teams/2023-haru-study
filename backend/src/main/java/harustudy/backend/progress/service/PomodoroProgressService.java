@@ -9,10 +9,9 @@ import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;
 import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
 import harustudy.backend.progress.exception.InvalidProgressException.UnavailableToProceed;
-import harustudy.backend.progress.repository.MemberProgressRepository;
+import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.domain.Room;
-import harustudy.backend.room.repository.RoomRepository;
+import harustudy.backend.room.repository.PomodoroRoomRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,22 +19,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @AllArgsConstructor
 @Transactional
-public class ProgressService {
+public class PomodoroProgressService {
 
-    private final MemberProgressRepository<PomodoroProgress> memberProgressRepository;
-    private final RoomRepository roomRepository;
+    private final PomodoroProgressRepository pomodoroProgressRepository;
+    private final PomodoroRoomRepository pomodoroRoomRepository;
     private final MemberRepository memberRepository;
 
     public RoomAndProgressStepResponse findMemberMetaData(Long studyId, Long memberId) {
-        Room room = roomRepository.findById(studyId).orElseThrow(IllegalArgumentException::new);
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(studyId).orElseThrow(IllegalArgumentException::new);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        PomodoroProgress pomodoroProgress = memberProgressRepository.findByRoomAndMember(
-                        room, member)
+        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByPomodoroRoomAndMember(
+                        pomodoroRoom, member)
                 .orElseThrow(IllegalArgumentException::new);
-
-        PomodoroRoom pomodoroRoom = (PomodoroRoom) pomodoroProgress.getRoom();
 
         return new RoomAndProgressStepResponse(pomodoroRoom.getName(), pomodoroRoom.getTotalCycle(),
                 pomodoroProgress.getCurrentCycle(),
@@ -55,20 +52,20 @@ public class ProgressService {
     }
 
     private PomodoroProgress findPomodoroProgressFrom(Long studyId, Long memberId) {
-        Room room = roomRepository.findById(studyId)
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(studyId)
                 .orElseThrow(RoomNotFound::new);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
-        return memberProgressRepository.findByRoomAndMember(room, member)
+        return pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
                 .orElseThrow(PomodoroProgressNotFound::new);
     }
 
     public PomodoroProgressResponse findPomodoroProgress(Long roomId, Long memberId) {
-        Room room = roomRepository.findById(roomId)
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
                 .orElseThrow(RoomNotFound::new);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
-        PomodoroProgress pomodoroProgress = memberProgressRepository.findByRoomAndMember(room, member)
+        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
                 .orElseThrow(PomodoroProgressNotFound::new);
         return PomodoroProgressResponse.from(pomodoroProgress);
     }

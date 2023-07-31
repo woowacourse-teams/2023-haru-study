@@ -1,23 +1,47 @@
 package harustudy.backend.room.domain;
 
+import harustudy.backend.common.BaseTimeEntity;
+import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.ParticipantCode;
+import harustudy.backend.progress.domain.PomodoroProgress;
+import harustudy.backend.room.exception.DuplicatedNicknameException;
 import harustudy.backend.room.exception.PomodoroTimePerCycleException;
 import harustudy.backend.room.exception.PomodoroTotalCycleException;
-import jakarta.persistence.Entity;
+import harustudy.backend.room.exception.RoomNameLengthException;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class PomodoroRoom extends Room {
+public class PomodoroRoom extends BaseTimeEntity {
+
+    private static final int MIN_NAME_LENGTH = 1;
+    private static final int MAX_NAME_LENGTH = 10;
 
     private final static int MIN_TOTAL_CYCLE = 1;
     private final static int MAX_TOTAL_CYCLE = 8;
+
     private final static int MIN_TIME_PER_CYCLE = 20;
     private final static int MAX_TIME_PER_CYCLE = 60;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "participant_code_id")
+    private ParticipantCode participantCode;
+
+    @NotNull
+    @Column(length = 10)
+    private String name;
 
     @NotNull
     private Integer totalCycle;
@@ -25,13 +49,28 @@ public class PomodoroRoom extends Room {
     @NotNull
     private Integer timePerCycle;
 
+    @OneToMany(mappedBy = "pomodoroRoom")
+    private List<PomodoroProgress> pomodoroProgresses = new ArrayList<>();
+
     public PomodoroRoom(@NotNull String name, @NotNull Integer totalCycle,
             @NotNull Integer timePerCycle, @NotNull ParticipantCode participantCode) {
-        super(name, participantCode);
-        validateTotalCycle(totalCycle);
-        validateTimePerCycle(timePerCycle);
+        validate(name, totalCycle, timePerCycle);
         this.totalCycle = totalCycle;
         this.timePerCycle = timePerCycle;
+        this.name = name;
+        this.participantCode = participantCode;
+    }
+
+    private void validate(String name, Integer totalCycle, Integer timePerCycle) {
+        validateName(name);
+        validateTotalCycle(totalCycle);
+        validateTimePerCycle(timePerCycle);
+    }
+
+    private void validateName(String name) {
+        if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH) {
+            throw new RoomNameLengthException();
+        }
     }
 
     private void validateTotalCycle(Integer totalCycle) {
@@ -43,6 +82,18 @@ public class PomodoroRoom extends Room {
     private void validateTimePerCycle(Integer timePerCycle) {
         if (timePerCycle < MIN_TIME_PER_CYCLE || timePerCycle > MAX_TIME_PER_CYCLE) {
             throw new PomodoroTimePerCycleException();
+        }
+    }
+
+    public boolean isParticipatedMember(Member member) {
+        return pomodoroProgresses.stream()
+                .anyMatch(memberProgress -> memberProgress.isOwnedBy(member));
+    }
+
+    public void validateDuplicatedNickname(Member member) {
+        if (pomodoroProgresses.stream()
+                .anyMatch(memberProgress -> memberProgress.hasSameNicknameMember(member))) {
+            throw new DuplicatedNicknameException();
         }
     }
 }

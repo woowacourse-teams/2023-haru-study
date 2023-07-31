@@ -1,7 +1,7 @@
 package harustudy.backend.content.controller;
 
 import harustudy.backend.content.dto.MemberContentResponses;
-import harustudy.backend.content.service.ContentService;
+import harustudy.backend.content.service.PomodoroContentService;
 import jakarta.validation.constraints.NotNull;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ContentController {
 
-    private final ContentService contentService;
+    private final PomodoroContentService pomodoroContentService;
 
     @PostMapping("/api/studies/{studyId}/members/{memberId}/content/plans")
     public ResponseEntity<Void> writePlan(
@@ -27,7 +27,7 @@ public class ContentController {
             @PathVariable("memberId") Long memberId,
             @RequestBody Map<String, String> plan
     ) {
-        contentService.writePlan(studyId, memberId, plan);
+        pomodoroContentService.writePlan(studyId, memberId, plan);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -37,7 +37,7 @@ public class ContentController {
             @PathVariable("memberId") Long memberId,
             @RequestBody Map<String, String> retrospect
     ) {
-        contentService.writeRetrospect(studyId, memberId, retrospect);
+        pomodoroContentService.writeRetrospect(studyId, memberId, retrospect);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -47,7 +47,7 @@ public class ContentController {
             @PathVariable Long memberId,
             @RequestParam @NotNull Integer cycle
     ) {
-        return ResponseEntity.ok(contentService.findCurrentCyclePlan(studyId, memberId, cycle));
+        return ResponseEntity.ok(pomodoroContentService.findCurrentCyclePlan(studyId, memberId, cycle));
     }
 
     @GetMapping("/api/studies/{studyId}/members/{memberId}/content")
@@ -55,6 +55,6 @@ public class ContentController {
             @PathVariable Long studyId,
             @PathVariable Long memberId
     ) {
-        return ResponseEntity.ok(contentService.findMemberContent(studyId, memberId));
+        return ResponseEntity.ok(pomodoroContentService.findMemberContent(studyId, memberId));
     }
 }
