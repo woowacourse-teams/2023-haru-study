@@ -7,7 +7,7 @@ import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.room.exception.PomodoroTimePerCycleException;
 import harustudy.backend.room.exception.PomodoroTotalCycleException;
-import harustudy.backend.room.exception.RoomNameLengthException;
+import harustudy.backend.room.exception.PomodoroRoomNameLengthException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -27,14 +27,14 @@ class PomodoroRoomTest {
     }
 
     @Test
-    void 스터디는_스터디명_사이클_수_사이클_당_스터디_시간이_필요하다() {
+    void 스터디방은_스터디명_사이클_수_사이클_당_스터디_시간이_필요하다() {
         // given, when, then
         assertThatCode(() -> new PomodoroRoom("teo", 3, 20, participantCode))
                 .doesNotThrowAnyException();
     }
 
     @Test
-    void 스터디명이_1자_이상_10자_이하이면_정상_케이스이다() {
+    void 스터디방_이름이_1자_이상_10자_이하이면_정상_케이스이다() {
         // given
         String name = "12345";
 
@@ -45,10 +45,10 @@ class PomodoroRoomTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", "01234567890"})
-    void 스터디명이_1자_미만이거나_10자_초과라면_예외를_던진다(String name) {
+    void 스터디방_이름이_1자_미만이거나_10자_초과라면_예외를_던진다(String name) {
         // given, when, then
         assertThatThrownBy(() -> new PomodoroRoom(name, 3, 20, participantCode))
-                .isInstanceOf(RoomNameLengthException.class);
+                .isInstanceOf(PomodoroRoomNameLengthException.class);
     }
 
     @ParameterizedTest

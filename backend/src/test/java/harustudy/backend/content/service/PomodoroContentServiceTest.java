@@ -4,17 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.dto.MemberContentResponse;
-import harustudy.backend.content.dto.MemberContentResponses;
+import harustudy.backend.content.dto.PomodoroContentResponse;
+import harustudy.backend.content.dto.PomodoroContentResponses;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.domain.PomodoroStatus;
-import harustudy.backend.progress.exception.StudyProgressException;
+import harustudy.backend.progress.exception.StudyPomodoroProgressException;
 import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.domain.Room;
-
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -28,36 +26,36 @@ import org.springframework.context.annotation.FilterType;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-@DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = ContentService.class))
-class ContentServiceTest {
+@DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = PomodoroContentService.class))
+class PomodoroContentServiceTest {
 
     @Autowired
     private TestEntityManager testEntityManager;
     @Autowired
-    private ContentService contentService;
+    private PomodoroContentService pomodoroContentService;
 
     @Test
     void 계획_단계가_아닐_때_계획을_작성하려_하면_예외를_던진다() {
         // given
         ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        Room room = new PomodoroRoom("studyName", 1, 20, participantCode);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 1, 20, participantCode);
         Member member = new Member("nickname");
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(room, member, 1,
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, 1,
                 PomodoroStatus.RETROSPECT);
         PomodoroContent pomodoroRecord = new PomodoroContent(pomodoroProgress, 1, Map.of(),
                 Map.of());
 
         // when
         testEntityManager.persist(participantCode);
-        testEntityManager.persist(room);
+        testEntityManager.persist(pomodoroRoom);
         testEntityManager.persist(member);
         testEntityManager.persist(pomodoroProgress);
         testEntityManager.persist(pomodoroRecord);
 
         // then
-        assertThatThrownBy(() -> contentService.writePlan(room.getId(),
+        assertThatThrownBy(() -> pomodoroContentService.writePlan(pomodoroRoom.getId(),
                 member.getId(), Map.of("plan", "abc")))
-                .isInstanceOf(StudyProgressException.class);
+                .isInstanceOf(StudyPomodoroProgressException.class);
     }
 
 
@@ -65,23 +63,23 @@ class ContentServiceTest {
     void 계획이_작성되어_있지_않은_경우_회고를_작성하려_하면_예외를_던진다() {
         // given
         ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        Room room = new PomodoroRoom("studyName", 1, 20, participantCode);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 1, 20, participantCode);
         Member member = new Member("nickname");
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(room, member, 1,
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, 1,
                 PomodoroStatus.RETROSPECT);
         PomodoroContent pomodoroRecord = new PomodoroContent(pomodoroProgress, 1, Map.of(), Map.of());
 
         // when
         testEntityManager.persist(participantCode);
-        testEntityManager.persist(room);
+        testEntityManager.persist(pomodoroRoom);
         testEntityManager.persist(member);
         testEntityManager.persist(pomodoroProgress);
         testEntityManager.persist(pomodoroRecord);
 
         // then
-        assertThatThrownBy(() -> contentService.writeRetrospect(room.getId(),
+        assertThatThrownBy(() -> pomodoroContentService.writeRetrospect(pomodoroRoom.getId(),
                 member.getId(), Map.of("retrospect", "abc")))
-                .isInstanceOf(StudyProgressException.class);
+                .isInstanceOf(StudyPomodoroProgressException.class);
     }
 
 
@@ -101,14 +99,14 @@ class ContentServiceTest {
                 "lesson", "교훈");
 
         ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        Room room = new PomodoroRoom("studyName", 1, 20, participantCode);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 1, 20, participantCode);
         Member member = new Member("nickname");
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(room, member, 1, PomodoroStatus.RETROSPECT);
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, 1, PomodoroStatus.RETROSPECT);
         PomodoroContent pomodoroContent = new PomodoroContent(pomodoroProgress, 1, expectedPlan, expectedRetrospect);
 
         // when
         testEntityManager.persist(participantCode);
-        testEntityManager.persist(room);
+        testEntityManager.persist(pomodoroRoom);
         testEntityManager.persist(member);
         testEntityManager.persist(pomodoroProgress);
         testEntityManager.persist(pomodoroContent);
@@ -116,29 +114,29 @@ class ContentServiceTest {
         testEntityManager.flush();
         testEntityManager.clear();
 
-        MemberContentResponses memberContentResponses = contentService.findMemberContent(room.getId(), member.getId());
+        PomodoroContentResponses pomodoroContentResponses = pomodoroContentService.findMemberContent(pomodoroRoom.getId(), member.getId());
 
-        MemberContentResponse expectedMemberContentResponse = new MemberContentResponse(1, expectedPlan,
+        PomodoroContentResponse expectedPomodoroContentResponse = new PomodoroContentResponse(1, expectedPlan,
                 expectedRetrospect);
 
         // when
-        List<MemberContentResponse> content = memberContentResponses.content();
+        List<PomodoroContentResponse> content = pomodoroContentResponses.content();
 
         // then
-        assertThat(content).containsExactly(expectedMemberContentResponse);
+        assertThat(content).containsExactly(expectedPomodoroContentResponse);
     }
 
     @Test
     void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회시_스터디가_없으면_예외를_던진다() {
         // given & when & then
-        assertThatThrownBy(() -> contentService.findMemberContent(10L, 1L))
+        assertThatThrownBy(() -> pomodoroContentService.findMemberContent(10L, 1L))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회_시_멤버가_없으면_예외를_던진다() {
         // given & when & then
-        assertThatThrownBy(() -> contentService.findMemberContent(1L, 10L))
+        assertThatThrownBy(() -> pomodoroContentService.findMemberContent(1L, 10L))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

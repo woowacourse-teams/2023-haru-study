@@ -6,7 +6,6 @@ import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.domain.Room;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.Map;
@@ -26,7 +25,7 @@ public class IntegrationTest {
 
     protected MockMvc mockMvc;
     protected ParticipantCode participantCode;
-    protected Room room;
+    protected PomodoroRoom pomodoroRoom;
     protected Member member;
     protected PomodoroProgress pomodoroProgress;
     protected PomodoroContent pomodoroContent;
@@ -54,13 +53,13 @@ public class IntegrationTest {
                 "lesson", "교훈");
 
         participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        room = new PomodoroRoom("room", 3, 20, participantCode);
+        pomodoroRoom = new PomodoroRoom("room", 3, 20, participantCode);
         member = new Member("name");
-        pomodoroProgress = new PomodoroProgress(room, member);
+        pomodoroProgress = new PomodoroProgress(pomodoroRoom, member);
         pomodoroContent = new PomodoroContent(pomodoroProgress, 1, plan, retrospect);
 
         entityManager.persist(participantCode);
-        entityManager.persist(room);
+        entityManager.persist(pomodoroRoom);
         entityManager.persist(member);
         entityManager.persist(pomodoroProgress);
         entityManager.persist(pomodoroContent);

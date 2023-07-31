@@ -6,10 +6,9 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.NicknameResponse;
 import harustudy.backend.member.exception.MemberNotParticipatedException;
 import harustudy.backend.member.repository.MemberRepository;
-import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.progress.repository.MemberProgressRepository;
-import harustudy.backend.room.domain.Room;
-import harustudy.backend.room.repository.RoomRepository;
+import harustudy.backend.progress.repository.PomodoroProgressRepository;
+import harustudy.backend.room.domain.PomodoroRoom;
+import harustudy.backend.room.repository.PomodoroRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,17 +18,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MemberService {
 
-    private final RoomRepository roomRepository;
+    private final PomodoroRoomRepository pomodoroRoomRepository;
     private final MemberRepository memberRepository;
-    private final MemberProgressRepository<PomodoroProgress> pomodoroProgressRepository;
+    private final PomodoroProgressRepository pomodoroProgressRepository;
 
     public NicknameResponse findParticipatedMemberNickname(Long roomId, Long memberId) {
-        Room room = roomRepository.findById(roomId)
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
                 .orElseThrow(RoomNotFound::new);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
 
-        pomodoroProgressRepository.findByRoomAndMember(room, member)
+        pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
                 .orElseThrow(MemberNotParticipatedException::new);
 
         return new NicknameResponse(member.getNickname());

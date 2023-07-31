@@ -5,18 +5,17 @@ import harustudy.backend.common.EntityNotFoundException.PomodoroProgressNotFound
 import harustudy.backend.common.EntityNotFoundException.PomodoroRecordNotFound;
 import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.dto.MemberContentResponse;
-import harustudy.backend.content.dto.MemberContentResponses;
-import harustudy.backend.content.repository.ContentRepository;
+import harustudy.backend.content.dto.PomodoroContentResponse;
+import harustudy.backend.content.dto.PomodoroContentResponses;
+import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.progress.exception.InvalidProgressException.UnavailableToProceed;
-import harustudy.backend.progress.exception.StudyProgressException;
-import harustudy.backend.progress.repository.MemberProgressRepository;
+import harustudy.backend.progress.exception.InvalidPomodoroProgressException.UnavailableToProceed;
+import harustudy.backend.progress.exception.StudyPomodoroProgressException;
+import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.domain.Room;
-import harustudy.backend.room.repository.RoomRepository;
+import harustudy.backend.room.repository.PomodoroRoomRepository;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -26,30 +25,29 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class ContentService {
+public class PomodoroContentService {
 
-    private final RoomRepository roomRepository;
+    private final PomodoroRoomRepository pomodoroRoomRepository;
     private final MemberRepository memberRepository;
-    private final MemberProgressRepository<PomodoroProgress> memberProgressRepository;
-    private final ContentRepository<PomodoroContent> contentRepository;
+    private final PomodoroProgressRepository pomodoroProgressRepository;
+    private final PomodoroContentRepository pomodoroContentRepository;
 
-    public Map<String, String> findCurrentCyclePlan(Long studyId, Long memberId,
-            Integer cycle) {
-        Room room = roomRepository.findById(studyId).orElseThrow(IllegalArgumentException::new);
+    public Map<String, String> findCurrentCyclePlan(Long roomId, Long memberId,
+                                                    Integer cycle) {
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        PomodoroProgress pomodoroProgress = memberProgressRepository.findByRoomAndMember(
-                        room, member)
+        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByPomodoroRoomAndMember(
+                        pomodoroRoom, member)
                 .orElseThrow(IllegalArgumentException::new);
 
         return pomodoroProgress.findPomodoroRecordByCycle(cycle).getPlan();
     }
 
-    public void writePlan(Long studyId, Long memberId, Map<String, String> plan) {
-        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(studyId, memberId);
+    public void writePlan(Long roomId, Long memberId, Map<String, String> plan) {
+        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, memberId);
         PomodoroContent recentRecord = findRecordWithSameCycle(pomodoroProgress);
-        // 생성 새로운거 만들어서 Repository에 저장
         validateProgressIsPlanning(pomodoroProgress);
         pomodoroProgress.proceed();
         recentRecord.changePlan(plan);
@@ -57,37 +55,36 @@ public class ContentService {
 
     private void validateProgressIsPlanning(PomodoroProgress pomodoroProgress) {
         if (pomodoroProgress.isNotPlanning()) {
-            throw new StudyProgressException();
+            throw new StudyPomodoroProgressException();
         }
     }
 
-    public MemberContentResponses findMemberContent(Long studyId, Long memberId) {
-        Room room = roomRepository.findById(studyId).orElseThrow(IllegalArgumentException::new);
+    public PomodoroContentResponses findMemberContent(Long roomId, Long memberId) {
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        PomodoroProgress pomodoroProgress = memberProgressRepository.findByRoomAndMember(
-                        room, member)
+        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByPomodoroRoomAndMember(
+                        pomodoroRoom, member)
                 .orElseThrow(IllegalArgumentException::new);
 
         List<PomodoroContent> pomodoroRecords = pomodoroProgress.getPomodoroRecords();
 
-        List<MemberContentResponse> memberContentResponses = pomodoroRecords.stream()
-                .map(record -> new MemberContentResponse(record.getCycle(), record.getPlan(),
+        List<PomodoroContentResponse> pomodoroContentRespons = pomodoroRecords.stream()
+                .map(record -> new PomodoroContentResponse(record.getCycle(), record.getPlan(),
                         record.getRetrospect()))
                 .toList();
 
-        return new MemberContentResponses(memberContentResponses);
+        return new PomodoroContentResponses(pomodoroContentRespons);
     }
 
-    // TODO: 나중에 ID 반환할지 말지 고민해보기
-    public void writeRetrospect(Long studyId, Long memberId, Map<String, String> retrospect) {
-        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(studyId, memberId);
+    public void writeRetrospect(Long roomId, Long memberId, Map<String, String> retrospect) {
+        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, memberId);
         PomodoroContent recentRecord = findRecordWithSameCycle(pomodoroProgress);
         validateProgressIsRetrospect(pomodoroProgress);
         validateIsPlanFilled(recentRecord);
         recentRecord.changeRetrospect(retrospect);
-        int totalCycle = ((PomodoroRoom) pomodoroProgress.getRoom()).getTotalCycle();
+        int totalCycle = pomodoroProgress.getPomodoroRoom().getTotalCycle();
         if (pomodoroProgress.getCurrentCycle().equals(totalCycle)) {
             pomodoroProgress.setDone();
             return;
@@ -96,7 +93,7 @@ public class ContentService {
     }
 
     private PomodoroContent findRecordWithSameCycle(PomodoroProgress pomodoroProgress) {
-        List<PomodoroContent> pomodoroRecords = contentRepository.findByMemberProgress(
+        List<PomodoroContent> pomodoroRecords = pomodoroContentRepository.findByPomodoroProgress(
                 pomodoroProgress);
 
         return pomodoroRecords.stream()
@@ -105,12 +102,12 @@ public class ContentService {
                 .orElseThrow(PomodoroRecordNotFound::new);
     }
 
-    private PomodoroProgress findPomodoroProgressFrom(Long studyId, Long memberId) {
-        Room room = roomRepository.findById(studyId)
+    private PomodoroProgress findPomodoroProgressFrom(Long roomId, Long memberId) {
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
                 .orElseThrow(RoomNotFound::new);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
-        return memberProgressRepository.findByRoomAndMember(room, member)
+        return pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
                 .orElseThrow(PomodoroProgressNotFound::new);
     }
 
@@ -122,7 +119,7 @@ public class ContentService {
 
     private void validateIsPlanFilled(PomodoroContent recentRecord) {
         if (recentRecord.getPlan().isEmpty()) {
-            throw new StudyProgressException();
+            throw new StudyPomodoroProgressException();
         }
     }
 }

@@ -8,14 +8,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.content.dto.MemberContentResponse;
-import harustudy.backend.content.dto.MemberContentResponses;
+import harustudy.backend.content.dto.PomodoroContentResponse;
+import harustudy.backend.content.dto.PomodoroContentResponses;
 import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
 import harustudy.backend.room.dto.MemberDto;
-import harustudy.backend.room.dto.RoomAndMembersResponse;
+import harustudy.backend.room.dto.PomodoroRoomAndMembersResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -35,7 +34,7 @@ public class FindRoomIntegrationTest extends IntegrationTest {
     void 스터디에_속하는_특정_멤버에_대한_정보를_조회한다() throws Exception {
         // given & when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/{studyId}/members/{memberId}/metadata", room.getId(),
+                        get("/api/studies/{studyId}/members/{memberId}/metadata", pomodoroRoom.getId(),
                                 member.getId())
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -53,37 +52,37 @@ public class FindRoomIntegrationTest extends IntegrationTest {
     void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회한다() throws Exception {
         // given, when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/{studyId}/members/{memberId}/content", room.getId(),
+                        get("/api/studies/{studyId}/members/{memberId}/content", pomodoroRoom.getId(),
                                 member.getId())
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        MemberContentResponses responses = objectMapper.readValue(jsonResponse,
-                MemberContentResponses.class);
+        PomodoroContentResponses responses = objectMapper.readValue(jsonResponse,
+                PomodoroContentResponses.class);
 
         // then
-        MemberContentResponse expectedMemberContentResponse = new MemberContentResponse(1,
+        PomodoroContentResponse expectedPomodoroContentResponse = new PomodoroContentResponse(1,
                 plan,
                 retrospect);
 
-        assertThat(responses.content()).containsExactly(expectedMemberContentResponse);
+        assertThat(responses.content()).containsExactly(expectedPomodoroContentResponse);
     }
 
     @Test
     void 스터디_메타데이터_및_참여한_모든_스터디원에_대한_정보를_조회한다() throws Exception {
         // given & when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/{studyId}/metadata", room.getId())
+                        get("/api/studies/{studyId}/metadata", pomodoroRoom.getId())
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
         // then
         String jsonResponse = result.getResponse().getContentAsString();
-        RoomAndMembersResponse response = objectMapper.readValue(jsonResponse,
-                RoomAndMembersResponse.class);
+        PomodoroRoomAndMembersResponse response = objectMapper.readValue(jsonResponse,
+                PomodoroRoomAndMembersResponse.class);
 
         // then
         assertAll(
@@ -99,7 +98,7 @@ public class FindRoomIntegrationTest extends IntegrationTest {
     void 특정_멤버의_현재_사이클의_계획을_조회한다() throws Exception {
         // given & when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/{studyId}/members/{memberId}/content/plans?cycle=1", room.getId(),
+                        get("/api/studies/{studyId}/members/{memberId}/content/plans?cycle=1", pomodoroRoom.getId(),
                                 member.getId())
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -107,7 +106,8 @@ public class FindRoomIntegrationTest extends IntegrationTest {
 
         // then
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        Map<String, String> response = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+        Map<String, String> response = objectMapper.readValue(jsonResponse, new TypeReference<>() {
+        });
 
         // then
         assertAll(

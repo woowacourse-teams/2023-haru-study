@@ -1,21 +1,20 @@
 package harustudy.backend.room.service;
 
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.repository.ContentRepository;
+import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participantcode.domain.GenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.progress.repository.MemberProgressRepository;
+import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.domain.Room;
 import harustudy.backend.room.dto.CreatePomodoroRoomDto;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.MemberDto;
-import harustudy.backend.room.dto.RoomAndMembersResponse;
-import harustudy.backend.room.repository.RoomRepository;
+import harustudy.backend.room.dto.PomodoroRoomAndMembersResponse;
+import harustudy.backend.room.repository.PomodoroRoomRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,22 +23,22 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class RoomService {
+public class PomodoroRoomService {
 
     private final ParticipantCodeRepository participantCodeRepository;
-    private final MemberProgressRepository<PomodoroProgress> pomodoroProgressRepository;
+    private final PomodoroProgressRepository pomodoroProgressRepository;
     private final MemberRepository memberRepository;
-    private final RoomRepository roomRepository;
+    private final PomodoroRoomRepository pomodoroRoomRepository;
     private final GenerationStrategy generationStrategy;
-    private final ContentRepository<PomodoroContent> pomodoroContentRepository;
+    private final PomodoroContentRepository pomodoroContentRepository;
 
-    public CreatePomodoroRoomDto createRoom(CreatePomodoroRoomRequest request) {
+    public CreatePomodoroRoomDto createPomodoroRoom(CreatePomodoroRoomRequest request) {
         ParticipantCode participantCode = regenerateUniqueCode();
         participantCodeRepository.save(participantCode);
 
         PomodoroRoom pomodoroRoom = new PomodoroRoom(request.name(), request.totalCycle(),
                 request.timePerCycle(), participantCode);
-        Room savedRoom = roomRepository.save(pomodoroRoom);
+        PomodoroRoom savedRoom = pomodoroRoomRepository.save(pomodoroRoom);
 
         return CreatePomodoroRoomDto.from(savedRoom, participantCode);
     }
@@ -58,16 +57,16 @@ public class RoomService {
                 .isPresent();
     }
 
-    public Long participate(Long studyId, String nickname) {
+    public Long participate(Long roomId, String nickname) {
         Member member = memberRepository.save(new Member(nickname));
-        PomodoroRoom room = (PomodoroRoom) roomRepository.findById(studyId)
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
                 .orElseThrow(IllegalArgumentException::new);
-        room.validateDuplicatedNickname(member);
+        pomodoroRoom.validateDuplicatedNickname(member);
 
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(room, member);
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member);
         pomodoroProgressRepository.save(pomodoroProgress);
 
-        int totalCycle = room.getTotalCycle();
+        int totalCycle = pomodoroRoom.getTotalCycle();
         for (int i = 1; i <= totalCycle; i++) {
             PomodoroContent content = new PomodoroContent(pomodoroProgress, i);
             pomodoroContentRepository.save(content);
@@ -75,9 +74,9 @@ public class RoomService {
         return member.getId();
     }
 
-    public RoomAndMembersResponse findStudyMetadata(Long studyId) {
-        Room room = roomRepository.findById(studyId).orElseThrow(IllegalArgumentException::new);
-        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findByRoom(room);
+    public PomodoroRoomAndMembersResponse findPomodoroRoomMetadata(Long roomId) {
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
+        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findByPomodoroRoom(pomodoroRoom);
 
         if (pomodoroProgresses.isEmpty()) {
             throw new IllegalArgumentException();
@@ -89,9 +88,7 @@ public class RoomService {
                         pomodoroProgress.getMember().getNickname()))
                 .toList();
 
-        PomodoroRoom pomodoroRoom = (PomodoroRoom) room;
-
-        return new RoomAndMembersResponse(
+        return new PomodoroRoomAndMembersResponse(
                 pomodoroRoom.getName(),
                 pomodoroRoom.getTotalCycle(),
                 pomodoroRoom.getTimePerCycle(),

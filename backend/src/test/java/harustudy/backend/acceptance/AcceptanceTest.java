@@ -5,14 +5,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.repository.ContentRepository;
+import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.domain.PomodoroStatus;
 import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.domain.Room;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
@@ -43,7 +42,7 @@ public class AcceptanceTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private ContentRepository<PomodoroContent> contentRepository;
+    private PomodoroContentRepository pomodoroContentRepository;
     @Autowired
     private MockMvc mockMvc;
 
@@ -67,9 +66,9 @@ public class AcceptanceTest {
     private Long 스터디를_개설한다() {
         ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
         entityManager.persist(participantCode);
-        Room room = new PomodoroRoom("studyName", 1, 20, participantCode);
-        entityManager.persist(room);
-        return room.getId();
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("studyName", 1, 20, participantCode);
+        entityManager.persist(pomodoroRoom);
+        return pomodoroRoom.getId();
     }
 
     private Long 스터디에_참여한다(Long studyId) {
@@ -112,7 +111,7 @@ public class AcceptanceTest {
                         .content(jsonRequest))
                 .andExpect(status().isCreated());
 
-        List<PomodoroContent> pomodoroRecords = contentRepository.findAll();
+        List<PomodoroContent> pomodoroRecords = pomodoroContentRepository.findAll();
         SoftAssertions.assertSoftly(softly -> {
                     softly.assertThat(pomodoroRecords.size()).isOne();
                     softly.assertThat(pomodoroRecords.get(0).getPlan())
