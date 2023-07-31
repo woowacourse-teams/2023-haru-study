@@ -1,11 +1,11 @@
 import { css, styled } from 'styled-components';
 import type { CSSProp } from 'styled-components';
 
-import { Size } from '@Types/style';
-
 import color from '@Styles/color';
 
 import { SIZE } from '@Constants/style';
+
+import type { Size } from '@Types/style';
 
 type Props = {
   size?: Size;

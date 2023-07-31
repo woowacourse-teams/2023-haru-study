@@ -1,4 +1,4 @@
-import { StudyData } from '@Types/study';
+import type { StudyData } from '@Types/study';
 
 import PlanningForm from '../PlanningForm/PlanningForm';
 import RetrospectForm from '../RetrospectForm/RetrospectForm';

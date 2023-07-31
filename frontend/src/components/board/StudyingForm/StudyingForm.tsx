@@ -5,13 +5,13 @@ import Button from '@Components/common/Button/Button';
 import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
 import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
 
-import { Plan, PlanList } from '@Types/study';
-
 import useStudyingForm from '@Hooks/board/useStudyingForm';
 
 import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
+
+import type { Plan, PlanList } from '@Types/study';
 
 const questions: PlanList = {
   toDo: '학습목표',

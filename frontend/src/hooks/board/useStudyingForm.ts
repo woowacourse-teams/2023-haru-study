@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { PlanList } from '@Types/study';
+import type { PlanList } from '@Types/study';
 
 const useStudyingForm = (studyId: string, memberId: string, cycle: number) => {
   const [planList, setPlanList] = useState<PlanList | null>(null);

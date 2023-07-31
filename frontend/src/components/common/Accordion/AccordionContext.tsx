@@ -1,4 +1,5 @@
-import { PropsWithChildren, createContext, useContext, useMemo } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 
 import useDisplay from '@Hooks/common/useDisplay';
 

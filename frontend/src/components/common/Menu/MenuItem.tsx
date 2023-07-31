@@ -1,4 +1,4 @@
-import { LiHTMLAttributes, PropsWithChildren } from 'react';
+import type { LiHTMLAttributes, PropsWithChildren } from 'react';
 import { styled } from 'styled-components';
 
 import color from '@Styles/color';
