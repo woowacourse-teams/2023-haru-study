@@ -7,15 +7,14 @@ import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.room.exception.DuplicatedNicknameException;
 import harustudy.backend.room.exception.PomodoroTimePerCycleException;
 import harustudy.backend.room.exception.PomodoroTotalCycleException;
-import harustudy.backend.room.exception.RoomNameLengthException;
+import harustudy.backend.room.exception.PomodoroRoomNameLengthException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -53,7 +52,7 @@ public class PomodoroRoom extends BaseTimeEntity {
     private List<PomodoroProgress> pomodoroProgresses = new ArrayList<>();
 
     public PomodoroRoom(@NotNull String name, @NotNull Integer totalCycle,
-            @NotNull Integer timePerCycle, @NotNull ParticipantCode participantCode) {
+                        @NotNull Integer timePerCycle, @NotNull ParticipantCode participantCode) {
         validate(name, totalCycle, timePerCycle);
         this.totalCycle = totalCycle;
         this.timePerCycle = timePerCycle;
@@ -69,7 +68,7 @@ public class PomodoroRoom extends BaseTimeEntity {
 
     private void validateName(String name) {
         if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH) {
-            throw new RoomNameLengthException();
+            throw new PomodoroRoomNameLengthException();
         }
     }
 

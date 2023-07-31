@@ -11,7 +11,7 @@ import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
-import harustudy.backend.progress.exception.InvalidProgressException;
+import harustudy.backend.progress.exception.InvalidPomodoroProgressException;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.dto.MemberDto;
 import harustudy.backend.room.dto.PomodoroRoomAndMembersResponse;
@@ -172,6 +172,6 @@ class PomodoroProgressServiceTest {
         // given, when, then
         assertThatThrownBy(() -> pomodoroProgressService.proceedToRetrospect(pomodoroRoom.getId(),
                 member.getId()))
-                .isInstanceOf(InvalidProgressException.UnavailableToProceed.class);
+                .isInstanceOf(InvalidPomodoroProgressException.UnavailableToProceed.class);
     }
 }

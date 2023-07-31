@@ -1,23 +1,18 @@
 package harustudy.backend.content.controller;
 
-import harustudy.backend.content.dto.MemberContentResponses;
+import harustudy.backend.content.dto.PomodoroContentResponses;
 import harustudy.backend.content.service.PomodoroContentService;
 import jakarta.validation.constraints.NotNull;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 // TODO: 콘텐츠 길이 검증 필요
 @RequiredArgsConstructor
 @RestController
-public class ContentController {
+public class PomodoroContentController {
 
     private final PomodoroContentService pomodoroContentService;
 
@@ -51,7 +46,7 @@ public class ContentController {
     }
 
     @GetMapping("/api/studies/{studyId}/members/{memberId}/content")
-    public ResponseEntity<MemberContentResponses> findMemberContent(
+    public ResponseEntity<PomodoroContentResponses> findMemberContent(
             @PathVariable Long studyId,
             @PathVariable Long memberId
     ) {

@@ -1,6 +1,7 @@
 package harustudy.backend.participantcode.service;
 
-import harustudy.backend.common.EntityNotFoundException;
+import static harustudy.backend.common.EntityNotFoundException.RoomNotFound;
+
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participantcode.domain.ParticipantCode;
@@ -12,8 +13,6 @@ import harustudy.backend.room.repository.PomodoroRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static harustudy.backend.common.EntityNotFoundException.*;
 
 // TODO: @Transactional(readonly = true)
 @RequiredArgsConstructor

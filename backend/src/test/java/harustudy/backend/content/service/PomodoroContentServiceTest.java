@@ -4,16 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.dto.MemberContentResponse;
-import harustudy.backend.content.dto.MemberContentResponses;
+import harustudy.backend.content.dto.PomodoroContentResponse;
+import harustudy.backend.content.dto.PomodoroContentResponses;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.domain.PomodoroStatus;
-import harustudy.backend.progress.exception.StudyProgressException;
+import harustudy.backend.progress.exception.StudyPomodoroProgressException;
 import harustudy.backend.room.domain.PomodoroRoom;
-
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -56,7 +55,7 @@ class PomodoroContentServiceTest {
         // then
         assertThatThrownBy(() -> pomodoroContentService.writePlan(pomodoroRoom.getId(),
                 member.getId(), Map.of("plan", "abc")))
-                .isInstanceOf(StudyProgressException.class);
+                .isInstanceOf(StudyPomodoroProgressException.class);
     }
 
 
@@ -80,7 +79,7 @@ class PomodoroContentServiceTest {
         // then
         assertThatThrownBy(() -> pomodoroContentService.writeRetrospect(pomodoroRoom.getId(),
                 member.getId(), Map.of("retrospect", "abc")))
-                .isInstanceOf(StudyProgressException.class);
+                .isInstanceOf(StudyPomodoroProgressException.class);
     }
 
 
@@ -115,16 +114,16 @@ class PomodoroContentServiceTest {
         testEntityManager.flush();
         testEntityManager.clear();
 
-        MemberContentResponses memberContentResponses = pomodoroContentService.findMemberContent(pomodoroRoom.getId(), member.getId());
+        PomodoroContentResponses pomodoroContentResponses = pomodoroContentService.findMemberContent(pomodoroRoom.getId(), member.getId());
 
-        MemberContentResponse expectedMemberContentResponse = new MemberContentResponse(1, expectedPlan,
+        PomodoroContentResponse expectedPomodoroContentResponse = new PomodoroContentResponse(1, expectedPlan,
                 expectedRetrospect);
 
         // when
-        List<MemberContentResponse> content = memberContentResponses.content();
+        List<PomodoroContentResponse> content = pomodoroContentResponses.content();
 
         // then
-        assertThat(content).containsExactly(expectedMemberContentResponse);
+        assertThat(content).containsExactly(expectedPomodoroContentResponse);
     }
 
     @Test

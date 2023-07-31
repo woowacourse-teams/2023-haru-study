@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-public class ProgressController {
+public class PomodoroProgressController {
 
     private final PomodoroProgressService pomodoroProgressService;
 
     @PostMapping("api/studies/{studyId}/members/{memberId}/next-step")
     public ResponseEntity<Void> proceed(@PathVariable("studyId") @NotNull Long studyId,
-            @PathVariable("memberId") @NotNull Long memberId) {
+                                        @PathVariable("memberId") @NotNull Long memberId) {
         pomodoroProgressService.proceedToRetrospect(studyId, memberId);
         return ResponseEntity.ok().build();
     }

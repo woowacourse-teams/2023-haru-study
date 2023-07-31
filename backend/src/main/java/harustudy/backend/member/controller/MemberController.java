@@ -16,7 +16,7 @@ public class MemberController {
 
     @GetMapping("/api/studies/{studyId}/members/{memberId}")
     public ResponseEntity<NicknameResponse> findNickname(@PathVariable Long studyId,
-            @PathVariable Long memberId) {
+                                                         @PathVariable Long memberId) {
         NicknameResponse response = memberService.findParticipatedMemberNickname(studyId, memberId);
         return ResponseEntity.ok(response);
     }

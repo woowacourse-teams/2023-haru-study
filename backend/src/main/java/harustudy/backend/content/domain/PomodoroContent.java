@@ -39,7 +39,7 @@ public class PomodoroContent extends BaseTimeEntity {
     }
 
     public PomodoroContent(PomodoroProgress pomodoroProgress, @NotNull Integer cycle,
-            Map<String, String> plan, Map<String, String> retrospect) {
+                           Map<String, String> plan, Map<String, String> retrospect) {
         this.pomodoroProgress = pomodoroProgress;
         this.cycle = cycle;
         this.plan = plan;

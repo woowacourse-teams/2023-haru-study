@@ -8,7 +8,7 @@ import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;
 import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
-import harustudy.backend.progress.exception.InvalidProgressException.UnavailableToProceed;
+import harustudy.backend.progress.exception.InvalidPomodoroProgressException.UnavailableToProceed;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.repository.PomodoroRoomRepository;

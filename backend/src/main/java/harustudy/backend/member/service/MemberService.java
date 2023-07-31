@@ -6,7 +6,6 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.NicknameResponse;
 import harustudy.backend.member.exception.MemberNotParticipatedException;
 import harustudy.backend.member.repository.MemberRepository;
-import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.repository.PomodoroRoomRepository;

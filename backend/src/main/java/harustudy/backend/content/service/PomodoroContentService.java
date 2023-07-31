@@ -5,14 +5,14 @@ import harustudy.backend.common.EntityNotFoundException.PomodoroProgressNotFound
 import harustudy.backend.common.EntityNotFoundException.PomodoroRecordNotFound;
 import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.dto.MemberContentResponse;
-import harustudy.backend.content.dto.MemberContentResponses;
+import harustudy.backend.content.dto.PomodoroContentResponse;
+import harustudy.backend.content.dto.PomodoroContentResponses;
 import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.progress.exception.InvalidProgressException.UnavailableToProceed;
-import harustudy.backend.progress.exception.StudyProgressException;
+import harustudy.backend.progress.exception.InvalidPomodoroProgressException.UnavailableToProceed;
+import harustudy.backend.progress.exception.StudyPomodoroProgressException;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
@@ -33,7 +33,7 @@ public class PomodoroContentService {
     private final PomodoroContentRepository pomodoroContentRepository;
 
     public Map<String, String> findCurrentCyclePlan(Long roomId, Long memberId,
-            Integer cycle) {
+                                                    Integer cycle) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
@@ -55,11 +55,11 @@ public class PomodoroContentService {
 
     private void validateProgressIsPlanning(PomodoroProgress pomodoroProgress) {
         if (pomodoroProgress.isNotPlanning()) {
-            throw new StudyProgressException();
+            throw new StudyPomodoroProgressException();
         }
     }
 
-    public MemberContentResponses findMemberContent(Long roomId, Long memberId) {
+    public PomodoroContentResponses findMemberContent(Long roomId, Long memberId) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
@@ -70,12 +70,12 @@ public class PomodoroContentService {
 
         List<PomodoroContent> pomodoroRecords = pomodoroProgress.getPomodoroRecords();
 
-        List<MemberContentResponse> memberContentResponses = pomodoroRecords.stream()
-                .map(record -> new MemberContentResponse(record.getCycle(), record.getPlan(),
+        List<PomodoroContentResponse> pomodoroContentRespons = pomodoroRecords.stream()
+                .map(record -> new PomodoroContentResponse(record.getCycle(), record.getPlan(),
                         record.getRetrospect()))
                 .toList();
 
-        return new MemberContentResponses(memberContentResponses);
+        return new PomodoroContentResponses(pomodoroContentRespons);
     }
 
     public void writeRetrospect(Long roomId, Long memberId, Map<String, String> retrospect) {
@@ -119,7 +119,7 @@ public class PomodoroContentService {
 
     private void validateIsPlanFilled(PomodoroContent recentRecord) {
         if (recentRecord.getPlan().isEmpty()) {
-            throw new StudyProgressException();
+            throw new StudyPomodoroProgressException();
         }
     }
 }

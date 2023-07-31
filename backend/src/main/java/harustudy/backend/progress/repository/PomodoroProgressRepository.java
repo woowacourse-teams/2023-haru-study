@@ -1,12 +1,10 @@
 package harustudy.backend.progress.repository;
 
 import harustudy.backend.member.domain.Member;
-
-import java.util.List;
-import java.util.Optional;
-
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.room.domain.PomodoroRoom;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PomodoroProgressRepository extends JpaRepository<PomodoroProgress, Long> {

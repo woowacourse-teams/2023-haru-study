@@ -6,7 +6,6 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.room.domain.PomodoroRoom;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -51,7 +50,7 @@ public class PomodoroProgress extends BaseTimeEntity {
 
     // TODO: 없애기
     public PomodoroProgress(PomodoroRoom pomodoroRoom, Member member, @NotNull Integer currentCycle,
-            PomodoroStatus pomodoroStatus) {
+                            PomodoroStatus pomodoroStatus) {
         this.pomodoroRoom = pomodoroRoom;
         this.member = member;
         this.currentCycle = currentCycle;
@@ -72,15 +71,13 @@ public class PomodoroProgress extends BaseTimeEntity {
 
     public PomodoroContent findPomodoroRecordByCycle(Integer cycle) {
         return getPomodoroContents().stream()
-                .filter(pomodoro -> ((PomodoroContent) pomodoro).getCycle().equals(cycle))
-                .map(record -> (PomodoroContent) record)
+                .filter(pomodoro -> pomodoro.getCycle().equals(cycle))
                 .findAny()
                 .orElseThrow(IllegalArgumentException::new);
     }
 
     public List<PomodoroContent> getPomodoroRecords() {
         return getPomodoroContents().stream()
-                .map(record -> (PomodoroContent) record)
                 .toList();
     }
 

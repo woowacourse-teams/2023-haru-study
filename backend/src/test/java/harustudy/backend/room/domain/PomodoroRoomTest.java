@@ -7,7 +7,7 @@ import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.room.exception.PomodoroTimePerCycleException;
 import harustudy.backend.room.exception.PomodoroTotalCycleException;
-import harustudy.backend.room.exception.RoomNameLengthException;
+import harustudy.backend.room.exception.PomodoroRoomNameLengthException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -48,7 +48,7 @@ class PomodoroRoomTest {
     void 스터디방_이름이_1자_미만이거나_10자_초과라면_예외를_던진다(String name) {
         // given, when, then
         assertThatThrownBy(() -> new PomodoroRoom(name, 3, 20, participantCode))
-                .isInstanceOf(RoomNameLengthException.class);
+                .isInstanceOf(PomodoroRoomNameLengthException.class);
     }
 
     @ParameterizedTest

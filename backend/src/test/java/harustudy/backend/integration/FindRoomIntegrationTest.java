@@ -8,14 +8,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.content.dto.MemberContentResponse;
-import harustudy.backend.content.dto.MemberContentResponses;
+import harustudy.backend.content.dto.PomodoroContentResponse;
+import harustudy.backend.content.dto.PomodoroContentResponses;
 import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
 import harustudy.backend.room.dto.MemberDto;
 import harustudy.backend.room.dto.PomodoroRoomAndMembersResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -60,15 +59,15 @@ public class FindRoomIntegrationTest extends IntegrationTest {
                 .andReturn();
 
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        MemberContentResponses responses = objectMapper.readValue(jsonResponse,
-                MemberContentResponses.class);
+        PomodoroContentResponses responses = objectMapper.readValue(jsonResponse,
+                PomodoroContentResponses.class);
 
         // then
-        MemberContentResponse expectedMemberContentResponse = new MemberContentResponse(1,
+        PomodoroContentResponse expectedPomodoroContentResponse = new PomodoroContentResponse(1,
                 plan,
                 retrospect);
 
-        assertThat(responses.content()).containsExactly(expectedMemberContentResponse);
+        assertThat(responses.content()).containsExactly(expectedPomodoroContentResponse);
     }
 
     @Test
@@ -107,7 +106,8 @@ public class FindRoomIntegrationTest extends IntegrationTest {
 
         // then
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        Map<String, String> response = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+        Map<String, String> response = objectMapper.readValue(jsonResponse, new TypeReference<>() {
+        });
 
         // then
         assertAll(
