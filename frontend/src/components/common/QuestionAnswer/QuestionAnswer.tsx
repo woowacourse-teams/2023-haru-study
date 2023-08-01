@@ -33,8 +33,11 @@ const QuestionAnswer = ({ question, answer, iconColor }: Props) => {
 export default QuestionAnswer;
 
 const Layout = styled.div`
+  width: 100%;
   display: flex;
-  gap: 13px;
+  /* gap: 13px; */
+
+  justify-content: space-between;
 `;
 
 const IconWrapper = styled.div`
@@ -42,7 +45,12 @@ const IconWrapper = styled.div`
 `;
 
 const TypographyContainer = styled.div`
+  width: 92%;
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  p {
+    word-break: break-all;
+  }
 `;

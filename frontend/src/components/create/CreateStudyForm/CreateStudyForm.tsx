@@ -17,6 +17,9 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import { createStudy } from '@Apis/index';
 
+const TOTAL_CYCLE_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8] as const;
+const STUDY_TIME_PER_CYCLE_OPTIONS = [20, 25, 30, 35, 40, 45, 50, 55, 60] as const;
+
 const CreateStudyForm = () => {
   const navigate = useNavigate();
 
@@ -99,7 +102,7 @@ const CreateStudyForm = () => {
             `}
             onChange={totalCycleSelect.onChangeSelectItem}
           >
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((el, index) => (
+            {TOTAL_CYCLE_OPTIONS.map((el, index) => (
               <Select.Item key={index + el} value={el} suffix="회" />
             ))}
           </Select.List>
@@ -120,7 +123,7 @@ const CreateStudyForm = () => {
             `}
             onChange={timePerCycleSelect.onChangeSelectItem}
           >
-            {[20, 25, 30, 35, 40, 45, 50, 55, 60].map((el, index) => (
+            {STUDY_TIME_PER_CYCLE_OPTIONS.map((el, index) => (
               <Select.Item key={index + el} value={el} suffix="분" />
             ))}
           </Select.List>

@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
 
+import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
 import Tabs from '@Components/common/Tabs/Tabs';
 import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
@@ -8,24 +9,14 @@ import useFetch from '@Hooks/api/useFetch';
 
 import color from '@Styles/color';
 
+import { PLAN_KEYWORDS, RETROSPECT_KEYWORDS } from '@Constants/study';
+
 import GoalIcon from '@Assets/icons/GoalIcon';
 import PencilIcon from '@Assets/icons/PencilIcon';
 
-import AnswerQuestion from '../AnswerQuestion/AnswerQuestion';
+import { getKeys } from '@Utils/getKeys';
 
-const PLAN_QUESTION = [
-  { key: 'toDo', question: '학습 목표' },
-  { key: 'completionCondition', question: '학습 완료 조건' },
-  { key: 'expectedProbability', question: '성공적으로 마칠 확률과 그 이유' },
-  { key: 'expectedDifficulty', question: '병목으로 예상 되는 가장 큰 것' },
-  { key: 'whatCanYouDo', question: '학습 시간이 초과된다면 초과된 원인 혹은 이유' },
-] as const;
-
-const RETROSPECT_QUESTION = [
-  { key: 'doneAsExpected', question: '학습이 이루어진 과정' },
-  { key: 'experiencedDifficulty', question: '학습과정에서의 겪은 어려움' },
-  { key: 'lesson', question: '학습을 통해 얻은 교훈' },
-] as const;
+import type { Plan, Retrospect } from '@Types/study';
 
 type MemberRecordContent = {
   cycle: number;
@@ -74,8 +65,13 @@ const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
                   <GoalIcon color={color.blue[500]} />
                   {nickname}가 작성한 목표
                 </Typography>
-                {PLAN_QUESTION.map(({ question, key }) => (
-                  <AnswerQuestion key={key} question={question} answer={content.plan[key]} topic="plan" />
+                {getKeys<Plan>(PLAN_KEYWORDS).map((key) => (
+                  <QuestionAnswer
+                    key={key}
+                    question={PLAN_KEYWORDS[key]}
+                    answer={content.plan[key]}
+                    iconColor={color.blue[500]}
+                  />
                 ))}
               </TabItemSection>
               <TabItemSection>
@@ -83,8 +79,13 @@ const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
                   <PencilIcon color={color.teal[500]} />
                   {nickname}가 작성한 회고
                 </Typography>
-                {RETROSPECT_QUESTION.map(({ question, key }) => (
-                  <AnswerQuestion key={key} question={question} answer={content.retrospect[key]} topic="retrospect" />
+                {getKeys<Retrospect>(RETROSPECT_KEYWORDS).map((key) => (
+                  <QuestionAnswer
+                    key={key}
+                    question={RETROSPECT_KEYWORDS[key]}
+                    answer={content.retrospect[key]}
+                    iconColor={color.teal[500]}
+                  />
                 ))}
               </TabItemSection>
             </TabItemContainer>
