@@ -7,6 +7,11 @@ import QuestionTextarea from '@Components/common/QuestionTextarea/QuestionTextar
 import useRetrospectForm from '@Hooks/board/useRetrospectForm';
 
 import { ROUTES_PATH } from '@Constants/routes';
+import { RETROSPECT_QUESTIONS } from '@Constants/study';
+
+import { getKeys } from '@Utils/getKeys';
+
+import type { Retrospect } from '@Types/study';
 
 type Props = {
   isLastCycle: boolean;
@@ -38,15 +43,9 @@ const RetrospectForm = ({ isLastCycle, onClickSubmitButton, studyId, memberId }:
 
   return (
     <Layout>
-      <QuestionTextarea
-        question="실제로 학습이 어떻게 됐나요? 예상대로 잘 이루어졌나요?"
-        {...questionTextareaProps.doneAsExpected}
-      />
-      <QuestionTextarea
-        question="학습을 진행하면서 겪은 어려움은 어떤 것이 있었나요?"
-        {...questionTextareaProps.experiencedDifficulty}
-      />
-      <QuestionTextarea question="학습 과정에서 어떤 교훈을 얻었나요?" {...questionTextareaProps.lesson} />
+      {getKeys<Retrospect>(RETROSPECT_QUESTIONS).map((key) => (
+        <QuestionTextarea key={key} question={RETROSPECT_QUESTIONS[key]} {...questionTextareaProps[key]} />
+      ))}
       <Button
         variant="success"
         type="submit"

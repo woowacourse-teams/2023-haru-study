@@ -15,13 +15,7 @@ const GuideContents = ({ studyData, changeNextStep }: Props) => {
   switch (studyData.step) {
     case 'planning':
       return (
-        <PlanningForm
-          minutes={studyData.timePerCycle}
-          cycle={studyData.currentCycle}
-          onClickSubmitButton={changeNextStep}
-          studyId={studyData.studyId}
-          memberId={studyData.memberId}
-        />
+        <PlanningForm onClickSubmitButton={changeNextStep} studyId={studyData.studyId} memberId={studyData.memberId} />
       );
     case 'studying':
       return (
