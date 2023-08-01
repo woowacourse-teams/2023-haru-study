@@ -10,16 +10,11 @@ import useStudyingForm from '@Hooks/board/useStudyingForm';
 import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
+import { PLAN_KEYWORDS } from '@Constants/study';
 
-import type { Plan, PlanList } from '@Types/study';
+import { getKeys } from '@Utils/getKeys';
 
-const questions: PlanList = {
-  toDo: '학습목표',
-  completionCondition: '완료 조건',
-  expectedProbability: '성공적으로 마칠 확률과 그 이유',
-  expectedDifficulty: '학습 중 예상되는 어려움',
-  whatCanYouDo: '확률을 높이기 위한 방법',
-};
+import type { Plan } from '@Types/study';
 
 type Props = {
   onClickSubmitButton: () => void;
@@ -66,11 +61,11 @@ const StudyingForm = ({ onClickSubmitButton, studyId, memberId, cycle }: Props) 
   return (
     <Layout>
       <PlanResultList>
-        {Object.keys(questions).map((planKey) => (
+        {getKeys<Plan>(PLAN_KEYWORDS).map((planKey) => (
           <QuestionAnswer
             key={planKey}
-            question={questions[planKey as Plan]}
-            answer={planList[planKey as Plan]}
+            question={PLAN_KEYWORDS[planKey]}
+            answer={planList[planKey]}
             iconColor={color.red[600]}
           />
         ))}
