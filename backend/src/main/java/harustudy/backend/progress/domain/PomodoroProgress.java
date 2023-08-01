@@ -1,7 +1,7 @@
 package harustudy.backend.progress.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
-import harustudy.backend.content.domain.PomodoroContent;
+import harustudy.backend.content.controller.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.room.domain.PomodoroRoom;
 import jakarta.persistence.*;
@@ -86,6 +86,17 @@ public class PomodoroProgress extends BaseTimeEntity {
             currentCycle++;
         }
         pomodoroStatus = pomodoroStatus.getNext();
+    }
+
+    public void proceedV2() {
+        // TODO: 서비스로 뺄지 말지(일관성을 위해)
+        if (pomodoroStatus.equals(PomodoroStatus.RETROSPECT) &&
+                currentCycle.equals(pomodoroRoom.getTotalCycle())) {
+            pomodoroStatus = PomodoroStatus.DONE;
+            return;
+        }
+        pomodoroStatus = pomodoroStatus.getNext();
+        currentCycle++;
     }
 
     public boolean isRetrospect() {

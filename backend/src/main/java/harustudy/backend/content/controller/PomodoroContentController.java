@@ -1,6 +1,6 @@
 package harustudy.backend.content.controller;
 
-import harustudy.backend.content.dto.PomodoroContentResponses;
+import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.service.PomodoroContentService;
 import jakarta.validation.constraints.NotNull;
 import java.util.Map;
@@ -46,7 +46,7 @@ public class PomodoroContentController {
     }
 
     @GetMapping("/api/studies/{studyId}/members/{memberId}/content")
-    public ResponseEntity<PomodoroContentResponses> findMemberContent(
+    public ResponseEntity<PomodoroContentsResponse> findMemberContent(
             @PathVariable Long studyId,
             @PathVariable Long memberId
     ) {

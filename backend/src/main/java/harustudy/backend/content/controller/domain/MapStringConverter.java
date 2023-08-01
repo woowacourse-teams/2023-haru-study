@@ -1,4 +1,4 @@
-package harustudy.backend.content.domain;
+package harustudy.backend.content.controller.domain;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

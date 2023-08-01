@@ -1,4 +1,4 @@
-package harustudy.backend.content.domain;
+package harustudy.backend.content.controller.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.progress.domain.PomodoroProgress;

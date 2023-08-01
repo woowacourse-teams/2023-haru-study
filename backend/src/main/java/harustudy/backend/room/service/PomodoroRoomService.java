@@ -1,6 +1,6 @@
 package harustudy.backend.room.service;
 
-import harustudy.backend.content.domain.PomodoroContent;
+import harustudy.backend.content.controller.domain.PomodoroContent;
 import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
@@ -76,7 +76,7 @@ public class PomodoroRoomService {
 
     public PomodoroRoomAndMembersResponse findPomodoroRoomMetadata(Long roomId) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
-        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findByPomodoroRoom(pomodoroRoom);
+        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findAllByPomodoroRoom(pomodoroRoom);
 
         if (pomodoroProgresses.isEmpty()) {
             throw new IllegalArgumentException();
