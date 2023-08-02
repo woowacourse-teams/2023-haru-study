@@ -79,7 +79,7 @@ class PomodoroProgressRepositoryTest {
         pomodoroProgressRepository.save(pomodoroProgress2);
 
         // when
-        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findByPomodoroRoom(pomodoroRoom);
+        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findAllByPomodoroRoom(pomodoroRoom);
 
         // then
         assertThat(pomodoroProgresses.size()).isEqualTo(2);

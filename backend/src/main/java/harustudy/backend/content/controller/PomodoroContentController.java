@@ -1,6 +1,6 @@
 package harustudy.backend.content.controller;
 
-import harustudy.backend.content.dto.PomodoroContentResponses;
+import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.service.PomodoroContentService;
 import jakarta.validation.constraints.NotNull;
 import java.util.Map;
@@ -16,6 +16,7 @@ public class PomodoroContentController {
 
     private final PomodoroContentService pomodoroContentService;
 
+    @Deprecated
     @PostMapping("/api/studies/{studyId}/members/{memberId}/content/plans")
     public ResponseEntity<Void> writePlan(
             @PathVariable("studyId") Long studyId,
@@ -26,6 +27,7 @@ public class PomodoroContentController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Deprecated
     @PostMapping("/api/studies/{studyId}/members/{memberId}/content/retrospects")
     public ResponseEntity<Void> writeRetrospect(
             @PathVariable("studyId") Long studyId,
@@ -36,6 +38,7 @@ public class PomodoroContentController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Deprecated
     @GetMapping("/api/studies/{studyId}/members/{memberId}/content/plans")
     public ResponseEntity<Map<String, String>> findCurrentCyclePlan(
             @PathVariable Long studyId,
@@ -45,8 +48,9 @@ public class PomodoroContentController {
         return ResponseEntity.ok(pomodoroContentService.findCurrentCyclePlan(studyId, memberId, cycle));
     }
 
+    @Deprecated
     @GetMapping("/api/studies/{studyId}/members/{memberId}/content")
-    public ResponseEntity<PomodoroContentResponses> findMemberContent(
+    public ResponseEntity<PomodoroContentsResponse> findMemberContent(
             @PathVariable Long studyId,
             @PathVariable Long memberId
     ) {

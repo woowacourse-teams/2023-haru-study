@@ -14,11 +14,13 @@ public class PomodoroRoomController {
 
     private final PomodoroRoomService pomodoroRoomService;
 
+    @Deprecated
     @GetMapping("/api/studies/{studyId}/metadata")
     public ResponseEntity<PomodoroRoomAndMembersResponse> findStudyMetaData(@PathVariable Long studyId) {
         return ResponseEntity.ok(pomodoroRoomService.findPomodoroRoomMetadata(studyId));
     }
 
+    @Deprecated
     @PostMapping("/api/studies")
     public ResponseEntity<CreatePomodoroRoomResponse> createStudy(
             @Valid @RequestBody CreatePomodoroRoomRequest request
@@ -29,6 +31,7 @@ public class PomodoroRoomController {
                 .body(CreatePomodoroRoomResponse.from(createPomodoroRoomDto));
     }
 
+    @Deprecated
     @PostMapping("/api/studies/{studyId}/members")
     public ResponseEntity<Void> participate(
             @PathVariable Long studyId,

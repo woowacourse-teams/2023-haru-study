@@ -88,6 +88,17 @@ public class PomodoroProgress extends BaseTimeEntity {
         pomodoroStatus = pomodoroStatus.getNext();
     }
 
+    public void proceedV2() {
+        // TODO: 서비스로 뺄지 말지(일관성을 위해)
+        if (pomodoroStatus.equals(PomodoroStatus.RETROSPECT) &&
+                currentCycle.equals(pomodoroRoom.getTotalCycle())) {
+            pomodoroStatus = PomodoroStatus.DONE;
+            return;
+        }
+        pomodoroStatus = pomodoroStatus.getNext();
+        currentCycle++;
+    }
+
     public boolean isRetrospect() {
         return pomodoroStatus == PomodoroStatus.RETROSPECT;
     }

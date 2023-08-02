@@ -6,7 +6,7 @@ import harustudy.backend.common.EntityNotFoundException.PomodoroRecordNotFound;
 import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.dto.PomodoroContentResponse;
-import harustudy.backend.content.dto.PomodoroContentResponses;
+import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
@@ -59,7 +59,7 @@ public class PomodoroContentService {
         }
     }
 
-    public PomodoroContentResponses findMemberContent(Long roomId, Long memberId) {
+    public PomodoroContentsResponse findMemberContent(Long roomId, Long memberId) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(IllegalArgumentException::new);
@@ -75,7 +75,7 @@ public class PomodoroContentService {
                         record.getRetrospect()))
                 .toList();
 
-        return new PomodoroContentResponses(pomodoroContentRespons);
+        return new PomodoroContentsResponse(pomodoroContentRespons);
     }
 
     public void writeRetrospect(Long roomId, Long memberId, Map<String, String> retrospect) {

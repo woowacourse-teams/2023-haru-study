@@ -14,6 +14,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @Deprecated
     @GetMapping("/api/studies/{studyId}/members/{memberId}")
     public ResponseEntity<NicknameResponse> findNickname(@PathVariable Long studyId,
                                                          @PathVariable Long memberId) {

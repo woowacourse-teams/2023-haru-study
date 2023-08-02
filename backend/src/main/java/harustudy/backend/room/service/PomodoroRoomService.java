@@ -76,7 +76,7 @@ public class PomodoroRoomService {
 
     public PomodoroRoomAndMembersResponse findPomodoroRoomMetadata(Long roomId) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
-        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findByPomodoroRoom(pomodoroRoom);
+        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findAllByPomodoroRoom(pomodoroRoom);
 
         if (pomodoroProgresses.isEmpty()) {
             throw new IllegalArgumentException();

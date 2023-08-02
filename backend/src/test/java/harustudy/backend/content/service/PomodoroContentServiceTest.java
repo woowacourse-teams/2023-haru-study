@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.dto.PomodoroContentResponse;
-import harustudy.backend.content.dto.PomodoroContentResponses;
+import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
@@ -114,13 +114,13 @@ class PomodoroContentServiceTest {
         testEntityManager.flush();
         testEntityManager.clear();
 
-        PomodoroContentResponses pomodoroContentResponses = pomodoroContentService.findMemberContent(pomodoroRoom.getId(), member.getId());
+        PomodoroContentsResponse pomodoroContentsResponse = pomodoroContentService.findMemberContent(pomodoroRoom.getId(), member.getId());
 
         PomodoroContentResponse expectedPomodoroContentResponse = new PomodoroContentResponse(1, expectedPlan,
                 expectedRetrospect);
 
         // when
-        List<PomodoroContentResponse> content = pomodoroContentResponses.content();
+        List<PomodoroContentResponse> content = pomodoroContentsResponse.content();
 
         // then
         assertThat(content).containsExactly(expectedPomodoroContentResponse);

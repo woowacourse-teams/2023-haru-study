@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import harustudy.backend.content.dto.PomodoroContentResponse;
-import harustudy.backend.content.dto.PomodoroContentResponses;
+import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
 import harustudy.backend.room.dto.MemberDto;
 import harustudy.backend.room.dto.PomodoroRoomAndMembersResponse;
@@ -59,8 +59,8 @@ public class FindRoomIntegrationTest extends IntegrationTest {
                 .andReturn();
 
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        PomodoroContentResponses responses = objectMapper.readValue(jsonResponse,
-                PomodoroContentResponses.class);
+        PomodoroContentsResponse responses = objectMapper.readValue(jsonResponse,
+                PomodoroContentsResponse.class);
 
         // then
         PomodoroContentResponse expectedPomodoroContentResponse = new PomodoroContentResponse(1,

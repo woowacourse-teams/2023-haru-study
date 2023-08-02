@@ -6,10 +6,17 @@ import harustudy.backend.room.domain.PomodoroRoom;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface PomodoroProgressRepository extends JpaRepository<PomodoroProgress, Long> {
 
-    Optional<PomodoroProgress> findByPomodoroRoomAndMember(PomodoroRoom pomodoroRoom, Member member);
+    Optional<PomodoroProgress> findByPomodoroRoomAndMember(PomodoroRoom pomodoroRoom,
+            Member member);
 
-    List<PomodoroProgress> findByPomodoroRoom(PomodoroRoom pomodoroRoom);
+    List<PomodoroProgress> findAllByPomodoroRoom(PomodoroRoom pomodoroRoom);
+
+    @Query("select p from PomodoroProgress p join fetch p.member where p.pomodoroRoom = :pomodoroRoom")
+    List<PomodoroProgress> findAllByPomodoroRoomFetchMember(
+            @Param("pomodoroRoom") PomodoroRoom pomodoroRoom);
 }

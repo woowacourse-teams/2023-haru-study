@@ -16,6 +16,7 @@ public class ParticipantCodeController {
 
     private final ParticipantCodeService participantCodeService;
 
+    @Deprecated
     @PostMapping("/api/studies/authenticate")
     public ResponseEntity<FindRoomResponse> checkAuth(@Valid @RequestBody FindRoomRequest request) {
         return ResponseEntity.ok(participantCodeService.findRoomByCode(request.participantCode()));
