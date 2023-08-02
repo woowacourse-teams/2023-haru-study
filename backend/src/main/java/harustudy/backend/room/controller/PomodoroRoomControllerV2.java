@@ -1,6 +1,5 @@
 package harustudy.backend.room.controller;
 
-import harustudy.backend.participantcode.dto.FindRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomDto;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;

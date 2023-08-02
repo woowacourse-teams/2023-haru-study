@@ -72,7 +72,8 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
     @Test
     void 참여코드로_스터디를_조회한다() throws Exception {
         // given, when
-        MvcResult result = mockMvc.perform(get("/api/v2/studies?participantCode=" + participantCode.getCode())
+        MvcResult result = mockMvc.perform(get("/api/v2/studies")
+                        .param("participantCode", participantCode.getCode())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();

@@ -43,6 +43,9 @@ class PomodoroRoomServiceV2Test {
         entityManager.persist(participantCode);
         entityManager.persist(pomodoroRoom);
 
+        entityManager.flush();
+        entityManager.clear();
+
         // when
         PomodoroRoomResponseV2 result = pomodoroRoomServiceV2.findPomodoroRoom(pomodoroRoom.getId());
 
@@ -61,6 +64,9 @@ class PomodoroRoomServiceV2Test {
         PomodoroRoom pomodoroRoom = new PomodoroRoom("room", 8, 20, participantCode);
         entityManager.persist(participantCode);
         entityManager.persist(pomodoroRoom);
+
+        entityManager.flush();
+        entityManager.clear();
 
         // when, then
         assertThatThrownBy(() -> pomodoroRoomServiceV2.findPomodoroRoom(99999L))
@@ -90,6 +96,9 @@ class PomodoroRoomServiceV2Test {
         entityManager.persist(participantCode);
         entityManager.persist(pomodoroRoom);
 
+        entityManager.flush();
+        entityManager.clear();
+
         // when
         PomodoroRoomResponseV2 result = pomodoroRoomServiceV2.findPomodoroRoomByParticipantCode(participantCode.getCode());
 
@@ -109,6 +118,9 @@ class PomodoroRoomServiceV2Test {
         entityManager.persist(participantCode);
         entityManager.persist(pomodoroRoom);
 
+        entityManager.flush();
+        entityManager.clear();
+
         ParticipantCode notPersisted = new ParticipantCode(generationStrategy);
 
         // when, then
@@ -126,6 +138,9 @@ class PomodoroRoomServiceV2Test {
 
         ParticipantCode notRoomsCode = new ParticipantCode(generationStrategy);
         entityManager.persist(notRoomsCode);
+
+        entityManager.flush();
+        entityManager.clear();
 
         // when, then
         assertThatThrownBy(() -> pomodoroRoomServiceV2.findPomodoroRoomByParticipantCode(notRoomsCode.getCode()))
