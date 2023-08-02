@@ -32,7 +32,7 @@ class PomodoroContentRepositoryTest {
     private PomodoroProgress pomodoroProgress;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
         PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 3, 20, participantCode);
         Member member = new Member("member");

@@ -43,7 +43,7 @@ class PomodoroContentServiceTest {
     private Member member;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
         pomodoroRoom = new PomodoroRoom("roomName", 1, 20, participantCode);
         member = new Member("nickname");

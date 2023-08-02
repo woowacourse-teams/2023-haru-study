@@ -35,8 +35,8 @@ public class PomodoroContentIntegrationTest extends IntegrationTest {
     private Member member;
 
     @BeforeEach
-    void setup() {
-        super.setup();
+    void setUp() {
+        super.setUp();
 
         ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
         pomodoroRoom = new PomodoroRoom("roomName", 2, 20, participantCode);

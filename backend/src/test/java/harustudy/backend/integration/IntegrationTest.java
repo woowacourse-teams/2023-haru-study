@@ -27,7 +27,7 @@ public class IntegrationTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    void setup() {
+    void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
