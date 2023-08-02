@@ -1,11 +1,10 @@
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
 import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
 import Tabs from '@Components/common/Tabs/Tabs';
 import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
-
-import useFetch from '@Hooks/api/useFetch';
 
 import color from '@Styles/color';
 
@@ -16,39 +15,35 @@ import PencilIcon from '@Assets/icons/PencilIcon';
 
 import { getKeys } from '@Utils/getKeys';
 
-import type { Plan, Retrospect } from '@Types/study';
+import { requestGetMemberRecordContents } from '@Apis/index';
 
-type MemberRecordContent = {
-  cycle: number;
-  plan: {
-    toDo: string;
-    completionCondition: string;
-    expectedProbability: string;
-    expectedDifficulty: string;
-    whatCanYouDo: string;
-  };
-  retrospect: {
-    doneAsExpected: string;
-    experiencedDifficulty: string;
-    lesson: string;
-  };
-};
-
-type MemberRecordContents = {
-  content: MemberRecordContent[];
-};
+import type { MemberRecordContent, Plan, Retrospect } from '@Types/study';
 
 type Props = {
   studyId: string;
-  memberId: number;
+  memberId: string;
   nickname: string;
 };
 
 const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
-  const { data, status } = useFetch<MemberRecordContents>(`/api/studies/${studyId}/members/${memberId}/content`);
-  const isLoading = status === 'pending';
+  const [memberRecordContents, setMemberRecordContents] = useState<MemberRecordContent[] | null>(null);
 
-  const memberContents = data?.content;
+  const isLoading = !memberRecordContents;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await requestGetMemberRecordContents(studyId, memberId);
+
+      setMemberRecordContents(data.content);
+    };
+
+    try {
+      fetchData();
+    } catch (error) {
+      if (!(error instanceof Error)) throw error;
+      alert(error.message);
+    }
+  }, [memberId, studyId]);
 
   if (isLoading) {
     return <TabsSkeleton />;
@@ -57,7 +52,7 @@ const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
   return (
     <MemberRecordLayout>
       <Tabs>
-        {memberContents?.map((content) => (
+        {memberRecordContents?.map((content) => (
           <Tabs.Item key={content.cycle} label={`${content.cycle}번째 사이클`}>
             <TabItemContainer>
               <TabItemSection>

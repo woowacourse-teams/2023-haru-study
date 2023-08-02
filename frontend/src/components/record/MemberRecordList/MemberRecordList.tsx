@@ -5,13 +5,12 @@ import Typography from '@Components/common/Typography/Typography';
 import MemberRecord from '../MemberRecord/MemberRecord';
 
 type Props = {
-  members?: { memberId: number; nickname: string }[];
+  members: { memberId: string; nickname: string }[];
   studyId?: string;
-  isLoading: boolean;
 };
 
-const MemberRecordList = ({ members = [], studyId = '', isLoading }: Props) => {
-  if (isLoading) {
+const MemberRecordList = ({ members = [], studyId = '' }: Props) => {
+  if (members.length === 0) {
     return <AccordionSkeleton />;
   }
 
