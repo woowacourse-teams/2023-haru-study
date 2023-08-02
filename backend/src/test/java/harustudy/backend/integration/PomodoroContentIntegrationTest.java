@@ -62,9 +62,9 @@ public class PomodoroContentIntegrationTest extends IntegrationTest {
 
         // when
         mockMvc.perform(
-                post("/api/v2/studies/{studyId}/contents/write-plan", pomodoroRoom.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
+                        post("/api/v2/studies/{studyId}/contents/write-plan", pomodoroRoom.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(body))
 
                 // then
                 .andExpect(status().isOk());
@@ -86,9 +86,9 @@ public class PomodoroContentIntegrationTest extends IntegrationTest {
 
         // when
         mockMvc.perform(
-                post("/api/v2/studies/{studyId}/contents/write-retrospect", pomodoroRoom.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
+                        post("/api/v2/studies/{studyId}/contents/write-retrospect", pomodoroRoom.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(body))
 
                 // then
                 .andExpect(status().isOk());
@@ -111,9 +111,9 @@ public class PomodoroContentIntegrationTest extends IntegrationTest {
 
         // when
         MvcResult result = mockMvc.perform(
-                get("/api/v2/studies/{studyId}/contents", pomodoroRoom.getId())
-                        .param("memberId", String.valueOf(member.getId()))
-                        .param("cycle", String.valueOf(pomodoroContent.getCycle())))
+                        get("/api/v2/studies/{studyId}/contents", pomodoroRoom.getId())
+                                .param("memberId", String.valueOf(member.getId()))
+                                .param("cycle", String.valueOf(pomodoroContent.getCycle())))
 
                 .andExpect(status().isOk())
                 .andReturn();

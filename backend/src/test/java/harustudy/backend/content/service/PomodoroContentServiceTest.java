@@ -1,9 +1,9 @@
 package harustudy.backend.content.service;
 
-import static harustudy.backend.common.EntityNotFoundException.*;
+import static harustudy.backend.common.EntityNotFoundException.MemberNotFound;
+import static harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import static org.assertj.core.api.Assertions.*;
 
-import harustudy.backend.common.EntityNotFoundException;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.dto.PomodoroContentResponse;
 import harustudy.backend.content.dto.PomodoroContentsResponse;
