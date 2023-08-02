@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 @Service
+@Deprecated
 public class PomodoroContentService {
 
     private final PomodoroRoomRepository pomodoroRoomRepository;
