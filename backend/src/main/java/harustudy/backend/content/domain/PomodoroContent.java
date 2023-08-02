@@ -58,4 +58,8 @@ public class PomodoroContent extends BaseTimeEntity {
     public boolean hasSameCycleWith(PomodoroProgress pomodoroProgress) {
         return cycle.equals(pomodoroProgress.getCurrentCycle());
     }
+
+    public boolean hasEmptyPlan() {
+        return plan.isEmpty();
+    }
 }

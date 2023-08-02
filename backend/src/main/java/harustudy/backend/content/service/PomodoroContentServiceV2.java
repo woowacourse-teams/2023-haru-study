@@ -72,7 +72,7 @@ public class PomodoroContentServiceV2 {
     }
 
     private void validateIsPlanFilled(PomodoroContent recentContent) {
-        if (recentContent.getPlan().isEmpty()) {
+        if (recentContent.hasEmptyPlan()) {
             throw new StudyPomodoroProgressException();
         }
     }
