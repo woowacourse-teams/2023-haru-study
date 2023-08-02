@@ -17,6 +17,7 @@ public class PomodoroProgressController {
 
     private final PomodoroProgressService pomodoroProgressService;
 
+    @Deprecated
     @PostMapping("api/studies/{studyId}/members/{memberId}/next-step")
     public ResponseEntity<Void> proceed(@PathVariable("studyId") @NotNull Long studyId,
                                         @PathVariable("memberId") @NotNull Long memberId) {
@@ -24,7 +25,7 @@ public class PomodoroProgressController {
         return ResponseEntity.ok().build();
     }
 
-    // TODO: API 분리 + metatdata 키워드 삭제
+    @Deprecated
     @GetMapping("/api/studies/{studyId}/members/{memberId}/metadata")
     public ResponseEntity<RoomAndProgressStepResponse> findMemberStudyMetaData(
             @PathVariable Long studyId,
@@ -33,6 +34,7 @@ public class PomodoroProgressController {
         return ResponseEntity.ok(pomodoroProgressService.findMemberMetaData(studyId, memberId));
     }
 
+    @Deprecated
     @GetMapping("api/studies/{studyId}/members/{memberId}/progress")
     public ResponseEntity<PomodoroProgressResponse> findPomodoroProgress(
             @PathVariable Long studyId,

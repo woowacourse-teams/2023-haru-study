@@ -19,6 +19,7 @@ import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,15 +57,6 @@ public class PomodoroContentServiceV2 {
                 .orElseThrow(PomodoroRecordNotFound::new);
     }
 
-    private PomodoroProgress findPomodoroProgressFrom(Long roomId, Long memberId) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
-                .orElseThrow(RoomNotFound::new);
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFound::new);
-        return pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
-                .orElseThrow(PomodoroProgressNotFound::new);
-    }
-
     public void writeRetrospect(Long roomId, WriteRetrospectRequest request) {
         PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, request.memberId());
         PomodoroContent recentContent = findContentWithSameCycle(pomodoroProgress);
@@ -85,12 +77,31 @@ public class PomodoroContentServiceV2 {
         }
     }
 
-    public PomodoroContentsResponse findMemberContent(Long roomId, Long memberId) {
+    // TODO: 이후 동적쿼리로 변경해서 repository로 로직 밀어넣기
+    public PomodoroContentsResponse findMemberContentWithCycleFilter(Long roomId, Long memberId, Integer cycle) {
         PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, memberId);
         List<PomodoroContent> pomodoroContents = pomodoroProgress.getPomodoroContents();
+
+        if (Objects.isNull(cycle)) {
+            List<PomodoroContentResponse> pomodoroContentResponses = pomodoroContents.stream()
+                    .map(PomodoroContentResponse::from)
+                    .toList();
+            return PomodoroContentsResponse.from(pomodoroContentResponses);
+        }
+
         List<PomodoroContentResponse> pomodoroContentResponses = pomodoroContents.stream()
+                .filter(content -> content.getCycle().equals(cycle))
                 .map(PomodoroContentResponse::from)
                 .toList();
         return PomodoroContentsResponse.from(pomodoroContentResponses);
+    }
+
+    private PomodoroProgress findPomodoroProgressFrom(Long roomId, Long memberId) {
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
+                .orElseThrow(RoomNotFound::new);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFound::new);
+        return pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
+                .orElseThrow(PomodoroProgressNotFound::new);
     }
 }

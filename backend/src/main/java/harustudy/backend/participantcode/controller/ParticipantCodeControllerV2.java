@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-public class ParticipantCodeController {
+public class ParticipantCodeControllerV2 {
 
     private final ParticipantCodeService participantCodeService;
 
-    @Deprecated
-    @PostMapping("/api/studies/authenticate")
+    @PostMapping("/api/v2/studies/authenticate")
     public ResponseEntity<FindRoomResponse> checkAuth(@Valid @RequestBody FindRoomRequest request) {
         return ResponseEntity.ok(participantCodeService.findRoomByCode(request.participantCode()));
     }
