@@ -24,7 +24,7 @@ export const DefaultSelect: Story = {
         <Select.Trigger></Select.Trigger>
         <Select.List
           onChange={() => {
-            alert('목록이 펼쳐집니다.');
+            alert('Item이 선택되었습니다.');
           }}
         >
           <Select.Item value="Item1" suffix="" />
