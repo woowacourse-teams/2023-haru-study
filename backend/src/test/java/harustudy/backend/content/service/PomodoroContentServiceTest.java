@@ -11,7 +11,7 @@ import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.domain.PomodoroStatus;
-import harustudy.backend.progress.exception.StudyPomodoroProgressException;
+import harustudy.backend.progress.exception.IllegalProgressStateException;
 import harustudy.backend.room.domain.PomodoroRoom;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +55,7 @@ class PomodoroContentServiceTest {
         // then
         assertThatThrownBy(() -> pomodoroContentService.writePlan(pomodoroRoom.getId(),
                 member.getId(), Map.of("plan", "abc")))
-                .isInstanceOf(StudyPomodoroProgressException.class);
+                .isInstanceOf(IllegalProgressStateException.class);
     }
 
 
@@ -79,7 +79,7 @@ class PomodoroContentServiceTest {
         // then
         assertThatThrownBy(() -> pomodoroContentService.writeRetrospect(pomodoroRoom.getId(),
                 member.getId(), Map.of("retrospect", "abc")))
-                .isInstanceOf(StudyPomodoroProgressException.class);
+                .isInstanceOf(IllegalProgressStateException.class);
     }
 
 

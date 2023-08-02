@@ -4,7 +4,16 @@ import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.room.domain.PomodoroRoom;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,13 +99,15 @@ public class PomodoroProgress extends BaseTimeEntity {
 
     public void proceedV2() {
         // TODO: 서비스로 뺄지 말지(일관성을 위해)
-        if (pomodoroStatus.equals(PomodoroStatus.RETROSPECT) &&
-                currentCycle.equals(pomodoroRoom.getTotalCycle())) {
-            pomodoroStatus = PomodoroStatus.DONE;
+        if (pomodoroStatus.equals(PomodoroStatus.RETROSPECT)) {
+            if (currentCycle.equals(pomodoroRoom.getTotalCycle())) {
+                pomodoroStatus = PomodoroStatus.DONE;
+                return;
+            }
+            currentCycle++;
             return;
         }
         pomodoroStatus = pomodoroStatus.getNext();
-        currentCycle++;
     }
 
     public boolean isRetrospect() {
