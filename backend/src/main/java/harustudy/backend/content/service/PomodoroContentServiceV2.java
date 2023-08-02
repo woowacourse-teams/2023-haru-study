@@ -13,7 +13,6 @@ import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.progress.exception.InvalidPomodoroProgressException.UnavailableToProceed;
 import harustudy.backend.progress.exception.StudyPomodoroProgressException;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
@@ -81,14 +80,20 @@ public class PomodoroContentServiceV2 {
     public PomodoroContentsResponse findMemberContentWithCycleFilter(Long roomId, Long memberId, Integer cycle) {
         PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, memberId);
         List<PomodoroContent> pomodoroContents = pomodoroProgress.getPomodoroContents();
-
         if (Objects.isNull(cycle)) {
-            List<PomodoroContentResponse> pomodoroContentResponses = pomodoroContents.stream()
-                    .map(PomodoroContentResponse::from)
-                    .toList();
-            return PomodoroContentsResponse.from(pomodoroContentResponses);
+            return getPomodoroContentsResponseWithoutCycleFilter(pomodoroContents);
         }
+        return getPomodoroContentsResponseWithCycleFilter(pomodoroContents, cycle);
+    }
 
+    private PomodoroContentsResponse getPomodoroContentsResponseWithoutCycleFilter(List<PomodoroContent> pomodoroContents) {
+        List<PomodoroContentResponse> pomodoroContentResponses = pomodoroContents.stream()
+                .map(PomodoroContentResponse::from)
+                .toList();
+        return PomodoroContentsResponse.from(pomodoroContentResponses);
+    }
+
+    private PomodoroContentsResponse getPomodoroContentsResponseWithCycleFilter(List<PomodoroContent> pomodoroContents, Integer cycle) {
         List<PomodoroContentResponse> pomodoroContentResponses = pomodoroContents.stream()
                 .filter(content -> content.getCycle().equals(cycle))
                 .map(PomodoroContentResponse::from)
