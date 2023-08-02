@@ -1,30 +1,85 @@
-const request = async (path: string, init?: RequestInit) => {
-  const response = await fetch(path, {
-    ...init,
+import http from '@Utils/http';
+
+import type {
+  ResponseCreateStudy,
+  ResponseIsCheckMember,
+  ResponseMemberRecordContents,
+  ResponseMemberStudyMetadata,
+  ResponsePlanList,
+  ResponseStudyInfo,
+  ResponseStudyMetadata,
+} from '@Types/api';
+import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
+
+export const requestCreateStudy = async (
+  studyName: string,
+  totalCycle: TotalCycleOptions,
+  timePerCycle: StudyTimePerCycleOptions,
+) => {
+  const response = await fetch(`api/studies`, {
+    body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      ...init?.headers,
     },
   });
 
-  if (!response.ok) throw new Error(response.status.toString());
-  return response;
+  const locationHeader = response.headers.get('Location');
+  const studyId = locationHeader?.split('/').pop() as string;
+
+  const result = (await response.json()) as ResponseCreateStudy;
+
+  return { studyId, result };
 };
 
-export const createStudy = (studyName: string, totalCycle: number, timePerCycle: number) =>
-  request(`api/studies`, {
-    method: 'POST',
-    body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
-  });
-
-export const startStudy = (nickname: string | null, studyId: string | null) =>
-  request(`api/studies/${studyId ?? ''}/members`, {
-    method: 'POST',
+export const requestRegisterMember = async (nickname: string | null, studyId: string | null) => {
+  const response = await fetch(`api/studies/${studyId ?? ''}/members`, {
     body: JSON.stringify({ nickname }),
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 
-export const authenticateParticipantCode = (participantCode: string, memberId: number | null) =>
-  request(`api/studies/authenticate`, {
-    method: 'POST',
+  if (!response.ok) {
+    throw Error('사용할 수 없는 닉네임입니다.');
+  }
+
+  const locationHeader = response.headers.get('Location');
+  const memberId = locationHeader?.split('/').pop() as string;
+
+  return { memberId };
+};
+
+export const requestAuthenticateParticipationCode = (participantCode: string, memberId: number) =>
+  http.post<ResponseStudyInfo>(`api/studies/authenticate`, {
     body: JSON.stringify({ participantCode, memberId }),
   });
+
+export const requestCheckIsMember = (studyId: string, memberId: string) =>
+  http.get<ResponseIsCheckMember>(`/api/studies/${studyId}/members/${memberId}`);
+
+export const requestSubmitPlanningForm = (studyId: string, memberId: string, plans: PlanList) =>
+  http.post(`/api/studies/${studyId}/members/${memberId}/content/plans`, {
+    body: JSON.stringify(plans),
+  });
+
+export const requestSubmitRetrospectForm = (studyId: string, memberId: string, retrospects: RetrospectList) =>
+  http.post(`/api/studies/${studyId}/members/${memberId}/content/retrospects`, { body: JSON.stringify(retrospects) });
+
+export const requestGetMemberStudyMetadata = (studyId: string, memberId: string) =>
+  http.get<ResponseMemberStudyMetadata>(`/api/studies/${studyId}/members/${memberId}/metadata`);
+
+export const requestGetStudyingContent = (studyId: string, memberId: string, cycle: number) =>
+  http.get<ResponsePlanList>(`/api/studies/${studyId}/members/${memberId}/content/plans?cycle=${cycle}`);
+
+export const requestSubmitStudyingForm = (studyId: string, memberId: string) =>
+  http.post(`/api/studies/${studyId}/members/${memberId}/next-step`);
+
+// RecordContents
+export const requestGetStudyMetadata = (studyId: string) =>
+  http.get<ResponseStudyMetadata>(`/api/studies/${studyId}/metadata`);
+
+// MemberRecord
+export const requestGetMemberRecordContents = (studyId: string, memberId: string) =>
+  http.get<ResponseMemberRecordContents>(`/api/studies/${studyId}/members/${memberId}/content`);
