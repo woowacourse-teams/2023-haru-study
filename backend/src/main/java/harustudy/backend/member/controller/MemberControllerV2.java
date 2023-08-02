@@ -5,6 +5,7 @@ import harustudy.backend.member.dto.MemberResponseV2;
 import harustudy.backend.member.dto.MembersResponseV2;
 import harustudy.backend.member.service.MemberServiceV2;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,10 +36,13 @@ public class MemberControllerV2 {
     }
 
     @PostMapping("/api/v2/members/guest")
-    public ResponseEntity<Void> registerGuest(Cookie cookie,
+    public ResponseEntity<Void> registerGuest(HttpServletResponse servletResponse,
             @RequestBody GuestRegisterRequest request) {
         Long memberId = memberService.register(request);
-        cookie.setAttribute("memberId", String.valueOf(memberId));
+
+        //TODO: cookie 수명 설정해주기
+        Cookie cookie = new Cookie("memberId", String.valueOf(memberId));
+        servletResponse.addCookie(cookie);
         return ResponseEntity.created(URI.create("/api/v2/members/" + memberId)).build();
     }
 }

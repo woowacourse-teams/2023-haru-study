@@ -34,9 +34,20 @@ public class MemberServiceV2 {
         return MemberResponseV2.from(member);
     }
 
+    public MembersResponseV2 findParticipatedMembers(Long roomId) {
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
+                .orElseThrow(RoomNotFound::new);
+        List<PomodoroProgress> pomodoroProgresses =
+                pomodoroProgressRepository.findAllByPomodoroRoomFetchMember(pomodoroRoom);
+        List<MemberResponseV2> memberResponses = pomodoroProgresses.stream()
+                .map(PomodoroProgress::getMember)
+                .map(MemberResponseV2::from)
+                .toList();
+        return new MembersResponseV2(memberResponses);
+    }
+
     public Long register(GuestRegisterRequest request) {
-        String nickname = request.nickname();
-        Member member = memberRepository.save(new Member(nickname));
+        Member member = memberRepository.save(new Member(request.nickname()));
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(request.studyId())
                 .orElseThrow(RoomNotFound::new);
         Integer totalCycle = pomodoroRoom.getTotalCycle();
@@ -46,18 +57,6 @@ public class MemberServiceV2 {
         for (int i = 1; i <= totalCycle; i++) {
             pomodoroContentRepository.save(new PomodoroContent(pomodoroProgress, i));
         }
-        return pomodoroProgress.getId();
-    }
-
-    public MembersResponseV2 findParticipatedMembers(Long roomId) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
-                .orElseThrow(RoomNotFound::new);
-        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findAllByPomodoroRoomFetchMember(
-                pomodoroRoom);
-        List<MemberResponseV2> memberResponses = pomodoroProgresses.stream()
-                .map(PomodoroProgress::getMember)
-                .map(MemberResponseV2::from)
-                .toList();
-        return new MembersResponseV2(memberResponses);
+        return member.getId();
     }
 }

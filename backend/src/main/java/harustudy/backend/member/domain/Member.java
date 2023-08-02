@@ -2,7 +2,11 @@ package harustudy.backend.member.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.member.exception.MemberNameLengthException;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,6 +32,7 @@ public class Member extends BaseTimeEntity {
 
     private void validateLength(String nickname) {
         if (nickname.length() < 1 || nickname.length() > 10) {
+            // TODO: 에러 처리 시 에러 코드 정의해야 할 듯?
             throw new MemberNameLengthException();
         }
     }

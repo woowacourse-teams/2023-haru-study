@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+@Deprecated
 @RequiredArgsConstructor
 @RestController
 public class MemberController {
@@ -17,7 +18,7 @@ public class MemberController {
     @Deprecated
     @GetMapping("/api/studies/{studyId}/members/{memberId}")
     public ResponseEntity<NicknameResponse> findNickname(@PathVariable Long studyId,
-                                                         @PathVariable Long memberId) {
+            @PathVariable Long memberId) {
         NicknameResponse response = memberService.findParticipatedMemberNickname(studyId, memberId);
         return ResponseEntity.ok(response);
     }
