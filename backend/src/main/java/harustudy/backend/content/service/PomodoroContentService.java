@@ -2,7 +2,7 @@ package harustudy.backend.content.service;
 
 import harustudy.backend.common.EntityNotFoundException.MemberNotFound;
 import harustudy.backend.common.EntityNotFoundException.PomodoroProgressNotFound;
-import harustudy.backend.common.EntityNotFoundException.PomodoroRecordNotFound;
+import harustudy.backend.common.EntityNotFoundException.PomodoroContentNotFound;
 import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.dto.PomodoroContentResponse;
@@ -99,7 +99,7 @@ public class PomodoroContentService {
         return pomodoroRecords.stream()
                 .filter(pomodoroRecord -> pomodoroRecord.hasSameCycleWith(pomodoroProgress))
                 .findAny()
-                .orElseThrow(PomodoroRecordNotFound::new);
+                .orElseThrow(PomodoroContentNotFound::new);
     }
 
     private PomodoroProgress findPomodoroProgressFrom(Long roomId, Long memberId) {
