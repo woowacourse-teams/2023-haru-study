@@ -1,6 +1,7 @@
 package harustudy.backend.content.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
+import harustudy.backend.common.MapStringConverter;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
