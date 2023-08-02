@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import useQuestionTextarea from '@Hooks/common/useQuestionTextarea';
 
+import { requestSubmitPlanningForm } from '@Apis/index';
+
 const usePlanningForm = (studyId: string, memberId: string) => {
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
@@ -37,25 +39,21 @@ const usePlanningForm = (studyId: string, memberId: string) => {
 
   const submitForm = async () => {
     setIsSubmitLoading(true);
-    const response = await fetch(`/api/studies/${studyId}/members/${memberId}/content/plans`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    try {
+      await requestSubmitPlanningForm(studyId, memberId, {
         toDo: questionTextareaProps.toDo.value,
         completionCondition: questionTextareaProps.completionCondition.value,
         expectedProbability: questionTextareaProps.expectedProbability.value,
         expectedDifficulty: questionTextareaProps.expectedDifficulty.value,
         whatCanYouDo: questionTextareaProps.whatCanYouDo.value,
-      }),
-    });
+      });
+    } catch (error) {
+      setIsSubmitLoading(false);
+      if (!(error instanceof Error)) throw error;
+      throw new Error('제출 과정에 에러가 발생했습니다. 다시 시도 해주세요.');
+    }
 
     setIsSubmitLoading(false);
-
-    if (!response.ok) {
-      throw new Error('제출 과정에 에러가 발생했습니다. 다시 시도해주세요.');
-    }
   };
 
   return { questionTextareaProps, isSubmitLoading, isInvalidForm, submitForm };
