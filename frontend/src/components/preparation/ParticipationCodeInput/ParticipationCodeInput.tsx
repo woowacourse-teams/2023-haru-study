@@ -10,11 +10,9 @@ import useInput from '@Hooks/common/useInput';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-type StudyInfo = {
-  studyId: string;
-  studyName: string;
-  nickname: string | null;
-};
+import { getCookie } from '@Utils/cookie';
+
+import { requestAuthenticateParticipationCode } from '@Apis/index';
 
 const ParticipationCodeInput = () => {
   const navigate = useNavigate();
@@ -24,18 +22,15 @@ const ParticipationCodeInput = () => {
   const participantCodeInput = useInput(false);
 
   const handleOnClickParticipateButton = async () => {
+    if (!participantCodeInput.state) return;
+
+    setIsLoading(true);
     try {
-      setIsLoading(true);
+      const memberId = Number(getCookie('memberId'));
 
-      const response = await fetch(`api/studies/authenticate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ participantCode: participantCodeInput.state }),
-      });
+      if (!memberId) return;
 
-      const { studyId, studyName } = (await response.json()) as StudyInfo;
+      const { studyId, studyName } = await requestAuthenticateParticipationCode(participantCodeInput.state, memberId);
 
       setIsLoading(false);
 
@@ -43,9 +38,11 @@ const ParticipationCodeInput = () => {
         state: { participantCode: participantCodeInput.state, studyName, isHost: false },
       });
     } catch (error) {
-      console.error(error);
-      alert('해당 참여코드는 없는 코드입니다.');
       setIsLoading(false);
+
+      if (!(error instanceof Error)) throw error;
+
+      alert('해당 참여코드는 없는 코드입니다.');
     }
   };
 
