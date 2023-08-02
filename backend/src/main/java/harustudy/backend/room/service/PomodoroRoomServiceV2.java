@@ -1,5 +1,6 @@
 package harustudy.backend.room.service;
 
+import harustudy.backend.common.EntityNotFoundException.ParticipantCodeNotFound;
 import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.participantcode.domain.GenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
@@ -51,5 +52,13 @@ public class PomodoroRoomServiceV2 {
     private boolean isParticipantCodePresent(ParticipantCode participantCode) {
         return participantCodeRepository.findByCode(participantCode.getCode())
                 .isPresent();
+    }
+
+    public PomodoroRoomResponseV2 findPomodoroRoomByParticipantCode(String code) {
+        ParticipantCode participantCode = participantCodeRepository.findByCode(code)
+                .orElseThrow(ParticipantCodeNotFound::new);
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByParticipantCode(participantCode)
+                .orElseThrow(RoomNotFound::new);
+        return PomodoroRoomResponseV2.from(pomodoroRoom);
     }
 }

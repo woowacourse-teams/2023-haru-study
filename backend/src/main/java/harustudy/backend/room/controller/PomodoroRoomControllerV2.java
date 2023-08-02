@@ -1,5 +1,6 @@
 package harustudy.backend.room.controller;
 
+import harustudy.backend.participantcode.dto.FindRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomDto;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -26,11 +28,19 @@ public class PomodoroRoomControllerV2 {
         return ResponseEntity.ok(pomodoroRoomService.findPomodoroRoom(studyId));
     }
 
+    @GetMapping("/api/v2/studies")
+    public ResponseEntity<PomodoroRoomResponseV2> findRoom(
+            @RequestParam("participantCode") String participantCode) {
+        return ResponseEntity.ok(
+                pomodoroRoomService.findPomodoroRoomByParticipantCode(participantCode));
+    }
+
     @PostMapping("/api/v2/studies")
     public ResponseEntity<CreatePomodoroRoomResponse> createStudy(
             @Valid @RequestBody CreatePomodoroRoomRequest request
     ) {
-        CreatePomodoroRoomDto createPomodoroRoomDto = pomodoroRoomService.createPomodoroRoom(request);
+        CreatePomodoroRoomDto createPomodoroRoomDto = pomodoroRoomService.createPomodoroRoom(
+                request);
         return ResponseEntity.created(
                         URI.create("/api/studies/" + createPomodoroRoomDto.studyId()))
                 .body(CreatePomodoroRoomResponse.from(createPomodoroRoomDto));
