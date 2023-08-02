@@ -67,7 +67,7 @@ public class PomodoroContentServiceV2 {
 
     private void validateProgressIsRetrospect(PomodoroProgress pomodoroProgress) {
         if (pomodoroProgress.isNotRetrospect()) {
-            throw new UnavailableToProceed(); // TODO: 예외 세분화
+            throw new StudyPomodoroProgressException();
         }
     }
 
