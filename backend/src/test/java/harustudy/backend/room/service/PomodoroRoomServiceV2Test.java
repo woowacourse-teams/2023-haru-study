@@ -1,5 +1,7 @@
 package harustudy.backend.room.service;
 
+import harustudy.backend.common.EntityNotFoundException.ParticipantCodeNotFound;
+import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.participantcode.domain.GenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.room.domain.PomodoroRoom;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -52,6 +55,19 @@ class PomodoroRoomServiceV2Test {
     }
 
     @Test
+    void 룸_아이디로_룸_조회시_없으면_예외를_던진다() {
+        // given
+        ParticipantCode participantCode = new ParticipantCode(generationStrategy);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("room", 8, 20, participantCode);
+        entityManager.persist(participantCode);
+        entityManager.persist(pomodoroRoom);
+
+        // when, then
+        assertThatThrownBy(() -> pomodoroRoomServiceV2.findPomodoroRoom(99999L))
+            .isInstanceOf(RoomNotFound.class);
+    }
+
+    @Test
     void 룸을_생성한다() {
         // given
         CreatePomodoroRoomRequest request = new CreatePomodoroRoomRequest("room", 8, 40);
@@ -83,5 +99,36 @@ class PomodoroRoomServiceV2Test {
                 () -> assertThat(result.totalCycle()).isEqualTo(pomodoroRoom.getTotalCycle()),
                 () -> assertThat(result.timePerCycle()).isEqualTo(pomodoroRoom.getTimePerCycle())
         );
+    }
+
+    @Test
+    void 참여코드에_해당하는_룸_조회시_참여코드가_없으면_예외를_던진다() {
+        // given
+        ParticipantCode participantCode = new ParticipantCode(generationStrategy);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("room", 8, 40, participantCode);
+        entityManager.persist(participantCode);
+        entityManager.persist(pomodoroRoom);
+
+        ParticipantCode notPersisted = new ParticipantCode(generationStrategy);
+
+        // when, then
+        assertThatThrownBy(() -> pomodoroRoomServiceV2.findPomodoroRoomByParticipantCode(notPersisted.getCode()))
+            .isInstanceOf(ParticipantCodeNotFound.class);
+    }
+
+    @Test
+    void 참여코드에_해당하는_룸_조회시_참여코드에_해당하는_룸이_없으면_예외를_던진다() {
+        // given
+        ParticipantCode participantCode = new ParticipantCode(generationStrategy);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("room", 8, 40, participantCode);
+        entityManager.persist(participantCode);
+        entityManager.persist(pomodoroRoom);
+
+        ParticipantCode notRoomsCode = new ParticipantCode(generationStrategy);
+        entityManager.persist(notRoomsCode);
+
+        // when, then
+        assertThatThrownBy(() -> pomodoroRoomServiceV2.findPomodoroRoomByParticipantCode(notRoomsCode.getCode()))
+                .isInstanceOf(RoomNotFound.class);
     }
 }

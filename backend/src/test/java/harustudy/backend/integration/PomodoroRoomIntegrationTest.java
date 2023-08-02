@@ -1,9 +1,14 @@
 package harustudy.backend.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
+import harustudy.backend.participantcode.domain.ParticipantCode;
+import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
 import harustudy.backend.room.dto.PomodoroRoomResponseV2;
+import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -24,6 +29,25 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private EntityManager entityManager;
+
+    private ParticipantCode participantCode;
+    private PomodoroRoom pomodoroRoom;
+
+    @BeforeEach
+    void setUp() {
+        super.setMockMvc();
+        participantCode = new ParticipantCode(new CodeGenerationStrategy());
+        pomodoroRoom = new PomodoroRoom("room", 3, 20, participantCode);
+
+        entityManager.persist(participantCode);
+        entityManager.persist(pomodoroRoom);
+
+        entityManager.flush();
+        entityManager.clear();
+    }
 
     @Test
     void 스터디_아이디로_스터디를_조회한다() throws Exception {
@@ -79,10 +103,10 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
                 .andExpect(header().exists("Location"))
                 .andReturn();
 
+        // then
         String jsonResponse = result.getResponse().getContentAsString();
         CreatePomodoroRoomResponse response = objectMapper.readValue(jsonResponse, CreatePomodoroRoomResponse.class);
 
-        // then
         assertThat(response.participantCode())
                 .isAlphabetic()
                 .isUpperCase()
