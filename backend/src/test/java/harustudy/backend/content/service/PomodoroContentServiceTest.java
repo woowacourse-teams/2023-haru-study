@@ -123,7 +123,6 @@ class PomodoroContentServiceTest {
                 .isInstanceOf(StudyPomodoroProgressException.class);
     }
 
-
     @Test
     void 회고_단계에서는_회고를_작성할_수_있다() {
         // given
