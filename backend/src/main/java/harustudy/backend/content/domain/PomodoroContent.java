@@ -36,15 +36,10 @@ public class PomodoroContent extends BaseTimeEntity {
     private Map<String, String> retrospect = new HashMap<>();
 
     public PomodoroContent(PomodoroProgress pomodoroProgress, @NotNull Integer cycle) {
-        this(pomodoroProgress, cycle, Map.of(), Map.of());
-    }
-
-    public PomodoroContent(PomodoroProgress pomodoroProgress, @NotNull Integer cycle,
-                           Map<String, String> plan, Map<String, String> retrospect) {
         this.pomodoroProgress = pomodoroProgress;
         this.cycle = cycle;
-        this.plan = plan;
-        this.retrospect = retrospect;
+        this.plan = Map.of();
+        this.retrospect = Map.of();
     }
 
     public void changePlan(Map<String, String> plan) {
