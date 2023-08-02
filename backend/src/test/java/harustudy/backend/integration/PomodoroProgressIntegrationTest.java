@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
@@ -14,12 +13,10 @@ import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.domain.PomodoroStatus;
 import harustudy.backend.progress.dto.PomodoroProgressResponseV2;
 import harustudy.backend.room.domain.PomodoroRoom;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -27,25 +24,30 @@ import org.springframework.test.web.servlet.MvcResult;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 public class PomodoroProgressIntegrationTest extends IntegrationTest {
 
-    @Autowired
-    private ObjectMapper objectMapper;
-    @PersistenceContext
-    private EntityManager entityManager;
+    private PomodoroRoom pomodoroRoom;
+    private Member member;
+    private PomodoroProgress pomodoroProgress;
 
-    @Test
-    void studyId와_memberId로_진행도를_조회한다() throws Exception {
-        // given
+    @BeforeEach
+    void setUp() {
+        super.setUp();
         ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 3, 20,
+        pomodoroRoom = new PomodoroRoom("roomName", 3, 20,
                 participantCode);
-        Member member = new Member("nickname");
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member);
+        member = new Member("nickname");
+        pomodoroProgress = new PomodoroProgress(pomodoroRoom, member);
 
         entityManager.persist(participantCode);
         entityManager.persist(pomodoroRoom);
         entityManager.persist(member);
         entityManager.persist(pomodoroProgress);
 
+        entityManager.flush();
+        entityManager.clear();
+    }
+
+    @Test
+    void studyId와_memberId로_진행도를_조회한다() throws Exception {
         // when
         MvcResult result = mockMvc.perform(
                         get("/api/v2/studies/{studyId}/progresses", pomodoroProgress.getId())
@@ -68,25 +70,15 @@ public class PomodoroProgressIntegrationTest extends IntegrationTest {
 
     @Test
     void studyId와_progressId로_진행도를_진행시킨다() throws Exception {
-        // given
-        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 3, 20,
-                participantCode);
-        Member member = new Member("nickname");
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member);
-
-        entityManager.persist(participantCode);
-        entityManager.persist(pomodoroRoom);
-        entityManager.persist(member);
-        entityManager.persist(pomodoroProgress);
-
-        // when & then
+        // when, then
         mockMvc.perform(
                         post("/api/v2/studies/{studyId}/progresses/{progressId}/next-step",
                                 pomodoroRoom.getId(), pomodoroProgress.getId())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
-        assertThat(pomodoroProgress.getPomodoroStatus()).isEqualTo(PomodoroStatus.STUDYING);
+        PomodoroProgress foundProgress = entityManager.find(PomodoroProgress.class,
+                pomodoroProgress.getId());
+        assertThat(foundProgress.getPomodoroStatus()).isEqualTo(PomodoroStatus.STUDYING);
     }
 }
