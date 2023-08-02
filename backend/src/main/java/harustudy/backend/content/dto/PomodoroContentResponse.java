@@ -1,6 +1,6 @@
 package harustudy.backend.content.dto;
 
-import harustudy.backend.content.controller.domain.PomodoroContent;
+import harustudy.backend.content.domain.PomodoroContent;
 import java.util.Map;
 
 public record PomodoroContentResponse(Integer cycle, Map<String, String> plan,

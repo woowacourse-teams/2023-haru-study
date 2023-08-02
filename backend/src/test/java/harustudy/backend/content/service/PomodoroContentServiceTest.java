@@ -3,7 +3,7 @@ package harustudy.backend.content.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import harustudy.backend.content.controller.domain.PomodoroContent;
+import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.dto.PomodoroContentResponse;
 import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.member.domain.Member;

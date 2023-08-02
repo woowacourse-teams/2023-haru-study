@@ -1,7 +1,7 @@
 package harustudy.backend.progress.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
-import harustudy.backend.content.controller.domain.PomodoroContent;
+import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.room.domain.PomodoroRoom;
 import jakarta.persistence.*;

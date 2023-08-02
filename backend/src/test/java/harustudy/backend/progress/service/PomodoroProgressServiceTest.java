@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import harustudy.backend.content.controller.domain.PomodoroContent;
+import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.service.PomodoroContentService;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;

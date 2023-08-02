@@ -2,7 +2,7 @@ package harustudy.backend.member.service;
 
 import harustudy.backend.common.EntityNotFoundException.MemberNotFound;
 import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
-import harustudy.backend.content.controller.domain.PomodoroContent;
+import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.GuestRegisterRequest;

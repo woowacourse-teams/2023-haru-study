@@ -4,7 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.content.controller.domain.PomodoroContent;
+import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;

@@ -1,6 +1,6 @@
 package harustudy.backend.integration;
 
-import harustudy.backend.content.controller.domain.PomodoroContent;
+import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;

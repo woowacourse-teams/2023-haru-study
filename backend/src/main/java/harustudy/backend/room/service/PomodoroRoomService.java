@@ -1,6 +1,6 @@
 package harustudy.backend.room.service;
 
-import harustudy.backend.content.controller.domain.PomodoroContent;
+import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;

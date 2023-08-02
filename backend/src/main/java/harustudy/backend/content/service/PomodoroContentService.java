@@ -4,7 +4,7 @@ import harustudy.backend.common.EntityNotFoundException.MemberNotFound;
 import harustudy.backend.common.EntityNotFoundException.PomodoroProgressNotFound;
 import harustudy.backend.common.EntityNotFoundException.PomodoroRecordNotFound;
 import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
-import harustudy.backend.content.controller.domain.PomodoroContent;
+import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.dto.PomodoroContentResponse;
 import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.repository.PomodoroContentRepository;
