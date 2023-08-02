@@ -77,7 +77,7 @@ public class AcceptanceTest {
         Member member = new Member("nickname");
         PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, 1,
                 PomodoroStatus.PLANNING);
-        PomodoroContent pomodoroRecord = new PomodoroContent(pomodoroProgress, 1, Map.of(), Map.of());
+        PomodoroContent pomodoroRecord = new PomodoroContent(pomodoroProgress, 1);
         entityManager.persist(member);
         entityManager.persist(pomodoroProgress);
         entityManager.persist(pomodoroRecord);
