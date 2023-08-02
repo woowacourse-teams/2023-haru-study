@@ -22,3 +22,7 @@ export type ResponseStudyMetadata = {
 export type ResponseMemberRecordContents = {
   content: MemberRecordContent[];
 };
+
+export type ResponseIsCheckMember = {
+  nickname: string | null;
+};

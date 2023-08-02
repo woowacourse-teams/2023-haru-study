@@ -31,9 +31,7 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
     try {
       setIsLoading(true);
 
-      if (!nickNameInput.state) {
-        throw Error('닉네임을 입력해주세요.');
-      }
+      if (!nickNameInput.state) throw Error('닉네임을 입력해주세요.');
 
       const { memberId } = await requestRegisterMember(nickNameInput.state, studyId);
 

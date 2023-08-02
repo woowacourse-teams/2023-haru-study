@@ -28,7 +28,7 @@ const ParticipationCodeInput = () => {
     try {
       const memberId = Number(getCookie('memberId'));
 
-      if (!memberId) return;
+      if (!memberId) throw new Error('잘못된 접근입니다.');
 
       const { studyId, studyName } = await requestAuthenticateParticipationCode(participantCodeInput.state, memberId);
 
@@ -42,7 +42,7 @@ const ParticipationCodeInput = () => {
 
       if (!(error instanceof Error)) throw error;
 
-      alert('해당 참여코드는 없는 코드입니다.');
+      alert(error.message);
     }
   };
 

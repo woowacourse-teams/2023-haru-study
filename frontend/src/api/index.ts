@@ -2,6 +2,7 @@ import http from '@Utils/http';
 
 import type {
   ResponseCreateStudy,
+  ResponseIsCheckMember,
   ResponseMemberRecordContents,
   ResponseMemberStudyMetadata,
   ResponsePlanList,
@@ -54,6 +55,9 @@ export const requestAuthenticateParticipationCode = (participantCode: string, me
   http.post<ResponseStudyInfo>(`api/studies/authenticate`, {
     body: JSON.stringify({ participantCode, memberId }),
   });
+
+export const requestCheckIsMember = (studyId: string, memberId: string) =>
+  http.get<ResponseIsCheckMember>(`/api/studies/${studyId}/members/${memberId}`);
 
 export const requestSubmitPlanningForm = (studyId: string, memberId: string, plans: PlanList) =>
   http.post(`/api/studies/${studyId}/members/${memberId}/content/plans`, {
