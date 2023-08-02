@@ -14,6 +14,7 @@ public interface PomodoroProgressRepository extends JpaRepository<PomodoroProgre
     Optional<PomodoroProgress> findByPomodoroRoomAndMember(PomodoroRoom pomodoroRoom,
             Member member);
 
+    @Deprecated
     List<PomodoroProgress> findAllByPomodoroRoom(PomodoroRoom pomodoroRoom);
 
     @Query("select p from PomodoroProgress p join fetch p.member where p.pomodoroRoom = :pomodoroRoom")

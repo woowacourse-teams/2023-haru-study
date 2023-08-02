@@ -90,6 +90,7 @@ public class PomodoroProgress extends BaseTimeEntity {
                 .toList();
     }
 
+    @Deprecated
     public void proceed() {
         if (isRetrospect()) {
             currentCycle++;
