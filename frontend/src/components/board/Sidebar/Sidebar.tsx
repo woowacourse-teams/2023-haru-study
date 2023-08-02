@@ -22,7 +22,7 @@ const SIDEBAR_INFO: Record<Step, { theme: string; stepKeyword: string; paragraph
   retrospect: {
     theme: color.teal[600],
     stepKeyword: '회고',
-    paragraph: '30분간의 학습이\n어땠는지 회고해보세요.',
+    paragraph: '분간의 학습이\n어땠는지 회고해보세요.',
   },
 };
 
@@ -47,7 +47,7 @@ const Sidebar = ({ step, cycle, studyMinutes }: Props) => {
           white-space: pre-line;
         `}
       >
-        {paragraph}
+        {step === 'retrospect' ? `${studyMinutes}${paragraph}` : paragraph}
       </Typography>
       <Timer studyMinutes={studyMinutes} step={step} />
       <Typography variant="p1" color={color.white}>
