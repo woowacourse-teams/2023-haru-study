@@ -71,7 +71,7 @@ class PomodoroProgressServiceV2Test {
         PomodoroProgressResponseV2 foundProgress = pomodoroProgressService.findProgress(
                 pomodoroRoom.getId(), pomodoroProgress.getId());
 
-        //
+        // then
         assertThat(foundProgress.step()).isEqualTo(
                 PomodoroStatus.STUDYING.toString().toLowerCase());
     }
