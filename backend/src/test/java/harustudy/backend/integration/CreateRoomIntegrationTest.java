@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+@Deprecated
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class CreateRoomIntegrationTest extends IntegrationTest {
@@ -23,6 +24,7 @@ class CreateRoomIntegrationTest extends IntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Deprecated
     @Test
     void 스터디가_생성된다() throws Exception {
         // given

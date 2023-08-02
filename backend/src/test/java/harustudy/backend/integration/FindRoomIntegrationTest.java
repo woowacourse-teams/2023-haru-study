@@ -70,6 +70,7 @@ public class FindRoomIntegrationTest extends IntegrationTest {
         assertThat(responses.content()).containsExactly(expectedPomodoroContentResponse);
     }
 
+    @Deprecated
     @Test
     void 스터디_메타데이터_및_참여한_모든_스터디원에_대한_정보를_조회한다() throws Exception {
         // given & when

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+@Deprecated
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 public class ParticipateRoomIntegrationTest extends IntegrationTest {
@@ -20,6 +21,7 @@ public class ParticipateRoomIntegrationTest extends IntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Deprecated
     @Test
     void 신규멤버_닉네임을_통해_멤버_생성하고_스터디에_참여한다() throws Exception {
         // given
