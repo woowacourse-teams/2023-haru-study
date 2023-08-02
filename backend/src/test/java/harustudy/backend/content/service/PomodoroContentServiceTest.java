@@ -14,7 +14,7 @@ import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.domain.PomodoroStatus;
-import harustudy.backend.progress.exception.StudyPomodoroProgressException;
+import harustudy.backend.progress.exception.PomodoroProgressStatusException;
 import harustudy.backend.room.domain.PomodoroRoom;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -68,7 +68,7 @@ class PomodoroContentServiceTest {
 
         // when, then
         assertThatThrownBy(() -> pomodoroContentService.writePlan(pomodoroRoom.getId(), request))
-                .isInstanceOf(StudyPomodoroProgressException.class);
+                .isInstanceOf(PomodoroProgressStatusException.class);
     }
 
 
@@ -103,7 +103,7 @@ class PomodoroContentServiceTest {
 
         // when, then
         assertThatThrownBy(() -> pomodoroContentService.writeRetrospect(pomodoroRoom.getId(), request))
-                .isInstanceOf(StudyPomodoroProgressException.class);
+                .isInstanceOf(PomodoroProgressStatusException.class);
     }
 
     @Test
@@ -120,7 +120,7 @@ class PomodoroContentServiceTest {
 
         // when, then
         assertThatThrownBy(() -> pomodoroContentService.writeRetrospect(pomodoroRoom.getId(), request))
-                .isInstanceOf(StudyPomodoroProgressException.class);
+                .isInstanceOf(PomodoroProgressStatusException.class);
     }
 
     @Test
