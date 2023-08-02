@@ -30,7 +30,6 @@ class PomodoroContentRepositoryTest {
     private PomodoroContentRepository pomodoroContentRepository;
 
     private PomodoroProgress pomodoroProgress;
-    private PomodoroContent pomodoroContent;
 
     @BeforeEach
     void setup() {
@@ -38,7 +37,6 @@ class PomodoroContentRepositoryTest {
         PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 3, 20, participantCode);
         Member member = new Member("member");
         pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, 1, PomodoroStatus.STUDYING);
-        pomodoroContent = new PomodoroContent(pomodoroProgress, 1);
 
         testEntityManager.persist(participantCode);
         testEntityManager.persist(pomodoroRoom);
@@ -50,6 +48,7 @@ class PomodoroContentRepositoryTest {
     void 스터디_계획을_저장할_수_있다() {
         // given
         Map<String, String> plan = Map.of("completionCondition", "완료조건", "expectedProbability", "80%");
+        PomodoroContent pomodoroContent = new PomodoroContent(pomodoroProgress, 1);
         pomodoroContent.changePlan(plan);
 
         // when
@@ -72,6 +71,7 @@ class PomodoroContentRepositoryTest {
                 "expectedProbability", "80%");
         Map<String, String> retrospect = Map.of("doneAsExpected", "예상했던 결과",
                 "experiencedDifficulty", "겪었던 어려움");
+        PomodoroContent pomodoroContent = new PomodoroContent(pomodoroProgress, 1);
         pomodoroContent.changePlan(plan);
         pomodoroContent.changeRetrospect(retrospect);
 
