@@ -25,7 +25,11 @@ const CreateStudyForm = () => {
   const timePerCycleSelect = useSelect<StudyTimePerCycleOptions>();
   const totalCycleSelect = useSelect<TotalCycleOptions>();
 
-  const { isLoading, error, createStudy } = useCreateStudy();
+  const errorHandler = (message: string) => {
+    alert(message);
+  };
+
+  const { isLoading, createStudy } = useCreateStudy(errorHandler);
 
   const totalTime = (Number(timePerCycleSelect.state ?? 0) + 20) * Number(totalCycleSelect.state ?? 0);
   const hour = Math.floor(totalTime / 60);
@@ -52,10 +56,6 @@ const CreateStudyForm = () => {
 
     return false;
   };
-
-  if (error) {
-    alert(error.message);
-  }
 
   return (
     <Layout>
