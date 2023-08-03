@@ -1,6 +1,5 @@
 package harustudy.backend.room.controller;
 
-import harustudy.backend.participantcode.dto.FindRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomDto;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
@@ -29,7 +28,7 @@ public class PomodoroRoomControllerV2 {
     }
 
     @GetMapping("/api/v2/studies")
-    public ResponseEntity<PomodoroRoomResponseV2> findRoom(
+    public ResponseEntity<PomodoroRoomResponseV2> findStudy(
             @RequestParam("participantCode") String participantCode) {
         return ResponseEntity.ok(
                 pomodoroRoomService.findPomodoroRoomByParticipantCode(participantCode));

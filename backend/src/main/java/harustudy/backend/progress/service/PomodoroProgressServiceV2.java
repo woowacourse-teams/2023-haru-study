@@ -28,9 +28,9 @@ public class PomodoroProgressServiceV2 {
         return PomodoroProgressResponseV2.from(pomodoroProgress);
     }
 
-    public void proceed(Long studyId, Long progressId) {
-        PomodoroProgress pomodoroProgress = findPomodoroProgress(studyId, progressId);
-        pomodoroProgress.proceed();
+    public void proceed(Long roomId, Long progressId) {
+        PomodoroProgress pomodoroProgress = findPomodoroProgress(roomId, progressId);
+        pomodoroProgress.proceedV2();
     }
 
     private PomodoroProgress findPomodoroProgress(Long roomId, Long memberId) {

@@ -16,7 +16,7 @@ const SelectTrigger = ({ triggerText = '선택', ...props }: Props) => {
   const { isOpen, selectedItem, toggleOpen, triggerSuffixText } = useSelectContext();
 
   return (
-    <Layout {...props} onClick={toggleOpen}>
+    <Layout {...props} $isOpen={isOpen} onClick={toggleOpen}>
       {selectedItem === null ? triggerText : selectedItem.toString() + triggerSuffixText}
       {isOpen ? <Mark>&#9650;</Mark> : <Mark>&#9660;</Mark>}
     </Layout>
@@ -25,19 +25,22 @@ const SelectTrigger = ({ triggerText = '선택', ...props }: Props) => {
 
 export default SelectTrigger;
 
-const Layout = styled.button<Props>`
+const Layout = styled.button<Props & { $isOpen: boolean }>`
   display: flex;
   justify-content: space-between;
 
   width: 100%;
   padding: 20px;
   font-size: 2rem;
-  border-radius: 7px;
+  border-top-right-radius: 7px;
+  border-top-left-radius: 7px;
   border: 1px solid ${color.neutral[200]};
   margin-top: 10px;
 
-  ${({ $style, theme }) => css`
+  ${({ $style, theme, $isOpen }) => css`
     background-color: ${theme.background};
+    border-bottom-right-radius: ${$isOpen ? 'none' : '7px'};
+    border-bottom-left-radius: ${$isOpen ? 'none' : '7px'};
     ${$style}
   `};
 `;

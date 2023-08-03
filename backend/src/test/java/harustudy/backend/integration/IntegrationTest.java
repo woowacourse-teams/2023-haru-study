@@ -35,4 +35,8 @@ public class IntegrationTest {
         entityManager.flush();
         entityManager.clear();
     }
+  
+    protected void setMockMvc() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
 }

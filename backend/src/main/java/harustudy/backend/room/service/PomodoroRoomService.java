@@ -32,6 +32,7 @@ public class PomodoroRoomService {
     private final GenerationStrategy generationStrategy;
     private final PomodoroContentRepository pomodoroContentRepository;
 
+    @Deprecated
     public CreatePomodoroRoomDto createPomodoroRoom(CreatePomodoroRoomRequest request) {
         ParticipantCode participantCode = regenerateUniqueCode();
         participantCodeRepository.save(participantCode);
@@ -43,7 +44,7 @@ public class PomodoroRoomService {
         return CreatePomodoroRoomDto.from(savedRoom, participantCode);
     }
 
-    // TODO: ParticipantCodeService 분리 고려
+    @Deprecated
     private ParticipantCode regenerateUniqueCode() {
         ParticipantCode participantCode = new ParticipantCode(generationStrategy);
         while (isParticipantCodePresent(participantCode)) {
@@ -52,11 +53,13 @@ public class PomodoroRoomService {
         return participantCode;
     }
 
+    @Deprecated
     private boolean isParticipantCodePresent(ParticipantCode participantCode) {
         return participantCodeRepository.findByCode(participantCode.getCode())
                 .isPresent();
     }
 
+    @Deprecated
     public Long participate(Long roomId, String nickname) {
         Member member = memberRepository.save(new Member(nickname));
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
@@ -74,6 +77,7 @@ public class PomodoroRoomService {
         return member.getId();
     }
 
+    @Deprecated
     public PomodoroRoomAndMembersResponse findPomodoroRoomMetadata(Long roomId) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
         List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findAllByPomodoroRoom(pomodoroRoom);

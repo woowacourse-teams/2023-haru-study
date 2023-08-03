@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import useQuestionTextarea from '@Hooks/common/useQuestionTextarea';
 
+import { requestSubmitRetrospectForm } from '@Apis/index';
+
 const useRetrospectForm = (studyId: string, memberId: string) => {
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
@@ -31,22 +33,18 @@ const useRetrospectForm = (studyId: string, memberId: string) => {
 
   const submitForm = async () => {
     setIsSubmitLoading(true);
-    const response = await fetch(`/api/studies/${studyId}/members/${memberId}/content/retrospects`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    try {
+      await requestSubmitRetrospectForm(studyId, memberId, {
         doneAsExpected: questionTextareaProps.doneAsExpected.value,
         experiencedDifficulty: questionTextareaProps.experiencedDifficulty.value,
         lesson: questionTextareaProps.lesson.value,
-      }),
-    });
-    setIsSubmitLoading(false);
-
-    if (!response.ok) {
+      });
+    } catch (error) {
+      setIsSubmitLoading(false);
+      if (!(error instanceof Error)) throw error;
       throw new Error('제출 과정에 에러가 발생했습니다. 다시 시도 해주세요.');
     }
+    setIsSubmitLoading(false);
   };
 
   return { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm };

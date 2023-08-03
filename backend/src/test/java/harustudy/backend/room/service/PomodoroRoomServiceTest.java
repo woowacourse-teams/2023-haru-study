@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+@Deprecated
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @SpringBootTest
@@ -53,6 +54,7 @@ class PomodoroRoomServiceTest {
         entityManager.clear();
     }
 
+    @Deprecated
     @Test
     void 닉네임을_받아_신규_멤버를_생성하고_스터디에_등록한다() {
         // when
@@ -69,6 +71,7 @@ class PomodoroRoomServiceTest {
         assertThat(foundRoom.isParticipatedMember(member)).isTrue();
     }
 
+    @Deprecated
     @Test
     void 한_스터디_내에서_닉네임이_중복되면_예외를_던진다() {
         // given

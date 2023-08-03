@@ -13,6 +13,8 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import { setCookie } from '@Utils/cookie';
 
+import { requestRegisterMember } from '@Apis/index';
+
 type Props = {
   studyId: string;
   studyName: string;
@@ -29,26 +31,9 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
     try {
       setIsLoading(true);
 
-      if (!nickNameInput.state) {
-        throw Error('닉네임을 입력해주세요.');
-      }
+      if (!nickNameInput.state) throw Error('닉네임을 입력해주세요.');
 
-      const response = await fetch(`/api/studies/${studyId}/members`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          nickname: nickNameInput.state,
-        }),
-      });
-
-      if (!response.ok) {
-        throw Error('사용할 수 없는 닉네임입니다.');
-      }
-
-      const locationHeader = response.headers.get('Location');
-      const memberId = locationHeader?.split('/').pop() as string;
+      const { memberId } = await requestRegisterMember(nickNameInput.state, studyId);
 
       setCookie('memberId', memberId, 1);
 
@@ -56,10 +41,11 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
 
       navigate(`${ROUTES_PATH.board}/${studyId}`);
     } catch (error) {
-      console.error(error);
-      if (!(error instanceof Error)) return;
-      alert(error.message);
       setIsLoading(false);
+
+      if (!(error instanceof Error)) return error;
+
+      alert(error.message);
     }
   };
   return (

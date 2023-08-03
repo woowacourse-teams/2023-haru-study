@@ -42,7 +42,7 @@ const Layout = styled.div<Omit<ItemProps, 'value' | 'suffix'>>`
   padding: 20px;
   font-size: 2rem;
   border: 1px solid ${color.neutral[200]};
-  border-top: none;
+  border-bottom: none;
   cursor: pointer;
 
   ${({ $style, theme }) => css`
