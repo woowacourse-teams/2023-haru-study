@@ -3,6 +3,8 @@ import { Children, cloneElement, isValidElement } from 'react';
 import type { CSSProp } from 'styled-components';
 import { css, styled } from 'styled-components';
 
+import color from '@Styles/color';
+
 import { composeEventHandlers } from '@Utils/domEventHandler';
 
 import { useSelectContext } from './SelectContext';
@@ -51,4 +53,8 @@ const Layout = styled.div<Pick<Props, '$style'>>`
   ${({ $style }) => css`
     ${$style}
   `}
+
+  height: 200px;
+  overflow-y: scroll;
+  border-bottom: 1px solid ${color.neutral[200]};
 `;
