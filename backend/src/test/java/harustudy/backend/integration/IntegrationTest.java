@@ -16,17 +16,17 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 public class IntegrationTest {
 
-    protected MockMvc mockMvc;
-
     @PersistenceContext
     protected EntityManager entityManager;
 
     @Autowired
     protected ObjectMapper objectMapper;
-
+  
+    protected MockMvc mockMvc;
+  
     @Autowired
     private WebApplicationContext webApplicationContext;
-
+    
     void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
