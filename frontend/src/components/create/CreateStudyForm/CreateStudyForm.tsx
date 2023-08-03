@@ -127,22 +127,33 @@ const CreateStudyForm = () => {
           </Select.List>
         </Select>
       </Container>
-      <Typography
-        variant="p1"
-        $style={css`
-          text-align: center;
-        `}
-      >
-        예상 스터디 시간은{' '}
-        <TimeText
-          onClick={() => {
-            alert('예상시간에는 학습시간 외에 목표설정시간(10분)과 회고시간(10분)이 포함되어있습니다.');
-          }}
+      {timePerCycleSelect.state && totalCycleSelect.state ? (
+        <Typography
+          variant="p1"
+          $style={css`
+            text-align: center;
+          `}
         >
-          {hour}시간 {minute}분
-        </TimeText>
-        이에요.
-      </Typography>
+          예상 스터디 시간은{' '}
+          <TimeText
+            onClick={() => {
+              alert('예상시간에는 학습시간 외에 목표설정시간(10분)과 회고시간(10분)이 포함되어있습니다.');
+            }}
+          >
+            {hour}시간 {minute}분
+          </TimeText>
+          이에요.
+        </Typography>
+      ) : (
+        <Typography
+          variant="p1"
+          $style={css`
+            text-align: center;
+          `}
+        >
+          사이클 횟수와 사이클 당 학습시간을 선택하세요.
+        </Typography>
+      )}
       <Button variant="primary" onClick={handleOnClickMakeButton} disabled={isDisabled()} isLoading={isLoading}>
         스터디 개설하기
       </Button>
