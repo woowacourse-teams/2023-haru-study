@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+@Deprecated
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +36,7 @@ class CreatePomodoroPomodoroRoomServiceTest {
     @InjectMocks
     private PomodoroRoomService pomodoroRoomService;
 
+    @Deprecated
     @Test
     void 스터디_개설시_참여코드가_생성된다() {
         // given
@@ -55,6 +57,7 @@ class CreatePomodoroPomodoroRoomServiceTest {
         assertThat(response.participantCode()).isEqualTo(code);
     }
 
+    @Deprecated
     @Test
     void 중복된_참여코드로_스터디가_생성되면_참여_코드가_재생성된다() {
         // given
