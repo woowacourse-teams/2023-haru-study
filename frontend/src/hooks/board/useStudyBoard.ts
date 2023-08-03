@@ -16,7 +16,10 @@ const useStudyBoard = () => {
 
   useEffect(() => {
     const fetchStudyMetaData = async () => {
-      if (!studyId || !memberId) throw new Error('정상적인 경로로 접근해주세요.');
+      if (!studyId || !memberId) {
+        setError(new Error('정상적인 경로로 접근해주세요.'));
+        return;
+      }
 
       const fetchedData = await requestGetMemberStudyMetadata(studyId, memberId);
       setStudyData({ ...fetchedData, studyId, memberId });
