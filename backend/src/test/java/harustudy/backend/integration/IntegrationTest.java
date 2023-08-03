@@ -11,23 +11,31 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-@SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@SpringBootTest
 public class IntegrationTest {
 
     @PersistenceContext
     protected EntityManager entityManager;
+
+    @Autowired
+    protected ObjectMapper objectMapper;
+  
+    protected MockMvc mockMvc;
+  
     @Autowired
     private WebApplicationContext webApplicationContext;
-    @Autowired
-    ObjectMapper objectMapper;
-    protected MockMvc mockMvc;
-
+    
     void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
+    void FLUSH_AND_CLEAR_CONTEXT() {
+        entityManager.flush();
+        entityManager.clear();
+    }
+  
     protected void setMockMvc() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }

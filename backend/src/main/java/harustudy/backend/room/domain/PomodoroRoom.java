@@ -24,6 +24,7 @@ public class PomodoroRoom extends BaseTimeEntity {
     private static final int MIN_NAME_LENGTH = 1;
     private static final int MAX_NAME_LENGTH = 10;
 
+    // TODO: 순서 조정
     private final static int MIN_TOTAL_CYCLE = 1;
     private final static int MAX_TOTAL_CYCLE = 8;
 

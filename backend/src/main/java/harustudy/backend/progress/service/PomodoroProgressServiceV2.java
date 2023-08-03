@@ -1,5 +1,7 @@
 package harustudy.backend.progress.service;
 
+import static harustudy.backend.common.EntityNotFoundException.PomodoroProgressNotFound;
+
 import harustudy.backend.common.EntityNotFoundException.MemberNotFound;
 import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.member.domain.Member;
@@ -7,6 +9,7 @@ import harustudy.backend.member.exception.MemberNotParticipatedException;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.dto.PomodoroProgressResponseV2;
+import harustudy.backend.progress.exception.ProgressNotBelongToRoomException;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
@@ -29,7 +32,13 @@ public class PomodoroProgressServiceV2 {
     }
 
     public void proceed(Long roomId, Long progressId) {
-        PomodoroProgress pomodoroProgress = findPomodoroProgress(roomId, progressId);
+        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findById(progressId)
+                .orElseThrow(PomodoroProgressNotFound::new);
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
+                .orElseThrow(RoomNotFound::new);
+        if (!pomodoroProgress.getPomodoroRoom().equals(pomodoroRoom)) {
+            throw new ProgressNotBelongToRoomException();
+        }
         pomodoroProgress.proceedV2();
     }
 

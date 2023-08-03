@@ -1,8 +1,8 @@
 package harustudy.backend.content.service;
 
 import harustudy.backend.common.EntityNotFoundException.MemberNotFound;
+import harustudy.backend.common.EntityNotFoundException.PomodoroContentNotFound;
 import harustudy.backend.common.EntityNotFoundException.PomodoroProgressNotFound;
-import harustudy.backend.common.EntityNotFoundException.PomodoroRecordNotFound;
 import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.dto.PomodoroContentResponse;
@@ -13,8 +13,7 @@ import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.progress.exception.InvalidPomodoroProgressException.UnavailableToProceed;
-import harustudy.backend.progress.exception.IllegalProgressStateException;
+import harustudy.backend.progress.exception.PomodoroProgressStatusException;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
@@ -43,7 +42,7 @@ public class PomodoroContentServiceV2 {
 
     private void validateProgressIsPlanning(PomodoroProgress pomodoroProgress) {
         if (pomodoroProgress.isNotPlanning()) {
-            throw new IllegalProgressStateException();
+            throw new PomodoroProgressStatusException();
         }
     }
 
@@ -54,7 +53,7 @@ public class PomodoroContentServiceV2 {
         return pomodoroContents.stream()
                 .filter(pomodoroContent -> pomodoroContent.hasSameCycleWith(pomodoroProgress))
                 .findAny()
-                .orElseThrow(PomodoroRecordNotFound::new);
+                .orElseThrow(PomodoroContentNotFound::new);
     }
 
     public void writeRetrospect(Long roomId, WriteRetrospectRequest request) {
@@ -67,13 +66,13 @@ public class PomodoroContentServiceV2 {
 
     private void validateProgressIsRetrospect(PomodoroProgress pomodoroProgress) {
         if (pomodoroProgress.isNotRetrospect()) {
-            throw new UnavailableToProceed(); // TODO: 예외 세분화
+            throw new PomodoroProgressStatusException();
         }
     }
 
     private void validateIsPlanFilled(PomodoroContent recentContent) {
-        if (recentContent.getPlan().isEmpty()) {
-            throw new IllegalProgressStateException();
+        if (recentContent.hasEmptyPlan()) {
+            throw new PomodoroProgressStatusException();
         }
     }
 
@@ -81,14 +80,20 @@ public class PomodoroContentServiceV2 {
     public PomodoroContentsResponse findMemberContentWithCycleFilter(Long roomId, Long memberId, Integer cycle) {
         PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, memberId);
         List<PomodoroContent> pomodoroContents = pomodoroProgress.getPomodoroContents();
-
         if (Objects.isNull(cycle)) {
-            List<PomodoroContentResponse> pomodoroContentResponses = pomodoroContents.stream()
-                    .map(PomodoroContentResponse::from)
-                    .toList();
-            return PomodoroContentsResponse.from(pomodoroContentResponses);
+            return getPomodoroContentsResponseWithoutCycleFilter(pomodoroContents);
         }
+        return getPomodoroContentsResponseWithCycleFilter(pomodoroContents, cycle);
+    }
 
+    private PomodoroContentsResponse getPomodoroContentsResponseWithoutCycleFilter(List<PomodoroContent> pomodoroContents) {
+        List<PomodoroContentResponse> pomodoroContentResponses = pomodoroContents.stream()
+                .map(PomodoroContentResponse::from)
+                .toList();
+        return PomodoroContentsResponse.from(pomodoroContentResponses);
+    }
+
+    private PomodoroContentsResponse getPomodoroContentsResponseWithCycleFilter(List<PomodoroContent> pomodoroContents, Integer cycle) {
         List<PomodoroContentResponse> pomodoroContentResponses = pomodoroContents.stream()
                 .filter(content -> content.getCycle().equals(cycle))
                 .map(PomodoroContentResponse::from)

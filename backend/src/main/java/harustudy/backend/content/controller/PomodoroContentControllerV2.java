@@ -21,12 +21,11 @@ public class PomodoroContentControllerV2 {
 
     @GetMapping("/api/v2/studies/{studyId}/contents")
     public ResponseEntity<PomodoroContentsResponse> findMemberContent(
-            @PathVariable Long studyId,
+            @PathVariable("studyId") Long studyId,
             @RequestParam("memberId") Long memberId,
             @RequestParam(name = "cycle", required = false) Integer cycle
     ) {
-        return ResponseEntity.ok(
-                pomodoroContentService.findMemberContentWithCycleFilter(studyId, memberId, cycle));
+        return ResponseEntity.ok(pomodoroContentService.findMemberContentWithCycleFilter(studyId, memberId, cycle));
     }
 
     @PostMapping("/api/v2/studies/{studyId}/contents/write-plan")
