@@ -35,7 +35,8 @@ type Props = {
 const Sidebar = ({ step, cycle, studyMinutes }: Props) => {
   const theme = SIDEBAR_INFO[step].theme;
   const stepKeyword = SIDEBAR_INFO[step].stepKeyword;
-  const paragraph = SIDEBAR_INFO[step].paragraph;
+  const paragraph =
+    step === 'retrospect' ? `${studyMinutes}${SIDEBAR_INFO[step].paragraph}` : SIDEBAR_INFO[step].paragraph;
 
   return (
     <Layout background={theme}>
@@ -46,8 +47,11 @@ const Sidebar = ({ step, cycle, studyMinutes }: Props) => {
           margin-right: auto;
           white-space: pre-line;
         `}
+        tabIndex={0}
+        aria-label={paragraph}
+        aria-live="assertive"
       >
-        {step === 'retrospect' ? `${studyMinutes}${paragraph}` : paragraph}
+        {paragraph}
       </Typography>
       <Timer studyMinutes={studyMinutes} step={step} />
       <Typography variant="p1" color={color.white}>
