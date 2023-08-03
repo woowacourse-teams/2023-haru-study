@@ -106,7 +106,6 @@ public class PomodoroProgress extends BaseTimeEntity {
                 return;
             }
             currentCycle++;
-            return;
         }
         pomodoroStatus = pomodoroStatus.getNext();
     }

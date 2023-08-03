@@ -1,6 +1,5 @@
 package harustudy.backend.progress.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import harustudy.backend.member.domain.Member;
@@ -14,6 +13,28 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class PomodoroProgressTest {
+
+    @Test
+    void 학습_이후_동일_사이클에_회고_단계로_넘어간다() {
+        // given
+        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
+        PomodoroRoom room = new PomodoroRoom("room", 3, 25, participantCode);
+        Member member = new Member("nickname");
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(room, member);
+
+        // when
+        int notDoneStatusCount = 3;
+        for (int i = 0; i < notDoneStatusCount - 1; i++) {
+            pomodoroProgress.proceedV2();
+        }
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(pomodoroProgress.getCurrentCycle()).isEqualTo(1);
+            softly.assertThat(pomodoroProgress.getPomodoroStatus())
+                    .isEqualTo(PomodoroStatus.RETROSPECT);
+        });
+    }
 
     @Test
     void 마지막_사이클이_아니라면_회고_종료_후_사이클_수가_증가한다() {
@@ -30,7 +51,11 @@ class PomodoroProgressTest {
         }
 
         // then
-        assertThat(pomodoroProgress.getCurrentCycle()).isEqualTo(2);
+        assertSoftly(softly -> {
+            softly.assertThat(pomodoroProgress.getCurrentCycle()).isEqualTo(2);
+            softly.assertThat(pomodoroProgress.getPomodoroStatus())
+                    .isEqualTo(PomodoroStatus.PLANNING);
+        });
     }
 
     @Test
