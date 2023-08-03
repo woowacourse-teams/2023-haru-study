@@ -51,9 +51,9 @@ export const requestRegisterMember = async (nickname: string | null, studyId: st
   return { memberId };
 };
 
-export const requestAuthenticateParticipationCode = async (participantCode: string, memberId: number) => {
+export const requestAuthenticateParticipationCode = async (participantCode: string) => {
   const response = await http.post(`/api/studies/authenticate`, {
-    body: JSON.stringify({ participantCode, memberId }),
+    body: JSON.stringify({ participantCode }),
   });
 
   return (await response.json()) as ResponseStudyInfo;

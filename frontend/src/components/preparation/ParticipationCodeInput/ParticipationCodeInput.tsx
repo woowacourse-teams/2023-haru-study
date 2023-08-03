@@ -10,8 +10,6 @@ import useInput from '@Hooks/common/useInput';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-import { getCookie } from '@Utils/cookie';
-
 import { requestAuthenticateParticipationCode } from '@Apis/index';
 
 const ParticipationCodeInput = () => {
@@ -26,11 +24,8 @@ const ParticipationCodeInput = () => {
 
     setIsLoading(true);
     try {
-      const memberId = Number(getCookie('memberId'));
-
-      if (!memberId) throw new Error('잘못된 접근입니다.');
-
-      const { studyId, studyName } = await requestAuthenticateParticipationCode(participantCodeInput.state, memberId);
+      // memberId는 해당 api요청에 필요없기 때문에 삭제
+      const { studyId, studyName } = await requestAuthenticateParticipationCode(participantCodeInput.state);
 
       setIsLoading(false);
 
