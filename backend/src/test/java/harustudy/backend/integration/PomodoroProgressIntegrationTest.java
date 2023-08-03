@@ -47,10 +47,10 @@ public class PomodoroProgressIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    void studyId와_memberId로_진행도를_조회한다() throws Exception {
+    void studyId와_progressId로_진행도를_조회한다() throws Exception {
         // when
         MvcResult result = mockMvc.perform(
-                        get("/api/v2/studies/{studyId}/progresses", pomodoroProgress.getId())
+                        get("/api/v2/studies/{studyId}/progresses", pomodoroRoom.getId())
                                 .param("memberId", Long.toString(member.getId()))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

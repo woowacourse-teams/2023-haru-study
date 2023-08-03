@@ -1,8 +1,17 @@
 package harustudy.backend.content.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
+import harustudy.backend.common.MapStringConverter;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,15 +44,10 @@ public class PomodoroContent extends BaseTimeEntity {
     private Map<String, String> retrospect = new HashMap<>();
 
     public PomodoroContent(PomodoroProgress pomodoroProgress, @NotNull Integer cycle) {
-        this(pomodoroProgress, cycle, Map.of(), Map.of());
-    }
-
-    public PomodoroContent(PomodoroProgress pomodoroProgress, @NotNull Integer cycle,
-                           Map<String, String> plan, Map<String, String> retrospect) {
         this.pomodoroProgress = pomodoroProgress;
         this.cycle = cycle;
-        this.plan = plan;
-        this.retrospect = retrospect;
+        this.plan = Map.of();
+        this.retrospect = Map.of();
     }
 
     public void changePlan(Map<String, String> plan) {
@@ -56,5 +60,9 @@ public class PomodoroContent extends BaseTimeEntity {
 
     public boolean hasSameCycleWith(PomodoroProgress pomodoroProgress) {
         return cycle.equals(pomodoroProgress.getCurrentCycle());
+    }
+
+    public boolean hasEmptyPlan() {
+        return plan.isEmpty();
     }
 }

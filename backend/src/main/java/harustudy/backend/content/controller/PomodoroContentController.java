@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 // TODO: 콘텐츠 길이 검증 필요
 @RequiredArgsConstructor
 @RestController
+@Deprecated
 public class PomodoroContentController {
 
     private final PomodoroContentService pomodoroContentService;

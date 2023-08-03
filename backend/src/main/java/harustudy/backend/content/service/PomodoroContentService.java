@@ -2,7 +2,7 @@ package harustudy.backend.content.service;
 
 import harustudy.backend.common.EntityNotFoundException.MemberNotFound;
 import harustudy.backend.common.EntityNotFoundException.PomodoroProgressNotFound;
-import harustudy.backend.common.EntityNotFoundException.PomodoroRecordNotFound;
+import harustudy.backend.common.EntityNotFoundException.PomodoroContentNotFound;
 import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.dto.PomodoroContentResponse;
@@ -12,7 +12,7 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.exception.InvalidPomodoroProgressException.UnavailableToProceed;
-import harustudy.backend.progress.exception.IllegalProgressStateException;
+import harustudy.backend.progress.exception.PomodoroProgressStatusException;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 @Service
+@Deprecated
 public class PomodoroContentService {
 
     private final PomodoroRoomRepository pomodoroRoomRepository;
@@ -55,7 +56,7 @@ public class PomodoroContentService {
 
     private void validateProgressIsPlanning(PomodoroProgress pomodoroProgress) {
         if (pomodoroProgress.isNotPlanning()) {
-            throw new IllegalProgressStateException();
+            throw new PomodoroProgressStatusException();
         }
     }
 
@@ -99,7 +100,7 @@ public class PomodoroContentService {
         return pomodoroRecords.stream()
                 .filter(pomodoroRecord -> pomodoroRecord.hasSameCycleWith(pomodoroProgress))
                 .findAny()
-                .orElseThrow(PomodoroRecordNotFound::new);
+                .orElseThrow(PomodoroContentNotFound::new);
     }
 
     private PomodoroProgress findPomodoroProgressFrom(Long roomId, Long memberId) {
@@ -119,7 +120,7 @@ public class PomodoroContentService {
 
     private void validateIsPlanFilled(PomodoroContent recentRecord) {
         if (recentRecord.getPlan().isEmpty()) {
-            throw new IllegalProgressStateException();
+            throw new PomodoroProgressStatusException();
         }
     }
 }
