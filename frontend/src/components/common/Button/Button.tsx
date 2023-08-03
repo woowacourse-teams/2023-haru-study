@@ -115,6 +115,7 @@ const Button = ({
   size = 'medium',
   $block = true,
   $style,
+  ...props
 }: PropsWithChildren<Props> & ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <StyledButton
@@ -125,6 +126,7 @@ const Button = ({
       disabled={disabled}
       $block={$block}
       $style={$style}
+      {...props}
     >
       {isLoading && (
         <CircularProgressLayout>
