@@ -99,6 +99,7 @@ const StyledLabel = styled.label<StyledLabel>`
 `;
 
 const StyledBottomText = styled.p<{ $error?: boolean }>`
+  position: absolute;
   margin-top: 10px;
   font-size: 16px;
   font-weight: 200;

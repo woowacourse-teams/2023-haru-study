@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
@@ -60,6 +60,9 @@ const ParticipationCodeInput = () => {
         onClick={handleOnClickParticipateButton}
         disabled={!participantCodeInput.state}
         isLoading={isLoading}
+        $style={css`
+          margin-top: 25px;
+        `}
       >
         스터디 참여하기
       </Button>
