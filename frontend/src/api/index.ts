@@ -16,12 +16,8 @@ export const requestCreateStudy = async (
   totalCycle: TotalCycleOptions,
   timePerCycle: StudyTimePerCycleOptions,
 ) => {
-  const response = await fetch(`api/studies`, {
+  const response = await http.post(`api/studies`, {
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
 
   const locationHeader = response.headers.get('Location');

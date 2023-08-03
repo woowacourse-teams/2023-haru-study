@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
@@ -9,14 +8,13 @@ import Typography from '@Components/common/Typography/Typography';
 
 import useInput from '@Hooks/common/useInput';
 import useSelect from '@Hooks/common/useSelect';
+import useCreateStudy from '@Hooks/create/useCreateStudy';
 
 import color from '@Styles/color';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 import { ROUTES_PATH } from '@Constants/routes';
 import { STUDY_TIME_PER_CYCLE_OPTIONS, TOTAL_CYCLE_OPTIONS } from '@Constants/study';
-
-import { requestCreateStudy } from '@Apis/index';
 
 import type { StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
@@ -27,35 +25,24 @@ const CreateStudyForm = () => {
   const timePerCycleSelect = useSelect<StudyTimePerCycleOptions>();
   const totalCycleSelect = useSelect<TotalCycleOptions>();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { isLoading, error, createStudy } = useCreateStudy();
 
   const totalTime = (Number(timePerCycleSelect.state ?? 0) + 20) * Number(totalCycleSelect.state ?? 0);
   const hour = Math.floor(totalTime / 60);
   const minute = totalTime % 60;
 
   const handleOnClickMakeButton = async () => {
-    setIsLoading(true);
-
-    try {
-      if (!totalCycleSelect.state || !timePerCycleSelect.state || !studyNameInput.state)
-        throw new Error('이름의 길이와, 사이클 수, 사이클 당 시간을 다시 한번 확인해주세요');
-
-      const { studyId, result } = await requestCreateStudy(
-        studyNameInput.state,
-        totalCycleSelect.state,
-        timePerCycleSelect.state,
-      );
-
-      navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
-        state: { participantCode: result.participantCode, studyName: studyNameInput.state, isHost: true },
-      });
-    } catch (error) {
-      setIsLoading(false);
-      if (!(error instanceof Error)) throw error;
-      alert(error.message);
+    if (!totalCycleSelect.state || !timePerCycleSelect.state || !studyNameInput.state) {
+      throw new Error('이름의 길이와, 사이클 수, 사이클 당 시간을 다시 한번 확인해주세요');
     }
 
-    setIsLoading(false);
+    const data = await createStudy(studyNameInput.state, totalCycleSelect.state, timePerCycleSelect.state);
+
+    if (data) {
+      navigate(`${ROUTES_PATH.preparation}/${data.studyId}`, {
+        state: { participantCode: data.result.participantCode, studyName: studyNameInput.state, isHost: true },
+      });
+    }
   };
 
   const isDisabled = () => {
@@ -65,6 +52,10 @@ const CreateStudyForm = () => {
 
     return false;
   };
+
+  if (error) {
+    alert(error.message);
+  }
 
   return (
     <Layout>
