@@ -16,7 +16,7 @@ export const requestCreateStudy = async (
   totalCycle: TotalCycleOptions,
   timePerCycle: StudyTimePerCycleOptions,
 ) => {
-  const response = await fetch(`api/studies`, {
+  const response = await fetch(`/api/studies`, {
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
     method: 'POST',
     headers: {
@@ -33,7 +33,7 @@ export const requestCreateStudy = async (
 };
 
 export const requestRegisterMember = async (nickname: string | null, studyId: string | null) => {
-  const response = await fetch(`api/studies/${studyId ?? ''}/members`, {
+  const response = await fetch(`/api/studies/${studyId ?? ''}/members`, {
     body: JSON.stringify({ nickname }),
     method: 'POST',
     headers: {
@@ -52,7 +52,7 @@ export const requestRegisterMember = async (nickname: string | null, studyId: st
 };
 
 export const requestAuthenticateParticipationCode = async (participantCode: string, memberId: number) => {
-  const response = await http.post(`api/studies/authenticate`, {
+  const response = await http.post(`/api/studies/authenticate`, {
     body: JSON.stringify({ participantCode, memberId }),
   });
 
