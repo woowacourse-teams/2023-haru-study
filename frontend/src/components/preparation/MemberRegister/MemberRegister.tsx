@@ -59,7 +59,7 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
         }
         errorMessage={ERROR_MESSAGE.nickName}
       >
-        <Input.TextField onChange={nickNameInput.onChangeInput} error={nickNameInput.isInputError} />
+        <Input.TextField maxLength={10} onChange={nickNameInput.onChangeInput} error={nickNameInput.isInputError} />
       </Input>
       <Button
         variant="primary"
