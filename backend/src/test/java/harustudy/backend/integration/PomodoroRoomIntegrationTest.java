@@ -8,6 +8,7 @@ import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
 import harustudy.backend.room.dto.PomodoroRoomResponseV2;
 import jakarta.persistence.EntityManager;
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -58,7 +59,7 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
                 .andReturn();
 
         // then
-        String jsonResponse = result.getResponse().getContentAsString();
+        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
         PomodoroRoomResponseV2 response = objectMapper.readValue(jsonResponse,
                 PomodoroRoomResponseV2.class);
 
@@ -79,7 +80,7 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
                 .andReturn();
 
         // then
-        String jsonResponse = result.getResponse().getContentAsString();
+        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
         PomodoroRoomResponseV2 response = objectMapper.readValue(jsonResponse,
                 PomodoroRoomResponseV2.class);
 
@@ -105,7 +106,7 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
                 .andReturn();
 
         // then
-        String jsonResponse = result.getResponse().getContentAsString();
+        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
         CreatePomodoroRoomResponse response = objectMapper.readValue(jsonResponse, CreatePomodoroRoomResponse.class);
 
         assertThat(response.participantCode())
