@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 
+import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
 import MemberRegister from '@Components/preparation/MemberRegister/MemberRegister';
 import MemberRestart from '@Components/preparation/MemberRestart/MemberRestart';
 import ParticipationCodeCopier from '@Components/preparation/ParticipationCodeCopier/ParticipationCodeCopier';
+
+import color from '@Styles/color';
 
 import { getCookie } from '@Utils/cookie';
 
@@ -20,6 +23,7 @@ const StudyPreparation = () => {
   const { studyId } = useParams();
 
   const [nickname, setNickname] = useState<string | null>(null);
+
   const isExistMember = Boolean(nickname);
 
   const memberId = getCookie('memberId');
@@ -50,6 +54,19 @@ const StudyPreparation = () => {
 
   if (!studyId) return <div>잘못된 접근입니다.</div>;
 
+  if (nickname === null)
+    return (
+      <LoadingLayout>
+        <CircularProgress
+          size="x-large"
+          $style={css`
+            border: 2px solid ${color.blue[500]};
+            border-color: ${color.blue[500]} transparent transparent transparent;
+          `}
+        />
+      </LoadingLayout>
+    );
+
   return (
     <StudyPreparationLayout headerText={`${studyName} 스터디`}>
       <Layout>
@@ -70,4 +87,13 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   gap: 70px;
+`;
+
+const LoadingLayout = styled.div`
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
