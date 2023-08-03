@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react';
+import type { HTMLAttributes, PropsWithChildren } from 'react';
 import { css, styled } from 'styled-components';
 import type { CSSProp } from 'styled-components';
 
@@ -12,7 +12,7 @@ type Props = {
   color?: string;
 
   $style?: CSSProp;
-};
+} & HTMLAttributes<HTMLHeadingElement>;
 
 const TAG_MAPPING = {
   h1: 'h1',
@@ -48,7 +48,7 @@ const FONT_STYLE = {
   },
 } as const;
 
-const Typography = ({ variant, fontSize, fontWeight, color, $style, children }: PropsWithChildren<Props>) => {
+const Typography = ({ variant, fontSize, fontWeight, color, $style, children, ...props }: PropsWithChildren<Props>) => {
   return (
     <StyledTypography
       as={TAG_MAPPING[variant]}
@@ -57,6 +57,7 @@ const Typography = ({ variant, fontSize, fontWeight, color, $style, children }: 
       fontWeight={fontWeight}
       color={color}
       $style={$style}
+      {...props}
     >
       {children}
     </StyledTypography>
