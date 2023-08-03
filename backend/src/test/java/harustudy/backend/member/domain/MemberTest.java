@@ -31,7 +31,7 @@ class MemberTest {
 
     @Test
     void 멤버간_닉네임이_동일한지_확인할_수_있다() {
-        // given & when
+        // given, when
         Member newMember = new Member("sameName");
         Member sameNameMember = new Member("sameName");
         Member otherNameMember = new Member("otherName");

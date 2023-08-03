@@ -1,7 +1,7 @@
 package harustudy.backend.member.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
@@ -15,6 +15,7 @@ import harustudy.backend.room.domain.PomodoroRoom;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
+import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -45,10 +46,10 @@ class MemberServiceV2Test {
         MemberResponseV2 response = memberServiceV2.findMember(member.getId());
 
         // then
-        assertAll(
-                () -> assertThat(response.id()).isEqualTo(member.getId()),
-                () -> assertThat(response.nickname()).isEqualTo(member.getNickname())
-        );
+        assertSoftly(softly -> {
+            assertThat(response.id()).isEqualTo(member.getId());
+            assertThat(response.nickname()).isEqualTo(member.getNickname());
+        });
     }
 
     @Test
@@ -62,8 +63,6 @@ class MemberServiceV2Test {
         Member member2 = new Member("member2");
         PomodoroProgress pomodoroProgress1 = new PomodoroProgress(room, member1);
         PomodoroProgress pomodoroProgress2 = new PomodoroProgress(room, member2);
-        PomodoroContent pomodoroContent1 = new PomodoroContent(pomodoroProgress1, 1);
-        PomodoroContent pomodoroContent2 = new PomodoroContent(pomodoroProgress2, 1);
 
         entityManager.persist(participantCode);
         entityManager.persist(room);
@@ -71,18 +70,24 @@ class MemberServiceV2Test {
         entityManager.persist(member2);
         entityManager.persist(pomodoroProgress1);
         entityManager.persist(pomodoroProgress2);
-        entityManager.persist(pomodoroContent1);
-        entityManager.persist(pomodoroContent2);
+
+        entityManager.flush();
+        entityManager.clear();
 
         // when
         MembersResponseV2 response = memberServiceV2.findParticipatedMembers(room.getId());
 
         // then
-        assertAll(
-                () -> assertThat(response.members().size()).isEqualTo(2),
-                () -> assertThat(response.members().get(0).nickname()).isEqualTo("member1"),
-                () -> assertThat(response.members().get(1).nickname()).isEqualTo("member2")
+        Condition<String> condition = new Condition<>(
+                s -> s.equals(member1.getNickname()) || s.equals(member2.getNickname()),
+                "member1의 nickname과 같거나 member2의 nickname과 같다"
         );
+
+        assertSoftly(softly -> {
+            assertThat(response.members().size()).isEqualTo(2);
+            assertThat(response.members().get(0).nickname()).is(condition);
+            assertThat(response.members().get(1).nickname()).is(condition);
+        });
     }
 
     @Test
@@ -108,11 +113,11 @@ class MemberServiceV2Test {
         PomodoroProgress registeredPomodoroProgress = pomodoroProgresses.get(0);
         List<PomodoroContent> pomodoroContents = registeredPomodoroProgress.getPomodoroContents();
 
-        assertAll(
-                () -> assertThat(registeredMember.getNickname()).isEqualTo("nickname"),
-                () -> assertThat(registeredPomodoroRoom.getName()).isEqualTo("roomName"),
-                () -> assertThat(pomodoroProgresses.size()).isEqualTo(1),
-                () -> assertThat(pomodoroContents.size()).isEqualTo(3)
-        );
+        assertSoftly(softly -> {
+            assertThat(registeredMember.getNickname()).isEqualTo(request.nickname());
+            assertThat(registeredPomodoroRoom.getName()).isEqualTo(room.getName());
+            assertThat(pomodoroProgresses.size()).isEqualTo(1);
+            assertThat(pomodoroContents.size()).isEqualTo(3);
+        });
     }
 }

@@ -32,7 +32,6 @@ public class Member extends BaseTimeEntity {
 
     private void validateLength(String nickname) {
         if (nickname.length() < 1 || nickname.length() > 10) {
-            // TODO: 에러 처리 시 에러 코드 정의해야 할 듯?
             throw new MemberNameLengthException();
         }
     }

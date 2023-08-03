@@ -1,12 +1,12 @@
 package harustudy.backend.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.GuestRegisterRequest;
 import harustudy.backend.member.dto.MemberResponseV2;
@@ -29,29 +29,21 @@ import org.springframework.test.web.servlet.MvcResult;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 public class MemberIntegrationTest extends IntegrationTest {
 
-    private ParticipantCode participantCode;
     private PomodoroRoom room;
     private Member member1;
     private Member member2;
-    private PomodoroProgress pomodoroProgress1;
-    private PomodoroProgress pomodoroProgress2;
-    private PomodoroContent pomodoroContent1;
-    private PomodoroContent pomodoroContent2;
 
-    @BeforeEach()
+    @BeforeEach
     void setUp() {
         super.setUp();
 
-        participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        room =
-                new PomodoroRoom("roomName", 1, 20, participantCode);
+        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
+        room = new PomodoroRoom("roomName", 1, 20, participantCode);
 
         member1 = new Member("member1");
         member2 = new Member("member2");
-        pomodoroProgress1 = new PomodoroProgress(room, member1);
-        pomodoroProgress2 = new PomodoroProgress(room, member2);
-        pomodoroContent1 = new PomodoroContent(pomodoroProgress1, 1);
-        pomodoroContent2 = new PomodoroContent(pomodoroProgress2, 1);
+        PomodoroProgress pomodoroProgress1 = new PomodoroProgress(room, member1);
+        PomodoroProgress pomodoroProgress2 = new PomodoroProgress(room, member2);
 
         entityManager.persist(participantCode);
         entityManager.persist(room);
@@ -59,8 +51,6 @@ public class MemberIntegrationTest extends IntegrationTest {
         entityManager.persist(member2);
         entityManager.persist(pomodoroProgress1);
         entityManager.persist(pomodoroProgress2);
-        entityManager.persist(pomodoroContent1);
-        entityManager.persist(pomodoroContent2);
     }
 
     @Test
@@ -102,10 +92,19 @@ public class MemberIntegrationTest extends IntegrationTest {
         MembersResponseV2 response = objectMapper.readValue(jsonResponse, MembersResponseV2.class);
 
         // then
-        assertThat(response.members()).hasSize(2);
-        assertThat(response.members().get(0).nickname()).isEqualTo("member1");
-        assertThat(response.members().get(1).nickname()).isEqualTo("member2");
+        assertAll(
+                () -> assertThat(response.members()).hasSize(2),
+                () -> assertThat(response.members().get(0).nickname()).isEqualTo(
+                        member1.getNickname()),
+                () -> assertThat(response.members().get(1).nickname()).isEqualTo(
+                        member2.getNickname())
+        );
 
+        assertSoftly(softly -> {
+            assertThat(response.members()).hasSize(2);
+            assertThat(response.members().get(0).nickname()).isEqualTo(member1.getNickname());
+            assertThat(response.members().get(1).nickname()).isEqualTo(member2.getNickname());
+        });
     }
 
     @Test
@@ -131,5 +130,11 @@ public class MemberIntegrationTest extends IntegrationTest {
                 () -> assertThat(cookie).isNotNull(),
                 () -> assertThat(cookie.getValue()).isNotNull()
         );
+
+        assertSoftly(softly -> {
+            assertThat(createdUri).contains("/api/v2/members/");
+            assertThat(cookie).isNotNull();
+            assertThat(cookie.getValue()).isNotNull();
+        });
     }
 }
