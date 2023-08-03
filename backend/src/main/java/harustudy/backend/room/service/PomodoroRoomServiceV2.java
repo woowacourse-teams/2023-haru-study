@@ -23,8 +23,8 @@ public class PomodoroRoomServiceV2 {
     private final ParticipantCodeRepository participantCodeRepository;
     private final GenerationStrategy generationStrategy;
 
-    public PomodoroRoomResponseV2 findPomodoroRoom(Long studyId) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(studyId)
+    public PomodoroRoomResponseV2 findPomodoroRoom(Long roomId) {
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
                 .orElseThrow(RoomNotFound::new);
         return PomodoroRoomResponseV2.from(pomodoroRoom);
     }
@@ -40,7 +40,6 @@ public class PomodoroRoomServiceV2 {
         return CreatePomodoroRoomDto.from(savedRoom, participantCode);
     }
 
-    // TODO: ParticipantCodeService 분리 고려
     private ParticipantCode regenerateUniqueCode() {
         ParticipantCode participantCode = new ParticipantCode(generationStrategy);
         while (isParticipantCodePresent(participantCode)) {

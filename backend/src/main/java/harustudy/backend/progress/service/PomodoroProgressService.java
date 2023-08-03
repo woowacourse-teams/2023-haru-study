@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @AllArgsConstructor
 @Transactional
+@Deprecated
 public class PomodoroProgressService {
 
     private final PomodoroProgressRepository pomodoroProgressRepository;

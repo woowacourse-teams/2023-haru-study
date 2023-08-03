@@ -12,7 +12,7 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.exception.InvalidPomodoroProgressException.UnavailableToProceed;
-import harustudy.backend.progress.exception.StudyPomodoroProgressException;
+import harustudy.backend.progress.exception.IllegalProgressStateException;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
@@ -55,7 +55,7 @@ public class PomodoroContentService {
 
     private void validateProgressIsPlanning(PomodoroProgress pomodoroProgress) {
         if (pomodoroProgress.isNotPlanning()) {
-            throw new StudyPomodoroProgressException();
+            throw new IllegalProgressStateException();
         }
     }
 
@@ -119,7 +119,7 @@ public class PomodoroContentService {
 
     private void validateIsPlanFilled(PomodoroContent recentRecord) {
         if (recentRecord.getPlan().isEmpty()) {
-            throw new StudyPomodoroProgressException();
+            throw new IllegalProgressStateException();
         }
     }
 }

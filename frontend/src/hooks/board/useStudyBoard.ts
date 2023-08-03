@@ -3,7 +3,9 @@ import { useParams } from 'react-router-dom';
 
 import { getCookie } from '@Utils/cookie';
 
-import type { StudyData, StudyFetchingData } from '@Types/study';
+import { requestGetMemberStudyMetadata } from '@Apis/index';
+
+import type { StudyData } from '@Types/study';
 
 const useStudyBoard = () => {
   const [studyData, setStudyData] = useState<StudyData | null>(null);
@@ -13,20 +15,18 @@ const useStudyBoard = () => {
   const memberId = getCookie('memberId');
 
   useEffect(() => {
-    try {
-      if (studyId === undefined || memberId === null) {
-        throw new Error('유저 정보를 불러오는 중 문제가 발생했습니다.');
-      }
+    const fetchStudyMetaData = async () => {
+      if (!studyId || !memberId) throw new Error('정상적인 경로로 접근해주세요.');
 
-      fetch(`/api/studies/${studyId}/members/${memberId}/metadata`)
-        .then((res) => res.json())
-        .then((data: StudyFetchingData) => setStudyData({ ...data, studyId: studyId, memberId: memberId }))
-        .catch(() => {
-          throw new Error('유저 정보를 불러오는 중 문제가 발생했습니다');
-        });
+      const fetchedData = await requestGetMemberStudyMetadata(studyId, memberId);
+      setStudyData({ ...fetchedData, studyId, memberId });
+    };
+
+    try {
+      fetchStudyMetaData();
     } catch (error) {
-      if (!(error instanceof Error)) return;
-      setError(error);
+      if (!(error instanceof Error)) throw error;
+      setError(new Error('유저 정보를 불러오는 중 문제가 발생했습니다.'));
     }
   }, [memberId, studyId]);
 

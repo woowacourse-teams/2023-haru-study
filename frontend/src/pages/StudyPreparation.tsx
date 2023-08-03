@@ -8,6 +8,8 @@ import ParticipationCodeCopier from '@Components/preparation/ParticipationCodeCo
 
 import { getCookie } from '@Utils/cookie';
 
+import { requestCheckIsMember } from '@Apis/index';
+
 import StudyPreparationLayout from './layout/StudyPreparationLayout';
 
 type LocationState = {
@@ -15,7 +17,7 @@ type LocationState = {
 };
 
 const StudyPreparation = () => {
-  const { studyId } = useParams<{ studyId: string }>();
+  const { studyId } = useParams();
 
   const [nickname, setNickname] = useState<string | null>(null);
   const isExistMember = Boolean(nickname);
@@ -29,26 +31,24 @@ const StudyPreparation = () => {
   } = useLocation() as LocationState;
 
   const authenticateMember = useCallback(async () => {
-    if (!studyId || !memberId) return;
+    if (!studyId || !memberId) throw Error('잘못된 접근입니다.');
 
-    const response = await fetch(`/api/studies/${studyId}/members/${memberId}`);
-
-    if (!response.ok) return;
-
-    const { nickname } = (await response.json()) as { nickname: string };
+    const { nickname } = await requestCheckIsMember(studyId, memberId);
 
     setNickname(nickname);
   }, [memberId, studyId]);
 
   useEffect(() => {
     if (isHost) return;
-
-    authenticateMember();
+    try {
+      authenticateMember();
+    } catch (error) {
+      if (!(error instanceof Error)) throw error;
+      alert(error.message);
+    }
   }, [authenticateMember, isHost]);
 
-  if (!studyId) {
-    return <div>잘못된 접근!</div>;
-  }
+  if (!studyId) return <div>잘못된 접근입니다.</div>;
 
   return (
     <StudyPreparationLayout headerText={`${studyName} 스터디`}>

@@ -1,33 +1,50 @@
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-import useFetch from '@Hooks/api/useFetch';
+import { requestGetStudyMetadata } from '@Apis/index';
+
+import type { Member, StudyBasicInfo } from '@Types/study';
 
 import MemberRecordList from '../MemberRecordList/MemberRecordList';
 import StudyInformation from '../StudyInformation/StudyInformation';
 
-type StudyMetadata = {
-  members: { memberId: number; nickname: string }[];
-  studyName: string;
-  timePerCycle: number;
-  totalCycle: number;
-};
-
 const RecordContents = () => {
   const { studyId } = useParams<{ studyId: string }>();
+  const [studyBasicInfo, setStudyBasicInfo] = useState<StudyBasicInfo | null>(null);
+  const [members, setMembers] = useState<Member[]>([]);
 
-  const { data, status } = useFetch<StudyMetadata>(`/api/studies/${studyId!}/metadata`);
-  const isLoading = status === 'pending';
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!studyId) throw Error('잘못된 접근입니다.');
+
+      const { studyName, timePerCycle, totalCycle, members } = await requestGetStudyMetadata(studyId);
+
+      setStudyBasicInfo({
+        studyName,
+        timePerCycle,
+        totalCycle,
+      });
+      setMembers(members);
+    };
+
+    try {
+      fetchData();
+    } catch (error) {
+      if (!(error instanceof Error)) throw error;
+      alert(error.message);
+    }
+  }, [studyId]);
 
   return (
     <RecordContentsLayout>
       <StudyInformation
-        studyName={data?.studyName}
-        totalCycle={data?.totalCycle}
-        timePerCycle={data?.timePerCycle}
-        $isLoading={isLoading}
+        studyName={studyBasicInfo?.studyName}
+        totalCycle={studyBasicInfo?.totalCycle}
+        timePerCycle={studyBasicInfo?.timePerCycle}
+        $isLoading={!studyBasicInfo}
       />
-      <MemberRecordList studyId={studyId} members={data?.members} isLoading={isLoading} />
+      <MemberRecordList studyId={studyId} members={members} />
     </RecordContentsLayout>
   );
 };

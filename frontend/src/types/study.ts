@@ -1,17 +1,38 @@
+import type { STUDY_TIME_PER_CYCLE_OPTIONS, TOTAL_CYCLE_OPTIONS } from '@Constants/study';
+
+export type TotalCycleOptions = (typeof TOTAL_CYCLE_OPTIONS)[number];
+
+export type StudyTimePerCycleOptions = (typeof STUDY_TIME_PER_CYCLE_OPTIONS)[number];
+
 export type Step = 'planning' | 'studying' | 'retrospect';
 
-export type StudyFetchingData = {
-  studyName: string;
-  totalCycle: number;
+export type Member = {
+  memberId: string;
+  nickname: string;
+};
+
+export type Progress = {
   currentCycle: number;
-  timePerCycle: number;
   step: Step;
+};
+
+export type StudyBasicInfo = {
+  studyName: string;
+  timePerCycle: StudyTimePerCycleOptions;
+  totalCycle: TotalCycleOptions;
 };
 
 export type StudyData = {
   studyId: string;
   memberId: string;
-} & StudyFetchingData;
+} & StudyBasicInfo &
+  Progress;
+
+export type MemberRecordContent = {
+  cycle: number;
+  plan: PlanList;
+  retrospect: RetrospectList;
+};
 
 export type Plan = 'toDo' | 'completionCondition' | 'expectedProbability' | 'expectedDifficulty' | 'whatCanYouDo';
 
