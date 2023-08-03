@@ -2,6 +2,7 @@ package harustudy.backend.progress.dto;
 
 import harustudy.backend.progress.domain.PomodoroProgress;
 
+@Deprecated
 public record PomodoroProgressResponse(Boolean isDone, Integer currentCycle, String step) {
 
     public static PomodoroProgressResponse from(PomodoroProgress pomodoroProgress) {
