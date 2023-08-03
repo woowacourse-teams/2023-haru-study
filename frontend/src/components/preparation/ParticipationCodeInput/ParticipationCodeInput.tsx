@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
@@ -7,42 +6,30 @@ import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
 import useInput from '@Hooks/common/useInput';
+import useParticipationCode from '@Hooks/preparation/useParticipationCode';
 
 import { ROUTES_PATH } from '@Constants/routes';
-
-import { getCookie } from '@Utils/cookie';
-
-import { requestAuthenticateParticipationCode } from '@Apis/index';
 
 const ParticipationCodeInput = () => {
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const participantCodeInput = useInput(false);
 
+  const errorHandler = (message: string) => {
+    alert(message);
+  };
+  
+  const { authenticatePartcipationCode, isLoading } = useParticipationCode(errorHandler);
+  
   const handleOnClickParticipateButton = async () => {
-    if (!participantCodeInput.state) return;
+    if (!participantCodeInput.state) throw new Error('참여코드를 입력해주세요.');
 
-    setIsLoading(true);
-    try {
-      const memberId = Number(getCookie('memberId'));
+    const data = await authenticatePartcipationCode(participantCodeInput.state);
 
-      if (!memberId) throw new Error('잘못된 접근입니다.');
-
-      const { studyId, studyName } = await requestAuthenticateParticipationCode(participantCodeInput.state, memberId);
-
-      setIsLoading(false);
-
-      navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
-        state: { participantCode: participantCodeInput.state, studyName, isHost: false },
+    if (data) {
+      navigate(`${ROUTES_PATH.preparation}/${data.studyId}`, {
+        state: { participantCode: participantCodeInput.state, studyName: data.studyName, isHost: false },
       });
-    } catch (error) {
-      setIsLoading(false);
-
-      if (!(error instanceof Error)) throw error;
-
-      alert(error.message);
     }
   };
 
