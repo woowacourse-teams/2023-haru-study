@@ -21,9 +21,14 @@ type Props = {
 };
 
 const Timer = ({ studyMinutes, step }: Props) => {
-  const { start, stop, getFormattedTime, isTicking } = useTimer(studyMinutes, step);
+  const { start, stop, leftTime, isTicking } = useTimer(studyMinutes, step);
 
-  const formattedTime = getFormattedTime();
+  const leftMinutes = Math.floor(leftTime / 60)
+    .toString()
+    .padStart(2, '0');
+  const leftSeconds = Math.floor(leftTime % 60)
+    .toString()
+    .padStart(2, '0');
 
   const buttonColor = BUTTON_COLOR[step];
   const buttonText = isTicking ? '정지' : '시작';
@@ -34,18 +39,31 @@ const Timer = ({ studyMinutes, step }: Props) => {
       <Typography variant="p1" fontSize="3.6rem" color={color.white}>
         제한 시간
       </Typography>
-      <Typography variant="h1" fontSize="12.8rem" color={color.white}>
-        {formattedTime}
+      <Typography
+        variant="h1"
+        fontSize="12.8rem"
+        color={color.white}
+        tabIndex={0}
+        role="timer"
+        aria-label={`남은 시간 ${leftMinutes}분 ${leftSeconds}초`}
+      >
+        {`${leftMinutes}:${leftSeconds}`}
       </Typography>
       <Button
         variant="outlined"
         size="small"
         onClick={buttonAction}
+        aria-label="타이머 시작 및 일시정지 버튼"
         $style={css`
           border: none;
         `}
       >
-        <Typography variant="h5" color={buttonColor}>
+        <Typography
+          variant="h5"
+          color={buttonColor}
+          aria-label={`타이머 ${isTicking ? '시작' : '정지'}`}
+          aria-live="assertive"
+        >
           {buttonText}
         </Typography>
       </Button>

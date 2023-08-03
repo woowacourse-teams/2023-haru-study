@@ -51,10 +51,13 @@ export const requestRegisterMember = async (nickname: string | null, studyId: st
   return { memberId };
 };
 
-export const requestAuthenticateParticipationCode = (participantCode: string, memberId: number) =>
-  http.post<ResponseStudyInfo>(`api/studies/authenticate`, {
+export const requestAuthenticateParticipationCode = async (participantCode: string, memberId: number) => {
+  const response = await http.post(`api/studies/authenticate`, {
     body: JSON.stringify({ participantCode, memberId }),
   });
+
+  return (await response.json()) as ResponseStudyInfo;
+};
 
 export const requestCheckIsMember = (studyId: string, memberId: string) =>
   http.get<ResponseIsCheckMember>(`/api/studies/${studyId}/members/${memberId}`);

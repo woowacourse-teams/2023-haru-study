@@ -15,7 +15,7 @@ const QuestionTextarea = ({ question, errorMessage, ...props }: Props) => {
     <Layout>
       <Typography variant="h6">{question}</Typography>
       <Seperator />
-      <Textarea placeholder="답변을 입력해주세요." {...props} />
+      <Textarea placeholder="답변을 입력해주세요." aria-label={`${question}, ${errorMessage ?? ''}`} {...props} />
       <ErrorMessageWrapper>
         <Typography variant="p2" color={color.red[200]} fontSize="14px">
           {errorMessage}
