@@ -14,18 +14,18 @@ import color from '@Styles/color';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 import { ROUTES_PATH } from '@Constants/routes';
+import { STUDY_TIME_PER_CYCLE_OPTIONS, TOTAL_CYCLE_OPTIONS } from '@Constants/study';
 
-import { createStudy } from '@Apis/index';
+import { requestCreateStudy } from '@Apis/index';
 
-const TOTAL_CYCLE_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8] as const;
-const STUDY_TIME_PER_CYCLE_OPTIONS = [20, 25, 30, 35, 40, 45, 50, 55, 60] as const;
+import type { StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
 const CreateStudyForm = () => {
   const navigate = useNavigate();
 
   const studyNameInput = useInput(true);
-  const timePerCycleSelect = useSelect();
-  const totalCycleSelect = useSelect();
+  const timePerCycleSelect = useSelect<StudyTimePerCycleOptions>();
+  const totalCycleSelect = useSelect<TotalCycleOptions>();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -34,30 +34,28 @@ const CreateStudyForm = () => {
   const minute = totalTime % 60;
 
   const handleOnClickMakeButton = async () => {
+    setIsLoading(true);
+
     try {
-      setIsLoading(true);
+      if (!totalCycleSelect.state || !timePerCycleSelect.state || !studyNameInput.state)
+        throw new Error('이름의 길이와, 사이클 수, 사이클 당 시간을 다시 한번 확인해주세요');
 
-      const response = await createStudy(
-        studyNameInput.state ?? '',
-        Number(totalCycleSelect.state ?? 0),
-        Number(timePerCycleSelect.state ?? 0),
+      const { studyId, result } = await requestCreateStudy(
+        studyNameInput.state,
+        totalCycleSelect.state,
+        timePerCycleSelect.state,
       );
-
-      const locationHeader = response.headers.get('Location');
-      const studyId = locationHeader?.split('/').pop() as string;
-
-      const result = (await response.json()) as { participantCode: string; studyName: string };
-
-      setIsLoading(false);
 
       navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
         state: { participantCode: result.participantCode, studyName: studyNameInput.state, isHost: true },
       });
     } catch (error) {
-      console.error(error);
-      alert('이름의 길이와, 사이클 수, 사이클 당 시간을 다시 한번 확인해주세요');
       setIsLoading(false);
+      if (!(error instanceof Error)) throw error;
+      alert(error.message);
     }
+
+    setIsLoading(false);
   };
 
   const isDisabled = () => {

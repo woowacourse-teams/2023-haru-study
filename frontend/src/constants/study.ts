@@ -1,5 +1,9 @@
 import type { PlanList, RetrospectList } from '@Types/study';
 
+export const TOTAL_CYCLE_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8] as const;
+
+export const STUDY_TIME_PER_CYCLE_OPTIONS = [20, 25, 30, 35, 40, 45, 50, 55, 60] as const;
+
 export const PLAN_KEYWORDS: Readonly<PlanList> = {
   toDo: '학습목표',
   completionCondition: '완료 조건',

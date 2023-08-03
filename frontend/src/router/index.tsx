@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import CreateStudy from '@Pages/CreateStudy';
 import Landing from '@Pages/Landing';
 import StudyBoard from '@Pages/StudyBoard';
-import StudyParticipation from '@Pages/StudyParticipant';
+import StudyParticipation from '@Pages/StudyParticipation';
 import StudyPreparation from '@Pages/StudyPreparation';
 import StudyRecord from '@Pages/StudyRecord';
 
