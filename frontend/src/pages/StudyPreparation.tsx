@@ -56,15 +56,16 @@ const StudyPreparation = () => {
 
   if (nickname === null)
     return (
-      <LoadingLayout>
+      <StudyPreparationLayout headerText={`${studyName} 스터디`}>
         <CircularProgress
           size="x-large"
           $style={css`
+            margin-top: 200px;
             border: 2px solid ${color.blue[500]};
             border-color: ${color.blue[500]} transparent transparent transparent;
           `}
         />
-      </LoadingLayout>
+      </StudyPreparationLayout>
     );
 
   return (
@@ -87,13 +88,4 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   gap: 70px;
-`;
-
-const LoadingLayout = styled.div`
-  width: 100vw;
-  height: 100vh;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
