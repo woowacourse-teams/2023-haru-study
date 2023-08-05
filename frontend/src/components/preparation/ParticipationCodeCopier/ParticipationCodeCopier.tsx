@@ -50,8 +50,9 @@ const ParticipationCodeCopier = ({ participantCode }: Props) => {
         <Typography
           variant="p2"
           $style={css`
+            position: absolute;
             text-decoration: underline;
-            margin-top: 5px;
+            margin-top: 20px;
             color: ${color.neutral[400]};
             cursor: pointer;
           `}

@@ -71,6 +71,7 @@ const CreateStudyForm = () => {
               border: none;
               border-bottom: 1px solid ${color.blue[500]};
             `}
+            maxLength={10}
             error={studyNameInput.isInputError}
             onChange={studyNameInput.onChangeInput}
           />
