@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { styled } from 'styled-components';
+import { useLocation } from 'react-router-dom';
+import { css, styled } from 'styled-components';
 
+import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
 import MemberRegister from '@Components/preparation/MemberRegister/MemberRegister';
 import MemberRestart from '@Components/preparation/MemberRestart/MemberRestart';
 import ParticipationCodeCopier from '@Components/preparation/ParticipationCodeCopier/ParticipationCodeCopier';
 
-import { getCookie } from '@Utils/cookie';
+import useCheckIsMember from '@Hooks/preparation/useCheckIsMember';
 
-import { requestCheckIsMember } from '@Apis/index';
+import color from '@Styles/color';
 
 import StudyPreparationLayout from './layout/StudyPreparationLayout';
 
@@ -17,38 +17,31 @@ type LocationState = {
 };
 
 const StudyPreparation = () => {
-  const { studyId } = useParams();
-
-  const [nickname, setNickname] = useState<string | null>(null);
-  const isExistMember = Boolean(nickname);
-
-  const memberId = getCookie('memberId');
-
-  const restart = () => setNickname(null);
-
   const {
     state: { participantCode, studyName, isHost },
   } = useLocation() as LocationState;
 
-  const authenticateMember = useCallback(async () => {
-    if (!studyId || !memberId) throw Error('잘못된 접근입니다.');
+  const errorHandler = (message: string) => {
+    alert(message);
+  };
 
-    const { nickname } = await requestCheckIsMember(studyId, memberId);
+  const { nickname, restart, studyId } = useCheckIsMember(isHost, errorHandler);
 
-    setNickname(nickname);
-  }, [memberId, studyId]);
+  const isExistMember = Boolean(nickname);
 
-  useEffect(() => {
-    if (isHost) return;
-    try {
-      authenticateMember();
-    } catch (error) {
-      if (!(error instanceof Error)) throw error;
-      alert(error.message);
-    }
-  }, [authenticateMember, isHost]);
-
-  if (!studyId) return <div>잘못된 접근입니다.</div>;
+  if (nickname === null)
+    return (
+      <StudyPreparationLayout headerText={`${studyName} 스터디`}>
+        <CircularProgress
+          size="x-large"
+          $style={css`
+            margin-top: 200px;
+            border: 2px solid ${color.blue[500]};
+            border-color: ${color.blue[500]} transparent transparent transparent;
+          `}
+        />
+      </StudyPreparationLayout>
+    );
 
   return (
     <StudyPreparationLayout headerText={`${studyName} 스터디`}>
