@@ -6,7 +6,7 @@ import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
 import useInput from '@Hooks/common/useInput';
-import useParticipationCode from '@Hooks/preparation/useParticipationCode';
+import useParticipationCode from '@Hooks/participation/useParticipationCode';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
