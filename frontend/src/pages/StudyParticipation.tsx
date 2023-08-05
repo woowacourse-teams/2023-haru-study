@@ -1,4 +1,4 @@
-import ParticipationCodeInput from '@Components/preparation/ParticipationCodeInput/ParticipationCodeInput';
+import ParticipationCodeInput from '@Components/participation/ParticipationCodeInput/ParticipationCodeInput';
 
 import StudyPreparationLayout from './layout/StudyPreparationLayout';
 
