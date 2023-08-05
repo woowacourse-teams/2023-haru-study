@@ -28,8 +28,8 @@ export const requestCreateStudy = async (
   return { studyId, result };
 };
 
-export const requestRegisterMember = async (nickname: string | null, studyId: string | null) => {
-  const response = await http.post(`/api/studies/${studyId ?? ''}/members`, {
+export const requestRegisterMember = async (nickname: string, studyId: string) => {
+  const response = await http.post(`/api/studies/${studyId}/members`, {
     body: JSON.stringify({ nickname }),
   });
 
