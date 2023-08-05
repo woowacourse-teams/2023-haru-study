@@ -29,7 +29,7 @@ export const checkParticipantCodeHandlers = [
     const memberId = req.params.memberId[0];
 
     if (memberId !== '5') {
-      return res(ctx.status(404), ctx.delay(1000));
+      return res(ctx.status(200), ctx.json({ nickname: null }), ctx.delay(300));
     }
 
     return res(ctx.status(200), ctx.json({ nickname: '하루' }), ctx.delay(300));
