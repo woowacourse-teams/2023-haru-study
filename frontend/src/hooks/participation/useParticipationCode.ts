@@ -5,7 +5,7 @@ import { requestAuthenticateParticipationCode } from '@Apis/index';
 const useParticipationCode = (errorHandler: (message: string) => void) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const authenticatePartcipationCode = async (participantCode: string) => {
+  const authenticateParticipationCode = async (participantCode: string) => {
     setIsLoading(true);
 
     try {
@@ -18,7 +18,7 @@ const useParticipationCode = (errorHandler: (message: string) => void) => {
     }
   };
 
-  return { authenticatePartcipationCode, isLoading };
+  return { authenticateParticipationCode, isLoading };
 };
 
 export default useParticipationCode;

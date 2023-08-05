@@ -23,14 +23,14 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
     alert(message);
   };
 
-  const { isLoading, resgisterMember } = useRegisterMember(errorHandler);
+  const { isLoading, registerMember } = useRegisterMember(errorHandler);
 
   const nickNameInput = useInput(true);
 
   const handleOnClickStartButton = async () => {
     if (!nickNameInput.state || !studyId) return;
 
-    await resgisterMember(nickNameInput.state, studyId);
+    await registerMember(nickNameInput.state, studyId);
 
     navigate(`${ROUTES_PATH.board}/${studyId}`);
   };

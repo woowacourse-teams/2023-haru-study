@@ -7,7 +7,7 @@ import { requestRegisterMember } from '@Apis/index';
 const useRegisterMember = (errorHandler: (message: string) => void) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const resgisterMember = async (nickName: string, studyId: string) => {
+  const registerMember = async (nickName: string, studyId: string) => {
     try {
       setIsLoading(true);
       const { memberId } = await requestRegisterMember(nickName, studyId);
@@ -20,7 +20,7 @@ const useRegisterMember = (errorHandler: (message: string) => void) => {
     }
   };
 
-  return { isLoading, resgisterMember };
+  return { isLoading, registerMember };
 };
 
 export default useRegisterMember;

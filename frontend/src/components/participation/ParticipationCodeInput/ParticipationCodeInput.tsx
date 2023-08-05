@@ -19,12 +19,12 @@ const ParticipationCodeInput = () => {
     alert(message);
   };
 
-  const { authenticatePartcipationCode, isLoading } = useParticipationCode(errorHandler);
+  const { authenticateParticipationCode, isLoading } = useParticipationCode(errorHandler);
 
   const handleOnClickParticipateButton = async () => {
     if (!participantCodeInput.state) throw new Error('참여코드를 입력해주세요.');
 
-    const data = await authenticatePartcipationCode(participantCodeInput.state);
+    const data = await authenticateParticipationCode(participantCodeInput.state);
 
     if (data) {
       navigate(`${ROUTES_PATH.preparation}/${data.studyId}`, {
