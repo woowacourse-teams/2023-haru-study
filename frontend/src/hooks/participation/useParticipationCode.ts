@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { requestAuthenticateParticipationCode } from '@Apis/index';
 
 const useParticipationCode = (errorHandler: (message: string) => void) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const authenticatePartcipationCode = async (participantCode: string) => {
     setIsLoading(true);

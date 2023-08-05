@@ -5,7 +5,7 @@ import { setCookie } from '@Utils/cookie';
 import { requestRegisterMember } from '@Apis/index';
 
 const useRegisterMember = (errorHandler: (message: string) => void) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const resgisterMember = async (nickName: string, studyId: string) => {
     try {

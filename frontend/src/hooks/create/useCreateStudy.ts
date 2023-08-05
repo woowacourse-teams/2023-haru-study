@@ -5,7 +5,7 @@ import { requestCreateStudy } from '@Apis/index';
 import type { StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
 const useCreateStudy = (errorHandler: (message: string) => void) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const createStudy = async (
     studyName: string,
