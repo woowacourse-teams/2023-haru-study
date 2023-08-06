@@ -44,20 +44,6 @@ const StudyPreparation = () => {
       </StudyPreparationLayout>
     );
 
-  if (nickname === null)
-    return (
-      <StudyPreparationLayout headerText={`${studyName} 스터디`}>
-        <CircularProgress
-          size="x-large"
-          $style={css`
-            margin-top: 200px;
-            border: 2px solid ${color.blue[500]};
-            border-color: ${color.blue[500]} transparent transparent transparent;
-          `}
-        />
-      </StudyPreparationLayout>
-    );
-
   return (
     <StudyPreparationLayout headerText={`${studyName} 스터디`}>
       <Layout>
