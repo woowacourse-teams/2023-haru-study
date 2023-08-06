@@ -40,7 +40,8 @@ const CreateStudyForm = () => {
 
   const handleOnClickMakeButton = async () => {
     if (!totalCycleSelect.state || !timePerCycleSelect.state || !studyNameInput.state) {
-      throw new Error('이름의 길이와, 사이클 수, 사이클 당 시간을 다시 한번 확인해주세요');
+      alert('이름의 길이와, 사이클 수, 사이클 당 시간을 다시 한번 확인해주세요');
+      return;
     }
 
     const data = await createStudy(studyNameInput.state, totalCycleSelect.state, timePerCycleSelect.state);

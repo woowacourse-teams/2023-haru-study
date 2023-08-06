@@ -28,7 +28,10 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
   const nickNameInput = useInput(true);
 
   const handleOnClickStartButton = async () => {
-    if (!nickNameInput.state || !studyId) return;
+    if (!nickNameInput.state || !studyId) {
+      alert('잘못된 접근입니다.');
+      return;
+    }
 
     await registerMember(nickNameInput.state, studyId);
 

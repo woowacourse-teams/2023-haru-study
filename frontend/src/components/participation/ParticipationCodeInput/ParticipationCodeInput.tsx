@@ -22,7 +22,10 @@ const ParticipationCodeInput = () => {
   const { authenticateParticipationCode, isLoading } = useParticipationCode(errorHandler);
 
   const handleOnClickParticipateButton = async () => {
-    if (!participantCodeInput.state) throw new Error('참여코드를 입력해주세요.');
+    if (!participantCodeInput.state) {
+      alert('참여코드를 입력해주세요.');
+      return;
+    }
 
     const data = await authenticateParticipationCode(participantCodeInput.state);
 
