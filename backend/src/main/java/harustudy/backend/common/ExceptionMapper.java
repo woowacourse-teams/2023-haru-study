@@ -24,9 +24,9 @@ public class ExceptionMapper {
 
     static {
         setupMemberException();
-        setupContentException();
+        setupPomodoroContentException();
         setupParticipantCodeException();
-        setupProgressException();
+        setupPomodoroProgressException();
         setupRoomException();
     }
 
@@ -39,7 +39,7 @@ public class ExceptionMapper {
                 ExceptionSituation.of("멤버가 해당 스터디에 참여하지 않았습니다.", NOT_FOUND, 1000));
     }
 
-    private static void setupContentException() {
+    private static void setupPomodoroContentException() {
         mapper.put(PomodoroContentNotFoundException.class,
                 ExceptionSituation.of("해당하는 컨텐츠가 없습니다.", NOT_FOUND));
     }
@@ -49,7 +49,7 @@ public class ExceptionMapper {
                 ExceptionSituation.of("해당하는 참여코드가 없습니다.", NOT_FOUND));
     }
 
-    private static void setupProgressException() {
+    private static void setupPomodoroProgressException() {
         mapper.put(PomodoroProgressStatusException.class,
                 ExceptionSituation.of("스터디 진행 상태가 적절하지 않습니다.", BAD_REQUEST));
         mapper.put(ProgressNotBelongToRoomException.class,
@@ -58,7 +58,7 @@ public class ExceptionMapper {
 
     private static void setupRoomException() {
         mapper.put(DuplicatedNicknameException.class,
-                ExceptionSituation.of("스터디 이름은 중복될 수 없습니다.", BAD_REQUEST));
+                ExceptionSituation.of("멤버 이름은 중복될 수 없습니다.", BAD_REQUEST));
         mapper.put(PomodoroRoomNameLengthException.class,
                 ExceptionSituation.of("스터디 이름의 길이가 적절하지 않습니다.", BAD_REQUEST));
         mapper.put(PomodoroTimePerCycleException.class,
