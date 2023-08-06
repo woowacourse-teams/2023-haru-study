@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from 'react';
 
-import { requestGetStudyMetadata } from '@Apis/index';
+import { requestGetStudyData, requestGetStudyMembers } from '@Apis/index';
 
 import type { Member, StudyBasicInfo } from '@Types/study';
 
@@ -12,7 +12,8 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
 
   const fetchData = useCallback(async () => {
     try {
-      const { studyName, timePerCycle, totalCycle, members } = await requestGetStudyMetadata(studyId);
+      const { studyName, timePerCycle, totalCycle } = await requestGetStudyData(studyId);
+      const { members } = await requestGetStudyMembers(studyId);
 
       setStudyBasicInfo({
         studyName,

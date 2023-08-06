@@ -79,10 +79,11 @@ export const requestGetStudyingContent = (studyId: string, memberId: string, cyc
 export const requestSubmitStudyingForm = (studyId: string, memberId: string) =>
   http.post(`/api/studies/${studyId}/members/${memberId}/next-step`);
 
-// RecordContents
-export const requestGetStudyMetadata = (studyId: string) =>
-  http.get<ResponseStudyMetadata>(`/api/studies/${studyId}/metadata`);
+export const requestGetStudyData = (studyId: string) =>
+  http.get<Omit<ResponseStudyMetadata, 'member'>>(`/api/v2/studies/${studyId}`);
 
-// MemberRecord
+export const requestGetStudyMembers = (studyId: string) =>
+  http.get<Pick<ResponseStudyMetadata, 'members'>>(`/api/v2/members?studyId=${studyId}`);
+
 export const requestGetMemberRecordContents = (studyId: string, memberId: string) =>
-  http.get<ResponseMemberRecordContents>(`/api/studies/${studyId}/members/${memberId}/content`);
+  http.get<ResponseMemberRecordContents>(`/api/v2/studies/${studyId}/contents?memberId=${memberId}`);
