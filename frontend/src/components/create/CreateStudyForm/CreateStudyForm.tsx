@@ -28,8 +28,8 @@ const CreateStudyForm = () => {
   const timePerCycleSelect = useSelect<StudyTimePerCycleOptions>();
   const totalCycleSelect = useSelect<TotalCycleOptions>();
 
-  const errorHandler = (message: string) => {
-    alert(message);
+  const errorHandler = (error: Error) => {
+    alert(error.message);
   };
 
   const { isLoading, createStudy } = useCreateStudy(errorHandler);

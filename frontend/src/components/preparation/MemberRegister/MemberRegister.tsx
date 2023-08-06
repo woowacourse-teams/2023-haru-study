@@ -19,8 +19,8 @@ type Props = {
 const MemberRegister = ({ studyId, studyName }: Props) => {
   const navigate = useNavigate();
 
-  const errorHandler = (message: string) => {
-    alert(message);
+  const errorHandler = (error: Error) => {
+    alert(error.message);
   };
 
   const { isLoading, registerMember } = useRegisterMember(errorHandler);

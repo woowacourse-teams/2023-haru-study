@@ -4,7 +4,7 @@ import { setCookie } from '@Utils/cookie';
 
 import { requestRegisterMember } from '@Apis/index';
 
-const useRegisterMember = (errorHandler: (message: string) => void) => {
+const useRegisterMember = (errorHandler: (error: Error) => void) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const registerMember = async (nickName: string, studyId: string) => {
@@ -14,7 +14,7 @@ const useRegisterMember = (errorHandler: (message: string) => void) => {
       setCookie('memberId', memberId, 1);
     } catch (error) {
       if (!(error instanceof Error)) return error;
-      errorHandler(error.message);
+      errorHandler(error);
     } finally {
       setIsLoading(false);
     }

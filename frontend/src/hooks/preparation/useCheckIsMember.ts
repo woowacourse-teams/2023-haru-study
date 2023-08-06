@@ -5,7 +5,7 @@ import { getCookie } from '@Utils/cookie';
 
 import { requestCheckIsMember } from '@Apis/index';
 
-const useCheckIsMember = (isHost: boolean, errorHandler: (message: string) => void) => {
+const useCheckIsMember = (isHost: boolean, errorHandler: (error: Error) => void) => {
   const { studyId } = useParams();
   const memberId = getCookie('memberId');
 
@@ -15,7 +15,7 @@ const useCheckIsMember = (isHost: boolean, errorHandler: (message: string) => vo
 
   if (!studyId) {
     const error = new Error('잘못된 접근입니다.');
-    errorHandler(error.message);
+    errorHandler(error);
     throw error;
   }
 
@@ -36,7 +36,7 @@ const useCheckIsMember = (isHost: boolean, errorHandler: (message: string) => vo
       authenticateMember();
     } catch (error) {
       if (!(error instanceof Error)) throw error;
-      errorHandler(error.message);
+      errorHandler(error);
     }
   }, [authenticateMember, isHost, memberId, errorHandler]);
 

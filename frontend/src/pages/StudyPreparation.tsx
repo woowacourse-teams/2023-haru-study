@@ -22,8 +22,8 @@ const StudyPreparation = () => {
     state: { participantCode, studyName, isHost },
   } = useLocation() as LocationState;
 
-  const errorHandler = useCallback((message: string) => {
-    alert(message);
+  const errorHandler = useCallback((error: Error) => {
+    alert(error.message);
   }, []);
 
   const { nickname, restart, studyId } = useCheckIsMember(isHost, errorHandler);

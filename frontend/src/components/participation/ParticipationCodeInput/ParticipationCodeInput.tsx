@@ -15,8 +15,8 @@ const ParticipationCodeInput = () => {
 
   const participantCodeInput = useInput(false);
 
-  const errorHandler = (message: string) => {
-    alert(message);
+  const errorHandler = (error: Error) => {
+    alert(error.message);
   };
 
   const { authenticateParticipationCode, isLoading } = useParticipationCode(errorHandler);
