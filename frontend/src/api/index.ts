@@ -16,12 +16,8 @@ export const requestCreateStudy = async (
   totalCycle: TotalCycleOptions,
   timePerCycle: StudyTimePerCycleOptions,
 ) => {
-  const response = await fetch(`/api/studies`, {
+  const response = await http.post(`/api/studies`, {
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
 
   const locationHeader = response.headers.get('Location');
@@ -32,18 +28,10 @@ export const requestCreateStudy = async (
   return { studyId, result };
 };
 
-export const requestRegisterMember = async (nickname: string | null, studyId: string | null) => {
-  const response = await fetch(`/api/studies/${studyId ?? ''}/members`, {
+export const requestRegisterMember = async (nickname: string, studyId: string) => {
+  const response = await http.post(`/api/studies/${studyId}/members`, {
     body: JSON.stringify({ nickname }),
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
-
-  if (!response.ok) {
-    throw Error('사용할 수 없는 닉네임입니다.');
-  }
 
   const locationHeader = response.headers.get('Location');
   const memberId = locationHeader?.split('/').pop() as string;

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
@@ -7,13 +6,10 @@ import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
 import useInput from '@Hooks/common/useInput';
+import useRegisterMember from '@Hooks/preparation/useRegisterMember';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 import { ROUTES_PATH } from '@Constants/routes';
-
-import { setCookie } from '@Utils/cookie';
-
-import { requestRegisterMember } from '@Apis/index';
 
 type Props = {
   studyId: string;
@@ -23,30 +19,23 @@ type Props = {
 const MemberRegister = ({ studyId, studyName }: Props) => {
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const errorHandler = (error: Error) => {
+    alert(error.message);
+  };
+
+  const { isLoading, registerMember } = useRegisterMember(errorHandler);
 
   const nickNameInput = useInput(true);
 
   const handleOnClickStartButton = async () => {
-    try {
-      setIsLoading(true);
-
-      if (!nickNameInput.state) throw Error('닉네임을 입력해주세요.');
-
-      const { memberId } = await requestRegisterMember(nickNameInput.state, studyId);
-
-      setCookie('memberId', memberId, 1);
-
-      setIsLoading(false);
-
-      navigate(`${ROUTES_PATH.board}/${studyId}`);
-    } catch (error) {
-      setIsLoading(false);
-
-      if (!(error instanceof Error)) return error;
-
-      alert(error.message);
+    if (!nickNameInput.state || !studyId) {
+      alert('잘못된 접근입니다.');
+      return;
     }
+
+    await registerMember(nickNameInput.state, studyId);
+
+    navigate(`${ROUTES_PATH.board}/${studyId}`);
   };
   return (
     <>

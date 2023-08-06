@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
@@ -7,37 +6,33 @@ import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
 import useInput from '@Hooks/common/useInput';
+import useParticipationCode from '@Hooks/participation/useParticipationCode';
 
 import { ROUTES_PATH } from '@Constants/routes';
-
-import { requestAuthenticateParticipationCode } from '@Apis/index';
 
 const ParticipationCodeInput = () => {
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const participantCodeInput = useInput(false);
 
+  const errorHandler = (error: Error) => {
+    alert(error.message);
+  };
+
+  const { authenticateParticipationCode, isLoading } = useParticipationCode(errorHandler);
+
   const handleOnClickParticipateButton = async () => {
-    if (!participantCodeInput.state) return;
+    if (!participantCodeInput.state) {
+      alert('참여코드를 입력해주세요.');
+      return;
+    }
 
-    setIsLoading(true);
-    try {
-      // memberId는 해당 api요청에 필요없기 때문에 삭제
-      const { studyId, studyName } = await requestAuthenticateParticipationCode(participantCodeInput.state);
+    const data = await authenticateParticipationCode(participantCodeInput.state);
 
-      setIsLoading(false);
-
-      navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
-        state: { participantCode: participantCodeInput.state, studyName, isHost: false },
+    if (data) {
+      navigate(`${ROUTES_PATH.preparation}/${data.studyId}`, {
+        state: { participantCode: participantCodeInput.state, studyName: data.studyName, isHost: false },
       });
-    } catch (error) {
-      setIsLoading(false);
-
-      if (!(error instanceof Error)) throw error;
-
-      alert(error.message);
     }
   };
 
