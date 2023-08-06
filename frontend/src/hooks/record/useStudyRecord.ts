@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { requestGetStudyMetadata } from '@Apis/index';
 
@@ -10,7 +10,7 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (message: str
   const [studyBasicInfo, setStudyBasicInfo] = useState<StudyBasicInfo | null>(null);
   const [members, setMembers] = useState<Member[]>([]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const { studyName, timePerCycle, totalCycle, members } = await requestGetStudyMetadata(studyId);
 
@@ -27,11 +27,11 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (message: str
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [studyId]);
 
   useEffect(() => {
     fetchData();
-  }, [studyId]);
+  }, [fetchData]);
 
   return { isLoading, studyBasicInfo, members };
 };

@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
 import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
 import Tabs from '@Components/common/Tabs/Tabs';
 import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
+
+import useMemberRecord from '@Hooks/record/useMemberRecord';
 
 import color from '@Styles/color';
 
@@ -15,9 +16,7 @@ import PencilIcon from '@Assets/icons/PencilIcon';
 
 import { getKeys } from '@Utils/getKeys';
 
-import { requestGetMemberRecordContents } from '@Apis/index';
-
-import type { MemberRecordContent, Plan, Retrospect } from '@Types/study';
+import type { Plan, Retrospect } from '@Types/study';
 
 type Props = {
   studyId: string;
@@ -26,24 +25,7 @@ type Props = {
 };
 
 const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
-  const [memberRecordContents, setMemberRecordContents] = useState<MemberRecordContent[] | null>(null);
-
-  const isLoading = !memberRecordContents;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await requestGetMemberRecordContents(studyId, memberId);
-
-      setMemberRecordContents(data.content);
-    };
-
-    try {
-      fetchData();
-    } catch (error) {
-      if (!(error instanceof Error)) throw error;
-      alert(error.message);
-    }
-  }, [memberId, studyId]);
+  const { memberRecordContents, isLoading } = useMemberRecord(studyId, memberId);
 
   if (isLoading) {
     return <TabsSkeleton />;
