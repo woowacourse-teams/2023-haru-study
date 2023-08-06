@@ -1,7 +1,7 @@
 package harustudy.backend.common;
 
 // TODO: 예외 나누기
-public class EntityNotFoundException extends RuntimeException {
+public class EntityNotFoundException extends HaruStudyException {
 
     public static class RoomNotFound extends EntityNotFoundException {
 

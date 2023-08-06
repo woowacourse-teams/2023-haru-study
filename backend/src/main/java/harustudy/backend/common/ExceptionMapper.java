@@ -1,7 +1,10 @@
 package harustudy.backend.common;
 
-import static harustudy.backend.common.EntityNotFoundException.*;
-import static org.springframework.http.HttpStatus.*;
+import static harustudy.backend.common.EntityNotFoundException.ParticipantCodeNotFound;
+import static harustudy.backend.common.EntityNotFoundException.PomodoroContentNotFound;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import harustudy.backend.common.EntityNotFoundException.MemberNotFound;
 import harustudy.backend.member.exception.MemberNameLengthException;
