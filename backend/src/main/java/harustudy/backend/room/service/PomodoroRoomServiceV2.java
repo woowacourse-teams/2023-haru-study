@@ -1,14 +1,14 @@
 package harustudy.backend.room.service;
 
-import harustudy.backend.common.EntityNotFoundException.ParticipantCodeNotFound;
-import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.participantcode.domain.GenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
+import harustudy.backend.participantcode.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.dto.CreatePomodoroRoomDto;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.PomodoroRoomResponseV2;
+import harustudy.backend.room.exception.RoomNotFoundException;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class PomodoroRoomServiceV2 {
 
     public PomodoroRoomResponseV2 findPomodoroRoom(Long roomId) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
-                .orElseThrow(RoomNotFound::new);
+                .orElseThrow(RoomNotFoundException::new);
         return PomodoroRoomResponseV2.from(pomodoroRoom);
     }
 
@@ -55,9 +55,9 @@ public class PomodoroRoomServiceV2 {
 
     public PomodoroRoomResponseV2 findPomodoroRoomByParticipantCode(String code) {
         ParticipantCode participantCode = participantCodeRepository.findByCode(code)
-                .orElseThrow(ParticipantCodeNotFound::new);
+                .orElseThrow(ParticipantCodeNotFoundException::new);
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByParticipantCode(participantCode)
-                .orElseThrow(RoomNotFound::new);
+                .orElseThrow(RoomNotFoundException::new);
         return PomodoroRoomResponseV2.from(pomodoroRoom);
     }
 }

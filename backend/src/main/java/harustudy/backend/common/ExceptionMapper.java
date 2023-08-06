@@ -1,14 +1,14 @@
 package harustudy.backend.common;
 
-import static harustudy.backend.common.EntityNotFoundException.ParticipantCodeNotFound;
-import static harustudy.backend.common.EntityNotFoundException.PomodoroContentNotFound;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-import harustudy.backend.common.EntityNotFoundException.MemberNotFound;
+import harustudy.backend.content.exception.PomodoroContentNotFoundException;
 import harustudy.backend.member.exception.MemberNameLengthException;
+import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.exception.MemberNotParticipatedException;
+import harustudy.backend.participantcode.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.progress.exception.PomodoroProgressStatusException;
 import harustudy.backend.progress.exception.ProgressNotBelongToRoomException;
 import harustudy.backend.room.exception.DuplicatedNicknameException;
@@ -31,7 +31,7 @@ public class ExceptionMapper {
     }
 
     private static void setupMemberException() {
-        mapper.put(MemberNotFound.class,
+        mapper.put(MemberNotFoundException.class,
                 ExceptionSituation.of("해당하는 멤버가 없습니다.", NOT_FOUND));
         mapper.put(MemberNameLengthException.class,
                 ExceptionSituation.of("멤버의 닉네임 길이가 유효하지 않습니다.", BAD_REQUEST));
@@ -40,12 +40,12 @@ public class ExceptionMapper {
     }
 
     private static void setupContentException() {
-        mapper.put(PomodoroContentNotFound.class,
+        mapper.put(PomodoroContentNotFoundException.class,
                 ExceptionSituation.of("해당하는 컨텐츠가 없습니다.", NOT_FOUND));
     }
 
     private static void setupParticipantCodeException() {
-        mapper.put(ParticipantCodeNotFound.class,
+        mapper.put(ParticipantCodeNotFoundException.class,
                 ExceptionSituation.of("해당하는 참여코드가 없습니다.", NOT_FOUND));
     }
 

@@ -1,13 +1,13 @@
 package harustudy.backend.room.service;
 
-import harustudy.backend.common.EntityNotFoundException.ParticipantCodeNotFound;
-import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.participantcode.domain.GenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
+import harustudy.backend.participantcode.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.dto.CreatePomodoroRoomDto;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.PomodoroRoomResponseV2;
+import harustudy.backend.room.exception.RoomNotFoundException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -70,7 +70,7 @@ class PomodoroRoomServiceV2Test {
 
         // when, then
         assertThatThrownBy(() -> pomodoroRoomServiceV2.findPomodoroRoom(99999L))
-            .isInstanceOf(RoomNotFound.class);
+            .isInstanceOf(RoomNotFoundException.class);
     }
 
     @Test
@@ -125,7 +125,7 @@ class PomodoroRoomServiceV2Test {
 
         // when, then
         assertThatThrownBy(() -> pomodoroRoomServiceV2.findPomodoroRoomByParticipantCode(notPersisted.getCode()))
-            .isInstanceOf(ParticipantCodeNotFound.class);
+            .isInstanceOf(ParticipantCodeNotFoundException.class);
     }
 
     @Test
@@ -144,6 +144,6 @@ class PomodoroRoomServiceV2Test {
 
         // when, then
         assertThatThrownBy(() -> pomodoroRoomServiceV2.findPomodoroRoomByParticipantCode(notRoomsCode.getCode()))
-                .isInstanceOf(RoomNotFound.class);
+                .isInstanceOf(RoomNotFoundException.class);
     }
 }
