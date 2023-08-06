@@ -5,7 +5,7 @@ import { requestGetStudyMetadata } from '@Apis/index';
 
 import type { Member, StudyBasicInfo } from '@Types/study';
 
-const useStudyRecord = (studyId: string, options?: { errorHandler: (message: string) => void }) => {
+const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error) => void }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [studyBasicInfo, setStudyBasicInfo] = useState<StudyBasicInfo | null>(null);
   const [members, setMembers] = useState<Member[]>([]);
@@ -23,7 +23,7 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (message: str
     } catch (error) {
       if (!(error instanceof Error)) throw error;
 
-      options?.errorHandler(error.message);
+      options?.errorHandler(error);
     } finally {
       setIsLoading(false);
     }

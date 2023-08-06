@@ -25,7 +25,9 @@ type Props = {
 };
 
 const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
-  const { memberRecordContents, isLoading } = useMemberRecord(studyId, memberId);
+  const { memberRecordContents, isLoading } = useMemberRecord(studyId, memberId, {
+    errorHandler: (error) => alert(error.message),
+  });
 
   if (isLoading) {
     return <TabsSkeleton />;

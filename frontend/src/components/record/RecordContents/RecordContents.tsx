@@ -12,7 +12,7 @@ const RecordContents = () => {
   if (!studyId) throw Error('잘못된 접근입니다.');
 
   const { isLoading, studyBasicInfo, members } = useStudyRecord(studyId, {
-    errorHandler: (message) => alert(message),
+    errorHandler: (error) => alert(error.message),
   });
 
   return (
