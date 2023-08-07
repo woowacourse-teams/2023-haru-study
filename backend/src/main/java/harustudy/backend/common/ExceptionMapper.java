@@ -53,7 +53,7 @@ public class ExceptionMapper {
         mapper.put(PomodoroProgressStatusException.class,
                 ExceptionSituation.of("스터디 진행 상태가 적절하지 않습니다.", BAD_REQUEST));
         mapper.put(ProgressNotBelongToRoomException.class,
-                ExceptionSituation.of("해당 스터디에 참여한 기록이 없습니다.", FORBIDDEN));
+                ExceptionSituation.of("해당 스터디에 참여한 기록이 없습니다.", BAD_REQUEST));
     }
 
     private static void setupRoomException() {
