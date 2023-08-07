@@ -10,7 +10,7 @@ const useMemberRecord = (studyId: string, memberId: string, options?: { errorHan
 
   const isLoading = !memberRecordContents;
 
-  const fetchData = useCallback(async () => {
+  const fetchMemberRecordData = useCallback(async () => {
     try {
       const { content } = await requestGetMemberRecordContents(studyId, memberId);
 
@@ -23,8 +23,8 @@ const useMemberRecord = (studyId: string, memberId: string, options?: { errorHan
   }, [memberId, studyId]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchMemberRecordData();
+  }, [fetchMemberRecordData]);
 
   return { memberRecordContents, isLoading };
 };

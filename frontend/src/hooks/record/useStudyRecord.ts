@@ -10,7 +10,7 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
   const [studyBasicInfo, setStudyBasicInfo] = useState<StudyBasicInfo | null>(null);
   const [members, setMembers] = useState<Member[]>([]);
 
-  const fetchData = useCallback(async () => {
+  const fetchStudyRecordData = useCallback(async () => {
     try {
       const { studyName, timePerCycle, totalCycle } = await requestGetStudyData(studyId);
       const { members } = await requestGetStudyMembers(studyId);
@@ -31,8 +31,8 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
   }, [studyId]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchStudyRecordData();
+  }, [fetchStudyRecordData]);
 
   return { isLoading, studyBasicInfo, members };
 };
