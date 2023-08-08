@@ -9,7 +9,7 @@ type Props = {
   children: ReactNode;
 };
 
-const StudyPreparationLayout = ({ headerText, children }: Props) => {
+const StudyParticipationLayout = ({ headerText, children }: Props) => {
   return (
     <>
       <Header />
@@ -28,7 +28,7 @@ const StudyPreparationLayout = ({ headerText, children }: Props) => {
   );
 };
 
-export default StudyPreparationLayout;
+export default StudyParticipationLayout;
 
 const Layout = styled.div`
   width: 520px;

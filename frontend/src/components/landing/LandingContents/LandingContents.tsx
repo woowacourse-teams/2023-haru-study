@@ -12,14 +12,14 @@ import { ROUTES_PATH } from '@Constants/routes';
 const LANDING_CONTENTS_MENU_ITEMS = [
   {
     key: 0,
-    text: '하루스터디 소개',
+    text: '사용자 피드백',
     clickEvent: () => {
-      alert('우아한테크코스 5기 - 테오, 히이로, 모디, 마코, 룩소, 엽토, 노아');
+      window.open('https://forms.gle/gjEejNBaQmbhwh3C8', 'blank');
     },
   },
   {
     key: 1,
-    text: '깃허브',
+    text: 'github',
     clickEvent: () => {
       window.open('https://github.com/woowacourse-teams/2023-haru-study', 'blank');
     },

@@ -3,15 +3,15 @@ import { useLocation } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
 import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
-import MemberRegister from '@Components/preparation/MemberRegister/MemberRegister';
-import MemberRestart from '@Components/preparation/MemberRestart/MemberRestart';
-import ParticipationCodeCopier from '@Components/preparation/ParticipationCodeCopier/ParticipationCodeCopier';
+import MemberRegister from '@Components/participation/MemberRegister/MemberRegister';
+import MemberRestart from '@Components/participation/MemberRestart/MemberRestart';
+import ParticipationCodeCopier from '@Components/participation/ParticipationCodeCopier/ParticipationCodeCopier';
 
-import useCheckIsMember from '@Hooks/preparation/useCheckIsMember';
+import useCheckIsMember from '@Hooks/participation/useCheckIsMember';
 
 import color from '@Styles/color';
 
-import StudyPreparationLayout from './layout/StudyPreparationLayout';
+import StudyParticipationLayout from './layout/StudyParticipationLayout';
 
 type LocationState = {
   state: { participantCode: string; studyName: string; isHost: boolean };
@@ -32,7 +32,7 @@ const StudyPreparation = () => {
 
   if (nickname === null)
     return (
-      <StudyPreparationLayout headerText={`${studyName} 스터디`}>
+      <StudyParticipationLayout headerText={`${studyName} 스터디`}>
         <CircularProgress
           size="x-large"
           $style={css`
@@ -41,11 +41,11 @@ const StudyPreparation = () => {
             border-color: ${color.blue[500]} transparent transparent transparent;
           `}
         />
-      </StudyPreparationLayout>
+      </StudyParticipationLayout>
     );
 
   return (
-    <StudyPreparationLayout headerText={`${studyName} 스터디`}>
+    <StudyParticipationLayout headerText={`${studyName} 스터디`}>
       <Layout>
         {isHost && <ParticipationCodeCopier participantCode={participantCode} />}
         {isExistMember ? (
@@ -54,7 +54,7 @@ const StudyPreparation = () => {
           <MemberRegister studyId={studyId} studyName={studyName} />
         )}
       </Layout>
-    </StudyPreparationLayout>
+    </StudyParticipationLayout>
   );
 };
 
