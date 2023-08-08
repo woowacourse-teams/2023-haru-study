@@ -18,3 +18,12 @@ springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+
