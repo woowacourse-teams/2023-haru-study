@@ -9,7 +9,7 @@ spring:
     show-sql: true
 
   flyway:
-    enabled: true
+    enabled: false
 
   config:
     import: classpath:/submodule/application.yml
@@ -17,4 +17,3 @@ spring:
 springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
-

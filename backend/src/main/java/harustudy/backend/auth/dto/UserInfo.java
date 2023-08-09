@@ -7,7 +7,7 @@ import lombok.Builder;
 @Builder
 public record UserInfo(String name, String email, String imageUrl) {
 
-  public OauthMember toOauthMember(SocialType socialType) {
-    return new OauthMember(name, email, imageUrl, socialType);
-  }
+    public OauthMember toOauthMember(SocialType socialType) {
+        return new OauthMember(name, email, imageUrl, socialType);
+    }
 }

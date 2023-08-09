@@ -16,27 +16,31 @@ import lombok.NoArgsConstructor;
 @Entity
 public class OauthMember extends BaseTimeEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private String name;
+    private String name;
 
-  private String email;
+    private String email;
 
-  private String imageUrl;
+    private String imageUrl;
 
-  @Enumerated(EnumType.STRING)
-  private SocialType socialType;
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
 
-  public OauthMember(String name, String email, String imageUrl, SocialType socialType) {
-    this.name = name;
-    this.email = email;
-    this.imageUrl = imageUrl;
-    this.socialType = socialType;
-  }
+    public OauthMember(String name, String email, String imageUrl, SocialType socialType) {
+        this.name = name;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.socialType = socialType;
+    }
 
-  public OauthMember update(String name, String email, String imageUrl) {
-    return new OauthMember(name, email, imageUrl, this.socialType);
-  }
+    public static OauthMember guest() {
+        return new OauthMember("guest", null, null, SocialType.GUEST);
+    }
+
+    public OauthMember update(String name, String email, String imageUrl) {
+        return new OauthMember(name, email, imageUrl, this.socialType);
+    }
 }

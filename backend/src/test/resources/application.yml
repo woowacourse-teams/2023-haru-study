@@ -12,9 +12,19 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+oauth2:
+  oauth-properties:
+    google:
+      client-id: test-client-id
+      client-secret: test-client-secret
+      redirect-uri: http://www.test.com
+      token-uri: http://www.test.com
+      user-info-uri: http://www.test.com
 
+jwt:
+  expire-length: 1
+  guest-expire-length: 1
+  secret-key: test-secret-key
 
-
-
-
-
+refresh-token:
+  expire-length: 1
