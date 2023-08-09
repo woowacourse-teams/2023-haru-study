@@ -6,7 +6,7 @@ import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
 import useInput from '@Hooks/common/useInput';
-import useRegisterMember from '@Hooks/preparation/useRegisterMember';
+import useRegisterMember from '@Hooks/participation/useRegisterMember';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 import { ROUTES_PATH } from '@Constants/routes';

@@ -1,6 +1,8 @@
 package harustudy.backend.progress.exception;
 
-public class InvalidPomodoroProgressException extends RuntimeException {
+import harustudy.backend.common.HaruStudyException;
+
+public class InvalidPomodoroProgressException extends HaruStudyException {
 
     public static class UnavailableToProceed extends InvalidPomodoroProgressException {
 

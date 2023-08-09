@@ -1,21 +1,21 @@
 package harustudy.backend.content.service;
 
-import harustudy.backend.common.EntityNotFoundException.MemberNotFound;
-import harustudy.backend.common.EntityNotFoundException.PomodoroContentNotFound;
-import harustudy.backend.common.EntityNotFoundException.PomodoroProgressNotFound;
-import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.dto.PomodoroContentResponse;
 import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.dto.WritePlanRequest;
 import harustudy.backend.content.dto.WriteRetrospectRequest;
+import harustudy.backend.content.exception.PomodoroContentNotFoundException;
 import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
+import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
+import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
 import harustudy.backend.progress.exception.PomodoroProgressStatusException;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
+import harustudy.backend.room.exception.RoomNotFoundException;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +53,7 @@ public class PomodoroContentServiceV2 {
         return pomodoroContents.stream()
                 .filter(pomodoroContent -> pomodoroContent.hasSameCycleWith(pomodoroProgress))
                 .findAny()
-                .orElseThrow(PomodoroContentNotFound::new);
+                .orElseThrow(PomodoroContentNotFoundException::new);
     }
 
     public void writeRetrospect(Long roomId, WriteRetrospectRequest request) {
@@ -103,10 +103,10 @@ public class PomodoroContentServiceV2 {
 
     private PomodoroProgress findPomodoroProgressFrom(Long roomId, Long memberId) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
-                .orElseThrow(RoomNotFound::new);
+                .orElseThrow(RoomNotFoundException::new);
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFound::new);
+                .orElseThrow(MemberNotFoundException::new);
         return pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
-                .orElseThrow(PomodoroProgressNotFound::new);
+                .orElseThrow(PomodoroProgressNotFoundException::new);
     }
 }

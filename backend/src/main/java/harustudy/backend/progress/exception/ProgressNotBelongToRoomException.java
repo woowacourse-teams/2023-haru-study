@@ -1,4 +1,6 @@
 package harustudy.backend.progress.exception;
 
-public class ProgressNotBelongToRoomException extends RuntimeException {
+import harustudy.backend.common.HaruStudyException;
+
+public class ProgressNotBelongToRoomException extends HaruStudyException {
 }

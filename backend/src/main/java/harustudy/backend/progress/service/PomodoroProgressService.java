@@ -1,16 +1,16 @@
 package harustudy.backend.progress.service;
 
-import harustudy.backend.common.EntityNotFoundException.MemberNotFound;
-import harustudy.backend.common.EntityNotFoundException.PomodoroProgressNotFound;
-import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.member.domain.Member;
+import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;
 import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
 import harustudy.backend.progress.exception.InvalidPomodoroProgressException.UnavailableToProceed;
+import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
+import harustudy.backend.room.exception.RoomNotFoundException;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,20 +54,20 @@ public class PomodoroProgressService {
 
     private PomodoroProgress findPomodoroProgressFrom(Long studyId, Long memberId) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(studyId)
-                .orElseThrow(RoomNotFound::new);
+                .orElseThrow(RoomNotFoundException::new);
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFound::new);
+                .orElseThrow(MemberNotFoundException::new);
         return pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
-                .orElseThrow(PomodoroProgressNotFound::new);
+                .orElseThrow(PomodoroProgressNotFoundException::new);
     }
 
     public PomodoroProgressResponse findPomodoroProgress(Long roomId, Long memberId) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
-                .orElseThrow(RoomNotFound::new);
+                .orElseThrow(RoomNotFoundException::new);
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFound::new);
+                .orElseThrow(MemberNotFoundException::new);
         PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
-                .orElseThrow(PomodoroProgressNotFound::new);
+                .orElseThrow(PomodoroProgressNotFoundException::new);
         return PomodoroProgressResponse.from(pomodoroProgress);
     }
 }

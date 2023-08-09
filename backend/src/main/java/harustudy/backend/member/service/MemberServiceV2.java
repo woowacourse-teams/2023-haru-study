@@ -1,17 +1,17 @@
 package harustudy.backend.member.service;
 
-import harustudy.backend.common.EntityNotFoundException.MemberNotFound;
-import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.GuestRegisterRequest;
 import harustudy.backend.member.dto.MemberResponseV2;
 import harustudy.backend.member.dto.MembersResponseV2;
+import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
+import harustudy.backend.room.exception.RoomNotFoundException;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,13 +30,13 @@ public class MemberServiceV2 {
 
     public MemberResponseV2 findMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFound::new);
+                .orElseThrow(MemberNotFoundException::new);
         return MemberResponseV2.from(member);
     }
 
     public MembersResponseV2 findParticipatedMembers(Long roomId) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
-                .orElseThrow(RoomNotFound::new);
+                .orElseThrow(RoomNotFoundException::new);
         List<PomodoroProgress> pomodoroProgresses =
                 pomodoroProgressRepository.findAllByPomodoroRoomFetchMember(pomodoroRoom);
         List<MemberResponseV2> memberResponses = pomodoroProgresses.stream()
@@ -49,7 +49,7 @@ public class MemberServiceV2 {
     public Long register(GuestRegisterRequest request) {
         Member member = memberRepository.save(new Member(request.nickname()));
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(request.studyId())
-                .orElseThrow(RoomNotFound::new);
+                .orElseThrow(RoomNotFoundException::new);
         Integer totalCycle = pomodoroRoom.getTotalCycle();
 
         PomodoroProgress pomodoroProgress = pomodoroProgressRepository.save(

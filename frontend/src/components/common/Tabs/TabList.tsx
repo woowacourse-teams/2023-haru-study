@@ -39,6 +39,7 @@ const Tab = styled.li<TabProps>`
 
   padding-bottom: 5px;
 
+  font-size: 1.8rem;
   text-align: center;
 
   cursor: pointer;

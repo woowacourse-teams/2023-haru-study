@@ -24,7 +24,9 @@ const useTimer = (studyMinutes: number, step: Step) => {
     if (leftTime > 0) {
       const timeDifference = Math.floor((Date.now() - startTime.current) / 1000);
 
-      setLeftTime(initTime.current - timeDifference);
+      const leftTime = initTime.current - timeDifference;
+
+      setLeftTime(leftTime > 0 ? leftTime : 0);
     }
     if (leftTime <= 1) {
       setIsTicking(false);

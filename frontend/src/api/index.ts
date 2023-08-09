@@ -11,6 +11,8 @@ import type {
 } from '@Types/api';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
+const BASE_URL = '/api/v2';
+
 export const requestCreateStudy = async (
   studyName: string,
   totalCycle: TotalCycleOptions,
@@ -67,10 +69,11 @@ export const requestGetStudyingContent = (studyId: string, memberId: string, cyc
 export const requestSubmitStudyingForm = (studyId: string, memberId: string) =>
   http.post(`/api/studies/${studyId}/members/${memberId}/next-step`);
 
-// RecordContents
-export const requestGetStudyMetadata = (studyId: string) =>
-  http.get<ResponseStudyMetadata>(`/api/studies/${studyId}/metadata`);
+export const requestGetStudyData = (studyId: string) =>
+  http.get<Omit<ResponseStudyMetadata, 'member'>>(`${BASE_URL}/studies/${studyId}`);
 
-// MemberRecord
+export const requestGetStudyMembers = (studyId: string) =>
+  http.get<Pick<ResponseStudyMetadata, 'members'>>(`${BASE_URL}/members?studyId=${studyId}`);
+
 export const requestGetMemberRecordContents = (studyId: string, memberId: string) =>
-  http.get<ResponseMemberRecordContents>(`/api/studies/${studyId}/members/${memberId}/content`);
+  http.get<ResponseMemberRecordContents>(`${BASE_URL}/studies/${studyId}/contents?memberId=${memberId}`);

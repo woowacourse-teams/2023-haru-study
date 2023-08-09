@@ -17,3 +17,14 @@ spring:
 springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, logfile
+  endpoint:
+    prometheus:
+      enabled: true
+    logfile:
+      external-file: ./logs/default/default.log

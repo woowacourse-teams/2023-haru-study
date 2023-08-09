@@ -53,6 +53,8 @@ const CreateStudyForm = () => {
     }
   };
 
+  const isSelectedOptions = timePerCycleSelect.state && totalCycleSelect.state;
+
   const isDisabled = () => {
     if (!studyNameInput.state || !timePerCycleSelect.state || !totalCycleSelect.state) return true;
     if ((studyNameInput.state ?? '').length < 1 || (studyNameInput.state ?? '').length > 10) return true;
@@ -123,33 +125,28 @@ const CreateStudyForm = () => {
           </Select.List>
         </Select>
       </Container>
-      {timePerCycleSelect.state && totalCycleSelect.state ? (
-        <Typography
-          variant="p1"
-          $style={css`
-            text-align: center;
-          `}
-        >
-          예상 스터디 시간은{' '}
-          <TimeText
-            onClick={() => {
-              alert('예상시간에는 학습시간 외에 목표설정시간(10분)과 회고시간(10분)이 포함되어있습니다.');
-            }}
-          >
-            {hour}시간 {minute}분
-          </TimeText>
-          이에요.
-        </Typography>
-      ) : (
-        <Typography
-          variant="p1"
-          $style={css`
-            text-align: center;
-          `}
-        >
-          사이클 횟수와 사이클 당 학습시간을 선택하세요.
-        </Typography>
-      )}
+      <Typography
+        variant="p2"
+        $style={css`
+          text-align: center;
+        `}
+      >
+        {isSelectedOptions ? (
+          <>
+            예상 스터디 시간은{' '}
+            <TimeText
+              onClick={() => {
+                alert('예상시간에는 학습시간 외에 목표설정시간(10분)과 회고시간(10분)이 포함되어있습니다.');
+              }}
+            >
+              {hour}시간 {minute}분
+            </TimeText>
+            이에요.
+          </>
+        ) : (
+          '사이클 횟수와 사이클 당 학습시간을 선택하세요.'
+        )}
+      </Typography>
       <Button variant="primary" onClick={handleOnClickMakeButton} disabled={isDisabled()} isLoading={isLoading}>
         스터디 개설하기
       </Button>

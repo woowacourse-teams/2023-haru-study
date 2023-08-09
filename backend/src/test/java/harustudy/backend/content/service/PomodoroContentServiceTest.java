@@ -1,7 +1,5 @@
 package harustudy.backend.content.service;
 
-import static harustudy.backend.common.EntityNotFoundException.MemberNotFound;
-import static harustudy.backend.common.EntityNotFoundException.RoomNotFound;
 import static org.assertj.core.api.Assertions.*;
 
 import harustudy.backend.content.domain.PomodoroContent;
@@ -10,12 +8,14 @@ import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.dto.WritePlanRequest;
 import harustudy.backend.content.dto.WriteRetrospectRequest;
 import harustudy.backend.member.domain.Member;
+import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.domain.PomodoroStatus;
 import harustudy.backend.progress.exception.PomodoroProgressStatusException;
 import harustudy.backend.room.domain.PomodoroRoom;
+import harustudy.backend.room.exception.RoomNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
@@ -206,14 +206,14 @@ class PomodoroContentServiceTest {
     void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회시_스터디가_없으면_예외를_던진다() {
         // given, when, then
         assertThatThrownBy(() -> pomodoroContentService.findMemberContentWithCycleFilter(999L, member.getId(), null))
-                .isInstanceOf(RoomNotFound.class);
+                .isInstanceOf(RoomNotFoundException.class);
     }
 
     @Test
     void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회_시_멤버가_없으면_예외를_던진다() {
         // given, when, then
         assertThatThrownBy(() -> pomodoroContentService.findMemberContentWithCycleFilter(pomodoroRoom.getId(), 999L, null))
-                .isInstanceOf(MemberNotFound.class);
+                .isInstanceOf(MemberNotFoundException.class);
     }
 
     void FLUSH_AND_CLEAR_CONTEXT() {
