@@ -7,10 +7,11 @@ import MemberRecord from '../MemberRecord/MemberRecord';
 type Props = {
   members: { memberId: string; nickname: string }[];
   studyId?: string;
+  isLoading: boolean;
 };
 
-const MemberRecordList = ({ members = [], studyId = '' }: Props) => {
-  if (members.length === 0) {
+const MemberRecordList = ({ members = [], studyId = '', isLoading }: Props) => {
+  if (isLoading) {
     return <AccordionSkeleton />;
   }
 

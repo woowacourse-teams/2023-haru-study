@@ -1,40 +1,19 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-import { requestGetStudyMetadata } from '@Apis/index';
-
-import type { Member, StudyBasicInfo } from '@Types/study';
+import useStudyRecord from '@Hooks/record/useStudyRecord';
 
 import MemberRecordList from '../MemberRecordList/MemberRecordList';
 import StudyInformation from '../StudyInformation/StudyInformation';
 
 const RecordContents = () => {
   const { studyId } = useParams<{ studyId: string }>();
-  const [studyBasicInfo, setStudyBasicInfo] = useState<StudyBasicInfo | null>(null);
-  const [members, setMembers] = useState<Member[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!studyId) throw Error('잘못된 접근입니다.');
+  if (!studyId) throw Error('잘못된 접근입니다.');
 
-      const { studyName, timePerCycle, totalCycle, members } = await requestGetStudyMetadata(studyId);
-
-      setStudyBasicInfo({
-        studyName,
-        timePerCycle,
-        totalCycle,
-      });
-      setMembers(members);
-    };
-
-    try {
-      fetchData();
-    } catch (error) {
-      if (!(error instanceof Error)) throw error;
-      alert(error.message);
-    }
-  }, [studyId]);
+  const { isLoading, studyBasicInfo, members } = useStudyRecord(studyId, {
+    errorHandler: (error) => alert(error.message),
+  });
 
   return (
     <RecordContentsLayout>
@@ -42,9 +21,9 @@ const RecordContents = () => {
         studyName={studyBasicInfo?.studyName}
         totalCycle={studyBasicInfo?.totalCycle}
         timePerCycle={studyBasicInfo?.timePerCycle}
-        $isLoading={!studyBasicInfo}
+        $isLoading={isLoading}
       />
-      <MemberRecordList studyId={studyId} members={members} />
+      <MemberRecordList studyId={studyId} members={members} isLoading={isLoading} />
     </RecordContentsLayout>
   );
 };
