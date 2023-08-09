@@ -7,7 +7,9 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
-const REDIRECT_URI = 'http://localhost:3000/login/callback';
+import { ROUTES_PATH } from '@Constants/routes';
+
+const REDIRECT_URI = 'http://localhost:3000/auth?provider=google';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,11 +36,7 @@ const Login = () => {
         <Button
           variant="outlined"
           onClick={() => {
-            navigate('/login/callback', {
-              state: {
-                guest: true,
-              },
-            });
+            navigate(`${ROUTES_PATH.auth}?provider=guest`);
           }}
         >
           비회원으로 로그인
