@@ -1,5 +1,7 @@
 package harustudy.backend.room.exception;
 
-public class PomodoroRoomNameLengthException extends RuntimeException {
+import harustudy.backend.common.HaruStudyException;
+
+public class PomodoroRoomNameLengthException extends HaruStudyException {
 
 }
