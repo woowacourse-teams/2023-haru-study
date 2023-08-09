@@ -1,5 +1,6 @@
 <included>
   <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>./logs/warn-error/warn-error-logs.log</file>
     <filter class="ch.qos.logback.classic.filter.LevelFilter">
       <level>WARN</level>
     </filter>
