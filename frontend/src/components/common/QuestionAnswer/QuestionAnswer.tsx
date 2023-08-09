@@ -53,4 +53,8 @@ const TypographyContainer = styled.div`
   p {
     word-break: break-all;
   }
+
+  h5 {
+    line-height: 100%;
+  }
 `;

@@ -101,7 +101,7 @@ const StyledLabel = styled.label<StyledLabel>`
 const StyledBottomText = styled.p<{ $error?: boolean }>`
   position: absolute;
   margin-top: 10px;
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 200;
 
   ${({ $error }) => css`

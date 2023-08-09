@@ -48,7 +48,7 @@ const ParticipationCodeCopier = ({ participantCode }: Props) => {
       </Input>
       <button onClick={handleOnClickHelperMessage}>
         <Typography
-          variant="p2"
+          variant="p3"
           $style={css`
             position: absolute;
             text-decoration: underline;

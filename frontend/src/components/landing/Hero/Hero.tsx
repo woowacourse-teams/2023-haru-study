@@ -54,7 +54,7 @@ const SloganContainer = styled.div`
     font-size: 64px;
     font-weight: 600;
     color: ${color.white};
-    line-height: 120%;
+    line-height: 110%;
   }
 `;
 

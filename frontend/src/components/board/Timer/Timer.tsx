@@ -41,7 +41,7 @@ const Timer = ({ studyMinutes, step }: Props) => {
       </Typography>
       <Typography
         variant="h1"
-        fontSize="12.8rem"
+        fontSize="15rem"
         color={color.white}
         tabIndex={0}
         role="timer"
@@ -79,4 +79,9 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  h1 {
+    line-height: 100%;
+    margin-bottom: 20px;
+  }
 `;

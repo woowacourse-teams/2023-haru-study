@@ -93,7 +93,7 @@ const TopicSummaryContainer = styled.div`
   p {
     font-size: 2rem;
     font-weight: 200;
-    line-height: 180%;
+    line-height: 150%;
   }
 `;
 

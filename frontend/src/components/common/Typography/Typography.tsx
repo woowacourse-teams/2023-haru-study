@@ -5,7 +5,7 @@ import type { CSSProp } from 'styled-components';
 import colorStyle from '@Styles/color';
 
 type Props = {
-  variant: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p1' | 'p2';
+  variant: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p1' | 'p2' | 'p3';
 
   fontSize?: string;
   fontWeight?: string;
@@ -23,18 +23,20 @@ const TAG_MAPPING = {
   h6: 'h6',
   p1: 'p',
   p2: 'p',
+  p3: 'p',
 };
 
 const FONT_STYLE = {
   fontSize: {
-    h1: '4.8rem',
-    h2: '4rem',
-    h3: '3.6rem',
-    h4: '3.2rem',
-    h5: '2.4rem',
-    h6: '2rem',
-    p1: '2.4rem',
-    p2: '1.6rem',
+    h1: '5.2rem',
+    h2: '4.4rem',
+    h3: '4rem',
+    h4: '3.6rem',
+    h5: '2.8rem',
+    h6: '2.4rem',
+    p1: '2.8rem',
+    p2: '2rem',
+    p3: '1.6rem',
   },
   fontWeight: {
     h1: 700,
@@ -45,6 +47,7 @@ const FONT_STYLE = {
     h6: 500,
     p1: 300,
     p2: 300,
+    p3: 300,
   },
 } as const;
 
