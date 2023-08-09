@@ -4,9 +4,13 @@
   <property name="CONSOLE_LOG_PATTERN" value="%green(%d{yyyy-MM-dd HH:mm:ss.SSS}) %magenta([%thread]) %clr(%5level) %cyan(%logger) - %yellow(%msg%n)" />
   <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level %logger - %msg%n" />
 
-  <include resource="console-appender.xml" />
   <include resource="default-appender.xml" />
   <include resource="http-appender.xml" />
+  <include resource="error-appender.xml" />
+
+  <logger name="ExceptionLogger" level="WARN" additivity="false">
+    <appender-ref ref="ERROR"/>
+  </logger>
 
   <logger name="HttpLogger" level="INFO" additivity="false">
     <appender-ref ref="HTTP"/>
