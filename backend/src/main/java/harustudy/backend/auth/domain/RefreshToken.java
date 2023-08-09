@@ -1,4 +1,4 @@
-package harustudy.backend.oauth.domain;
+package harustudy.backend.auth.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
 import jakarta.persistence.Column;
