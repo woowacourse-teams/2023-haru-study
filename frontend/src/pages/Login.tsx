@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
@@ -5,7 +7,13 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
+const REDIRECT_URI = 'http://localhost:3000/login/callback';
+
 const Login = () => {
+  const navigate = useNavigate();
+
+  const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}`;
+
   return (
     <Layout>
       <Typography
@@ -20,8 +28,21 @@ const Login = () => {
         <Emphasis>하루</Emphasis>스터디
       </Typography>
       <ButtonContainer>
-        <Button variant="primary">로그인</Button>
-        <Button variant="outlined">비회원으로 로그인</Button>
+        <a href={googleOAuthUrl}>
+          <Button variant="primary">로그인</Button>
+        </a>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            navigate('/login/callback', {
+              state: {
+                guest: true,
+              },
+            });
+          }}
+        >
+          비회원으로 로그인
+        </Button>
       </ButtonContainer>
     </Layout>
   );
