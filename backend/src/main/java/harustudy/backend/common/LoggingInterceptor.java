@@ -13,30 +13,33 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 @RequiredArgsConstructor
 public class LoggingInterceptor implements HandlerInterceptor {
 
+    public static final String HTTP_LOG_FORMAT = """
+                                    
+            request:
+                requestURI: {} {}
+                QueryString: {}
+                Authorization: {}
+                Body: {}
+                Handler: {}
+            ================
+            response:
+                statusCode: {}
+                Body: {}
+                    """;
+
     private final ObjectMapper objectMapper;
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
             Object handler, Exception ex) throws Exception {
-        final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
-        final ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
-
+        ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
+        ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
         log.info(
-                """
-                        
-                        request:
-                            requestURI: {} {}
-                            QueryString: {}
-                            Body: {}
-                            Handler: {}
-                        ================
-                        response:
-                            statusCode: {}
-                            Body: {}
-                                """,
+                HTTP_LOG_FORMAT,
                 request.getMethod(),
                 request.getRequestURI(),
                 request.getQueryString(),
+                request.getHeader("Authorization"),
                 objectMapper.readTree(cachingRequest.getContentAsByteArray()),
                 handler,
 
