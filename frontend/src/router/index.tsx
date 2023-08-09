@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import CreateStudy from '@Pages/CreateStudy';
 import Landing from '@Pages/Landing';
+import Login from '@Pages/Login';
 import StudyBoard from '@Pages/StudyBoard';
 import StudyParticipation from '@Pages/StudyParticipation';
 import StudyPreparation from '@Pages/StudyPreparation';
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Landing />,
+      },
+      {
+        path: `${ROUTES_PATH.login}`,
+        element: <Login />,
       },
       {
         path: `${ROUTES_PATH.board}/:studyId`,
