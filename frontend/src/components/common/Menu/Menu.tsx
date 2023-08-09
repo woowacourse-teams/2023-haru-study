@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactElement } from 'react';
+import type { PropsWithChildren, ReactElement, ReactNode } from 'react';
 import { Children, cloneElement } from 'react';
 import { css, styled } from 'styled-components';
 import type { CSSProp } from 'styled-components';
@@ -8,9 +8,14 @@ import useOutsideClick from '@Hooks/common/useOutsideClick';
 
 import color from '@Styles/color';
 
-import HamburgerIcon from '@Assets/icons/HamburgerIcon';
-
 import MenuItem from './MenuItem';
+
+export type MenuItem = {
+  key: number;
+  text: string;
+  onClick: () => void;
+  bottomSeparator?: boolean;
+};
 
 const MENU_LIST_POSITION = {
   left: css`
@@ -24,21 +29,19 @@ const MENU_LIST_POSITION = {
 } as const;
 
 type Props = {
-  $iconColor?: string;
+  trigger: ReactNode;
   $style?: CSSProp;
   $menuListPosition?: keyof typeof MENU_LIST_POSITION;
 };
 
-const Menu = ({ $menuListPosition = 'right', $style, children, $iconColor }: PropsWithChildren<Props>) => {
+const Menu = ({ $menuListPosition = 'right', $style, children, trigger }: PropsWithChildren<Props>) => {
   const { isShow, toggleShow, hide } = useDisplay();
 
   const ref = useOutsideClick<HTMLDivElement>(hide);
 
   return (
     <MenuLayout ref={ref} $style={$style}>
-      <MenuIconWrapper onClick={toggleShow}>
-        <HamburgerIcon color={$iconColor} />
-      </MenuIconWrapper>
+      <MenuIconWrapper onClick={toggleShow}>{trigger}</MenuIconWrapper>
       {isShow && (
         <MenuList $menuListPosition={$menuListPosition}>
           {Children.map(children, (child) => {

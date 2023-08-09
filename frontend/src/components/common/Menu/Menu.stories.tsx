@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { css } from 'styled-components';
 
+import HamburgerIcon from '@Assets/icons/HamburgerIcon';
+
 import Menu from './Menu';
 
 type Story = StoryObj<typeof Menu>;
@@ -20,6 +22,7 @@ export default meta;
  */
 export const DefaultMenu: Story = {
   args: {
+    trigger: <HamburgerIcon />,
     children: (
       <>
         <Menu.Item onClick={() => alert('아이템1을 클릭했습니다.')}>아이템1</Menu.Item>
@@ -36,6 +39,7 @@ export const DefaultMenu: Story = {
  */
 export const RightMenu: Story = {
   args: {
+    trigger: <HamburgerIcon />,
     children: (
       <>
         <Menu.Item onClick={() => alert('아이템1을 클릭했습니다.')}>아이템1</Menu.Item>
@@ -48,5 +52,24 @@ export const RightMenu: Story = {
     $style: css`
       margin: 0 0 0 auto;
     `,
+  },
+};
+
+/**
+ * 구분선이 있는 메뉴 스토입니다.
+ */
+export const SeparatorMenu: Story = {
+  args: {
+    trigger: <HamburgerIcon />,
+    children: (
+      <>
+        <Menu.Item onClick={() => alert('아이템1을 클릭했습니다.')}>아이템1</Menu.Item>
+        <Menu.Item onClick={() => alert('아이템2을 클릭했습니다.')} bottomSeparator>
+          아이템2
+        </Menu.Item>
+        <Menu.Item onClick={() => alert('아이템3을 클릭했습니다.')}>아이템3</Menu.Item>
+        <Menu.Item onClick={() => alert('아이템4을 클릭했습니다.')}>아이템4</Menu.Item>
+      </>
+    ),
   },
 };
