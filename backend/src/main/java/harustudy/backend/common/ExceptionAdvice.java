@@ -1,9 +1,7 @@
 package harustudy.backend.common;
 
-import harustudy.backend.member.exception.MemberNotParticipatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,15 +20,6 @@ public class ExceptionAdvice {
         exceptionLog.error(exceptionSituation.getMessage(), e);
         return ResponseEntity.status(exceptionSituation.getStatusCode())
                 .body(ExceptionResponse.from(exceptionSituation));
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleBindException(
-            MethodArgumentNotValidException e) {
-        defaultLog.error(e.getMessage());
-        exceptionLog.error(e.getMessage(), e);
-        return ResponseEntity.badRequest()
-                .body(new ExceptionResponse(null, e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
