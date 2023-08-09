@@ -22,8 +22,9 @@ management:
   endpoints:
     web:
       exposure:
-        include: prometheus
+        include: prometheus, logfile
   endpoint:
     prometheus:
       enabled: true
-
+    logfile:
+      external-file: ./logs/default/default.log

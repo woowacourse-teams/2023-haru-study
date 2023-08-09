@@ -1,6 +1,6 @@
 <included>
   <appender name="DEFAULT" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>./logs/default/default-logs.log</file>
+    <file>./logs/default/default.log</file>
     <filter class="ch.qos.logback.classic.filter.LevelFilter">
       <level>INFO</level>
     </filter>

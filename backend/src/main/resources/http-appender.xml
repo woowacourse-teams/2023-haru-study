@@ -1,6 +1,6 @@
 <included>
   <appender name="HTTP" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>./logs/http/http-logs.log</file>
+    <file>./logs/http/http.log</file>
     <filter class="ch.qos.logback.classic.filter.LevelFilter">
       <level>INFO</level>
       <onMatch>ACCEPT</onMatch>
