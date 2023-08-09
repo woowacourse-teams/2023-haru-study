@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import Auth from '@Pages/Auth';
 import CreateStudy from '@Pages/CreateStudy';
 import Landing from '@Pages/Landing';
 import Login from '@Pages/Login';
@@ -22,8 +23,12 @@ const router = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: `${ROUTES_PATH.login}`,
+        path: ROUTES_PATH.login,
         element: <Login />,
+      },
+      {
+        path: ROUTES_PATH.auth,
+        element: <Auth />,
       },
       {
         path: `${ROUTES_PATH.board}/:studyId`,
