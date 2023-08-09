@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
+import type { MenuItem } from '@Components/common/Menu/Menu';
 import Menu from '@Components/common/Menu/Menu';
 import Typography from '@Components/common/Typography/Typography';
 
@@ -9,18 +10,20 @@ import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-const LANDING_CONTENTS_MENU_ITEMS = [
+import HamburgerIcon from '@Assets/icons/HamburgerIcon';
+
+const LANDING_CONTENTS_MENU_ITEMS: MenuItem[] = [
   {
     key: 0,
     text: '사용자 피드백',
-    clickEvent: () => {
+    onClick: () => {
       window.open('https://forms.gle/gjEejNBaQmbhwh3C8', 'blank');
     },
   },
   {
     key: 1,
     text: 'github',
-    clickEvent: () => {
+    onClick: () => {
       window.open('https://github.com/woowacourse-teams/2023-haru-study', 'blank');
     },
   },
@@ -30,14 +33,15 @@ const LandingContents = () => {
   return (
     <ContentsContainer>
       <Menu
+        trigger={<HamburgerIcon />}
         $menuListPosition="left"
         $style={css`
           margin: 0 0 0 auto;
         `}
       >
-        {LANDING_CONTENTS_MENU_ITEMS.map((menuItem) => (
-          <Menu.Item key={menuItem.key} onClick={menuItem.clickEvent}>
-            {menuItem.text}
+        {LANDING_CONTENTS_MENU_ITEMS.map(({ key, text, onClick }) => (
+          <Menu.Item key={key} onClick={onClick}>
+            {text}
           </Menu.Item>
         ))}
       </Menu>
@@ -93,7 +97,7 @@ const TopicSummaryContainer = styled.div`
   p {
     font-size: 2rem;
     font-weight: 200;
-    line-height: 180%;
+    line-height: 150%;
   }
 `;
 

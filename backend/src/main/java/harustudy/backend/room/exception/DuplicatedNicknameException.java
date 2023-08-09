@@ -1,5 +1,7 @@
 package harustudy.backend.room.exception;
 
-public class DuplicatedNicknameException extends RuntimeException {
+import harustudy.backend.common.HaruStudyException;
+
+public class DuplicatedNicknameException extends HaruStudyException {
 
 }

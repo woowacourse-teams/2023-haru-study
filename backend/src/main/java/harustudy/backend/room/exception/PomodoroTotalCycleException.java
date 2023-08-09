@@ -1,5 +1,7 @@
 package harustudy.backend.room.exception;
 
-public class PomodoroTotalCycleException extends RuntimeException {
+import harustudy.backend.common.HaruStudyException;
+
+public class PomodoroTotalCycleException extends HaruStudyException {
 
 }

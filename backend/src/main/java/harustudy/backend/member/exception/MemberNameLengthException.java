@@ -1,5 +1,7 @@
 package harustudy.backend.member.exception;
 
-public class MemberNameLengthException extends RuntimeException {
+import harustudy.backend.common.HaruStudyException;
+
+public class MemberNameLengthException extends HaruStudyException {
 
 }

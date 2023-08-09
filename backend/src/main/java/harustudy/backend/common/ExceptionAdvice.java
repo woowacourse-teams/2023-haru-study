@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -15,14 +14,14 @@ public class ExceptionAdvice {
     Logger defaultLog = LoggerFactory.getLogger(ExceptionAdvice.class);
     Logger exceptionLog = LoggerFactory.getLogger("ExceptionLogger");
 
-    @ExceptionHandler(MemberNotParticipatedException.class)
+    @ExceptionHandler(HaruStudyException.class)
     public ResponseEntity<ExceptionResponse> handleMemberNotParticipatedException(
-            MemberNotParticipatedException e) {
-        defaultLog.error(e.getMessage());
-        exceptionLog.error(e.getMessage(), e);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ExceptionResponse(MemberNotParticipatedException.CODE,
-                        MemberNotParticipatedException.MESSAGE));
+            HaruStudyException e) {
+        ExceptionSituation exceptionSituation = ExceptionMapper.getSituationOf(e);
+        defaultLog.error(exceptionSituation.getMessage());
+        exceptionLog.error(exceptionSituation.getMessage(), e);
+        return ResponseEntity.status(exceptionSituation.getStatusCode())
+                .body(ExceptionResponse.from(exceptionSituation));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

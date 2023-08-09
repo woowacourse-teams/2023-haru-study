@@ -12,7 +12,7 @@ const GlobalStyles = createGlobalStyle`
 
   body {
     font-size: 1.6rem;
-    font-family: "S-Core Dream";
+    font-family: "Pretendard";
     font-weight: 300;
 
     ${({ theme }) => css`

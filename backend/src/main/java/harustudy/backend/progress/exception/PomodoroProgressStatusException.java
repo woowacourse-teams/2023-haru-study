@@ -1,5 +1,7 @@
 package harustudy.backend.progress.exception;
 
-public class PomodoroProgressStatusException extends RuntimeException {
+import harustudy.backend.common.HaruStudyException;
+
+public class PomodoroProgressStatusException extends HaruStudyException {
 
 }
