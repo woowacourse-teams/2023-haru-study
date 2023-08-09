@@ -4,11 +4,13 @@ import { styled } from 'styled-components';
 import color from '@Styles/color';
 
 type Props = {
+  bottomSeparator?: boolean;
   hide?: () => void;
   onClick: () => void;
 };
 
 const MenuItem = ({
+  bottomSeparator,
   children,
   onClick,
   hide,
@@ -20,9 +22,12 @@ const MenuItem = ({
   };
 
   return (
-    <MenuItemLayout onClick={handleClick} {...props}>
-      {children}
-    </MenuItemLayout>
+    <>
+      <MenuItemLayout onClick={handleClick} {...props}>
+        {children}
+      </MenuItemLayout>
+      {bottomSeparator && <Separator />}
+    </>
   );
 };
 
@@ -38,4 +43,9 @@ const MenuItemLayout = styled.li`
   &:hover {
     background-color: ${color.neutral[100]};
   }
+`;
+
+const Separator = styled.div`
+  height: 1.5px;
+  background-color: ${color.neutral[100]};
 `;
