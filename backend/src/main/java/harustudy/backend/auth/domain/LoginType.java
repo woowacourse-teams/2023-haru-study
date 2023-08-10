@@ -1,10 +1,11 @@
 package harustudy.backend.auth.domain;
 
-public enum SocialType {
+public enum LoginType {
+
     GUEST,
     GOOGLE;
 
-    public static SocialType from(String name) {
+    public static LoginType from(String name) {
         return valueOf(name.toUpperCase());
     }
 }

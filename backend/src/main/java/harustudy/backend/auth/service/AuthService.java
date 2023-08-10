@@ -5,7 +5,7 @@ import harustudy.backend.auth.config.OauthProperty;
 import harustudy.backend.auth.config.TokenConfig;
 import harustudy.backend.auth.domain.OauthMember;
 import harustudy.backend.auth.domain.RefreshToken;
-import harustudy.backend.auth.domain.SocialType;
+import harustudy.backend.auth.domain.LoginType;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.RefreshTokenRequest;
@@ -38,8 +38,8 @@ public class AuthService {
         UserInfo userInfo = requestUserInfo(request.oauthProvider(), request.code());
         OauthMember oauthMember = saveOrUpdateOauthMember(request.oauthProvider(), userInfo); // TODO: 트랜잭션 분리
         String accessToken = generateAccessToken(oauthMember.getId());
-        RefreshToken refreshToken = saveRefreshToken(oauthMember);
-        return new TokenResponse(accessToken, refreshToken.getUuid());
+        RefreshToken refreshToken = saveRefreshTokenOf(oauthMember);
+        return TokenResponse.forLoggedIn(accessToken, refreshToken);
     }
 
     private UserInfo requestUserInfo(String oauthProvider, String code) {
@@ -47,6 +47,13 @@ public class AuthService {
         OauthTokenResponse oauthToken = googleOauthClient.requestOauthToken(code, oauthProperty);
         Map<String, Object> oauthUserInfo = googleOauthClient.requestOauthUserInfo(oauthProperty, oauthToken);
         return OauthUserInfoExtractor.extract(oauthProvider, oauthUserInfo);
+    }
+
+    private OauthMember saveOrUpdateOauthMember(String oauthProvider, UserInfo userInfo) {
+        OauthMember oauthMember = oauthMemberRepository.findByEmail(userInfo.email())
+                .map(entity -> entity.update(userInfo.email(), userInfo.name(), userInfo.imageUrl()))
+                .orElseGet(() -> userInfo.toOauthMember(LoginType.from(oauthProvider)));
+        return oauthMemberRepository.save(oauthMember);
     }
 
     private String generateAccessToken(Long memberId) {
@@ -57,24 +64,17 @@ public class AuthService {
                 .build();
     }
 
-    private RefreshToken saveRefreshToken(OauthMember oauthMember) {
+    private RefreshToken saveRefreshTokenOf(OauthMember oauthMember) {
         RefreshToken refreshToken = new RefreshToken(oauthMember, tokenConfig.refreshTokenExpireLength());
         refreshTokenRepository.save(refreshToken);
         return refreshToken;
-    }
-
-    private OauthMember saveOrUpdateOauthMember(String oauthProvider, UserInfo userInfo) {
-        OauthMember oauthMember = oauthMemberRepository.findByEmail(userInfo.email())
-                .map(entity -> entity.update(userInfo.email(), userInfo.name(), userInfo.imageUrl()))
-                .orElseGet(() -> userInfo.toOauthMember(SocialType.from(oauthProvider)));
-        return oauthMemberRepository.save(oauthMember);
     }
 
     public TokenResponse guestLogin() {
         OauthMember oauthMember = OauthMember.guest();
         oauthMemberRepository.save(oauthMember);
         String accessToken = generateGuestAccessToken(oauthMember.getId());
-        return new TokenResponse(accessToken, null);
+        return TokenResponse.forGuest(accessToken);
     }
 
     private String generateGuestAccessToken(Long memberId) {
@@ -91,6 +91,6 @@ public class AuthService {
         refreshToken.validateExpired();
         refreshToken.updateUuidAndExpireDateTime(tokenConfig.refreshTokenExpireLength());
         String accessToken = generateAccessToken(refreshToken.getOauthMember().getId());
-        return new TokenResponse(accessToken, refreshToken.getUuid());
+        return TokenResponse.forLoggedIn(accessToken, refreshToken);
     }
 }
