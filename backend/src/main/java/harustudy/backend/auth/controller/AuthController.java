@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("api/auth")
 @RequiredArgsConstructor
+@RequestMapping("api/auth")
 @RestController
 public class AuthController {
 
@@ -33,17 +33,10 @@ public class AuthController {
         return ResponseEntity.ok(tokenResponse);
     }
 
-    @Operation(summary = "refresh 토큰, access 토큰 갱신")
+    @Operation(summary = "access 토큰, refresh 토큰 갱신")
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponse> refresh(@RequestBody RefreshTokenRequest request) {
         TokenResponse tokenResponse = authService.refresh(request);
         return ResponseEntity.ok(tokenResponse);
-    }
-
-    @Operation(summary = "refresh 토큰 검증")
-    @PostMapping("/validate")
-    public ResponseEntity<Void> validate(@RequestBody RefreshTokenRequest request) {
-        authService.validateRefreshToken(request);
-        return ResponseEntity.ok().build();
     }
 }
