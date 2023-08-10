@@ -45,13 +45,14 @@ public class AuthService {
     private UserInfo requestUserInfo(String oauthProvider, String code) {
         OauthProperty oauthProperty = oauthProperties.get(oauthProvider);
         OauthTokenResponse oauthToken = googleOauthClient.requestOauthToken(code, oauthProperty);
-        Map<String, Object> oauthUserInfo = googleOauthClient.requestOauthUserInfo(oauthProperty, oauthToken);
+        Map<String, Object> oauthUserInfo =
+                googleOauthClient.requestOauthUserInfo(oauthProperty, oauthToken.accessToken());
         return OauthUserInfoExtractor.extract(oauthProvider, oauthUserInfo);
     }
 
     private OauthMember saveOrUpdateOauthMember(String oauthProvider, UserInfo userInfo) {
         OauthMember oauthMember = oauthMemberRepository.findByEmail(userInfo.email())
-                .map(entity -> entity.update(userInfo.email(), userInfo.name(), userInfo.imageUrl()))
+                .map(entity -> entity.updateUserInfo(userInfo.email(), userInfo.name(), userInfo.imageUrl()))
                 .orElseGet(() -> userInfo.toOauthMember(LoginType.from(oauthProvider)));
         return oauthMemberRepository.save(oauthMember);
     }
@@ -87,7 +88,7 @@ public class AuthService {
 
     public TokenResponse refresh(RefreshTokenRequest request) {
         RefreshToken refreshToken = refreshTokenRepository.findByUuid(request.refreshTokenUuid())
-                .orElseThrow(InvalidRefreshTokenException::new); // TODO: handle 400
+                .orElseThrow(InvalidRefreshTokenException::new);
         refreshToken.validateExpired();
         refreshToken.updateUuidAndExpireDateTime(tokenConfig.refreshTokenExpireLength());
         String accessToken = generateAccessToken(refreshToken.getOauthMember().getId());

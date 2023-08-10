@@ -43,7 +43,7 @@ public class RefreshToken extends BaseTimeEntity {
 
     public void validateExpired() {
         if (expireDateTime.isBefore(LocalDateTime.now())) {
-            throw new RefreshTokenExpiredException(); // TODO: handle 401
+            throw new RefreshTokenExpiredException();
         }
     }
 

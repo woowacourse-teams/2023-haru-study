@@ -1,9 +1,10 @@
 package harustudy.backend.common;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
+import harustudy.backend.auth.exception.InvalidProviderNameException;
+import harustudy.backend.auth.exception.InvalidRefreshTokenException;
+import harustudy.backend.auth.exception.RefreshTokenExpiredException;
 import harustudy.backend.content.exception.PomodoroContentNotFoundException;
 import harustudy.backend.member.exception.MemberNameLengthException;
 import harustudy.backend.member.exception.MemberNotFoundException;
@@ -28,6 +29,7 @@ public class ExceptionMapper {
         setupParticipantCodeException();
         setupPomodoroProgressException();
         setupRoomException();
+        setupAuthException();
     }
 
     private static void setupMemberException() {
@@ -65,6 +67,15 @@ public class ExceptionMapper {
                 ExceptionSituation.of("시간 당 사이클 횟수가 적절하지 않습니다.", BAD_REQUEST));
         mapper.put(PomodoroTotalCycleException.class,
                 ExceptionSituation.of("총 사이클 횟수가 적절하지 않습니다.", BAD_REQUEST));
+    }
+
+    private static void setupAuthException() {
+        mapper.put(InvalidProviderNameException.class,
+                ExceptionSituation.of("유효하지 않은 프로바이더 이름입니다.", BAD_REQUEST));
+        mapper.put(InvalidRefreshTokenException.class,
+                ExceptionSituation.of("유효하지 않은 갱신 토큰입니다.", BAD_REQUEST));
+        mapper.put(RefreshTokenExpiredException.class,
+                ExceptionSituation.of("만료된 갱신 토큰입니다.", UNAUTHORIZED));
     }
 
     public static ExceptionSituation getSituationOf(Exception exception) {

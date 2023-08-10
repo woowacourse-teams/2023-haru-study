@@ -42,12 +42,11 @@ public class GoogleOauthClient {
         return formData;
     }
 
-    public Map<String, Object> requestOauthUserInfo(OauthProperty oauthProperty,
-            OauthTokenResponse oauthTokenResponse) {
+    public Map<String, Object> requestOauthUserInfo(OauthProperty oauthProperty, String accessToken) {
         return WebClient.create()
                 .get()
                 .uri(oauthProperty.getUserInfoUri())
-                .headers(header -> header.setBearerAuth(oauthTokenResponse.accessToken()))
+                .headers(header -> header.setBearerAuth(accessToken))
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
                 })

@@ -1,12 +1,14 @@
 package harustudy.backend.auth.util;
 
 import harustudy.backend.auth.dto.UserInfo;
+import harustudy.backend.auth.exception.InvalidProviderNameException;
 import java.util.Arrays;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum OauthUserInfoExtractor {
+
     GOOGLE("google") {
         @Override
         public UserInfo from(Map<String, Object> attributes) {
@@ -24,7 +26,7 @@ public enum OauthUserInfoExtractor {
         return Arrays.stream(values())
                 .filter(provider -> providerName.equals(provider.providerName))
                 .findFirst()
-                .orElseThrow(IllegalStateException::new)
+                .orElseThrow(InvalidProviderNameException::new)
                 .from(attributes);
     }
 

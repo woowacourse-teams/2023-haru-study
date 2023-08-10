@@ -40,7 +40,10 @@ public class OauthMember extends BaseTimeEntity {
         return new OauthMember("guest", null, null, LoginType.GUEST);
     }
 
-    public OauthMember update(String name, String email, String imageUrl) {
-        return new OauthMember(name, email, imageUrl, this.loginType);
+    public OauthMember updateUserInfo(String name, String email, String imageUrl) {
+        this.name = name;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        return this;
     }
 }
