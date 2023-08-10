@@ -89,7 +89,7 @@ public class AuthService {
         RefreshToken refreshToken = refreshTokenRepository.findByUuid(request.refreshTokenUuid())
                 .orElseThrow(InvalidRefreshTokenException::new); // TODO: handle 400
         refreshToken.validateExpired();
-        refreshToken.regenerate(tokenConfig.refreshTokenExpireLength());
+        refreshToken.updateUuidAndExpireDateTime(tokenConfig.refreshTokenExpireLength());
         String accessToken = generateAccessToken(refreshToken.getOauthMember().getId());
         return new TokenResponse(accessToken, refreshToken.getUuid());
     }

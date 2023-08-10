@@ -33,22 +33,22 @@ public class RefreshToken extends BaseTimeEntity {
     @Column(columnDefinition = "BINARY(16)")
     private UUID uuid;
 
-    private LocalDateTime expireDate;
+    private LocalDateTime expireDateTime;
 
-    public RefreshToken(OauthMember oauthMember, long expireDate) {
+    public RefreshToken(OauthMember oauthMember, long expireLength) {
         this.oauthMember = oauthMember;
         this.uuid = UUID.randomUUID();
-        this.expireDate = LocalDateTime.now().plus(expireDate, ChronoUnit.MILLIS);
+        this.expireDateTime = LocalDateTime.now().plus(expireLength, ChronoUnit.MILLIS);
     }
 
     public void validateExpired() {
-        if (expireDate.isBefore(LocalDateTime.now())) {
+        if (expireDateTime.isBefore(LocalDateTime.now())) {
             throw new RefreshTokenExpiredException(); // TODO: handle 401
         }
     }
 
-    public void regenerate(long expireDate) {
+    public void updateUuidAndExpireDateTime(long expireLength) {
         this.uuid = UUID.randomUUID();
-        this.expireDate = LocalDateTime.now().plus(expireDate, ChronoUnit.MILLIS);
+        this.expireDateTime = LocalDateTime.now().plus(expireLength, ChronoUnit.MILLIS);
     }
 }
