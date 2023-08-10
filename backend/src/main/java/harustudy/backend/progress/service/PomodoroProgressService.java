@@ -47,7 +47,7 @@ public class PomodoroProgressService {
     }
 
     private void validateProgressIsStudying(PomodoroProgress pomodoroProgress) {
-        if (pomodoroProgress.isNotStudying()) {
+        if (!pomodoroProgress.isStudying()) {
             throw new UnavailableToProceed();
         }
     }

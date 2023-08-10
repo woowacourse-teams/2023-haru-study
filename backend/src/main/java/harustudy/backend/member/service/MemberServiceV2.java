@@ -1,7 +1,5 @@
 package harustudy.backend.member.service;
 
-import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.GuestRegisterRequest;
 import harustudy.backend.member.dto.MemberResponseV2;
@@ -26,7 +24,6 @@ public class MemberServiceV2 {
     private final MemberRepository memberRepository;
     private final PomodoroRoomRepository pomodoroRoomRepository;
     private final PomodoroProgressRepository pomodoroProgressRepository;
-    private final PomodoroContentRepository pomodoroContentRepository;
 
     public MemberResponseV2 findMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
@@ -50,13 +47,7 @@ public class MemberServiceV2 {
         Member member = memberRepository.save(new Member(request.nickname()));
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(request.studyId())
                 .orElseThrow(RoomNotFoundException::new);
-        Integer totalCycle = pomodoroRoom.getTotalCycle();
-
-        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.save(
-                new PomodoroProgress(pomodoroRoom, member));
-        for (int i = 1; i <= totalCycle; i++) {
-            pomodoroContentRepository.save(new PomodoroContent(pomodoroProgress, i));
-        }
+        pomodoroProgressRepository.save(new PomodoroProgress(pomodoroRoom, member));
         return member.getId();
     }
 }

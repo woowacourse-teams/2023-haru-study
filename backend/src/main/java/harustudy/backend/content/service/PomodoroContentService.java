@@ -55,7 +55,7 @@ public class PomodoroContentService {
     }
 
     private void validateProgressIsPlanning(PomodoroProgress pomodoroProgress) {
-        if (pomodoroProgress.isNotPlanning()) {
+        if (!pomodoroProgress.isPlanning()) {
             throw new PomodoroProgressStatusException();
         }
     }
@@ -113,7 +113,7 @@ public class PomodoroContentService {
     }
 
     private void validateProgressIsRetrospect(PomodoroProgress pomodoroProgress) {
-        if (pomodoroProgress.isNotRetrospect()) {
+        if (!pomodoroProgress.isRetrospect()) {
             throw new UnavailableToProceed(); // TODO: 예외 세분화
         }
     }

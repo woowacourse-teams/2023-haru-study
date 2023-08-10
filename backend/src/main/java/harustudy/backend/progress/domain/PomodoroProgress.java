@@ -4,6 +4,7 @@ import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.room.domain.PomodoroRoom;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -39,7 +40,7 @@ public class PomodoroProgress extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "pomodoroProgress")
+    @OneToMany(mappedBy = "pomodoroProgress", cascade = CascadeType.ALL)
     private List<PomodoroContent> pomodoroContents = new ArrayList<>();
 
     private boolean isDone = false;
@@ -55,6 +56,7 @@ public class PomodoroProgress extends BaseTimeEntity {
         this.member = member;
         this.currentCycle = 1;
         this.pomodoroStatus = PomodoroStatus.PLANNING;
+        makeContentsByTotalCycle(pomodoroRoom.getTotalCycle());
     }
 
     // TODO: 없애기
@@ -64,6 +66,12 @@ public class PomodoroProgress extends BaseTimeEntity {
         this.member = member;
         this.currentCycle = currentCycle;
         this.pomodoroStatus = pomodoroStatus;
+    }
+
+    private void makeContentsByTotalCycle(Integer totalCycle) {
+        for (int i = 0; i < totalCycle; i++) {
+            pomodoroContents.add(new PomodoroContent(this, i));
+        }
     }
 
     public boolean isOwnedBy(Member member) {
@@ -110,19 +118,15 @@ public class PomodoroProgress extends BaseTimeEntity {
         pomodoroStatus = pomodoroStatus.getNext();
     }
 
+    public boolean isPlanning() {
+        return pomodoroStatus == PomodoroStatus.PLANNING;
+    }
+
+    public boolean isStudying() {
+        return pomodoroStatus == PomodoroStatus.STUDYING;
+    }
+
     public boolean isRetrospect() {
         return pomodoroStatus == PomodoroStatus.RETROSPECT;
-    }
-
-    public boolean isNotPlanning() {
-        return pomodoroStatus != PomodoroStatus.PLANNING;
-    }
-
-    public boolean isNotStudying() {
-        return pomodoroStatus != PomodoroStatus.STUDYING;
-    }
-
-    public boolean isNotRetrospect() {
-        return pomodoroStatus != PomodoroStatus.RETROSPECT;
     }
 }

@@ -41,7 +41,7 @@ public class PomodoroContentServiceV2 {
     }
 
     private void validateProgressIsPlanning(PomodoroProgress pomodoroProgress) {
-        if (pomodoroProgress.isNotPlanning()) {
+        if (!pomodoroProgress.isPlanning()) {
             throw new PomodoroProgressStatusException();
         }
     }
@@ -65,7 +65,7 @@ public class PomodoroContentServiceV2 {
     }
 
     private void validateProgressIsRetrospect(PomodoroProgress pomodoroProgress) {
-        if (pomodoroProgress.isNotRetrospect()) {
+        if (!pomodoroProgress.isRetrospect()) {
             throw new PomodoroProgressStatusException();
         }
     }
