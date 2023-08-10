@@ -13,11 +13,10 @@ public class ExceptionAdvice {
     Logger exceptionLog = LoggerFactory.getLogger("ExceptionLogger");
 
     @ExceptionHandler(HaruStudyException.class)
-    public ResponseEntity<ExceptionResponse> handleMemberNotParticipatedException(
-            HaruStudyException e) {
+    public ResponseEntity<ExceptionResponse> handleHaruStudyException(HaruStudyException e) {
         ExceptionSituation exceptionSituation = ExceptionMapper.getSituationOf(e);
-        defaultLog.error(exceptionSituation.getMessage());
-        exceptionLog.error(exceptionSituation.getMessage(), e);
+        defaultLog.warn(exceptionSituation.getMessage());
+        exceptionLog.warn(exceptionSituation.getMessage(), e);
         return ResponseEntity.status(exceptionSituation.getStatusCode())
                 .body(ExceptionResponse.from(exceptionSituation));
     }

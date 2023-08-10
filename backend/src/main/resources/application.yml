@@ -9,7 +9,7 @@ spring:
     show-sql: true
 
   flyway:
-    enabled: true
+    enabled: false
 
   config:
     import: classpath:/submodule/application.yml
