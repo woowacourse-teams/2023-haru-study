@@ -1,8 +1,10 @@
 import http from '@Utils/http';
 
 import type {
+  ResponseAuthToken,
   ResponseCreateStudy,
   ResponseIsCheckMember,
+  ResponseMemberInfo,
   ResponseMemberRecordContents,
   ResponseMemberStudyMetadata,
   ResponsePlanList,
@@ -14,6 +16,7 @@ import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOpti
 
 const BASE_URL = '/api/v2';
 
+// 옛날거
 export const requestCreateStudy = async (
   studyName: string,
   totalCycle: TotalCycleOptions,
@@ -79,11 +82,7 @@ export const requestGetStudyMembers = (studyId: string) =>
 export const requestGetMemberRecordContents = (studyId: string, memberId: string) =>
   http.get<ResponseMemberRecordContents>(`${BASE_URL}/studies/${studyId}/contents?memberId=${memberId}`);
 
-type ResponseAuthToken = {
-  accessToken: string;
-  refreshToken: string;
-};
-
+// 새로 적용되는 api
 export const requestGuestLogin = async () => {
   const response = await http.post('/api/auth/guest');
 
@@ -91,9 +90,20 @@ export const requestGuestLogin = async () => {
 };
 
 export const requestOAuthLogin = async (provider: OAuthProvider, code: string) => {
-  const response = await http.post('api/auth/login', {
+  const response = await http.post('/api/auth/login', {
     body: JSON.stringify({ oauthProvider: provider, code }),
   });
+
+  return (await response.json()) as ResponseAuthToken;
+};
+
+export const requestMemberInfo = (accessToken: string, memberId: string) =>
+  http.get<ResponseMemberInfo>(`/api/members/${memberId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+export const requestAccessTokenRefresh = async () => {
+  const response = await http.post(`/api/auth/refresh`);
 
   return (await response.json()) as ResponseAuthToken;
 };
