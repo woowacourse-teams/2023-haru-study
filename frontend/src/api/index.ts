@@ -9,6 +9,7 @@ import type {
   ResponseStudyInfo,
   ResponseStudyMetadata,
 } from '@Types/api';
+import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
 const BASE_URL = '/api/v2';
@@ -77,3 +78,22 @@ export const requestGetStudyMembers = (studyId: string) =>
 
 export const requestGetMemberRecordContents = (studyId: string, memberId: string) =>
   http.get<ResponseMemberRecordContents>(`${BASE_URL}/studies/${studyId}/contents?memberId=${memberId}`);
+
+type ResponseAuthToken = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export const requestGuestLogin = async () => {
+  const response = await http.post('/api/auth/guest');
+
+  return (await response.json()) as ResponseAuthToken;
+};
+
+export const requestOAuthLogin = async (provider: OAuthProvider, code: string) => {
+  const response = await http.post('api/auth/login', {
+    body: JSON.stringify({ oauthProvider: provider, code }),
+  });
+
+  return (await response.json()) as ResponseAuthToken;
+};

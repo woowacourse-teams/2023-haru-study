@@ -4,12 +4,33 @@ import CircularProgress from '@Components/common/CircularProgress/CircularProgre
 
 import color from '@Styles/color';
 
-const Auth = () => {
-  const urlSearchParams = new URL(window.location.href).searchParams;
-  const provider = urlSearchParams.get('provider');
-  const code = urlSearchParams.get('code');
+import { getUrlQuery } from '@Utils/getUrlQuery';
 
-  console.log(provider, code);
+import { requestGuestLogin, requestOAuthLogin } from '@Apis/index';
+
+import type { AuthProvider } from '@Types/auth';
+
+const Auth = () => {
+  const provider = getUrlQuery<AuthProvider>('provider');
+  const code = getUrlQuery('code');
+
+  const requestAuthToken = async () => {
+    if (provider === 'guest') {
+      const { accessToken } = await requestGuestLogin();
+      sessionStorage.setItem('accessToken', accessToken);
+
+      return;
+    }
+
+    const { accessToken, refreshToken } = await requestOAuthLogin(provider, code);
+    sessionStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+
+    // msw
+    // landing page 이동
+
+    // refreshToken 검사
+  };
 
   return (
     <Layout>
