@@ -1,3 +1,4 @@
+import { authHandler } from './authHandler';
 import { checkParticipantCodeHandlers } from './checkParticipantCodeHandlers';
 import { studyBoardHandlers } from './studyBoardHandler';
 import { studyMakingHandlers } from './studyMakingHandler';
@@ -10,4 +11,5 @@ export const handlers = [
   ...studyStartHandlers,
   ...checkParticipantCodeHandlers,
   ...studyBoardHandlers,
+  ...authHandler,
 ];

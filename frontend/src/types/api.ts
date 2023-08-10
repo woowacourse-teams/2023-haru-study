@@ -1,3 +1,4 @@
+import type { MemberInfo } from './member';
 import type { Member, MemberRecordContent, PlanList, Step, StudyBasicInfo } from './study';
 
 export type ResponseCreateStudy = { participantCode: string; studyName: string };
@@ -26,3 +27,9 @@ export type ResponseMemberRecordContents = {
 export type ResponseIsCheckMember = {
   nickname: string | null;
 };
+
+export type ResponseAuthToken = {
+  accessToken: string;
+};
+
+export type ResponseMemberInfo = MemberInfo;

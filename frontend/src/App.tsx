@@ -4,12 +4,16 @@ import { ThemeProvider } from 'styled-components';
 import GlobalStyles from '@Styles/globalStyle';
 import { lightTheme } from '@Styles/theme';
 
+import MemberInfoProvider from '@Contexts/MemberInfoProvider';
+
 const App = () => {
   return (
-    <ThemeProvider theme={lightTheme}>
-      <GlobalStyles />
-      <Outlet />
-    </ThemeProvider>
+    <MemberInfoProvider>
+      <ThemeProvider theme={lightTheme}>
+        <GlobalStyles />
+        <Outlet />
+      </ThemeProvider>
+    </MemberInfoProvider>
   );
 };
 
