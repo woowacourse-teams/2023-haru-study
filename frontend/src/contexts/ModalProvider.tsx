@@ -3,11 +3,13 @@ import { createContext, useCallback, useContext, useState } from 'react';
 
 import Modal from '@Components/common/Modal/Modal';
 
-const ModalContext = createContext<{
+type ModalContext = {
   isOpen: boolean;
   openModal: (modalContents: ReactNode) => void;
   closeModal: () => void;
-} | null>(null);
+};
+
+const ModalContext = createContext<ModalContext | null>(null);
 
 const ModalProvider = ({ children }: PropsWithChildren) => {
   const [modalContents, setModalContents] = useState<ReactNode | null>(null);

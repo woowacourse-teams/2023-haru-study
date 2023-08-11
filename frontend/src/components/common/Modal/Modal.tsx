@@ -6,7 +6,11 @@ import usePreventScroll from '@Hooks/common/usePreventScroll';
 
 import color from '@Styles/color';
 
-const Modal = ({ children, closeModal }: PropsWithChildren<{ closeModal: () => void }>) => {
+type Props = {
+  closeModal: () => void;
+};
+
+const Modal = ({ children, closeModal }: PropsWithChildren<Props>) => {
   usePreventScroll();
 
   const onClickBackdrop = () => {
