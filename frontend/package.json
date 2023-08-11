@@ -4,10 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "prod": "NODE_ENV=production webpack serve",
-    "dev": "NODE_ENV=development webpack serve",
+    "prod": "NODE_ENV=production webpack server --open --config webpack.prod.js",
+    "dev": "NODE_ENV=development webpack server --open --config webpack.dev.js",
     "test": "jest",
-    "build": "yarn test && NODE_ENV=production webpack",
+    "build:dev": "yarn test && NODE_ENV=development webpack",
+    "build:prod": "yarn test && NODE_ENV=production webpack",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "ci": "yarn install --immutable --immutable-cache --check-cache"
@@ -61,7 +62,8 @@
     "typescript": "^5.1.6",
     "webpack": "^5.88.1",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^4.15.1",
+    "webpack-merge": "^5.9.0"
   },
   "msw": {
     "workerDirectory": "public"
