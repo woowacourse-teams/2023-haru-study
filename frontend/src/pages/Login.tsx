@@ -12,7 +12,7 @@ import { ROUTES_PATH } from '@Constants/routes';
 const REDIRECT_URI =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/auth?provider=google'
-    : 'https://haru-study/auth?provider=google';
+    : 'https://haru-study.com/auth?provider=google';
 
 const Login = () => {
   const navigate = useNavigate();
