@@ -62,7 +62,7 @@ module.exports = () => {
       }),
 
       new Dotenv({
-        path: isDevelopment ? './.env.development' : './.env.production',
+        path: isDevelopment ? './env-submodule/.env.development' : './env-submodule/.env.production',
       }),
     ],
   };
