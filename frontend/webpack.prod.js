@@ -7,7 +7,7 @@ module.exports = merge(common(), {
   devtool: 'source-map',
   plugins: [
     new Dotenv({
-      path: './.env.production',
+      path: './env-submodule/.env.production',
     }),
   ],
 });
