@@ -1,10 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
 
 module.exports = () => {
-  const isDevelopment = process.env.NODE_ENV !== 'production';
-
   return {
     entry: './src/index.tsx',
     output: {
@@ -28,12 +25,6 @@ module.exports = () => {
         '@Apis': path.resolve(__dirname, 'src/api'),
       },
     },
-    devServer: {
-      port: 3000,
-      historyApiFallback: true,
-      hot: true,
-    },
-    devtool: isDevelopment ? 'eval-source-map' : 'source-map',
     module: {
       rules: [
         {
@@ -59,10 +50,6 @@ module.exports = () => {
     plugins: [
       new HtmlWebpackPlugin({
         template: 'public/index.html',
-      }),
-
-      new Dotenv({
-        path: isDevelopment ? './.env.development' : './.env.production',
       }),
     ],
   };
