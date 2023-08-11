@@ -18,11 +18,13 @@ const SIZE_TYPE: Record<ButtonSizeType, RuleSet<object>> = {
   'x-small': css`
     padding: 8px 20px;
     font-size: ${SIZE['x-small']};
+    border-radius: 7px;
   `,
 
   small: css`
     padding: 12px 24px;
     font-size: ${SIZE.small};
+    border-radius: 7px;
   `,
 
   medium: css`

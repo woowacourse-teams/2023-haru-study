@@ -7,6 +7,8 @@ import useClipBoard from '@Hooks/common/useClipBoard';
 
 import color from '@Styles/color';
 
+import { useModal } from '@Contexts/ModalProvider';
+
 import ClipBoardIcon from '@Assets/icons/ClipBoardIcon';
 
 type Props = {
@@ -15,14 +17,15 @@ type Props = {
 
 const ParticipationCodeCopier = ({ participantCode }: Props) => {
   const { copy } = useClipBoard();
+  const { openAlert } = useModal();
 
   const handleOnClickClipBoardButton = async () => {
     await copy(participantCode);
-    alert('클립보드에 복사되었습니다.');
+    openAlert('클립보드에 복사되었습니다.');
   };
 
   const handleOnClickHelperMessage = () => {
-    alert('참여 코드를 스터디원들과 공유하면 스터디원들의 회고와 기록을 확인할 수 있어요.');
+    openAlert('참여 코드를 스터디원들과 공유하면 스터디원들의 회고와 기록을 확인할 수 있어요.');
   };
 
   return (
