@@ -1,10 +1,14 @@
-import { useEffect, type MouseEventHandler, type PropsWithChildren } from 'react';
+import type { MouseEventHandler, PropsWithChildren } from 'react';
 import { createPortal } from 'react-dom';
 import { styled } from 'styled-components';
+
+import usePreventScroll from '@Hooks/common/usePreventScroll';
 
 import color from '@Styles/color';
 
 const Modal = ({ children, closeModal }: PropsWithChildren<{ closeModal: () => void }>) => {
+  usePreventScroll();
+
   const onClickBackdrop = () => {
     closeModal();
   };
@@ -12,14 +16,6 @@ const Modal = ({ children, closeModal }: PropsWithChildren<{ closeModal: () => v
   const preventCloseModal: MouseEventHandler = (event) => {
     event.stopPropagation();
   };
-
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.removeProperty('overflow');
-    };
-  }, []);
 
   return createPortal(
     <Backdrop onClick={onClickBackdrop}>
