@@ -16,6 +16,8 @@ import { ERROR_MESSAGE } from '@Constants/errorMessage';
 import { ROUTES_PATH } from '@Constants/routes';
 import { STUDY_TIME_PER_CYCLE_OPTIONS, TOTAL_CYCLE_OPTIONS } from '@Constants/study';
 
+import { useModal } from '@Contexts/ModalProvider';
+
 import type { StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
 const ADDITIONAL_TIME = 20 as const;
@@ -24,6 +26,7 @@ const DIVIDE_TIME = 60 as const;
 const CreateStudyForm = () => {
   const navigate = useNavigate();
 
+  const { openAlert } = useModal();
   const studyNameInput = useInput(true);
   const timePerCycleSelect = useSelect<StudyTimePerCycleOptions>();
   const totalCycleSelect = useSelect<TotalCycleOptions>();
@@ -51,6 +54,10 @@ const CreateStudyForm = () => {
         state: { participantCode: data.result.participantCode, studyName: studyNameInput.state, isHost: true },
       });
     }
+  };
+
+  const handleClickExpectedTime = () => {
+    openAlert('예상 시간에는 학습 시간 외에 각 사이클 당 목표설정 시간 10분, 회고 시간 10분이 포함되어있습니다.');
   };
 
   const isSelectedOptions = timePerCycleSelect.state && totalCycleSelect.state;
@@ -134,17 +141,13 @@ const CreateStudyForm = () => {
         {isSelectedOptions ? (
           <>
             예상 스터디 시간은{' '}
-            <TimeText
-              onClick={() => {
-                alert('예상시간에는 학습시간 외에 목표설정시간(10분)과 회고시간(10분)이 포함되어있습니다.');
-              }}
-            >
+            <TimeText onClick={handleClickExpectedTime}>
               {hour}시간 {minute}분
             </TimeText>
             이에요.
           </>
         ) : (
-          '사이클 횟수와 사이클 당 학습시간을 선택하세요.'
+          '사이클 횟수와 사이클 당 학습 시간을 선택하세요.'
         )}
       </Typography>
       <Button variant="primary" onClick={handleOnClickMakeButton} disabled={isDisabled()} isLoading={isLoading}>

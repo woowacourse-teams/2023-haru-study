@@ -2,10 +2,12 @@ import type { PropsWithChildren, ReactNode } from 'react';
 import { createContext, useCallback, useContext, useState } from 'react';
 
 import Modal from '@Components/common/Modal/Modal';
+import Alert from '@Components/common/Modal/Template/Alert';
 
 type ModalContext = {
   isOpen: boolean;
   openModal: (modalContents: ReactNode) => void;
+  openAlert: (message: string, onClose?: () => void) => void;
   closeModal: () => void;
 };
 
@@ -20,9 +22,16 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
 
   const closeModal = useCallback(() => setModalContents(null), []);
 
+  const openAlert = useCallback(
+    (message: string, onClose?: () => void) =>
+      setModalContents(<Alert message={message} closeModal={closeModal} onClose={onClose} />),
+    [closeModal],
+  );
+
   const value = {
     isOpen,
     openModal,
+    openAlert,
     closeModal,
   };
 
