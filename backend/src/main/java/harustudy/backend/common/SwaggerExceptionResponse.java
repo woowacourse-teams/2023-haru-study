@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SwaggerExceptionResponse {
 
-    Class<? extends HaruStudyException> value() default HaruStudyException.class;
+    Class<? extends HaruStudyException>[] value();
 }

@@ -12,6 +12,7 @@ import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.Objects;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -22,44 +23,64 @@ import org.springframework.web.method.HandlerMethod;
 public class SwaggerConfig {
 
     @Bean
-    public OperationCustomizer customizer() {
+    public OperationCustomizer customize() {
         return (Operation operation, HandlerMethod handlerMethod) -> {
             SwaggerExceptionResponse exceptionResponse = handlerMethod.getMethodAnnotation(
                     SwaggerExceptionResponse.class);
 
             if (!Objects.isNull(exceptionResponse)) {
-                try {
-                    generateErrorCodeResponse(operation, exceptionResponse.value());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                Class<? extends HaruStudyException>[] exceptionClasses = exceptionResponse.value();
+                ApiResponses responses = operation.getResponses();
+                setUpApiResponses(exceptionClasses, responses);
             }
             return operation;
         };
     }
 
-    private void generateErrorCodeResponse(Operation operation,
-            Class<? extends HaruStudyException> type) throws Exception {
-        ApiResponses responses = operation.getResponses();
-        Constructor<? extends HaruStudyException> constructor = type.getConstructor();
-        ExceptionSituation situation = ExceptionMapper.getSituationOf(constructor.newInstance());
+    private void setUpApiResponses(Class<? extends HaruStudyException>[] exceptionClasses,
+            ApiResponses responses) {
+        Arrays.stream(exceptionClasses)
+                .forEach(exceptionClass -> {
+                    try {
+                        HaruStudyException exception = extractExceptionFrom(exceptionClass);
+                        ApiResponse apiResponse = setupApiResponse(exception);
+                        responses.addApiResponse(removePostfix(exceptionClass), apiResponse);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
+
+    private String removePostfix(Class<? extends HaruStudyException> exceptionClass) {
+        String exceptionClassName = exceptionClass.getSimpleName();
+        return exceptionClassName.substring(0, exceptionClassName.indexOf("Exception"));
+    }
+
+    private HaruStudyException extractExceptionFrom(
+            Class<? extends HaruStudyException> exceptionClass) throws Exception {
+        Constructor<? extends HaruStudyException> constructor = exceptionClass.getConstructor();
+        return constructor.newInstance();
+    }
+
+    private ObjectSchema setupObjectSchema(HaruStudyException exception) {
+        ExceptionSituation situation = ExceptionMapper.getSituationOf(exception);
         ObjectSchema responseObject = new ObjectSchema();
         responseObject.addProperty("message", new StringSchema().example(situation.getMessage()));
         responseObject.addProperty("code", new StringSchema().example(situation.getErrorCode()));
-
-        addExampleToResponse(responses, situation, responseObject);
+        return responseObject;
     }
 
-    private void addExampleToResponse(ApiResponses responses, ExceptionSituation situation,
-            ObjectSchema objectSchema) {
-
+    private ApiResponse setupApiResponse(HaruStudyException exception) {
+        ObjectSchema objectSchema = setupObjectSchema(exception);
         Content content = new Content();
         MediaType mediaType = new MediaType();
         ApiResponse apiResponse = new ApiResponse();
 
         content.addMediaType("application/json", mediaType);
+        ExceptionSituation situation = ExceptionMapper.getSituationOf(exception);
         mediaType.schema(objectSchema);
         apiResponse.setContent(content);
-        responses.addApiResponse(situation.getStatusCode().toString(), apiResponse);
+        apiResponse.description(situation.getStatusCode().toString());
+        return apiResponse;
     }
 }
