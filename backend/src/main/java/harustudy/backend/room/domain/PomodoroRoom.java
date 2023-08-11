@@ -49,7 +49,7 @@ public class PomodoroRoom extends BaseTimeEntity {
     @NotNull
     private Integer timePerCycle;
 
-    @OneToMany(mappedBy = "pomodoroRoom")
+    @OneToMany(mappedBy = "pomodoroRoom", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<PomodoroProgress> pomodoroProgresses = new ArrayList<>();
 
     public PomodoroRoom(@NotNull String name, @NotNull Integer totalCycle,
@@ -95,5 +95,11 @@ public class PomodoroRoom extends BaseTimeEntity {
                 .anyMatch(memberProgress -> memberProgress.hasSameNicknameMember(member))) {
             throw new DuplicatedNicknameException();
         }
+    }
+
+    public PomodoroProgress createProgress(Member member) {
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(this, member, totalCycle);
+        pomodoroProgresses.add(pomodoroProgress);
+        return pomodoroProgress;
     }
 }

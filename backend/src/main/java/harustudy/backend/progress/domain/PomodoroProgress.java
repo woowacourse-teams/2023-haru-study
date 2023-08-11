@@ -40,7 +40,7 @@ public class PomodoroProgress extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "pomodoroProgress", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pomodoroProgress", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<PomodoroContent> pomodoroContents = new ArrayList<>();
 
     private boolean isDone = false;
@@ -57,6 +57,14 @@ public class PomodoroProgress extends BaseTimeEntity {
         this.currentCycle = 1;
         this.pomodoroStatus = PomodoroStatus.PLANNING;
         makeContentsByTotalCycle(pomodoroRoom.getTotalCycle());
+    }
+
+    public PomodoroProgress(PomodoroRoom pomodoroRoom, Member member, Integer totalCycle) {
+        this.pomodoroRoom = pomodoroRoom;
+        this.member = member;
+        this.currentCycle = 1;
+        this.pomodoroStatus = PomodoroStatus.PLANNING;
+        makeContentsByTotalCycle(totalCycle);
     }
 
     // TODO: 없애기

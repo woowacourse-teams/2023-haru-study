@@ -47,7 +47,7 @@ public class MemberServiceV2 {
         Member member = memberRepository.save(new Member(request.nickname()));
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(request.studyId())
                 .orElseThrow(RoomNotFoundException::new);
-        pomodoroProgressRepository.save(new PomodoroProgress(pomodoroRoom, member));
+        pomodoroRoom.createProgress(member);
         return member.getId();
     }
 }
