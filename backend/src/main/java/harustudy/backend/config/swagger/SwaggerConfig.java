@@ -14,6 +14,7 @@ import io.swagger.v3.oas.models.responses.ApiResponses;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,7 +67,8 @@ public class SwaggerConfig {
         ExceptionSituation situation = ExceptionMapper.getSituationOf(exception);
         ObjectSchema responseObject = new ObjectSchema();
         responseObject.addProperty("message", new StringSchema().example(situation.getMessage()));
-        responseObject.addProperty("code", new StringSchema().example(situation.getErrorCode()));
+        Optional.ofNullable(situation.getErrorCode())
+                .ifPresent(code -> responseObject.addProperty("code", new StringSchema().example(code)));
         return responseObject;
     }
 

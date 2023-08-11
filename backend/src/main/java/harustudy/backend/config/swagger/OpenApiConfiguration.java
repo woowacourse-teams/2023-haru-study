@@ -17,7 +17,7 @@ public class OpenApiConfiguration {
     @Bean
     public OpenAPI openAPI() {
         final Info info = new Info()
-                .version("v1.0.0")
+                .version("v2.0.0")
                 .title("하루스터디 API")
                 .description("하루스터디 API 명세");
 
