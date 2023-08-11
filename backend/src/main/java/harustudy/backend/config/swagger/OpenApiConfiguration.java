@@ -1,4 +1,4 @@
-package harustudy.backend.config;
+package harustudy.backend.config.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.servers.Server;
