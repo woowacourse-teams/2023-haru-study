@@ -27,7 +27,7 @@ pipeline {
         stage('publish on ssh') {
             steps {
                 dir('backend') {
-                    sshPublisher(publishers: [sshPublisherDesc(configName: 'haru-study-prod', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'sh /home/ubuntu/2023-haru-study/script/backend_deploy.sh > backend_deploy.out 2>&1', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/2023-haru-study/deploy', remoteDirectorySDF: false, removePrefix: 'build/libs', sourceFiles: 'build/libs/*.jar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+                    sshPublisher(publishers: [sshPublisherDesc(configName: 'haru-study-production', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'sh /home/ubuntu/2023-haru-study/script/backend_production.sh > backend_production.out 2>&1', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/2023-haru-study/production', remoteDirectorySDF: false, removePrefix: 'build/libs', sourceFiles: 'build/libs/*.jar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
                 }
             }
         }
