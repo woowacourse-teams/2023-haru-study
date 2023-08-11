@@ -7,7 +7,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
   flyway:
-    enabled: true
+    enabled: false
 
   config:
     import:
