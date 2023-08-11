@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('git clone') {
             steps {
-                git branch: 'develop', credentialsId: 'repo-and-hook-access-token-username-and-password', url: 'https://github.com/woowacourse-teams/2023-haru-study/'
+                git branch: 'main', credentialsId: 'repo-and-hook-access-token-username-and-password', url: 'https://github.com/woowacourse-teams/2023-haru-study/'
             }
         }
 
