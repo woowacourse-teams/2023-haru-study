@@ -9,6 +9,7 @@ import harustudy.backend.content.exception.PomodoroContentNotFoundException;
 import harustudy.backend.member.exception.MemberNameLengthException;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.exception.MemberNotParticipatedException;
+import harustudy.backend.participantcode.exception.ParticipantCodeExpiredException;
 import harustudy.backend.participantcode.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
 import harustudy.backend.progress.exception.PomodoroProgressStatusException;
@@ -57,18 +58,20 @@ public class ExceptionMapper {
     }
 
     private static void setupRoomException() {
-        mapper.put(ParticipantCodeNotFoundException.class,
+        mapper.put(ParticipantCodeExpiredException.class,
                 ExceptionSituation.of("해당하는 참여코드가 없습니다.", NOT_FOUND, 1300));
+        mapper.put(ParticipantCodeNotFoundException.class,
+                ExceptionSituation.of("만료된 참여코드입니다.", BAD_REQUEST, 1301));
         mapper.put(RoomNotFoundException.class,
-                ExceptionSituation.of("해당하는 스터디가 없습니다.", NOT_FOUND, 1301));
+                ExceptionSituation.of("해당하는 스터디가 없습니다.", NOT_FOUND, 1302));
         mapper.put(DuplicatedNicknameException.class,
-                ExceptionSituation.of("멤버 이름은 중복될 수 없습니다.", BAD_REQUEST, 1302));
+                ExceptionSituation.of("멤버 이름은 중복될 수 없습니다.", BAD_REQUEST, 1303));
         mapper.put(PomodoroRoomNameLengthException.class,
-                ExceptionSituation.of("스터디 이름의 길이가 적절하지 않습니다.", BAD_REQUEST, 1303));
+                ExceptionSituation.of("스터디 이름의 길이가 적절하지 않습니다.", BAD_REQUEST, 1304));
         mapper.put(PomodoroTimePerCycleException.class,
-                ExceptionSituation.of("시간 당 사이클 횟수가 적절하지 않습니다.", BAD_REQUEST, 1304));
+                ExceptionSituation.of("시간 당 사이클 횟수가 적절하지 않습니다.", BAD_REQUEST, 1305));
         mapper.put(PomodoroTotalCycleException.class,
-                ExceptionSituation.of("총 사이클 횟수가 적절하지 않습니다.", BAD_REQUEST, 1305));
+                ExceptionSituation.of("총 사이클 횟수가 적절하지 않습니다.", BAD_REQUEST, 1306));
     }
 
     private static void setupAuthException() {
