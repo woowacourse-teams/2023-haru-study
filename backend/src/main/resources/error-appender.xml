@@ -1,6 +1,6 @@
 <included>
   <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>./logs/warn-error/warn-error.log</file>
+    <file>${LOG_PATH}/warn-error/warn-error.log</file>
     <filter class="ch.qos.logback.classic.filter.LevelFilter">
       <level>WARN</level>
     </filter>
@@ -8,7 +8,7 @@
       <pattern>${FILE_LOG_PATTERN}</pattern>
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>./logs/warn-error/warn-error.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <fileNamePattern>${LOG_PATH}/warn-error/warn-error.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
       <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
         <maxFileSize>5MB</maxFileSize>
       </timeBasedFileNamingAndTriggeringPolicy>
