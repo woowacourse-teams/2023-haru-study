@@ -41,10 +41,10 @@ public class SwaggerConfig {
     private void setUpApiResponses(Class<? extends HaruStudyException>[] exceptionClasses,
             ApiResponses responses) {
         Arrays.stream(exceptionClasses)
-                .forEach(exceptionClass -> setUpApiResponses(exceptionClass, responses));
+                .forEach(exceptionClass -> setApiResponseFrom(exceptionClass, responses));
     }
 
-    private void setUpApiResponses(Class<? extends HaruStudyException> exceptionClass,
+    private void setApiResponseFrom(Class<? extends HaruStudyException> exceptionClass,
             ApiResponses responses) {
         HaruStudyException exception = extractExceptionFrom(exceptionClass);
         ApiResponse apiResponse = setupApiResponse(exception);
