@@ -48,6 +48,6 @@ public class PomodoroProgressServiceV2 {
                 .orElseThrow(MemberNotFoundException::new);
         return pomodoroProgressRepository.findByPomodoroRoomAndMember(
                         pomodoroRoom, member)
-                .orElseThrow(MemberNotParticipatedException::new);
+                .orElseThrow(MemberNotParticipatedException::new); // TODO: ProgressNotBelongToRoom과 의미 동일해서 삭제 예정
     }
 }
