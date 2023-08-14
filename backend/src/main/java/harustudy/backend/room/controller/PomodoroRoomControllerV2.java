@@ -12,6 +12,7 @@ import harustudy.backend.room.exception.PomodoroTotalCycleException;
 import harustudy.backend.room.exception.RoomNotFoundException;
 import harustudy.backend.room.service.PomodoroRoomServiceV2;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -50,6 +51,7 @@ public class PomodoroRoomControllerV2 {
     }
 
     @Operation(summary = "스터디 생성")
+    @ApiResponse(responseCode = "201")
     @SwaggerExceptionResponse({
             PomodoroRoomNameLengthException.class,
             PomodoroTotalCycleException.class,
