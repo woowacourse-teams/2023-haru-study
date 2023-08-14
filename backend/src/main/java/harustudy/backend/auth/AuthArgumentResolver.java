@@ -1,7 +1,7 @@
 package harustudy.backend.auth;
 
 import harustudy.backend.auth.service.AuthService;
-import harustudy.backend.member.service.MemberServiceV2;
+import harustudy.backend.member.repository.MemberRepository;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -19,7 +19,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     private static final int ACCESS_TOKEN_LOCATION = 1;
 
     private final AuthService authService;
-    private final MemberServiceV2 memberService;
+    private final MemberRepository memberRepository;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -33,7 +33,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         Objects.requireNonNull(authorizationHeader);
         String accessToken = authorizationHeader.split(" ")[ACCESS_TOKEN_LOCATION];
 
-        Long memberId = authService.parseMemberId(accessToken);
-        return memberService.findMember(memberId);
+        Long memberId = Long.parseLong(authService.parseSubject(accessToken));
+        return memberRepository.findById(memberId);
     }
 }
