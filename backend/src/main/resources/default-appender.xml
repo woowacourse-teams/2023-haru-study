@@ -1,6 +1,6 @@
 <included>
   <appender name="DEFAULT" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>./logs/default/default.log</file>
+    <file>${LOG_PATH}/default/default.log</file>
     <filter class="ch.qos.logback.classic.filter.LevelFilter">
       <level>INFO</level>
     </filter>
@@ -8,7 +8,7 @@
       <pattern>${FILE_LOG_PATTERN}</pattern>
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>./logs/default/default.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <fileNamePattern>${LOG_PATH}/default/default.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
       <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
         <maxFileSize>20MB</maxFileSize>
       </timeBasedFileNamingAndTriggeringPolicy>
