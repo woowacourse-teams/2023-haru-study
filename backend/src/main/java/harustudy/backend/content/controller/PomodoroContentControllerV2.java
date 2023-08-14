@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "컨텐츠 관련 기능")
 @RequiredArgsConstructor
+@Deprecated
 @RestController
 public class PomodoroContentControllerV2 {
 

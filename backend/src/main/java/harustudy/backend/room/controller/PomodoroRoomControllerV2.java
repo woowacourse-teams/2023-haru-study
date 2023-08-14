@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "스터디 관련 기능")
 @RequiredArgsConstructor
+@Deprecated
 @RestController
 public class PomodoroRoomControllerV2 {
 
