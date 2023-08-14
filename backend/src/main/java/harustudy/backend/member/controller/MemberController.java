@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     @Operation(summary = "멤버 정보 조회")
-    @GetMapping("/api/v3/members/{memberId}")
+    @GetMapping("/api/members/{memberId}")
     public ResponseEntity<MemberResponse> findMember(
             @AuthMember Member member,
             @PathVariable Long memberId

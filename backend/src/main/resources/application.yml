@@ -6,16 +6,25 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
-
   datasource:
     url: jdbc:h2:mem:testdb;MODE=MySQL
     username: sa
     password:
     driver-class-name: org.h2.Driver
 
-  h2:
-    console:
-      enabled: true
+oauth2:
+  oauth-properties:
+    google:
+      client-id: test-client-id
+      client-secret: test-client-secret
+      redirect-uri: http://www.test.com
+      token-uri: http://www.test.com
+      user-info-uri: http://www.test.com
 
-  config:
-    import: classpath:/submodule/application-auth.yml
+jwt:
+  expire-length: 1
+  guest-expire-length: 1
+  secret-key: test-secret-key
+
+refresh-token:
+  expire-length: 1

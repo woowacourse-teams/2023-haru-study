@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PomodoroProgressController {
 
     @Operation(summary = "멤버의 스터디 진행도 조회")
-    @GetMapping("/api/v3/studies/{studyId}/progresses")
+    @GetMapping("/api/studies/{studyId}/progresses")
     public ResponseEntity<PomodoroProgressesResponse> findMemberProgress(
             @AuthMember Member member,
             @PathVariable Long studyId,
@@ -34,33 +34,32 @@ public class PomodoroProgressController {
     }
 
     @Operation(summary = "스터디 진행도 조회")
-    @GetMapping("/api/v3/studies/{studyId}/progresses/{progressId}")
+    @GetMapping("/api/studies/{studyId}/progresses/{progressId}")
     public ResponseEntity<PomodoroProgressResponse> findProgress(
             @AuthMember Member member,
-            @PathVariable("studyId") Long studyId,
-            @PathVariable("progressId") Long progressId
+            @PathVariable Long studyId,
+            @PathVariable Long progressId
     ) {
         return ResponseEntity.ok(null);
     }
 
     @Operation(summary = "스터디 진행")
     @ApiResponse(responseCode = "204")
-    @PostMapping("/api/v3/studies/{studyId}/progress"
-            + "es/{progressId}/next-step")
+    @PostMapping("/api/studies/{studyId}/progresses/{progressId}/next-step")
     public ResponseEntity<Void> proceed(
             @AuthMember Member member,
-            @PathVariable("studyId") Long studyId,
-            @PathVariable("progressId") Long progressId
+            @PathVariable Long studyId,
+            @PathVariable Long progressId
     ) {
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "스터디 참여")
     @ApiResponse(responseCode = "201")
-    @PostMapping("/api/v3/studies/{studyId}/progresses")
+    @PostMapping("/api/studies/{studyId}/progresses")
     public ResponseEntity<Void> participate(
             @AuthMember Member member,
-            @PathVariable("studyId") Long studyId,
+            @PathVariable Long studyId,
             @RequestBody PomodoroProgressRequest request
     ) {
         return ResponseEntity.created(

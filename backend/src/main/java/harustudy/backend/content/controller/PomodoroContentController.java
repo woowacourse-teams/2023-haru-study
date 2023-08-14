@@ -25,8 +25,8 @@ public class PomodoroContentController {
     @GetMapping("/api/studies/{studyId}/contents")
     public ResponseEntity<PomodoroContentsResponse> findMemberContent(
             @AuthMember Member member,
-            @PathVariable("studyId") Long studyId,
-            @RequestParam("progressId") Long progressId,
+            @PathVariable Long studyId,
+            @RequestParam Long progressId,
             @RequestParam(value = "cycle", required = false) Integer cycle
     ) {
         return ResponseEntity.ok(null);
@@ -36,7 +36,7 @@ public class PomodoroContentController {
     @PostMapping("/api/studies/{studyId}/contents/write-plan")
     public ResponseEntity<Void> writePlan(
             @AuthMember Member member,
-            @PathVariable("studyId") Long studyId,
+            @PathVariable Long studyId,
             @RequestBody WritePlanRequest request
     ) {
         return ResponseEntity.ok().build();
@@ -46,7 +46,7 @@ public class PomodoroContentController {
     @PostMapping("/api/studies/{studyId}/contents/write-retrospect")
     public ResponseEntity<Void> writeRetrospect(
             @AuthMember Member member,
-            @PathVariable("studyId") Long studyId,
+            @PathVariable Long studyId,
             @RequestBody WriteRetrospectRequest request
     ) {
         return ResponseEntity.ok().build();

@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PomodoroRoomController {
 
     @Operation(summary = "스터디 정보 조회")
-    @GetMapping("/api/v3/studies/{studyId}")
+    @GetMapping("/api/studies/{studyId}")
     public ResponseEntity<PomodoroRoomResponse> findStudy(
             @PathVariable Long studyId,
             @RequestParam(value = "participantCode", required = false) String participantCode,
@@ -36,9 +36,9 @@ public class PomodoroRoomController {
     }
 
     @Operation(summary = "참여한 모든 스터디 조회")
-    @GetMapping("/api/v3/studies")
+    @GetMapping("/api/studies")
     public ResponseEntity<PomodoroRoomsResponse> xx(
-            @RequestParam("memberId") Long memberId,
+            @RequestParam Long memberId,
             @AuthMember Member member
     ) {
         return ResponseEntity.ok(null);
@@ -46,9 +46,9 @@ public class PomodoroRoomController {
 
     @Operation(summary = "스터디 생성")
     @ApiResponse(responseCode = "201")
-    @PostMapping("/api/v3/studies")
+    @PostMapping("/api/studies")
     public ResponseEntity<CreatePomodoroRoomResponse> createStudy(
-            @Valid @RequestBody CreatePomodoroRoomRequest request,
+            @RequestBody CreatePomodoroRoomRequest request,
             @AuthMember Member member
     ) {
         return ResponseEntity.created(URI.create("/api/studies/" + 1L)).body(null);
