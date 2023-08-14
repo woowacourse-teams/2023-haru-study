@@ -8,7 +8,7 @@
     <property name="LOG_PATH" value="./backend/logs/production"/>
   </springProfile>
 
-  <springProfile name = "local">
+  <springProfile name = "default">
     <property name="LOG_PATH" value="./backend/logs/local"/>
   </springProfile>
 
