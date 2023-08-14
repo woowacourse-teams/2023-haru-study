@@ -1,5 +1,7 @@
 package harustudy.backend.room.controller;
 
+import harustudy.backend.auth.AuthMember;
+import harustudy.backend.member.domain.Member;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
 import harustudy.backend.room.dto.PomodoroRoomResponseV3;
@@ -25,14 +27,20 @@ public class PomodoroRoomControllerV3 {
 
     @Operation(summary = "스터디 정보 조회")
     @GetMapping("/api/v3/studies/{studyId}")
-    public ResponseEntity<PomodoroRoomResponseV3> findStudy(@PathVariable Long studyId,
-            @RequestParam(value = "participantCode", required = false) String participantCode) {
+    public ResponseEntity<PomodoroRoomResponseV3> findStudy(
+            @PathVariable Long studyId,
+            @RequestParam(value = "participantCode", required = false) String participantCode,
+            @AuthMember Member member
+    ) {
         return ResponseEntity.ok(null);
     }
 
     @Operation(summary = "참여한 모든 스터디 조회")
     @GetMapping("/api/v3/studies")
-    public ResponseEntity<PomodoroRoomsResponseV3> xx(@RequestParam("memberId") Long memberId) {
+    public ResponseEntity<PomodoroRoomsResponseV3> xx(
+            @RequestParam("memberId") Long memberId,
+            @AuthMember Member member
+    ) {
         return ResponseEntity.ok(null);
     }
 
@@ -40,7 +48,8 @@ public class PomodoroRoomControllerV3 {
     @ApiResponse(responseCode = "201")
     @PostMapping("/api/v3/studies")
     public ResponseEntity<CreatePomodoroRoomResponse> createStudy(
-            @Valid @RequestBody CreatePomodoroRoomRequest request
+            @Valid @RequestBody CreatePomodoroRoomRequest request,
+            @AuthMember Member member
     ) {
         return ResponseEntity.created(URI.create("/api/studies/" + 1L)).body(null);
     }

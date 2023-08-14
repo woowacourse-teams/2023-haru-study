@@ -1,8 +1,10 @@
 package harustudy.backend.content.controller;
 
+import harustudy.backend.auth.AuthMember;
 import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.dto.WritePlanRequestV3;
 import harustudy.backend.content.dto.WriteRetrospectRequestV3;
+import harustudy.backend.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,8 @@ public class PomodoroContentControllerV3 {
     public ResponseEntity<PomodoroContentsResponse> findMemberContent(
             @PathVariable("studyId") Long studyId,
             @RequestParam("progressId") Long progressId,
-            @RequestParam(value = "cycle", required = false) Integer cycle
+            @RequestParam(value = "cycle", required = false) Integer cycle,
+            @AuthMember Member member
     ) {
         return ResponseEntity.ok(null);
     }
@@ -33,7 +36,8 @@ public class PomodoroContentControllerV3 {
     @PostMapping("/api/v3/studies/{studyId}/contents/write-plan")
     public ResponseEntity<Void> writePlan(
             @PathVariable("studyId") Long studyId,
-            @RequestBody WritePlanRequestV3 request
+            @RequestBody WritePlanRequestV3 request,
+            @AuthMember Member member
     ) {
         return ResponseEntity.ok().build();
     }
@@ -42,7 +46,8 @@ public class PomodoroContentControllerV3 {
     @PostMapping("/api/v3/studies/{studyId}/contents/write-retrospect")
     public ResponseEntity<Void> writeRetrospect(
             @PathVariable("studyId") Long studyId,
-            @RequestBody WriteRetrospectRequestV3 request
+            @RequestBody WriteRetrospectRequestV3 request,
+            @AuthMember Member member
     ) {
         return ResponseEntity.ok().build();
     }

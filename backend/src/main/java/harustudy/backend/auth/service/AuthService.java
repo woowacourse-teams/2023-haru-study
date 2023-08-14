@@ -3,9 +3,9 @@ package harustudy.backend.auth.service;
 import harustudy.backend.auth.config.OauthProperties;
 import harustudy.backend.auth.config.OauthProperty;
 import harustudy.backend.auth.config.TokenConfig;
+import harustudy.backend.auth.domain.LoginType;
 import harustudy.backend.auth.domain.OauthMember;
 import harustudy.backend.auth.domain.RefreshToken;
-import harustudy.backend.auth.domain.LoginType;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.RefreshTokenRequest;
@@ -93,5 +93,13 @@ public class AuthService {
         refreshToken.updateUuidAndExpireDateTime(tokenConfig.refreshTokenExpireLength());
         String accessToken = generateAccessToken(refreshToken.getOauthMember().getId());
         return TokenResponse.forLoggedIn(accessToken, refreshToken);
+    }
+
+    public void validateAccessToken(String accessToken) {
+        jwtTokenProvider.validateAccessToken(accessToken, tokenConfig.secretKey());
+    }
+
+    public Long parseMemberId(String accessToken) {
+        return Long.parseLong(jwtTokenProvider.parseSubject(accessToken, tokenConfig.secretKey()));
     }
 }
