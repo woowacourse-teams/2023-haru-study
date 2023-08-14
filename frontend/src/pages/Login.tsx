@@ -9,15 +9,13 @@ import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-const REDIRECT_URI =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000/auth?provider=google'
-    : 'https://haru-study.com/auth?provider=google';
+const REDIRECT_URI = '/auth?provider=google';
 
 const Login = () => {
   const navigate = useNavigate();
+  const baseUri = `${window.location.protocol}//${window.location.host}`;
 
-  const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}`;
+  const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${baseUri}${REDIRECT_URI}`;
 
   return (
     <Layout>
