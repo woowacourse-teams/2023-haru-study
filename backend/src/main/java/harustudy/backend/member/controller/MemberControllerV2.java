@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "멤버 관련 기능")
 @RequiredArgsConstructor
+@Deprecated
 @RestController
 public class MemberControllerV2 {
 
