@@ -1,13 +1,7 @@
 package harustudy.backend.member.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
-import harustudy.backend.member.exception.MemberNameLengthException;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,22 +15,30 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Column(length = 10)
-    private String nickname;
+    private String name;
 
-    public Member(@NotNull String nickname) {
-        validateLength(nickname);
-        this.nickname = nickname;
+    private String email;
+
+    private String imageUrl;
+
+    @Enumerated(EnumType.STRING)
+    private LoginType loginType;
+
+    public Member(String name, String email, String imageUrl, LoginType loginType) {
+        this.name = name;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.loginType = loginType;
     }
 
-    private void validateLength(String nickname) {
-        if (nickname.length() < 1 || nickname.length() > 10) {
-            throw new MemberNameLengthException();
-        }
+    public static Member guest() {
+        return new Member("guest", null, null, LoginType.GUEST);
     }
 
-    public boolean hasSameNickname(Member member) {
-        return nickname.equals(member.nickname);
+    public Member updateUserInfo(String name, String email, String imageUrl) {
+        this.name = name;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        return this;
     }
 }

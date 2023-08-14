@@ -1,4 +1,4 @@
-package harustudy.backend.auth.domain;
+package harustudy.backend.member.domain;
 
 public enum LoginType {
 
