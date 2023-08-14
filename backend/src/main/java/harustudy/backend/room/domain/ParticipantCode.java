@@ -1,4 +1,4 @@
-package harustudy.backend.participantcode.domain;
+package harustudy.backend.room.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
 import jakarta.persistence.*;

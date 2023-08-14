@@ -3,8 +3,6 @@ package harustudy.backend.room.domain;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
-import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.room.exception.PomodoroTimePerCycleException;
 import harustudy.backend.room.exception.PomodoroTotalCycleException;
 import harustudy.backend.room.exception.PomodoroRoomNameLengthException;

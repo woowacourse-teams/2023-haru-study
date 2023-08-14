@@ -1,60 +1,54 @@
 package harustudy.backend.content.controller;
 
+import harustudy.backend.auth.AuthMember;
 import harustudy.backend.content.dto.PomodoroContentsResponse;
-import harustudy.backend.content.service.PomodoroContentService;
-import jakarta.validation.constraints.NotNull;
-import java.util.Map;
+import harustudy.backend.content.dto.WritePlanRequest;
+import harustudy.backend.content.dto.WriteRetrospectRequest;
+import harustudy.backend.member.domain.Member;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-// TODO: 콘텐츠 길이 검증 필요
+@Tag(name = "컨텐츠 관련 기능")
 @RequiredArgsConstructor
 @RestController
-@Deprecated
 public class PomodoroContentController {
 
-    private final PomodoroContentService pomodoroContentService;
-
-    @Deprecated
-    @PostMapping("/api/studies/{studyId}/members/{memberId}/content/plans")
-    public ResponseEntity<Void> writePlan(
-            @PathVariable("studyId") Long studyId,
-            @PathVariable("memberId") Long memberId,
-            @RequestBody Map<String, String> plan
-    ) {
-        pomodoroContentService.writePlan(studyId, memberId, plan);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @Deprecated
-    @PostMapping("/api/studies/{studyId}/members/{memberId}/content/retrospects")
-    public ResponseEntity<Void> writeRetrospect(
-            @PathVariable("studyId") Long studyId,
-            @PathVariable("memberId") Long memberId,
-            @RequestBody Map<String, String> retrospect
-    ) {
-        pomodoroContentService.writeRetrospect(studyId, memberId, retrospect);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @Deprecated
-    @GetMapping("/api/studies/{studyId}/members/{memberId}/content/plans")
-    public ResponseEntity<Map<String, String>> findCurrentCyclePlan(
-            @PathVariable Long studyId,
-            @PathVariable Long memberId,
-            @RequestParam @NotNull Integer cycle
-    ) {
-        return ResponseEntity.ok(pomodoroContentService.findCurrentCyclePlan(studyId, memberId, cycle));
-    }
-
-    @Deprecated
-    @GetMapping("/api/studies/{studyId}/members/{memberId}/content")
+    @Operation(summary = "사이클 횟수에 해당하는 멤버 컨텐츠 조회")
+    @GetMapping("/api/studies/{studyId}/contents")
     public ResponseEntity<PomodoroContentsResponse> findMemberContent(
-            @PathVariable Long studyId,
-            @PathVariable Long memberId
+            @AuthMember Member member,
+            @PathVariable("studyId") Long studyId,
+            @RequestParam("progressId") Long progressId,
+            @RequestParam(value = "cycle", required = false) Integer cycle
     ) {
-        return ResponseEntity.ok(pomodoroContentService.findMemberContent(studyId, memberId));
+        return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "스터디 계획 작성")
+    @PostMapping("/api/studies/{studyId}/contents/write-plan")
+    public ResponseEntity<Void> writePlan(
+            @AuthMember Member member,
+            @PathVariable("studyId") Long studyId,
+            @RequestBody WritePlanRequest request
+    ) {
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "스터디 회고 작성")
+    @PostMapping("/api/studies/{studyId}/contents/write-retrospect")
+    public ResponseEntity<Void> writeRetrospect(
+            @AuthMember Member member,
+            @PathVariable("studyId") Long studyId,
+            @RequestBody WriteRetrospectRequest request
+    ) {
+        return ResponseEntity.ok().build();
     }
 }

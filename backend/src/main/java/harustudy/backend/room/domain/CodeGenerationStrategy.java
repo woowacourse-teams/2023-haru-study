@@ -1,4 +1,4 @@
-package harustudy.backend.participantcode.domain;
+package harustudy.backend.room.domain;
 
 public class CodeGenerationStrategy implements GenerationStrategy {
 

@@ -71,7 +71,7 @@ public class PomodoroProgress extends BaseTimeEntity {
         return getMember().equals(member);
     }
 
-    public boolean hasSameNicknameMember(PomodoroProgress pomodoroProgress) {
+    public boolean hasSameNicknameWith(PomodoroProgress pomodoroProgress) {
         return this.nickname.equals(pomodoroProgress.nickname);
     }
 
@@ -82,20 +82,7 @@ public class PomodoroProgress extends BaseTimeEntity {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public List<PomodoroContent> getPomodoroRecords() {
-        return getPomodoroContents().stream()
-                .toList();
-    }
-
-    @Deprecated
     public void proceed() {
-        if (isRetrospect()) {
-            currentCycle++;
-        }
-        pomodoroStatus = pomodoroStatus.getNext();
-    }
-
-    public void proceedV2() {
         // TODO: 서비스로 뺄지 말지(일관성을 위해)
         if (pomodoroStatus.equals(PomodoroStatus.RETROSPECT)) {
             if (currentCycle.equals(pomodoroRoom.getTotalCycle())) {

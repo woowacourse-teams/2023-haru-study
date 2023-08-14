@@ -1,46 +1,69 @@
 package harustudy.backend.progress.controller;
 
+import harustudy.backend.auth.AuthMember;
+import harustudy.backend.member.domain.Member;
+import harustudy.backend.progress.dto.PomodoroProgressRequest;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;
-import harustudy.backend.progress.dto.RoomAndProgressStepResponse;
-import harustudy.backend.progress.service.PomodoroProgressService;
-import jakarta.validation.constraints.NotNull;
+import harustudy.backend.progress.dto.PomodoroProgressesResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "진행 관련 기능")
 @RequiredArgsConstructor
 @RestController
-@Deprecated
 public class PomodoroProgressController {
 
-    private final PomodoroProgressService pomodoroProgressService;
-
-    @Deprecated
-    @PostMapping("api/studies/{studyId}/members/{memberId}/next-step")
-    public ResponseEntity<Void> proceed(@PathVariable("studyId") @NotNull Long studyId,
-                                        @PathVariable("memberId") @NotNull Long memberId) {
-        pomodoroProgressService.proceedToRetrospect(studyId, memberId);
-        return ResponseEntity.ok().build();
+    @Operation(summary = "멤버의 스터디 진행도 조회")
+    @GetMapping("/api/v3/studies/{studyId}/progresses")
+    public ResponseEntity<PomodoroProgressesResponse> findMemberProgress(
+            @AuthMember Member member,
+            @PathVariable Long studyId,
+            @RequestParam(required = false, value = "memberId") Long memberId
+    ) {
+        return ResponseEntity.ok(null);
     }
 
-    @Deprecated
-    @GetMapping("/api/studies/{studyId}/members/{memberId}/metadata")
-    public ResponseEntity<RoomAndProgressStepResponse> findMemberStudyMetaData(
-            @PathVariable Long studyId,
-            @PathVariable Long memberId
+    @Operation(summary = "스터디 진행도 조회")
+    @GetMapping("/api/v3/studies/{studyId}/progresses/{progressId}")
+    public ResponseEntity<PomodoroProgressResponse> findProgress(
+            @AuthMember Member member,
+            @PathVariable("studyId") Long studyId,
+            @PathVariable("progressId") Long progressId
     ) {
-        return ResponseEntity.ok(pomodoroProgressService.findMemberMetaData(studyId, memberId));
+        return ResponseEntity.ok(null);
     }
 
-    @Deprecated
-    @GetMapping("api/studies/{studyId}/members/{memberId}/progress")
-    public ResponseEntity<PomodoroProgressResponse> findPomodoroProgress(
-            @PathVariable Long studyId,
-            @PathVariable Long memberId
+    @Operation(summary = "스터디 진행")
+    @ApiResponse(responseCode = "204")
+    @PostMapping("/api/v3/studies/{studyId}/progress"
+            + "es/{progressId}/next-step")
+    public ResponseEntity<Void> proceed(
+            @AuthMember Member member,
+            @PathVariable("studyId") Long studyId,
+            @PathVariable("progressId") Long progressId
     ) {
-        return ResponseEntity.ok(pomodoroProgressService.findPomodoroProgress(studyId, memberId));
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "스터디 참여")
+    @ApiResponse(responseCode = "201")
+    @PostMapping("/api/v3/studies/{studyId}/progresses")
+    public ResponseEntity<Void> participate(
+            @AuthMember Member member,
+            @PathVariable("studyId") Long studyId,
+            @RequestBody PomodoroProgressRequest request
+    ) {
+        return ResponseEntity.created(
+                URI.create("/api/v3/studies/" + studyId + "/progresses/" + 1L)).build();
     }
 }
