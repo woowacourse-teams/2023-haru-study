@@ -1,45 +1,55 @@
 package harustudy.backend.room.controller;
 
-import harustudy.backend.room.dto.*;
-import harustudy.backend.room.service.PomodoroRoomService;
-import jakarta.validation.Valid;
+import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.auth.Authenticated;
+import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
+import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
+import harustudy.backend.room.dto.PomodoroRoomResponse;
+import harustudy.backend.room.dto.PomodoroRoomsResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Deprecated
+@Tag(name = "스터디 관련 기능")
 @RequiredArgsConstructor
 @RestController
 public class PomodoroRoomController {
 
-    private final PomodoroRoomService pomodoroRoomService;
-
-    @Deprecated
-    @GetMapping("/api/studies/{studyId}/metadata")
-    public ResponseEntity<PomodoroRoomAndMembersResponse> findStudyMetaData(@PathVariable Long studyId) {
-        return ResponseEntity.ok(pomodoroRoomService.findPomodoroRoomMetadata(studyId));
+    @Operation(summary = "단일 스터디 정보 조회")
+    @GetMapping("/api/studies/{studyId}")
+    public ResponseEntity<PomodoroRoomResponse> findStudy(
+            @Authenticated AuthMember authMember,
+            @PathVariable Long studyId
+    ) {
+        return ResponseEntity.ok(null);
     }
 
-    @Deprecated
+    @Operation(summary = "필터링 조건으로 스터디 조회")
+    @GetMapping("/api/studies")
+    public ResponseEntity<PomodoroRoomsResponse> findStudiesWithFilter(
+            @Authenticated AuthMember authMember,
+            @RequestParam(required = false) Long memberId,
+            @RequestParam(required = false) String participantCode
+    ) {
+        return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "스터디 생성")
+    @ApiResponse(responseCode = "201")
     @PostMapping("/api/studies")
     public ResponseEntity<CreatePomodoroRoomResponse> createStudy(
-            @Valid @RequestBody CreatePomodoroRoomRequest request
+            @Authenticated AuthMember authMember,
+            @RequestBody CreatePomodoroRoomRequest request
     ) {
-        CreatePomodoroRoomDto createPomodoroRoomDto = pomodoroRoomService.createPomodoroRoom(request);
-        return ResponseEntity.created(
-                        URI.create("/api/studies/" + createPomodoroRoomDto.studyId()))
-                .body(CreatePomodoroRoomResponse.from(createPomodoroRoomDto));
-    }
-
-    @Deprecated
-    @PostMapping("/api/studies/{studyId}/members")
-    public ResponseEntity<Void> participate(
-            @PathVariable Long studyId,
-            @Valid @RequestBody ParticipateRequest request
-    ) {
-        Long memberId = pomodoroRoomService.participate(studyId, request.nickname());
-        return ResponseEntity.created(
-                URI.create("/api/studies/" + studyId + "/members/" + memberId)).build();
+        return ResponseEntity.created(URI.create("/api/studies/" + 1L)).body(null);
     }
 }

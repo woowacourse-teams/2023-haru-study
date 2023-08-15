@@ -3,8 +3,7 @@ package harustudy.backend.auth.service;
 import harustudy.backend.auth.config.OauthProperties;
 import harustudy.backend.auth.config.OauthProperty;
 import harustudy.backend.auth.config.TokenConfig;
-import harustudy.backend.auth.domain.LoginType;
-import harustudy.backend.auth.domain.OauthMember;
+import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.auth.domain.RefreshToken;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
@@ -13,10 +12,11 @@ import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
 import harustudy.backend.auth.exception.InvalidRefreshTokenException;
 import harustudy.backend.auth.infrastructure.GoogleOauthClient;
-import harustudy.backend.auth.repository.OauthMemberRepository;
 import harustudy.backend.auth.repository.RefreshTokenRepository;
 import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.auth.util.OauthUserInfoExtractor;
+import harustudy.backend.member.domain.Member;
+import harustudy.backend.member.repository.MemberRepository;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,14 +31,14 @@ public class AuthService {
     private final GoogleOauthClient googleOauthClient;
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenConfig tokenConfig;
-    private final OauthMemberRepository oauthMemberRepository;
+    private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     public TokenResponse oauthLogin(OauthLoginRequest request) {
         UserInfo userInfo = requestUserInfo(request.oauthProvider(), request.code());
-        OauthMember oauthMember = saveOrUpdateOauthMember(request.oauthProvider(), userInfo); // TODO: 트랜잭션 분리
-        String accessToken = generateAccessToken(oauthMember.getId());
-        RefreshToken refreshToken = saveRefreshTokenOf(oauthMember);
+        Member member = saveOrUpdateMember(request.oauthProvider(), userInfo); // TODO: 트랜잭션 분리
+        String accessToken = generateAccessToken(member.getId());
+        RefreshToken refreshToken = saveRefreshTokenOf(member);
         return TokenResponse.forLoggedIn(accessToken, refreshToken);
     }
 
@@ -50,11 +50,11 @@ public class AuthService {
         return OauthUserInfoExtractor.extract(oauthProvider, oauthUserInfo);
     }
 
-    private OauthMember saveOrUpdateOauthMember(String oauthProvider, UserInfo userInfo) {
-        OauthMember oauthMember = oauthMemberRepository.findByEmail(userInfo.email())
+    private Member saveOrUpdateMember(String oauthProvider, UserInfo userInfo) {
+        Member member = memberRepository.findByEmail(userInfo.email())
                 .map(entity -> entity.updateUserInfo(userInfo.email(), userInfo.name(), userInfo.imageUrl()))
-                .orElseGet(() -> userInfo.toOauthMember(LoginType.from(oauthProvider)));
-        return oauthMemberRepository.save(oauthMember);
+                .orElseGet(() -> userInfo.toMember(LoginType.from(oauthProvider)));
+        return memberRepository.save(member);
     }
 
     private String generateAccessToken(Long memberId) {
@@ -65,16 +65,16 @@ public class AuthService {
                 .build();
     }
 
-    private RefreshToken saveRefreshTokenOf(OauthMember oauthMember) {
-        RefreshToken refreshToken = new RefreshToken(oauthMember, tokenConfig.refreshTokenExpireLength());
+    private RefreshToken saveRefreshTokenOf(Member member) {
+        RefreshToken refreshToken = new RefreshToken(member, tokenConfig.refreshTokenExpireLength());
         refreshTokenRepository.save(refreshToken);
         return refreshToken;
     }
 
     public TokenResponse guestLogin() {
-        OauthMember oauthMember = OauthMember.guest();
-        oauthMemberRepository.save(oauthMember);
-        String accessToken = generateGuestAccessToken(oauthMember.getId());
+        Member member = Member.guest();
+        memberRepository.save(member);
+        String accessToken = generateGuestAccessToken(member.getId());
         return TokenResponse.forGuest(accessToken);
     }
 
@@ -91,7 +91,7 @@ public class AuthService {
                 .orElseThrow(InvalidRefreshTokenException::new);
         refreshToken.validateExpired();
         refreshToken.updateUuidAndExpireDateTime(tokenConfig.refreshTokenExpireLength());
-        String accessToken = generateAccessToken(refreshToken.getOauthMember().getId());
+        String accessToken = generateAccessToken(refreshToken.getMember().getId());
         return TokenResponse.forLoggedIn(accessToken, refreshToken);
     }
 
@@ -99,7 +99,7 @@ public class AuthService {
         jwtTokenProvider.validateAccessToken(accessToken, tokenConfig.secretKey());
     }
 
-    public Long parseMemberId(String accessToken) {
-        return Long.parseLong(jwtTokenProvider.parseSubject(accessToken, tokenConfig.secretKey()));
+    public String parseMemberId(String accessToken) {
+        return jwtTokenProvider.parseSubject(accessToken, tokenConfig.secretKey());
     }
 }

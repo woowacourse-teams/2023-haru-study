@@ -6,11 +6,11 @@ import harustudy.backend.auth.exception.InvalidProviderNameException;
 import harustudy.backend.auth.exception.InvalidRefreshTokenException;
 import harustudy.backend.auth.exception.RefreshTokenExpiredException;
 import harustudy.backend.content.exception.PomodoroContentNotFoundException;
-import harustudy.backend.member.exception.MemberNameLengthException;
+import harustudy.backend.progress.exception.NicknameLengthException;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.exception.MemberNotParticipatedException;
-import harustudy.backend.participantcode.exception.ParticipantCodeExpiredException;
-import harustudy.backend.participantcode.exception.ParticipantCodeNotFoundException;
+import harustudy.backend.room.exception.ParticipantCodeExpiredException;
+import harustudy.backend.room.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
 import harustudy.backend.progress.exception.PomodoroProgressStatusException;
 import harustudy.backend.progress.exception.ProgressNotBelongToRoomException;
@@ -37,7 +37,7 @@ public class ExceptionMapper {
     private static void setupMemberException() {
         mapper.put(MemberNotParticipatedException.class,
                 ExceptionSituation.of("멤버가 해당 스터디에 참여하지 않았습니다.", NOT_FOUND, 1000));
-        mapper.put(MemberNameLengthException.class,
+        mapper.put(NicknameLengthException.class,
                 ExceptionSituation.of("멤버의 닉네임 길이가 유효하지 않습니다.", BAD_REQUEST, 1001));
         mapper.put(MemberNotFoundException.class,
                 ExceptionSituation.of("해당하는 멤버가 없습니다.", NOT_FOUND, 1002));
@@ -58,9 +58,9 @@ public class ExceptionMapper {
     }
 
     private static void setupRoomException() {
-        mapper.put(ParticipantCodeExpiredException.class,
-                ExceptionSituation.of("해당하는 참여코드가 없습니다.", NOT_FOUND, 1300));
         mapper.put(ParticipantCodeNotFoundException.class,
+                ExceptionSituation.of("해당하는 참여코드가 없습니다.", NOT_FOUND, 1300));
+        mapper.put(ParticipantCodeExpiredException.class,
                 ExceptionSituation.of("만료된 참여코드입니다.", BAD_REQUEST, 1301));
         mapper.put(RoomNotFoundException.class,
                 ExceptionSituation.of("해당하는 스터디가 없습니다.", NOT_FOUND, 1302));
