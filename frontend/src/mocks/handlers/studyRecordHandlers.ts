@@ -96,6 +96,18 @@ const STUDY_METADATA = {
 
 export const studyRecordHandlers = [
   rest.get('/api/v3/studies/:studyId', (req, res, ctx) => {
+    const accessToken =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkxNTY4NDI4LCJleHAiOjE2OTE1NzIwMjh9.BfGH7jBxO_iixmlpzxHKV7d9ekJPegLxrpY9ME066ro';
+
+    const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
+
+    const newAccessToken =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxMjM0NTY3fQ.NUiutjXo0mcIBU5fWxfjpBEvPxakFiBaUCg4THKAYpQ';
+
+    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_METADATA), ctx.delay(400));
+
+    if (accessToken !== requestAuthToken) return res(ctx.status(401), ctx.delay(100));
+
     return res(ctx.status(200), ctx.json(STUDY_METADATA), ctx.delay(400));
   }),
 

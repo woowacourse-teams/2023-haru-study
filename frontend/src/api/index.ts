@@ -73,8 +73,10 @@ export const requestGetStudyingContent = (studyId: string, memberId: string, cyc
 export const requestSubmitStudyingForm = (studyId: string, memberId: string) =>
   http.post(`/api/studies/${studyId}/members/${memberId}/next-step`);
 
-export const requestGetStudyData = (studyId: string) =>
-  http.get<Omit<ResponseStudyMetadata, 'member'>>(`/api/v3/studies/${studyId}`);
+export const requestGetStudyData = (studyId: string, accessToken: string) =>
+  http.get<Omit<ResponseStudyMetadata, 'member'>>(`/api/v3/studies/${studyId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
 
 export const requestGetStudyMembers = (studyId: string) =>
   http.get<Pick<ResponseStudyMetadata, 'members'>>(`/api/v3/members?studyId=${studyId}`);
