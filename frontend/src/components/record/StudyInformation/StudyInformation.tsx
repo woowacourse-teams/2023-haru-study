@@ -5,6 +5,7 @@ import Typography from '@Components/common/Typography/Typography';
 import color from '@Styles/color';
 import { TextSkeletonStyle } from '@Styles/common';
 
+import CalenderIcon from '@Assets/icons/CalenderIcon';
 import CycleIcon from '@Assets/icons/CycleIcon';
 import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
@@ -12,11 +13,16 @@ type Props = {
   studyName?: string;
   totalCycle?: number;
   timePerCycle?: number;
+  createdDateTime: Date;
   $isLoading: boolean;
 };
 
-const StudyInformation = ({ studyName, totalCycle, timePerCycle, $isLoading }: Props) => {
+const StudyInformation = ({ studyName, totalCycle, timePerCycle, createdDateTime, $isLoading }: Props) => {
   const iconColor = $isLoading ? 'transparent' : color.neutral[700];
+
+  const progressDate = `${createdDateTime.getFullYear()}년 ${
+    createdDateTime.getMonth() + 1
+  }월 ${createdDateTime.getDate()}일`;
 
   return (
     <StudyInformationLayout>
@@ -35,6 +41,11 @@ const StudyInformation = ({ studyName, totalCycle, timePerCycle, $isLoading }: P
       >
         {studyName} 스터디에서의 기록
       </Typography>
+      <StudyInfoContainer $isLoading={$isLoading}>
+        <CalenderIcon color={iconColor} />
+        <Typography variant="p2">진행 날짜</Typography>
+        <Typography variant="p2">{progressDate}</Typography>
+      </StudyInfoContainer>
       <StudyInfoContainer $isLoading={$isLoading}>
         <CycleIcon color={iconColor} />
         <Typography variant="p2">진행한 총 사이클</Typography>
@@ -66,7 +77,7 @@ type StudyInfoContainerType = {
 
 const StudyInfoContainer = styled.div<StudyInfoContainerType>`
   display: grid;
-  grid-template-columns: 20px 180px 60px;
+  grid-template-columns: 20px 160px 160px;
   align-items: center;
   column-gap: 10px;
 

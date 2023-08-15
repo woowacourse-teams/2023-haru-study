@@ -15,12 +15,15 @@ const RecordContents = () => {
     errorHandler: (error) => alert(error.message),
   });
 
+  const createdDateTime = studyBasicInfo ? new Date(studyBasicInfo.createdDateTime) : new Date();
+
   return (
     <RecordContentsLayout>
       <StudyInformation
         studyName={studyBasicInfo?.studyName}
         totalCycle={studyBasicInfo?.totalCycle}
         timePerCycle={studyBasicInfo?.timePerCycle}
+        createdDateTime={createdDateTime}
         $isLoading={isLoading}
       />
       <MemberRecordList studyId={studyId} members={members} isLoading={isLoading} />
