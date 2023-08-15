@@ -8,7 +8,7 @@ import type {
   ResponseMemberRecordContents,
   ResponseMemberStudyMetadata,
   ResponsePlanList,
-  ResponseStudyInfo,
+  ResponseStudies,
   ResponseStudyMetadata,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
@@ -26,14 +26,6 @@ export const requestRegisterMember = async (nickname: string, studyId: string) =
   const memberId = locationHeader?.split('/').pop() as string;
 
   return { memberId };
-};
-
-export const requestAuthenticateParticipationCode = async (participantCode: string) => {
-  const response = await http.post(`/api/studies/authenticate`, {
-    body: JSON.stringify({ participantCode }),
-  });
-
-  return (await response.json()) as ResponseStudyInfo;
 };
 
 export const requestCheckIsMember = (studyId: string, memberId: string) =>
@@ -109,3 +101,8 @@ export const requestCreateStudy = async (
 
   return { studyId, result };
 };
+
+export const requestAuthenticateParticipationCode = (participantCode: string, accessToken: string) =>
+  http.get<ResponseStudies>(`/api/v2/studies?participantCode=${participantCode}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });

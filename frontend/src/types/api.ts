@@ -1,12 +1,26 @@
 import type { MemberInfo } from './member';
-import type { Member, MemberRecordContent, PlanList, Step, StudyBasicInfo } from './study';
+import type {
+  Member,
+  MemberRecordContent,
+  PlanList,
+  Step,
+  StudyBasicInfo,
+  StudyTimePerCycleOptions,
+  TotalCycleOptions,
+} from './study';
 
 export type ResponseCreateStudy = { participantCode: string; studyName: string };
 
-export type ResponseStudyInfo = {
+type ResponseStudyInfo = {
   studyId: string;
-  studyName: string;
-  nickname: string | null;
+  name: string;
+  totalCycle: TotalCycleOptions;
+  timePerCycle: StudyTimePerCycleOptions;
+  createdDateTime: Date;
+};
+
+export type ResponseStudies = {
+  studies: ResponseStudyInfo[];
 };
 
 export type ResponseMemberStudyMetadata = {
