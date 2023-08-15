@@ -109,4 +109,8 @@ public class PomodoroProgress extends BaseTimeEntity {
     public boolean isNotRetrospect() {
         return pomodoroStatus != PomodoroStatus.RETROSPECT;
     }
+
+    public boolean isNotIncludedIn(PomodoroRoom other) {
+        return pomodoroRoom.equals(other);
+    }
 }

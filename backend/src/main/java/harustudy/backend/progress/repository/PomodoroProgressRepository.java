@@ -20,4 +20,6 @@ public interface PomodoroProgressRepository extends JpaRepository<PomodoroProgre
     @Query("select p from PomodoroProgress p join fetch p.member where p.pomodoroRoom = :pomodoroRoom")
     List<PomodoroProgress> findAllByPomodoroRoomFetchMember(
             @Param("pomodoroRoom") PomodoroRoom pomodoroRoom);
+
+    List<PomodoroProgress> findByPomodoroRoom(PomodoroRoom pomodoroRoom);
 }
