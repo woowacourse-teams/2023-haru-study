@@ -3,7 +3,7 @@ package harustudy.backend.progress.domain;
 import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
-import harustudy.backend.member.exception.MemberNameLengthException;
+import harustudy.backend.progress.exception.NicknameLengthException;
 import harustudy.backend.room.domain.PomodoroRoom;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -63,7 +63,7 @@ public class PomodoroProgress extends BaseTimeEntity {
 
     private void validateNicknameLength(String nickname) {
     if (nickname.length() < 1 || nickname.length() > 10) {
-        throw new MemberNameLengthException();
+        throw new NicknameLengthException();
     }
     }
 

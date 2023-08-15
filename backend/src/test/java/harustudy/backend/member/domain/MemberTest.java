@@ -4,7 +4,7 @@
 //import static org.assertj.core.api.Assertions.assertThatCode;
 //import static org.assertj.core.api.Assertions.assertThatThrownBy;
 //
-//import harustudy.backend.member.exception.MemberNameLengthException;
+//import harustudy.backend.progress.exception.MemberNameLengthException;
 //import org.junit.jupiter.api.DisplayNameGeneration;
 //import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 //import org.junit.jupiter.api.Test;
