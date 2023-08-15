@@ -6,15 +6,14 @@ import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.dto.PomodoroContentResponse;
 import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.dto.WritePlanRequest;
-import harustudy.backend.content.dto.WriteRetrospectRequest;
 import harustudy.backend.content.exception.PomodoroContentNotFoundException;
 import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
-import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
 import harustudy.backend.progress.exception.PomodoroProgressStatusException;
+import harustudy.backend.progress.exception.ProgressNotBelongToRoomException;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.exception.RoomNotFoundException;
@@ -41,7 +40,7 @@ public class PomodoroContentService {
     ) {
         List<PomodoroProgress> pomodoroProgresses = getProgressesIfAuthorized(
                 authMember, roomId);
-        PomodoroProgress pomodoroProgress = findSingleProgressWithId(
+        PomodoroProgress pomodoroProgress = filterSingleProgressById(
                 pomodoroProgresses, progressId);
 
         List<PomodoroContent> pomodoroContents = pomodoroProgress.getPomodoroContents();
@@ -69,7 +68,7 @@ public class PomodoroContentService {
                 .noneMatch(pomodoroProgress -> pomodoroProgress.isOwnedBy(member));
     }
 
-    private PomodoroProgress findSingleProgressWithId(
+    private PomodoroProgress filterSingleProgressById(
             List<PomodoroProgress> pomodoroProgresses, Long progressId) {
         return pomodoroProgresses.stream()
                 .filter(progress -> progress.getId().equals(progressId))
@@ -84,23 +83,55 @@ public class PomodoroContentService {
         return PomodoroContentsResponse.from(pomodoroContentResponses);
     }
 
-    private PomodoroContentsResponse getPomodoroContentsResponseWithCycleFilter(List<PomodoroContent> pomodoroContents, Integer cycle) {
+    private PomodoroContentsResponse getPomodoroContentsResponseWithCycleFilter(
+            List<PomodoroContent> pomodoroContents, Integer cycle) {
         List<PomodoroContentResponse> pomodoroContentResponses = pomodoroContents.stream()
                 .filter(content -> content.getCycle().equals(cycle))
                 .map(PomodoroContentResponse::from)
                 .toList();
         return PomodoroContentsResponse.from(pomodoroContentResponses);
     }
-//
-//    public PomodoroContentsResponse findMemberContentWithCycleFilter(Long roomId, Long memberId, Integer cycle) {
-//        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, memberId);
-//        List<PomodoroContent> pomodoroContents = pomodoroProgress.getPomodoroContents();
-//        if (Objects.isNull(cycle)) {
-//            return getPomodoroContentsResponseWithoutCycleFilter(pomodoroContents);
-//        }
-//        return getPomodoroContentsResponseWithCycleFilter(pomodoroContents, cycle);
-//    }
 
+    // TODO: 이제 progressId로 요청을 받으니 굳이 roomId 까지 받아야 하는지 의문
+    public void writePlan(AuthMember authMember, Long roomId, WritePlanRequest request) {
+        Member member = memberRepository.findByIdIfExists(authMember.id());
+        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, request.progressId());
+        if (!pomodoroProgress.isOwnedBy(member)) {
+            throw new AuthorizationException();
+        }
+        validateProgressIsPlanning(pomodoroProgress);
+        PomodoroContent recentContent = findContentWithSameCycle(pomodoroProgress);
+        recentContent.changePlan(request.plan());
+    }
+
+    private PomodoroProgress findPomodoroProgressFrom(Long roomId, Long progressId) {
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
+                .orElseThrow(RoomNotFoundException::new);
+        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findById(progressId)
+                .orElseThrow(PomodoroProgressNotFoundException::new);
+        if (!pomodoroProgress.isProgressOf(pomodoroRoom)) {
+            throw new ProgressNotBelongToRoomException();
+        }
+        return pomodoroProgress;
+    }
+
+    private void validateProgressIsPlanning(PomodoroProgress pomodoroProgress) {
+        if (pomodoroProgress.isNotPlanning()) {
+            throw new PomodoroProgressStatusException();
+        }
+    }
+
+    private PomodoroContent findContentWithSameCycle(PomodoroProgress pomodoroProgress) {
+        List<PomodoroContent> pomodoroContents = pomodoroContentRepository.findByPomodoroProgress(
+                pomodoroProgress);
+
+        return pomodoroContents.stream()
+                .filter(pomodoroContent -> pomodoroContent.hasSameCycleWith(pomodoroProgress))
+                .findAny()
+                .orElseThrow(PomodoroContentNotFoundException::new);
+    }
+
+//
 //    public void writePlan(Long roomId, WritePlanRequest request) {
 //        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, request.memberId());
 //        PomodoroContent recentContent = findContentWithSameCycle(pomodoroProgress);
@@ -108,21 +139,8 @@ public class PomodoroContentService {
 //        recentContent.changePlan(request.plan());
 //    }
 
-//    private void validateProgressIsPlanning(PomodoroProgress pomodoroProgress) {
-//        if (pomodoroProgress.isNotPlanning()) {
-//            throw new PomodoroProgressStatusException();
-//        }
-//    }
 
-//    private PomodoroContent findContentWithSameCycle(PomodoroProgress pomodoroProgress) {
-//        List<PomodoroContent> pomodoroContents = pomodoroContentRepository.findByPomodoroProgress(
-//                pomodoroProgress);
-//
-//        return pomodoroContents.stream()
-//                .filter(pomodoroContent -> pomodoroContent.hasSameCycleWith(pomodoroProgress))
-//                .findAny()
-//                .orElseThrow(PomodoroContentNotFoundException::new);
-//    }
+
 //
 //    public void writeRetrospect(Long roomId, WriteRetrospectRequest request) {
 //        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, request.memberId());
