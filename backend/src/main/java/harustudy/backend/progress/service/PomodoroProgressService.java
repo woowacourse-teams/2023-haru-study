@@ -30,8 +30,8 @@ public class PomodoroProgressService {
     private final PomodoroRoomRepository pomodoroRoomRepository;
 
     public PomodoroProgressResponse findPomodoroProgress(
-            AuthMember authMember, Long studyId, Long progressId)
-    {
+            AuthMember authMember, Long studyId, Long progressId
+    ) {
         Member member = memberRepository.findByIdIfExists(authMember.id());
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
         PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByIdIfExists(progressId);
@@ -40,7 +40,8 @@ public class PomodoroProgressService {
     }
 
     public PomodoroProgressesResponse findPomodoroProgressWithFilter(
-            AuthMember authMember, Long studyId, Long memberId) {
+            AuthMember authMember, Long studyId, Long memberId
+    ) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
         Member member = memberRepository.findByIdIfExists(memberId);
         validateIsSameMemberId(authMember, memberId);
@@ -52,7 +53,8 @@ public class PomodoroProgressService {
     }
 
     private PomodoroProgressesResponse getPomodoroProgressesResponseWithoutMemberFilter(
-            PomodoroRoom pomodoroRoom) {
+            PomodoroRoom pomodoroRoom
+    ) {
         List<PomodoroProgressResponse> responses =
                 pomodoroProgressRepository.findByPomodoroRoom(pomodoroRoom)
                         .stream()
@@ -62,7 +64,8 @@ public class PomodoroProgressService {
     }
 
     private PomodoroProgressesResponse getPomodoroProgressesResponseWithMemberFilter(
-            PomodoroRoom pomodoroRoom, Member member) {
+            PomodoroRoom pomodoroRoom, Member member
+    ) {
         PomodoroProgressResponse response =
                 pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
                         .map(PomodoroProgressResponse::from)
@@ -95,7 +98,8 @@ public class PomodoroProgressService {
     }
 
     private void validateProgressIsRelatedWith(
-            PomodoroProgress pomodoroProgress, Member member, PomodoroRoom pomodoroRoom) {
+            PomodoroProgress pomodoroProgress, Member member, PomodoroRoom pomodoroRoom
+    ) {
         if (pomodoroProgress.isNotOwnedBy(member)) {
             throw new AuthorizationException();
         }
