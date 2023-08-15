@@ -6,6 +6,7 @@ import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.dto.PomodoroContentResponse;
 import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.dto.WritePlanRequest;
+import harustudy.backend.content.dto.WriteRetrospectRequest;
 import harustudy.backend.content.exception.PomodoroContentNotFoundException;
 import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
@@ -96,9 +97,7 @@ public class PomodoroContentService {
     public void writePlan(AuthMember authMember, Long roomId, WritePlanRequest request) {
         Member member = memberRepository.findByIdIfExists(authMember.id());
         PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, request.progressId());
-        if (!pomodoroProgress.isOwnedBy(member)) {
-            throw new AuthorizationException();
-        }
+        validateMemberOwnsProgress(member, pomodoroProgress);
         validateProgressIsPlanning(pomodoroProgress);
         PomodoroContent recentContent = findContentWithSameCycle(pomodoroProgress);
         recentContent.changePlan(request.plan());
@@ -109,10 +108,14 @@ public class PomodoroContentService {
                 .orElseThrow(RoomNotFoundException::new);
         PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findById(progressId)
                 .orElseThrow(PomodoroProgressNotFoundException::new);
+        validateProgressBelongsToRoom(pomodoroRoom, pomodoroProgress);
+        return pomodoroProgress;
+    }
+
+    private void validateProgressBelongsToRoom(PomodoroRoom pomodoroRoom, PomodoroProgress pomodoroProgress) {
         if (!pomodoroProgress.isProgressOf(pomodoroRoom)) {
             throw new ProgressNotBelongToRoomException();
         }
-        return pomodoroProgress;
     }
 
     private void validateProgressIsPlanning(PomodoroProgress pomodoroProgress) {
@@ -131,35 +134,32 @@ public class PomodoroContentService {
                 .orElseThrow(PomodoroContentNotFoundException::new);
     }
 
-//
-//    public void writePlan(Long roomId, WritePlanRequest request) {
-//        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, request.memberId());
-//        PomodoroContent recentContent = findContentWithSameCycle(pomodoroProgress);
-//        validateProgressIsPlanning(pomodoroProgress);
-//        recentContent.changePlan(request.plan());
-//    }
+    public void writeRetrospect(AuthMember authMember, Long roomId, WriteRetrospectRequest request) {
+        Member member = memberRepository.findByIdIfExists(authMember.id());
+        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, request.progressId());
+        validateMemberOwnsProgress(member, pomodoroProgress);
+        validateProgressIsRetrospect(pomodoroProgress);
+        PomodoroContent recentContent = findContentWithSameCycle(pomodoroProgress);
+        validateIsPlanFilled(recentContent);
 
+        recentContent.changeRetrospect(request.retrospect());
+    }
 
+    private void validateMemberOwnsProgress(Member member, PomodoroProgress pomodoroProgress) {
+        if (!pomodoroProgress.isOwnedBy(member)) {
+            throw new AuthorizationException();
+        }
+    }
 
-//
-//    public void writeRetrospect(Long roomId, WriteRetrospectRequest request) {
-//        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, request.memberId());
-//        PomodoroContent recentContent = findContentWithSameCycle(pomodoroProgress);
-//        validateProgressIsRetrospect(pomodoroProgress);
-//        validateIsPlanFilled(recentContent);
-//        recentContent.changeRetrospect(request.retrospect());
-//    }
+    private void validateProgressIsRetrospect(PomodoroProgress pomodoroProgress) {
+        if (pomodoroProgress.isNotRetrospect()) {
+            throw new PomodoroProgressStatusException();
+        }
+    }
 
-//    private void validateProgressIsRetrospect(PomodoroProgress pomodoroProgress) {
-//        if (pomodoroProgress.isNotRetrospect()) {
-//            throw new PomodoroProgressStatusException();
-//        }
-//    }
-//
-//    private void validateIsPlanFilled(PomodoroContent recentContent) {
-//        if (recentContent.hasEmptyPlan()) {
-//            throw new PomodoroProgressStatusException();
-//        }
-//    }
-
+    private void validateIsPlanFilled(PomodoroContent recentContent) {
+        if (recentContent.hasEmptyPlan()) {
+            throw new PomodoroProgressStatusException();
+        }
+    }
 }
