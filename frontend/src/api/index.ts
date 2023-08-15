@@ -83,8 +83,10 @@ export const requestGetStudyMembers = (studyId: string, accessToken: string) =>
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
-export const requestGetMemberRecordContents = (studyId: string, memberId: string) =>
-  http.get<ResponseMemberRecordContents>(`/api/v3/studies/${studyId}/contents?memberId=${memberId}`);
+export const requestGetMemberRecordContents = (studyId: string, progressId: string, accessToken: string) =>
+  http.get<ResponseMemberRecordContents>(`/api/v3/studies/${studyId}/contents?progressId=${progressId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
 
 // 새로 적용되는 api
 export const requestGuestLogin = async () => {

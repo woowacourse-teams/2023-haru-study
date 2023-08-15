@@ -138,6 +138,12 @@ export const studyRecordHandlers = [
   }),
 
   rest.get('/api/v3/studies/:studyId/contents?memberId=1', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(800));
+    const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
+
+    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(400));
+
+    if (accessToken !== requestAuthToken) return res(ctx.status(401), ctx.delay(100));
+
+    return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(400));
   }),
 ];
