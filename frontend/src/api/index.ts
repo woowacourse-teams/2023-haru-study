@@ -3,16 +3,18 @@ import http from '@Utils/http';
 import type {
   ResponseAuthToken,
   ResponseCreateStudy,
-  ResponseIsCheckMember,
   ResponseMemberInfo,
   ResponseMemberRecordContents,
   ResponseMemberStudyMetadata,
   ResponsePlanList,
+  ResponseProgresses,
   ResponseStudies,
   ResponseStudyMetadata,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
+
+import { ExpiredAccessTokenError, NotExistProgressesError } from '../errors/CustomError';
 
 const BASE_URL = '/api/v2';
 
@@ -27,9 +29,6 @@ export const requestRegisterMember = async (nickname: string, studyId: string) =
 
   return { memberId };
 };
-
-export const requestCheckIsMember = (studyId: string, memberId: string) =>
-  http.get<ResponseIsCheckMember>(`/api/studies/${studyId}/members/${memberId}`);
 
 export const requestSubmitPlanningForm = (studyId: string, memberId: string, plans: PlanList) =>
   http.post(`/api/studies/${studyId}/members/${memberId}/content/plans`, {
@@ -106,3 +105,22 @@ export const requestAuthenticateParticipationCode = (participantCode: string, ac
   http.get<ResponseStudies>(`/api/v2/studies?participantCode=${participantCode}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
+
+export const requestCheckProgresses = async (studyId: string, memberId: string, accessToken: string) => {
+  const response = await fetch(`/api/v2/studies/${studyId}/progresses?memberId=${memberId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (response.status >= 200 && response.status < 300) {
+    return response.json() as Promise<ResponseProgresses>;
+  }
+
+  if (response.status === 401) throw new ExpiredAccessTokenError('토큰이 만료되었습니다.', response.status);
+
+  if (response.status === 404) throw new NotExistProgressesError('progresses가 존재하지 않아요.', response.status);
+
+  throw new Error('에러가 발생했습니다.');
+};
