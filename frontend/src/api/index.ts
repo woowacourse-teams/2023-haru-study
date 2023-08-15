@@ -19,17 +19,6 @@ import { ExpiredAccessTokenError, NotExistProgressesError } from '../errors/Cust
 const BASE_URL = '/api/v2';
 
 // 옛날거
-export const requestRegisterMember = async (nickname: string, studyId: string) => {
-  const response = await http.post(`/api/studies/${studyId}/members`, {
-    body: JSON.stringify({ nickname }),
-  });
-
-  const locationHeader = response.headers.get('Location');
-  const memberId = locationHeader?.split('/').pop() as string;
-
-  return { memberId };
-};
-
 export const requestSubmitPlanningForm = (studyId: string, memberId: string, plans: PlanList) =>
   http.post(`/api/studies/${studyId}/members/${memberId}/content/plans`, {
     body: JSON.stringify(plans),
@@ -115,7 +104,7 @@ export const requestCheckProgresses = async (studyId: string, memberId: string, 
   });
 
   if (response.status >= 200 && response.status < 300) {
-    return response.json() as Promise<ResponseProgresses>;
+    return (await response.json()) as ResponseProgresses;
   }
 
   if (response.status === 401) throw new ExpiredAccessTokenError('토큰이 만료되었습니다.', response.status);
@@ -124,3 +113,9 @@ export const requestCheckProgresses = async (studyId: string, memberId: string, 
 
   throw new Error('에러가 발생했습니다.');
 };
+
+export const requestRegisterProgress = (nickname: string, studyId: string, memberId: string, accessToken: string) =>
+  http.post(`/api/v2/studies/${studyId}/progresses`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify({ memberId, nickname }),
+  });
