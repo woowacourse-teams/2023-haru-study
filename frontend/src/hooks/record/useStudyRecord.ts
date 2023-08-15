@@ -63,7 +63,7 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
       }
 
       const basicInfo = await requestGetStudyData(studyId, accessToken);
-      const { pomodoroProgresses } = await requestGetStudyMembers(studyId);
+      const { pomodoroProgresses } = await requestGetStudyMembers(studyId, accessToken);
 
       setInitInfo(basicInfo, pomodoroProgresses);
     } catch (error) {
@@ -72,7 +72,7 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
 
         if (accessToken) {
           const basicInfo = await requestGetStudyData(studyId, accessToken);
-          const { pomodoroProgresses } = await requestGetStudyMembers(studyId);
+          const { pomodoroProgresses } = await requestGetStudyMembers(studyId, accessToken);
 
           setInitInfo(basicInfo, pomodoroProgresses);
 

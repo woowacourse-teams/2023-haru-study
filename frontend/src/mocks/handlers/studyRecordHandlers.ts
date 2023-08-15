@@ -110,15 +110,15 @@ const STUDY_METADATA = {
   createdDateTime: '2023-08-15T06:25:39.093Z',
 };
 
+const accessToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkxNTY4NDI4LCJleHAiOjE2OTE1NzIwMjh9.BfGH7jBxO_iixmlpzxHKV7d9ekJPegLxrpY9ME066ro';
+
+const newAccessToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxMjM0NTY3fQ.NUiutjXo0mcIBU5fWxfjpBEvPxakFiBaUCg4THKAYpQ';
+
 export const studyRecordHandlers = [
   rest.get('/api/v3/studies/:studyId', (req, res, ctx) => {
-    const accessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkxNTY4NDI4LCJleHAiOjE2OTE1NzIwMjh9.BfGH7jBxO_iixmlpzxHKV7d9ekJPegLxrpY9ME066ro';
-
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
-
-    const newAccessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxMjM0NTY3fQ.NUiutjXo0mcIBU5fWxfjpBEvPxakFiBaUCg4THKAYpQ';
 
     if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_METADATA), ctx.delay(400));
 
@@ -128,6 +128,12 @@ export const studyRecordHandlers = [
   }),
 
   rest.get('/api/v3/studies/1/progresses', (req, res, ctx) => {
+    const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
+
+    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_MEMBERS), ctx.delay(400));
+
+    if (accessToken !== requestAuthToken) return res(ctx.status(401), ctx.delay(100));
+
     return res(ctx.status(200), ctx.json(STUDY_MEMBERS), ctx.delay(400));
   }),
 
