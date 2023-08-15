@@ -31,7 +31,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         String authorizationHeader = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
         Objects.requireNonNull(authorizationHeader);
         String accessToken = authorizationHeader.split(" ")[ACCESS_TOKEN_LOCATION];
-        long memberId = Long.parseLong(authService.parseSubject(accessToken));
+        long memberId = Long.parseLong(authService.parseMemberId(accessToken));
         return new AuthMember(memberId);
     }
 }

@@ -99,7 +99,7 @@ public class AuthService {
         jwtTokenProvider.validateAccessToken(accessToken, tokenConfig.secretKey());
     }
 
-    public String parseSubject(String accessToken) {
+    public String parseMemberId(String accessToken) {
         return jwtTokenProvider.parseSubject(accessToken, tokenConfig.secretKey());
     }
 }
