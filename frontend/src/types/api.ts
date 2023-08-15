@@ -38,8 +38,15 @@ export type ResponseMemberRecordContents = {
   content: MemberRecordContent[];
 };
 
-export type ResponseIsCheckMember = {
-  nickname: string | null;
+type ResponseProgress = {
+  progressId: string;
+  nickname: string;
+  currentCycle: number;
+  step: Step;
+};
+
+export type ResponseProgresses = {
+  progresses: ResponseProgress[];
 };
 
 export type ResponseAuthToken = {
