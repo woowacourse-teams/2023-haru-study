@@ -2,7 +2,7 @@ package harustudy.backend.progress.controller;
 
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.auth.dto.AuthMember;
-import harustudy.backend.progress.dto.PomodoroProgressRequest;
+import harustudy.backend.progress.dto.ParticipateStudyRequest;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;
 import harustudy.backend.progress.dto.PomodoroProgressesResponse;
 import harustudy.backend.progress.service.PomodoroProgressService;
@@ -63,7 +63,7 @@ public class PomodoroProgressController {
     public ResponseEntity<Void> participate(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId,
-            @RequestBody PomodoroProgressRequest request
+            @RequestBody ParticipateStudyRequest request
     ) {
         Long progressId = pomodoroProgressService.participateStudy(authMember, studyId, request);
         return ResponseEntity.created(

@@ -5,7 +5,7 @@ import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.progress.dto.PomodoroProgressRequest;
+import harustudy.backend.progress.dto.ParticipateStudyRequest;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;
 import harustudy.backend.progress.dto.PomodoroProgressesResponse;
 import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
@@ -43,11 +43,11 @@ public class PomodoroProgressService {
             AuthMember authMember, Long studyId, Long memberId
     ) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
-        Member member = memberRepository.findByIdIfExists(memberId);
         // TODO: 동적쿼리로 변경(memberId 유무에 따른 분기처리)
         if (Objects.isNull(memberId)) {
             return getPomodoroProgressesResponseWithoutMemberFilter(pomodoroRoom);
         }
+        Member member = memberRepository.findByIdIfExists(memberId);
         validateIsSameMemberId(authMember, memberId);
         return getPomodoroProgressesResponseWithMemberFilter(pomodoroRoom, member);
     }
@@ -82,7 +82,7 @@ public class PomodoroProgressService {
         pomodoroProgress.proceed();
     }
 
-    public Long participateStudy(AuthMember authMember, Long studyId, PomodoroProgressRequest request) {
+    public Long participateStudy(AuthMember authMember, Long studyId, ParticipateStudyRequest request) {
         Member member = memberRepository.findByIdIfExists(request.memberId());
         validateIsSameMemberId(authMember, request.memberId());
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
