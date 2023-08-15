@@ -67,8 +67,8 @@ public class PomodoroProgress extends BaseTimeEntity {
     }
     }
 
-    public boolean isOwnedBy(Member member) {
-        return getMember().equals(member);
+    public boolean isNotOwnedBy(Member other) {
+        return !member.equals(other);
     }
 
     public boolean hasSameNicknameWith(PomodoroProgress pomodoroProgress) {
