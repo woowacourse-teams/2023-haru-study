@@ -20,6 +20,7 @@ export type StudyBasicInfo = {
   studyName: string;
   timePerCycle: StudyTimePerCycleOptions;
   totalCycle: TotalCycleOptions;
+  createdDateTime: string;
 };
 
 export type StudyData = {

@@ -91,18 +91,19 @@ const STUDY_METADATA = {
   studyName: '안오면 지상렬',
   totalCycle: 3,
   timePerCycle: 25,
+  createdDateTime: '2023-08-15T06:25:39.093Z',
 };
 
 export const studyRecordHandlers = [
-  rest.get('/api/v2/studies/:studyId', (req, res, ctx) => {
+  rest.get('/api/v3/studies/:studyId', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(STUDY_METADATA), ctx.delay(400));
   }),
 
-  rest.get('/api/v2/members?studyId=1', (req, res, ctx) => {
+  rest.get('/api/v3/members?studyId=1', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(STUDY_MEMBERS), ctx.delay(400));
   }),
 
-  rest.get('/api/v2/studies/:studyId/contents?memberId=1', (req, res, ctx) => {
+  rest.get('/api/v3/studies/:studyId/contents?memberId=1', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(800));
   }),
 ];

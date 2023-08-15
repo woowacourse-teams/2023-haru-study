@@ -74,13 +74,13 @@ export const requestSubmitStudyingForm = (studyId: string, memberId: string) =>
   http.post(`/api/studies/${studyId}/members/${memberId}/next-step`);
 
 export const requestGetStudyData = (studyId: string) =>
-  http.get<Omit<ResponseStudyMetadata, 'member'>>(`${BASE_URL}/studies/${studyId}`);
+  http.get<Omit<ResponseStudyMetadata, 'member'>>(`/api/v3/studies/${studyId}`);
 
 export const requestGetStudyMembers = (studyId: string) =>
-  http.get<Pick<ResponseStudyMetadata, 'members'>>(`${BASE_URL}/members?studyId=${studyId}`);
+  http.get<Pick<ResponseStudyMetadata, 'members'>>(`/api/v3/members?studyId=${studyId}`);
 
 export const requestGetMemberRecordContents = (studyId: string, memberId: string) =>
-  http.get<ResponseMemberRecordContents>(`${BASE_URL}/studies/${studyId}/contents?memberId=${memberId}`);
+  http.get<ResponseMemberRecordContents>(`/api/v3/studies/${studyId}/contents?memberId=${memberId}`);
 
 // 새로 적용되는 api
 export const requestGuestLogin = async () => {

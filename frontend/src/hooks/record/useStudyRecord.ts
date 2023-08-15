@@ -12,13 +12,14 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
 
   const fetchStudyRecordData = useCallback(async () => {
     try {
-      const { studyName, timePerCycle, totalCycle } = await requestGetStudyData(studyId);
+      const { studyName, timePerCycle, totalCycle, createdDateTime } = await requestGetStudyData(studyId);
       const { members } = await requestGetStudyMembers(studyId);
 
       setStudyBasicInfo({
         studyName,
         timePerCycle,
         totalCycle,
+        createdDateTime,
       });
       setMembers(members);
     } catch (error) {
