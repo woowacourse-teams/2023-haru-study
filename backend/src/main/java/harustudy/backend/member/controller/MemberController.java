@@ -1,6 +1,7 @@
 package harustudy.backend.member.controller;
 
 import harustudy.backend.auth.AuthMember;
+import harustudy.backend.auth.Authenticated;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.MemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +20,7 @@ public class MemberController {
     @Operation(summary = "멤버 정보 조회")
     @GetMapping("/api/members/{memberId}")
     public ResponseEntity<MemberResponse> findMember(
-            @AuthMember Member member,
+            @Authenticated AuthMember authMember,
             @PathVariable Long memberId
     ) {
         return ResponseEntity.ok(null);

@@ -1,6 +1,7 @@
 package harustudy.backend.auth;
 
 import harustudy.backend.auth.service.AuthService;
+import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -19,21 +20,19 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     private static final int ACCESS_TOKEN_LOCATION = 1;
 
     private final AuthService authService;
-    private final MemberRepository memberRepository;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(AuthMember.class);
+        return parameter.hasParameterAnnotation(Authenticated.class);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-            NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    public AuthMember resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String authorizationHeader = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
         Objects.requireNonNull(authorizationHeader);
         String accessToken = authorizationHeader.split(" ")[ACCESS_TOKEN_LOCATION];
-
-        Long memberId = Long.parseLong(authService.parseSubject(accessToken));
-        return memberRepository.findById(memberId);
+        long memberId = Long.parseLong(authService.parseSubject(accessToken));
+        return new AuthMember(memberId);
     }
 }
