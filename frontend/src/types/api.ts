@@ -1,5 +1,5 @@
 import type { MemberInfo } from './member';
-import type { Member, MemberRecordContent, PlanList, Step, StudyBasicInfo } from './study';
+import type { MemberProgress, MemberRecordContent, PlanList, Step, StudyBasicInfo } from './study';
 
 export type ResponseCreateStudy = { participantCode: string; studyName: string };
 
@@ -17,7 +17,7 @@ export type ResponseMemberStudyMetadata = {
 export type ResponsePlanList = PlanList;
 
 export type ResponseStudyMetadata = {
-  members: Member[];
+  pomodoroProgresses: MemberProgress[];
 } & StudyBasicInfo;
 
 export type ResponseMemberRecordContents = {

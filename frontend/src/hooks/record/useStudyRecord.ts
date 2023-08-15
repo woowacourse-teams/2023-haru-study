@@ -8,7 +8,7 @@ import { boolCheckCookie } from '@Utils/cookie';
 
 import { requestAccessTokenRefresh, requestGetStudyData, requestGetStudyMembers } from '@Apis/index';
 
-import type { Member, StudyBasicInfo } from '@Types/study';
+import type { MemberProgress, StudyBasicInfo } from '@Types/study';
 
 import { ExpiredAccessTokenError } from '../../errors/CustomError';
 
@@ -17,16 +17,19 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
 
   const [isLoading, setIsLoading] = useState(true);
   const [studyBasicInfo, setStudyBasicInfo] = useState<StudyBasicInfo | null>(null);
-  const [members, setMembers] = useState<Member[]>([]);
+  const [memberProgresses, setMemberProgresses] = useState<MemberProgress[]>([]);
 
-  const setInitInfo = ({ studyName, timePerCycle, totalCycle, createdDateTime }: StudyBasicInfo, members: Member[]) => {
+  const setInitInfo = (
+    { studyName, timePerCycle, totalCycle, createdDateTime }: StudyBasicInfo,
+    members: MemberProgress[],
+  ) => {
     setStudyBasicInfo({
       studyName,
       timePerCycle,
       totalCycle,
       createdDateTime,
     });
-    setMembers(members);
+    setMemberProgresses(members);
   };
 
   const getAccessTokenRefresh = async () => {
@@ -60,18 +63,18 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
       }
 
       const basicInfo = await requestGetStudyData(studyId, accessToken);
-      const { members } = await requestGetStudyMembers(studyId);
+      const { pomodoroProgresses } = await requestGetStudyMembers(studyId);
 
-      setInitInfo(basicInfo, members);
+      setInitInfo(basicInfo, pomodoroProgresses);
     } catch (error) {
       if (error instanceof ExpiredAccessTokenError) {
         const accessToken = await getAccessTokenRefresh();
 
         if (accessToken) {
           const basicInfo = await requestGetStudyData(studyId, accessToken);
-          const { members } = await requestGetStudyMembers(studyId);
+          const { pomodoroProgresses } = await requestGetStudyMembers(studyId);
 
-          setInitInfo(basicInfo, members);
+          setInitInfo(basicInfo, pomodoroProgresses);
 
           return;
         }
@@ -89,7 +92,7 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
     fetchStudyRecordData();
   }, [fetchStudyRecordData]);
 
-  return { isLoading, studyBasicInfo, members };
+  return { isLoading, studyBasicInfo, memberProgresses };
 };
 
 export default useStudyRecord;

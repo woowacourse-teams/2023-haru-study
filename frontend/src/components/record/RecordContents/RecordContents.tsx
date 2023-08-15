@@ -11,7 +11,7 @@ const RecordContents = () => {
 
   if (!studyId) throw Error('잘못된 접근입니다.');
 
-  const { isLoading, studyBasicInfo, members } = useStudyRecord(studyId, {
+  const { isLoading, studyBasicInfo, memberProgresses } = useStudyRecord(studyId, {
     errorHandler: (error) => alert(error.message),
   });
 
@@ -26,7 +26,7 @@ const RecordContents = () => {
         createdDateTime={createdDateTime}
         $isLoading={isLoading}
       />
-      <MemberRecordList studyId={studyId} members={members} isLoading={isLoading} />
+      <MemberRecordList studyId={studyId} memberProgresses={memberProgresses} isLoading={isLoading} />
     </RecordContentsLayout>
   );
 };

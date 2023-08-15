@@ -20,12 +20,12 @@ import type { Plan, Retrospect } from '@Types/study';
 
 type Props = {
   studyId: string;
-  memberId: string;
+  progressId: string;
   nickname: string;
 };
 
-const MemberRecord = ({ studyId, nickname, memberId }: Props) => {
-  const { memberRecordContents, isLoading } = useMemberRecord(studyId, memberId, {
+const MemberRecord = ({ studyId, nickname, progressId }: Props) => {
+  const { memberRecordContents, isLoading } = useMemberRecord(studyId, progressId, {
     errorHandler: (error) => alert(error.message),
   });
 
