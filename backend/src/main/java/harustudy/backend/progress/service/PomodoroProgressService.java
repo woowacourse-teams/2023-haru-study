@@ -44,11 +44,11 @@ public class PomodoroProgressService {
     ) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
         Member member = memberRepository.findByIdIfExists(memberId);
-        validateIsSameMemberId(authMember, memberId);
         // TODO: 동적쿼리로 변경(memberId 유무에 따른 분기처리)
         if (Objects.isNull(memberId)) {
             return getPomodoroProgressesResponseWithoutMemberFilter(pomodoroRoom);
         }
+        validateIsSameMemberId(authMember, memberId);
         return getPomodoroProgressesResponseWithMemberFilter(pomodoroRoom, member);
     }
 
