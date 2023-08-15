@@ -35,6 +35,19 @@ const useCreateStudy = (errorHandler: (error: Error) => void) => {
     }
   };
 
+  const newRequestCreateStudy = async (
+    studyName: string,
+    totalCycle: TotalCycleOptions,
+    timePerCycle: StudyTimePerCycleOptions,
+    accessToken: string,
+  ) => {
+    try {
+      return await requestCreateStudy(studyName, totalCycle, timePerCycle, accessToken);
+    } catch (error) {
+      if (error instanceof Error) return errorHandler(error);
+    }
+  };
+
   const createStudy = async (
     studyName: string,
     totalCycle: TotalCycleOptions,
@@ -57,9 +70,7 @@ const useCreateStudy = (errorHandler: (error: Error) => void) => {
       if (error instanceof ExpiredAccessTokenError) {
         const accessToken = await getAccessTokenRefresh();
 
-        if (accessToken) return await requestCreateStudy(studyName, totalCycle, timePerCycle, accessToken);
-
-        return;
+        if (accessToken) return await newRequestCreateStudy(studyName, totalCycle, timePerCycle, accessToken);
       }
       if (error instanceof Error) return errorHandler(error);
     } finally {
