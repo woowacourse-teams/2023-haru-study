@@ -2,7 +2,6 @@ package harustudy.backend.room.controller;
 
 import harustudy.backend.auth.AuthMember;
 import harustudy.backend.auth.Authenticated;
-import harustudy.backend.member.domain.Member;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
 import harustudy.backend.room.dto.PomodoroRoomResponse;
@@ -25,21 +24,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PomodoroRoomController {
 
-    @Operation(summary = "스터디 정보 조회")
+    @Operation(summary = "단일 스터디 정보 조회")
     @GetMapping("/api/studies/{studyId}")
     public ResponseEntity<PomodoroRoomResponse> findStudy(
             @Authenticated AuthMember authMember,
-            @PathVariable Long studyId,
-            @RequestParam(value = "participantCode", required = false) String participantCode
+            @PathVariable Long studyId
     ) {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "참여한 모든 스터디 조회")
+    @Operation(summary = "필터링 조건으로 스터디 조회")
     @GetMapping("/api/studies")
-    public ResponseEntity<PomodoroRoomsResponse> xx(
+    public ResponseEntity<PomodoroRoomsResponse> findStudiesWithFilter(
             @Authenticated AuthMember authMember,
-            @RequestParam Long memberId
+            @RequestParam(required = false) Long memberId,
+            @RequestParam(required = false) String participantCode
     ) {
         return ResponseEntity.ok(null);
     }
