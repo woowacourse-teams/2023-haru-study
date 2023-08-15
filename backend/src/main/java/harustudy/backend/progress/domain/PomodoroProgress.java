@@ -18,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -68,7 +69,7 @@ public class PomodoroProgress extends BaseTimeEntity {
     }
 
     public boolean isNotOwnedBy(Member other) {
-        return !member.equals(other);
+        return !(member.getId().equals(other.getId()));
     }
 
     public boolean hasSameNicknameWith(PomodoroProgress pomodoroProgress) {
