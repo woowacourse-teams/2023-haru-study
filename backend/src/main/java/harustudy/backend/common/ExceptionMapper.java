@@ -58,9 +58,9 @@ public class ExceptionMapper {
     }
 
     private static void setupRoomException() {
-        mapper.put(ParticipantCodeExpiredException.class,
-                ExceptionSituation.of("해당하는 참여코드가 없습니다.", NOT_FOUND, 1300));
         mapper.put(ParticipantCodeNotFoundException.class,
+                ExceptionSituation.of("해당하는 참여코드가 없습니다.", NOT_FOUND, 1300));
+        mapper.put(ParticipantCodeExpiredException.class,
                 ExceptionSituation.of("만료된 참여코드입니다.", BAD_REQUEST, 1301));
         mapper.put(RoomNotFoundException.class,
                 ExceptionSituation.of("해당하는 스터디가 없습니다.", NOT_FOUND, 1302));
