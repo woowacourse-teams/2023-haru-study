@@ -5,6 +5,7 @@ import harustudy.backend.auth.Authenticated;
 import harustudy.backend.progress.dto.PomodoroProgressRequest;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;
 import harustudy.backend.progress.dto.PomodoroProgressesResponse;
+import harustudy.backend.progress.service.PomodoroProgressService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PomodoroProgressController {
 
+    private final PomodoroProgressService pomodoroProgressService;
+
     @Operation(summary = "단일 스터디 진행도 조회")
     @GetMapping("/api/studies/{studyId}/progresses/{progressId}")
     public ResponseEntity<PomodoroProgressResponse> findPomodoroProgress(
@@ -30,7 +33,9 @@ public class PomodoroProgressController {
             @PathVariable Long studyId,
             @PathVariable Long progressId
     ) {
-        return ResponseEntity.ok(null);
+        PomodoroProgressResponse response =
+                pomodoroProgressService.findPomodoroProgress(authMember, studyId, progressId);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "필터링 조건으로 스터디 진행도 조회")
@@ -40,7 +45,9 @@ public class PomodoroProgressController {
             @PathVariable Long studyId,
             @RequestParam(required = false) Long memberId
     ) {
-        return ResponseEntity.ok(null);
+        PomodoroProgressesResponse response =
+                pomodoroProgressService.findPomodoroProgressWithFilter(authMember, studyId, memberId);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "다음 스터디 단계로 이동")
@@ -51,6 +58,7 @@ public class PomodoroProgressController {
             @PathVariable Long studyId,
             @PathVariable Long progressId
     ) {
+        pomodoroProgressService.proceed(authMember, studyId, progressId);
         return ResponseEntity.noContent().build();
     }
 
@@ -62,7 +70,8 @@ public class PomodoroProgressController {
             @PathVariable Long studyId,
             @RequestBody PomodoroProgressRequest request
     ) {
+        Long progressId = pomodoroProgressService.participateStudy(authMember, studyId, request);
         return ResponseEntity.created(
-                URI.create("/api/v3/studies/" + studyId + "/progresses/" + 1L)).build();
+                URI.create("/api/v3/studies/" + studyId + "/progresses/" + progressId)).build();
     }
 }
