@@ -17,23 +17,6 @@ import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOpti
 const BASE_URL = '/api/v2';
 
 // 옛날거
-export const requestCreateStudy = async (
-  studyName: string,
-  totalCycle: TotalCycleOptions,
-  timePerCycle: StudyTimePerCycleOptions,
-) => {
-  const response = await http.post(`/api/studies`, {
-    body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
-  });
-
-  const locationHeader = response.headers.get('Location');
-  const studyId = locationHeader?.split('/').pop() as string;
-
-  const result = (await response.json()) as ResponseCreateStudy;
-
-  return { studyId, result };
-};
-
 export const requestRegisterMember = async (nickname: string, studyId: string) => {
   const response = await http.post(`/api/studies/${studyId}/members`, {
     body: JSON.stringify({ nickname }),
@@ -106,4 +89,23 @@ export const requestAccessTokenRefresh = async () => {
   const response = await http.post(`/api/auth/refresh`);
 
   return (await response.json()) as ResponseAuthToken;
+};
+
+export const requestCreateStudy = async (
+  studyName: string,
+  totalCycle: TotalCycleOptions,
+  timePerCycle: StudyTimePerCycleOptions,
+  accessToken: string,
+) => {
+  const response = await http.post(`/api/v2/studies`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
+  });
+
+  const locationHeader = response.headers.get('Location');
+  const studyId = locationHeader?.split('/').pop() as string;
+
+  const result = (await response.json()) as ResponseCreateStudy;
+
+  return { studyId, result };
 };
