@@ -112,6 +112,6 @@ public class PomodoroProgress extends BaseTimeEntity {
     }
 
     public boolean isNotIncludedIn(PomodoroRoom other) {
-        return pomodoroRoom.equals(other);
+        return !pomodoroRoom.getId().equals(other.getId());
     }
 }
