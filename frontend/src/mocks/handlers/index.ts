@@ -1,12 +1,12 @@
 import { authHandler } from './authHandler';
 import { checkParticipantCodeHandlers } from './checkParticipantCodeHandlers';
+import { createStudyHandlers } from './createStudyHandlers';
 import { studyBoardHandlers } from './studyBoardHandler';
-import { studyMakingHandlers } from './studyMakingHandler';
 import { studyRecordHandlers } from './studyRecordHandlers';
 import { studyStartHandlers } from './studyStartHandlers';
 
 export const handlers = [
-  ...studyMakingHandlers,
+  ...createStudyHandlers,
   ...studyRecordHandlers,
   ...studyStartHandlers,
   ...checkParticipantCodeHandlers,
