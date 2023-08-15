@@ -62,9 +62,9 @@ public class PomodoroProgress extends BaseTimeEntity {
     }
 
     private void validateNicknameLength(String nickname) {
-    if (nickname.length() < 1 || nickname.length() > 10) {
-        throw new NicknameLengthException();
-    }
+        if (nickname.length() < 1 || nickname.length() > 10) {
+            throw new NicknameLengthException();
+        }
     }
 
     public boolean isNotOwnedBy(Member other) {
