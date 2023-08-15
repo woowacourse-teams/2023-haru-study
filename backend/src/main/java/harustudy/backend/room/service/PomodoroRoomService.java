@@ -12,10 +12,12 @@ import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
 import harustudy.backend.room.dto.PomodoroRoomResponse;
 import harustudy.backend.room.dto.PomodoroRoomsResponse;
+import harustudy.backend.room.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.room.exception.RoomNotFoundException;
 import harustudy.backend.room.repository.ParticipantCodeRepository;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,13 +33,31 @@ public class PomodoroRoomService {
     private final MemberRepository memberRepository;
     private final GenerationStrategy generationStrategy;
 
-    public PomodoroRoomResponse findPomodoroRoomWithFilter(Long roomId, String participantCode) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findWithFilter(roomId, participantCode)
-                .orElseThrow(RoomNotFoundException::new);
-        return PomodoroRoomResponse.from(pomodoroRoom);
+    public PomodoroRoomResponse findPomodoroRoom(Long roomId) {
+        return PomodoroRoomResponse.from(pomodoroRoomRepository.findById(roomId)
+                .orElseThrow(RoomNotFoundException::new));
     }
 
-    public PomodoroRoomsResponse findPomodoroRoomByMemberId(Long memberId) {
+    public PomodoroRoomsResponse findPomodoroRoomWithFilter(Long memberId, String code) {
+        if (Objects.nonNull(code)) {
+            ParticipantCode participantCode = participantCodeRepository.findByCode(code)
+                    .orElseThrow(ParticipantCodeNotFoundException::new);
+            List<PomodoroRoom> pomodoroRooms = pomodoroRoomRepository.findByParticipantCode(
+                    participantCode);
+            if (pomodoroRooms.isEmpty()) {
+                throw new RoomNotFoundException();
+            }
+
+            return PomodoroRoomsResponse.from(pomodoroRooms);
+        }
+        if (Objects.nonNull(memberId)) {
+            return findPomodoroRoomByMemberId(memberId);
+        }
+
+        return PomodoroRoomsResponse.from(pomodoroRoomRepository.findAll());
+    }
+
+    private PomodoroRoomsResponse findPomodoroRoomByMemberId(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
         List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findByMember(member);

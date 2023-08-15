@@ -31,22 +31,21 @@ public class PomodoroRoomController {
     @GetMapping("/api/studies/{studyId}")
     public ResponseEntity<PomodoroRoomResponse> findStudy(
             @Authenticated AuthMember authMember,
-            @PathVariable(required = false) Long studyId,
-            @RequestParam(required = false) String participantCode
+            @PathVariable Long studyId
     ) {
-        PomodoroRoomResponse pomodoroRoom = pomodoroRoomService.findPomodoroRoomWithFilter(studyId,
-                participantCode);
+        PomodoroRoomResponse pomodoroRoom = pomodoroRoomService.findPomodoroRoom(studyId);
         return ResponseEntity.ok(pomodoroRoom);
     }
 
-    @Operation(summary = "멤버 아이디로 스터디 조회")
+    @Operation(summary = "필터링 조건으로 스터디 조회")
     @GetMapping("/api/studies")
     public ResponseEntity<PomodoroRoomsResponse> findStudiesByMemberId(
             @Authenticated AuthMember authMember,
-            @RequestParam Long memberId
+            @RequestParam(required = false) Long memberId,
+            @RequestParam(required = false) String participantCode
     ) {
         return ResponseEntity.ok(
-                pomodoroRoomService.findPomodoroRoomByMemberId(memberId));
+                pomodoroRoomService.findPomodoroRoomWithFilter(memberId, participantCode));
     }
 
     @Operation(summary = "스터디 생성")

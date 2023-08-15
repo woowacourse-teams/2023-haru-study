@@ -14,6 +14,7 @@ import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
 import harustudy.backend.progress.exception.PomodoroProgressStatusException;
 import harustudy.backend.progress.exception.ProgressNotBelongToRoomException;
 import harustudy.backend.room.exception.DuplicatedNicknameException;
+import harustudy.backend.room.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.room.exception.PomodoroRoomNameLengthException;
 import harustudy.backend.room.exception.PomodoroTimePerCycleException;
 import harustudy.backend.room.exception.PomodoroTotalCycleException;
@@ -57,6 +58,8 @@ public class ExceptionMapper {
     }
 
     private static void setupRoomException() {
+        mapper.put(ParticipantCodeNotFoundException.class,
+                ExceptionSituation.of("해당하는 참여코드가 없습니다.", NOT_FOUND, 1300));
         mapper.put(ParticipantCodeExpiredException.class,
                 ExceptionSituation.of("만료된 참여코드입니다.", BAD_REQUEST, 1301));
         mapper.put(RoomNotFoundException.class,

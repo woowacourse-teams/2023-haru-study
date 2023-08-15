@@ -4,12 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.room.domain.GenerationStrategy;
 import harustudy.backend.room.domain.ParticipantCode;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
 import harustudy.backend.room.dto.PomodoroRoomResponse;
+import harustudy.backend.room.dto.PomodoroRoomsResponse;
+import harustudy.backend.room.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.room.exception.RoomNotFoundException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -46,8 +49,7 @@ class PomodoroRoomServiceTest {
         entityManager.clear();
 
         // when
-        PomodoroRoomResponse result = pomodoroRoomService.findPomodoroRoomWithFilter(
-                pomodoroRoom.getId(), null);
+        PomodoroRoomResponse result = pomodoroRoomService.findPomodoroRoom(pomodoroRoom.getId());
 
         // then
         assertAll(
@@ -71,7 +73,7 @@ class PomodoroRoomServiceTest {
 
         // when, then
         assertThatThrownBy(() -> pomodoroRoomService.findPomodoroRoomWithFilter(99999L, null), null)
-                .isInstanceOf(RoomNotFoundException.class);
+                .isInstanceOf(MemberNotFoundException.class);
     }
 
     @Test
@@ -101,14 +103,15 @@ class PomodoroRoomServiceTest {
         entityManager.clear();
 
         // when
-        PomodoroRoomResponse result = pomodoroRoomService.findPomodoroRoomWithFilter(null,
+        PomodoroRoomsResponse result = pomodoroRoomService.findPomodoroRoomWithFilter(null,
                 participantCode.getCode());
 
         // then
         assertAll(
-                () -> assertThat(result.name()).isEqualTo(pomodoroRoom.getName()),
-                () -> assertThat(result.totalCycle()).isEqualTo(pomodoroRoom.getTotalCycle()),
-                () -> assertThat(result.timePerCycle()).isEqualTo(pomodoroRoom.getTimePerCycle())
+                () -> assertThat(result.studies()).hasSize(1),
+                () -> assertThat(result.studies().get(0).name()).isEqualTo(pomodoroRoom.getName()),
+                () -> assertThat(result.studies().get(0).totalCycle()).isEqualTo(pomodoroRoom.getTotalCycle()),
+                () -> assertThat(result.studies().get(0).timePerCycle()).isEqualTo(pomodoroRoom.getTimePerCycle())
         );
     }
 
@@ -128,7 +131,7 @@ class PomodoroRoomServiceTest {
         // when, then
         assertThatThrownBy(
                 () -> pomodoroRoomService.findPomodoroRoomWithFilter(null, notPersisted.getCode()))
-                .isInstanceOf(RoomNotFoundException.class);
+                .isInstanceOf(ParticipantCodeNotFoundException.class);
     }
 
     @Test
