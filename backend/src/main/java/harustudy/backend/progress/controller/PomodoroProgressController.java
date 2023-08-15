@@ -2,7 +2,6 @@ package harustudy.backend.progress.controller;
 
 import harustudy.backend.auth.AuthMember;
 import harustudy.backend.auth.Authenticated;
-import harustudy.backend.member.domain.Member;
 import harustudy.backend.progress.dto.PomodoroProgressRequest;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;
 import harustudy.backend.progress.dto.PomodoroProgressesResponse;
@@ -26,7 +25,7 @@ public class PomodoroProgressController {
 
     @Operation(summary = "단일 스터디 진행도 조회")
     @GetMapping("/api/studies/{studyId}/progresses/{progressId}")
-    public ResponseEntity<PomodoroProgressResponse> findProgress(
+    public ResponseEntity<PomodoroProgressResponse> findPomodoroProgress(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId,
             @PathVariable Long progressId
@@ -36,7 +35,7 @@ public class PomodoroProgressController {
 
     @Operation(summary = "필터링 조건으로 스터디 진행도 조회")
     @GetMapping("/api/studies/{studyId}/progresses")
-    public ResponseEntity<PomodoroProgressesResponse> findMemberProgressesWithFilter(
+    public ResponseEntity<PomodoroProgressesResponse> findPomodoroProgressesWithFilter(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId,
             @RequestParam(required = false) Long memberId
