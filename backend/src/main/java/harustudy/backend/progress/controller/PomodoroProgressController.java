@@ -24,17 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PomodoroProgressController {
 
-    @Operation(summary = "멤버의 스터디 진행도 조회")
-    @GetMapping("/api/studies/{studyId}/progresses")
-    public ResponseEntity<PomodoroProgressesResponse> findMemberProgress(
-            @Authenticated AuthMember authMember,
-            @PathVariable Long studyId,
-            @RequestParam(required = false, value = "memberId") Long memberId
-    ) {
-        return ResponseEntity.ok(null);
-    }
-
-    @Operation(summary = "스터디 진행도 조회")
+    @Operation(summary = "단일 스터디 진행도 조회")
     @GetMapping("/api/studies/{studyId}/progresses/{progressId}")
     public ResponseEntity<PomodoroProgressResponse> findProgress(
             @Authenticated AuthMember authMember,
@@ -44,7 +34,17 @@ public class PomodoroProgressController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "스터디 진행")
+    @Operation(summary = "필터링 조건으로 스터디 진행도 조회")
+    @GetMapping("/api/studies/{studyId}/progresses")
+    public ResponseEntity<PomodoroProgressesResponse> findMemberProgressesWithFilter(
+            @Authenticated AuthMember authMember,
+            @PathVariable Long studyId,
+            @RequestParam(required = false) Long memberId
+    ) {
+        return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "다음 스터디 단계로 이동")
     @ApiResponse(responseCode = "204")
     @PostMapping("/api/studies/{studyId}/progresses/{progressId}/next-step")
     public ResponseEntity<Void> proceed(

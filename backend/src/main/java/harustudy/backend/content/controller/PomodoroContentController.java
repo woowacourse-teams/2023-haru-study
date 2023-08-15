@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class PomodoroContentController {
 
-    @Operation(summary = "사이클 횟수에 해당하는 멤버 컨텐츠 조회")
+    @Operation(summary = "필터링 조건으로 멤버 컨텐츠 조회")
     @GetMapping("/api/studies/{studyId}/contents")
-    public ResponseEntity<PomodoroContentsResponse> findMemberContent(
+    public ResponseEntity<PomodoroContentsResponse> findMemberContentsWithFilter(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId,
             @RequestParam Long progressId,
-            @RequestParam(value = "cycle", required = false) Integer cycle
+            @RequestParam(required = false) Integer cycle
     ) {
         return ResponseEntity.ok(null);
     }
