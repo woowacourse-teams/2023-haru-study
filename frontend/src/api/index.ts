@@ -74,12 +74,12 @@ export const requestSubmitStudyingForm = (studyId: string, memberId: string) =>
   http.post(`/api/studies/${studyId}/members/${memberId}/next-step`);
 
 export const requestGetStudyData = (studyId: string, accessToken: string) =>
-  http.get<Omit<ResponseStudyMetadata, 'pomodoroProgresses'>>(`/api/v3/studies/${studyId}`, {
+  http.get<Omit<ResponseStudyMetadata, 'progresses'>>(`/api/v3/studies/${studyId}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
 export const requestGetStudyMembers = (studyId: string, accessToken: string) =>
-  http.get<Pick<ResponseStudyMetadata, 'pomodoroProgresses'>>(`/api/v3/studies/${studyId}/progresses`, {
+  http.get<Pick<ResponseStudyMetadata, 'progresses'>>(`/api/v3/studies/${studyId}/progresses`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 

@@ -63,18 +63,18 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
       }
 
       const basicInfo = await requestGetStudyData(studyId, accessToken);
-      const { pomodoroProgresses } = await requestGetStudyMembers(studyId, accessToken);
+      const { progresses } = await requestGetStudyMembers(studyId, accessToken);
 
-      setInitInfo(basicInfo, pomodoroProgresses);
+      setInitInfo(basicInfo, progresses);
     } catch (error) {
       if (error instanceof ExpiredAccessTokenError) {
         const accessToken = await getAccessTokenRefresh();
 
         if (accessToken) {
           const basicInfo = await requestGetStudyData(studyId, accessToken);
-          const { pomodoroProgresses } = await requestGetStudyMembers(studyId, accessToken);
+          const { progresses } = await requestGetStudyMembers(studyId, accessToken);
 
-          setInitInfo(basicInfo, pomodoroProgresses);
+          setInitInfo(basicInfo, progresses);
 
           return;
         }

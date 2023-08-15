@@ -17,7 +17,7 @@ export type ResponseMemberStudyMetadata = {
 export type ResponsePlanList = PlanList;
 
 export type ResponseStudyMetadata = {
-  pomodoroProgresses: MemberProgress[];
+  progresses: MemberProgress[];
 } & StudyBasicInfo;
 
 export type ResponseMemberRecordContents = {
