@@ -11,11 +11,13 @@ const http = {
       },
     });
 
-    if (!response.ok) {
-      throw new Error('에러가 발생했습니다. 다시 시도해주세요.');
+    if (response.status >= 200 && response.status < 300) {
+      return response.json() as Promise<T>;
     }
 
-    return response.json() as Promise<T>;
+    if (response.status === 401) throw new ExpiredAccessTokenError('토큰이 만료되었습니다.', response.status);
+
+    throw new Error('에러가 발생했습니다.');
   },
 
   post: async (url: string, config: RequestInit = {}) => {
