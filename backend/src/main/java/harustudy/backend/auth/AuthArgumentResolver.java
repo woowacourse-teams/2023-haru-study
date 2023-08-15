@@ -1,8 +1,7 @@
 package harustudy.backend.auth;
 
+import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.auth.service.AuthService;
-import harustudy.backend.member.domain.Member;
-import harustudy.backend.member.repository.MemberRepository;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -28,7 +27,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public AuthMember resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+                                      NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String authorizationHeader = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
         Objects.requireNonNull(authorizationHeader);
         String accessToken = authorizationHeader.split(" ")[ACCESS_TOKEN_LOCATION];

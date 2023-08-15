@@ -1,6 +1,6 @@
 package harustudy.backend.progress.controller;
 
-import harustudy.backend.auth.AuthMember;
+import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.progress.dto.PomodoroProgressRequest;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;

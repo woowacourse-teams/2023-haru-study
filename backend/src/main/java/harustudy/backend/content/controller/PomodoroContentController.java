@@ -1,6 +1,6 @@
 package harustudy.backend.content.controller;
 
-import harustudy.backend.auth.AuthMember;
+import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.dto.WritePlanRequest;

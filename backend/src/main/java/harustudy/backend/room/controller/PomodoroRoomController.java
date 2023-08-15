@@ -1,6 +1,6 @@
 package harustudy.backend.room.controller;
 
-import harustudy.backend.auth.AuthMember;
+import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;

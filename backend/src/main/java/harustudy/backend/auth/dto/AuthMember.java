@@ -1,4 +1,4 @@
-package harustudy.backend.auth;
+package harustudy.backend.auth.dto;
 
 import harustudy.backend.member.domain.Member;
 
