@@ -44,9 +44,7 @@ public class PomodoroRoomService {
                     .orElseThrow(ParticipantCodeNotFoundException::new);
             List<PomodoroRoom> pomodoroRooms = pomodoroRoomRepository.findByParticipantCode(
                     participantCode);
-            if (pomodoroRooms.isEmpty()) {
-                throw new RoomNotFoundException();
-            }
+            validateIsPresent(pomodoroRooms);
 
             return PomodoroRoomsResponse.from(pomodoroRooms);
         }
@@ -55,6 +53,12 @@ public class PomodoroRoomService {
         }
 
         return PomodoroRoomsResponse.from(pomodoroRoomRepository.findAll());
+    }
+
+    private void validateIsPresent(List<PomodoroRoom> pomodoroRooms) {
+        if (pomodoroRooms.isEmpty()) {
+            throw new RoomNotFoundException();
+        }
     }
 
     private PomodoroRoomsResponse findPomodoroRoomByMemberId(Long memberId) {
@@ -70,7 +74,6 @@ public class PomodoroRoomService {
     private List<PomodoroRoom> mapToPomodoroRooms(List<PomodoroProgress> pomodoroProgresses) {
         return pomodoroProgresses.stream()
                 .map(PomodoroProgress::getPomodoroRoom)
-                .distinct()
                 .toList();
     }
 
