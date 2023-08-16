@@ -3,7 +3,7 @@ import type { MemberProgress, MemberRecordContent, PlanList, Step, StudyBasicInf
 
 export type ResponseAPIError = {
   message: string;
-  code: number;
+  code: string;
 };
 
 export type ResponseCreateStudy = { participantCode: string; studyName: string };
