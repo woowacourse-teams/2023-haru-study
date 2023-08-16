@@ -33,19 +33,20 @@ public class PomodoroRoomController {
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId
     ) {
-        PomodoroRoomResponse pomodoroRoom = pomodoroRoomService.findPomodoroRoom(studyId);
-        return ResponseEntity.ok(pomodoroRoom);
+        PomodoroRoomResponse response = pomodoroRoomService.findPomodoroRoom(studyId);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "필터링 조건으로 스터디 조회")
     @GetMapping("/api/studies")
-    public ResponseEntity<PomodoroRoomsResponse> findStudiesByMemberId(
+    public ResponseEntity<PomodoroRoomsResponse> findStudiesWithFilter(
             @Authenticated AuthMember authMember,
             @RequestParam(required = false) Long memberId,
             @RequestParam(required = false) String participantCode
     ) {
-        return ResponseEntity.ok(
-                pomodoroRoomService.findPomodoroRoomWithFilter(memberId, participantCode));
+        PomodoroRoomsResponse response = pomodoroRoomService.findPomodoroRoomWithFilter(
+                memberId, participantCode);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "스터디 생성")
@@ -55,8 +56,8 @@ public class PomodoroRoomController {
             @Authenticated AuthMember authMember,
             @RequestBody CreatePomodoroRoomRequest request
     ) {
-        CreatePomodoroRoomResponse pomodoroRoom = pomodoroRoomService.createPomodoroRoom(request);
-        return ResponseEntity.created(URI.create("/api/studies/" + pomodoroRoom.studyId()))
-                .body(pomodoroRoom);
+        CreatePomodoroRoomResponse response = pomodoroRoomService.createPomodoroRoom(request);
+        return ResponseEntity.created(URI.create("/api/studies/" + response.studyId()))
+                .body(response);
     }
 }
