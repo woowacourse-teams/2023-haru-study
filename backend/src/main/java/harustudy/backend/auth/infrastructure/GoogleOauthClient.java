@@ -28,7 +28,6 @@ public class GoogleOauthClient {
                 .bodyValue(setupFormData(code, oauthProperty))
                 .retrieve()
                 .bodyToMono(OauthTokenResponse.class)
-                .log()
                 .block();
     }
 
@@ -50,7 +49,6 @@ public class GoogleOauthClient {
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
                 })
-                .log()
                 .block();
     }
 }

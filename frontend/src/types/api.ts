@@ -6,6 +6,11 @@ export type ResponseAPIError = {
   code: string;
 };
 
+export type ResponseAPIError = {
+  message: string;
+  code: number;
+};
+
 export type ResponseCreateStudy = { participantCode: string; studyName: string };
 
 export type ResponseStudyInfo = {

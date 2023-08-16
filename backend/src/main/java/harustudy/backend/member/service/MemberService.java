@@ -1,34 +1,31 @@
 package harustudy.backend.member.service;
 
+import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.member.domain.Member;
-import harustudy.backend.member.dto.NicknameResponse;
+import harustudy.backend.member.dto.MemberResponse;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.repository.MemberRepository;
-import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.exception.RoomNotFoundException;
-import harustudy.backend.room.repository.PomodoroRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Deprecated
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class MemberService {
 
-    private final PomodoroRoomRepository pomodoroRoomRepository;
     private final MemberRepository memberRepository;
 
-    public NicknameResponse findParticipatedMemberNickname(Long roomId, Long memberId) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
-                .orElseThrow(RoomNotFoundException::new);
-        Member member = memberRepository.findById(memberId)
+    public MemberResponse findMember(AuthMember authMember, Long memberId) {
+        Member authorizedMember = memberRepository.findById(authMember.id())
+                .orElseThrow(MemberNotFoundException::new);
+        Member foundMember = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
 
-        if (pomodoroRoom.isParticipatedMember(member)) {
-            return new NicknameResponse(member.getNickname());
+        if (authorizedMember.isDifferentMember(foundMember)) {
+            throw new AuthorizationException();
         }
-        return new NicknameResponse(null);
+        return MemberResponse.from(foundMember);
     }
 }
