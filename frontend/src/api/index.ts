@@ -9,6 +9,7 @@ import type {
   ResponseMemberStudyMetadata,
   ResponsePlanList,
   ResponseStudyData,
+  ResponseStudyDataList,
   ResponseStudyInfo,
   ResponseStudyMembers,
 } from '@Types/api';
@@ -80,7 +81,7 @@ export const requestGetStudyData = (studyId: string, accessToken: string) =>
   });
 
 export const requestGetMemberStudyListData = (memberId: string, accessToken: string) =>
-  http.get<ResponseStudyData[]>(`/api/studies?memberId=${memberId}`, {
+  http.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 

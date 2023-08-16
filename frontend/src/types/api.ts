@@ -23,6 +23,10 @@ export type ResponsePlanList = PlanList;
 
 export type ResponseStudyData = StudyBasicInfo;
 
+export type ResponseStudyDataList = {
+  studies: StudyBasicInfo[];
+};
+
 export type ResponseStudyMembers = {
   progresses: MemberProgress[];
 };
