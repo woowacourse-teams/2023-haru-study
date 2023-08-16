@@ -98,6 +98,11 @@
             "pattern": "@Types/*",
             "group": "internal",
             "position": "after"
+          },
+          {
+            "pattern": "@Errors/*",
+            "group": "internal",
+            "position": "after"
           }
         ],
         "newlines-between": "always",

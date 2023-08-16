@@ -23,6 +23,7 @@ module.exports = () => {
         '@Assets': path.resolve(__dirname, 'src/assets'),
         '@Utils': path.resolve(__dirname, 'src/utils'),
         '@Apis': path.resolve(__dirname, 'src/api'),
+        '@Errors': path.resolve(__dirname, 'src/errors'),
       },
     },
     module: {
