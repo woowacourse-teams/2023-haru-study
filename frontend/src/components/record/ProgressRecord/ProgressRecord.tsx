@@ -5,7 +5,7 @@ import Tabs from '@Components/common/Tabs/Tabs';
 import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
-import useMemberRecord from '@Hooks/record/useMemberRecord';
+import useProgressRecord from '@Hooks/record/useProgressRecord';
 
 import color from '@Styles/color';
 
@@ -25,7 +25,7 @@ type Props = {
 };
 
 const ProgressRecord = ({ studyId, nickname, progressId }: Props) => {
-  const { memberRecordContents, isLoading } = useMemberRecord(studyId, progressId, {
+  const { memberRecordContents, isLoading } = useProgressRecord(studyId, progressId, {
     errorHandler: (error) => alert(error.message),
   });
 
