@@ -3,20 +3,22 @@ package harustudy.backend.auth.service;
 import harustudy.backend.auth.config.OauthProperties;
 import harustudy.backend.auth.config.OauthProperty;
 import harustudy.backend.auth.config.TokenConfig;
-import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.auth.domain.RefreshToken;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.RefreshTokenRequest;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
+import harustudy.backend.auth.exception.InvalidAccessTokenException;
 import harustudy.backend.auth.exception.InvalidRefreshTokenException;
 import harustudy.backend.auth.infrastructure.GoogleOauthClient;
 import harustudy.backend.auth.repository.RefreshTokenRepository;
 import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.auth.util.OauthUserInfoExtractor;
+import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
+import io.jsonwebtoken.JwtException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -96,7 +98,11 @@ public class AuthService {
     }
 
     public void validateAccessToken(String accessToken) {
-        jwtTokenProvider.validateAccessToken(accessToken, tokenConfig.secretKey());
+        try {
+            jwtTokenProvider.validateAccessToken(accessToken, tokenConfig.secretKey());
+        } catch (JwtException e) {
+            throw new InvalidAccessTokenException();
+        }
     }
 
     public String parseMemberId(String accessToken) {
