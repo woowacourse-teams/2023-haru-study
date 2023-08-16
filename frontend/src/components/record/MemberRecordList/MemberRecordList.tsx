@@ -13,6 +13,8 @@ import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
 import type { StudyBasicInfo } from '@Types/study';
 
+import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
+
 type Props = {
   studyList: StudyBasicInfo[] | null;
   isLoading: boolean;
@@ -33,6 +35,8 @@ const MemberRecordList = ({ studyList, isLoading }: Props) => {
         <SkeletonItem />
       </SkeletonLayout>
     );
+
+  if (studyList?.length === 0) return <EmptyMemberRecord />;
 
   return (
     <Layout>
