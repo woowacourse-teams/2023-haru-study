@@ -9,7 +9,7 @@ import { boolCheckCookie } from '@Utils/cookie';
 
 import { requestAccessTokenRefresh, requestRegisterProgress } from '@Apis/index';
 
-import { ExpiredAccessTokenError } from '../../errors/CustomError';
+import { APIError, ResponseError } from '@Errors/index';
 
 const useRegisterProgress = (errorHandler: (error: Error) => void) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +33,7 @@ const useRegisterProgress = (errorHandler: (error: Error) => void) => {
 
       return accessToken;
     } catch (error) {
-      if (error instanceof Error) return errorHandler(error);
+      if (error instanceof ResponseError || error instanceof APIError) return errorHandler(error);
     }
   };
 
@@ -46,7 +46,7 @@ const useRegisterProgress = (errorHandler: (error: Error) => void) => {
     try {
       await requestRegisterProgress(nickname, studyId, memberId, accessToken);
     } catch (error) {
-      if (error instanceof Error) return errorHandler(error);
+      if (error instanceof ResponseError || error instanceof APIError) return errorHandler(error);
     }
   };
 
@@ -65,14 +65,14 @@ const useRegisterProgress = (errorHandler: (error: Error) => void) => {
 
       if (memberInfo) await requestRegisterProgress(nickname, studyId, memberInfo.id, accessToken);
     } catch (error) {
-      if (error instanceof ExpiredAccessTokenError) {
+      if (error instanceof APIError && error.code === '1403') {
         const accessToken = await getAccessTokenRefresh();
 
         if (memberInfo && accessToken)
           return await newRequestRegisterProgress(nickname, studyId, memberInfo.id, accessToken);
       }
 
-      if (error instanceof Error) return errorHandler(error);
+      if (error instanceof ResponseError) return errorHandler(error);
     } finally {
       setIsLoading(false);
     }
