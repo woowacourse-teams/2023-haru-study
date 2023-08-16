@@ -10,7 +10,7 @@ import { requestAccessTokenRefresh, requestGetStudyData, requestGetStudyMembers 
 
 import type { MemberProgress, StudyBasicInfo } from '@Types/study';
 
-import { APIError } from '@Errors/index';
+import { APIError, ResponseError } from '@Errors/index';
 
 const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error) => void }) => {
   const navigate = useNavigate();
@@ -82,7 +82,7 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
         return;
       }
 
-      if (error instanceof Error) return options?.errorHandler(error);
+      if (error instanceof ResponseError) return options?.errorHandler(error);
     } finally {
       setIsLoading(false);
     }

@@ -10,7 +10,7 @@ import { requestAccessTokenRefresh, requestMemberInfo } from '@Apis/index';
 
 import type { MemberInfo } from '@Types/member';
 
-import { APIError } from '@Errors/index';
+import { APIError, ResponseError } from '@Errors/index';
 
 type Actions = {
   initMemberInfo: (memberInfo: MemberInfo) => void;
@@ -86,7 +86,7 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
 
         return;
       }
-      if (!(error instanceof Error)) throw error;
+      if (!(error instanceof ResponseError)) throw error;
 
       alert(error.message);
     }

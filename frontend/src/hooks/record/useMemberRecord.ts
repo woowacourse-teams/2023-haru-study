@@ -10,7 +10,7 @@ import { requestAccessTokenRefresh, requestGetMemberRecordContents } from '@Apis
 
 import type { MemberRecordContent } from '@Types/study';
 
-import { APIError } from '@Errors/index';
+import { APIError, ResponseError } from '@Errors/index';
 
 const useMemberRecord = (studyId: string, progressId: string, options?: { errorHandler: (error: Error) => void }) => {
   const navigate = useNavigate();
@@ -67,7 +67,7 @@ const useMemberRecord = (studyId: string, progressId: string, options?: { errorH
         return;
       }
 
-      if (error instanceof Error) return options?.errorHandler(error);
+      if (error instanceof ResponseError) return options?.errorHandler(error);
     }
   }, [progressId, studyId]);
 
