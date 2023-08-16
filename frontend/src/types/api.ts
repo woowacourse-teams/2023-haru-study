@@ -9,6 +9,11 @@ import type {
   TotalCycleOptions,
 } from './study';
 
+export type ResponseAPIError = {
+  message: string;
+  code: string;
+};
+
 export type ResponseCreateStudy = { participantCode: string; studyName: string };
 
 type ResponseStudyInfo = {

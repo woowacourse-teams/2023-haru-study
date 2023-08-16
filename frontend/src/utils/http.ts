@@ -1,8 +1,38 @@
-import { ExpiredAccessTokenError } from '../errors/CustomError';
+import type { ResponseAPIError } from '@Types/api';
+
+import { APIError, OfflineError, ResponseError } from '@Errors/index';
+
+const isAPIErrorData = (data: ResponseAPIError | undefined): data is ResponseAPIError => {
+  return (data as ResponseAPIError).code !== undefined;
+};
+
+const fetchAPI = async (url: string, config: RequestInit) => {
+  if (!navigator.onLine) throw new OfflineError();
+
+  try {
+    const response = await fetch(url, config);
+
+    if (!response.ok) {
+      const data = (await response.json()) as ResponseAPIError | undefined;
+
+      if (isAPIErrorData(data)) {
+        throw new APIError(data.message, data.code);
+      }
+
+      throw new ResponseError();
+    }
+
+    return response;
+  } catch (error) {
+    if (error instanceof APIError) throw error;
+
+    throw new ResponseError();
+  }
+};
 
 const http = {
   get: async <T>(url: string, config: RequestInit = {}) => {
-    const response = await fetch(url, {
+    const response = await fetchAPI(url, {
       ...config,
       method: 'GET',
       headers: {
@@ -11,17 +41,11 @@ const http = {
       },
     });
 
-    if (response.status >= 200 && response.status < 300) {
-      return response.json() as Promise<T>;
-    }
-
-    if (response.status === 401) throw new ExpiredAccessTokenError('토큰이 만료되었습니다.', response.status);
-
-    throw new Error('에러가 발생했습니다.');
+    return response.json() as T;
   },
 
-  post: async (url: string, config: RequestInit = {}) => {
-    const response = await fetch(url, {
+  post: (url: string, config: RequestInit = {}) => {
+    return fetchAPI(url, {
       ...config,
       method: 'POST',
       headers: {
@@ -29,14 +53,6 @@ const http = {
         ...config.headers,
       },
     });
-
-    if (response.status >= 200 && response.status < 300) {
-      return response;
-    }
-
-    if (response.status === 401) throw new ExpiredAccessTokenError('토큰이 만료되었습니다.', response.status);
-
-    throw new Error('에러가 발생했습니다.');
   },
 };
 
