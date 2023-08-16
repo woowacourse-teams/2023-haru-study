@@ -13,9 +13,9 @@ export class OfflineError extends Error {
 }
 
 export class APIError extends Error {
-  code: number;
+  code: string;
 
-  constructor(message: string, code: number) {
+  constructor(message: string, code: string) {
     super(message);
     this.name = 'API Error';
     this.code = code;
