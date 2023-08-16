@@ -16,6 +16,7 @@
     "^\\@Contexts/(.*)$": "<rootDir>/src/contexts/$1",
     "^\\@Assets/(.*)$": "<rootDir>/src/assets/$1",
     "^\\@Utils/(.*)$": "<rootDir>/src/utils/$1",
-    "^\\@Apis/(.*)$": "<rootDir>/src/api/$1"
+    "^\\@Apis/(.*)$": "<rootDir>/src/api/$1",
+    "^\\@Errors/(.*)$": "<rootDir>/src/errors/$1"
   }
 }

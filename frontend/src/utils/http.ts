@@ -1,6 +1,6 @@
-import { APIError, OfflineError, ResponseError } from 'errors';
-
 import type { ResponseAPIError } from '@Types/api';
+
+import { APIError, OfflineError, ResponseError } from '@Errors/index';
 
 const isAPIErrorData = (data: ResponseAPIError | undefined): data is ResponseAPIError => {
   return (data as ResponseAPIError).code !== undefined;
