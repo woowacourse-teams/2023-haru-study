@@ -3,6 +3,7 @@ package harustudy.backend.progress.domain;
 import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
+import harustudy.backend.progress.exception.NicknameLengthException;
 import harustudy.backend.room.domain.PomodoroRoom;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +44,7 @@ public class PomodoroProgress extends BaseTimeEntity {
     @OneToMany(mappedBy = "pomodoroProgress")
     private List<PomodoroContent> pomodoroContents = new ArrayList<>();
 
-    private boolean isDone = false;
+    private String nickname;
 
     @NotNull
     private Integer currentCycle;
@@ -50,32 +52,32 @@ public class PomodoroProgress extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private PomodoroStatus pomodoroStatus;
 
-    public PomodoroProgress(PomodoroRoom pomodoroRoom, Member member) {
+    public PomodoroProgress(PomodoroRoom pomodoroRoom, Member member, String nickname) {
         this.pomodoroRoom = pomodoroRoom;
         this.member = member;
+        this.nickname = nickname;
         this.currentCycle = 1;
         this.pomodoroStatus = PomodoroStatus.PLANNING;
+
+        validateNicknameLength(nickname);
     }
 
-    // TODO: 없애기
-    public PomodoroProgress(PomodoroRoom pomodoroRoom, Member member, @NotNull Integer currentCycle,
-                            PomodoroStatus pomodoroStatus) {
-        this.pomodoroRoom = pomodoroRoom;
-        this.member = member;
-        this.currentCycle = currentCycle;
-        this.pomodoroStatus = pomodoroStatus;
+    private void validateNicknameLength(String nickname) {
+        if (nickname.length() < 1 || nickname.length() > 10) {
+            throw new NicknameLengthException();
+        }
+    }
+
+    public boolean isProgressOf(PomodoroRoom pomodoroRoom) {
+        return this.pomodoroRoom.getId().equals(pomodoroRoom.getId());
     }
 
     public boolean isOwnedBy(Member member) {
-        return getMember().equals(member);
+        return this.member.getId().equals(member.getId());
     }
 
-    public boolean hasSameNicknameMember(Member member) {
-        return getMember().hasSameNickname(member);
-    }
-
-    public void setDone() {
-        this.isDone = true;
+    public boolean hasSameNicknameWith(PomodoroProgress pomodoroProgress) {
+        return this.nickname.equals(pomodoroProgress.nickname);
     }
 
     public PomodoroContent findPomodoroRecordByCycle(Integer cycle) {
@@ -85,20 +87,7 @@ public class PomodoroProgress extends BaseTimeEntity {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public List<PomodoroContent> getPomodoroRecords() {
-        return getPomodoroContents().stream()
-                .toList();
-    }
-
-    @Deprecated
     public void proceed() {
-        if (isRetrospect()) {
-            currentCycle++;
-        }
-        pomodoroStatus = pomodoroStatus.getNext();
-    }
-
-    public void proceedV2() {
         // TODO: 서비스로 뺄지 말지(일관성을 위해)
         if (pomodoroStatus.equals(PomodoroStatus.RETROSPECT)) {
             if (currentCycle.equals(pomodoroRoom.getTotalCycle())) {
@@ -124,5 +113,9 @@ public class PomodoroProgress extends BaseTimeEntity {
 
     public boolean isNotRetrospect() {
         return pomodoroStatus != PomodoroStatus.RETROSPECT;
+    }
+
+    public boolean isNotIncludedIn(PomodoroRoom other) {
+        return !pomodoroRoom.getId().equals(other.getId());
     }
 }

@@ -1,13 +1,13 @@
 package harustudy.backend.member.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
-import harustudy.backend.member.exception.MemberNameLengthException;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,22 +21,51 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Column(length = 10)
-    private String nickname;
+    private String name;
 
-    public Member(@NotNull String nickname) {
-        validateLength(nickname);
-        this.nickname = nickname;
+    private String email;
+
+    private String imageUrl;
+
+    @Enumerated(EnumType.STRING)
+    private LoginType loginType;
+
+    public Member(String name, String email, String imageUrl, LoginType loginType) {
+        this.name = name;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.loginType = loginType;
     }
 
-    private void validateLength(String nickname) {
-        if (nickname.length() < 1 || nickname.length() > 10) {
-            throw new MemberNameLengthException();
+    public static Member guest() {
+        return new Member("guest", null, null, LoginType.GUEST);
+    }
+
+    public Member updateUserInfo(String name, String email, String imageUrl) {
+        this.name = name;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        return this;
+    }
+
+    public boolean isDifferentMember(Member other) {
+        return !this.equals(other);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
         }
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+        Member otherMember = (Member) other;
+        return getId().equals(otherMember.getId());
     }
 
-    public boolean hasSameNickname(Member member) {
-        return nickname.equals(member.nickname);
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

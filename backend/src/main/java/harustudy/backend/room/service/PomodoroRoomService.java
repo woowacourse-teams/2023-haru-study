@@ -1,21 +1,23 @@
 package harustudy.backend.room.service;
 
-import harustudy.backend.content.domain.PomodoroContent;
-import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
+import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.repository.MemberRepository;
-import harustudy.backend.participantcode.domain.GenerationStrategy;
-import harustudy.backend.participantcode.domain.ParticipantCode;
-import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
+import harustudy.backend.room.domain.GenerationStrategy;
+import harustudy.backend.room.domain.ParticipantCode;
 import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.dto.CreatePomodoroRoomDto;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
-import harustudy.backend.room.dto.MemberDto;
-import harustudy.backend.room.dto.PomodoroRoomAndMembersResponse;
+import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
+import harustudy.backend.room.dto.PomodoroRoomResponse;
+import harustudy.backend.room.dto.PomodoroRoomsResponse;
+import harustudy.backend.room.exception.ParticipantCodeNotFoundException;
+import harustudy.backend.room.exception.RoomNotFoundException;
+import harustudy.backend.room.repository.ParticipantCodeRepository;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +27,57 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PomodoroRoomService {
 
-    private final ParticipantCodeRepository participantCodeRepository;
-    private final PomodoroProgressRepository pomodoroProgressRepository;
-    private final MemberRepository memberRepository;
     private final PomodoroRoomRepository pomodoroRoomRepository;
+    private final PomodoroProgressRepository pomodoroProgressRepository;
+    private final ParticipantCodeRepository participantCodeRepository;
+    private final MemberRepository memberRepository;
     private final GenerationStrategy generationStrategy;
-    private final PomodoroContentRepository pomodoroContentRepository;
 
-    @Deprecated
-    public CreatePomodoroRoomDto createPomodoroRoom(CreatePomodoroRoomRequest request) {
+    public PomodoroRoomResponse findPomodoroRoom(Long roomId) {
+        return PomodoroRoomResponse.from(pomodoroRoomRepository.findById(roomId)
+                .orElseThrow(RoomNotFoundException::new));
+    }
+
+    public PomodoroRoomsResponse findPomodoroRoomWithFilter(Long memberId, String code) {
+        if (Objects.nonNull(code)) {
+            ParticipantCode participantCode = participantCodeRepository.findByCode(code)
+                    .orElseThrow(ParticipantCodeNotFoundException::new);
+            List<PomodoroRoom> pomodoroRooms = pomodoroRoomRepository.findByParticipantCode(
+                    participantCode);
+            validateIsPresent(pomodoroRooms);
+
+            return PomodoroRoomsResponse.from(pomodoroRooms);
+        }
+        if (Objects.nonNull(memberId)) {
+            return findPomodoroRoomByMemberId(memberId);
+        }
+
+        return PomodoroRoomsResponse.from(pomodoroRoomRepository.findAll());
+    }
+
+    private void validateIsPresent(List<PomodoroRoom> pomodoroRooms) {
+        if (pomodoroRooms.isEmpty()) {
+            throw new RoomNotFoundException();
+        }
+    }
+
+    private PomodoroRoomsResponse findPomodoroRoomByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findByMember(member);
+
+        List<PomodoroRoom> pomodoroRooms = mapToPomodoroRooms(pomodoroProgresses);
+
+        return PomodoroRoomsResponse.from(pomodoroRooms);
+    }
+
+    private List<PomodoroRoom> mapToPomodoroRooms(List<PomodoroProgress> pomodoroProgresses) {
+        return pomodoroProgresses.stream()
+                .map(PomodoroProgress::getPomodoroRoom)
+                .toList();
+    }
+
+    public CreatePomodoroRoomResponse createPomodoroRoom(CreatePomodoroRoomRequest request) {
         ParticipantCode participantCode = regenerateUniqueCode();
         participantCodeRepository.save(participantCode);
 
@@ -41,10 +85,9 @@ public class PomodoroRoomService {
                 request.timePerCycle(), participantCode);
         PomodoroRoom savedRoom = pomodoroRoomRepository.save(pomodoroRoom);
 
-        return CreatePomodoroRoomDto.from(savedRoom, participantCode);
+        return CreatePomodoroRoomResponse.from(savedRoom, participantCode);
     }
 
-    @Deprecated
     private ParticipantCode regenerateUniqueCode() {
         ParticipantCode participantCode = new ParticipantCode(generationStrategy);
         while (isParticipantCodePresent(participantCode)) {
@@ -53,50 +96,8 @@ public class PomodoroRoomService {
         return participantCode;
     }
 
-    @Deprecated
     private boolean isParticipantCodePresent(ParticipantCode participantCode) {
         return participantCodeRepository.findByCode(participantCode.getCode())
                 .isPresent();
-    }
-
-    @Deprecated
-    public Long participate(Long roomId, String nickname) {
-        Member member = memberRepository.save(new Member(nickname));
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
-                .orElseThrow(IllegalArgumentException::new);
-        pomodoroRoom.validateDuplicatedNickname(member);
-
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member);
-        pomodoroProgressRepository.save(pomodoroProgress);
-
-        int totalCycle = pomodoroRoom.getTotalCycle();
-        for (int i = 1; i <= totalCycle; i++) {
-            PomodoroContent content = new PomodoroContent(pomodoroProgress, i);
-            pomodoroContentRepository.save(content);
-        }
-        return member.getId();
-    }
-
-    @Deprecated
-    public PomodoroRoomAndMembersResponse findPomodoroRoomMetadata(Long roomId) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
-        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findAllByPomodoroRoom(pomodoroRoom);
-
-        if (pomodoroProgresses.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-
-        List<MemberDto> members = pomodoroProgresses.stream()
-                .map(pomodoroProgress -> new MemberDto(
-                        pomodoroProgress.getMember().getId(),
-                        pomodoroProgress.getMember().getNickname()))
-                .toList();
-
-        return new PomodoroRoomAndMembersResponse(
-                pomodoroRoom.getName(),
-                pomodoroRoom.getTotalCycle(),
-                pomodoroRoom.getTimePerCycle(),
-                members
-        );
     }
 }

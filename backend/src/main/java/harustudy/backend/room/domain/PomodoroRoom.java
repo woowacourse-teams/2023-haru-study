@@ -1,14 +1,19 @@
 package harustudy.backend.room.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
-import harustudy.backend.member.domain.Member;
-import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.room.exception.DuplicatedNicknameException;
+import harustudy.backend.room.exception.PomodoroRoomNameLengthException;
 import harustudy.backend.room.exception.PomodoroTimePerCycleException;
 import harustudy.backend.room.exception.PomodoroTotalCycleException;
-import harustudy.backend.room.exception.PomodoroRoomNameLengthException;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +29,11 @@ public class PomodoroRoom extends BaseTimeEntity {
     private static final int MIN_NAME_LENGTH = 1;
     private static final int MAX_NAME_LENGTH = 10;
 
-    // TODO: 순서 조정
-    private final static int MIN_TOTAL_CYCLE = 1;
-    private final static int MAX_TOTAL_CYCLE = 8;
+    private static final int MIN_TOTAL_CYCLE = 1;
+    private static final int MAX_TOTAL_CYCLE = 8;
 
-    private final static int MIN_TIME_PER_CYCLE = 20;
-    private final static int MAX_TIME_PER_CYCLE = 60;
+    private static final int MIN_TIME_PER_CYCLE = 20;
+    private static final int MAX_TIME_PER_CYCLE = 60;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,18 +86,6 @@ public class PomodoroRoom extends BaseTimeEntity {
     private void validateTimePerCycle(Integer timePerCycle) {
         if (timePerCycle < MIN_TIME_PER_CYCLE || timePerCycle > MAX_TIME_PER_CYCLE) {
             throw new PomodoroTimePerCycleException();
-        }
-    }
-
-    public boolean isParticipatedMember(Member member) {
-        return pomodoroProgresses.stream()
-                .anyMatch(memberProgress -> memberProgress.isOwnedBy(member));
-    }
-
-    public void validateDuplicatedNickname(Member member) {
-        if (pomodoroProgresses.stream()
-                .anyMatch(memberProgress -> memberProgress.hasSameNicknameMember(member))) {
-            throw new DuplicatedNicknameException();
         }
     }
 }

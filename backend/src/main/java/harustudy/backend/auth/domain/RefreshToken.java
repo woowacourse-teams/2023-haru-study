@@ -2,6 +2,7 @@ package harustudy.backend.auth.domain;
 
 import harustudy.backend.auth.exception.RefreshTokenExpiredException;
 import harustudy.backend.common.BaseTimeEntity;
+import harustudy.backend.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,16 +28,16 @@ public class RefreshToken extends BaseTimeEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "oauth_member_id")
-    private OauthMember oauthMember;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Column(columnDefinition = "BINARY(16)")
     private UUID uuid;
 
     private LocalDateTime expireDateTime;
 
-    public RefreshToken(OauthMember oauthMember, long expireLength) {
-        this.oauthMember = oauthMember;
+    public RefreshToken(Member member, long expireLength) {
+        this.member = member;
         this.uuid = UUID.randomUUID();
         this.expireDateTime = LocalDateTime.now().plus(expireLength, ChronoUnit.MILLIS);
     }
