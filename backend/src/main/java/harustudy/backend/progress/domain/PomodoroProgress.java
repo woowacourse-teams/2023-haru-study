@@ -18,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -62,13 +63,17 @@ public class PomodoroProgress extends BaseTimeEntity {
     }
 
     private void validateNicknameLength(String nickname) {
-    if (nickname.length() < 1 || nickname.length() > 10) {
-        throw new NicknameLengthException();
+        if (nickname.length() < 1 || nickname.length() > 10) {
+            throw new NicknameLengthException();
+        }
     }
+
+    public boolean isProgressOf(PomodoroRoom pomodoroRoom) {
+        return this.pomodoroRoom.getId().equals(pomodoroRoom.getId());
     }
 
     public boolean isOwnedBy(Member member) {
-        return getMember().equals(member);
+        return this.member.getId().equals(member.getId());
     }
 
     public boolean hasSameNicknameWith(PomodoroProgress pomodoroProgress) {
@@ -108,5 +113,9 @@ public class PomodoroProgress extends BaseTimeEntity {
 
     public boolean isNotRetrospect() {
         return pomodoroStatus != PomodoroStatus.RETROSPECT;
+    }
+
+    public boolean isNotIncludedIn(PomodoroRoom other) {
+        return !pomodoroRoom.getId().equals(other.getId());
     }
 }
