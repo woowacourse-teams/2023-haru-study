@@ -100,6 +100,6 @@ public class PomodoroProgressController {
     ) {
         Long progressId = pomodoroProgressService.participateStudy(authMember, studyId, request);
         return ResponseEntity.created(
-                URI.create("/api/v3/studies/" + studyId + "/progresses/" + progressId)).build();
+                URI.create("/api/studies/" + studyId + "/progresses/" + progressId)).build();
     }
 }
