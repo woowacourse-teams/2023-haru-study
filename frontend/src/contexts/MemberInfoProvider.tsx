@@ -33,10 +33,12 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
         setMemberInfo(memberInfo);
       },
       clearMemberInfo: () => {
+        navigate(ROUTES_PATH.login);
+        sessionStorage.removeItem('accessToken');
         setMemberInfo(null);
       },
     }),
-    [],
+    [navigate],
   );
 
   const fetchAccessTokenRefresh = useCallback(async () => {
@@ -111,11 +113,9 @@ export default MemberInfoProvider;
 export const useMemberInfo = () => {
   const value = useContext(MemberInfoContext);
 
-  if (value === null) {
-    throw new Error('MemberInfo 에러');
-  }
+  if (value === null) return { data: null };
 
-  return value;
+  return { data: value };
 };
 
 export const useMemberInfoAction = () => {
