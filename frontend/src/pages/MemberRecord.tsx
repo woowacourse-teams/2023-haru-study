@@ -1,9 +1,11 @@
+import MemberRecordContents from '@Components/record/MemberRecordContents/MemberRecordContents';
+
 import RecordLayout from './layout/RecordLayout';
 
 const MemberRecord = () => {
   return (
     <RecordLayout>
-      <div>나의 기록</div>
+      <MemberRecordContents />
     </RecordLayout>
   );
 };
