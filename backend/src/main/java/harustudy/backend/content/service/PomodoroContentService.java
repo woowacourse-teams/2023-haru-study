@@ -93,7 +93,6 @@ public class PomodoroContentService {
         return PomodoroContentsResponse.from(pomodoroContentResponses);
     }
 
-    // TODO: 이제 progressId로 요청을 받으니 굳이 roomId 까지 받아야 하는지 의문
     public void writePlan(AuthMember authMember, Long roomId, WritePlanRequest request) {
         Member member = memberRepository.findByIdIfExists(authMember.id());
         PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, request.progressId());
