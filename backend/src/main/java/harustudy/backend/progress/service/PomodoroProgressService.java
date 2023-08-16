@@ -87,6 +87,7 @@ public class PomodoroProgressService {
         validateIsSameMemberId(authMember, request.memberId());
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
         PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, request.nickname());
+        pomodoroProgress.generateContents(pomodoroRoom.getTotalCycle());
         PomodoroProgress saved = pomodoroProgressRepository.save(pomodoroProgress);
         return saved.getId();
     }

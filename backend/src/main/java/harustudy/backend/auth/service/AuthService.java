@@ -6,7 +6,6 @@ import harustudy.backend.auth.config.TokenConfig;
 import harustudy.backend.auth.domain.RefreshToken;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
-import harustudy.backend.auth.dto.RefreshTokenRequest;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
 import harustudy.backend.auth.exception.InvalidAccessTokenException;
@@ -20,6 +19,7 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import io.jsonwebtoken.JwtException;
 import java.util.Map;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,8 +88,8 @@ public class AuthService {
                 .build();
     }
 
-    public TokenResponse refresh(RefreshTokenRequest request) {
-        RefreshToken refreshToken = refreshTokenRepository.findByUuid(request.refreshTokenUuid())
+    public TokenResponse refresh(String refreshTokenRequest) {
+        RefreshToken refreshToken = refreshTokenRepository.findByUuid(UUID.fromString(refreshTokenRequest))
                 .orElseThrow(InvalidRefreshTokenException::new);
         refreshToken.validateExpired();
         refreshToken.updateUuidAndExpireDateTime(tokenConfig.refreshTokenExpireLength());
