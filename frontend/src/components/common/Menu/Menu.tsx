@@ -32,9 +32,10 @@ type Props = {
   trigger: ReactNode;
   $style?: CSSProp;
   $menuListPosition?: keyof typeof MENU_LIST_POSITION;
+  $menuListStyle?: CSSProp;
 };
 
-const Menu = ({ $menuListPosition = 'right', $style, children, trigger }: PropsWithChildren<Props>) => {
+const Menu = ({ $menuListPosition = 'right', $style, children, trigger, $menuListStyle }: PropsWithChildren<Props>) => {
   const { isShow, toggleShow, hide } = useDisplay();
 
   const ref = useOutsideClick<HTMLDivElement>(hide);
@@ -43,7 +44,7 @@ const Menu = ({ $menuListPosition = 'right', $style, children, trigger }: PropsW
     <MenuLayout ref={ref} $style={$style}>
       <MenuIconWrapper onClick={toggleShow}>{trigger}</MenuIconWrapper>
       {isShow && (
-        <MenuList $menuListPosition={$menuListPosition}>
+        <MenuList $menuListPosition={$menuListPosition} $menuListStyle={$menuListStyle || css``}>
           {Children.map(children, (child) => {
             const item = child as ReactElement;
             return cloneElement(item, { hide });
@@ -76,16 +77,9 @@ const MenuLayout = styled.div<MenuLayoutProp>`
 
 const MenuIconWrapper = styled.div`
   padding: 4px;
-  border-radius: 50%;
-
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: ${color.neutral[100]};
-  }
 `;
 
-type MenuListProp = Required<Pick<Props, '$menuListPosition'>>;
+type MenuListProp = Required<Pick<Props, '$menuListPosition' | '$menuListStyle'>>;
 
 const MenuList = styled.ul<MenuListProp>`
   position: absolute;
@@ -108,5 +102,9 @@ const MenuList = styled.ul<MenuListProp>`
   ${({ $menuListPosition, theme }) => css`
     ${MENU_LIST_POSITION[$menuListPosition]}
     background-color: ${theme.background};
+  `}
+
+  ${({ $menuListStyle }) => css`
+    ${$menuListStyle}
   `}
 `;
