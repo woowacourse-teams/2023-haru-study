@@ -14,15 +14,13 @@ const StudyRecordContents = () => {
     errorHandler: (error) => alert(error.message),
   });
 
-  const createdDateTime = studyBasicInfo ? new Date(studyBasicInfo.createdDateTime) : new Date();
-
   return (
     <>
       <StudyInformation
         studyName={studyBasicInfo?.name}
         totalCycle={studyBasicInfo?.totalCycle}
         timePerCycle={studyBasicInfo?.timePerCycle}
-        createdDateTime={createdDateTime}
+        createdDateTime={studyBasicInfo?.createdDateTime}
         $isLoading={isLoading}
       />
       <ProgressRecordList studyId={studyId} memberProgresses={memberProgresses} isLoading={isLoading} />

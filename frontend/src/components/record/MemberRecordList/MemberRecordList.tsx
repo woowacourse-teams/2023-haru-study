@@ -11,6 +11,8 @@ import { ROUTES_PATH } from '@Constants/routes';
 import CycleIcon from '@Assets/icons/CycleIcon';
 import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
+import date from '@Utils/date';
+
 import type { StudyBasicInfo } from '@Types/study';
 
 import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
@@ -24,8 +26,6 @@ const MemberRecordList = ({ studyList, isLoading }: Props) => {
   const navigate = useNavigate();
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
-
-  const progressDate = (date: Date) => `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
 
   if (isLoading)
     return (
@@ -45,7 +45,7 @@ const MemberRecordList = ({ studyList, isLoading }: Props) => {
           <StudyItem key={studyId} onClick={() => handleClickStudyItem(studyId)}>
             <StudyNameDateContainer>
               <Typography variant="h6">{name} 스터디</Typography>
-              <StudyDate>{progressDate(new Date(createdDateTime))}</StudyDate>
+              <StudyDate>{date.format(new Date(createdDateTime))}</StudyDate>
             </StudyNameDateContainer>
             <StudyCycleInfoLayout>
               <StudyCycleInfoContainer>
