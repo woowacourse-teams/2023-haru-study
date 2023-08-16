@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 
 import useStudyRecord from '@Hooks/record/useStudyRecord';
 
@@ -18,7 +17,7 @@ const RecordContents = () => {
   const createdDateTime = studyBasicInfo ? new Date(studyBasicInfo.createdDateTime) : new Date();
 
   return (
-    <RecordContentsLayout>
+    <>
       <StudyInformation
         studyName={studyBasicInfo?.studyName}
         totalCycle={studyBasicInfo?.totalCycle}
@@ -27,19 +26,8 @@ const RecordContents = () => {
         $isLoading={isLoading}
       />
       <MemberRecordList studyId={studyId} memberProgresses={memberProgresses} isLoading={isLoading} />
-    </RecordContentsLayout>
+    </>
   );
 };
-
-const RecordContentsLayout = styled.div`
-  display: grid;
-  row-gap: 40px;
-
-  max-width: 1200px;
-
-  margin: 0 auto;
-  padding: 0px 60px;
-  padding-bottom: 60px;
-`;
 
 export default RecordContents;
