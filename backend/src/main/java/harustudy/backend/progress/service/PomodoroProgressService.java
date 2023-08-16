@@ -39,17 +39,24 @@ public class PomodoroProgressService {
         return PomodoroProgressResponse.from(pomodoroProgress);
     }
 
+    // TODO: 동적쿼리로 변경(memberId 유무에 따른 분기처리)
     public PomodoroProgressesResponse findPomodoroProgressWithFilter(
             AuthMember authMember, Long studyId, Long memberId
     ) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
-        // TODO: 동적쿼리로 변경(memberId 유무에 따른 분기처리)
+        validateEverParticipated(authMember, pomodoroRoom);
         if (Objects.isNull(memberId)) {
             return getPomodoroProgressesResponseWithoutMemberFilter(pomodoroRoom);
         }
         Member member = memberRepository.findByIdIfExists(memberId);
         validateIsSameMemberId(authMember, memberId);
         return getPomodoroProgressesResponseWithMemberFilter(pomodoroRoom, member);
+    }
+
+    private void validateEverParticipated(AuthMember authMember, PomodoroRoom pomodoroRoom) {
+        Member member = memberRepository.findByIdIfExists(authMember.id());
+        pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
+                .orElseThrow(AuthorizationException::new);
     }
 
     private PomodoroProgressesResponse getPomodoroProgressesResponseWithoutMemberFilter(
