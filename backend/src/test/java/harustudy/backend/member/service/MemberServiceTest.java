@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.MemberResponse;
-import harustudy.backend.member.exception.MemberHasInvalidAuthorizationException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,6 +73,6 @@ class MemberServiceTest {
         // when, then
         assertThatThrownBy(
                 () -> memberService.findMember(authMember, member2.getId())).isInstanceOf(
-                MemberHasInvalidAuthorizationException.class);
+                AuthorizationException.class);
     }
 }

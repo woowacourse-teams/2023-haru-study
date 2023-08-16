@@ -1,6 +1,6 @@
 package harustudy.backend.auth;
 
-import harustudy.backend.auth.exception.AuthorizationException;
+import harustudy.backend.auth.exception.InvalidAuthorizationHeaderException;
 import harustudy.backend.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +22,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         String[] splitAuthorizationHeader = authorizationHeader.split(" ");
         if (splitAuthorizationHeader.length != 2 ||
                 !splitAuthorizationHeader[0].equals("Bearer")) {
-            throw new AuthorizationException();
+            throw new InvalidAuthorizationHeaderException();
         }
         String accessToken = authorizationHeader.split(" ")[1];
         authService.validateAccessToken(accessToken);
