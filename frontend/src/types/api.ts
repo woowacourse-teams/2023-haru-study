@@ -1,6 +1,11 @@
 import type { MemberInfo } from './member';
 import type { Member, MemberRecordContent, PlanList, Step, StudyBasicInfo } from './study';
 
+export type ResponseAPIError = {
+  message: string;
+  code: number;
+};
+
 export type ResponseCreateStudy = { participantCode: string; studyName: string };
 
 export type ResponseStudyInfo = {
