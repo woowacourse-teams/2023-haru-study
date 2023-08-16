@@ -25,6 +25,8 @@ export type ResponseStudyMetadata = {
   progresses: MemberProgress[];
 } & StudyBasicInfo;
 
+export type ResponseMemberStudyList = StudyBasicInfo[];
+
 export type ResponseMemberRecordContents = {
   content: MemberRecordContent[];
 };

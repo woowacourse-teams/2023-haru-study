@@ -20,11 +20,12 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
   const [memberProgresses, setMemberProgresses] = useState<MemberProgress[]>([]);
 
   const setInitInfo = (
-    { studyName, timePerCycle, totalCycle, createdDateTime }: StudyBasicInfo,
+    { studyId, name, timePerCycle, totalCycle, createdDateTime }: StudyBasicInfo,
     members: MemberProgress[],
   ) => {
     setStudyBasicInfo({
-      studyName,
+      studyId,
+      name,
       timePerCycle,
       totalCycle,
       createdDateTime,

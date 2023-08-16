@@ -19,7 +19,7 @@ const StudyRecordContents = () => {
   return (
     <>
       <StudyInformation
-        studyName={studyBasicInfo?.studyName}
+        studyName={studyBasicInfo?.name}
         totalCycle={studyBasicInfo?.totalCycle}
         timePerCycle={studyBasicInfo?.timePerCycle}
         createdDateTime={createdDateTime}
