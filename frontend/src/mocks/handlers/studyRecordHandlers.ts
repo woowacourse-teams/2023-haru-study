@@ -56,8 +56,8 @@ const STUDY_CONTENT = {
   ],
 };
 
-const STUDY_MEMBERS: { pomodoroProgresses: MemberProgress[] } = {
-  pomodoroProgresses: [
+const STUDY_MEMBERS: { progresses: MemberProgress[] } = {
+  progresses: [
     {
       progressId: '1',
       nickname: '노아',
