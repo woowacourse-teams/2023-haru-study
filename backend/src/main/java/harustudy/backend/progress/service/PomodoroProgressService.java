@@ -100,7 +100,7 @@ public class PomodoroProgressService {
     private void validateProgressIsRelatedWith(
             PomodoroProgress pomodoroProgress, Member member, PomodoroRoom pomodoroRoom
     ) {
-        if (pomodoroProgress.isNotOwnedBy(member)) {
+        if (!pomodoroProgress.isOwnedBy(member)) {
             throw new AuthorizationException();
         }
         if (pomodoroProgress.isNotIncludedIn(pomodoroRoom)) {
