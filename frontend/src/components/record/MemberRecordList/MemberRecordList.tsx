@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
+import { TextSkeletonStyle } from '@Styles/common';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
@@ -14,14 +15,24 @@ import type { StudyBasicInfo } from '@Types/study';
 
 type Props = {
   studyList: StudyBasicInfo[] | null;
+  isLoading: boolean;
 };
 
-const MemberRecordList = ({ studyList }: Props) => {
+const MemberRecordList = ({ studyList, isLoading }: Props) => {
   const navigate = useNavigate();
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
 
   const progressDate = (date: Date) => `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+
+  if (isLoading)
+    return (
+      <SkeletonLayout>
+        <SkeletonItem />
+        <SkeletonItem />
+        <SkeletonItem />
+      </SkeletonLayout>
+    );
 
   return (
     <Layout>
@@ -105,4 +116,16 @@ const StudyCycleInfoContainer = styled.div`
     font-size: 1.8rem;
     font-weight: 400;
   }
+`;
+
+const SkeletonLayout = styled.div`
+  display: grid;
+  row-gap: 40px;
+
+  max-width: 1200px;
+`;
+
+const SkeletonItem = styled.div`
+  height: 130px;
+  ${TextSkeletonStyle}
 `;

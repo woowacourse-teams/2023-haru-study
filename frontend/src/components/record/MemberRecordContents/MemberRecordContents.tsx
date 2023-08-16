@@ -30,7 +30,7 @@ const MemberRecordContents = () => {
       >
         {name}님의 스터디 기록
       </Typography>
-      <MemberRecordList studyList={studyList} />
+      <MemberRecordList studyList={studyList} isLoading={isLoading} />
     </>
   );
 };
