@@ -122,7 +122,15 @@ export const studyRecordHandlers = [
 
     if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_METADATA), ctx.delay(400));
 
-    if (accessToken !== requestAuthToken) return res(ctx.status(401), ctx.delay(100));
+    if (accessToken !== requestAuthToken)
+      return res(
+        ctx.status(401),
+        ctx.delay(100),
+        ctx.json({
+          message: '만료된 갱신 토큰입니다.',
+          code: '1402',
+        }),
+      );
 
     return res(ctx.status(200), ctx.json(STUDY_METADATA), ctx.delay(400));
   }),
@@ -132,7 +140,15 @@ export const studyRecordHandlers = [
 
     if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_MEMBERS), ctx.delay(400));
 
-    if (accessToken !== requestAuthToken) return res(ctx.status(401), ctx.delay(100));
+    if (accessToken !== requestAuthToken)
+      return res(
+        ctx.status(401),
+        ctx.delay(100),
+        ctx.json({
+          message: '만료된 갱신 토큰입니다.',
+          code: '1402',
+        }),
+      );
 
     return res(ctx.status(200), ctx.json(STUDY_MEMBERS), ctx.delay(400));
   }),
@@ -142,7 +158,15 @@ export const studyRecordHandlers = [
 
     if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(400));
 
-    if (accessToken !== requestAuthToken) return res(ctx.status(401), ctx.delay(100));
+    if (accessToken !== requestAuthToken)
+      return res(
+        ctx.status(401),
+        ctx.delay(100),
+        ctx.json({
+          message: '만료된 갱신 토큰입니다.',
+          code: '1402',
+        }),
+      );
 
     return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(400));
   }),

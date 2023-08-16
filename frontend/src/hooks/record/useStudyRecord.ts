@@ -10,7 +10,7 @@ import { requestAccessTokenRefresh, requestGetStudyData, requestGetStudyMembers 
 
 import type { MemberProgress, StudyBasicInfo } from '@Types/study';
 
-import { ExpiredAccessTokenError } from '../../errors/CustomError';
+import { APIError } from '@Errors/index';
 
 const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error) => void }) => {
   const navigate = useNavigate();
@@ -67,7 +67,7 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
 
       setInitInfo(basicInfo, progresses);
     } catch (error) {
-      if (error instanceof ExpiredAccessTokenError) {
+      if (error instanceof APIError && error.code === '1402') {
         const accessToken = await getAccessTokenRefresh();
 
         if (accessToken) {

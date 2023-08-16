@@ -10,7 +10,7 @@ import { requestAccessTokenRefresh, requestGetMemberRecordContents } from '@Apis
 
 import type { MemberRecordContent } from '@Types/study';
 
-import { ExpiredAccessTokenError } from '../../errors/CustomError';
+import { APIError } from '@Errors/index';
 
 const useMemberRecord = (studyId: string, progressId: string, options?: { errorHandler: (error: Error) => void }) => {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const useMemberRecord = (studyId: string, progressId: string, options?: { errorH
 
       setMemberRecordContents(content);
     } catch (error) {
-      if (error instanceof ExpiredAccessTokenError) {
+      if (error instanceof APIError && error.code === '1402') {
         const accessToken = await getAccessTokenRefresh();
 
         if (accessToken) {
