@@ -10,7 +10,7 @@ import { requestAccessTokenRefresh, requestMemberInfo } from '@Apis/index';
 
 import type { MemberInfo } from '@Types/member';
 
-import { ExpiredAccessTokenError } from '../errors/CustomError';
+import { APIError, ResponseError } from '../errors';
 
 type Actions = {
   initMemberInfo: (memberInfo: MemberInfo) => void;
@@ -68,20 +68,25 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
     try {
       const accessTokenPayload = accessToken.split('.')[1];
 
-      if (!accessTokenPayload) throw new ExpiredAccessTokenError('토큰이 만료되었습니다.', 401);
+      if (!accessTokenPayload) {
+        await fetchAccessTokenRefresh();
+        await fetchMemberInfo();
+
+        return;
+      }
 
       const { sub: memberId } = JSON.parse(atob(accessTokenPayload)) as { sub: string };
 
       const memberInfo = await requestMemberInfo(accessToken, memberId);
       actions.initMemberInfo(memberInfo);
     } catch (error) {
-      if (error instanceof ExpiredAccessTokenError) {
+      if (error instanceof APIError && error.code === '1403') {
         await fetchAccessTokenRefresh();
         await fetchMemberInfo();
 
         return;
       }
-      if (!(error instanceof Error)) throw error;
+      if (!(error instanceof ResponseError)) throw error;
 
       alert(error.message);
     }
