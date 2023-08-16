@@ -8,8 +8,9 @@ import type {
   ResponseMemberRecordContents,
   ResponseMemberStudyMetadata,
   ResponsePlanList,
+  ResponseStudyData,
   ResponseStudyInfo,
-  ResponseStudyMetadata,
+  ResponseStudyMembers,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
@@ -74,12 +75,17 @@ export const requestSubmitStudyingForm = (studyId: string, memberId: string) =>
   http.post(`/api/studies/${studyId}/members/${memberId}/next-step`);
 
 export const requestGetStudyData = (studyId: string, accessToken: string) =>
-  http.get<Omit<ResponseStudyMetadata, 'progresses'>>(`/api/studies/${studyId}`, {
+  http.get<ResponseStudyData>(`/api/studies/${studyId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+export const requestGetMemberStudyListData = (memberId: string, accessToken: string) =>
+  http.get<ResponseStudyData[]>(`/api/studies?memberId=${memberId}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
 export const requestGetStudyMembers = (studyId: string, accessToken: string) =>
-  http.get<Pick<ResponseStudyMetadata, 'progresses'>>(`/api/studies/${studyId}/progresses`, {
+  http.get<ResponseStudyMembers>(`/api/studies/${studyId}/progresses`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
