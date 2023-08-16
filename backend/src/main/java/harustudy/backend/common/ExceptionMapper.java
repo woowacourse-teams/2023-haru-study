@@ -6,6 +6,7 @@ import harustudy.backend.auth.exception.InvalidProviderNameException;
 import harustudy.backend.auth.exception.InvalidRefreshTokenException;
 import harustudy.backend.auth.exception.RefreshTokenExpiredException;
 import harustudy.backend.content.exception.PomodoroContentNotFoundException;
+import harustudy.backend.member.exception.MemberHasInvalidAuthorizationException;
 import harustudy.backend.progress.exception.NicknameLengthException;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.exception.MemberNotParticipatedException;
@@ -41,6 +42,8 @@ public class ExceptionMapper {
                 ExceptionSituation.of("멤버의 닉네임 길이가 유효하지 않습니다.", BAD_REQUEST, 1001));
         mapper.put(MemberNotFoundException.class,
                 ExceptionSituation.of("해당하는 멤버가 없습니다.", NOT_FOUND, 1002));
+        mapper.put(MemberHasInvalidAuthorizationException.class,
+                ExceptionSituation.of("요청을 수행하기에 적절한 인가가 부여되지 않은 멤버입니다.", FORBIDDEN, 1003));
     }
 
     private static void setupPomodoroContentException() {
