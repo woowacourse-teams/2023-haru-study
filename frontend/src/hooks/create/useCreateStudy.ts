@@ -9,7 +9,7 @@ import { requestAccessTokenRefresh, requestCreateStudy } from '@Apis/index';
 
 import type { StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
-import { ExpiredAccessTokenError } from '../../errors/CustomError';
+import { APIError, ResponseError } from '@Errors/index';
 
 const useCreateStudy = (errorHandler: (error: Error) => void) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +31,7 @@ const useCreateStudy = (errorHandler: (error: Error) => void) => {
 
       return accessToken;
     } catch (error) {
-      if (error instanceof Error) return errorHandler(error);
+      if (error instanceof ResponseError || error instanceof APIError) return errorHandler(error);
     }
   };
 
@@ -44,7 +44,7 @@ const useCreateStudy = (errorHandler: (error: Error) => void) => {
     try {
       return await requestCreateStudy(studyName, totalCycle, timePerCycle, accessToken);
     } catch (error) {
-      if (error instanceof Error) return errorHandler(error);
+      if (error instanceof ResponseError || error instanceof APIError) return errorHandler(error);
     }
   };
 
@@ -67,12 +67,16 @@ const useCreateStudy = (errorHandler: (error: Error) => void) => {
 
       return await requestCreateStudy(studyName, totalCycle, timePerCycle, accessToken);
     } catch (error) {
-      if (error instanceof ExpiredAccessTokenError) {
-        const accessToken = await getAccessTokenRefresh();
+      if (error instanceof APIError) {
+        if (error.code === '1403') {
+          const accessToken = await getAccessTokenRefresh();
 
-        if (accessToken) return await newRequestCreateStudy(studyName, totalCycle, timePerCycle, accessToken);
+          if (accessToken) return await newRequestCreateStudy(studyName, totalCycle, timePerCycle, accessToken);
+        }
+
+        return errorHandler(error);
       }
-      if (error instanceof Error) return errorHandler(error);
+      if (error instanceof ResponseError) return errorHandler(error);
     } finally {
       setIsLoading(false);
     }
