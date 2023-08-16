@@ -1,7 +1,6 @@
 import type { MemberInfo } from './member';
-
 import type {
-  Member,
+  MemberProgress,
   MemberRecordContent,
   PlanList,
   Step,
@@ -9,7 +8,6 @@ import type {
   StudyTimePerCycleOptions,
   TotalCycleOptions,
 } from './study';
-
 
 export type ResponseAPIError = {
   message: string;
