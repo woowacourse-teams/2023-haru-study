@@ -24,7 +24,7 @@ type Props = {
   nickname: string;
 };
 
-const MemberRecord = ({ studyId, nickname, progressId }: Props) => {
+const ProgressRecord = ({ studyId, nickname, progressId }: Props) => {
   const { memberRecordContents, isLoading } = useMemberRecord(studyId, progressId, {
     errorHandler: (error) => alert(error.message),
   });
@@ -34,7 +34,7 @@ const MemberRecord = ({ studyId, nickname, progressId }: Props) => {
   }
 
   return (
-    <MemberRecordLayout>
+    <ProgressRecordLayout>
       <Tabs>
         {memberRecordContents?.map((content) => (
           <Tabs.Item key={content.cycle} label={`${content.cycle}번째 사이클`}>
@@ -71,13 +71,13 @@ const MemberRecord = ({ studyId, nickname, progressId }: Props) => {
           </Tabs.Item>
         ))}
       </Tabs>
-    </MemberRecordLayout>
+    </ProgressRecordLayout>
   );
 };
 
-export default MemberRecord;
+export default ProgressRecord;
 
-const MemberRecordLayout = styled.div`
+const ProgressRecordLayout = styled.div`
   padding: 40px 30px;
 
   h5 {

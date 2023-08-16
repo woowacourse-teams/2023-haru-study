@@ -1,11 +1,11 @@
-import RecordContents from '@Components/record/RecordContents/RecordContents';
+import StudyRecordContents from '@Components/record/StudyRecordContents/StudyRecordContents';
 
 import RecordLayout from './layout/RecordLayout';
 
 const StudyRecord = () => {
   return (
     <RecordLayout>
-      <RecordContents />
+      <StudyRecordContents />
     </RecordLayout>
   );
 };

@@ -4,7 +4,7 @@ import Typography from '@Components/common/Typography/Typography';
 
 import type { MemberProgress } from '@Types/study';
 
-import MemberRecord from '../MemberRecord/MemberRecord';
+import ProgressRecord from '../ProgressRecord/ProgressRecord';
 
 type Props = {
   memberProgresses: MemberProgress[];
@@ -12,7 +12,7 @@ type Props = {
   isLoading: boolean;
 };
 
-const MemberRecordList = ({ memberProgresses = [], studyId = '', isLoading }: Props) => {
+const ProgressRecordList = ({ memberProgresses = [], studyId = '', isLoading }: Props) => {
   if (isLoading) {
     return <AccordionSkeleton />;
   }
@@ -25,7 +25,7 @@ const MemberRecordList = ({ memberProgresses = [], studyId = '', isLoading }: Pr
             <Typography variant="h5">{nickname}의 기록</Typography>
           </Accordion.Header>
           <Accordion.Panel>
-            <MemberRecord studyId={studyId} progressId={progressId} nickname={nickname} />
+            <ProgressRecord studyId={studyId} progressId={progressId} nickname={nickname} />
           </Accordion.Panel>
         </Accordion.Item>
       ))}
@@ -33,4 +33,4 @@ const MemberRecordList = ({ memberProgresses = [], studyId = '', isLoading }: Pr
   );
 };
 
-export default MemberRecordList;
+export default ProgressRecordList;

@@ -2,10 +2,10 @@ import { useParams } from 'react-router-dom';
 
 import useStudyRecord from '@Hooks/record/useStudyRecord';
 
-import MemberRecordList from '../MemberRecordList/MemberRecordList';
+import ProgressRecordList from '../ProgressRecordList/ProgressRecordList';
 import StudyInformation from '../StudyInformation/StudyInformation';
 
-const RecordContents = () => {
+const StudyRecordContents = () => {
   const { studyId } = useParams<{ studyId: string }>();
 
   if (!studyId) throw Error('잘못된 접근입니다.');
@@ -25,9 +25,9 @@ const RecordContents = () => {
         createdDateTime={createdDateTime}
         $isLoading={isLoading}
       />
-      <MemberRecordList studyId={studyId} memberProgresses={memberProgresses} isLoading={isLoading} />
+      <ProgressRecordList studyId={studyId} memberProgresses={memberProgresses} isLoading={isLoading} />
     </>
   );
 };
 
-export default RecordContents;
+export default StudyRecordContents;
