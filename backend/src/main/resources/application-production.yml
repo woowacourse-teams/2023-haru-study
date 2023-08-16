@@ -11,7 +11,7 @@ spring:
 
   config:
     import:
-      - classpath:/submodule/application-auth.yml
+      - classpath:/submodule/application-auth-production.yml
       - classpath:/submodule/application-db-production.yml
 
 springdoc:
