@@ -14,8 +14,6 @@ import type {
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
-import { ExpiredAccessTokenError, NotExistProgressesError } from '../errors/CustomError';
-
 const BASE_URL = '/api/v2';
 
 // 옛날거
@@ -95,24 +93,10 @@ export const requestAuthenticateParticipationCode = (participantCode: string, ac
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
-export const requestCheckProgresses = async (studyId: string, memberId: string, accessToken: string) => {
-  const response = await fetch(`/api/v2/studies/${studyId}/progresses?memberId=${memberId}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
+export const requestCheckProgresses = async (studyId: string, memberId: string, accessToken: string) =>
+  http.get<ResponseProgresses>(`/api/v2/studies/${studyId}/progresses?memberId=${memberId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
   });
-
-  if (response.status >= 200 && response.status < 300) {
-    return (await response.json()) as ResponseProgresses;
-  }
-
-  if (response.status === 401) throw new ExpiredAccessTokenError('토큰이 만료되었습니다.', response.status);
-
-  if (response.status === 404) throw new NotExistProgressesError('progresses가 존재하지 않아요.', response.status);
-
-  throw new Error('에러가 발생했습니다.');
-};
 
 export const requestRegisterProgress = (nickname: string, studyId: string, memberId: string, accessToken: string) =>
   http.post(`/api/v2/studies/${studyId}/progresses`, {

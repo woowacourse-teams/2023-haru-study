@@ -9,7 +9,7 @@ import { boolCheckCookie } from '@Utils/cookie';
 
 import { requestAccessTokenRefresh, requestCheckProgresses } from '@Apis/index';
 
-import { ExpiredAccessTokenError, NotExistProgressesError } from '../../errors/CustomError';
+import { APIError, ResponseError } from '../../errors';
 
 const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => void) => {
   const { studyId } = useParams();
@@ -43,7 +43,7 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
 
       return accessToken;
     } catch (error) {
-      if (error instanceof Error) return errorHandler(error);
+      if (error instanceof ResponseError || error instanceof APIError) return errorHandler(error);
     }
   }, [errorHandler, navigate]);
 
@@ -52,9 +52,15 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
       try {
         return await requestCheckProgresses(studyId, memberId, accessToken);
       } catch (error) {
-        if (error instanceof NotExistProgressesError) return setNickname('');
+        if (error instanceof APIError) {
+          if (error.code === '1201') return setNickname('');
 
-        if (error instanceof Error) {
+          errorHandler(error);
+          navigate(ROUTES_PATH.participation);
+          return;
+        }
+
+        if (error instanceof ResponseError) {
           errorHandler(error);
           navigate(ROUTES_PATH.participation);
           return;
@@ -83,15 +89,20 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
 
       setNickname(data.progresses[0].nickname);
     } catch (error) {
-      if (error instanceof ExpiredAccessTokenError) {
-        const accessToken = await getAccessTokenRefresh();
+      if (error instanceof APIError) {
+        if (error.code === '1403') {
+          const accessToken = await getAccessTokenRefresh();
 
-        if (memberInfo && accessToken) return await newRequestCheckProgresses(studyId, memberInfo.id, accessToken);
+          if (memberInfo && accessToken) return await newRequestCheckProgresses(studyId, memberInfo.id, accessToken);
+        }
+        if (error.code === '1201') return setNickname('');
+
+        errorHandler(error);
+        navigate(ROUTES_PATH.participation);
+        return;
       }
 
-      if (error instanceof NotExistProgressesError) return setNickname('');
-
-      if (error instanceof Error) {
+      if (error instanceof ResponseError) {
         errorHandler(error);
         navigate(ROUTES_PATH.participation);
         return;
