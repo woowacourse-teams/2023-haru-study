@@ -3,7 +3,9 @@ package harustudy.backend.progress.domain;
 import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
+import harustudy.backend.progress.exception.NicknameLengthException;
 import harustudy.backend.room.domain.PomodoroRoom;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -39,10 +41,10 @@ public class PomodoroProgress extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "pomodoroProgress")
+    @OneToMany(mappedBy = "pomodoroProgress", cascade = CascadeType.PERSIST)
     private List<PomodoroContent> pomodoroContents = new ArrayList<>();
 
-    private boolean isDone = false;
+    private String nickname;
 
     @NotNull
     private Integer currentCycle;
@@ -50,55 +52,30 @@ public class PomodoroProgress extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private PomodoroStatus pomodoroStatus;
 
-    public PomodoroProgress(PomodoroRoom pomodoroRoom, Member member) {
+    public PomodoroProgress(PomodoroRoom pomodoroRoom, Member member, String nickname) {
         this.pomodoroRoom = pomodoroRoom;
         this.member = member;
+        this.nickname = nickname;
         this.currentCycle = 1;
         this.pomodoroStatus = PomodoroStatus.PLANNING;
+
+        validateNicknameLength(nickname);
     }
 
-    // TODO: 없애기
-    public PomodoroProgress(PomodoroRoom pomodoroRoom, Member member, @NotNull Integer currentCycle,
-                            PomodoroStatus pomodoroStatus) {
-        this.pomodoroRoom = pomodoroRoom;
-        this.member = member;
-        this.currentCycle = currentCycle;
-        this.pomodoroStatus = pomodoroStatus;
-    }
-
-    public boolean isOwnedBy(Member member) {
-        return getMember().equals(member);
-    }
-
-    public boolean hasSameNicknameMember(Member member) {
-        return getMember().hasSameNickname(member);
-    }
-
-    public void setDone() {
-        this.isDone = true;
-    }
-
-    public PomodoroContent findPomodoroRecordByCycle(Integer cycle) {
-        return getPomodoroContents().stream()
-                .filter(pomodoro -> pomodoro.getCycle().equals(cycle))
-                .findAny()
-                .orElseThrow(IllegalArgumentException::new);
-    }
-
-    public List<PomodoroContent> getPomodoroRecords() {
-        return getPomodoroContents().stream()
-                .toList();
-    }
-
-    @Deprecated
-    public void proceed() {
-        if (isRetrospect()) {
-            currentCycle++;
+    private void validateNicknameLength(String nickname) {
+        if (nickname.length() < 1 || nickname.length() > 10) {
+            throw new NicknameLengthException();
         }
-        pomodoroStatus = pomodoroStatus.getNext();
     }
 
-    public void proceedV2() {
+    public void generateContents(int totalCycle) {
+        for (int cycle = 1; cycle <= totalCycle; cycle++) {
+            PomodoroContent pomodoroContent = new PomodoroContent(this, cycle);
+            pomodoroContents.add(pomodoroContent);
+        }
+    }
+
+    public void proceed() {
         // TODO: 서비스로 뺄지 말지(일관성을 위해)
         if (pomodoroStatus.equals(PomodoroStatus.RETROSPECT)) {
             if (currentCycle.equals(pomodoroRoom.getTotalCycle())) {
@@ -110,6 +87,18 @@ public class PomodoroProgress extends BaseTimeEntity {
         pomodoroStatus = pomodoroStatus.getNext();
     }
 
+    public boolean isProgressOf(PomodoroRoom pomodoroRoom) {
+        return this.pomodoroRoom.getId().equals(pomodoroRoom.getId());
+    }
+
+    public boolean isOwnedBy(Member member) {
+        return this.member.getId().equals(member.getId());
+    }
+
+    public boolean hasSameNicknameWith(PomodoroProgress pomodoroProgress) {
+        return this.nickname.equals(pomodoroProgress.nickname);
+    }
+
     public boolean isRetrospect() {
         return pomodoroStatus == PomodoroStatus.RETROSPECT;
     }
@@ -118,11 +107,11 @@ public class PomodoroProgress extends BaseTimeEntity {
         return pomodoroStatus != PomodoroStatus.PLANNING;
     }
 
-    public boolean isNotStudying() {
-        return pomodoroStatus != PomodoroStatus.STUDYING;
-    }
-
     public boolean isNotRetrospect() {
         return pomodoroStatus != PomodoroStatus.RETROSPECT;
+    }
+
+    public boolean isNotIncludedIn(PomodoroRoom other) {
+        return !pomodoroRoom.getId().equals(other.getId());
     }
 }

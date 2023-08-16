@@ -1,23 +1,27 @@
 package harustudy.backend.content.service;
 
+import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.content.dto.PomodoroContentResponse;
 import harustudy.backend.content.dto.PomodoroContentsResponse;
+import harustudy.backend.content.dto.WritePlanRequest;
+import harustudy.backend.content.dto.WriteRetrospectRequest;
 import harustudy.backend.content.exception.PomodoroContentNotFoundException;
 import harustudy.backend.content.repository.PomodoroContentRepository;
 import harustudy.backend.member.domain.Member;
-import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.progress.exception.InvalidPomodoroProgressException.UnavailableToProceed;
 import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
 import harustudy.backend.progress.exception.PomodoroProgressStatusException;
+import harustudy.backend.progress.exception.ProgressNotBelongToRoomException;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.exception.RoomNotFoundException;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
+import jakarta.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 @Service
-@Deprecated
 public class PomodoroContentService {
 
     private final PomodoroRoomRepository pomodoroRoomRepository;
@@ -33,25 +36,85 @@ public class PomodoroContentService {
     private final PomodoroProgressRepository pomodoroProgressRepository;
     private final PomodoroContentRepository pomodoroContentRepository;
 
-    public Map<String, String> findCurrentCyclePlan(Long roomId, Long memberId,
-                                                    Integer cycle) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(IllegalArgumentException::new);
+    public PomodoroContentsResponse findContentsWithFilter(
+            AuthMember authMember, Long roomId, Long progressId, @Nullable Integer cycle
+    ) {
+        List<PomodoroProgress> pomodoroProgresses = getProgressesIfAuthorized(
+                authMember, roomId);
+        PomodoroProgress pomodoroProgress = filterSingleProgressById(
+                pomodoroProgresses, progressId);
 
-        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByPomodoroRoomAndMember(
-                        pomodoroRoom, member)
-                .orElseThrow(IllegalArgumentException::new);
-
-        return pomodoroProgress.findPomodoroRecordByCycle(cycle).getPlan();
+        List<PomodoroContent> pomodoroContents = pomodoroProgress.getPomodoroContents();
+        if (Objects.isNull(cycle)) {
+            return getPomodoroContentsResponseWithoutCycleFilter(pomodoroContents);
+        }
+        return getPomodoroContentsResponseWithCycleFilter(pomodoroContents, cycle);
     }
 
-    public void writePlan(Long roomId, Long memberId, Map<String, String> plan) {
-        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, memberId);
-        PomodoroContent recentRecord = findRecordWithSameCycle(pomodoroProgress);
+    private List<PomodoroProgress> getProgressesIfAuthorized(AuthMember authMember, Long roomId) {
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
+                .orElseThrow(RoomNotFoundException::new);
+        List<PomodoroProgress> pomodoroProgresses = pomodoroProgressRepository.findAllByPomodoroRoomFetchMember(
+                pomodoroRoom);
+        Member member = memberRepository.findByIdIfExists(authMember.id());
+        if (isProgressNotRelatedToMember(pomodoroProgresses, member)) {
+            throw new AuthorizationException();
+        }
+        return pomodoroProgresses;
+    }
+
+    private boolean isProgressNotRelatedToMember(List<PomodoroProgress> pomodoroProgresses,
+            Member member) {
+        return pomodoroProgresses.stream()
+                .noneMatch(pomodoroProgress -> pomodoroProgress.isOwnedBy(member));
+    }
+
+    private PomodoroProgress filterSingleProgressById(
+            List<PomodoroProgress> pomodoroProgresses, Long progressId) {
+        return pomodoroProgresses.stream()
+                .filter(progress -> progress.getId().equals(progressId))
+                .findFirst()
+                .orElseThrow(PomodoroProgressNotFoundException::new);
+    }
+
+    private PomodoroContentsResponse getPomodoroContentsResponseWithoutCycleFilter(List<PomodoroContent> pomodoroContents) {
+        List<PomodoroContentResponse> pomodoroContentResponses = pomodoroContents.stream()
+                .map(PomodoroContentResponse::from)
+                .toList();
+        return PomodoroContentsResponse.from(pomodoroContentResponses);
+    }
+
+    private PomodoroContentsResponse getPomodoroContentsResponseWithCycleFilter(
+            List<PomodoroContent> pomodoroContents, Integer cycle) {
+        List<PomodoroContentResponse> pomodoroContentResponses = pomodoroContents.stream()
+                .filter(content -> content.getCycle().equals(cycle))
+                .map(PomodoroContentResponse::from)
+                .toList();
+        return PomodoroContentsResponse.from(pomodoroContentResponses);
+    }
+
+    public void writePlan(AuthMember authMember, Long roomId, WritePlanRequest request) {
+        Member member = memberRepository.findByIdIfExists(authMember.id());
+        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, request.progressId());
+        validateMemberOwnsProgress(member, pomodoroProgress);
         validateProgressIsPlanning(pomodoroProgress);
-        pomodoroProgress.proceed();
-        recentRecord.changePlan(plan);
+        PomodoroContent recentContent = findContentWithSameCycle(pomodoroProgress);
+        recentContent.changePlan(request.plan());
+    }
+
+    private PomodoroProgress findPomodoroProgressFrom(Long roomId, Long progressId) {
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
+                .orElseThrow(RoomNotFoundException::new);
+        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findById(progressId)
+                .orElseThrow(PomodoroProgressNotFoundException::new);
+        validateProgressBelongsToRoom(pomodoroRoom, pomodoroProgress);
+        return pomodoroProgress;
+    }
+
+    private void validateProgressBelongsToRoom(PomodoroRoom pomodoroRoom, PomodoroProgress pomodoroProgress) {
+        if (!pomodoroProgress.isProgressOf(pomodoroRoom)) {
+            throw new ProgressNotBelongToRoomException();
+        }
     }
 
     private void validateProgressIsPlanning(PomodoroProgress pomodoroProgress) {
@@ -60,66 +123,41 @@ public class PomodoroContentService {
         }
     }
 
-    public PomodoroContentsResponse findMemberContent(Long roomId, Long memberId) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId).orElseThrow(IllegalArgumentException::new);
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(IllegalArgumentException::new);
-
-        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByPomodoroRoomAndMember(
-                        pomodoroRoom, member)
-                .orElseThrow(IllegalArgumentException::new);
-
-        List<PomodoroContent> pomodoroRecords = pomodoroProgress.getPomodoroRecords();
-
-        List<PomodoroContentResponse> pomodoroContentRespons = pomodoroRecords.stream()
-                .map(record -> new PomodoroContentResponse(record.getCycle(), record.getPlan(),
-                        record.getRetrospect()))
-                .toList();
-
-        return new PomodoroContentsResponse(pomodoroContentRespons);
-    }
-
-    public void writeRetrospect(Long roomId, Long memberId, Map<String, String> retrospect) {
-        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, memberId);
-        PomodoroContent recentRecord = findRecordWithSameCycle(pomodoroProgress);
-        validateProgressIsRetrospect(pomodoroProgress);
-        validateIsPlanFilled(recentRecord);
-        recentRecord.changeRetrospect(retrospect);
-        int totalCycle = pomodoroProgress.getPomodoroRoom().getTotalCycle();
-        if (pomodoroProgress.getCurrentCycle().equals(totalCycle)) {
-            pomodoroProgress.setDone();
-            return;
-        }
-        pomodoroProgress.proceed();
-    }
-
-    private PomodoroContent findRecordWithSameCycle(PomodoroProgress pomodoroProgress) {
-        List<PomodoroContent> pomodoroRecords = pomodoroContentRepository.findByPomodoroProgress(
+    private PomodoroContent findContentWithSameCycle(PomodoroProgress pomodoroProgress) {
+        List<PomodoroContent> pomodoroContents = pomodoroContentRepository.findByPomodoroProgress(
                 pomodoroProgress);
 
-        return pomodoroRecords.stream()
-                .filter(pomodoroRecord -> pomodoroRecord.hasSameCycleWith(pomodoroProgress))
+        return pomodoroContents.stream()
+                .filter(pomodoroContent -> pomodoroContent.hasSameCycleWith(pomodoroProgress))
                 .findAny()
                 .orElseThrow(PomodoroContentNotFoundException::new);
     }
 
-    private PomodoroProgress findPomodoroProgressFrom(Long roomId, Long memberId) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
-                .orElseThrow(RoomNotFoundException::new);
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
-        return pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
-                .orElseThrow(PomodoroProgressNotFoundException::new);
+    public void writeRetrospect(AuthMember authMember, Long roomId, WriteRetrospectRequest request) {
+        Member member = memberRepository.findByIdIfExists(authMember.id());
+        PomodoroProgress pomodoroProgress = findPomodoroProgressFrom(roomId, request.progressId());
+        validateMemberOwnsProgress(member, pomodoroProgress);
+        validateProgressIsRetrospect(pomodoroProgress);
+        PomodoroContent recentContent = findContentWithSameCycle(pomodoroProgress);
+        validateIsPlanFilled(recentContent);
+
+        recentContent.changeRetrospect(request.retrospect());
+    }
+
+    private void validateMemberOwnsProgress(Member member, PomodoroProgress pomodoroProgress) {
+        if (!pomodoroProgress.isOwnedBy(member)) {
+            throw new AuthorizationException();
+        }
     }
 
     private void validateProgressIsRetrospect(PomodoroProgress pomodoroProgress) {
         if (pomodoroProgress.isNotRetrospect()) {
-            throw new UnavailableToProceed(); // TODO: 예외 세분화
+            throw new PomodoroProgressStatusException();
         }
     }
 
-    private void validateIsPlanFilled(PomodoroContent recentRecord) {
-        if (recentRecord.getPlan().isEmpty()) {
+    private void validateIsPlanFilled(PomodoroContent recentContent) {
+        if (recentContent.hasEmptyPlan()) {
             throw new PomodoroProgressStatusException();
         }
     }

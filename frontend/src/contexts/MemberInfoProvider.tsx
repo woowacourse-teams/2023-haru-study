@@ -10,7 +10,7 @@ import { requestAccessTokenRefresh, requestMemberInfo } from '@Apis/index';
 
 import type { MemberInfo } from '@Types/member';
 
-import { APIError, ResponseError } from '../errors';
+import { APIError, ResponseError } from '@Errors/index';
 
 type Actions = {
   initMemberInfo: (memberInfo: MemberInfo) => void;

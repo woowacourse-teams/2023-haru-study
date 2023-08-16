@@ -1,4 +1,5 @@
 import type { MemberInfo } from './member';
+
 import type {
   Member,
   MemberRecordContent,
@@ -8,6 +9,7 @@ import type {
   StudyTimePerCycleOptions,
   TotalCycleOptions,
 } from './study';
+
 
 export type ResponseAPIError = {
   message: string;
@@ -36,7 +38,7 @@ export type ResponseMemberStudyMetadata = {
 export type ResponsePlanList = PlanList;
 
 export type ResponseStudyMetadata = {
-  members: Member[];
+  progresses: MemberProgress[];
 } & StudyBasicInfo;
 
 export type ResponseMemberRecordContents = {

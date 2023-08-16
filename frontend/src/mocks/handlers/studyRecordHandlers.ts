@@ -1,5 +1,7 @@
 import { rest } from 'msw';
 
+import type { MemberProgress } from '@Types/study';
+
 const STUDY_CONTENT = {
   content: [
     {
@@ -54,35 +56,49 @@ const STUDY_CONTENT = {
   ],
 };
 
-const STUDY_MEMBERS = {
-  members: [
+const STUDY_MEMBERS: { progresses: MemberProgress[] } = {
+  progresses: [
     {
-      memberId: 1,
+      progressId: '1',
       nickname: '노아',
+      currentCycle: 3,
+      step: 'done',
     },
     {
-      memberId: 2,
+      progressId: '2',
       nickname: '룩소',
+      currentCycle: 2,
+      step: 'planning',
     },
     {
-      memberId: 3,
+      progressId: '3',
       nickname: '엽토',
+      currentCycle: 3,
+      step: 'retrospect',
     },
     {
-      memberId: 4,
+      progressId: '4',
       nickname: '테오',
+      currentCycle: 3,
+      step: 'done',
     },
     {
-      memberId: 5,
+      progressId: '5',
       nickname: '모디',
+      currentCycle: 3,
+      step: 'done',
     },
     {
-      memberId: 6,
+      progressId: '6',
       nickname: '히이로',
+      currentCycle: 3,
+      step: 'done',
     },
     {
-      memberId: 7,
+      progressId: '7',
       nickname: '마코',
+      currentCycle: 3,
+      step: 'done',
     },
   ],
 };
@@ -91,18 +107,67 @@ const STUDY_METADATA = {
   studyName: '안오면 지상렬',
   totalCycle: 3,
   timePerCycle: 25,
+  createdDateTime: '2023-08-15T06:25:39.093Z',
 };
 
+const accessToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkxNTY4NDI4LCJleHAiOjE2OTE1NzIwMjh9.BfGH7jBxO_iixmlpzxHKV7d9ekJPegLxrpY9ME066ro';
+
+const newAccessToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxMjM0NTY3fQ.NUiutjXo0mcIBU5fWxfjpBEvPxakFiBaUCg4THKAYpQ';
+
 export const studyRecordHandlers = [
-  rest.get('/api/v2/studies/:studyId', (req, res, ctx) => {
+  rest.get('/api/studies/:studyId', (req, res, ctx) => {
+    const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
+
+    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_METADATA), ctx.delay(400));
+
+    if (accessToken !== requestAuthToken)
+      return res(
+        ctx.status(401),
+        ctx.delay(100),
+        ctx.json({
+          message: '만료된 갱신 토큰입니다.',
+          code: '1403',
+        }),
+      );
+
     return res(ctx.status(200), ctx.json(STUDY_METADATA), ctx.delay(400));
   }),
 
-  rest.get('/api/v2/members?studyId=1', (req, res, ctx) => {
+  rest.get('/api/studies/1/progresses', (req, res, ctx) => {
+    const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
+
+    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_MEMBERS), ctx.delay(400));
+
+    if (accessToken !== requestAuthToken)
+      return res(
+        ctx.status(401),
+        ctx.delay(100),
+        ctx.json({
+          message: '만료된 갱신 토큰입니다.',
+          code: '1403',
+        }),
+      );
+
     return res(ctx.status(200), ctx.json(STUDY_MEMBERS), ctx.delay(400));
   }),
 
-  rest.get('/api/v2/studies/:studyId/contents?memberId=1', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(800));
+  rest.get('/api/studies/:studyId/contents?progressId=1', (req, res, ctx) => {
+    const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
+
+    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(400));
+
+    if (accessToken !== requestAuthToken)
+      return res(
+        ctx.status(401),
+        ctx.delay(100),
+        ctx.json({
+          message: '만료된 갱신 토큰입니다.',
+          code: '1403',
+        }),
+      );
+
+    return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(400));
   }),
 ];

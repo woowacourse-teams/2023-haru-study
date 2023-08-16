@@ -34,14 +34,20 @@ export const requestGetStudyingContent = (studyId: string, memberId: string, cyc
 export const requestSubmitStudyingForm = (studyId: string, memberId: string) =>
   http.post(`/api/studies/${studyId}/members/${memberId}/next-step`);
 
-export const requestGetStudyData = (studyId: string) =>
-  http.get<Omit<ResponseStudyMetadata, 'member'>>(`${BASE_URL}/studies/${studyId}`);
+export const requestGetStudyData = (studyId: string, accessToken: string) =>
+  http.get<Omit<ResponseStudyMetadata, 'progresses'>>(`/api/studies/${studyId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
 
-export const requestGetStudyMembers = (studyId: string) =>
-  http.get<Pick<ResponseStudyMetadata, 'members'>>(`${BASE_URL}/members?studyId=${studyId}`);
+export const requestGetStudyMembers = (studyId: string, accessToken: string) =>
+  http.get<Pick<ResponseStudyMetadata, 'progresses'>>(`/api/studies/${studyId}/progresses`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
 
-export const requestGetMemberRecordContents = (studyId: string, memberId: string) =>
-  http.get<ResponseMemberRecordContents>(`${BASE_URL}/studies/${studyId}/contents?memberId=${memberId}`);
+export const requestGetMemberRecordContents = (studyId: string, progressId: string, accessToken: string) =>
+  http.get<ResponseMemberRecordContents>(`/api/studies/${studyId}/contents?progressId=${progressId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
 
 // 새로 적용되는 api
 export const requestGuestLogin = async () => {

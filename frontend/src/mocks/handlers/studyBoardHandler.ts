@@ -8,6 +8,7 @@ let studyData: StudyBasicInfo & Progress = {
   currentCycle: 1,
   timePerCycle: 30,
   step: 'planning',
+  createdDateTime: '2023-08-15T06:25:39.093Z',
 };
 
 let plan: PlanList = {

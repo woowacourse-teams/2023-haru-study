@@ -1,16 +1,17 @@
 package harustudy.backend.auth.controller;
 
 import harustudy.backend.auth.dto.OauthLoginRequest;
-import harustudy.backend.auth.dto.RefreshTokenRequest;
 import harustudy.backend.auth.dto.TokenResponse;
-import harustudy.backend.auth.exception.InvalidProviderNameException;
-import harustudy.backend.auth.exception.InvalidRefreshTokenException;
-import harustudy.backend.auth.exception.RefreshTokenExpiredException;
+import harustudy.backend.auth.exception.RefreshTokenCookieNotExistsException;
 import harustudy.backend.auth.service.AuthService;
-import harustudy.backend.common.SwaggerExceptionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,13 +24,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
+    @Value("${refresh-token.expire-length}")
+    private Long refreshTokenExpireLength;
+
     private final AuthService authService;
 
     @Operation(summary = "소셜 로그인 요청")
-    @SwaggerExceptionResponse(InvalidProviderNameException.class)
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> oauthLogin(@RequestBody OauthLoginRequest request) {
+    public ResponseEntity<TokenResponse> oauthLogin(
+            HttpServletResponse httpServletResponse,
+            @RequestBody OauthLoginRequest request
+    ) {
         TokenResponse tokenResponse = authService.oauthLogin(request);
+        Cookie cookie = new Cookie("refreshToken", tokenResponse.refreshToken().toString());
+        cookie.setMaxAge(refreshTokenExpireLength.intValue());
+        httpServletResponse.addCookie(cookie);
         return ResponseEntity.ok(tokenResponse);
     }
 
@@ -41,12 +50,24 @@ public class AuthController {
     }
 
     @Operation(summary = "access 토큰, refresh 토큰 갱신")
-    @SwaggerExceptionResponse({
-            InvalidRefreshTokenException.class,
-            RefreshTokenExpiredException.class})
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponse> refresh(@RequestBody RefreshTokenRequest request) {
-        TokenResponse tokenResponse = authService.refresh(request);
+    public ResponseEntity<TokenResponse> refresh(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse
+    ) {
+        String refreshToken = extractRefreshTokenFromCookie(httpServletRequest);
+        TokenResponse tokenResponse = authService.refresh(refreshToken);
+        Cookie cookie = new Cookie("refreshToken", tokenResponse.refreshToken().toString());
+        cookie.setMaxAge(refreshTokenExpireLength.intValue());
+        httpServletResponse.addCookie(cookie);
         return ResponseEntity.ok(tokenResponse);
+    }
+
+    private String extractRefreshTokenFromCookie(HttpServletRequest httpServletRequest) {
+        return Arrays.stream(httpServletRequest.getCookies())
+                .filter(cookie -> cookie.getName().equals("refreshToken"))
+                .map(Cookie::getValue)
+                .findAny()
+                .orElseThrow(RefreshTokenCookieNotExistsException::new);
     }
 }

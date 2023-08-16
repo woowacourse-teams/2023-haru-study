@@ -16,10 +16,18 @@ export type Progress = {
   step: Step;
 };
 
+export type MemberProgress = {
+  progressId: string;
+  nickname: string;
+  currentCycle: number;
+  step: Step | 'done';
+};
+
 export type StudyBasicInfo = {
   studyName: string;
   timePerCycle: StudyTimePerCycleOptions;
   totalCycle: TotalCycleOptions;
+  createdDateTime: string;
 };
 
 export type StudyData = {
