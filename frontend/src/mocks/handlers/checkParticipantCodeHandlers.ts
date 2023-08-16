@@ -28,11 +28,30 @@ export const checkParticipantCodeHandlers = [
         ctx.delay(1000),
       );
 
-    if (requestAuthToken === newAccessToken && testParticipantCode !== participantCode) return res(ctx.status(404));
+    if (requestAuthToken === newAccessToken && testParticipantCode !== participantCode)
+      return res(
+        ctx.status(404),
+        ctx.json({
+          message: '해당하는 참여코드가 없습니다.',
+          code: '1300',
+        }),
+      );
 
-    if (accessToken !== requestAuthToken) return res(ctx.status(401), ctx.delay(1000));
+    if (accessToken !== requestAuthToken)
+      return res(
+        ctx.status(401),
+        ctx.json({ message: '유효하지 않은 엑세스 토큰입니다.', code: '1403' }),
+        ctx.delay(1000),
+      );
 
-    if (accessToken === requestAuthToken && testParticipantCode !== participantCode) return res(ctx.status(404));
+    if (accessToken === requestAuthToken && testParticipantCode !== participantCode)
+      return res(
+        ctx.status(404),
+        ctx.json({
+          message: '해당하는 참여코드가 없습니다.',
+          code: '1300',
+        }),
+      );
 
     return res(
       ctx.status(200),

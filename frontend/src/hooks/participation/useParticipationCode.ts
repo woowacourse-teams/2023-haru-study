@@ -7,7 +7,7 @@ import { boolCheckCookie } from '@Utils/cookie';
 
 import { requestAccessTokenRefresh, requestAuthenticateParticipationCode } from '@Apis/index';
 
-import { ExpiredAccessTokenError } from '../../errors/CustomError';
+import { APIError, ResponseError } from '@Errors/index';
 
 const useParticipationCode = (errorHandler: (error: Error) => void) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +29,7 @@ const useParticipationCode = (errorHandler: (error: Error) => void) => {
 
       return accessToken;
     } catch (error) {
-      if (error instanceof Error) return errorHandler(error);
+      if (error instanceof ResponseError || error instanceof APIError) return errorHandler(error);
     }
   };
 
@@ -37,7 +37,7 @@ const useParticipationCode = (errorHandler: (error: Error) => void) => {
     try {
       return await requestAuthenticateParticipationCode(participantCode, accessToken);
     } catch (error) {
-      if (error instanceof Error) return errorHandler(error);
+      if (error instanceof ResponseError || error instanceof APIError) return errorHandler(error);
     }
   };
 
@@ -56,13 +56,17 @@ const useParticipationCode = (errorHandler: (error: Error) => void) => {
 
       return await requestAuthenticateParticipationCode(participantCode, accessToken);
     } catch (error) {
-      if (error instanceof ExpiredAccessTokenError) {
-        const accessToken = await getAccessTokenRefresh();
+      if (error instanceof APIError) {
+        if (error.code === '1403') {
+          const accessToken = await getAccessTokenRefresh();
 
-        if (accessToken) return await newRequestAuthenticateParticipationCode(participantCode, accessToken);
+          if (accessToken) return await newRequestAuthenticateParticipationCode(participantCode, accessToken);
+        }
+
+        return errorHandler(error);
       }
 
-      if (error instanceof Error) return errorHandler(error);
+      if (error instanceof ResponseError) return errorHandler(error);
     } finally {
       setIsLoading(false);
     }
