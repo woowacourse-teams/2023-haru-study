@@ -68,14 +68,19 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
     try {
       const accessTokenPayload = accessToken.split('.')[1];
 
-      if (!accessTokenPayload) throw new APIError('토큰이 만료되었습니다.', '1402');
+      if (!accessTokenPayload) {
+        await fetchAccessTokenRefresh();
+        await fetchMemberInfo();
+
+        return;
+      }
 
       const { sub: memberId } = JSON.parse(atob(accessTokenPayload)) as { sub: string };
 
       const memberInfo = await requestMemberInfo(accessToken, memberId);
       actions.initMemberInfo(memberInfo);
     } catch (error) {
-      if (error instanceof APIError && error.code === '1402') {
+      if (error instanceof APIError && error.code === '1403') {
         await fetchAccessTokenRefresh();
         await fetchMemberInfo();
 

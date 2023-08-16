@@ -53,7 +53,7 @@ const useMemberRecord = (studyId: string, progressId: string, options?: { errorH
 
       setMemberRecordContents(content);
     } catch (error) {
-      if (error instanceof APIError && error.code === '1402') {
+      if (error instanceof APIError && error.code === '1403') {
         const accessToken = await getAccessTokenRefresh();
 
         if (accessToken) {

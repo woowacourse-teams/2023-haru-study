@@ -67,7 +67,7 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
 
       setInitInfo(basicInfo, progresses);
     } catch (error) {
-      if (error instanceof APIError && error.code === '1402') {
+      if (error instanceof APIError && error.code === '1403') {
         const accessToken = await getAccessTokenRefresh();
 
         if (accessToken) {
