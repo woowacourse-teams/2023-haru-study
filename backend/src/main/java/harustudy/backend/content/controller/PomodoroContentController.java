@@ -5,6 +5,7 @@ import harustudy.backend.auth.Authenticated;
 import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.dto.WritePlanRequest;
 import harustudy.backend.content.dto.WriteRetrospectRequest;
+import harustudy.backend.content.service.PomodoroContentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class PomodoroContentController {
 
+    private final PomodoroContentService pomodoroContentService;
+
     @Operation(summary = "필터링 조건으로 멤버 컨텐츠 조회")
     @GetMapping("/api/studies/{studyId}/contents")
     public ResponseEntity<PomodoroContentsResponse> findMemberContentsWithFilter(
@@ -24,7 +27,8 @@ public class PomodoroContentController {
             @RequestParam Long progressId,
             @RequestParam(required = false) Integer cycle
     ) {
-        return ResponseEntity.ok(null);
+        PomodoroContentsResponse response = pomodoroContentService.findContentsWithFilter(authMember, studyId, progressId, cycle);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "스터디 계획 작성")
@@ -34,6 +38,7 @@ public class PomodoroContentController {
             @PathVariable Long studyId,
             @RequestBody WritePlanRequest request
     ) {
+        pomodoroContentService.writePlan(authMember, studyId, request);
         return ResponseEntity.ok().build();
     }
 
@@ -44,6 +49,7 @@ public class PomodoroContentController {
             @PathVariable Long studyId,
             @RequestBody WriteRetrospectRequest request
     ) {
+        pomodoroContentService.writeRetrospect(authMember, studyId, request);
         return ResponseEntity.ok().build();
     }
 }
