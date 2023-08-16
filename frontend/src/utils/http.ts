@@ -6,66 +6,53 @@ const isAPIErrorData = (data: ResponseAPIError | undefined): data is ResponseAPI
   return (data as ResponseAPIError).code !== undefined;
 };
 
+const fetchAPI = async (url: string, config: RequestInit) => {
+  if (!navigator.onLine) throw new OfflineError();
+
+  try {
+    const response = await fetch(url, config);
+
+    if (!response.ok) {
+      const data = (await response.json()) as ResponseAPIError | undefined;
+
+      if (isAPIErrorData(data)) {
+        throw new APIError(data.message, data.code);
+      }
+
+      throw new ResponseError();
+    }
+
+    return response;
+  } catch (error) {
+    if (error instanceof APIError) throw error;
+
+    throw new ResponseError();
+  }
+};
+
 const http = {
   get: async <T>(url: string, config: RequestInit = {}) => {
-    if (!navigator.onLine) throw new OfflineError();
+    const response = await fetchAPI(url, {
+      ...config,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...config.headers,
+      },
+    });
 
-    try {
-      const response = await fetch(url, {
-        ...config,
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          ...config.headers,
-        },
-      });
-
-      if (!response.ok) {
-        const data = (await response.json()) as ResponseAPIError | undefined;
-
-        if (isAPIErrorData(data)) {
-          throw new APIError(data.message, data.code);
-        }
-
-        throw new ResponseError();
-      }
-
-      return response.json() as T;
-    } catch (error) {
-      if (error instanceof APIError) throw error;
-
-      throw new ResponseError();
-    }
+    return response.json() as T;
   },
 
-  post: async (url: string, config: RequestInit = {}) => {
-    if (!navigator.onLine) throw new OfflineError();
-
-    try {
-      const response = await fetch(url, {
-        ...config,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...config.headers,
-        },
-      });
-
-      if (!response.ok) {
-        const data = (await response.json()) as ResponseAPIError | undefined;
-
-        if (isAPIErrorData(data)) {
-          throw new APIError(data.message, data.code);
-        }
-
-        throw new ResponseError();
-      }
-
-      return response;
-    } catch (error) {
-      if (error instanceof APIError) throw error;
-      throw new ResponseError();
-    }
+  post: (url: string, config: RequestInit = {}) => {
+    return fetchAPI(url, {
+      ...config,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...config.headers,
+      },
+    });
   },
 };
 
