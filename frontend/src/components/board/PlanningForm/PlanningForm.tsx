@@ -1,15 +1,15 @@
+import { useState } from 'react';
 import { styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 import QuestionTextarea from '@Components/common/QuestionTextarea/QuestionTextarea';
+import Typography from '@Components/common/Typography/Typography';
 
 import usePlanningForm from '@Hooks/board/usePlanningForm';
 
 import { PLAN_QUESTIONS } from '@Constants/study';
 
-import { getKeys } from '@Utils/getKeys';
-
-import type { Plan } from '@Types/study';
+import ArrowIcon from '@Assets/icons/ArrowIcon';
 
 type Props = {
   onClickSubmitButton: () => Promise<void>;
@@ -23,6 +23,7 @@ const PlanningForm = ({ onClickSubmitButton, studyId, progressId }: Props) => {
     progressId,
     onClickSubmitButton,
   );
+  const [isOpenOptionalQuestion, setIsOpenOptionalQuestion] = useState(false);
 
   const handleClickButton = async () => {
     try {
@@ -33,11 +34,43 @@ const PlanningForm = ({ onClickSubmitButton, studyId, progressId }: Props) => {
     }
   };
 
+  const toggleOptionalQuestion = () => {
+    setIsOpenOptionalQuestion(!isOpenOptionalQuestion);
+  };
+
   return (
     <Layout>
-      {getKeys<Plan>(PLAN_QUESTIONS).map((key) => (
-        <QuestionTextarea key={key} question={PLAN_QUESTIONS[key]} {...questionTextareaProps[key]} />
-      ))}
+      <QuestionLayout>
+        <Typography variant="h5" fontWeight="600">
+          다음 항목에 답변해주세요.
+        </Typography>
+        <QuestionList>
+          <QuestionTextarea question={PLAN_QUESTIONS.toDo} {...questionTextareaProps.toDo} />
+          <QuestionTextarea
+            question={PLAN_QUESTIONS.completionCondition}
+            {...questionTextareaProps.completionCondition}
+          />
+        </QuestionList>
+        <OptionalQuestionToggle onClick={toggleOptionalQuestion}>
+          <Typography variant="h5" fontWeight="600">
+            더 구체적인 목표 설정을 원한다면?
+          </Typography>
+          <ArrowIcon direction={isOpenOptionalQuestion ? 'up' : 'down'} />
+        </OptionalQuestionToggle>
+        {isOpenOptionalQuestion && (
+          <QuestionList>
+            <QuestionTextarea
+              question={PLAN_QUESTIONS.expectedProbability}
+              {...questionTextareaProps.expectedProbability}
+            />
+            <QuestionTextarea
+              question={PLAN_QUESTIONS.expectedDifficulty}
+              {...questionTextareaProps.expectedDifficulty}
+            />
+            <QuestionTextarea question={PLAN_QUESTIONS.whatCanYouDo} {...questionTextareaProps.whatCanYouDo} />
+          </QuestionList>
+        )}
+      </QuestionLayout>
       <Button
         variant="primary"
         type="submit"
@@ -59,9 +92,29 @@ const Layout = styled.div`
 
   display: flex;
   flex-direction: column;
-  gap: 60px;
+  gap: 30px;
 
   padding: 60px 85px;
+`;
+
+const QuestionLayout = styled.div`
+  width: 100%;
+  height: 90%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 
   overflow-y: auto;
+`;
+const QuestionList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+`;
+
+const OptionalQuestionToggle = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
