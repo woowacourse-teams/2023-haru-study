@@ -7,7 +7,7 @@ import MemberRegister from '@Components/participation/MemberRegister/MemberRegis
 import MemberRestart from '@Components/participation/MemberRestart/MemberRestart';
 import ParticipationCodeCopier from '@Components/participation/ParticipationCodeCopier/ParticipationCodeCopier';
 
-import useCheckIsMember from '@Hooks/participation/useCheckIsMember';
+import useCheckProgresses from '@Hooks/participation/useCheckProgresses';
 
 import color from '@Styles/color';
 
@@ -26,7 +26,7 @@ const StudyPreparation = () => {
     alert(error.message);
   }, []);
 
-  const { nickname, restart, studyId } = useCheckIsMember(isHost, errorHandler);
+  const { nickname, restart, studyId } = useCheckProgresses(isHost, errorHandler);
 
   const isExistMember = Boolean(nickname);
 

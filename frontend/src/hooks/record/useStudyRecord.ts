@@ -54,6 +54,8 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
 
   const fetchStudyRecordData = useCallback(async () => {
     try {
+      setIsLoading(true);
+
       const accessToken = sessionStorage.getItem('accessToken');
 
       if (!accessToken) {
@@ -93,7 +95,7 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
     fetchStudyRecordData();
   }, [fetchStudyRecordData]);
 
-  return { isLoading, studyBasicInfo, memberProgresses };
+  return { isLoading, studyBasicInfo, memberProgresses, refetchStudyRecordData: fetchStudyRecordData };
 };
 
 export default useStudyRecord;

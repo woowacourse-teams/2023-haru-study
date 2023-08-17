@@ -3,14 +3,18 @@ import { useNavigate } from 'react-router-dom';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
+import { useMemberInfo } from '@Contexts/MemberInfoProvider';
+
 import { boolCheckCookie } from '@Utils/cookie';
 
-import { requestAccessTokenRefresh, requestAuthenticateParticipationCode } from '@Apis/index';
+import { requestAccessTokenRefresh, requestRegisterProgress } from '@Apis/index';
 
 import { APIError, ResponseError } from '@Errors/index';
 
-const useParticipationCode = (errorHandler: (error: Error) => void) => {
+const useRegisterProgress = (errorHandler: (error: Error) => void) => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const memberInfo = useMemberInfo();
 
   const navigate = useNavigate();
 
@@ -33,15 +37,20 @@ const useParticipationCode = (errorHandler: (error: Error) => void) => {
     }
   };
 
-  const newRequestAuthenticateParticipationCode = async (participantCode: string, accessToken: string) => {
+  const newRequestRegisterProgress = async (
+    nickname: string,
+    studyId: string,
+    memberId: string,
+    accessToken: string,
+  ) => {
     try {
-      return await requestAuthenticateParticipationCode(participantCode, accessToken);
+      await requestRegisterProgress(nickname, studyId, memberId, accessToken);
     } catch (error) {
       if (error instanceof ResponseError || error instanceof APIError) return errorHandler(error);
     }
   };
 
-  const authenticateParticipationCode = async (participantCode: string) => {
+  const registerProgress = async (nickname: string, studyId: string) => {
     setIsLoading(true);
 
     try {
@@ -54,16 +63,12 @@ const useParticipationCode = (errorHandler: (error: Error) => void) => {
         return;
       }
 
-      return await requestAuthenticateParticipationCode(participantCode, accessToken);
+      await requestRegisterProgress(nickname, studyId, memberInfo.id, accessToken);
     } catch (error) {
-      if (error instanceof APIError) {
-        if (error.code === '1403') {
-          const accessToken = await getAccessTokenRefresh();
+      if (error instanceof APIError && error.code === '1403') {
+        const accessToken = await getAccessTokenRefresh();
 
-          if (accessToken) return await newRequestAuthenticateParticipationCode(participantCode, accessToken);
-        }
-
-        return errorHandler(error);
+        if (accessToken) return await newRequestRegisterProgress(nickname, studyId, memberInfo.id, accessToken);
       }
 
       if (error instanceof ResponseError) return errorHandler(error);
@@ -72,7 +77,7 @@ const useParticipationCode = (errorHandler: (error: Error) => void) => {
     }
   };
 
-  return { authenticateParticipationCode, isLoading };
+  return { isLoading, registerProgress };
 };
 
-export default useParticipationCode;
+export default useRegisterProgress;
