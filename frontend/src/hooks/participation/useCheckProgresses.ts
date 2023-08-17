@@ -1,9 +1,9 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-import { MemberInfoContext } from '@Contexts/MemberInfoProvider';
+import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
 import { boolCheckCookie } from '@Utils/cookie';
 
@@ -16,7 +16,7 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
 
   const navigate = useNavigate();
 
-  const memberInfo = useContext(MemberInfoContext);
+  const memberInfo = useMemberInfo();
 
   const [nickname, setNickname] = useState<string | null>(null);
 
@@ -93,7 +93,7 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
         if (error.code === '1403') {
           const accessToken = await getAccessTokenRefresh();
 
-          if (memberInfo && accessToken) return await newRequestCheckProgresses(studyId, memberInfo.id, accessToken);
+          if (accessToken) return await newRequestCheckProgresses(studyId, memberInfo.id, accessToken);
         }
         if (error.code === '1201') return setNickname('');
 
