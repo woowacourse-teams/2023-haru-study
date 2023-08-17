@@ -14,7 +14,7 @@ import { APIError, ResponseError } from '@Errors/index';
 const useRegisterProgress = (errorHandler: (error: Error) => void) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const memberInfo = useMemberInfo();
+  const { data } = useMemberInfo();
 
   const navigate = useNavigate();
 
@@ -53,6 +53,8 @@ const useRegisterProgress = (errorHandler: (error: Error) => void) => {
   const registerProgress = async (nickname: string, studyId: string) => {
     setIsLoading(true);
 
+    if (!data) return;
+
     try {
       const accessToken = sessionStorage.getItem('accessToken');
 
@@ -63,12 +65,12 @@ const useRegisterProgress = (errorHandler: (error: Error) => void) => {
         return;
       }
 
-      await requestRegisterProgress(nickname, studyId, memberInfo.id, accessToken);
+      await requestRegisterProgress(nickname, studyId, data.memberId, accessToken);
     } catch (error) {
       if (error instanceof APIError && error.code === '1403') {
         const accessToken = await getAccessTokenRefresh();
 
-        if (accessToken) return await newRequestRegisterProgress(nickname, studyId, memberInfo.id, accessToken);
+        if (accessToken) return await newRequestRegisterProgress(nickname, studyId, data.memberId, accessToken);
       }
 
       if (error instanceof ResponseError) return errorHandler(error);

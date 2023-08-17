@@ -19,13 +19,19 @@ const ProgressRecordList = ({ memberProgresses = [], studyId = '', isLoading }: 
 
   return (
     <Accordion>
-      {memberProgresses.map(({ progressId, nickname }) => (
+      {memberProgresses.map(({ progressId, nickname, step, currentCycle }) => (
         <Accordion.Item key={progressId}>
           <Accordion.Header>
             <Typography variant="h5">{nickname}의 기록</Typography>
           </Accordion.Header>
           <Accordion.Panel>
-            <ProgressRecord studyId={studyId} progressId={progressId} nickname={nickname} />
+            <ProgressRecord
+              studyId={studyId}
+              progressId={progressId}
+              nickname={nickname}
+              isCompleted={step === 'done'}
+              currentCycle={currentCycle}
+            />
           </Accordion.Panel>
         </Accordion.Item>
       ))}

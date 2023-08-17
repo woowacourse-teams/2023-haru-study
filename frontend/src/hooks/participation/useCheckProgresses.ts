@@ -16,7 +16,7 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
 
   const navigate = useNavigate();
 
-  const memberInfo = useMemberInfo();
+  const { data: memberInfo } = useMemberInfo();
 
   const [nickname, setNickname] = useState<string | null>(null);
 
@@ -71,11 +71,11 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
   );
 
   const checkProgresses = useCallback(async () => {
-    try {
-      if (isHost || !memberInfo) {
-        return setNickname('');
-      }
+    if (isHost || !memberInfo) {
+      return setNickname('');
+    }
 
+    try {
       const accessToken = sessionStorage.getItem('accessToken');
 
       if (!accessToken) {
@@ -85,7 +85,7 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
         return;
       }
 
-      const data = await requestCheckProgresses(studyId, memberInfo.id, accessToken);
+      const data = await requestCheckProgresses(studyId, memberInfo.memberId, accessToken);
 
       setNickname(data.progresses[0].nickname);
     } catch (error) {
@@ -93,7 +93,7 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
         if (error.code === '1403') {
           const accessToken = await getAccessTokenRefresh();
 
-          if (accessToken) return await newRequestCheckProgresses(studyId, memberInfo.id, accessToken);
+          if (accessToken) return await newRequestCheckProgresses(studyId, memberInfo.memberId, accessToken);
         }
         if (error.code === '1201') return setNickname('');
 

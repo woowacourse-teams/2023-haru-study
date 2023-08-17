@@ -53,7 +53,7 @@ const useMemberRecord = (options: { errorHandler: (error: Error) => void }) => {
         return;
       }
 
-      const { studies } = await requestGetMemberStudyListData(data.id, accessToken);
+      const { studies } = await requestGetMemberStudyListData(data.memberId, accessToken);
 
       setStudyList(studies);
     } catch (error) {
@@ -61,7 +61,7 @@ const useMemberRecord = (options: { errorHandler: (error: Error) => void }) => {
         const accessToken = await getAccessTokenRefresh();
 
         if (accessToken) {
-          const { studies } = await requestGetMemberStudyListData(data.id, accessToken);
+          const { studies } = await requestGetMemberStudyListData(data.memberId, accessToken);
 
           setStudyList(studies);
 
