@@ -56,6 +56,7 @@ const Timer = ({ studyMinutes, step }: Props) => {
         aria-label="타이머 시작 및 일시정지 버튼"
         $style={css`
           border: none;
+          border-radius: 14px;
         `}
       >
         <Typography
