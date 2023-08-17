@@ -6,8 +6,6 @@ import type { CSSProp } from 'styled-components';
 import useDisplay from '@Hooks/common/useDisplay';
 import useOutsideClick from '@Hooks/common/useOutsideClick';
 
-import color from '@Styles/color';
-
 import MenuItem from './MenuItem';
 
 export type MenuItem = {
@@ -44,7 +42,7 @@ const Menu = ({ $menuListPosition = 'right', $style, children, trigger, $menuLis
     <MenuLayout ref={ref} $style={$style}>
       <MenuIconWrapper onClick={toggleShow}>{trigger}</MenuIconWrapper>
       {isShow && (
-        <MenuList $menuListPosition={$menuListPosition} $menuListStyle={$menuListStyle || css``}>
+        <MenuList $menuListPosition={$menuListPosition} $menuListStyle={$menuListStyle}>
           {Children.map(children, (child) => {
             const item = child as ReactElement;
             return cloneElement(item, { hide });
@@ -79,9 +77,9 @@ const MenuIconWrapper = styled.div`
   padding: 4px;
 `;
 
-type MenuListProp = Required<Pick<Props, '$menuListPosition' | '$menuListStyle'>>;
+type MenuListProps = Required<Pick<Props, '$menuListPosition'>> & { $menuListStyle?: CSSProp };
 
-const MenuList = styled.ul<MenuListProp>`
+const MenuList = styled.ul<MenuListProps>`
   position: absolute;
   top: 34px;
 
@@ -105,6 +103,6 @@ const MenuList = styled.ul<MenuListProp>`
   `}
 
   ${({ $menuListStyle }) => css`
-    ${$menuListStyle}
+    ${$menuListStyle && $menuListStyle}
   `}
 `;
