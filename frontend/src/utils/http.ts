@@ -19,14 +19,14 @@ const fetchAPI = async (url: string, config: RequestInit) => {
         throw new APIError(data.message, data.code);
       }
 
-      throw new ResponseError();
+      throw new ResponseError('알수없는 에러입니다.');
     }
 
     return response;
   } catch (error) {
     if (error instanceof APIError) throw error;
 
-    throw new ResponseError();
+    throw new ResponseError('알수없는 에러입니다.');
   }
 };
 

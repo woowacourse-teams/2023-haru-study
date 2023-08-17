@@ -2,8 +2,8 @@ import { rest } from 'msw';
 
 import type { PlanList, Progress, Retrospect, StudyBasicInfo } from '@Types/study';
 
-let studyData: StudyBasicInfo & Progress = {
-  studyName: '안오면 지상렬',
+let studyData: Omit<StudyBasicInfo, 'studyId'> & Progress = {
+  name: '안오면 지상렬',
   totalCycle: 3,
   currentCycle: 1,
   timePerCycle: 30,

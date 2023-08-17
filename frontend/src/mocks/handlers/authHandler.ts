@@ -27,7 +27,7 @@ export const authHandler = [
     return res(
       ctx.delay(1000),
       ctx.json({
-        id: '1',
+        memberId: '1',
         name: '맘모스',
         email: 'haru12@gmail.com',
         imageUrl: 'https://lh3.google.com/u/0/ogw/AGvuzYZKngVdZecWrpGTnHj7hQRtO5p9tjelI5lvCcsk=s64-c-mo',

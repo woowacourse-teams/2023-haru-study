@@ -1,36 +1,135 @@
-import Accordion from '@Components/common/Accordion/Accordion';
-import AccordionSkeleton from '@Components/common/Accordion/AccordionSkeleton';
+import { useNavigate } from 'react-router-dom';
+import { styled } from 'styled-components';
+
 import Typography from '@Components/common/Typography/Typography';
 
-import type { MemberProgress } from '@Types/study';
+import color from '@Styles/color';
+import { TextSkeletonStyle } from '@Styles/common';
 
-import MemberRecord from '../MemberRecord/MemberRecord';
+import { ROUTES_PATH } from '@Constants/routes';
+
+import CycleIcon from '@Assets/icons/CycleIcon';
+import TimeLineIcon from '@Assets/icons/TimeLineIcon';
+
+import date from '@Utils/date';
+
+import type { StudyBasicInfo } from '@Types/study';
+
+import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
 
 type Props = {
-  memberProgresses: MemberProgress[];
-  studyId?: string;
+  studyList: StudyBasicInfo[] | null;
   isLoading: boolean;
 };
 
-const MemberRecordList = ({ memberProgresses = [], studyId = '', isLoading }: Props) => {
-  if (isLoading) {
-    return <AccordionSkeleton />;
-  }
+const MemberRecordList = ({ studyList, isLoading }: Props) => {
+  const navigate = useNavigate();
+
+  const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
+
+  if (isLoading)
+    return (
+      <SkeletonLayout>
+        <SkeletonItem />
+        <SkeletonItem />
+        <SkeletonItem />
+      </SkeletonLayout>
+    );
+
+  if (studyList?.length === 0) return <EmptyMemberRecord />;
 
   return (
-    <Accordion>
-      {memberProgresses.map(({ progressId, nickname }) => (
-        <Accordion.Item key={progressId}>
-          <Accordion.Header>
-            <Typography variant="h5">{nickname}의 기록</Typography>
-          </Accordion.Header>
-          <Accordion.Panel>
-            <MemberRecord studyId={studyId} progressId={progressId} nickname={nickname} />
-          </Accordion.Panel>
-        </Accordion.Item>
-      ))}
-    </Accordion>
+    <Layout>
+      {studyList?.map(({ studyId, name, createdDateTime, totalCycle, timePerCycle }) => {
+        return (
+          <StudyItem key={studyId} onClick={() => handleClickStudyItem(studyId)}>
+            <StudyNameDateContainer>
+              <Typography variant="h6">{name} 스터디</Typography>
+              <StudyDate>{date.format(new Date(createdDateTime))}</StudyDate>
+            </StudyNameDateContainer>
+            <StudyCycleInfoLayout>
+              <StudyCycleInfoContainer>
+                <CycleIcon color={color.neutral[500]} />
+                <span>진행한 총 사이클</span>
+                <span>{totalCycle}회</span>
+              </StudyCycleInfoContainer>
+              <StudyCycleInfoContainer>
+                <TimeLineIcon color={color.neutral[500]} />
+                <span>사이클 당 학습 시간</span>
+                <span>{timePerCycle}분</span>
+              </StudyCycleInfoContainer>
+            </StudyCycleInfoLayout>
+          </StudyItem>
+        );
+      })}
+    </Layout>
   );
 };
 
 export default MemberRecordList;
+
+const Layout = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+`;
+
+const StudyItem = styled.li`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  background-color: ${color.white};
+  border: 1px solid ${color.neutral[200]};
+  border-radius: 7px;
+
+  padding: 20px;
+
+  cursor: pointer;
+`;
+
+const StudyNameDateContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`;
+
+const StudyDate = styled.span`
+  color: ${color.neutral[700]};
+`;
+
+const StudyCycleInfoLayout = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 25px;
+`;
+
+const StudyCycleInfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 5px 10px;
+  border-radius: 7px;
+
+  background-color: ${color.neutral[100]};
+  color: ${color.neutral[700]};
+
+  :last-child {
+    margin-left: 10px;
+    font-size: 1.8rem;
+    font-weight: 400;
+  }
+`;
+
+const SkeletonLayout = styled.div`
+  display: grid;
+  row-gap: 40px;
+
+  max-width: 1200px;
+`;
+
+const SkeletonItem = styled.div`
+  height: 130px;
+  ${TextSkeletonStyle}
+`;

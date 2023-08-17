@@ -4,24 +4,22 @@ import { useNavigate } from 'react-router-dom';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-import { useMemberInfo } from '@Contexts/MemberInfoProvider';
-
 import { boolCheckCookie } from '@Utils/cookie';
 
-import { requestAccessTokenRefresh, requestGetMemberStudyListData } from '@Apis/index';
+import { requestAccessTokenRefresh, requestGetMemberRecordContents } from '@Apis/index';
 
-import type { StudyBasicInfo } from '@Types/study';
+import type { MemberRecordContent } from '@Types/study';
 
 import { APIError, ResponseError } from '@Errors/index';
 
-const useMemberRecord = (options: { errorHandler: (error: Error) => void }) => {
+const useProgressRecord = (studyId: string, progressId: string, options?: { errorHandler: (error: Error) => void }) => {
   const navigate = useNavigate();
 
-  const { data } = useMemberInfo();
-  const [studyList, setStudyList] = useState<StudyBasicInfo[] | null>(null);
-  const isLoading = !studyList;
+  const [memberRecordContents, setMemberRecordContents] = useState<MemberRecordContent[] | null>(null);
 
-  const getAccessTokenRefresh = useCallback(async () => {
+  const isLoading = !memberRecordContents;
+
+  const getAccessTokenRefresh = async () => {
     try {
       const hasRefreshToken = boolCheckCookie('refreshToken');
 
@@ -38,11 +36,9 @@ const useMemberRecord = (options: { errorHandler: (error: Error) => void }) => {
     } catch (error) {
       if (error instanceof Error) return options?.errorHandler(error);
     }
-  }, [navigate, options]);
+  };
 
-  const fetchMemberRecord = useCallback(async () => {
-    if (!data) return;
-
+  const fetchMemberRecordData = useCallback(async () => {
     try {
       const accessToken = sessionStorage.getItem('accessToken');
 
@@ -53,17 +49,17 @@ const useMemberRecord = (options: { errorHandler: (error: Error) => void }) => {
         return;
       }
 
-      const { studies } = await requestGetMemberStudyListData(data.memberId, accessToken);
+      const { content } = await requestGetMemberRecordContents(studyId, progressId, accessToken);
 
-      setStudyList(studies);
+      setMemberRecordContents(content);
     } catch (error) {
       if (error instanceof APIError && error.code === '1403') {
         const accessToken = await getAccessTokenRefresh();
 
         if (accessToken) {
-          const { studies } = await requestGetMemberStudyListData(data.memberId, accessToken);
+          const { content } = await requestGetMemberRecordContents(studyId, progressId, accessToken);
 
-          setStudyList(studies);
+          setMemberRecordContents(content);
 
           return;
         }
@@ -73,13 +69,13 @@ const useMemberRecord = (options: { errorHandler: (error: Error) => void }) => {
 
       if (error instanceof ResponseError) return options?.errorHandler(error);
     }
-  }, [data, navigate]);
+  }, [progressId, studyId]);
 
   useEffect(() => {
-    fetchMemberRecord();
-  }, [fetchMemberRecord]);
+    fetchMemberRecordData();
+  }, [fetchMemberRecordData]);
 
-  return { name: data?.name, studyList, isLoading };
+  return { memberRecordContents, isLoading };
 };
 
-export default useMemberRecord;
+export default useProgressRecord;

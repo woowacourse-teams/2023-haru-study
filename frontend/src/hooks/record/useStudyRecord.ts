@@ -20,11 +20,12 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
   const [memberProgresses, setMemberProgresses] = useState<MemberProgress[]>([]);
 
   const setInitInfo = (
-    { studyName, timePerCycle, totalCycle, createdDateTime }: StudyBasicInfo,
+    { studyId, name, timePerCycle, totalCycle, createdDateTime }: StudyBasicInfo,
     members: MemberProgress[],
   ) => {
     setStudyBasicInfo({
-      studyName,
+      studyId,
+      name,
       timePerCycle,
       totalCycle,
       createdDateTime,
@@ -53,6 +54,8 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
 
   const fetchStudyRecordData = useCallback(async () => {
     try {
+      setIsLoading(true);
+
       const accessToken = sessionStorage.getItem('accessToken');
 
       if (!accessToken) {
@@ -92,7 +95,7 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
     fetchStudyRecordData();
   }, [fetchStudyRecordData]);
 
-  return { isLoading, studyBasicInfo, memberProgresses };
+  return { isLoading, studyBasicInfo, memberProgresses, refetchStudyRecordData: fetchStudyRecordData };
 };
 
 export default useStudyRecord;

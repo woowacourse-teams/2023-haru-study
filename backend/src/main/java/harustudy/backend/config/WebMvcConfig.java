@@ -20,8 +20,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final AuthInterceptor authInterceptor;
     private final AuthArgumentResolver authArgumentResolver;
 
-    @Value("cors-allow-origin")
-    private String allowOrigin;
+    @Value("${cors-allow-origin}")
+    private String[] corsAllowOrigins;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -35,8 +35,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins(allowOrigin)
+        registry.addMapping("/api/**")
+                .allowedOriginPatterns(corsAllowOrigins)
                 .allowedMethods("*")
                 .allowCredentials(true);
     }

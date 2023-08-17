@@ -24,7 +24,8 @@ export type MemberProgress = {
 };
 
 export type StudyBasicInfo = {
-  studyName: string;
+  studyId: string;
+  name: string;
   timePerCycle: StudyTimePerCycleOptions;
   totalCycle: TotalCycleOptions;
   createdDateTime: string;
