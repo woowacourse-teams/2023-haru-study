@@ -108,8 +108,6 @@ export default MemberInfoProvider;
 export const useMemberInfo = () => {
   const value = useContext(MemberInfoContext);
 
-  if (value === null) return { data: null };
-
   return { data: value };
 };
 
