@@ -71,8 +71,8 @@ export const requestOAuthLogin = async (provider: OAuthProvider, code: string) =
   return (await response.json()) as ResponseAuthToken;
 };
 
-export const requestMemberInfo = (accessToken: string, memberId: string) =>
-  http.get<ResponseMemberInfo>(`/api/members/${memberId}`, {
+export const requestMemberInfo = (accessToken: string) =>
+  http.get<ResponseMemberInfo>('/api/me', {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
