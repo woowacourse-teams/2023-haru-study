@@ -27,17 +27,4 @@ const ArrowIcon = ({ direction = 'down' }: Props) => {
   );
 };
 
-{
-  /* <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_1371_134)">
-<path d="M17.7085 28.125L25.0002 21.875L32.2918 28.125" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
-<defs>
-<clipPath id="clip0_1371_134">
-<rect width="16.6667" height="16.6667" fill="white" transform="matrix(-1 0 0 -1 33.3335 33.3333)"/>
-</clipPath>
-</defs>
-</svg> */
-}
-
 export default ArrowIcon;
