@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 
 export const progressesHandlers = [
-  rest.get('/api/v2/studies/:studyId/progresses', (req, res, ctx) => {
+  rest.get('/api/studies/:studyId/progresses', (req, res, ctx) => {
     const accessToken =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkxNTY4NDI4LCJleHAiOjE2OTE1NzIwMjh9.BfGH7jBxO_iixmlpzxHKV7d9ekJPegLxrpY9ME066ro';
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];

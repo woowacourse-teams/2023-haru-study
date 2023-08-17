@@ -81,7 +81,7 @@ export const requestCreateStudy = async (
   timePerCycle: StudyTimePerCycleOptions,
   accessToken: string,
 ) => {
-  const response = await http.post(`/api/v2/studies`, {
+  const response = await http.post(`/api/studies`, {
     headers: { Authorization: `Bearer ${accessToken}` },
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
   });
@@ -95,17 +95,17 @@ export const requestCreateStudy = async (
 };
 
 export const requestAuthenticateParticipationCode = (participantCode: string, accessToken: string) =>
-  http.get<ResponseStudies>(`/api/v2/studies?participantCode=${participantCode}`, {
+  http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
 export const requestCheckProgresses = async (studyId: string, memberId: string, accessToken: string) =>
-  http.get<ResponseProgresses>(`/api/v2/studies/${studyId}/progresses?memberId=${memberId}`, {
+  http.get<ResponseProgresses>(`/api/studies/${studyId}/progresses?memberId=${memberId}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
 export const requestRegisterProgress = (nickname: string, studyId: string, memberId: string, accessToken: string) =>
-  http.post(`/api/v2/studies/${studyId}/progresses`, {
+  http.post(`/api/studies/${studyId}/progresses`, {
     headers: { Authorization: `Bearer ${accessToken}` },
     body: JSON.stringify({ memberId, nickname }),
   });
