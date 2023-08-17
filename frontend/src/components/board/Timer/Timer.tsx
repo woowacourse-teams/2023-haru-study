@@ -57,6 +57,11 @@ const Timer = ({ studyMinutes, step }: Props) => {
         $style={css`
           border: none;
           border-radius: 14px;
+          &:hover {
+            &:enabled {
+              background-color: ${color.white};
+            }
+          }
         `}
       >
         <Typography

@@ -94,7 +94,7 @@ const VARIANT_TYPE = {
     border: 1px solid ${color.blue[500]};
     &:hover {
       &:enabled {
-        background-color: ${color.white};
+        background-color: ${color.neutral[100]};
       }
     }
   `,
