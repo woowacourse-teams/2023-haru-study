@@ -33,6 +33,17 @@ const MemberRecord = ({ studyId, nickname, progressId }: Props) => {
     return <TabsSkeleton />;
   }
 
+  const getPostPosition = (name: string) => {
+    const charCode = name.charCodeAt(name.length - 1);
+    const consonantCode = (charCode - 0xac00) % 28;
+
+    if (consonantCode === 0) {
+      return '가';
+    }
+
+    return '이(가)';
+  };
+
   return (
     <MemberRecordLayout>
       <Tabs>
@@ -42,7 +53,8 @@ const MemberRecord = ({ studyId, nickname, progressId }: Props) => {
               <TabItemSection>
                 <Typography variant="h5">
                   <GoalIcon color={color.blue[500]} />
-                  {nickname}가 작성한 목표
+                  {nickname}
+                  {getPostPosition(nickname)} 작성한 목표
                 </Typography>
                 {getKeys<Plan>(PLAN_KEYWORDS).map((key) => (
                   <QuestionAnswer
@@ -56,7 +68,8 @@ const MemberRecord = ({ studyId, nickname, progressId }: Props) => {
               <TabItemSection>
                 <Typography variant="h5">
                   <PencilIcon color={color.teal[500]} />
-                  {nickname}가 작성한 회고
+                  {nickname}
+                  {getPostPosition(nickname)} 작성한 회고
                 </Typography>
                 {getKeys<Retrospect>(RETROSPECT_KEYWORDS).map((key) => (
                   <QuestionAnswer
