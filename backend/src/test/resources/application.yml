@@ -11,6 +11,8 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  flyway:
+    enabled: false
 
 oauth2:
   oauth-properties:
