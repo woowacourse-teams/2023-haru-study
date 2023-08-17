@@ -33,10 +33,12 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
         setMemberInfo(memberInfo);
       },
       clearMemberInfo: () => {
+        navigate(ROUTES_PATH.login);
+        sessionStorage.removeItem('accessToken');
         setMemberInfo(null);
       },
     }),
-    [],
+    [navigate],
   );
 
   const fetchAccessTokenRefresh = useCallback(async () => {
