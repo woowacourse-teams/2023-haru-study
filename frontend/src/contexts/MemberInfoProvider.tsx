@@ -17,9 +17,9 @@ type Actions = {
   clearMemberInfo: () => void;
 };
 
-export const MemberInfoContext = createContext<MemberInfo | null>(null);
+const MemberInfoContext = createContext<MemberInfo | null>(null);
 
-export const MemberInfoActionContext = createContext<Actions | null>(null);
+const MemberInfoActionContext = createContext<Actions | null>(null);
 
 const MemberInfoProvider = ({ children }: PropsWithChildren) => {
   const [memberInfo, setMemberInfo] = useState<MemberInfo | null>(null);

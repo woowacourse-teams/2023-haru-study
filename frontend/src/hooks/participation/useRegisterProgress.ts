@@ -1,9 +1,9 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-import { MemberInfoContext } from '@Contexts/MemberInfoProvider';
+import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
 import { boolCheckCookie } from '@Utils/cookie';
 
@@ -14,7 +14,7 @@ import { APIError, ResponseError } from '@Errors/index';
 const useRegisterProgress = (errorHandler: (error: Error) => void) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const memberInfo = useContext(MemberInfoContext);
+  const memberInfo = useMemberInfo();
 
   const navigate = useNavigate();
 
@@ -63,13 +63,12 @@ const useRegisterProgress = (errorHandler: (error: Error) => void) => {
         return;
       }
 
-      if (memberInfo) await requestRegisterProgress(nickname, studyId, memberInfo.id, accessToken);
+      await requestRegisterProgress(nickname, studyId, memberInfo.id, accessToken);
     } catch (error) {
       if (error instanceof APIError && error.code === '1403') {
         const accessToken = await getAccessTokenRefresh();
 
-        if (memberInfo && accessToken)
-          return await newRequestRegisterProgress(nickname, studyId, memberInfo.id, accessToken);
+        if (accessToken) return await newRequestRegisterProgress(nickname, studyId, memberInfo.id, accessToken);
       }
 
       if (error instanceof ResponseError) return errorHandler(error);
