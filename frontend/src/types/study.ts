@@ -41,3 +41,20 @@ export type PlanList = Record<Plan, string>;
 export type Retrospect = 'doneAsExpected' | 'experiencedDifficulty' | 'lesson';
 
 export type RetrospectList = Record<Retrospect, string>;
+
+// 새로 바뀌는거
+
+export type StudyInfo = {
+  studyId: string;
+  name: string;
+  totalCycle: number;
+  timePerCycle: number;
+  createdDateTime: Date;
+};
+
+export type ProgressInfo = {
+  progressId: string;
+  nickname: string;
+  currentCycle: number;
+  step: Step | 'done';
+};
