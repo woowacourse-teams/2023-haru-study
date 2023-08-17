@@ -7,5 +7,5 @@ export const ROUTES_PATH = {
   create: '/create',
   preparation: '/preparation',
   participation: '/participation',
-  memberRecord: "/member-record'",
+  memberRecord: '/member-record',
 } as const;

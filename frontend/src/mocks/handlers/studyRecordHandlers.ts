@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 
-import type { MemberProgress } from '@Types/study';
+import type { MemberProgress, StudyBasicInfo } from '@Types/study';
 
 const STUDY_CONTENT = {
   content: [
@@ -100,6 +100,18 @@ const STUDY_MEMBERS: { progresses: MemberProgress[] } = {
       currentCycle: 3,
       step: 'done',
     },
+    {
+      progressId: '8',
+      nickname: '도밥',
+      currentCycle: 2,
+      step: 'retrospect',
+    },
+    {
+      progressId: '9',
+      nickname: 'noah',
+      currentCycle: 1,
+      step: 'retrospect',
+    },
   ],
 };
 
@@ -108,6 +120,39 @@ const STUDY_METADATA = {
   totalCycle: 3,
   timePerCycle: 25,
   createdDateTime: '2023-08-15T06:25:39.093Z',
+};
+
+const STUDY_LIST: { studies: StudyBasicInfo[] } = {
+  studies: [
+    {
+      studyId: '1',
+      name: '안오면 지상렬',
+      totalCycle: 3,
+      timePerCycle: 60,
+      createdDateTime: '2023-08-16T13:33:02.810Z',
+    },
+    {
+      studyId: '2',
+      name: '와도 지상렬',
+      totalCycle: 6,
+      timePerCycle: 30,
+      createdDateTime: '2023-08-14T13:33:02.810Z',
+    },
+    {
+      studyId: '3',
+      name: '심야 공부방',
+      totalCycle: 3,
+      timePerCycle: 50,
+      createdDateTime: '2023-08-12T13:33:02.810Z',
+    },
+    {
+      studyId: '4',
+      name: '짧고 빠른 공부방',
+      totalCycle: 3,
+      timePerCycle: 20,
+      createdDateTime: '2023-08-11T13:33:02.810Z',
+    },
+  ],
 };
 
 const accessToken =
@@ -169,5 +214,23 @@ export const studyRecordHandlers = [
       );
 
     return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(400));
+  }),
+
+  rest.get('/api/studies?memberId=1', (req, res, ctx) => {
+    const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
+
+    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_LIST), ctx.delay(400));
+
+    if (accessToken !== requestAuthToken)
+      return res(
+        ctx.status(401),
+        ctx.delay(100),
+        ctx.json({
+          message: '만료된 갱신 토큰입니다.',
+          code: '1403',
+        }),
+      );
+
+    return res(ctx.status(200), ctx.json(STUDY_LIST), ctx.delay(400));
   }),
 ];

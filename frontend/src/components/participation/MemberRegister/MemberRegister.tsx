@@ -6,7 +6,7 @@ import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
 import useInput from '@Hooks/common/useInput';
-import useRegisterMember from '@Hooks/participation/useRegisterMember';
+import useRegisterMember from '@Hooks/participation/useRegisterProgress';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 import { ROUTES_PATH } from '@Constants/routes';
@@ -23,7 +23,7 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
     alert(error.message);
   };
 
-  const { isLoading, registerMember } = useRegisterMember(errorHandler);
+  const { isLoading, registerProgress } = useRegisterMember(errorHandler);
 
   const nickNameInput = useInput(true);
 
@@ -33,7 +33,7 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
       return;
     }
 
-    await registerMember(nickNameInput.state, studyId);
+    await registerProgress(nickNameInput.state, studyId);
 
     navigate(`${ROUTES_PATH.board}/${studyId}`);
   };
