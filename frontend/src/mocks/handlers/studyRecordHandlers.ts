@@ -100,6 +100,18 @@ const STUDY_MEMBERS: { progresses: MemberProgress[] } = {
       currentCycle: 3,
       step: 'done',
     },
+    {
+      progressId: '8',
+      nickname: '도밥',
+      currentCycle: 2,
+      step: 'retrospect',
+    },
+    {
+      progressId: '9',
+      nickname: 'noah',
+      currentCycle: 1,
+      step: 'retrospect',
+    },
   ],
 };
 
