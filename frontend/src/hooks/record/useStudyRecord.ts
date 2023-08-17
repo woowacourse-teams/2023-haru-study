@@ -90,15 +90,11 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
     }
   }, [studyId]);
 
-  const refetchStudyRecordData = () => {
-    fetchStudyRecordData();
-  };
-
   useEffect(() => {
     fetchStudyRecordData();
   }, [fetchStudyRecordData]);
 
-  return { isLoading, studyBasicInfo, memberProgresses, refetchStudyRecordData };
+  return { isLoading, studyBasicInfo, memberProgresses, refetchStudyRecordData: fetchStudyRecordData };
 };
 
 export default useStudyRecord;
