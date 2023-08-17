@@ -106,11 +106,7 @@ export default MemberInfoProvider;
 export const useMemberInfo = () => {
   const value = useContext(MemberInfoContext);
 
-  if (value === null) {
-    throw new Error('MemberInfo 에러');
-  }
-
-  return value;
+  return { data: value };
 };
 
 export const useMemberInfoAction = () => {
