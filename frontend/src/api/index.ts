@@ -3,12 +3,12 @@ import http from '@Utils/http';
 import type {
   ResponseAuthToken,
   ResponseCreateStudy,
-  ResponseIsCheckMember,
   ResponseMemberInfo,
   ResponseMemberRecordContents,
   ResponseMemberStudyMetadata,
   ResponsePlanList,
-  ResponseStudyInfo,
+  ResponseProgresses,
+  ResponseStudies,
   ResponseStudyMetadata,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
@@ -17,45 +17,6 @@ import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOpti
 const BASE_URL = '/api/v2';
 
 // 옛날거
-export const requestCreateStudy = async (
-  studyName: string,
-  totalCycle: TotalCycleOptions,
-  timePerCycle: StudyTimePerCycleOptions,
-) => {
-  const response = await http.post(`/api/studies`, {
-    body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
-  });
-
-  const locationHeader = response.headers.get('Location');
-  const studyId = locationHeader?.split('/').pop() as string;
-
-  const result = (await response.json()) as ResponseCreateStudy;
-
-  return { studyId, result };
-};
-
-export const requestRegisterMember = async (nickname: string, studyId: string) => {
-  const response = await http.post(`/api/studies/${studyId}/members`, {
-    body: JSON.stringify({ nickname }),
-  });
-
-  const locationHeader = response.headers.get('Location');
-  const memberId = locationHeader?.split('/').pop() as string;
-
-  return { memberId };
-};
-
-export const requestAuthenticateParticipationCode = async (participantCode: string) => {
-  const response = await http.post(`/api/studies/authenticate`, {
-    body: JSON.stringify({ participantCode }),
-  });
-
-  return (await response.json()) as ResponseStudyInfo;
-};
-
-export const requestCheckIsMember = (studyId: string, memberId: string) =>
-  http.get<ResponseIsCheckMember>(`/api/studies/${studyId}/members/${memberId}`);
-
 export const requestSubmitPlanningForm = (studyId: string, memberId: string, plans: PlanList) =>
   http.post(`/api/studies/${studyId}/members/${memberId}/content/plans`, {
     body: JSON.stringify(plans),
@@ -113,3 +74,38 @@ export const requestAccessTokenRefresh = async () => {
 
   return (await response.json()) as ResponseAuthToken;
 };
+
+export const requestCreateStudy = async (
+  studyName: string,
+  totalCycle: TotalCycleOptions,
+  timePerCycle: StudyTimePerCycleOptions,
+  accessToken: string,
+) => {
+  const response = await http.post(`/api/studies`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
+  });
+
+  const locationHeader = response.headers.get('Location');
+  const studyId = locationHeader?.split('/').pop() as string;
+
+  const result = (await response.json()) as ResponseCreateStudy;
+
+  return { studyId, result };
+};
+
+export const requestAuthenticateParticipationCode = (participantCode: string, accessToken: string) =>
+  http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+export const requestCheckProgresses = async (studyId: string, memberId: string, accessToken: string) =>
+  http.get<ResponseProgresses>(`/api/studies/${studyId}/progresses?memberId=${memberId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+export const requestRegisterProgress = (nickname: string, studyId: string, memberId: string, accessToken: string) =>
+  http.post(`/api/studies/${studyId}/progresses`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify({ memberId, nickname }),
+  });

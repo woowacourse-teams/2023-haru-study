@@ -30,8 +30,8 @@ const ParticipationCodeInput = () => {
     const data = await authenticateParticipationCode(participantCodeInput.state);
 
     if (data) {
-      navigate(`${ROUTES_PATH.preparation}/${data.studyId}`, {
-        state: { participantCode: participantCodeInput.state, studyName: data.studyName, isHost: false },
+      navigate(`${ROUTES_PATH.preparation}/${data.studies[0].studyId}`, {
+        state: { participantCode: participantCodeInput.state, studyName: data.studies[0].name, isHost: false },
       });
     }
   };
