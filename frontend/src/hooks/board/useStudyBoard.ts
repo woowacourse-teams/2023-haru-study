@@ -53,7 +53,7 @@ const useStudyBoard = () => {
 
     try {
       const fetchedStudyInfoData = await requestGetOneStudyData(accessToken, studyId);
-      const fetchedProgressInfoData = await requestGetMemberProgress(accessToken, studyId, memberInfo.id);
+      const fetchedProgressInfoData = await requestGetMemberProgress(accessToken, studyId, memberInfo.memberId);
 
       setStudyInfo(fetchedStudyInfoData);
       setProgressInfo(fetchedProgressInfoData.progresses[0]);
