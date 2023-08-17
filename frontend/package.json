@@ -4,20 +4,20 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "prod": "NODE_ENV=production webpack serve",
-    "dev": "NODE_ENV=development webpack serve",
+    "prod": "NODE_ENV=production webpack server --open --config webpack.prod.js",
+    "dev": "NODE_ENV=development webpack server --open --config webpack.dev.js",
     "test": "jest",
-    "build": "yarn test && NODE_ENV=production webpack",
+    "build": "yarn test && NODE_ENV=production webpack --config webpack.prod.js",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "ci": "yarn install --immutable --immutable-cache --check-cache"
   },
   "dependencies": {
+    "msw": "^1.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.1",
-    "styled-components": "^6.0.2",
-    "msw": "^1.2.2"
+    "styled-components": "^6.0.2"
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.22.5",
@@ -41,6 +41,7 @@
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
+    "dotenv-webpack": "^8.0.1",
     "eslint": "^8.44.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.8.0",
@@ -60,7 +61,8 @@
     "typescript": "^5.1.6",
     "webpack": "^5.88.1",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^4.15.1",
+    "webpack-merge": "^5.9.0"
   },
   "msw": {
     "workerDirectory": "public"

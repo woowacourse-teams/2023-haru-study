@@ -2,45 +2,18 @@ import { Link } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
-import Menu from '@Components/common/Menu/Menu';
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-const LANDING_CONTENTS_MENU_ITEMS = [
-  {
-    key: 0,
-    text: '하루스터디 소개',
-    clickEvent: () => {
-      alert('우아한테크코스 5기 - 테오, 히이로, 모디, 마코, 룩소, 엽토, 노아');
-    },
-  },
-  {
-    key: 1,
-    text: '깃허브',
-    clickEvent: () => {
-      window.open('https://github.com/woowacourse-teams/2023-haru-study', 'blank');
-    },
-  },
-];
+import MemberProfile from '../MemberProfile/MemberProfile';
 
 const LandingContents = () => {
   return (
     <ContentsContainer>
-      <Menu
-        $menuListPosition="left"
-        $style={css`
-          margin: 0 0 0 auto;
-        `}
-      >
-        {LANDING_CONTENTS_MENU_ITEMS.map((menuItem) => (
-          <Menu.Item key={menuItem.key} onClick={menuItem.clickEvent}>
-            {menuItem.text}
-          </Menu.Item>
-        ))}
-      </Menu>
+      <MemberProfile />
       <TopicSummaryContainer>
         <Typography
           variant="h1"
@@ -93,7 +66,11 @@ const TopicSummaryContainer = styled.div`
   p {
     font-size: 2rem;
     font-weight: 200;
-    line-height: 180%;
+    line-height: 150%;
+  }
+
+  svg {
+    font-size: 4rem;
   }
 `;
 

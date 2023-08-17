@@ -1,34 +1,25 @@
 package harustudy.backend.member.service;
 
-import harustudy.backend.common.EntityNotFoundException.MemberNotFound;
-import harustudy.backend.common.EntityNotFoundException.RoomNotFound;
+import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.member.domain.Member;
-import harustudy.backend.member.dto.NicknameResponse;
+import harustudy.backend.member.dto.MemberResponse;
+import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.repository.MemberRepository;
-import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.repository.PomodoroRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Deprecated
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class MemberService {
 
-    private final PomodoroRoomRepository pomodoroRoomRepository;
     private final MemberRepository memberRepository;
 
-    public NicknameResponse findParticipatedMemberNickname(Long roomId, Long memberId) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findById(roomId)
-                .orElseThrow(RoomNotFound::new);
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFound::new);
+    public MemberResponse findOauthProfile(AuthMember authMember) {
+        Member authorizedMember = memberRepository.findById(authMember.id())
+                .orElseThrow(MemberNotFoundException::new);
 
-        if (pomodoroRoom.isParticipatedMember(member)) {
-            return new NicknameResponse(member.getNickname());
-        }
-        return new NicknameResponse(null);
+        return MemberResponse.from(authorizedMember);
     }
 }

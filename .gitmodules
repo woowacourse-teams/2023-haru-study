@@ -1,3 +1,6 @@
 [submodule "backend/src/main/resources/submodule"]
 	path = backend/src/main/resources/submodule
 	url = https://github.com/haru-study/submodule.git
+[submodule "frontend/env-submodule"]
+	path = frontend/env-submodule
+	url = https://github.com/haru-study/env-submodule.git

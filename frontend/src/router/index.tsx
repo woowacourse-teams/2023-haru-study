@@ -1,7 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import Auth from '@Pages/Auth';
 import CreateStudy from '@Pages/CreateStudy';
 import Landing from '@Pages/Landing';
+import Login from '@Pages/Login';
+import NotFoundPage from '@Pages/NotFoundPage';
+import MemberRecord from '@Pages/MemberRecord';
 import StudyBoard from '@Pages/StudyBoard';
 import StudyParticipation from '@Pages/StudyParticipation';
 import StudyPreparation from '@Pages/StudyPreparation';
@@ -15,10 +19,19 @@ const router = createBrowserRouter([
   {
     path: ROUTES_PATH.landing,
     element: <App />,
+    errorElement: <NotFoundPage />,
     children: [
       {
         index: true,
         element: <Landing />,
+      },
+      {
+        path: ROUTES_PATH.login,
+        element: <Login />,
+      },
+      {
+        path: ROUTES_PATH.auth,
+        element: <Auth />,
       },
       {
         path: `${ROUTES_PATH.board}/:studyId`,
@@ -39,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: ROUTES_PATH.participation,
         element: <StudyParticipation />,
+      },
+      {
+        path: ROUTES_PATH.memberRecord,
+        element: <MemberRecord />,
       },
     ],
   },

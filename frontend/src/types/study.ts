@@ -16,10 +16,19 @@ export type Progress = {
   step: Step;
 };
 
+export type MemberProgress = {
+  progressId: string;
+  nickname: string;
+  currentCycle: number;
+  step: Step | 'done';
+};
+
 export type StudyBasicInfo = {
-  studyName: string;
+  studyId: string;
+  name: string;
   timePerCycle: StudyTimePerCycleOptions;
   totalCycle: TotalCycleOptions;
+  createdDateTime: string;
 };
 
 export type StudyData = {
@@ -41,3 +50,20 @@ export type PlanList = Record<Plan, string>;
 export type Retrospect = 'doneAsExpected' | 'experiencedDifficulty' | 'lesson';
 
 export type RetrospectList = Record<Retrospect, string>;
+
+// 새로 바뀌는거
+
+export type StudyInfo = {
+  studyId: string;
+  name: string;
+  totalCycle: number;
+  timePerCycle: number;
+  createdDateTime: string;
+};
+
+export type ProgressInfo = {
+  progressId: string;
+  nickname: string;
+  currentCycle: number;
+  step: Step | 'done';
+};

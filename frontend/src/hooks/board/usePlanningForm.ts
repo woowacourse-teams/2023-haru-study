@@ -2,9 +2,13 @@ import { useState } from 'react';
 
 import useQuestionTextarea from '@Hooks/common/useQuestionTextarea';
 
-import { requestSubmitPlanningForm } from '@Apis/index';
+import { boolCheckCookie } from '@Utils/cookie';
 
-const usePlanningForm = (studyId: string, memberId: string) => {
+import { requestAccessTokenRefresh, requestWritePlan } from '@Apis/index';
+
+import { APIError } from '@Errors/index';
+
+const usePlanningForm = (studyId: string, progressId: string, onClickSubmit: () => Promise<void>) => {
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
   const questionTextareaProps = {
@@ -37,23 +41,44 @@ const usePlanningForm = (studyId: string, memberId: string) => {
     questionTextareaProps.whatCanYouDo.errorMessage
   );
 
+  const refreshAccessToken = async () => {
+    if (!boolCheckCookie('refreshToken')) {
+      throw new Error('리프레시 토큰이 존재하지 않습니다. 다시 로그인 해주세요.');
+    }
+
+    const { accessToken } = await requestAccessTokenRefresh();
+    sessionStorage.setItem('accessToken', accessToken);
+  };
+
   const submitForm = async () => {
     setIsSubmitLoading(true);
+
+    const accessToken = sessionStorage.getItem('accessToken');
+
+    if (!accessToken) {
+      throw new Error('엑세스 토큰이 존재하지 않습니다. 다시 로그인 해주세요.');
+    }
+
     try {
-      await requestSubmitPlanningForm(studyId, memberId, {
+      await requestWritePlan(accessToken, studyId, progressId, {
         toDo: questionTextareaProps.toDo.value,
         completionCondition: questionTextareaProps.completionCondition.value,
         expectedProbability: questionTextareaProps.expectedProbability.value,
         expectedDifficulty: questionTextareaProps.expectedDifficulty.value,
         whatCanYouDo: questionTextareaProps.whatCanYouDo.value,
       });
+      await onClickSubmit();
     } catch (error) {
-      setIsSubmitLoading(false);
-      if (!(error instanceof Error)) throw error;
-      throw new Error('제출 과정에 에러가 발생했습니다. 다시 시도 해주세요.');
-    }
+      if (error instanceof APIError && error.code === 1403) {
+        await refreshAccessToken();
+        await submitForm();
+        return;
+      }
 
-    setIsSubmitLoading(false);
+      throw error;
+    } finally {
+      setIsSubmitLoading(false);
+    }
   };
 
   return { questionTextareaProps, isSubmitLoading, isInvalidForm, submitForm };

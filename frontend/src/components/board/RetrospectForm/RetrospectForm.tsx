@@ -15,14 +15,18 @@ import type { Retrospect } from '@Types/study';
 
 type Props = {
   isLastCycle: boolean;
-  onClickSubmitButton: () => void;
+  onClickSubmitButton: () => Promise<void>;
   studyId: string;
-  memberId: string;
+  progressId: string;
 };
 
-const RetrospectForm = ({ isLastCycle, onClickSubmitButton, studyId, memberId }: Props) => {
+const RetrospectForm = ({ isLastCycle, onClickSubmitButton, studyId, progressId }: Props) => {
   const navigate = useNavigate();
-  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = useRetrospectForm(studyId, memberId);
+  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = useRetrospectForm(
+    studyId,
+    progressId,
+    onClickSubmitButton,
+  );
 
   const handleClickButton = async () => {
     try {
@@ -32,7 +36,6 @@ const RetrospectForm = ({ isLastCycle, onClickSubmitButton, studyId, memberId }:
         navigate(`${ROUTES_PATH.record}/${studyId}`);
         return;
       }
-      onClickSubmitButton();
     } catch (error) {
       if (!(error instanceof Error)) return;
       alert(error.message);

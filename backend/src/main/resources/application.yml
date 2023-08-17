@@ -1,20 +1,21 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
 
-  flyway:
-    enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  h2:
+    console:
+      enabled: true
 
   config:
-    import: classpath:/submodule/application.yml
-
-springdoc:
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-
+    import: classpath:/submodule/application-auth-develop.yml
