@@ -35,10 +35,10 @@ const MemberRecord = ({ studyId, nickname, progressId, isCompleted, currentCycle
     return <TabsSkeleton />;
   }
 
-  const isDoneCycle = (cycle: number) => {
+  const isDoneCycle = (selectedTabCycle: number) => {
     if (isCompleted) return true;
 
-    return currentCycle > cycle;
+    return currentCycle > selectedTabCycle;
   };
 
   return (
