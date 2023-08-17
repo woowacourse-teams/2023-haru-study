@@ -61,7 +61,7 @@ const useRetrospectForm = (studyId: string, progressId: string, onClickSubmit: (
       });
       await onClickSubmit();
     } catch (error) {
-      if (error instanceof APIError && error.code === '1403') {
+      if (error instanceof APIError && error.code === 1403) {
         await refreshAccessToken();
         await submitForm();
         return;

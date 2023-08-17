@@ -79,7 +79,7 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
       const memberInfo = await requestMemberInfo(accessToken);
       actions.initMemberInfo(memberInfo);
     } catch (error) {
-      if (error instanceof APIError && error.code === '1403') {
+      if (error instanceof APIError && error.code === 1403) {
         await fetchAccessTokenRefresh();
         await fetchMemberInfo();
 

@@ -53,7 +53,7 @@ const useProgressRecord = (studyId: string, progressId: string, options?: { erro
 
       setMemberRecordContents(content);
     } catch (error) {
-      if (error instanceof APIError && error.code === '1403') {
+      if (error instanceof APIError && error.code === 1403) {
         const accessToken = await getAccessTokenRefresh();
 
         if (accessToken) {

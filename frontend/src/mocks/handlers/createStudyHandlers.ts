@@ -23,7 +23,7 @@ export const createStudyHandlers = [
     if (accessToken !== requestAuthToken)
       return res(
         ctx.status(401),
-        ctx.json({ message: '유효하지 않은 엑세스 토큰입니다.', code: '1403' }),
+        ctx.json({ message: '유효하지 않은 엑세스 토큰입니다.', code: 1403 }),
         ctx.delay(1000),
       );
 

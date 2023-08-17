@@ -58,7 +58,7 @@ const useStudyBoard = () => {
       setStudyInfo(fetchedStudyInfoData);
       setProgressInfo(fetchedProgressInfoData.progresses[0]);
     } catch (error) {
-      if (error instanceof APIError && error.code === '1403') {
+      if (error instanceof APIError && error.code === 1403) {
         await refreshAccessToken();
         await fetchStudyMetaData();
         return;
@@ -106,7 +106,7 @@ const useStudyBoard = () => {
           break;
       }
     } catch (error) {
-      if (error instanceof APIError && error.code === '1403') {
+      if (error instanceof APIError && error.code === 1403) {
         await refreshAccessToken();
         await changeNextStep();
         return;

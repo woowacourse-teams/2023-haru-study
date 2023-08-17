@@ -70,19 +70,21 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
 
       setInitInfo(basicInfo, progresses);
     } catch (error) {
-      if (error instanceof APIError && error.code === '1403') {
-        const accessToken = await getAccessTokenRefresh();
+      if (error instanceof APIError) {
+        if (error.code === 1403) {
+          const accessToken = await getAccessTokenRefresh();
 
-        if (accessToken) {
+          if (!accessToken) return;
+
           const basicInfo = await requestGetStudyData(studyId, accessToken);
           const { progresses } = await requestGetStudyMembers(studyId, accessToken);
 
           setInitInfo(basicInfo, progresses);
-
-          return;
         }
 
-        return;
+        if (error.code === 1500) {
+          navigate('/404');
+        }
       }
 
       if (error instanceof ResponseError) return options?.errorHandler(error);

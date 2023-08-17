@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { css } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
@@ -9,9 +10,15 @@ import { TextSkeletonStyle } from '@Styles/common';
 import MemberRecordList from '../MemberRecordList/MemberRecordList';
 
 const MemberRecordContents = () => {
-  const { name, studyList, isLoading } = useMemberRecord({
+  const navigate = useNavigate();
+
+  const { name, studyList, isLoading, loginType } = useMemberRecord({
     errorHandler: (error) => alert(error.message),
   });
+
+  if (loginType === 'guest') {
+    navigate('/404');
+  }
 
   return (
     <>
