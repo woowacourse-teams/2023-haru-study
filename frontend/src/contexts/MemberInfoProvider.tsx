@@ -59,25 +59,22 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
 
   const fetchMemberInfo = useCallback(async () => {
     const accessToken = sessionStorage.getItem('accessToken');
+    const hasRefreshToken = boolCheckCookie('refreshToken');
 
-    if (!accessToken) {
+    if (!accessToken && !hasRefreshToken) {
       navigate(ROUTES_PATH.login);
       return;
     }
 
+    if (!accessToken) {
+      await fetchAccessTokenRefresh();
+      await fetchMemberInfo();
+
+      return;
+    }
+
     try {
-      const accessTokenPayload = accessToken.split('.')[1];
-
-      if (!accessTokenPayload) {
-        await fetchAccessTokenRefresh();
-        await fetchMemberInfo();
-
-        return;
-      }
-
-      const { sub: memberId } = JSON.parse(atob(accessTokenPayload)) as { sub: string };
-
-      const memberInfo = await requestMemberInfo(accessToken, memberId);
+      const memberInfo = await requestMemberInfo(accessToken);
       actions.initMemberInfo(memberInfo);
     } catch (error) {
       if (error instanceof APIError && error.code === '1403') {
