@@ -35,9 +35,15 @@ export type ResponseMemberStudyMetadata = {
 
 export type ResponsePlanList = PlanList;
 
-export type ResponseStudyMetadata = {
+export type ResponseStudyData = StudyBasicInfo;
+
+export type ResponseStudyDataList = {
+  studies: StudyBasicInfo[];
+};
+
+export type ResponseStudyMembers = {
   progresses: MemberProgress[];
-} & StudyBasicInfo;
+};
 
 export type ResponseMemberRecordContents = {
   content: MemberRecordContent[];

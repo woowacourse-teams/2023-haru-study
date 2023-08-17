@@ -9,20 +9,20 @@ import CalenderIcon from '@Assets/icons/CalenderIcon';
 import CycleIcon from '@Assets/icons/CycleIcon';
 import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
+import date from '@Utils/date';
+
 type Props = {
   studyName?: string;
   totalCycle?: number;
   timePerCycle?: number;
-  createdDateTime: Date;
+  createdDateTime?: string;
   $isLoading: boolean;
 };
 
 const StudyInformation = ({ studyName, totalCycle, timePerCycle, createdDateTime, $isLoading }: Props) => {
   const iconColor = $isLoading ? 'transparent' : color.neutral[700];
 
-  const progressDate = `${createdDateTime.getFullYear()}년 ${
-    createdDateTime.getMonth() + 1
-  }월 ${createdDateTime.getDate()}일`;
+  const displayDate = createdDateTime ? date.format(new Date(createdDateTime)) : '/년 /월 /일';
 
   return (
     <StudyInformationLayout>
@@ -44,7 +44,7 @@ const StudyInformation = ({ studyName, totalCycle, timePerCycle, createdDateTime
       <StudyInfoContainer $isLoading={$isLoading}>
         <CalenderIcon color={iconColor} />
         <Typography variant="p2">진행 날짜</Typography>
-        <Typography variant="p2">{progressDate}</Typography>
+        <Typography variant="p2">{displayDate}</Typography>
       </StudyInfoContainer>
       <StudyInfoContainer $isLoading={$isLoading}>
         <CycleIcon color={iconColor} />

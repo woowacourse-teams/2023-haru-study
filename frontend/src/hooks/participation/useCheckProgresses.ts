@@ -16,7 +16,7 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
 
   const navigate = useNavigate();
 
-  const memberInfo = useMemberInfo();
+  const { data: memberInfo } = useMemberInfo();
 
   const [nickname, setNickname] = useState<string | null>(null);
 
@@ -71,11 +71,11 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
   );
 
   const checkProgresses = useCallback(async () => {
-    try {
-      if (isHost || !memberInfo) {
-        return setNickname('');
-      }
+    if (isHost || !memberInfo) {
+      return setNickname('');
+    }
 
+    try {
       const accessToken = sessionStorage.getItem('accessToken');
 
       if (!accessToken) {

@@ -5,7 +5,7 @@ import Tabs from '@Components/common/Tabs/Tabs';
 import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
-import useMemberRecord from '@Hooks/record/useMemberRecord';
+import useProgressRecord from '@Hooks/record/useProgressRecord';
 
 import color from '@Styles/color';
 
@@ -26,8 +26,8 @@ type Props = {
   currentCycle: number;
 };
 
-const MemberRecord = ({ studyId, nickname, progressId, isCompleted, currentCycle }: Props) => {
-  const { memberRecordContents, isLoading } = useMemberRecord(studyId, progressId, {
+const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCycle }: Props) => {
+  const { memberRecordContents, isLoading } = useProgressRecord(studyId, progressId, {
     errorHandler: (error) => alert(error.message),
   });
 
@@ -42,7 +42,7 @@ const MemberRecord = ({ studyId, nickname, progressId, isCompleted, currentCycle
   };
 
   return (
-    <MemberRecordLayout>
+    <ProgressRecordLayout>
       <Tabs>
         {memberRecordContents?.map((content) => (
           <Tabs.Item key={content.cycle} label={`${content.cycle}번째 사이클`}>
@@ -91,13 +91,13 @@ const MemberRecord = ({ studyId, nickname, progressId, isCompleted, currentCycle
           </Tabs.Item>
         ))}
       </Tabs>
-    </MemberRecordLayout>
+    </ProgressRecordLayout>
   );
 };
 
-export default MemberRecord;
+export default ProgressRecord;
 
-const MemberRecordLayout = styled.div`
+const ProgressRecordLayout = styled.div`
   padding: 40px 30px;
 
   h5 {
