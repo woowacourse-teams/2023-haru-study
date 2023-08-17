@@ -94,6 +94,14 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (pathname === ROUTES_PATH.auth) return;
+
+    const accessToken = sessionStorage.getItem('accessToken');
+    const hasRefreshToken = boolCheckCookie('refreshToken');
+    if (pathname === ROUTES_PATH.login && (accessToken || hasRefreshToken)) {
+      navigate(ROUTES_PATH.landing);
+      return;
+    }
+
     if (memberInfo) return;
 
     fetchMemberInfo();
