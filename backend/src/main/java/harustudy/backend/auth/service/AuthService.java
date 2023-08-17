@@ -69,7 +69,7 @@ public class AuthService {
 
     private RefreshToken saveRefreshTokenOf(Member member) {
         RefreshToken refreshToken = refreshTokenRepository.findByMember(member)
-                .map(entity -> entity.updateUuidAndExpireDateTime(tokenConfig.refreshTokenExpireLength()))
+                .map(entity -> entity.updateExpireDateTime(tokenConfig.refreshTokenExpireLength()))
                 .orElseGet(() -> new RefreshToken(member, tokenConfig.refreshTokenExpireLength()));
         refreshTokenRepository.save(refreshToken);
         return refreshToken;

@@ -48,9 +48,13 @@ public class RefreshToken extends BaseTimeEntity {
         }
     }
 
-    public RefreshToken updateUuidAndExpireDateTime(long expireLength) {
-        this.uuid = UUID.randomUUID();
+    public RefreshToken updateExpireDateTime(long expireLength) {
         this.expireDateTime = LocalDateTime.now().plus(expireLength, ChronoUnit.MILLIS);
         return this;
+    }
+
+    public void updateUuidAndExpireDateTime(long expireLength) {
+        this.uuid = UUID.randomUUID();
+        this.expireDateTime = LocalDateTime.now().plus(expireLength, ChronoUnit.MILLIS);
     }
 }
