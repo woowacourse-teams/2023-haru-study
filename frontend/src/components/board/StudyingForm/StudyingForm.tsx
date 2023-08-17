@@ -17,20 +17,24 @@ import { getKeys } from '@Utils/getKeys';
 import type { Plan } from '@Types/study';
 
 type Props = {
-  onClickSubmitButton: () => void;
+  onClickSubmitButton: () => Promise<void>;
   studyId: string;
-  memberId: string;
+  progressId: string;
   cycle: number;
 };
 
-const StudyingForm = ({ onClickSubmitButton, studyId, memberId, cycle }: Props) => {
+const StudyingForm = ({ onClickSubmitButton, studyId, progressId, cycle }: Props) => {
   const navigate = useNavigate();
-  const { planList, isSubmitLoading, error, submitForm } = useStudyingForm(studyId, memberId, cycle);
+  const { planList, isSubmitLoading, error, submitForm } = useStudyingForm(
+    studyId,
+    progressId,
+    cycle,
+    onClickSubmitButton,
+  );
 
   const handleClickButton = async () => {
     try {
       await submitForm();
-      onClickSubmitButton();
     } catch (error) {
       if (!(error instanceof Error)) return;
       alert(error.message);
