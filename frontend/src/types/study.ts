@@ -58,7 +58,7 @@ export type StudyInfo = {
   name: string;
   totalCycle: number;
   timePerCycle: number;
-  createdDateTime: Date;
+  createdDateTime: string;
 };
 
 export type ProgressInfo = {
