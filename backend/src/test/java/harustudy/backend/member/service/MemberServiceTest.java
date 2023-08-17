@@ -1,11 +1,9 @@
 package harustudy.backend.member.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import harustudy.backend.auth.dto.AuthMember;
-import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.MemberResponse;
@@ -52,7 +50,7 @@ class MemberServiceTest {
         AuthMember authMember = new AuthMember(member1.getId());
 
         // when
-        MemberResponse foundMember = memberService.findMember(authMember, member1.getId());
+        MemberResponse foundMember = memberService.findOauthProfile(authMember);
 
         //then
         assertSoftly(softly -> {
@@ -63,16 +61,5 @@ class MemberServiceTest {
             assertThat(foundMember.loginType()).isEqualTo(
                     member1.getLoginType().name().toLowerCase());
         });
-    }
-
-    @Test
-    void 인증된_멤버가_다른_멤버정보를_조회하면_인가_예외처리한다() {
-        // given
-        AuthMember authMember = new AuthMember(member1.getId());
-
-        // when, then
-        assertThatThrownBy(
-                () -> memberService.findMember(authMember, member2.getId())).isInstanceOf(
-                AuthorizationException.class);
     }
 }
