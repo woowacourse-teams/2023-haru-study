@@ -22,3 +22,12 @@ export const TextSkeletonStyle = css`
 
   animation: ${SkeletonAnimation} 5s infinite ease-in-out;
 `;
+
+export const DefaultSkeletonStyle = css`
+  color: transparent;
+
+  background: linear-gradient(-90deg, #dee2e6, #f0f0f0, #dee2e6, #f0f0f0);
+  background-size: 400%;
+
+  animation: ${SkeletonAnimation} 5s infinite ease-in-out;
+`;
