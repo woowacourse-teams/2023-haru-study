@@ -10,6 +10,8 @@ import { requestAccessTokenRefresh, requestMemberInfo } from '@Apis/index';
 
 import type { MemberInfo } from '@Types/member';
 
+import { APIError, ResponseError } from '@Errors/index';
+
 type Actions = {
   initMemberInfo: (memberInfo: MemberInfo) => void;
   clearMemberInfo: () => void;
@@ -55,35 +57,7 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
     }
   }, [navigate]);
 
-  const fetchMemberInfo = useCallback(
-    async (accessToken: string) => {
-      try {
-        const accessTokenPayload = accessToken.split('.')[1];
-        const { sub: memberId } = JSON.parse(atob(accessTokenPayload)) as { sub: string };
-
-        const memberInfo = await requestMemberInfo(accessToken, memberId);
-        actions.initMemberInfo(memberInfo);
-      } catch (error) {
-        if (!(error instanceof Error)) throw error;
-
-        const isAccessTokenExpire = true; // status 401
-        if (isAccessTokenExpire) {
-          await fetchAccessTokenRefresh();
-          await fetchMemberInfo(accessToken);
-
-          return;
-        }
-
-        alert(error.message);
-      }
-    },
-    [actions, fetchAccessTokenRefresh],
-  );
-
-  useEffect(() => {
-    if (pathname === ROUTES_PATH.auth) return;
-    if (memberInfo) return;
-
+  const fetchMemberInfo = useCallback(async () => {
     const accessToken = sessionStorage.getItem('accessToken');
 
     if (!accessToken) {
@@ -91,7 +65,38 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
       return;
     }
 
-    fetchMemberInfo(accessToken);
+    try {
+      const accessTokenPayload = accessToken.split('.')[1];
+
+      if (!accessTokenPayload) {
+        await fetchAccessTokenRefresh();
+        await fetchMemberInfo();
+
+        return;
+      }
+
+      const { sub: memberId } = JSON.parse(atob(accessTokenPayload)) as { sub: string };
+
+      const memberInfo = await requestMemberInfo(accessToken, memberId);
+      actions.initMemberInfo(memberInfo);
+    } catch (error) {
+      if (error instanceof APIError && error.code === '1403') {
+        await fetchAccessTokenRefresh();
+        await fetchMemberInfo();
+
+        return;
+      }
+      if (!(error instanceof ResponseError)) throw error;
+
+      alert(error.message);
+    }
+  }, [actions, fetchAccessTokenRefresh, navigate]);
+
+  useEffect(() => {
+    if (pathname === ROUTES_PATH.auth) return;
+    if (memberInfo) return;
+
+    fetchMemberInfo();
   }, [navigate, pathname, fetchMemberInfo, memberInfo]);
 
   return (
@@ -105,6 +110,8 @@ export default MemberInfoProvider;
 
 export const useMemberInfo = () => {
   const value = useContext(MemberInfoContext);
+
+  if (value === null) return { data: null };
 
   return { data: value };
 };

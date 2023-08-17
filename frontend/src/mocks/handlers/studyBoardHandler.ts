@@ -12,7 +12,7 @@ const studyInfo: StudyInfo = {
   name: '안오면 지상렬',
   totalCycle: 3,
   timePerCycle: 30,
-  createdDateTime: new Date(),
+  createdDateTime: '123',
 };
 
 let progress: ProgressInfo = {

@@ -1,13 +1,15 @@
 import type { MemberInfo } from './member';
 import type {
-  Member,
-  MemberRecordContent,
-  PlanList,
   ProgressInfo,
   RetrospectList,
+  StudyInfo,
+  MemberProgress,
+  MemberRecordContent,
+  PlanList,
   Step,
   StudyBasicInfo,
-  StudyInfo,
+  StudyTimePerCycleOptions,
+  TotalCycleOptions,
 } from './study';
 
 export type ResponseAPIError = {
@@ -17,10 +19,16 @@ export type ResponseAPIError = {
 
 export type ResponseCreateStudy = { participantCode: string; studyName: string };
 
-export type ResponseStudyInfo = {
+type ResponseStudyInfo = {
   studyId: string;
-  studyName: string;
-  nickname: string | null;
+  name: string;
+  totalCycle: TotalCycleOptions;
+  timePerCycle: StudyTimePerCycleOptions;
+  createdDateTime: Date;
+};
+
+export type ResponseStudies = {
+  studies: ResponseStudyInfo[];
 };
 
 export type ResponseMemberStudyMetadata = {
@@ -30,16 +38,29 @@ export type ResponseMemberStudyMetadata = {
 
 export type ResponsePlanList = PlanList;
 
-export type ResponseStudyMetadata = {
-  members: Member[];
-} & StudyBasicInfo;
+export type ResponseStudyData = StudyBasicInfo;
+
+export type ResponseStudyDataList = {
+  studies: StudyBasicInfo[];
+};
+
+export type ResponseStudyMembers = {
+  progresses: MemberProgress[];
+};
 
 export type ResponseMemberRecordContents = {
   content: MemberRecordContent[];
 };
 
-export type ResponseIsCheckMember = {
-  nickname: string | null;
+type ResponseProgress = {
+  progressId: string;
+  nickname: string;
+  currentCycle: number;
+  step: Step;
+};
+
+export type ResponseProgresses = {
+  progresses: ResponseProgress[];
 };
 
 export type ResponseAuthToken = {

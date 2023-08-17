@@ -18,4 +18,4 @@ spring:
       enabled: true
 
   config:
-    import: classpath:/submodule/application-auth.yml
+    import: classpath:/submodule/application-auth-develop.yml
