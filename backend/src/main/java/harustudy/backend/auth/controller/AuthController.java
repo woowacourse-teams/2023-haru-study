@@ -60,6 +60,7 @@ public class AuthController {
         TokenResponse tokenResponse = authService.refresh(refreshToken);
         Cookie cookie = new Cookie("refreshToken", tokenResponse.refreshToken().toString());
         cookie.setMaxAge(refreshTokenExpireLength.intValue());
+        cookie.setPath("/");
         httpServletResponse.addCookie(cookie);
         return ResponseEntity.ok(tokenResponse);
     }
