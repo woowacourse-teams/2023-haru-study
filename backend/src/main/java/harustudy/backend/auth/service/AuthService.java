@@ -54,7 +54,7 @@ public class AuthService {
 
     private Member saveOrUpdateMember(String oauthProvider, UserInfo userInfo) {
         Member member = memberRepository.findByEmail(userInfo.email())
-                .map(entity -> entity.updateUserInfo(userInfo.email(), userInfo.name(), userInfo.imageUrl()))
+                .map(entity -> entity.updateUserInfo(userInfo.name(), userInfo.email(), userInfo.imageUrl()))
                 .orElseGet(() -> userInfo.toMember(LoginType.from(oauthProvider)));
         return memberRepository.save(member);
     }
@@ -68,7 +68,9 @@ public class AuthService {
     }
 
     private RefreshToken saveRefreshTokenOf(Member member) {
-        RefreshToken refreshToken = new RefreshToken(member, tokenConfig.refreshTokenExpireLength());
+        RefreshToken refreshToken = refreshTokenRepository.findByMember(member)
+                .map(entity -> entity.updateExpireDateTime(tokenConfig.refreshTokenExpireLength()))
+                .orElseGet(() -> new RefreshToken(member, tokenConfig.refreshTokenExpireLength()));
         refreshTokenRepository.save(refreshToken);
         return refreshToken;
     }
