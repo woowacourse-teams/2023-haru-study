@@ -14,7 +14,7 @@ import type {
 
 export type ResponseAPIError = {
   message: string;
-  code: string;
+  code: number;
 };
 
 export type ResponseCreateStudy = { participantCode: string; studyName: string };
