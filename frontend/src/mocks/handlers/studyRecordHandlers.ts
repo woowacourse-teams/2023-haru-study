@@ -103,7 +103,7 @@ const STUDY_MEMBERS: { progresses: MemberProgress[] } = {
     {
       progressId: '8',
       nickname: '도밥',
-      currentCycle: 1,
+      currentCycle: 2,
       step: 'retrospect',
     },
     {
