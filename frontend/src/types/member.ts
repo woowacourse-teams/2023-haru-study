@@ -1,7 +1,7 @@
 import type { AuthProvider } from './auth';
 
 export type MemberInfo = {
-  id: string;
+  memberId: string;
   name: string;
   email: string;
   imageUrl: string;

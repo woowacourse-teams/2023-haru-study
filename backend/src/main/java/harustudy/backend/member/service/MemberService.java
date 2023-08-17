@@ -3,7 +3,6 @@ package harustudy.backend.member.service;
 import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.MemberResponse;
-import harustudy.backend.member.exception.MemberHasInvalidAuthorizationException;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +16,10 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public MemberResponse findMember(AuthMember authMember, Long memberId) {
+    public MemberResponse findOauthProfile(AuthMember authMember) {
         Member authorizedMember = memberRepository.findById(authMember.id())
                 .orElseThrow(MemberNotFoundException::new);
-        Member foundMember = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
 
-        if (authorizedMember.isDifferentMember(foundMember)) {
-            throw new MemberHasInvalidAuthorizationException();
-        }
-        return MemberResponse.from(foundMember);
+        return MemberResponse.from(authorizedMember);
     }
 }

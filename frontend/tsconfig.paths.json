@@ -11,7 +11,8 @@
       "@Contexts/*": ["./contexts/*"],
       "@Assets/*": ["./assets/*"],
       "@Utils/*": ["./utils/*"],
-      "@Apis/*": ["./api/*"]
+      "@Apis/*": ["./api/*"],
+      "@Errors/*": ["./errors/*"]
     }
   }
 }

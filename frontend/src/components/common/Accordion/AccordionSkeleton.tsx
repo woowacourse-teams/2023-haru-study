@@ -13,14 +13,14 @@ const AccordionSkeleton = () => {
 
 export default AccordionSkeleton;
 
-const AccordionSkeletonLayout = styled.div`
+const AccordionSkeletonLayout = styled.ul`
   display: grid;
   row-gap: 40px;
 
   max-width: 1200px;
 `;
 
-const SkeletonItem = styled.div`
+const SkeletonItem = styled.li`
   height: 80px;
   ${TextSkeletonStyle}
 `;

@@ -5,6 +5,7 @@ import CreateStudy from '@Pages/CreateStudy';
 import Landing from '@Pages/Landing';
 import Login from '@Pages/Login';
 import NotFoundPage from '@Pages/NotFoundPage';
+import MemberRecord from '@Pages/MemberRecord';
 import StudyBoard from '@Pages/StudyBoard';
 import StudyParticipation from '@Pages/StudyParticipation';
 import StudyPreparation from '@Pages/StudyPreparation';
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: ROUTES_PATH.participation,
         element: <StudyParticipation />,
+      },
+      {
+        path: ROUTES_PATH.memberRecord,
+        element: <MemberRecord />,
       },
     ],
   },

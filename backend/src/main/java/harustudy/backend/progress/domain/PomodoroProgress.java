@@ -5,6 +5,7 @@ import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.progress.exception.NicknameLengthException;
 import harustudy.backend.room.domain.PomodoroRoom;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,7 +19,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,7 +41,7 @@ public class PomodoroProgress extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "pomodoroProgress")
+    @OneToMany(mappedBy = "pomodoroProgress", cascade = CascadeType.PERSIST)
     private List<PomodoroContent> pomodoroContents = new ArrayList<>();
 
     private String nickname;
@@ -68,23 +68,11 @@ public class PomodoroProgress extends BaseTimeEntity {
         }
     }
 
-    public boolean isProgressOf(PomodoroRoom pomodoroRoom) {
-        return this.pomodoroRoom.getId().equals(pomodoroRoom.getId());
-    }
-
-    public boolean isOwnedBy(Member member) {
-        return this.member.getId().equals(member.getId());
-    }
-
-    public boolean hasSameNicknameWith(PomodoroProgress pomodoroProgress) {
-        return this.nickname.equals(pomodoroProgress.nickname);
-    }
-
-    public PomodoroContent findPomodoroRecordByCycle(Integer cycle) {
-        return getPomodoroContents().stream()
-                .filter(pomodoro -> pomodoro.getCycle().equals(cycle))
-                .findAny()
-                .orElseThrow(IllegalArgumentException::new);
+    public void generateContents(int totalCycle) {
+        for (int cycle = 1; cycle <= totalCycle; cycle++) {
+            PomodoroContent pomodoroContent = new PomodoroContent(this, cycle);
+            pomodoroContents.add(pomodoroContent);
+        }
     }
 
     public void proceed() {
@@ -99,16 +87,24 @@ public class PomodoroProgress extends BaseTimeEntity {
         pomodoroStatus = pomodoroStatus.getNext();
     }
 
+    public boolean isProgressOf(PomodoroRoom pomodoroRoom) {
+        return this.pomodoroRoom.getId().equals(pomodoroRoom.getId());
+    }
+
+    public boolean isOwnedBy(Member member) {
+        return this.member.getId().equals(member.getId());
+    }
+
+    public boolean hasSameNicknameWith(PomodoroProgress pomodoroProgress) {
+        return this.nickname.equals(pomodoroProgress.nickname);
+    }
+
     public boolean isRetrospect() {
         return pomodoroStatus == PomodoroStatus.RETROSPECT;
     }
 
     public boolean isNotPlanning() {
         return pomodoroStatus != PomodoroStatus.PLANNING;
-    }
-
-    public boolean isNotStudying() {
-        return pomodoroStatus != PomodoroStatus.STUDYING;
     }
 
     public boolean isNotRetrospect() {
