@@ -22,7 +22,7 @@ export const progressesHandlers = [
         ctx.status(404),
         ctx.json({
           message: '해당하는 멤버가 없습니다.',
-          code: '1002',
+          code: 1002,
         }),
         ctx.delay(300),
       );
@@ -30,7 +30,7 @@ export const progressesHandlers = [
     if (accessToken !== requestAuthToken)
       return res(
         ctx.status(401),
-        ctx.json({ message: '유효하지 않은 엑세스 토큰입니다.', code: '1403' }),
+        ctx.json({ message: '유효하지 않은 엑세스 토큰입니다.', code: 1403 }),
         ctx.delay(300),
       );
 
@@ -39,7 +39,7 @@ export const progressesHandlers = [
         ctx.status(404),
         ctx.json({
           message: '해당하는 멤버가 없습니다.',
-          code: '1002',
+          code: 1002,
         }),
         ctx.delay(300),
       );

@@ -65,15 +65,12 @@ const useRegisterProgress = (errorHandler: (error: Error) => void) => {
         return;
       }
 
-
       await requestRegisterProgress(nickname, studyId, data.memberId, accessToken);
-
     } catch (error) {
-      if (error instanceof APIError && error.code === '1403') {
+      if (error instanceof APIError && error.code === 1403) {
         const accessToken = await getAccessTokenRefresh();
 
         if (accessToken) return await newRequestRegisterProgress(nickname, studyId, data.memberId, accessToken);
-
       }
 
       if (error instanceof ResponseError) return errorHandler(error);

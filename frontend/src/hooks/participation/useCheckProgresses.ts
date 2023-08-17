@@ -53,7 +53,7 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
         return await requestCheckProgresses(studyId, memberId, accessToken);
       } catch (error) {
         if (error instanceof APIError) {
-          if (error.code === '1201') return setNickname('');
+          if (error.code === 1201) return setNickname('');
 
           errorHandler(error);
           navigate(ROUTES_PATH.participation);
@@ -90,12 +90,12 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
       setNickname(data.progresses[0].nickname);
     } catch (error) {
       if (error instanceof APIError) {
-        if (error.code === '1403') {
+        if (error.code === 1403) {
           const accessToken = await getAccessTokenRefresh();
 
           if (accessToken) return await newRequestCheckProgresses(studyId, memberInfo.memberId, accessToken);
         }
-        if (error.code === '1201') return setNickname('');
+        if (error.code === 1201) return setNickname('');
 
         errorHandler(error);
         navigate(ROUTES_PATH.participation);

@@ -57,18 +57,14 @@ const useMemberRecord = (options: { errorHandler: (error: Error) => void }) => {
 
       setStudyList(studies);
     } catch (error) {
-      if (error instanceof APIError && error.code === '1403') {
+      if (error instanceof APIError && error.code === 1403) {
         const accessToken = await getAccessTokenRefresh();
 
-        if (accessToken) {
-          const { studies } = await requestGetMemberStudyListData(data.memberId, accessToken);
+        if (!accessToken) return;
 
-          setStudyList(studies);
+        const { studies } = await requestGetMemberStudyListData(data.memberId, accessToken);
 
-          return;
-        }
-
-        return;
+        setStudyList(studies);
       }
 
       if (error instanceof ResponseError) return options?.errorHandler(error);
@@ -79,7 +75,7 @@ const useMemberRecord = (options: { errorHandler: (error: Error) => void }) => {
     fetchMemberRecord();
   }, [fetchMemberRecord]);
 
-  return { name: data?.name, studyList, isLoading };
+  return { name: data?.name, studyList, loginType: data?.loginType, isLoading };
 };
 
 export default useMemberRecord;

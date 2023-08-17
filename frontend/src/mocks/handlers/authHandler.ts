@@ -45,7 +45,7 @@ export const authHandler = [
         ctx.delay(100),
         ctx.json({
           message: '만료된 갱신 토큰입니다.',
-          code: '1403',
+          code: 1403,
         }),
       );
 

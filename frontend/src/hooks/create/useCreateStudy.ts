@@ -68,7 +68,7 @@ const useCreateStudy = (errorHandler: (error: Error) => void) => {
       return await requestCreateStudy(studyName, totalCycle, timePerCycle, accessToken);
     } catch (error) {
       if (error instanceof APIError) {
-        if (error.code === '1403') {
+        if (error.code === 1403) {
           const accessToken = await getAccessTokenRefresh();
 
           if (accessToken) return await newRequestCreateStudy(studyName, totalCycle, timePerCycle, accessToken);

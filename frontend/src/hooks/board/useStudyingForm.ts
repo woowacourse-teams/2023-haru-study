@@ -34,7 +34,7 @@ const useStudyingForm = (studyId: string, progressId: string, cycle: number, onC
       const fetchedData = await requestGetMemberContents(accessToken, studyId, progressId, cycle);
       setPlanList(fetchedData.content[0].plan);
     } catch (error) {
-      if (error instanceof APIError && error.code === '1403') {
+      if (error instanceof APIError && error.code === 1403) {
         await refreshAccessToken();
         await fetchPlanList();
         return;
