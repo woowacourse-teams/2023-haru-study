@@ -28,3 +28,5 @@ jwt:
 
 refresh-token:
   expire-length: 1
+
+cors-allow-origin: test
