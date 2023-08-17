@@ -13,6 +13,7 @@ import harustudy.backend.progress.exception.ProgressNotBelongToRoomException;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
+import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -41,11 +42,11 @@ public class PomodoroProgressService {
 
     // TODO: 동적쿼리로 변경(memberId 유무에 따른 분기처리)
     public PomodoroProgressesResponse findPomodoroProgressWithFilter(
-            AuthMember authMember, Long studyId, Long memberId
+            AuthMember authMember, Long studyId, @Nullable Long memberId
     ) {
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
-        validateEverParticipated(authMember, pomodoroRoom);
         if (Objects.isNull(memberId)) {
+            validateEverParticipated(authMember, pomodoroRoom);
             return getPomodoroProgressesResponseWithoutMemberFilter(pomodoroRoom);
         }
         Member member = memberRepository.findByIdIfExists(memberId);
