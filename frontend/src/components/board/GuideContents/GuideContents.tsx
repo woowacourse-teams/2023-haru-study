@@ -1,29 +1,34 @@
-import type { StudyData } from '@Types/study';
+import type { ProgressInfo, StudyInfo } from '@Types/study';
 
 import PlanningForm from '../PlanningForm/PlanningForm';
 import RetrospectForm from '../RetrospectForm/RetrospectForm';
 import StudyingForm from '../StudyingForm/StudyingForm';
 
 type Props = {
-  studyData: StudyData;
-  changeNextStep: () => void;
+  studyInfo: StudyInfo;
+  progressInfo: ProgressInfo;
+  changeNextStep: () => Promise<void>;
 };
 
-const GuideContents = ({ studyData, changeNextStep }: Props) => {
-  const isLastCycle = studyData.currentCycle === studyData.totalCycle;
+const GuideContents = ({ studyInfo, progressInfo, changeNextStep }: Props) => {
+  const isLastCycle = progressInfo.currentCycle === studyInfo.totalCycle;
 
-  switch (studyData.step) {
+  switch (progressInfo.step) {
     case 'planning':
       return (
-        <PlanningForm onClickSubmitButton={changeNextStep} studyId={studyData.studyId} memberId={studyData.memberId} />
+        <PlanningForm
+          onClickSubmitButton={changeNextStep}
+          studyId={studyInfo.studyId}
+          progressId={progressInfo.progressId}
+        />
       );
     case 'studying':
       return (
         <StudyingForm
           onClickSubmitButton={changeNextStep}
-          studyId={studyData.studyId}
-          memberId={studyData.memberId}
-          cycle={studyData.currentCycle}
+          studyId={studyInfo.studyId}
+          progressId={progressInfo.progressId}
+          cycle={progressInfo.currentCycle}
         />
       );
     case 'retrospect':
@@ -31,8 +36,8 @@ const GuideContents = ({ studyData, changeNextStep }: Props) => {
         <RetrospectForm
           isLastCycle={isLastCycle}
           onClickSubmitButton={changeNextStep}
-          studyId={studyData.studyId}
-          memberId={studyData.memberId}
+          studyId={studyInfo.studyId}
+          progressId={progressInfo.progressId}
         />
       );
   }

@@ -1,5 +1,8 @@
 import type { MemberInfo } from './member';
 import type {
+  ProgressInfo,
+  RetrospectList,
+  StudyInfo,
   MemberProgress,
   MemberRecordContent,
   PlanList,
@@ -65,3 +68,17 @@ export type ResponseAuthToken = {
 };
 
 export type ResponseMemberInfo = MemberInfo;
+
+export type ResponseOneStudyInfo = StudyInfo;
+
+export type ResponseMemberProgress = {
+  progresses: ProgressInfo[];
+};
+
+export type ResponseMemberContents = {
+  content: {
+    cycle: number;
+    plan: PlanList;
+    retrospect: RetrospectList;
+  }[];
+};

@@ -1,17 +1,28 @@
 import { rest } from 'msw';
 
-import type { PlanList, Progress, Retrospect, StudyBasicInfo } from '@Types/study';
+import type { PlanList, ProgressInfo, Step, StudyInfo } from '@Types/study';
 
-let studyData: Omit<StudyBasicInfo, 'studyId'> & Progress = {
-  name: '안오면 지상렬',
-  totalCycle: 3,
-  currentCycle: 1,
-  timePerCycle: 30,
-  step: 'planning',
-  createdDateTime: '2023-08-15T06:25:39.093Z',
+type RequestWritePlan = {
+  progressId: string;
+  plan: PlanList;
 };
 
-let plan: PlanList = {
+const studyInfo: StudyInfo = {
+  studyId: '1',
+  name: '안오면 지상렬',
+  totalCycle: 3,
+  timePerCycle: 30,
+  createdDateTime: '123',
+};
+
+let progress: ProgressInfo = {
+  progressId: '1',
+  nickname: '맘모스',
+  currentCycle: 1,
+  step: 'planning',
+};
+
+let planList: PlanList = {
   toDo: '',
   completionCondition: '',
   expectedProbability: '',
@@ -20,40 +31,53 @@ let plan: PlanList = {
 };
 
 export const studyBoardHandlers = [
-  rest.get('/api/studies/:studyId/members/:memberId/metadata', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(studyData), ctx.delay(1200));
+  rest.get('/api/studies/:studyId', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(studyInfo), ctx.delay(700));
   }),
 
-  rest.post<PlanList>('/api/studies/:studyId/members/:memberId/content/plans', async (req, res, ctx) => {
-    plan = await req.json();
+  rest.get('/api/studies/:studyId/progresses', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ progresses: [{ ...progress }] }), ctx.delay(500));
+  }),
 
-    studyData = {
-      ...studyData,
-      step: 'studying',
+  rest.post<RequestWritePlan>('/api/studies/:studyId/contents/write-plan', (req, res, ctx) => {
+    const { plan } = req.body;
+    planList = plan;
+
+    return res(ctx.status(200), ctx.delay(600));
+  }),
+
+  rest.post('/api/studies/:studyId/progresses/:progressId/next-step', async (req, res, ctx) => {
+    const getNextStep = (): Step => {
+      if (progress.step === 'planning') return 'studying';
+      if (progress.step === 'studying') return 'retrospect';
+      return 'planning';
     };
 
-    return res(ctx.status(200), ctx.delay(1500));
-  }),
-
-  rest.post('/api/studies/:studyId/members/:memberId/next-step', async (req, res, ctx) => {
-    studyData = {
-      ...studyData,
-      currentCycle: studyData.currentCycle + 1,
-      step: 'retrospect',
+    progress = {
+      ...progress,
+      currentCycle: progress.step === 'retrospect' ? progress.currentCycle + 1 : progress.currentCycle,
+      step: getNextStep(),
     };
-    return res(ctx.status(200), ctx.delay(1500));
+    return res(ctx.status(200), ctx.delay(600));
   }),
 
-  rest.post<Retrospect>('/api/studies/:studyId/members/:memberId/content/retrospects', async (req, res, ctx) => {
-    studyData = {
-      ...studyData,
-      step: 'planning',
-    };
-
-    return res(ctx.status(200), ctx.delay(1500));
+  rest.post('/api/studies/:studyId/contents/write-retrospect', async (req, res, ctx) => {
+    return res(ctx.status(200), ctx.delay(600));
   }),
 
-  rest.get('/api/studies/:studyId/members/:memberId/content/plans', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(plan), ctx.delay(1200));
+  rest.get('/api/studies/:studyId/contents', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        content: [
+          {
+            cycle: progress.currentCycle,
+            plan: planList,
+            retrospect: {},
+          },
+        ],
+      }),
+      ctx.delay(1200),
+    );
   }),
 ];

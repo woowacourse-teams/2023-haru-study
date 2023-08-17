@@ -13,14 +13,14 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 const StudyBoard = () => {
   const navigate = useNavigate();
-  const { studyData, error, changeNextStep } = useStudyBoard();
+  const { studyInfo, progressInfo, error, changeNextStep } = useStudyBoard();
 
   if (error) {
     alert(error.message);
     navigate(ROUTES_PATH.landing);
   }
 
-  if (studyData === null) {
+  if (studyInfo === null || progressInfo === null) {
     return (
       <LoadingLayout>
         <CircularProgress
@@ -34,11 +34,17 @@ const StudyBoard = () => {
     );
   }
 
+  if (progressInfo.step === 'done') {
+    alert('이미 끝난 스터디입니다.');
+    navigate(`/record/${studyInfo.studyId}`);
+    return <></>;
+  }
+
   return (
     <Layout>
-      <Sidebar step={studyData.step} cycle={studyData.currentCycle} studyMinutes={studyData.timePerCycle} />
+      <Sidebar step={progressInfo.step} cycle={progressInfo.currentCycle} studyMinutes={studyInfo.timePerCycle} />
       <Contents>
-        <GuideContents studyData={studyData} changeNextStep={changeNextStep} />
+        <GuideContents studyInfo={studyInfo} progressInfo={progressInfo} changeNextStep={changeNextStep} />
       </Contents>
     </Layout>
   );
