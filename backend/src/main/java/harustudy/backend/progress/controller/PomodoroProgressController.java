@@ -109,6 +109,15 @@ public class PomodoroProgressController {
                 URI.create("/api/studies/" + studyId + "/progresses/" + progressId)).build();
     }
 
+    @SwaggerExceptionResponse({
+            RoomNotFoundException.class,
+            MemberNotFoundException.class,
+            AuthorizationException.class,
+            PomodoroProgressNotFoundException.class,
+            ProgressNotBelongToRoomException.class
+    })
+    @Operation(summary = "스터디 진행도 삭제")
+    @ApiResponse(responseCode = "204")
     @DeleteMapping("/api/studies/{studyId}/progresses/{progressId}")
     public ResponseEntity<Void> delete(
             @Authenticated AuthMember authMember,
