@@ -20,12 +20,10 @@ const Hero = () => {
           단, <Emphasis>하루</Emphasis>
         </Typography>
       </SloganContainer>
-      <ShowcaseImageContainer>
-        <ImageBox>
-          <img src={HeroImage} alt="" />
-          <Typography variant="p2">작가 jcomp 출처 Freepik</Typography>
-        </ImageBox>
-      </ShowcaseImageContainer>
+      <ImageBox>
+        <img src={HeroImage} alt="" />
+        <Typography variant="p2">작가 jcomp 출처 Freepik</Typography>
+      </ImageBox>
     </HeroContainer>
   );
 };
@@ -33,22 +31,16 @@ const Hero = () => {
 export default Hero;
 
 const HeroContainer = styled.div`
-  display: grid;
-  grid-template-rows: 1fr auto;
-
-  min-width: 100%;
-  padding: 40px 40px;
+  position: relative;
 
   background-color: ${color.blue[500]};
 `;
 
 const SloganContainer = styled.div`
-  align-self: flex-end;
+  position: absolute;
 
-  position: relative;
-  bottom: -30px;
-
-  padding: 0px 120px;
+  top: 12%;
+  left: 15%;
 
   h3 {
     font-size: 64px;
@@ -59,22 +51,17 @@ const SloganContainer = styled.div`
 `;
 
 const ImageBox = styled.div`
-  position: relative;
-  padding: 0px 80px;
+  position: absolute;
 
-  min-width: 80%;
-  margin: 0 auto;
-`;
+  left: 50%;
+  bottom: 10px;
 
-const ShowcaseImageContainer = styled.div`
-  display: grid;
+  transform: translate(-50%, 0);
+
+  width: 75%;
 
   p {
-    position: absolute;
-    bottom: -30px;
-    right: 80px;
-
-    text-align: end;
+    float: right;
     opacity: 0.2;
   }
 `;

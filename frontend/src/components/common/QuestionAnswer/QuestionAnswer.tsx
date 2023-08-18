@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 import color from '@Styles/color';
 
@@ -22,7 +22,13 @@ const QuestionAnswer = ({ question, answer, iconColor }: Props) => {
       </IconWrapper>
       <TypographyContainer>
         <Typography variant="h5">{question}</Typography>
-        <Typography variant="p2" color={answerTextColor}>
+        <Typography
+          variant="p2"
+          color={answerTextColor}
+          $style={css`
+            white-space: pre-wrap;
+          `}
+        >
           {answerText}
         </Typography>
       </TypographyContainer>
