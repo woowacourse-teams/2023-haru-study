@@ -41,7 +41,7 @@ public class PomodoroProgress extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "pomodoroProgress", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "pomodoroProgress", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<PomodoroContent> pomodoroContents = new ArrayList<>();
 
     private String nickname;
