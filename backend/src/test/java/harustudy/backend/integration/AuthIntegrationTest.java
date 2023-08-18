@@ -1,5 +1,9 @@
 package harustudy.backend.integration;
 
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import harustudy.backend.auth.dto.TokenResponse;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
@@ -8,11 +12,8 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
-
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -25,6 +26,7 @@ class AuthIntegrationTest extends IntegrationTest {
 
     @Test
     void 구글_로그인을_한다() throws Exception {
+        // TODO : 실제 구글 id로 Oauth 기능 테스트하기
         // given, when
         LoginResponse response = 구글_로그인("member1");
 
@@ -39,19 +41,26 @@ class AuthIntegrationTest extends IntegrationTest {
     @Test
     void 비회원_로그인을_한다() throws Exception {
         // given, when
-        LoginResponse response = 비회원_로그인();
+        MockHttpServletResponse response = mockMvc.perform(
+                        post("/api/auth/guest"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        String jsonResponse = response.getContentAsString(StandardCharsets.UTF_8);
+        TokenResponse tokenResponse = objectMapper.readValue(jsonResponse, TokenResponse.class);
 
         // then
         assertSoftly(softly -> {
-            softly.assertThat(response.tokenResponse().accessToken()).isNotNull();
-            softly.assertThat(response.cookie()).isNull();
+            softly.assertThat(tokenResponse.accessToken()).isNotNull();
+            softly.assertThat(response.getCookie("refreshToken")).isNull();
         });
     }
 
     @Test
     void 액세스_토큰을_갱신한다() throws Exception {
         // given
-        LoginResponse loginResponse = 구글_로그인("member");
+        MemberDto memberDto1 = createMember("member1");
 
         // access token을 재발급 하더라도 Date는 초 단위의 시간 정보를 담은 액세스 토큰을 생성하기 때문에
         // 같은 access token이 만들어지는 문제가 있어서 갱신된다는 것을 검증하기 위해 사용
@@ -61,7 +70,7 @@ class AuthIntegrationTest extends IntegrationTest {
         MvcResult result = mockMvc.perform(
                         post("/api/auth/refresh")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .cookie(loginResponse.cookie()))
+                                .cookie(memberDto1.cookie()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -72,10 +81,10 @@ class AuthIntegrationTest extends IntegrationTest {
 
         assertSoftly(softly -> {
             softly.assertThat(response.accessToken()).isNotNull();
-            softly.assertThat(response.accessToken()).isNotEqualTo(loginResponse.tokenResponse().accessToken());
+            softly.assertThat(response.accessToken()).isNotEqualTo(memberDto1.accessToken());
             softly.assertThat(refreshToken).isNotNull();
             softly.assertThat(refreshToken.getName()).isEqualTo("refreshToken");
-            softly.assertThat(refreshToken.getValue()).isNotEqualTo(loginResponse.cookie().getValue());
+            softly.assertThat(refreshToken.getValue()).isNotEqualTo(memberDto1.cookie().getValue());
         });
     }
 }
