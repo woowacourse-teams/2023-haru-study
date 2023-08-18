@@ -53,7 +53,7 @@ export type ResponseMemberRecordContents = {
 };
 
 type ResponseProgress = {
-  progressId: string;
+  progressId: number;
   nickname: string;
   currentCycle: number;
   step: Step;

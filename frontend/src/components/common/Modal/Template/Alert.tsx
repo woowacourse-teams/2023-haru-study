@@ -1,7 +1,9 @@
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 import Typography from '@Components/common/Typography/Typography';
+
+import color from '@Styles/color';
 
 type Props = {
   message: string;
@@ -18,7 +20,23 @@ const Alert = ({ message, closeModal, onClose }: Props) => {
   return (
     <Layout>
       <Typography variant="p3">{message}</Typography>
-      <Button variant="secondary" size="x-small" $block={false} onClick={handleClose}>
+      <Button
+        variant="outlined"
+        $style={css`
+          color: ${color.blue[500]};
+
+          border: none;
+
+          &:hover {
+            &:enabled {
+              background-color: ${color.blue[50]};
+            }
+          }
+        `}
+        size="x-small"
+        $block={false}
+        onClick={handleClose}
+      >
         확인
       </Button>
     </Layout>

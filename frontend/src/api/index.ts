@@ -157,3 +157,8 @@ export const requestRegisterProgress = (nickname: string, studyId: string, membe
     headers: { Authorization: `Bearer ${accessToken}` },
     body: JSON.stringify({ memberId, nickname }),
   });
+
+export const requestDeleteProgress = (studyId: string, progressId: number, accessToken: string) =>
+  http.delete(`/api/studies/${studyId}/progresses/${progressId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });

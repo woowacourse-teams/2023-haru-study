@@ -19,7 +19,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "진행 관련 기능")
 @RequiredArgsConstructor
@@ -101,5 +107,24 @@ public class PomodoroProgressController {
         Long progressId = pomodoroProgressService.participateStudy(authMember, studyId, request);
         return ResponseEntity.created(
                 URI.create("/api/studies/" + studyId + "/progresses/" + progressId)).build();
+    }
+
+    @SwaggerExceptionResponse({
+            RoomNotFoundException.class,
+            MemberNotFoundException.class,
+            AuthorizationException.class,
+            PomodoroProgressNotFoundException.class,
+            ProgressNotBelongToRoomException.class
+    })
+    @Operation(summary = "스터디 진행도 삭제")
+    @ApiResponse(responseCode = "204")
+    @DeleteMapping("/api/studies/{studyId}/progresses/{progressId}")
+    public ResponseEntity<Void> delete(
+            @Authenticated AuthMember authMember,
+            @PathVariable Long studyId,
+            @PathVariable Long progressId
+    ) {
+        pomodoroProgressService.deleteProgress(authMember, studyId, progressId);
+        return ResponseEntity.noContent().build();
     }
 }

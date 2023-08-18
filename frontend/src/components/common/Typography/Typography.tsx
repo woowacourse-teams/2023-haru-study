@@ -28,14 +28,14 @@ const TAG_MAPPING = {
 
 const FONT_STYLE = {
   fontSize: {
-    h1: '5.2rem',
-    h2: '4.4rem',
-    h3: '4rem',
-    h4: '3.6rem',
-    h5: '2.8rem',
-    h6: '2.4rem',
-    p1: '2.8rem',
-    p2: '2rem',
+    h1: '4.8rem',
+    h2: '4.0rem',
+    h3: '3.6rem',
+    h4: '3.2rem',
+    h5: '2.4rem',
+    h6: '2.0rem',
+    p1: '2.4rem',
+    p2: '2.0rem',
     p3: '1.6rem',
   },
   fontWeight: {

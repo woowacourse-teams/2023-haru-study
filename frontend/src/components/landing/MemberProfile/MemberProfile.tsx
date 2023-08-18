@@ -55,7 +55,7 @@ const MemberProfile = () => {
   const memberMenu = (
     <>
       <Menu.Item onClick={() => navigate(ROUTES_PATH.memberRecord)}>스터디 기록</Menu.Item>
-      <Menu.Item onClick={() => navigate(ROUTES_PATH.login)} bottomSeparator>
+      <Menu.Item onClick={clearMemberInfo} bottomSeparator>
         로그아웃
       </Menu.Item>
     </>

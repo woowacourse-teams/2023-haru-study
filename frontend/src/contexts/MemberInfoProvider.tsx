@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-import { boolCheckCookie } from '@Utils/cookie';
+import { boolCheckCookie, deleteCookie } from '@Utils/cookie';
 
 import { requestAccessTokenRefresh, requestMemberInfo } from '@Apis/index';
 
@@ -35,6 +35,7 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
       clearMemberInfo: () => {
         navigate(ROUTES_PATH.login);
         sessionStorage.removeItem('accessToken');
+        deleteCookie('refreshToken');
         setMemberInfo(null);
       },
     }),
@@ -46,7 +47,7 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
       const hasRefreshToken = boolCheckCookie('refreshToken');
 
       if (!hasRefreshToken) {
-        navigate(ROUTES_PATH.login);
+        actions.clearMemberInfo();
         return;
       }
 
@@ -57,14 +58,14 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
 
       alert(error.message);
     }
-  }, [navigate]);
+  }, [actions]);
 
   const fetchMemberInfo = useCallback(async () => {
     const accessToken = sessionStorage.getItem('accessToken');
     const hasRefreshToken = boolCheckCookie('refreshToken');
 
     if (!accessToken && !hasRefreshToken) {
-      navigate(ROUTES_PATH.login);
+      actions.clearMemberInfo();
       return;
     }
 
@@ -89,10 +90,18 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
 
       alert(error.message);
     }
-  }, [actions, fetchAccessTokenRefresh, navigate]);
+  }, [actions, fetchAccessTokenRefresh]);
 
   useEffect(() => {
     if (pathname === ROUTES_PATH.auth) return;
+
+    const accessToken = sessionStorage.getItem('accessToken');
+    const hasRefreshToken = boolCheckCookie('refreshToken');
+    if (pathname === ROUTES_PATH.login && (accessToken || hasRefreshToken)) {
+      navigate(ROUTES_PATH.landing);
+      return;
+    }
+
     if (memberInfo) return;
 
     fetchMemberInfo();

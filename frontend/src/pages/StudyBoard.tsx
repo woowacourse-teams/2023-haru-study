@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
-import GuideContents from '@Components/board/GuideContents/GuideContents';
 import Sidebar from '@Components/board/Sidebar/Sidebar';
+import StepContents from '@Components/board/StepContents/StepContents';
 import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
 
 import useStudyBoard from '@Hooks/board/useStudyBoard';
@@ -44,7 +44,7 @@ const StudyBoard = () => {
     <Layout>
       <Sidebar step={progressInfo.step} cycle={progressInfo.currentCycle} studyMinutes={studyInfo.timePerCycle} />
       <Contents>
-        <GuideContents studyInfo={studyInfo} progressInfo={progressInfo} changeNextStep={changeNextStep} />
+        <StepContents studyInfo={studyInfo} progressInfo={progressInfo} changeNextStep={changeNextStep} />
       </Contents>
     </Layout>
   );

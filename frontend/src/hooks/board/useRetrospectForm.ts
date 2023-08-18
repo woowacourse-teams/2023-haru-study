@@ -18,14 +18,10 @@ const useRetrospectForm = (studyId: string, progressId: string, onClickSubmit: (
       required: true,
     }),
     experiencedDifficulty: useQuestionTextarea({
-      minLength: 10,
       maxLength: 500,
-      required: true,
     }),
     lesson: useQuestionTextarea({
-      minLength: 10,
       maxLength: 500,
-      required: true,
     }),
   } as const;
 
