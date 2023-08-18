@@ -7,7 +7,7 @@ import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
 import { boolCheckCookie } from '@Utils/cookie';
 
-import { requestAccessTokenRefresh, requestCheckProgresses } from '@Apis/index';
+import { requestAccessTokenRefresh, requestCheckProgresses, requestDeleteProgress } from '@Apis/index';
 
 import { APIError, ResponseError } from '../../errors';
 
@@ -20,7 +20,13 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
 
   const [nickname, setNickname] = useState<string | null>(null);
 
-  const restart = () => setNickname('');
+  const [progressId, setProgressId] = useState<number>(0);
+
+  const restart = async () => {
+    await deleteProgress();
+    setNickname('');
+    return;
+  };
 
   if (!studyId) {
     const error = new Error('잘못된 접근입니다.');
@@ -88,6 +94,7 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
       const data = await requestCheckProgresses(studyId, memberInfo.memberId, accessToken);
 
       setNickname(data.progresses[0].nickname);
+      setProgressId(data.progresses[0].progressId);
     } catch (error) {
       if (error instanceof APIError) {
         if (error.code === 1403) {
@@ -109,6 +116,50 @@ const useCheckProgresses = (isHost: boolean, errorHandler: (error: Error) => voi
       }
     }
   }, [studyId, isHost, memberInfo, errorHandler, navigate, getAccessTokenRefresh, newRequestCheckProgresses]);
+
+  const newRequestDeleteProgress = async (studyId: string, progressId: number, accessToken: string) => {
+    try {
+      await requestDeleteProgress(studyId, progressId, accessToken);
+    } catch (error) {
+      if (error instanceof APIError || error instanceof ResponseError) {
+        errorHandler(error);
+        navigate(ROUTES_PATH.participation);
+        return;
+      }
+    }
+  };
+
+  const deleteProgress = async () => {
+    try {
+      const accessToken = sessionStorage.getItem('accessToken');
+
+      if (!accessToken) {
+        const error = new Error('토큰이 없습니다. 다시 로그인 해주세요.');
+        errorHandler(error);
+        navigate(`${ROUTES_PATH.login}`);
+        return;
+      }
+
+      await requestDeleteProgress(studyId, progressId, accessToken);
+    } catch (error) {
+      if (error instanceof APIError) {
+        if (error.code === 1403) {
+          const accessToken = await getAccessTokenRefresh();
+
+          if (accessToken) return newRequestDeleteProgress(studyId, progressId, accessToken);
+        }
+        errorHandler(error);
+        navigate(ROUTES_PATH.participation);
+        return;
+      }
+
+      if (error instanceof ResponseError) {
+        errorHandler(error);
+        navigate(ROUTES_PATH.participation);
+        return;
+      }
+    }
+  };
 
   useEffect(() => {
     checkProgresses();
