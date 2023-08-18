@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
@@ -7,6 +6,7 @@ import QuestionTextarea from '@Components/common/QuestionTextarea/QuestionTextar
 import Typography from '@Components/common/Typography/Typography';
 
 import useRetrospectForm from '@Hooks/board/useRetrospectForm';
+import useDisplay from '@Hooks/common/useDisplay';
 
 import { ROUTES_PATH } from '@Constants/routes';
 import { RETROSPECT_QUESTIONS } from '@Constants/study';
@@ -28,7 +28,7 @@ const RetrospectForm = ({ isLastCycle, onClickSubmitButton, studyId, progressId 
     onClickSubmitButton,
   );
 
-  const [isOpenOptionalQuestion, setIsOpenOptionalQuestion] = useState(false);
+  const { isShow: isOpenOptionalQuestion, toggleShow: toggleOptionalQuestion } = useDisplay();
 
   const handleClickButton = async () => {
     try {
@@ -42,10 +42,6 @@ const RetrospectForm = ({ isLastCycle, onClickSubmitButton, studyId, progressId 
       if (!(error instanceof Error)) return;
       alert(error.message);
     }
-  };
-
-  const toggleOptionalQuestion = () => {
-    setIsOpenOptionalQuestion(!isOpenOptionalQuestion);
   };
 
   const buttonText = isLastCycle ? '스터디 종료하기' : '다음 사이클 시작하기';

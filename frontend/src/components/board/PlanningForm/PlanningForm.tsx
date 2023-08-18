@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
@@ -6,6 +5,7 @@ import QuestionTextarea from '@Components/common/QuestionTextarea/QuestionTextar
 import Typography from '@Components/common/Typography/Typography';
 
 import usePlanningForm from '@Hooks/board/usePlanningForm';
+import useDisplay from '@Hooks/common/useDisplay';
 
 import { PLAN_QUESTIONS } from '@Constants/study';
 
@@ -23,7 +23,8 @@ const PlanningForm = ({ onClickSubmitButton, studyId, progressId }: Props) => {
     progressId,
     onClickSubmitButton,
   );
-  const [isOpenOptionalQuestion, setIsOpenOptionalQuestion] = useState(false);
+
+  const { isShow: isOpenOptionalQuestion, toggleShow: toggleOptionalQuestion } = useDisplay();
 
   const handleClickButton = async () => {
     try {
@@ -32,10 +33,6 @@ const PlanningForm = ({ onClickSubmitButton, studyId, progressId }: Props) => {
       if (!(error instanceof Error)) return;
       alert(error.message);
     }
-  };
-
-  const toggleOptionalQuestion = () => {
-    setIsOpenOptionalQuestion(!isOpenOptionalQuestion);
   };
 
   return (
