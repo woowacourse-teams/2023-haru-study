@@ -9,7 +9,11 @@ import useDisplay from '@Hooks/common/useDisplay';
 
 import { PLAN_QUESTIONS } from '@Constants/study';
 
+import { useModal } from '@Contexts/ModalProvider';
+
 import ArrowIcon from '@Assets/icons/ArrowIcon';
+
+import GuideModal from '../GuideModal/GuideModal';
 
 type Props = {
   onClickSubmitButton: () => Promise<void>;
@@ -25,6 +29,7 @@ const PlanningForm = ({ onClickSubmitButton, studyId, progressId }: Props) => {
   );
 
   const { isShow: isOpenOptionalQuestion, toggleShow: toggleOptionalQuestion } = useDisplay();
+  const { openModal } = useModal();
 
   const handleClickButton = async () => {
     try {
@@ -35,6 +40,10 @@ const PlanningForm = ({ onClickSubmitButton, studyId, progressId }: Props) => {
     }
   };
 
+  const handleClickGuideButton = (question: 'toDo' | 'completionCondition') => () => {
+    openModal(<GuideModal question={question} />);
+  };
+
   return (
     <Layout>
       <QuestionLayout>
@@ -42,9 +51,14 @@ const PlanningForm = ({ onClickSubmitButton, studyId, progressId }: Props) => {
           다음 항목에 답변해주세요.
         </Typography>
         <QuestionList>
-          <QuestionTextarea question={PLAN_QUESTIONS.toDo} {...questionTextareaProps.toDo} />
+          <QuestionTextarea
+            question={PLAN_QUESTIONS.toDo}
+            onClickGuideButton={handleClickGuideButton('toDo')}
+            {...questionTextareaProps.toDo}
+          />
           <QuestionTextarea
             question={PLAN_QUESTIONS.completionCondition}
+            onClickGuideButton={handleClickGuideButton('completionCondition')}
             {...questionTextareaProps.completionCondition}
           />
         </QuestionList>
