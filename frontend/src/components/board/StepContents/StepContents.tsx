@@ -10,7 +10,7 @@ type Props = {
   changeNextStep: () => Promise<void>;
 };
 
-const GuideContents = ({ studyInfo, progressInfo, changeNextStep }: Props) => {
+const StepContents = ({ studyInfo, progressInfo, changeNextStep }: Props) => {
   const isLastCycle = progressInfo.currentCycle === studyInfo.totalCycle;
 
   switch (progressInfo.step) {
@@ -43,4 +43,4 @@ const GuideContents = ({ studyInfo, progressInfo, changeNextStep }: Props) => {
   }
 };
 
-export default GuideContents;
+export default StepContents;
