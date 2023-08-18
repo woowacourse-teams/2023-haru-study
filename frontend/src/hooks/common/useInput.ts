@@ -9,7 +9,10 @@ const useInput = (validateOption: boolean) => {
     (e) => {
       const value = e.target.value;
 
-      if (validateOption && (value.length < 1 || value.length > 10)) {
+      if (
+        (validateOption && (value.length < 1 || value.length > 10)) ||
+        (validateOption && value.trim().length === 0)
+      ) {
         return setIsInputError(true);
       }
 
