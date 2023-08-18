@@ -33,10 +33,9 @@ public class PomodoroProgressService {
     public PomodoroProgressResponse findPomodoroProgress(
             AuthMember authMember, Long studyId, Long progressId
     ) {
-        Member member = memberRepository.findByIdIfExists(authMember.id());
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
         PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByIdIfExists(progressId);
-        validateProgressIsRelatedWith(pomodoroProgress, member, pomodoroRoom);
+        validateProgressIsRelatedWith(pomodoroProgress, authMember, pomodoroRoom);
         return PomodoroProgressResponse.from(pomodoroProgress);
     }
 
@@ -82,11 +81,10 @@ public class PomodoroProgressService {
     }
 
     public void proceed(AuthMember authMember, Long studyId, Long progressId) {
-        Member member = memberRepository.findByIdIfExists(authMember.id());
         PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByIdIfExists(progressId);
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
 
-        validateProgressIsRelatedWith(pomodoroProgress, member, pomodoroRoom);
+        validateProgressIsRelatedWith(pomodoroProgress, authMember, pomodoroRoom);
         pomodoroProgress.proceed();
     }
 
@@ -107,13 +105,31 @@ public class PomodoroProgressService {
     }
 
     private void validateProgressIsRelatedWith(
-            PomodoroProgress pomodoroProgress, Member member, PomodoroRoom pomodoroRoom
+            PomodoroProgress pomodoroProgress, AuthMember authMember, PomodoroRoom pomodoroRoom
     ) {
+        validateMemberOwns(pomodoroProgress, authMember);
+        validateProgressIsIncludedIn(pomodoroRoom, pomodoroProgress);
+    }
+
+    private void validateMemberOwns(PomodoroProgress pomodoroProgress, AuthMember authMember) {
+        Member member = memberRepository.findByIdIfExists(authMember.id());
         if (!pomodoroProgress.isOwnedBy(member)) {
             throw new AuthorizationException();
         }
+    }
+
+    private void validateProgressIsIncludedIn(PomodoroRoom pomodoroRoom,
+            PomodoroProgress pomodoroProgress) {
         if (pomodoroProgress.isNotIncludedIn(pomodoroRoom)) {
             throw new ProgressNotBelongToRoomException();
         }
+    }
+
+    public void deleteProgress(AuthMember authMember, Long studyId, Long progressId) {
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
+        validateEverParticipated(authMember, pomodoroRoom);
+        PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByIdIfExists(progressId);
+        validateProgressIsRelatedWith(pomodoroProgress, authMember, pomodoroRoom);
+        pomodoroProgressRepository.delete(pomodoroProgress);
     }
 }
