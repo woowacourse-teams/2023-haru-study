@@ -54,6 +54,17 @@ const http = {
       },
     });
   },
+
+  delete: (url: string, config: RequestInit = {}) => {
+    return fetchAPI(url, {
+      ...config,
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        ...config.headers,
+      },
+    });
+  },
 };
 
 export default http;
