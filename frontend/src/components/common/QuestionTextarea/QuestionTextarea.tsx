@@ -21,6 +21,10 @@ const QuestionTextarea = ({ question, errorMessage, onClickGuideButton, ...props
           variant="h6"
           $style={css`
             width: ${onClickGuideButton ? 'calc(100% - 100px)' : '100%'};
+            min-height: 42px;
+
+            display: flex;
+            align-items: center;
           `}
         >
           {question}
@@ -50,7 +54,7 @@ const Layout = styled.div`
   width: 100%;
   min-width: 500px;
 
-  padding: 24px 30px 10px 30px;
+  padding: 16px 30px 10px 30px;
   background-color: #fff;
 
   border: 1px solid #fff;
@@ -66,6 +70,7 @@ const Question = styled.div`
 
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   button {
     font-weight: 700;
@@ -76,7 +81,7 @@ const Separator = styled.div`
   width: 100%;
   height: 1px;
 
-  margin: 20px 0;
+  margin: 16px 0;
 
   background-color: ${color.neutral[200]};
 `;
