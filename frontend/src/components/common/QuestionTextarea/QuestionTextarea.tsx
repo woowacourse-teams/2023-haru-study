@@ -50,7 +50,7 @@ const Layout = styled.div`
   width: 100%;
   min-width: 500px;
 
-  padding: 30px 30px 10px 30px;
+  padding: 24px 30px 10px 30px;
   background-color: #fff;
 
   border: 1px solid #fff;
@@ -76,7 +76,7 @@ const Separator = styled.div`
   width: 100%;
   height: 1px;
 
-  margin: 24px 0;
+  margin: 20px 0;
 
   background-color: ${color.neutral[200]};
 `;

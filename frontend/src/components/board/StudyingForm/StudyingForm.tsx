@@ -89,15 +89,14 @@ const Layout = styled.section`
 
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 30px;
 
   padding: 60px 85px;
-
-  overflow-y: auto;
 `;
 
 const PlanResultList = styled.ul`
   width: 100%;
+  height: 90%;
 
   display: flex;
   flex-direction: column;
@@ -106,6 +105,8 @@ const PlanResultList = styled.ul`
   padding: 50px;
   background-color: #fff;
   border-radius: 14px;
+
+  overflow-y: auto;
 `;
 
 const LoadingLayout = styled.div`

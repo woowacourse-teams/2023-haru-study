@@ -18,6 +18,5 @@ const LandingLayout = styled.div`
   display: grid;
   grid-template-columns: auto 450px;
 
-  min-height: 100vh;
-  max-height: 100vh;
+  height: 100vh;
 `;
