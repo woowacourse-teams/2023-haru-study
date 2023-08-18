@@ -22,12 +22,12 @@ export const PLAN_QUESTIONS: PlanList = {
 
 export const RETROSPECT_KEYWORDS: RetrospectList = {
   doneAsExpected: '학습이 이루어진 과정',
-  experiencedDifficulty: '학습과정에서의 겪은 어려움',
-  lesson: '학습을 통해 얻은 교훈',
+  experiencedDifficulty: '학습 과정에서의 겪은 어려움',
+  lesson: '학습을 통해 느낀 점',
 };
 
 export const RETROSPECT_QUESTIONS: RetrospectList = {
   doneAsExpected: '실제로 학습이 어떻게 됐나요? 예상대로 잘 이루어졌나요?',
   experiencedDifficulty: '학습을 진행하면서 겪은 어려움은 어떤 것이 있었나요?',
-  lesson: '학습 과정에서 어떤 교훈을 얻었나요?',
+  lesson: '학습 과정 전반적으로 느낀 점은 무엇인가요?',
 };
