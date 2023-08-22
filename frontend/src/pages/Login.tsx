@@ -38,11 +38,11 @@ const Login = () => {
             <LoginText>구글로 로그인</LoginText>
           </GoogleButton>
         </a>
-        <DividedLine>
-          <div></div>
+        <DividedContainer>
+          <DividedLine></DividedLine>
           <span>또는</span>
-          <div></div>
-        </DividedLine>
+          <DividedLine></DividedLine>
+        </DividedContainer>
         <NonMemberLoginButton>
           <Link to={`${ROUTES_PATH.auth}?provider=guest`}>비회원으로 로그인</Link>
         </NonMemberLoginButton>
@@ -97,17 +97,19 @@ const Emphasis = styled.span`
   color: ${color.blue[500]};
 `;
 
-const DividedLine = styled.div`
+const DividedContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  div {
-    width: 40%;
-    height: 1px;
+  color: ${color.neutral[600]};
+`;
 
-    background-color: ${color.neutral[300]};
-  }
+const DividedLine = styled.div`
+  width: 40%;
+  height: 1px;
+
+  background-color: ${color.neutral[300]};
 `;
 
 const NonMemberLoginButton = styled.button`
