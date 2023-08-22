@@ -16,10 +16,6 @@ public class ExceptionSituation {
         this.errorCode = errorCode;
     }
 
-    public static ExceptionSituation of(String message, HttpStatus statusCode) {
-        return of(message, statusCode, null);
-    }
-
     public static ExceptionSituation of(String message, HttpStatus statusCode, Integer errorCode) {
         return new ExceptionSituation(message, statusCode, errorCode);
     }
