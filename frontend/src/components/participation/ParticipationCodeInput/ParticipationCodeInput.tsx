@@ -10,12 +10,22 @@ import useParticipationCode from '@Hooks/participation/useParticipationCode';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
+import { useModal } from '@Contexts/ModalProvider';
+
+import { APIError } from '@Errors/index';
+import type { ResponseError } from '@Errors/index';
+
 const ParticipationCodeInput = () => {
   const navigate = useNavigate();
+  const { openAlert } = useModal();
 
   const participantCodeInput = useInput(false);
 
-  const errorHandler = (error: Error) => {
+  const errorHandler = (error: APIError | ResponseError) => {
+    if (error instanceof APIError && error.code === 1300) {
+      openAlert(error.message);
+      return;
+    }
     alert(error.message);
   };
 
