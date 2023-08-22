@@ -12,6 +12,7 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import { useModal } from '@Contexts/ModalProvider';
 
+import type { ResponseError } from '@Errors/index';
 import { APIError } from '@Errors/index';
 
 const ParticipationCodeInput = () => {
@@ -20,7 +21,7 @@ const ParticipationCodeInput = () => {
 
   const participantCodeInput = useInput(false);
 
-  const errorHandler = (error: Error) => {
+  const errorHandler = (error: APIError | ResponseError) => {
     if (error instanceof APIError && error.code === 1300) {
       openAlert(error.message);
       return;
