@@ -1,7 +1,5 @@
 spring:
   jpa:
-    hibernate:
-      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
@@ -16,6 +14,12 @@ spring:
   h2:
     console:
       enabled: true
+
+  flyway:
+    enabled: false
+
+    placeholders:
+      dialect: h2
 
   config:
     import: classpath:/submodule/application-auth-develop.yml
