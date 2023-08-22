@@ -33,24 +33,16 @@ const Login = () => {
       </Typography>
       <ButtonContainer>
         <a href={googleOAuthUrl}>
-          <Button
-            variant="outlined"
-            $style={css`
-              border-radius: 8px;
-              border: 1px solid ${color.neutral[300]};
-              color: ${color.black};
-              font-size: 1.8rem;
-            `}
-          >
+          <GoogleButton variant="outlined">
             <GoogleIcon />
             <LoginText>구글로 로그인</LoginText>
-          </Button>
+          </GoogleButton>
         </a>
-        <DividedLine>
-          <div></div>
+        <DividedContainer>
+          <DividedLine></DividedLine>
           <span>또는</span>
-          <div></div>
-        </DividedLine>
+          <DividedLine></DividedLine>
+        </DividedContainer>
         <NonMemberLoginButton>
           <Link to={`${ROUTES_PATH.auth}?provider=guest`}>비회원으로 로그인</Link>
         </NonMemberLoginButton>
@@ -89,6 +81,14 @@ const ButtonContainer = styled.div`
   }
 `;
 
+const GoogleButton = styled(Button)`
+  border-radius: 8px;
+  border: 1px solid ${color.neutral[300]};
+
+  color: ${color.black};
+  font-size: 1.8rem;
+`;
+
 const LoginText = styled.span`
   position: relative;
 `;
@@ -97,17 +97,19 @@ const Emphasis = styled.span`
   color: ${color.blue[500]};
 `;
 
-const DividedLine = styled.div`
+const DividedContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  div {
-    width: 40%;
-    height: 1px;
+  color: ${color.neutral[600]};
+`;
 
-    background-color: ${color.neutral[300]};
-  }
+const DividedLine = styled.div`
+  width: 40%;
+  height: 1px;
+
+  background-color: ${color.neutral[300]};
 `;
 
 const NonMemberLoginButton = styled.button`
