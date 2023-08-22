@@ -33,18 +33,10 @@ const Login = () => {
       </Typography>
       <ButtonContainer>
         <a href={googleOAuthUrl}>
-          <Button
-            variant="outlined"
-            $style={css`
-              border-radius: 8px;
-              border: 1px solid ${color.neutral[300]};
-              color: ${color.black};
-              font-size: 1.8rem;
-            `}
-          >
+          <GoogleButton variant="outlined">
             <GoogleIcon />
             <LoginText>구글로 로그인</LoginText>
-          </Button>
+          </GoogleButton>
         </a>
         <DividedLine>
           <div></div>
@@ -87,6 +79,14 @@ const ButtonContainer = styled.div`
     display: flex;
     margin: auto 0;
   }
+`;
+
+const GoogleButton = styled(Button)`
+  border-radius: 8px;
+  border: 1px solid ${color.neutral[300]};
+
+  color: ${color.black};
+  font-size: 1.8rem;
 `;
 
 const LoginText = styled.span`
