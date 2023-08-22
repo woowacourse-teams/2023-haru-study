@@ -1,4 +1,4 @@
-package harustudy.backend.common;
+package harustudy.backend.common.exception;
 
 import java.util.List;
 import org.springframework.stereotype.Controller;
