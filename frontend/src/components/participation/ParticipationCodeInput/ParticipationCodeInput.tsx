@@ -12,8 +12,8 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import { useModal } from '@Contexts/ModalProvider';
 
-import type { ResponseError } from '@Errors/index';
 import { APIError } from '@Errors/index';
+import type { ResponseError } from '@Errors/index';
 
 const ParticipationCodeInput = () => {
   const navigate = useNavigate();
