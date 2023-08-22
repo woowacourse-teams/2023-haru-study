@@ -25,7 +25,6 @@ class MemberIntegrationTest extends IntegrationTest {
     private MemberDto memberDto1;
     private MemberDto memberDto2;
 
-
     @BeforeEach
     void setUp() {
         super.setUp();
@@ -51,7 +50,7 @@ class MemberIntegrationTest extends IntegrationTest {
     void 멤버를_조회할_수_있다() throws Exception {
         // given, when
         MvcResult result = mockMvc.perform(
-                        get("/api/members/{memberId}", memberDto1.member().getId())
+                        get("/api/me")
                                 .header(HttpHeaders.AUTHORIZATION, memberDto1.createAuthorizationHeader()))
                 .andExpect(status().isOk())
                 .andReturn();
