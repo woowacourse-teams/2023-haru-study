@@ -29,6 +29,13 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @Operation(summary = "비회원 로그인 요청")
+    @PostMapping("/guest")
+    public ResponseEntity<TokenResponse> guestLogin() {
+        TokenResponse tokenResponse = authService.guestLogin();
+        return ResponseEntity.ok(tokenResponse);
+    }
+
     @Operation(summary = "소셜 로그인 요청")
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> oauthLogin(
@@ -36,17 +43,8 @@ public class AuthController {
             @RequestBody OauthLoginRequest request
     ) {
         TokenResponse tokenResponse = authService.oauthLogin(request);
-        Cookie cookie = new Cookie("refreshToken", tokenResponse.refreshToken().toString());
-        cookie.setMaxAge(refreshTokenExpireLength.intValue());
-        cookie.setPath("/");
+        Cookie cookie = setUpRefreshTokenCookie(tokenResponse);
         httpServletResponse.addCookie(cookie);
-        return ResponseEntity.ok(tokenResponse);
-    }
-
-    @Operation(summary = "비회원 로그인 요청")
-    @PostMapping("/guest")
-    public ResponseEntity<TokenResponse> guestLogin() {
-        TokenResponse tokenResponse = authService.guestLogin();
         return ResponseEntity.ok(tokenResponse);
     }
 
@@ -58,11 +56,16 @@ public class AuthController {
     ) {
         String refreshToken = extractRefreshTokenFromCookie(httpServletRequest);
         TokenResponse tokenResponse = authService.refresh(refreshToken);
-        Cookie cookie = new Cookie("refreshToken", tokenResponse.refreshToken().toString());
-        cookie.setMaxAge(refreshTokenExpireLength.intValue());
-        cookie.setPath("/");
+        Cookie cookie = setUpRefreshTokenCookie(tokenResponse);
         httpServletResponse.addCookie(cookie);
         return ResponseEntity.ok(tokenResponse);
+    }
+
+    private Cookie setUpRefreshTokenCookie(TokenResponse tokenResponse) {
+        Cookie cookie = new Cookie("refreshToken", tokenResponse.refreshToken().toString());
+        cookie.setMaxAge(refreshTokenExpireLength.intValue() / 1000);
+        cookie.setPath("/");
+        return cookie;
     }
 
     private String extractRefreshTokenFromCookie(HttpServletRequest httpServletRequest) {
