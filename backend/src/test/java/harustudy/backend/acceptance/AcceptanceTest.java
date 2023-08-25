@@ -25,6 +25,7 @@ import harustudy.backend.room.dto.PomodoroRoomResponse;
 import harustudy.backend.room.dto.PomodoroRoomsResponse;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -90,6 +91,17 @@ class AcceptanceTest {
     }
 
     @Test
+    void 회원으로_진행했었던_스터디_목록을_조회한다() throws Exception {
+        회원으로_스터디를_진행한다();
+        회원으로_스터디를_진행한다();
+        LoginResponse 로그인_정보 = 구글_로그인을_진행한다();
+        List<PomodoroRoomResponse> 회원으로_완료한_스터디_목록 = 회원으로_진행했던_모든_스터디_목록을_조회한다(로그인_정보);
+        for (PomodoroRoomResponse 스터디_정보 : 회원으로_완료한_스터디_목록) {
+            스터디_종료_후_결과_조회(로그인_정보, 스터디_정보.studyId());
+        }
+    }
+
+    @Test
     void 비회원으로_스터디를_진행한다() throws Exception {
         LoginResponse 로그인_정보 = 비회원_로그인을_진행한다();
         String 참여_코드 = 스터디를_개설한다(로그인_정보);
@@ -101,6 +113,25 @@ class AcceptanceTest {
         스터디_회고를_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
         스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
         스터디_종료_후_결과_조회(로그인_정보, 스터디_아이디);
+    }
+
+    private List<PomodoroRoomResponse> 회원으로_진행했던_모든_스터디_목록을_조회한다(LoginResponse 로그인_정보)
+            throws Exception {
+        long memberId = Long.parseLong(jwtTokenProvider
+                .parseSubject(로그인_정보.tokenResponse().accessToken(), tokenConfig.secretKey()));
+
+        MvcResult result = mockMvc.perform(
+                        get("/api/studies")
+                                .param("memberId", String.valueOf(memberId))
+                                .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+        PomodoroRoomsResponse pomodoroRoomsResponse = objectMapper.readValue(jsonResponse,
+                PomodoroRoomsResponse.class);
+
+        return pomodoroRoomsResponse.studies();
     }
 
     private LoginResponse 비회원_로그인을_진행한다() throws Exception {
