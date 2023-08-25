@@ -76,7 +76,7 @@ class AcceptanceTest {
     }
 
     @Test
-    void 스터디를_진행한다() throws Exception {
+    void 회원으로_스터디를_진행한다() throws Exception {
         LoginResponse 로그인_정보 = 구글_로그인을_진행한다();
         String 참여_코드 = 스터디를_개설한다(로그인_정보);
         Long 스터디_아이디 = 스터디를_조회한다(로그인_정보, 참여_코드);
@@ -87,6 +87,30 @@ class AcceptanceTest {
         스터디_회고를_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
         스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
         스터디_종료_후_결과_조회(로그인_정보, 스터디_아이디);
+    }
+
+    @Test
+    void 비회원으로_스터디를_진행한다() throws Exception {
+        LoginResponse 로그인_정보 = 비회원_로그인을_진행한다();
+        String 참여_코드 = 스터디를_개설한다(로그인_정보);
+        Long 스터디_아이디 = 스터디를_조회한다(로그인_정보, 참여_코드);
+        Long 진행도_아이디 = 스터디에_참여한다(로그인_정보, 스터디_아이디);
+        스터디_계획을_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
+        스터디_회고를_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
+        스터디_종료_후_결과_조회(로그인_정보, 스터디_아이디);
+    }
+
+    private LoginResponse 비회원_로그인을_진행한다() throws Exception {
+        MvcResult result = mockMvc.perform(post("/api/auth/guest"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+        TokenResponse tokenResponse = objectMapper.readValue(jsonResponse, TokenResponse.class);
+        return new LoginResponse(tokenResponse, null);
     }
 
     public LoginResponse 구글_로그인을_진행한다() throws Exception {
