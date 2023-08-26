@@ -1,7 +1,7 @@
 package harustudy.backend.auth;
 
-import harustudy.backend.auth.exception.InvalidAuthorizationHeaderException;
 import harustudy.backend.auth.service.AuthService;
+import harustudy.backend.auth.util.BearerAuthorizationParser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class AuthInterceptor implements HandlerInterceptor {
 
     private final AuthService authService;
+    private final BearerAuthorizationParser bearerAuthorizationParser;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
@@ -23,12 +24,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String[] splitAuthorizationHeader = authorizationHeader.split(" ");
-        if (splitAuthorizationHeader.length != 2 ||
-                !splitAuthorizationHeader[0].equals("Bearer")) {
-            throw new InvalidAuthorizationHeaderException();
-        }
-        String accessToken = authorizationHeader.split(" ")[1];
+        String accessToken = bearerAuthorizationParser.parse(authorizationHeader);
         authService.validateAccessToken(accessToken);
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
