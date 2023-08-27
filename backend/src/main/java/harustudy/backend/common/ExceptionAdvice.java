@@ -11,6 +11,7 @@ public class ExceptionAdvice {
 
     Logger defaultLog = LoggerFactory.getLogger(ExceptionAdvice.class);
     Logger exceptionLog = LoggerFactory.getLogger("ExceptionLogger");
+    Logger slackAlertLog = LoggerFactory.getLogger("SlackAlertLogger");
 
     @ExceptionHandler(HaruStudyException.class)
     public ResponseEntity<ExceptionResponse> handleHaruStudyException(HaruStudyException e) {
@@ -25,6 +26,7 @@ public class ExceptionAdvice {
     public ResponseEntity<Void> handleException(Exception e) {
         defaultLog.error(e.getMessage());
         exceptionLog.error(e.getMessage(), e);
+        slackAlertLog.error(e.getMessage(), e);
         return ResponseEntity.internalServerError().build();
     }
 }
