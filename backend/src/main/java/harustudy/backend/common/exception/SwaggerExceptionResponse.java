@@ -1,4 +1,4 @@
-package harustudy.backend.common;
+package harustudy.backend.common.exception;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

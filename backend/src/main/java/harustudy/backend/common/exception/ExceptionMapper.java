@@ -1,4 +1,4 @@
-package harustudy.backend.common;
+package harustudy.backend.common.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;

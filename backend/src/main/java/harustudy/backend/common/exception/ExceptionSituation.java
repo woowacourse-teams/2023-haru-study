@@ -1,4 +1,4 @@
-package harustudy.backend.common;
+package harustudy.backend.common.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

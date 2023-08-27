@@ -1,4 +1,4 @@
-package harustudy.backend.common;
+package harustudy.backend.common.logging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

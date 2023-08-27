@@ -1,9 +1,9 @@
 package harustudy.backend.config.swagger;
 
-import harustudy.backend.common.ExceptionMapper;
-import harustudy.backend.common.ExceptionSituation;
-import harustudy.backend.common.HaruStudyException;
-import harustudy.backend.common.SwaggerExceptionResponse;
+import harustudy.backend.common.exception.ExceptionMapper;
+import harustudy.backend.common.exception.ExceptionSituation;
+import harustudy.backend.common.exception.HaruStudyException;
+import harustudy.backend.common.exception.SwaggerExceptionResponse;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;

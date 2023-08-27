@@ -3,7 +3,7 @@ package harustudy.backend.content.controller;
 import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.auth.exception.AuthorizationException;
-import harustudy.backend.common.SwaggerExceptionResponse;
+import harustudy.backend.common.exception.SwaggerExceptionResponse;
 import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.dto.WritePlanRequest;
 import harustudy.backend.content.dto.WriteRetrospectRequest;

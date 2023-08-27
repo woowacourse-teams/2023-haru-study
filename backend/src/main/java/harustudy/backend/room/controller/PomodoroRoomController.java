@@ -2,7 +2,7 @@ package harustudy.backend.room.controller;
 
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.auth.dto.AuthMember;
-import harustudy.backend.common.SwaggerExceptionResponse;
+import harustudy.backend.common.exception.SwaggerExceptionResponse;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
 import harustudy.backend.room.dto.CreatePomodoroRoomResponse;

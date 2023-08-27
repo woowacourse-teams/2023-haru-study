@@ -1,5 +1,5 @@
 <included>
-  <appender name="SLACK" class="harustudy.backend.common.SlackAppender">
+  <appender name="SLACK" class="harustudy.backend.common.logging.SlackAppender">
   </appender>
 
   <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/> <!-- 애플리케이션 종료 시 비동기로 로깅을 처리하는 스레드를 전부 Shutdown될 수 있도록 합니다 -->

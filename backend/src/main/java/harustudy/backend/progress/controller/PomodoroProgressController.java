@@ -3,7 +3,7 @@ package harustudy.backend.progress.controller;
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.auth.exception.AuthorizationException;
-import harustudy.backend.common.SwaggerExceptionResponse;
+import harustudy.backend.common.exception.SwaggerExceptionResponse;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.progress.dto.ParticipateStudyRequest;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;

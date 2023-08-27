@@ -1,4 +1,4 @@
-package harustudy.backend.common;
+package harustudy.backend.common.logging;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

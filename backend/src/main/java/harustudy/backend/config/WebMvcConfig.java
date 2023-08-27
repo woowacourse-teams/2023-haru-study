@@ -2,7 +2,7 @@ package harustudy.backend.config;
 
 import harustudy.backend.auth.AuthArgumentResolver;
 import harustudy.backend.auth.AuthInterceptor;
-import harustudy.backend.common.LoggingInterceptor;
+import harustudy.backend.common.logging.LoggingInterceptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

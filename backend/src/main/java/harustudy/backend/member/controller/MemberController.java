@@ -2,7 +2,7 @@ package harustudy.backend.member.controller;
 
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.auth.dto.AuthMember;
-import harustudy.backend.common.SwaggerExceptionResponse;
+import harustudy.backend.common.exception.SwaggerExceptionResponse;
 import harustudy.backend.member.dto.MemberResponse;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.service.MemberService;
