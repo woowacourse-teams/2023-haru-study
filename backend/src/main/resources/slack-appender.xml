@@ -1,0 +1,14 @@
+<included>
+  <appender name="SLACK" class="harustudy.backend.common.SlackAppender">
+  </appender>
+
+  <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/> <!-- 애플리케이션 종료 시 비동기로 로깅을 처리하는 스레드를 전부 Shutdown될 수 있도록 합니다 -->
+  <appender name="ASYNC_SLACK_APPENDER" class="ch.qos.logback.classic.AsyncAppender">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <appender-ref ref="SLACK"/>
+    <discardingThreshold>0</discardingThreshold>  <!-- LoggingEvent queue가 가득 차지 않은 상황에서 데이터가 누락되지 않도록 0으로 설정해줍니다 -->
+    <neverBlock>false</neverBlock>  <!-- LoggingEvent queue가 가득 찼을 때 다른 로깅 스레드가 block 되지 않고 log를 누락시키며 application이 blocking되지 않도록 합니다 -->
+  </appender>
+</included>
