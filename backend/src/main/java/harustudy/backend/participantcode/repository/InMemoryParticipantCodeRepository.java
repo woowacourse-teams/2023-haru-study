@@ -12,9 +12,9 @@ import org.springframework.stereotype.Repository;
 public class InMemoryParticipantCodeRepository {
 
     // 1 hour
-//    private static final long SCHEDULE_DELAY_IN_MILLIS = 1000 * 60 * 60;
+    private static final long SCHEDULE_DELAY_IN_MILLIS = 1000 * 60 * 60;
     // 10 sec
-    private static final long SCHEDULE_DELAY_IN_MILLIS = 1000 * 10;
+//    private static final long SCHEDULE_DELAY_IN_MILLIS = 1000 * 10;
 
     private final Map<String, ParticipantCode> participantCodeRepository = new ConcurrentHashMap<>();
 
