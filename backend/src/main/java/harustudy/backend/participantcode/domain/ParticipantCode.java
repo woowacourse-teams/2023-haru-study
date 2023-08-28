@@ -7,29 +7,27 @@ import lombok.Getter;
 @Getter
 public class ParticipantCode {
 
-//    1 Day
-    private static final Long EXPIRATION_PERIOD_IN_SECONDS = 60L * 60 * 24;
-
     private Long id;
 
-//    @Indexed
+    @Transient
+    private GenerationStrategy generationStrategy;
+
+    //    @Indexed
     private String code;
 
-//    @TimeToLive
+    //    @TimeToLive
     private Long expirationPeriod;
 
     @Transient
     private LocalDateTime createdDate;
 
-    @Transient
-    private GenerationStrategy generationStrategy;
 
     public ParticipantCode(GenerationStrategy generationStrategy) {
         this.id = null;
         this.generationStrategy = generationStrategy;
         this.code = generationStrategy.generate();
-        this.expirationPeriod = EXPIRATION_PERIOD_IN_SECONDS;
-        this.createdDate = LocalDateTime.now();
+        this.expirationPeriod = generationStrategy.EXPIRATION_PERIOD_IN_SECONDS;
+        this.createdDate = generationStrategy.getCreatedDate();
     }
 
     public void regenerate() {
@@ -41,6 +39,6 @@ public class ParticipantCode {
     }
 
     public boolean isExpired() {
-        return createdDate.plusSeconds(EXPIRATION_PERIOD_IN_SECONDS).isBefore(LocalDateTime.now());
+        return createdDate.plusSeconds(expirationPeriod).isBefore(LocalDateTime.now());
     }
 }

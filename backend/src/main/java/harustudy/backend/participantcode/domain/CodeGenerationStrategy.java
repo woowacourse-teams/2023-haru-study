@@ -1,5 +1,7 @@
 package harustudy.backend.participantcode.domain;
 
+import java.time.LocalDateTime;
+
 public class CodeGenerationStrategy implements GenerationStrategy {
 
     private static final int CODE_LENGTH = 6;
@@ -11,5 +13,10 @@ public class CodeGenerationStrategy implements GenerationStrategy {
             sb.append((char) ((Math.random() * 26) + 65));
         }
         return sb.toString();
+    }
+
+    @Override
+    public LocalDateTime getCreatedDate() {
+        return LocalDateTime.now();
     }
 }
