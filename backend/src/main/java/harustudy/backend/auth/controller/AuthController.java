@@ -15,12 +15,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "인증 관련 기능")
 @RequiredArgsConstructor
-@RequestMapping("api/auth")
 @RestController
 public class AuthController {
 
@@ -30,7 +28,7 @@ public class AuthController {
     private final AuthService authService;
 
     @Operation(summary = "소셜 로그인 요청")
-    @PostMapping("/login")
+    @PostMapping("/api/auth/login")
     public ResponseEntity<TokenResponse> oauthLogin(
             HttpServletResponse httpServletResponse,
             @RequestBody OauthLoginRequest request
@@ -44,14 +42,14 @@ public class AuthController {
     }
 
     @Operation(summary = "비회원 로그인 요청")
-    @PostMapping("/guest")
+    @PostMapping("/api/auth/guest")
     public ResponseEntity<TokenResponse> guestLogin() {
         TokenResponse tokenResponse = authService.guestLogin();
         return ResponseEntity.ok(tokenResponse);
     }
 
     @Operation(summary = "access 토큰, refresh 토큰 갱신")
-    @PostMapping("/refresh")
+    @PostMapping("/api/auth/refresh")
     public ResponseEntity<TokenResponse> refresh(
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse
