@@ -13,14 +13,18 @@ public class BearerAuthorizationParser {
     private static final int HEADER_SIZE = 2;
 
     public String parse(String authorizationHeader) {
-        if (Objects.isNull(authorizationHeader)) {
-            throw new InvalidAuthorizationHeaderException();
-        }
+        validateIsNonNull(authorizationHeader);
         String[] split = authorizationHeader.split(" ");
         if (split.length != HEADER_SIZE || !split[TOKEN_TYPE_LOCATION].equals(TOKEN_TYPE)) {
             throw new InvalidAuthorizationHeaderException();
         }
         return split[ACCESS_TOKEN_LOCATION];
+    }
+
+    private void validateIsNonNull(String authorizationHeader) {
+        if (Objects.isNull(authorizationHeader)) {
+            throw new InvalidAuthorizationHeaderException();
+        }
     }
 }
 

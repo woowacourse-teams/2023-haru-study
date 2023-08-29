@@ -34,7 +34,7 @@ class BearerAuthorizationParserTest {
 
     @Test
     void 인증_헤더가_없으면_예외를_던진다() {
-        // when, then
+        // given, when, then
         assertThatThrownBy(() -> bearerAuthorizationParser.parse(null))
                 .isInstanceOf(InvalidAuthorizationHeaderException.class);
     }
@@ -46,7 +46,7 @@ class BearerAuthorizationParserTest {
         String email = "haru-study@harustudy.com:harustudy";
         String authorizationHeader = tokenType + " " + email;
 
-        // given
+        // when, then
         assertThatThrownBy(() -> bearerAuthorizationParser.parse(authorizationHeader))
                 .isInstanceOf(InvalidAuthorizationHeaderException.class);
     }
