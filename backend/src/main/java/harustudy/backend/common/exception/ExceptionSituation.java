@@ -1,4 +1,4 @@
-package harustudy.backend.common;
+package harustudy.backend.common.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -14,10 +14,6 @@ public class ExceptionSituation {
         this.message = message;
         this.statusCode = statusCode;
         this.errorCode = errorCode;
-    }
-
-    public static ExceptionSituation of(String message, HttpStatus statusCode) {
-        return of(message, statusCode, null);
     }
 
     public static ExceptionSituation of(String message, HttpStatus statusCode, Integer errorCode) {
