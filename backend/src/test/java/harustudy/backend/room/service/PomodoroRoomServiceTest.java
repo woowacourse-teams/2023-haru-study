@@ -15,6 +15,7 @@ import harustudy.backend.room.dto.PomodoroRoomsResponse;
 import harustudy.backend.room.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.room.exception.RoomNotFoundException;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class PomodoroRoomServiceTest {
     @Autowired
     private PomodoroRoomService pomodoroRoomService;
 
-    @Autowired
+    @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
