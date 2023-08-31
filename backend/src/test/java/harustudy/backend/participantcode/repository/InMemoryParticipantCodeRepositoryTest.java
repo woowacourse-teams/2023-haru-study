@@ -4,9 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import harustudy.backend.participantcode.domain.GenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.Map;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -15,32 +13,23 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 public class InMemoryParticipantCodeRepositoryTest {
 
-    @SuppressWarnings("unchecked")
     @Test
-    void 만료된_참여_코드만_삭제한다() throws Exception {
+    void 만료된_참여_코드만_삭제한다() {
         // given
         InMemoryParticipantCodeRepository repository = new InMemoryParticipantCodeRepository();
         GenerationStrategy outDatedCodeGenerationStrategy = new OutDatedCodeGenerationStrategy();
-        int outDatedCount = 49;
-        for (int i = 0; i < outDatedCount; i++) {
-            repository.save(new ParticipantCode(outDatedCodeGenerationStrategy));
-        }
-
         GenerationStrategy validCodeGenerationStrategy = new ValidCodeGenerationStrategy();
-        int validCount = 51;
-        for (int i = 0; i < validCount; i++) {
-            repository.save(new ParticipantCode(validCodeGenerationStrategy));
-        }
+        ParticipantCode outdatedCode = new ParticipantCode(outDatedCodeGenerationStrategy);
+        ParticipantCode validCode = new ParticipantCode(validCodeGenerationStrategy);
+        repository.save(outdatedCode);
+        repository.save(validCode);
 
         // when
         repository.expireCode();
 
         // then
-        Field field = repository.getClass()
-                .getDeclaredField("participantCodeRepository");
-        field.setAccessible(true);
-        Map<String, ParticipantCode> map = (Map<String, ParticipantCode>) field.get(repository);
-        assertThat(map).hasSize(51);
+        assertThat(repository.findByCode(outdatedCode.getCode()).isEmpty()).isTrue();
+        assertThat(repository.findByCode(validCode.getCode()).isEmpty()).isFalse();
     }
 
     private static class OutDatedCodeGenerationStrategy implements GenerationStrategy {
