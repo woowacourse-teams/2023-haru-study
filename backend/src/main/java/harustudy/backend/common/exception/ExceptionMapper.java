@@ -1,4 +1,4 @@
-package harustudy.backend.common;
+package harustudy.backend.common.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -23,12 +23,13 @@ import harustudy.backend.room.exception.PomodoroRoomNameLengthException;
 import harustudy.backend.room.exception.PomodoroTimePerCycleException;
 import harustudy.backend.room.exception.PomodoroTotalCycleException;
 import harustudy.backend.room.exception.RoomNotFoundException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ExceptionMapper {
 
-    private static final Map<Class<? extends Exception>, ExceptionSituation> mapper = new HashMap<>();
+    private static final Map<Class<? extends Exception>, ExceptionSituation> mapper = new LinkedHashMap<>();
 
     static {
         setUpMemberException();
@@ -62,7 +63,7 @@ public class ExceptionMapper {
 
     private static void setUpRoomException() {
         mapper.put(ParticipantCodeNotFoundException.class,
-                ExceptionSituation.of("해당하는 참여코드가 없습니다.", NOT_FOUND, 1300));
+                ExceptionSituation.of("참여 코드가 만료되었거나 존재하지 않습니다.", NOT_FOUND, 1300));
         mapper.put(ParticipantCodeExpiredException.class,
                 ExceptionSituation.of("만료된 참여코드입니다.", BAD_REQUEST, 1301));
         mapper.put(RoomNotFoundException.class,
@@ -95,5 +96,11 @@ public class ExceptionMapper {
 
     public static ExceptionSituation getSituationOf(Exception exception) {
         return mapper.get(exception.getClass());
+    }
+
+    public static List<ExceptionSituation> getExceptionSituations() {
+        return mapper.values()
+                .stream()
+                .toList();
     }
 }
