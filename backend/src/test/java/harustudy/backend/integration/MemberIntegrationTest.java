@@ -6,8 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import harustudy.backend.member.dto.MemberResponse;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.room.domain.CodeGenerationStrategy;
-import harustudy.backend.room.domain.ParticipantCode;
 import harustudy.backend.room.domain.PomodoroRoom;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,8 +27,7 @@ class MemberIntegrationTest extends IntegrationTest {
     void setUp() {
         super.setUp();
 
-        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        room = new PomodoroRoom("roomName", 1, 20, participantCode);
+        room = new PomodoroRoom("roomName", 1, 20);
 
         memberDto1 = createMember("member1");
         memberDto2 = createMember("member2");
@@ -40,7 +37,6 @@ class MemberIntegrationTest extends IntegrationTest {
         PomodoroProgress pomodoroProgress2 = new PomodoroProgress(room, memberDto2.member(),
                 "name2");
 
-        entityManager.persist(participantCode);
         entityManager.persist(room);
         entityManager.persist(pomodoroProgress1);
         entityManager.persist(pomodoroProgress2);

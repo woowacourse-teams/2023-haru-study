@@ -2,8 +2,8 @@ package harustudy.backend.room.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import harustudy.backend.room.domain.CodeGenerationStrategy;
-import harustudy.backend.room.domain.GenerationStrategy;
+import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
+import harustudy.backend.participantcode.domain.GenerationStrategy;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;

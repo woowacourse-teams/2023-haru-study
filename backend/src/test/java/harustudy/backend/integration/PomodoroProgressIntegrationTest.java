@@ -9,8 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.domain.PomodoroStatus;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;
-import harustudy.backend.room.domain.CodeGenerationStrategy;
-import harustudy.backend.room.domain.ParticipantCode;
 import harustudy.backend.room.domain.PomodoroRoom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -31,13 +29,10 @@ class PomodoroProgressIntegrationTest extends IntegrationTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        pomodoroRoom = new PomodoroRoom("roomName", 3, 20,
-                participantCode);
+        pomodoroRoom = new PomodoroRoom("roomName", 3, 20);
         memberDto = createMember("member1");
         pomodoroProgress = new PomodoroProgress(pomodoroRoom, memberDto.member(), "nickname");
 
-        entityManager.persist(participantCode);
         entityManager.persist(pomodoroRoom);
         entityManager.persist(pomodoroProgress);
 

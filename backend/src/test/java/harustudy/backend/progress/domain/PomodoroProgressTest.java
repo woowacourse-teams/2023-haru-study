@@ -1,12 +1,12 @@
 package harustudy.backend.progress.domain;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.progress.exception.NicknameLengthException;
-import harustudy.backend.room.domain.CodeGenerationStrategy;
-import harustudy.backend.room.domain.ParticipantCode;
 import harustudy.backend.room.domain.PomodoroRoom;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,8 +25,7 @@ class PomodoroProgressTest {
 
     @BeforeEach
     void setUp() {
-        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        pomodoroRoom = new PomodoroRoom("room", 3, 25, participantCode);
+        pomodoroRoom = new PomodoroRoom("room", 3, 25);
         member = Member.guest();
     }
 

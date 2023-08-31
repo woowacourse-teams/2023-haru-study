@@ -12,13 +12,9 @@ import harustudy.backend.content.dto.WritePlanRequest;
 import harustudy.backend.content.dto.WriteRetrospectRequest;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
-import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.progress.domain.PomodoroStatus;
 import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
 import harustudy.backend.progress.exception.PomodoroProgressStatusException;
-import harustudy.backend.room.domain.CodeGenerationStrategy;
-import harustudy.backend.room.domain.ParticipantCode;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.exception.RoomNotFoundException;
 import jakarta.persistence.EntityManager;
@@ -51,13 +47,11 @@ class PomodoroContentServiceTest {
 
     @BeforeEach
     void setUp() {
-        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        pomodoroRoom = new PomodoroRoom("roomName", 1, 20, participantCode);
+        pomodoroRoom = new PomodoroRoom("roomName", 1, 20);
         member = new Member("nickname", "email", "imageUrl", LoginType.GUEST);
         pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, "nickname");
         pomodoroContent = new PomodoroContent(pomodoroProgress, 1);
 
-        entityManager.persist(participantCode);
         entityManager.persist(pomodoroRoom);
         entityManager.persist(member);
         entityManager.persist(pomodoroProgress);
