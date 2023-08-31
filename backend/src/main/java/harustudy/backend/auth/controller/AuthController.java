@@ -28,7 +28,7 @@ public class AuthController {
     private final AuthService authService;
 
     @Operation(summary = "비회원 로그인 요청")
-    @PostMapping("/guest")
+    @PostMapping("api/auth/guest")
     public ResponseEntity<TokenResponse> guestLogin() {
         TokenResponse tokenResponse = authService.guestLogin();
         return ResponseEntity.ok(tokenResponse);
