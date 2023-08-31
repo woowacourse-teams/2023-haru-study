@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import harustudy.backend.auth.config.OauthProperty;
 import harustudy.backend.auth.config.TokenConfig;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
@@ -93,10 +94,10 @@ class AcceptanceTest {
         OauthLoginRequest request = new OauthLoginRequest("google", "oauthLoginCode");
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        given(googleOauthClient.requestOauthToken(any(), any()))
+        given(googleOauthClient.requestOauthToken(any(String.class), any(OauthProperty.class)))
                 .willReturn(new OauthTokenResponse("mock-token-type", "mock-access-token",
                         "mock-scope"));
-        given(googleOauthClient.requestOauthUserInfo(any(), any()))
+        given(googleOauthClient.requestOauthUserInfo(any(OauthProperty.class), any(String.class)))
                 .willReturn(Map.of("name", "mock-name", "email", "mock-email", "picture",
                         "mock-picture"));
 

@@ -48,7 +48,7 @@ class AuthArgumentResolverTest {
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         NativeWebRequest nativeWebRequest = new ServletWebRequest(request);
 
-        given(authService.parseMemberId(any()))
+        given(authService.parseMemberId(any(String.class)))
                 .willReturn(mockedAuthMemberId);
 
         // when

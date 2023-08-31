@@ -51,7 +51,7 @@ class AuthInterceptorTest {
 
         willDoNothing()
                 .given(authService)
-                .validateAccessToken(any());
+                .validateAccessToken(any(String.class));
 
         // when
         authInterceptor.preHandle(request, response, handler);
@@ -59,6 +59,6 @@ class AuthInterceptorTest {
         // then
         then(authService)
                 .should(times(1))
-                .validateAccessToken(any());
+                .validateAccessToken(any(String.class));
     }
 }
