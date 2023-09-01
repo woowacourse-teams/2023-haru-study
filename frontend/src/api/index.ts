@@ -17,6 +17,8 @@ import type {
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
+import http from './httpInstance';
+
 const BASE_URL = '';
 
 // 옛날거
@@ -52,10 +54,8 @@ export const requestGetStudyMembers = (studyId: string, accessToken: string) =>
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
-export const requestGetMemberRecordContents = (studyId: string, progressId: string, accessToken: string) =>
-  prevHttp.get<ResponseMemberRecordContents>(`/api/studies/${studyId}/contents?progressId=${progressId}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestGetMemberRecordContents = (studyId: string, progressId: string) =>
+  http.get<ResponseMemberRecordContents>(`${BASE_URL}/api/studies/${studyId}/contents?progressId=${progressId}`);
 
 // 새로 적용되는 api
 export const requestGuestLogin = async () => {

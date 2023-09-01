@@ -27,9 +27,7 @@ type Props = {
 };
 
 const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCycle }: Props) => {
-  const { memberRecordContents, isLoading } = useProgressRecord(studyId, progressId, {
-    errorHandler: (error) => alert(error.message),
-  });
+  const { memberRecordContents, isLoading } = useProgressRecord(studyId, progressId);
 
   if (isLoading) {
     return <TabsSkeleton />;
