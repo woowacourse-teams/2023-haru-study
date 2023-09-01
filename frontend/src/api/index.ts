@@ -58,10 +58,7 @@ export const requestOAuthLogin = (provider: OAuthProvider, code: string) =>
     body: JSON.stringify({ oauthProvider: provider, code }),
   });
 
-export const requestMemberInfo = (accessToken: string) =>
-  prevHttp.get<ResponseMemberInfo>('/api/me', {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestGetMemberInfo = () => http.get<ResponseMemberInfo>('/api/me');
 
 export const requestAccessTokenRefresh = async () => {
   const response = await prevHttp.post(`${BASE_URL}/api/auth/refresh`);

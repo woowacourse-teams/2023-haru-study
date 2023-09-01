@@ -6,11 +6,9 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import { boolCheckCookie, deleteCookie } from '@Utils/cookie';
 
-import { requestAccessTokenRefresh, requestMemberInfo } from '@Apis/index';
+import { requestGetMemberInfo } from '@Apis/index';
 
 import type { MemberInfo } from '@Types/member';
-
-import { APIError, ResponseError } from '@Errors/index';
 
 type Actions = {
   initMemberInfo: (memberInfo: MemberInfo) => void;
@@ -42,55 +40,10 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
     [navigate],
   );
 
-  const fetchAccessTokenRefresh = useCallback(async () => {
-    try {
-      const hasRefreshToken = boolCheckCookie('refreshToken');
-
-      if (!hasRefreshToken) {
-        actions.clearMemberInfo();
-        return;
-      }
-
-      const { accessToken } = await requestAccessTokenRefresh();
-      sessionStorage.setItem('accessToken', accessToken);
-    } catch (error) {
-      if (!(error instanceof Error)) throw error;
-
-      alert(error.message);
-    }
-  }, [actions]);
-
   const fetchMemberInfo = useCallback(async () => {
-    const accessToken = sessionStorage.getItem('accessToken');
-    const hasRefreshToken = boolCheckCookie('refreshToken');
-
-    if (!accessToken && !hasRefreshToken) {
-      actions.clearMemberInfo();
-      return;
-    }
-
-    if (!accessToken) {
-      await fetchAccessTokenRefresh();
-      await fetchMemberInfo();
-
-      return;
-    }
-
-    try {
-      const memberInfo = await requestMemberInfo(accessToken);
-      actions.initMemberInfo(memberInfo);
-    } catch (error) {
-      if (error instanceof APIError && error.code === 1403) {
-        await fetchAccessTokenRefresh();
-        await fetchMemberInfo();
-
-        return;
-      }
-      if (!(error instanceof ResponseError)) throw error;
-
-      alert(error.message);
-    }
-  }, [actions, fetchAccessTokenRefresh]);
+    const { data } = await requestGetMemberInfo();
+    actions.initMemberInfo(data);
+  }, [actions]);
 
   useEffect(() => {
     if (pathname === ROUTES_PATH.auth) return;
