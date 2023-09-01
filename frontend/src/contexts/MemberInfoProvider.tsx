@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-import { boolCheckCookie, deleteCookie } from '@Utils/cookie';
+import { deleteCookie, hasCookie } from '@Utils/cookie';
 
 import { requestGetMemberInfo } from '@Apis/index';
 
@@ -49,7 +49,7 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
     if (pathname === ROUTES_PATH.auth) return;
 
     const accessToken = sessionStorage.getItem('accessToken');
-    const hasRefreshToken = boolCheckCookie('refreshToken');
+    const hasRefreshToken = hasCookie('refreshToken');
     if (pathname === ROUTES_PATH.login && (accessToken || hasRefreshToken)) {
       navigate(ROUTES_PATH.landing);
       return;
