@@ -11,7 +11,7 @@ import { ROUTES_PATH } from '@Constants/routes';
 import { getUrlQuery } from '@Utils/getUrlQuery';
 import tokenStorage from '@Utils/tokenStorage';
 
-import { requestGuestLogin, requestOAuthLogin } from '@Apis/index';
+import { requestPostGuestLogin, requestPostOAuthLogin } from '@Apis/index';
 
 import type { AuthProvider } from '@Types/auth';
 
@@ -26,7 +26,7 @@ const Auth = () => {
       if (provider === 'guest') {
         const {
           data: { accessToken },
-        } = await requestGuestLogin();
+        } = await requestPostGuestLogin();
         tokenStorage.setAccessToken(accessToken);
 
         navigate(ROUTES_PATH.landing);
@@ -35,7 +35,7 @@ const Auth = () => {
 
       const {
         data: { accessToken },
-      } = await requestOAuthLogin(provider, code);
+      } = await requestPostOAuthLogin(provider, code);
       tokenStorage.setAccessToken(accessToken);
 
       navigate(ROUTES_PATH.landing);
