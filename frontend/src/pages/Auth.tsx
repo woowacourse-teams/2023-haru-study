@@ -9,6 +9,7 @@ import color from '@Styles/color';
 import { ROUTES_PATH } from '@Constants/routes';
 
 import { getUrlQuery } from '@Utils/getUrlQuery';
+import tokenStorage from '@Utils/tokenStorage';
 
 import { requestGuestLogin, requestOAuthLogin } from '@Apis/index';
 
@@ -23,15 +24,19 @@ const Auth = () => {
   const requestAuthToken = useCallback(async () => {
     try {
       if (provider === 'guest') {
-        const { accessToken } = await requestGuestLogin();
-        sessionStorage.setItem('accessToken', accessToken);
+        const {
+          data: { accessToken },
+        } = await requestGuestLogin();
+        tokenStorage.setAccessToken(accessToken);
 
         navigate(ROUTES_PATH.landing);
         return;
       }
 
-      const { accessToken } = await requestOAuthLogin(provider, code);
-      sessionStorage.setItem('accessToken', accessToken);
+      const {
+        data: { accessToken },
+      } = await requestOAuthLogin(provider, code);
+      tokenStorage.setAccessToken(accessToken);
 
       navigate(ROUTES_PATH.landing);
     } catch (error) {

@@ -51,19 +51,12 @@ export const requestGetMemberRecordContents = (studyId: string, progressId: stri
   http.get<ResponseMemberRecordContents>(`${BASE_URL}/api/studies/${studyId}/contents?progressId=${progressId}`);
 
 // 새로 적용되는 api
-export const requestGuestLogin = async () => {
-  const response = await prevHttp.post(`${BASE_URL}/api/auth/guest`);
+export const requestGuestLogin = () => http.post<ResponseAuthToken>(`${BASE_URL}/api/auth/guest`);
 
-  return (await response.json()) as ResponseAuthToken;
-};
-
-export const requestOAuthLogin = async (provider: OAuthProvider, code: string) => {
-  const response = await prevHttp.post(`${BASE_URL}/api/auth/login`, {
+export const requestOAuthLogin = (provider: OAuthProvider, code: string) =>
+  http.post<ResponseAuthToken>(`${BASE_URL}/api/auth/login`, {
     body: JSON.stringify({ oauthProvider: provider, code }),
   });
-
-  return (await response.json()) as ResponseAuthToken;
-};
 
 export const requestMemberInfo = (accessToken: string) =>
   prevHttp.get<ResponseMemberInfo>('/api/me', {
