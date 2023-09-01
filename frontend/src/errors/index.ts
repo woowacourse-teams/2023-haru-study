@@ -1,3 +1,4 @@
+// 삭제 예정
 export class ResponseError extends Error {
   constructor(message?: string) {
     super(message || '서버 요청에 문제가 발생했습니다. 잠시 후에 다시 시도해주세요.');
@@ -12,6 +13,7 @@ export class OfflineError extends Error {
   }
 }
 
+// 삭제 예정
 export class APIError extends Error {
   code: number;
 
@@ -19,5 +21,22 @@ export class APIError extends Error {
     super(message);
     this.name = 'API Error';
     this.code = code;
+  }
+}
+
+export class ApiError extends Error {
+  code: number;
+
+  constructor(message: string, code: number) {
+    super(message);
+    this.name = 'API Error';
+    this.code = code;
+  }
+}
+
+export class UnknownApiError extends Error {
+  constructor() {
+    super('서버 요청에 문제가 발생했습니다. 잠시 후에 다시 시도해주세요.');
+    this.name = 'Unknown API Error';
   }
 }
