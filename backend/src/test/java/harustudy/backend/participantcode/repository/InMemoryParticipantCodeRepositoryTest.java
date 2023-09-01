@@ -19,8 +19,8 @@ public class InMemoryParticipantCodeRepositoryTest {
         InMemoryParticipantCodeRepository repository = new InMemoryParticipantCodeRepository();
         GenerationStrategy outDatedCodeGenerationStrategy = new OutDatedCodeGenerationStrategy();
         GenerationStrategy validCodeGenerationStrategy = new ValidCodeGenerationStrategy();
-        ParticipantCode outdatedCode = new ParticipantCode(outDatedCodeGenerationStrategy);
-        ParticipantCode validCode = new ParticipantCode(validCodeGenerationStrategy);
+        ParticipantCode outdatedCode = new ParticipantCode(null, outDatedCodeGenerationStrategy);
+        ParticipantCode validCode = new ParticipantCode(null, validCodeGenerationStrategy);
         repository.save(outdatedCode);
         repository.save(validCode);
 

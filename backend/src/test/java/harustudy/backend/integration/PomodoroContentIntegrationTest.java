@@ -12,8 +12,6 @@ import harustudy.backend.content.dto.PomodoroContentsResponse;
 import harustudy.backend.content.dto.WritePlanRequest;
 import harustudy.backend.content.dto.WriteRetrospectRequest;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.room.domain.CodeGenerationStrategy;
-import harustudy.backend.room.domain.ParticipantCode;
 import harustudy.backend.room.domain.PomodoroRoom;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -40,13 +38,11 @@ public class PomodoroContentIntegrationTest extends IntegrationTest {
     void setUp() {
         super.setUp();
 
-        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        pomodoroRoom = new PomodoroRoom("roomName", 2, 20, participantCode);
+        pomodoroRoom = new PomodoroRoom("roomName", 2, 20);
         memberDto = createMember("member1");
         pomodoroProgress = new PomodoroProgress(pomodoroRoom, memberDto.member(), "nickname");
         pomodoroContent = new PomodoroContent(pomodoroProgress, 1);
 
-        entityManager.persist(participantCode);
         entityManager.persist(pomodoroRoom);
         entityManager.persist(pomodoroProgress);
         entityManager.persist(pomodoroContent);

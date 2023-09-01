@@ -7,7 +7,10 @@ import lombok.Getter;
 @Getter
 public class ParticipantCode {
 
-    private Long id;
+//    private Long id;
+
+    //    @OneToOne
+    private final Long pomodoroRoomId;
 
     @Transient
     private GenerationStrategy generationStrategy;
@@ -22,8 +25,8 @@ public class ParticipantCode {
     private LocalDateTime createdDate;
 
 
-    public ParticipantCode(GenerationStrategy generationStrategy) {
-        this.id = null;
+    public ParticipantCode(Long pomodoroRoomId, GenerationStrategy generationStrategy) {
+        this.pomodoroRoomId = pomodoroRoomId;
         this.generationStrategy = generationStrategy;
         this.code = generationStrategy.generate();
         this.expirationPeriod = generationStrategy.EXPIRATION_PERIOD_IN_SECONDS;

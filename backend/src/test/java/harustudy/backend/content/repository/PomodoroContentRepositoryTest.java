@@ -6,8 +6,6 @@ import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.room.domain.CodeGenerationStrategy;
-import harustudy.backend.room.domain.ParticipantCode;
 import harustudy.backend.room.domain.PomodoroRoom;
 import java.util.List;
 import java.util.Map;
@@ -34,12 +32,10 @@ class PomodoroContentRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
-        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 3, 20, participantCode);
+        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 3, 20);
         Member member = new Member("member", "email", "imageUrl", LoginType.GUEST);
         pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, "nickname");
 
-        testEntityManager.persist(participantCode);
         testEntityManager.persist(pomodoroRoom);
         testEntityManager.persist(member);
         testEntityManager.persist(pomodoroProgress);

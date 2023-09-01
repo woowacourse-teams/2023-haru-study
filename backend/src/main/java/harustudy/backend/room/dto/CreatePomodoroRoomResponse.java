@@ -1,7 +1,7 @@
 package harustudy.backend.room.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import harustudy.backend.room.domain.ParticipantCode;
+import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.room.domain.PomodoroRoom;
 
 public record CreatePomodoroRoomResponse(@JsonIgnore Long studyId, String participantCode) {

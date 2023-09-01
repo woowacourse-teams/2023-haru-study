@@ -1,7 +1,7 @@
 package harustudy.backend.config;
 
-import harustudy.backend.room.domain.CodeGenerationStrategy;
-import harustudy.backend.room.domain.GenerationStrategy;
+import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
+import harustudy.backend.participantcode.domain.GenerationStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
