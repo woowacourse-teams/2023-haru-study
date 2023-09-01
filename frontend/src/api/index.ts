@@ -39,20 +39,15 @@ export const requestSubmitPlanningForm = (studyId: string, memberId: string, pla
     body: JSON.stringify(plans),
   });
 
-export const requestGetStudyData = (studyId: string, accessToken: string) =>
-  prevHttp.get<ResponseStudyData>(`/api/studies/${studyId}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyData>(`/api/studies/${studyId}`);
 
 export const requestGetMemberStudyListData = (memberId: string, accessToken: string) =>
   prevHttp.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
-export const requestGetStudyMembers = (studyId: string, accessToken: string) =>
-  prevHttp.get<ResponseStudyMembers>(`/api/studies/${studyId}/progresses`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestGetStudyMembers = (studyId: string) =>
+  http.get<ResponseStudyMembers>(`${BASE_URL}/api/studies/${studyId}/progresses`);
 
 export const requestGetMemberRecordContents = (studyId: string, progressId: string) =>
   http.get<ResponseMemberRecordContents>(`${BASE_URL}/api/studies/${studyId}/contents?progressId=${progressId}`);

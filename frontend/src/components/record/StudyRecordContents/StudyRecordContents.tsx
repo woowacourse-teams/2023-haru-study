@@ -17,9 +17,7 @@ const StudyRecordContents = () => {
 
   if (!studyId) throw Error('잘못된 접근입니다.');
 
-  const { isLoading, studyBasicInfo, memberProgresses, refetchStudyRecordData } = useStudyRecord(studyId, {
-    errorHandler: (error) => alert(error.message),
-  });
+  const { isLoading, studyBasicInfo, memberProgresses, refetchStudyRecordData } = useStudyRecord(studyId);
 
   const handleClickResetButton = () => {
     if (isLoading || $rotateAnimation) return;
