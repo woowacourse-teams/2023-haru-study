@@ -41,10 +41,8 @@ export const requestSubmitPlanningForm = (studyId: string, memberId: string, pla
 
 export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyData>(`/api/studies/${studyId}`);
 
-export const requestGetMemberStudyListData = (memberId: string, accessToken: string) =>
-  prevHttp.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestGetMemberStudyListData = (memberId: string) =>
+  http.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`);
 
 export const requestGetStudyMembers = (studyId: string) =>
   http.get<ResponseStudyMembers>(`${BASE_URL}/api/studies/${studyId}/progresses`);

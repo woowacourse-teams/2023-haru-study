@@ -217,7 +217,7 @@ export const studyRecordHandlers = [
   }),
 
   rest.get('/api/studies?memberId=1', (req, res, ctx) => {
-    const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
+    const requestAuthToken = req.headers.get('tokenStorageorization')?.split(' ')[1];
 
     if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_LIST), ctx.delay(400));
 

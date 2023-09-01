@@ -12,9 +12,7 @@ import MemberRecordList from '../MemberRecordList/MemberRecordList';
 const MemberRecordContents = () => {
   const navigate = useNavigate();
 
-  const { name, studyList, isLoading, loginType } = useMemberRecord({
-    errorHandler: (error) => alert(error.message),
-  });
+  const { name, studyList, isLoading, loginType } = useMemberRecord();
 
   if (loginType === 'guest') {
     navigate('/404');
