@@ -10,8 +10,13 @@ export const getCookie = (key: string) => {
   return match ? decodeURIComponent(match[1]) : null;
 };
 
+// 삭제 예정
 export const boolCheckCookie = (key: string) => {
-  return getCookie(key) !== null ? true : false;
+  return Boolean(getCookie(key));
+};
+
+export const hasCookie = (key: string) => {
+  return Boolean(getCookie(key));
 };
 
 export const deleteCookie = (name: string) => {
