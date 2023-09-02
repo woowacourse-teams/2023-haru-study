@@ -51,4 +51,8 @@ export const progressesHandlers = [
       ctx.delay(300),
     );
   }),
+
+  rest.delete('/api/studies/:studyId/progresses/:progressId', (req, res, ctx) => {
+    return res(ctx.status(204));
+  }),
 ];
