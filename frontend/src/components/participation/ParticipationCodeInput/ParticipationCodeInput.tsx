@@ -10,26 +10,12 @@ import useParticipationCode from '@Hooks/participation/useParticipationCode';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-import { useModal } from '@Contexts/ModalProvider';
-
-import { APIError } from '@Errors/index';
-import type { ResponseError } from '@Errors/index';
-
 const ParticipationCodeInput = () => {
   const navigate = useNavigate();
-  const { openAlert } = useModal();
 
   const participantCodeInput = useInput(false);
 
-  const errorHandler = (error: APIError | ResponseError) => {
-    if (error instanceof APIError && error.code === 1300) {
-      openAlert(error.message);
-      return;
-    }
-    alert(error.message);
-  };
-
-  const { authenticateParticipationCode, isLoading } = useParticipationCode(errorHandler);
+  const { authenticateParticipationCode, isLoading } = useParticipationCode();
 
   const handleOnClickParticipateButton = async () => {
     if (!participantCodeInput.state) {
@@ -37,13 +23,11 @@ const ParticipationCodeInput = () => {
       return;
     }
 
-    const data = await authenticateParticipationCode(participantCodeInput.state);
+    const { data } = await authenticateParticipationCode(participantCodeInput.state);
 
-    if (data) {
-      navigate(`${ROUTES_PATH.preparation}/${data.studies[0].studyId}`, {
-        state: { participantCode: participantCodeInput.state, studyName: data.studies[0].name, isHost: false },
-      });
-    }
+    navigate(`${ROUTES_PATH.preparation}/${data.studies[0].studyId}`, {
+      state: { participantCode: participantCodeInput.state, studyName: data.studies[0].name, isHost: false },
+    });
   };
 
   return (

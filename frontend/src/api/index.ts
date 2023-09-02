@@ -140,10 +140,8 @@ export const requestPostCreateStudy = async (
   return { studyId, response };
 };
 
-export const requestAuthenticateParticipationCode = (participantCode: string, accessToken: string) =>
-  prevHttp.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestGetAuthenticateParticipationCode = (participantCode: string) =>
+  http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`);
 
 export const requestCheckProgresses = async (studyId: string, memberId: string, accessToken: string) =>
   prevHttp.get<ResponseProgresses>(`/api/studies/${studyId}/progresses?memberId=${memberId}`, {
