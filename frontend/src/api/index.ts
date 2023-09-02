@@ -17,6 +17,8 @@ import type {
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
+import http from './httpInstance';
+
 const BASE_URL = '';
 
 // 옛날거
@@ -123,21 +125,19 @@ export const requestNextStep = (accessToken: string, studyId: string, progressId
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
-export const requestCreateStudy = async (
+export const requestPostCreateStudy = async (
   studyName: string,
   totalCycle: TotalCycleOptions,
   timePerCycle: StudyTimePerCycleOptions,
-  accessToken: string,
 ) => {
-  const response = await prevHttp.post(`/api/studies`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
+  const response = await http.post<ResponseCreateStudy>(`/api/studies`, {
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
   });
 
   const locationHeader = response.headers.get('Location');
   const studyId = locationHeader?.split('/').pop() as string;
 
-  const result = (await response.json()) as ResponseCreateStudy;
+  const result = response.data;
 
   return { studyId, result };
 };

@@ -36,11 +36,7 @@ const CreateStudyForm = () => {
     isSelectedOptions,
   } = useCreateStudyForm();
 
-  const errorHandler = (error: Error) => {
-    alert(error.message);
-  };
-
-  const { isLoading, createStudy } = useCreateStudy(errorHandler);
+  const { isLoading, createStudy } = useCreateStudy();
 
   const handleClickCreateStudyButton = async () => {
     if (!studyName || !totalCycle || !timePerCycle) {
