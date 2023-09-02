@@ -36,13 +36,13 @@ const useCheckProgresses = (isHost: boolean) => {
       const { data } = await requestGetCheckProgresses(studyId, memberInfo.memberId);
       setNickname(data.progresses[0].nickname);
       setProgressId(data.progresses[0].progressId);
-    } catch (error) {
-      if (error instanceof ApiError) {
-        if (error.code === 1201) return setNickname('');
-        throw error;
+    } catch (reason) {
+      if (reason instanceof ApiError) {
+        if (reason.code === 1201) return setNickname('');
+        throw reason;
       }
 
-      if (error instanceof UnknownApiError) throw error;
+      if (reason instanceof UnknownApiError) throw reason;
     }
   }, [studyId, isHost, memberInfo]);
 
