@@ -19,11 +19,7 @@ type Props = {
 const MemberRegister = ({ studyId, studyName }: Props) => {
   const navigate = useNavigate();
 
-  const errorHandler = (error: Error) => {
-    alert(error.message);
-  };
-
-  const { isLoading, registerProgress } = useRegisterMember(errorHandler);
+  const { isLoading, registerProgress } = useRegisterMember();
 
   const nickNameInput = useInput(true);
 

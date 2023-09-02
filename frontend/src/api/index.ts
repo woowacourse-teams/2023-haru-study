@@ -146,9 +146,8 @@ export const requestGetAuthenticateParticipationCode = (participantCode: string)
 export const requestGetCheckProgresses = async (studyId: string, memberId: string) =>
   http.get<ResponseProgresses>(`/api/studies/${studyId}/progresses?memberId=${memberId}`);
 
-export const requestRegisterProgress = (nickname: string, studyId: string, memberId: string, accessToken: string) =>
-  prevHttp.post(`/api/studies/${studyId}/progresses`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
+export const requestPostRegisterProgress = (nickname: string, studyId: string, memberId: string) =>
+  http.post(`/api/studies/${studyId}/progresses`, {
     body: JSON.stringify({ memberId, nickname }),
   });
 
