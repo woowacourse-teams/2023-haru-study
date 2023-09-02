@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
@@ -22,11 +21,7 @@ const StudyPreparation = () => {
     state: { participantCode, studyName, isHost },
   } = useLocation() as LocationState;
 
-  const errorHandler = useCallback((error: Error) => {
-    alert(error.message);
-  }, []);
-
-  const { nickname, restart, studyId } = useCheckProgresses(isHost, errorHandler);
+  const { nickname, restart, studyId } = useCheckProgresses(isHost);
 
   const isExistMember = Boolean(nickname);
 

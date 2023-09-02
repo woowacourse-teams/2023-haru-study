@@ -143,10 +143,8 @@ export const requestPostCreateStudy = async (
 export const requestGetAuthenticateParticipationCode = (participantCode: string) =>
   http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`);
 
-export const requestCheckProgresses = async (studyId: string, memberId: string, accessToken: string) =>
-  prevHttp.get<ResponseProgresses>(`/api/studies/${studyId}/progresses?memberId=${memberId}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestGetCheckProgresses = async (studyId: string, memberId: string) =>
+  http.get<ResponseProgresses>(`/api/studies/${studyId}/progresses?memberId=${memberId}`);
 
 export const requestRegisterProgress = (nickname: string, studyId: string, memberId: string, accessToken: string) =>
   prevHttp.post(`/api/studies/${studyId}/progresses`, {
@@ -154,7 +152,5 @@ export const requestRegisterProgress = (nickname: string, studyId: string, membe
     body: JSON.stringify({ memberId, nickname }),
   });
 
-export const requestDeleteProgress = (studyId: string, progressId: number, accessToken: string) =>
-  prevHttp.delete(`/api/studies/${studyId}/progresses/${progressId}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestDeleteProgress = (studyId: string, progressId: number) =>
+  http.delete(`/api/studies/${studyId}/progresses/${progressId}`);
