@@ -137,9 +137,7 @@ export const requestPostCreateStudy = async (
   const locationHeader = response.headers.get('Location');
   const studyId = locationHeader?.split('/').pop() as string;
 
-  const result = response.data;
-
-  return { studyId, result };
+  return { studyId, response };
 };
 
 export const requestAuthenticateParticipationCode = (participantCode: string, accessToken: string) =>

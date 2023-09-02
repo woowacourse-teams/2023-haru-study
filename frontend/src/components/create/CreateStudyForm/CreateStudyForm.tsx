@@ -44,13 +44,11 @@ const CreateStudyForm = () => {
       return;
     }
 
-    const data = await createStudy(studyName, totalCycle, timePerCycle);
+    const { response, studyId } = await createStudy(studyName, totalCycle, timePerCycle);
 
-    if (data) {
-      navigate(`${ROUTES_PATH.preparation}/${data.studyId}`, {
-        state: { participantCode: data.result.participantCode, studyName, isHost: true },
-      });
-    }
+    navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
+      state: { participantCode: response.data.participantCode, studyName, isHost: true },
+    });
   };
 
   const handleClickExpectedTime = () => {
