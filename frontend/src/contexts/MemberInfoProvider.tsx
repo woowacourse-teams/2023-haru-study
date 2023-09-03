@@ -55,10 +55,15 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
       return;
     }
 
+    if (!accessToken && !hasRefreshToken) {
+      actions.clearMemberInfo();
+      return;
+    }
+
     if (memberInfo) return;
 
     fetchMemberInfo();
-  }, [navigate, pathname, fetchMemberInfo, memberInfo]);
+  }, [navigate, pathname, fetchMemberInfo, memberInfo, actions]);
 
   return (
     <MemberInfoContext.Provider value={memberInfo}>
