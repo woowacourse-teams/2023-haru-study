@@ -37,12 +37,10 @@ const useCheckProgresses = (isHost: boolean) => {
       setNickname(data.progresses[0].nickname);
       setProgressId(data.progresses[0].progressId);
     } catch (reason) {
-      if (reason instanceof ApiError) {
-        if (reason.code === 1201) return setNickname('');
-        throw reason;
+      if (reason instanceof ApiError && reason.code === 1201) {
+        return setNickname('');
       }
-
-      if (reason instanceof UnknownApiError) throw reason;
+      throw reason;
     }
   }, [studyId, isHost, memberInfo]);
 
