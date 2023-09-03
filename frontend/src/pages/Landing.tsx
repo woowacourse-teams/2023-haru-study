@@ -83,7 +83,7 @@ const Landing = () => {
             </ButtonContainer>
           )}
         </LandingContents>
-        <img src={haruServiceImage} alt="" />
+        <img src={haruServiceImage} alt="목표, 학습, 회고 스탭" />
         <LoadMoreContents>
           <Typography variant="p2">하루 스터디만의 학습 사이클이란?</Typography>
           <DownArrowIcon color={color.black} />
@@ -244,6 +244,8 @@ const Guide = styled.div`
     width: 750px;
     height: 437.5px;
     border-radius: 20px;
+
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
   }
 `;
 
