@@ -28,7 +28,7 @@ http.registerInterceptor({
 
     config.headers = {
       ...config.headers,
-      tokenStorageorization: `Bearer ${tokenStorage.accessToken}`,
+      Authorization: `Bearer ${tokenStorage.accessToken}`,
     };
 
     return config;

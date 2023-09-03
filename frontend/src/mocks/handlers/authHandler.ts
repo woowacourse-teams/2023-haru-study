@@ -35,7 +35,7 @@ export const authHandler = [
   }),
 
   rest.get('/api/me', (req, res, ctx) => {
-    const requestAuthToken = req.headers.get('tokenStorageorization')?.split(' ')[1];
+    const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
     if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(USER_MOCK), ctx.delay(400));
 
