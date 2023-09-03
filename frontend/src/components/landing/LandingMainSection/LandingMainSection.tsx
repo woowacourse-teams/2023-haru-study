@@ -99,9 +99,6 @@ const Layout = styled.section`
 
   img {
     justify-self: flex-end;
-
-    width: 800px;
-    height: 600px;
   }
 `;
 
@@ -142,8 +139,4 @@ const LoadMoreContents = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 10px;
-
-  svg {
-    cursor: pointer;
-  }
 `;
