@@ -20,7 +20,7 @@ const isApiErrorData = (data: object): data is ResponseAPIError => {
   return 'code' in data && 'message' in data;
 };
 
-const http = new Http('', { headers: { 'Content-Type': 'application/json' } });
+const http = new Http(process.env.REACT_APP_BASE_URL, { headers: { 'Content-Type': 'application/json' } });
 
 http.registerInterceptor({
   onRequest: (config) => {
