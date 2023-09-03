@@ -8,12 +8,9 @@ import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-import MemberProfile from '../MemberProfile/MemberProfile';
-
 const LandingContents = () => {
   return (
     <ContentsContainer>
-      <MemberProfile />
       <TopicSummaryContainer>
         <Typography
           variant="h1"

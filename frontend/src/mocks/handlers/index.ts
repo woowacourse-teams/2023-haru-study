@@ -7,10 +7,10 @@ import { studyRecordHandlers } from './studyRecordHandlers';
 import { studyStartHandlers } from './studyStartHandlers';
 
 export const handlers = [
-  ...checkParticipantCodeHandlers,
   ...studyBoardHandlers,
-  ...createStudyHandlers,
   ...studyRecordHandlers,
+  ...checkParticipantCodeHandlers,
+  ...createStudyHandlers,
   ...studyStartHandlers,
   ...authHandler,
   ...progressesHandlers,
