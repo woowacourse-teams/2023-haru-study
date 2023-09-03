@@ -1,10 +1,12 @@
-import type { HttpResponse } from '@Utils/http2';
-import Http from '@Utils/http2';
+import type { HttpResponse } from '@Utils/Http';
+import Http from '@Utils/Http';
 import tokenStorage from '@Utils/tokenStorage';
 
 import type { ResponseAPIError } from '@Types/api';
 
 import { ApiError, UnknownApiError } from '@Errors/index';
+
+const http = new Http(process.env.REACT_APP_BASE_URL, { headers: { 'Content-Type': 'application/json' } });
 
 const refreshAndRefetch = async <T extends object>(response: HttpResponse<T>) => {
   const {
@@ -19,8 +21,6 @@ const refreshAndRefetch = async <T extends object>(response: HttpResponse<T>) =>
 const isApiErrorData = (data: object): data is ResponseAPIError => {
   return 'code' in data && 'message' in data;
 };
-
-const http = new Http(process.env.REACT_APP_BASE_URL, { headers: { 'Content-Type': 'application/json' } });
 
 http.registerInterceptor({
   onRequest: (config) => {

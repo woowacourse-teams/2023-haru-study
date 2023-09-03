@@ -1,70 +1,100 @@
-import type { ResponseAPIError } from '@Types/api';
-
-import { APIError, OfflineError, ResponseError } from '@Errors/index';
-
-const isAPIErrorData = (data: ResponseAPIError | undefined): data is ResponseAPIError => {
-  return (data as ResponseAPIError).code !== undefined;
+export type HttpResponse<T extends object> = {
+  data: T;
+  config: RequestInit;
+  headers: Headers;
+  ok: boolean;
+  redirected: boolean;
+  status: number;
+  statusText: string;
+  type: ResponseType;
+  url: string;
 };
 
-const fetchAPI = async (url: string, config: RequestInit) => {
-  if (!navigator.onLine) throw new OfflineError();
+type Interceptor = {
+  onRequest: (config: RequestInit) => RequestInit;
+  onResponse: <T extends object>(response: HttpResponse<T>) => HttpResponse<T> | PromiseLike<HttpResponse<T>>;
+  onRequestError: (reason: unknown) => Promise<never>;
+  onResponseError: (reason: unknown) => Promise<never>;
+};
 
-  try {
-    const response = await fetch(url, config);
+const processHttpResponse = async <T extends object>(response: Response, config: RequestInit) => {
+  const data = (await response.json().catch(() => ({}))) as T;
+  const { headers, ok, redirected, status, statusText, type, url } = response;
+  return { data, config, headers, ok, redirected, status, statusText, type, url };
+};
 
-    if (!response.ok) {
-      const data = (await response.json()) as ResponseAPIError | undefined;
+class Http {
+  private baseURL;
 
-      if (isAPIErrorData(data)) {
-        throw new APIError(data.message, data.code);
-      }
+  private defaultConfig: RequestInit;
 
-      throw new ResponseError();
-    }
+  private interceptor: Interceptor;
 
-    return response;
-  } catch (error) {
-    if (error instanceof APIError) throw error;
-
-    throw new ResponseError();
+  constructor(baseURL = '', defaultConfig: RequestInit = {}) {
+    this.baseURL = baseURL;
+    this.defaultConfig = defaultConfig;
+    this.interceptor = {
+      onRequest: (config) => config,
+      onResponse: (response) => response,
+      onRequestError: (reason) => Promise.reject(reason),
+      onResponseError: (reason) => Promise.reject(reason),
+    };
   }
-};
 
-const http = {
-  get: async <T>(url: string, config: RequestInit = {}) => {
-    const response = await fetchAPI(url, {
+  registerInterceptor(interceptor: Partial<Interceptor>) {
+    this.interceptor = {
+      ...this.interceptor,
+      ...interceptor,
+    };
+  }
+
+  request<T extends object = object>(url: string, config: RequestInit) {
+    try {
+      config = { ...this.defaultConfig, ...this.interceptor.onRequest(config) };
+
+      return fetch(`${this.baseURL}${url}`, config)
+        .then((response) => processHttpResponse<T>(response, config))
+        .then(this.interceptor.onResponse)
+        .catch(this.interceptor.onResponseError);
+    } catch (reason) {
+      return this.interceptor.onRequestError(reason);
+    }
+  }
+
+  get<T extends object>(url: string, config: RequestInit = {}) {
+    return this.request<T>(url, {
       ...config,
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...config.headers,
-      },
     });
+  }
 
-    return response.json() as T;
-  },
-
-  post: (url: string, config: RequestInit = {}) => {
-    return fetchAPI(url, {
+  post<T extends object>(url: string, config: RequestInit = {}) {
+    return this.request<T>(url, {
       ...config,
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...config.headers,
-      },
     });
-  },
+  }
 
-  delete: (url: string, config: RequestInit = {}) => {
-    return fetchAPI(url, {
+  patch<T extends object>(url: string, config: RequestInit = {}) {
+    return this.request<T>(url, {
+      ...config,
+      method: 'PATCH',
+    });
+  }
+
+  put<T extends object>(url: string, config: RequestInit = {}) {
+    return this.request<T>(url, {
+      ...config,
+      method: 'PUT',
+    });
+  }
+
+  delete<T extends object>(url: string, config: RequestInit = {}) {
+    return this.request<T>(url, {
       ...config,
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        ...config.headers,
-      },
     });
-  },
-};
+  }
+}
 
-export default http;
+export default Http;
