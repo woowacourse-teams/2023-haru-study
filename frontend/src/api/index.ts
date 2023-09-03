@@ -17,6 +17,8 @@ import type {
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
+import http from './httpInstance';
+
 const BASE_URL = '';
 
 // 옛날거
@@ -37,45 +39,26 @@ export const requestSubmitPlanningForm = (studyId: string, memberId: string, pla
     body: JSON.stringify(plans),
   });
 
-export const requestGetStudyData = (studyId: string, accessToken: string) =>
-  prevHttp.get<ResponseStudyData>(`/api/studies/${studyId}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyData>(`/api/studies/${studyId}`);
 
-export const requestGetMemberStudyListData = (memberId: string, accessToken: string) =>
-  prevHttp.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestGetMemberStudyListData = (memberId: string) =>
+  http.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`);
 
-export const requestGetStudyMembers = (studyId: string, accessToken: string) =>
-  prevHttp.get<ResponseStudyMembers>(`/api/studies/${studyId}/progresses`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestGetStudyMembers = (studyId: string) =>
+  http.get<ResponseStudyMembers>(`${BASE_URL}/api/studies/${studyId}/progresses`);
 
-export const requestGetMemberRecordContents = (studyId: string, progressId: string, accessToken: string) =>
-  prevHttp.get<ResponseMemberRecordContents>(`/api/studies/${studyId}/contents?progressId=${progressId}`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestGetMemberRecordContents = (studyId: string, progressId: string) =>
+  http.get<ResponseMemberRecordContents>(`${BASE_URL}/api/studies/${studyId}/contents?progressId=${progressId}`);
 
 // 새로 적용되는 api
-export const requestGuestLogin = async () => {
-  const response = await prevHttp.post(`${BASE_URL}/api/auth/guest`);
+export const requestPostGuestLogin = () => http.post<ResponseAuthToken>(`${BASE_URL}/api/auth/guest`);
 
-  return (await response.json()) as ResponseAuthToken;
-};
-
-export const requestOAuthLogin = async (provider: OAuthProvider, code: string) => {
-  const response = await prevHttp.post(`${BASE_URL}/api/auth/login`, {
+export const requestPostOAuthLogin = (provider: OAuthProvider, code: string) =>
+  http.post<ResponseAuthToken>(`${BASE_URL}/api/auth/login`, {
     body: JSON.stringify({ oauthProvider: provider, code }),
   });
 
-  return (await response.json()) as ResponseAuthToken;
-};
-
-export const requestMemberInfo = (accessToken: string) =>
-  prevHttp.get<ResponseMemberInfo>('/api/me', {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export const requestGetMemberInfo = () => http.get<ResponseMemberInfo>('/api/me');
 
 export const requestAccessTokenRefresh = async () => {
   const response = await prevHttp.post(`${BASE_URL}/api/auth/refresh`);

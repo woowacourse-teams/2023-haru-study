@@ -9,7 +9,7 @@ import { ApiError, UnknownApiError } from '@Errors/index';
 const refreshAndRefetch = async <T extends object>(response: HttpResponse<T>) => {
   const {
     data: { accessToken },
-  } = await http.post<{ accessToken: string }>('/api/tokenStorage/refresh');
+  } = await http.post<{ accessToken: string }>('/api/auth/refresh');
 
   tokenStorage.setAccessToken(accessToken);
 
@@ -28,7 +28,7 @@ http.registerInterceptor({
 
     config.headers = {
       ...config.headers,
-      tokenStorageorization: `Bearer ${tokenStorage.accessToken}`,
+      Authorization: `Bearer ${tokenStorage.accessToken}`,
     };
 
     return config;

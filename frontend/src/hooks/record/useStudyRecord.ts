@@ -1,20 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { ROUTES_PATH } from '@Constants/routes';
-
-import { boolCheckCookie } from '@Utils/cookie';
-
-import { requestAccessTokenRefresh, requestGetStudyData, requestGetStudyMembers } from '@Apis/index';
+import { requestGetStudyData, requestGetStudyMembers } from '@Apis/index';
 
 import type { MemberProgress, StudyBasicInfo } from '@Types/study';
 
-import { APIError, ResponseError } from '@Errors/index';
-
-const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error) => void }) => {
-  const navigate = useNavigate();
-
+const useStudyRecord = (studyId: string) => {
   const [isLoading, setIsLoading] = useState(true);
   const [studyBasicInfo, setStudyBasicInfo] = useState<StudyBasicInfo | null>(null);
   const [memberProgresses, setMemberProgresses] = useState<MemberProgress[]>([]);
@@ -33,64 +24,15 @@ const useStudyRecord = (studyId: string, options?: { errorHandler: (error: Error
     setMemberProgresses(members);
   };
 
-  const getAccessTokenRefresh = async () => {
-    try {
-      const hasRefreshToken = boolCheckCookie('refreshToken');
-
-      if (!hasRefreshToken) {
-        navigate(ROUTES_PATH.login);
-        return;
-      }
-
-      const { accessToken } = await requestAccessTokenRefresh();
-
-      sessionStorage.setItem('accessToken', accessToken);
-
-      return accessToken;
-    } catch (error) {
-      if (error instanceof Error) return options?.errorHandler(error);
-    }
-  };
-
   const fetchStudyRecordData = useCallback(async () => {
-    try {
-      setIsLoading(true);
+    setIsLoading(true);
 
-      const accessToken = sessionStorage.getItem('accessToken');
+    const { data: basicInfo } = await requestGetStudyData(studyId);
+    const { data } = await requestGetStudyMembers(studyId);
 
-      if (!accessToken) {
-        const error = new Error('토큰이 없습니다. 다시 로그인 해주세요.');
-        options?.errorHandler(error);
-        navigate(ROUTES_PATH.login);
-        return;
-      }
+    setInitInfo(basicInfo, data.progresses);
 
-      const basicInfo = await requestGetStudyData(studyId, accessToken);
-      const { progresses } = await requestGetStudyMembers(studyId, accessToken);
-
-      setInitInfo(basicInfo, progresses);
-    } catch (error) {
-      if (error instanceof APIError) {
-        if (error.code === 1403) {
-          const accessToken = await getAccessTokenRefresh();
-
-          if (!accessToken) return;
-
-          const basicInfo = await requestGetStudyData(studyId, accessToken);
-          const { progresses } = await requestGetStudyMembers(studyId, accessToken);
-
-          setInitInfo(basicInfo, progresses);
-        }
-
-        if (error.code === 1500) {
-          navigate('/404');
-        }
-      }
-
-      if (error instanceof ResponseError) return options?.errorHandler(error);
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(false);
   }, [studyId]);
 
   useEffect(() => {
