@@ -50,6 +50,7 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
       const { data } = await requestGetMemberInfo();
       actions.initMemberInfo(data);
     } catch (reason) {
+      // Interceptor로 로직 변경 예정
       if (reason instanceof ApiError && (reason.code === 1402 || reason.code === 1405)) {
         actions.clearMemberInfo();
         return;
