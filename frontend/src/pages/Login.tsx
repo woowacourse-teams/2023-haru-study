@@ -25,11 +25,11 @@ const Login = () => {
         $style={css`
           display: inline;
 
-          font-size: 6rem;
+          font-size: 2.4rem;
           font-weight: 200;
         `}
       >
-        <Emphasis>하루</Emphasis>스터디
+        <Emphasis>하루</Emphasis>스터디 로그인
       </Typography>
       <ButtonContainer>
         <a href={googleOAuthUrl}>
@@ -54,14 +54,13 @@ const Login = () => {
 export default Login;
 
 const Layout = styled.div`
-  width: 100vw;
-  height: 100vh;
-
   display: flex;
   flex-direction: column;
   gap: 40px;
   justify-content: center;
   align-items: center;
+
+  padding: 40px 0px;
 `;
 
 const ButtonContainer = styled.div`
