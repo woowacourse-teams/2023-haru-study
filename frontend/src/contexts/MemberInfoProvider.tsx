@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES_PATH } from '@Constants/routes';
 
 import { deleteCookie, hasCookie } from '@Utils/cookie';
+import tokenStorage from '@Utils/tokenStorage';
 
 import { requestGetMemberInfo } from '@Apis/index';
 
@@ -48,7 +49,7 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     if (pathname === ROUTES_PATH.auth) return;
 
-    const accessToken = sessionStorage.getItem('accessToken');
+    const accessToken = tokenStorage.accessToken;
     const hasRefreshToken = hasCookie('refreshToken');
     if (pathname === ROUTES_PATH.login && (accessToken || hasRefreshToken)) {
       navigate(ROUTES_PATH.landing);
