@@ -64,17 +64,4 @@ export const authHandler = [
       ctx.cookie('refreshToken', Date.now().toString()),
     );
   }),
-
-  rest.post('/api/tokenStorage/refresh', (req, res, ctx) => {
-    const newAccessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxMjM0NTY3fQ.NUiutjXo0mcIBU5fWxfjpBEvPxakFiBaUCg4THKAYpQ';
-
-    return res(
-      ctx.delay(300),
-      ctx.json({
-        accessToken: newAccessToken,
-      }),
-      ctx.cookie('refreshToken', Date.now().toString()),
-    );
-  }),
 ];
