@@ -14,7 +14,9 @@ const useCreateStudy = () => {
   ) => {
     try {
       setIsLoading(true);
-      return await requestPostCreateStudy(studyName, totalCycle, timePerCycle);
+      const { studyId, response } = await requestPostCreateStudy(studyName, totalCycle, timePerCycle);
+      const { data } = response;
+      return { studyId, data };
     } finally {
       setIsLoading(false);
     }

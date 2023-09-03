@@ -44,10 +44,10 @@ const CreateStudyForm = () => {
       return;
     }
 
-    const { response, studyId } = await createStudy(studyName, totalCycle, timePerCycle);
+    const { studyId, data } = await createStudy(studyName, totalCycle, timePerCycle);
 
     navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
-      state: { participantCode: response.data.participantCode, studyName, isHost: true },
+      state: { participantCode: data.participantCode, studyName, isHost: true },
     });
   };
 
