@@ -100,6 +100,13 @@ const Layout = styled.section`
   img {
     justify-self: flex-end;
   }
+
+  @media screen and (max-width: 800px) {
+    grid-template-columns: 1fr;
+    img {
+      display: none;
+    }
+  }
 `;
 
 const LandingContents = styled.div`
@@ -108,6 +115,10 @@ const LandingContents = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
+
+  @media screen and (max-width: 800px) {
+    justify-self: center;
+  }
 `;
 
 const ButtonLoading = styled.div`
@@ -129,6 +140,11 @@ const ButtonContainer = styled.div<ButtonContainerProps>`
   ${({ $isLogin }) => css`
     grid-template-columns: ${$isLogin ? '1fr 1fr' : '1fr'};
   `}
+
+  @media screen and (max-width: 800px) {
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+  }
 `;
 
 const LoadMoreContents = styled.div`

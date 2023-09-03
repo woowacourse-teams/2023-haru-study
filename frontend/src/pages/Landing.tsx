@@ -1,10 +1,9 @@
 import { styled } from 'styled-components';
 
 import Header from '@Components/common/Header/Header';
+import GuideSection from '@Components/landing/GuideSection/GuideSection';
 import LandingMainSection from '@Components/landing/LandingMainSection/LandingMainSection';
 import MemberProfile from '@Components/landing/MemberProfile/MemberProfile';
-
-import GuideSection from './GuideSection/GuideSection';
 
 const Landing = () => {
   return (
