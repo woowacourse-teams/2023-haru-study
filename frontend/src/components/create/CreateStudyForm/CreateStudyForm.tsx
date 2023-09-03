@@ -36,11 +36,7 @@ const CreateStudyForm = () => {
     isSelectedOptions,
   } = useCreateStudyForm();
 
-  const errorHandler = (error: Error) => {
-    alert(error.message);
-  };
-
-  const { isLoading, createStudy } = useCreateStudy(errorHandler);
+  const { isLoading, createStudy } = useCreateStudy();
 
   const handleClickCreateStudyButton = async () => {
     if (!studyName || !totalCycle || !timePerCycle) {
@@ -48,13 +44,11 @@ const CreateStudyForm = () => {
       return;
     }
 
-    const data = await createStudy(studyName, totalCycle, timePerCycle);
+    const { studyId, data } = await createStudy(studyName, totalCycle, timePerCycle);
 
-    if (data) {
-      navigate(`${ROUTES_PATH.preparation}/${data.studyId}`, {
-        state: { participantCode: data.result.participantCode, studyName, isHost: true },
-      });
-    }
+    navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
+      state: { participantCode: data.participantCode, studyName, isHost: true },
+    });
   };
 
   const handleClickExpectedTime = () => {
