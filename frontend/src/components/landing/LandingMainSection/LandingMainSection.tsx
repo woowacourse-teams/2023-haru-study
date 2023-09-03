@@ -12,7 +12,7 @@ import { ROUTES_PATH } from '@Constants/routes';
 import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 import { useModal } from '@Contexts/ModalProvider';
 
-import DownArrowIcon from '@Assets/icons/DownArrowIcon';
+import ArrowIcon from '@Assets/icons/ArrowIcon';
 import haruServiceImage from '@Assets/image/haruServiceImage.png';
 
 import LoginModal from '../LoginModal/LoginModal';
@@ -76,7 +76,7 @@ const LandingMainSection = () => {
       <img src={haruServiceImage} alt="목표, 학습, 회고 스탭" />
       <LoadMoreContents>
         <Typography variant="p2">하루 스터디만의 학습 사이클이란?</Typography>
-        <DownArrowIcon color={color.black} />
+        <ArrowIcon direction="down" />
       </LoadMoreContents>
     </Layout>
   );

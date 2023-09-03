@@ -7,8 +7,8 @@ import { studyRecordHandlers } from './studyRecordHandlers';
 import { studyStartHandlers } from './studyStartHandlers';
 
 export const handlers = [
-  ...studyBoardHandlers,
   ...studyRecordHandlers,
+  ...studyBoardHandlers,
   ...checkParticipantCodeHandlers,
   ...createStudyHandlers,
   ...studyStartHandlers,
