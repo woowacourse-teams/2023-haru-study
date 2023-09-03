@@ -5,7 +5,7 @@ import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
 import { requestDeleteProgress, requestGetCheckProgresses } from '@Apis/index';
 
-import { ApiError, UnknownApiError } from '../../errors';
+import { ApiError } from '../../errors';
 
 const useCheckProgresses = (isHost: boolean) => {
   const { studyId } = useParams();
