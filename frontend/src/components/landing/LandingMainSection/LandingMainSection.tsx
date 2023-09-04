@@ -15,7 +15,7 @@ import { useModal } from '@Contexts/ModalProvider';
 import ArrowIcon from '@Assets/icons/ArrowIcon';
 import haruServiceImage from '@Assets/image/haruServiceImage.png';
 
-import LoginModal from '../LoginModal/LoginModal';
+import LoginModalContents from '../LoginModalContents/LoginModalContents';
 
 const LandingMainSection = () => {
   const { openModal } = useModal();
@@ -64,7 +64,7 @@ const LandingMainSection = () => {
               <Button
                 variant="primary"
                 onClick={() => {
-                  openModal(<LoginModal />);
+                  openModal(<LoginModalContents />);
                 }}
               >
                 하루스터디 시작하기
