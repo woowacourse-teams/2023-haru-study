@@ -1,22 +1,28 @@
 import { styled } from 'styled-components';
 
-import Hero from '@Components/landing/Hero/Hero';
-import LandingContents from '@Components/landing/LandingContents/LandingContents';
+import Header from '@Components/common/Header/Header';
+import GuideSection from '@Components/landing/GuideSection/GuideSection';
+import LandingMainSection from '@Components/landing/LandingMainSection/LandingMainSection';
+import MemberProfile from '@Components/landing/MemberProfile/MemberProfile';
 
 const Landing = () => {
   return (
-    <LandingLayout>
-      <Hero />
-      <LandingContents />
-    </LandingLayout>
+    <>
+      <LandingHeader>
+        <Header />
+        <MemberProfile />
+      </LandingHeader>
+      <LandingMainSection />
+      <GuideSection />
+    </>
   );
 };
 
 export default Landing;
 
-const LandingLayout = styled.div`
-  display: grid;
-  grid-template-columns: auto 450px;
+const LandingHeader = styled.div`
+  display: flex;
+  align-items: center;
 
-  height: 100vh;
+  padding-right: 40px;
 `;

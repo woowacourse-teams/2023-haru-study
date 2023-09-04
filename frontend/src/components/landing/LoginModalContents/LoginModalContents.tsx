@@ -13,7 +13,7 @@ import GoogleIcon from '@Assets/icons/GoogleIcon';
 
 const REDIRECT_URI_PARAMETER = '/auth?provider=google';
 
-const Login = () => {
+const LoginModalContents = () => {
   const baseUri = `${window.location.protocol}//${window.location.host}`;
 
   const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${baseUri}${REDIRECT_URI_PARAMETER}`;
@@ -25,11 +25,11 @@ const Login = () => {
         $style={css`
           display: inline;
 
-          font-size: 6rem;
+          font-size: 2.4rem;
           font-weight: 200;
         `}
       >
-        <Emphasis>하루</Emphasis>스터디
+        <Emphasis>하루</Emphasis>스터디 로그인
       </Typography>
       <ButtonContainer>
         <a href={googleOAuthUrl}>
@@ -51,17 +51,16 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginModalContents;
 
 const Layout = styled.div`
-  width: 100vw;
-  height: 100vh;
-
   display: flex;
   flex-direction: column;
   gap: 40px;
   justify-content: center;
   align-items: center;
+
+  padding: 40px 0px;
 `;
 
 const ButtonContainer = styled.div`

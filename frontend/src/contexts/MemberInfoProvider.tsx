@@ -4,24 +4,29 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-import { deleteCookie, hasCookie } from '@Utils/cookie';
 import tokenStorage from '@Utils/tokenStorage';
 
 import { requestGetMemberInfo } from '@Apis/index';
 
 import type { MemberInfo } from '@Types/member';
 
+import { ApiError } from '@Errors/index';
+
 type Actions = {
   initMemberInfo: (memberInfo: MemberInfo) => void;
   clearMemberInfo: () => void;
 };
 
-const MemberInfoContext = createContext<MemberInfo | null>(null);
+const MemberInfoContext = createContext<{ memberInfo: MemberInfo | null; isLoading: boolean }>({
+  memberInfo: null,
+  isLoading: false,
+});
 
 const MemberInfoActionContext = createContext<Actions | null>(null);
 
 const MemberInfoProvider = ({ children }: PropsWithChildren) => {
   const [memberInfo, setMemberInfo] = useState<MemberInfo | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -32,42 +37,47 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
         setMemberInfo(memberInfo);
       },
       clearMemberInfo: () => {
-        navigate(ROUTES_PATH.login);
-        sessionStorage.removeItem('accessToken');
-        deleteCookie('refreshToken');
+        tokenStorage.clear();
         setMemberInfo(null);
+        navigate(ROUTES_PATH.landing);
       },
     }),
     [navigate],
   );
 
   const fetchMemberInfo = useCallback(async () => {
-    const { data } = await requestGetMemberInfo();
-    actions.initMemberInfo(data);
+    try {
+      const { data } = await requestGetMemberInfo();
+      actions.initMemberInfo(data);
+    } catch (reason) {
+      // Interceptor로 로직 변경 예정
+      if (reason instanceof ApiError && (reason.code === 1402 || reason.code === 1405)) {
+        actions.clearMemberInfo();
+        return;
+      }
+
+      throw reason;
+    } finally {
+      setIsLoading(false);
+    }
   }, [actions]);
 
   useEffect(() => {
     if (pathname === ROUTES_PATH.auth) return;
-
-    const accessToken = tokenStorage.accessToken;
-    const hasRefreshToken = hasCookie('refreshToken');
-    if (pathname === ROUTES_PATH.login && (accessToken || hasRefreshToken)) {
-      navigate(ROUTES_PATH.landing);
-      return;
-    }
-
-    if (!accessToken && !hasRefreshToken) {
-      actions.clearMemberInfo();
-      return;
-    }
 
     if (memberInfo) return;
 
     fetchMemberInfo();
   }, [navigate, pathname, fetchMemberInfo, memberInfo, actions]);
 
+  useEffect(() => {
+    if (!memberInfo && !isLoading) {
+      navigate(ROUTES_PATH.landing);
+    }
+  }, [isLoading, memberInfo, navigate]);
+
   return (
-    <MemberInfoContext.Provider value={memberInfo}>
+    <MemberInfoContext.Provider value={{ memberInfo, isLoading }}>
       <MemberInfoActionContext.Provider value={actions}>{children}</MemberInfoActionContext.Provider>
     </MemberInfoContext.Provider>
   );
@@ -78,7 +88,7 @@ export default MemberInfoProvider;
 export const useMemberInfo = () => {
   const value = useContext(MemberInfoContext);
 
-  return { data: value };
+  return { data: value.memberInfo, isLoading: value.isLoading };
 };
 
 export const useMemberInfoAction = () => {
