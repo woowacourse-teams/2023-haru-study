@@ -1,27 +1,15 @@
-import { Link } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
-import Button from '@Components/common/Button/Button';
-import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
-import { ROUTES_PATH } from '@Constants/routes';
-
-import { useMemberInfo } from '@Contexts/MemberInfoProvider';
-import { useModal } from '@Contexts/ModalProvider';
-
 import ArrowIcon from '@Assets/icons/ArrowIcon';
 import haruServiceImage from '@Assets/image/haruServiceImage.png';
 
-import LoginModalContents from '../LoginModalContents/LoginModalContents';
+import LandingButton from '../LandingButton/LandingButton';
 
 const LandingMainSection = () => {
-  const { openModal } = useModal();
-  const { data, isLoading } = useMemberInfo();
-  const isLogin = !!data;
-
   return (
     <Layout>
       <LandingContents>
@@ -40,38 +28,7 @@ const LandingMainSection = () => {
           <br />
           하루스터디 어쩌구 설명 하루스터디 어쩌구 설명 하루스터디 어쩌구
         </Typography>
-        {isLoading ? (
-          <ButtonLoading>
-            <CircularProgress
-              $style={css`
-                border: 2px solid ${color.blue[500]};
-                border-color: ${color.blue[500]} transparent transparent transparent;
-              `}
-            />
-          </ButtonLoading>
-        ) : (
-          <ButtonContainer $isLogin={isLogin}>
-            {isLogin ? (
-              <>
-                <Link to={ROUTES_PATH.create}>
-                  <Button variant="primary">스터디 개설하기</Button>
-                </Link>
-                <Link to={ROUTES_PATH.participation}>
-                  <Button variant="outlined">스터디 참여하기</Button>
-                </Link>
-              </>
-            ) : (
-              <Button
-                variant="primary"
-                onClick={() => {
-                  openModal(<LoginModalContents />);
-                }}
-              >
-                하루스터디 시작하기
-              </Button>
-            )}
-          </ButtonContainer>
-        )}
+        <LandingButton />
       </LandingContents>
       <img src={haruServiceImage} alt="목표, 학습, 회고 스탭" />
       <LoadMoreContents>
@@ -95,7 +52,7 @@ const Layout = styled.section`
   padding: 0px 80px;
 
   height: calc(100vh - 140px);
-  min-height: 800px;
+  min-height: 500px;
 
   img {
     justify-self: flex-end;
@@ -118,32 +75,6 @@ const LandingContents = styled.div`
 
   @media screen and (max-width: 800px) {
     justify-self: center;
-  }
-`;
-
-const ButtonLoading = styled.div`
-  height: 70px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-type ButtonContainerProps = {
-  $isLogin: boolean;
-};
-
-const ButtonContainer = styled.div<ButtonContainerProps>`
-  display: grid;
-  column-gap: 10px;
-
-  ${({ $isLogin }) => css`
-    grid-template-columns: ${$isLogin ? '1fr 1fr' : '1fr'};
-  `}
-
-  @media screen and (max-width: 800px) {
-    grid-template-columns: 1fr;
-    row-gap: 20px;
   }
 `;
 
