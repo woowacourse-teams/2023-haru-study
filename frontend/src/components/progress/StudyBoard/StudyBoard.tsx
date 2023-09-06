@@ -1,8 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { css, styled } from 'styled-components';
+import { styled, css } from 'styled-components';
 
-import Sidebar from '@Components/board/Sidebar/Sidebar';
-import StepContents from '@Components/board/StepContents/StepContents';
 import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
 
 import useStudyBoard from '@Hooks/board/useStudyBoard';
@@ -10,6 +8,9 @@ import useStudyBoard from '@Hooks/board/useStudyBoard';
 import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
+
+import Sidebar from '../Sidebar/Sidebar';
+import StepContents from '../StepContents/StepContents';
 
 const StudyBoard = () => {
   const navigate = useNavigate();
@@ -41,18 +42,18 @@ const StudyBoard = () => {
   }
 
   return (
-    <Layout>
+    <Container>
       <Sidebar step={progressInfo.step} cycle={progressInfo.currentCycle} studyMinutes={studyInfo.timePerCycle} />
       <Contents>
         <StepContents studyInfo={studyInfo} progressInfo={progressInfo} changeNextStep={changeNextStep} />
       </Contents>
-    </Layout>
+    </Container>
   );
 };
 
 export default StudyBoard;
 
-const Layout = styled.div`
+const Container = styled.div`
   width: 100%;
   display: flex;
 `;

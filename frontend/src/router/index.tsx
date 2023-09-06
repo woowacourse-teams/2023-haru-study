@@ -4,11 +4,11 @@ import Auth from '@Pages/Auth';
 import CreateStudy from '@Pages/CreateStudy';
 import Landing from '@Pages/Landing';
 import Login from '@Pages/Login';
-import NotFoundPage from '@Pages/NotFoundPage';
 import MemberRecord from '@Pages/MemberRecord';
-import StudyBoard from '@Pages/StudyBoard';
+import NotFoundPage from '@Pages/NotFoundPage';
 import StudyParticipation from '@Pages/StudyParticipation';
 import StudyPreparation from '@Pages/StudyPreparation';
+import StudyProgress from '@Pages/StudyProgress';
 import StudyRecord from '@Pages/StudyRecord';
 
 import { ROUTES_PATH } from '@Constants/routes';
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
       },
       {
         path: `${ROUTES_PATH.board}/:studyId`,
-        element: <StudyBoard />,
+        element: <StudyProgress />,
       },
       {
         path: `${ROUTES_PATH.record}/:studyId`,

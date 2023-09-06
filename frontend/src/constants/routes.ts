@@ -2,7 +2,7 @@ export const ROUTES_PATH = {
   landing: '/',
   login: '/login',
   auth: '/auth',
-  board: '/board',
+  board: '/progress',
   record: '/record',
   create: '/create',
   preparation: '/preparation',
