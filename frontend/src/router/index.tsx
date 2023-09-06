@@ -34,7 +34,7 @@ const router = createBrowserRouter([
         element: <Auth />,
       },
       {
-        path: `${ROUTES_PATH.board}/:studyId`,
+        path: `${ROUTES_PATH.progress}/:studyId`,
         element: <StudyProgress />,
       },
       {
