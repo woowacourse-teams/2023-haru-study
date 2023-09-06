@@ -5,13 +5,14 @@ import Button from '@Components/common/Button/Button';
 import QuestionTextarea from '@Components/common/QuestionTextarea/QuestionTextarea';
 import Typography from '@Components/common/Typography/Typography';
 
-import useRetrospectForm from '@Hooks/board/useRetrospectForm';
 import useDisplay from '@Hooks/common/useDisplay';
 
 import { ROUTES_PATH } from '@Constants/routes';
 import { RETROSPECT_QUESTIONS } from '@Constants/study';
 
 import ArrowIcon from '@Assets/icons/ArrowIcon';
+
+import useRetrospectForm from '../hooks/useRetrospectForm';
 
 type Props = {
   isLastCycle: boolean;

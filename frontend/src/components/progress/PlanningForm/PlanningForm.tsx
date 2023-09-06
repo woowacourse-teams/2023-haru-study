@@ -4,7 +4,6 @@ import Button from '@Components/common/Button/Button';
 import QuestionTextarea from '@Components/common/QuestionTextarea/QuestionTextarea';
 import Typography from '@Components/common/Typography/Typography';
 
-import usePlanningForm from '@Hooks/board/usePlanningForm';
 import useDisplay from '@Hooks/common/useDisplay';
 
 import { PLAN_QUESTIONS } from '@Constants/study';
@@ -14,6 +13,7 @@ import { useModal } from '@Contexts/ModalProvider';
 import ArrowIcon from '@Assets/icons/ArrowIcon';
 
 import GuideModal from '../GuideModal/GuideModal';
+import usePlanningForm from '../hooks/usePlanningForm';
 
 type Props = {
   onClickSubmitButton: () => Promise<void>;

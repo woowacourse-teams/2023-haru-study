@@ -3,11 +3,11 @@ import { css, styled } from 'styled-components';
 import Button from '@Components/common/Button/Button';
 import Typography from '@Components/common/Typography/Typography';
 
-import useTimer from '@Hooks/board/useTimer';
-
 import color from '@Styles/color';
 
 import type { Step } from '@Types/study';
+
+import useTimer from '../hooks/useTimer';
 
 const BUTTON_COLOR: Record<Step, string> = {
   planning: color.blue[500],

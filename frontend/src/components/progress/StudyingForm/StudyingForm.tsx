@@ -5,8 +5,6 @@ import Button from '@Components/common/Button/Button';
 import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
 import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
 
-import useStudyingForm from '@Hooks/board/useStudyingForm';
-
 import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
@@ -15,6 +13,8 @@ import { PLAN_KEYWORDS } from '@Constants/study';
 import { getKeys } from '@Utils/getKeys';
 
 import type { Plan } from '@Types/study';
+
+import useStudyingForm from '../hooks/useStudyingForm';
 
 type Props = {
   onClickSubmitButton: () => Promise<void>;

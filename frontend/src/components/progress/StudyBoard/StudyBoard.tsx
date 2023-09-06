@@ -3,14 +3,13 @@ import { styled, css } from 'styled-components';
 
 import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
 
-import useStudyBoard from '@Hooks/board/useStudyBoard';
-
 import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
 import Sidebar from '../Sidebar/Sidebar';
 import StepContents from '../StepContents/StepContents';
+import useStudyBoard from '../hooks/useStudyBoard';
 
 const StudyBoard = () => {
   const navigate = useNavigate();
