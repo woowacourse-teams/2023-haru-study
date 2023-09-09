@@ -60,8 +60,8 @@ export const requestNextStep = (studyId: string, progressId: string) =>
 
 export const requestPostCreateStudy = async (
   studyName: string,
-  totalCycle: TotalCycleOptions,
-  timePerCycle: StudyTimePerCycleOptions,
+  totalCycle: TotalCycleOptions | null,
+  timePerCycle: StudyTimePerCycleOptions | null,
 ) => {
   const response = await http.post<ResponseCreateStudy>(`/api/studies`, {
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),

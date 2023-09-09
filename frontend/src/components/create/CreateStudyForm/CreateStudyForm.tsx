@@ -36,19 +36,18 @@ const CreateStudyForm = () => {
     isSelectedOptions,
   } = useCreateStudyForm();
 
-  const { isLoading, createStudy } = useCreateStudy();
+  const { mutate, isLoading } = useCreateStudy(studyName, totalCycle, timePerCycle);
 
   const handleClickCreateStudyButton = async () => {
-    if (!studyName || !totalCycle || !timePerCycle) {
-      alert('이름의 길이와, 사이클 수, 사이클 당 시간을 다시 한번 확인해주세요');
-      return;
+    const result = await mutate();
+
+    if (result) {
+      const { studyId, response } = result;
+
+      navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
+        state: { participantCode: response.data.participantCode, studyName, isHost: true },
+      });
     }
-
-    const { studyId, data } = await createStudy(studyName, totalCycle, timePerCycle);
-
-    navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
-      state: { participantCode: data.participantCode, studyName, isHost: true },
-    });
   };
 
   const handleClickExpectedTime = () => {

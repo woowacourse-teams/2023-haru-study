@@ -26,7 +26,7 @@ const useCreateStudyForm = () => {
   };
 
   return {
-    studyName: studyNameInput.state,
+    studyName: studyNameInput.state ?? '',
     changeStudyName: studyNameInput.onChangeInput,
     isStudyNameError: studyNameInput.isInputError,
     timePerCycle: timePerCycleSelect.state,
