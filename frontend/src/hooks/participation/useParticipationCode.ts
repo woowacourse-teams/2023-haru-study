@@ -1,20 +1,11 @@
-import { useState } from 'react';
+import useMutation from '@Hooks/api/useMutation';
 
 import { requestGetAuthenticateParticipationCode } from '@Apis/index';
 
-const useParticipationCode = () => {
-  const [isLoading, setIsLoading] = useState(false);
+const useParticipationCode = (participantCode: string) => {
+  const { mutate, isLoading } = useMutation(() => requestGetAuthenticateParticipationCode(participantCode));
 
-  const authenticateParticipationCode = async (participantCode: string) => {
-    try {
-      setIsLoading(true);
-      return await requestGetAuthenticateParticipationCode(participantCode);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return { authenticateParticipationCode, isLoading };
+  return { mutate, isLoading };
 };
 
 export default useParticipationCode;

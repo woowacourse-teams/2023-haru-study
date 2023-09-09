@@ -15,19 +15,16 @@ const ParticipationCodeInput = () => {
 
   const participantCodeInput = useInput(false);
 
-  const { authenticateParticipationCode, isLoading } = useParticipationCode();
+  const { mutate, isLoading } = useParticipationCode(participantCodeInput.state ?? '');
 
   const handleOnClickParticipateButton = async () => {
-    if (!participantCodeInput.state) {
-      alert('참여코드를 입력해주세요.');
-      return;
+    const result = await mutate();
+
+    if (result) {
+      navigate(`${ROUTES_PATH.preparation}/${result.data.studies[0].studyId}`, {
+        state: { participantCode: participantCodeInput.state, studyName: result.data.studies[0].name, isHost: false },
+      });
     }
-
-    const { data } = await authenticateParticipationCode(participantCodeInput.state);
-
-    navigate(`${ROUTES_PATH.preparation}/${data.studies[0].studyId}`, {
-      state: { participantCode: participantCodeInput.state, studyName: data.studies[0].name, isHost: false },
-    });
   };
 
   return (
