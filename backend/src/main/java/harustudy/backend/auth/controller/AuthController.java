@@ -2,7 +2,7 @@ package harustudy.backend.auth.controller;
 
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.TokenResponse;
-import harustudy.backend.auth.exception.RefreshTokenCookieNotExistsException;
+import harustudy.backend.auth.exception.RefreshTokenNotExistsException;
 import harustudy.backend.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -71,6 +71,6 @@ public class AuthController {
                 .filter(cookie -> cookie.getName().equals("refreshToken"))
                 .map(Cookie::getValue)
                 .findAny()
-                .orElseThrow(RefreshTokenCookieNotExistsException::new);
+                .orElseThrow(RefreshTokenNotExistsException::new);
     }
 }

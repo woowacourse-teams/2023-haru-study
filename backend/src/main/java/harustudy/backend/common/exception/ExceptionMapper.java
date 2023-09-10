@@ -5,12 +5,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
-import harustudy.backend.auth.exception.AuthorizationException;
-import harustudy.backend.auth.exception.InvalidAccessTokenException;
-import harustudy.backend.auth.exception.InvalidAuthorizationHeaderException;
-import harustudy.backend.auth.exception.InvalidProviderNameException;
-import harustudy.backend.auth.exception.InvalidRefreshTokenException;
-import harustudy.backend.auth.exception.RefreshTokenExpiredException;
+import harustudy.backend.auth.exception.*;
 import harustudy.backend.content.exception.PomodoroContentNotFoundException;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.progress.exception.NicknameLengthException;
@@ -87,6 +82,8 @@ public class ExceptionMapper {
                 ExceptionSituation.of("유효하지 않은 액세스 토큰입니다", UNAUTHORIZED, 1403));
         mapper.put(InvalidAuthorizationHeaderException.class,
                 ExceptionSituation.of("유효하지 않은 인증 헤더 형식입니다.", BAD_REQUEST, 1404));
+        mapper.put(RefreshTokenNotExistsException.class,
+                ExceptionSituation.of("갱신 토큰이 존재하지 않습니다.", BAD_REQUEST, 1405));
     }
 
     private static void setUpAuthorizationException() {
