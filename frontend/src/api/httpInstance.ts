@@ -38,7 +38,7 @@ http.registerInterceptor({
     if (response.ok) return response;
 
     if (isApiErrorData(response.data)) {
-      if (response.data.code === 1403) {
+      if (response.data.code === 1403 || response.data.code === 1404) {
         return refreshAndRefetch(response);
       }
 
