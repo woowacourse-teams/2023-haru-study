@@ -2,10 +2,17 @@ import { useState } from 'react';
 
 import useQuestionTextarea from '@Hooks/common/useQuestionTextarea';
 
+import { useProgressInfo, useStudyInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
+
 import { requestWritePlan } from '@Apis/index';
 
-const usePlanningForm = (studyId: string, progressId: string, onClickSubmit: () => Promise<void>) => {
+const usePlanningForm = () => {
+  const { studyId } = useStudyInfo();
+  const { progressId } = useProgressInfo();
+  const { onNextStep } = useStudyProgressAction();
+
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const questionTextareaProps = {
     toDo: useQuestionTextarea({
@@ -48,11 +55,18 @@ const usePlanningForm = (studyId: string, progressId: string, onClickSubmit: () 
         expectedDifficulty: questionTextareaProps.expectedDifficulty.value,
         whatCanYouDo: questionTextareaProps.whatCanYouDo.value,
       });
-      await onClickSubmit();
+      await onNextStep();
+    } catch (reason) {
+      if (!(reason instanceof Error)) throw reason;
+      setError(reason);
     } finally {
       setIsSubmitLoading(false);
     }
   };
+
+  if (error) {
+    alert(error.message);
+  }
 
   return { questionTextareaProps, isSubmitLoading, isInvalidForm, submitForm };
 };

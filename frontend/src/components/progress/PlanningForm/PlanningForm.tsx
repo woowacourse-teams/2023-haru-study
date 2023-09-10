@@ -15,30 +15,11 @@ import ArrowIcon from '@Assets/icons/ArrowIcon';
 import GuideModal from '../GuideModal/GuideModal';
 import usePlanningForm from '../hooks/usePlanningForm';
 
-type Props = {
-  onClickSubmitButton: () => Promise<void>;
-  studyId: string;
-  progressId: string;
-};
-
-const PlanningForm = ({ onClickSubmitButton, studyId, progressId }: Props) => {
-  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = usePlanningForm(
-    studyId,
-    progressId,
-    onClickSubmitButton,
-  );
+const PlanningForm = () => {
+  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = usePlanningForm();
 
   const { isShow: isOpenOptionalQuestion, toggleShow: toggleOptionalQuestion } = useDisplay();
   const { openModal } = useModal();
-
-  const handleClickButton = async () => {
-    try {
-      await submitForm();
-    } catch (error) {
-      if (!(error instanceof Error)) return;
-      alert(error.message);
-    }
-  };
 
   const handleClickGuideButton = (question: 'toDo' | 'completionCondition') => () => {
     openModal(<GuideModal question={question} />);
@@ -82,13 +63,7 @@ const PlanningForm = ({ onClickSubmitButton, studyId, progressId }: Props) => {
           </QuestionList>
         )}
       </QuestionLayout>
-      <Button
-        variant="primary"
-        type="submit"
-        onClick={handleClickButton}
-        isLoading={isSubmitLoading}
-        disabled={isInvalidForm}
-      >
+      <Button variant="primary" type="submit" onClick={submitForm} isLoading={isSubmitLoading} disabled={isInvalidForm}>
         학습 시작하기
       </Button>
     </Layout>
