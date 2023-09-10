@@ -2,10 +2,14 @@ import { styled } from 'styled-components';
 
 import StudyBoard from '@Components/progress/StudyBoard/StudyBoard';
 
+import StudyProgressProvider from '@Contexts/StudyProgressProvider';
+
 const StudyProgress = () => {
   return (
     <Layout>
-      <StudyBoard />
+      <StudyProgressProvider>
+        <StudyBoard />
+      </StudyProgressProvider>
     </Layout>
   );
 };
