@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
@@ -7,7 +6,6 @@ import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
 
 import color from '@Styles/color';
 
-import { ROUTES_PATH } from '@Constants/routes';
 import { PLAN_KEYWORDS } from '@Constants/study';
 
 import { getKeys } from '@Utils/getKeys';
@@ -16,37 +14,8 @@ import type { Plan } from '@Types/study';
 
 import useStudyingForm from '../hooks/useStudyingForm';
 
-type Props = {
-  onClickSubmitButton: () => Promise<void>;
-  studyId: string;
-  progressId: string;
-  cycle: number;
-};
-
-const StudyingForm = ({ onClickSubmitButton, studyId, progressId, cycle }: Props) => {
-  const navigate = useNavigate();
-  const { planList, isSubmitLoading, error, submitForm } = useStudyingForm(
-    studyId,
-    progressId,
-    cycle,
-    onClickSubmitButton,
-  );
-
-  const handleClickButton = async () => {
-    try {
-      await submitForm();
-    } catch (error) {
-      if (!(error instanceof Error)) return;
-      alert(error.message);
-    }
-  };
-
-  if (error) {
-    alert(error.message);
-    if (confirm('메인 페이지로 돌아기시겠습니까?')) {
-      navigate(ROUTES_PATH.landing);
-    }
-  }
+const StudyingForm = () => {
+  const { planList, isSubmitLoading, submitForm } = useStudyingForm();
 
   if (planList === null) {
     return (
@@ -74,7 +43,7 @@ const StudyingForm = ({ onClickSubmitButton, studyId, progressId, cycle }: Props
           />
         ))}
       </PlanResultList>
-      <Button variant="danger" onClick={handleClickButton} isLoading={isSubmitLoading}>
+      <Button variant="danger" onClick={submitForm} isLoading={isSubmitLoading}>
         학습 마치기
       </Button>
     </Layout>
