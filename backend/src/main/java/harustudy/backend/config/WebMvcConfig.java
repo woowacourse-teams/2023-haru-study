@@ -31,7 +31,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loggingInterceptor)
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("api/error-code")
+                .excludePathPatterns("/api/error-code")
                 .excludePathPatterns("/api/resources/**");
 
         registry.addInterceptor(authInterceptor)
