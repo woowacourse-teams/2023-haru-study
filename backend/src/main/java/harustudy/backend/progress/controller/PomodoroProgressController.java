@@ -2,9 +2,7 @@ package harustudy.backend.progress.controller;
 
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.auth.dto.AuthMember;
-import harustudy.backend.progress.dto.ParticipateStudyRequest;
-import harustudy.backend.progress.dto.PomodoroProgressResponse;
-import harustudy.backend.progress.dto.PomodoroProgressesResponse;
+import harustudy.backend.progress.dto.*;
 import harustudy.backend.progress.service.PomodoroProgressService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -50,6 +48,19 @@ public class PomodoroProgressController {
                 pomodoroProgressService.findPomodoroProgressWithFilter(authMember, studyId, memberId);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "필터링 조건으로 스터디 진행도 조회(임시)")
+    @GetMapping("/api/temp/studies/{studyId}/progresses")
+    public ResponseEntity<TempPomodoroProgressesResponse> findPomodoroProgressesWithFilterTemp(
+            @Authenticated AuthMember authMember,
+            @PathVariable Long studyId,
+            @RequestParam(required = false) Long memberId
+    ) {
+        TempPomodoroProgressesResponse response = TempPomodoroProgressesResponse.from(
+                pomodoroProgressService.findPomodoroProgressWithFilter(authMember, studyId, memberId));
+        return ResponseEntity.ok(response);
+    }
+
 
     @Operation(summary = "다음 스터디 단계로 이동")
     @ApiResponse(responseCode = "204")
