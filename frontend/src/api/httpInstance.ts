@@ -42,10 +42,10 @@ http.registerInterceptor({
         return refreshAndRefetch(response);
       }
 
-      throw new ApiError(response.data.message, response.data.code);
+      throw new ApiError(response.data.message, response.data.code, response.config);
     }
 
-    throw new UnknownApiError();
+    throw new UnknownApiError(response.config);
   },
 });
 
