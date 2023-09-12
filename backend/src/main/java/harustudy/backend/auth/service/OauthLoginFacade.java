@@ -10,11 +10,11 @@ import harustudy.backend.auth.infrastructure.GoogleOauthClient;
 import harustudy.backend.auth.util.OauthUserInfoExtractor;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
-@Service
-public class OauthService {
+@Component
+public class OauthLoginFacade {
 
     private final OauthProperties oauthProperties;
     private final GoogleOauthClient googleOauthClient;
