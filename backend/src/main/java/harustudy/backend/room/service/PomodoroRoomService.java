@@ -33,11 +33,13 @@ public class PomodoroRoomService {
     private final GenerationStrategy generationStrategy;
     private final InMemoryParticipantCodeRepository participantCodeRepository;
 
+    @Transactional(readOnly = true)
     public PomodoroRoomResponse findPomodoroRoom(Long roomId) {
         return PomodoroRoomResponse.from(pomodoroRoomRepository.findById(roomId)
                 .orElseThrow(RoomNotFoundException::new));
     }
 
+    @Transactional(readOnly = true)
     public PomodoroRoomsResponse findPomodoroRoomWithFilter(Long memberId, String code) {
         if (Objects.nonNull(code)) {
             ParticipantCode participantCode = participantCodeRepository.findByCode(code)

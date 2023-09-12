@@ -16,20 +16,20 @@ import harustudy.backend.room.repository.PomodoroRoomRepository;
 import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
 @Transactional
+@Service
 public class PomodoroProgressService {
 
     private final MemberRepository memberRepository;
     private final PomodoroProgressRepository pomodoroProgressRepository;
     private final PomodoroRoomRepository pomodoroRoomRepository;
 
+    @Transactional(readOnly = true)
     public PomodoroProgressResponse findPomodoroProgress(
             AuthMember authMember, Long studyId, Long progressId
     ) {
@@ -40,6 +40,7 @@ public class PomodoroProgressService {
     }
 
     // TODO: 동적쿼리로 변경(memberId 유무에 따른 분기처리)
+    @Transactional(readOnly = true)
     public PomodoroProgressesResponse findPomodoroProgressWithFilter(
             AuthMember authMember, Long studyId, @Nullable Long memberId
     ) {
@@ -66,7 +67,7 @@ public class PomodoroProgressService {
                 pomodoroProgressRepository.findByPomodoroRoom(pomodoroRoom)
                         .stream()
                         .map(PomodoroProgressResponse::from)
-                        .collect(Collectors.toList());
+                        .toList();
         return PomodoroProgressesResponse.from(responses);
     }
 
@@ -88,11 +89,13 @@ public class PomodoroProgressService {
         pomodoroProgress.proceed();
     }
 
-    public Long participateStudy(AuthMember authMember, Long studyId, ParticipateStudyRequest request) {
+    public Long participateStudy(AuthMember authMember, Long studyId,
+            ParticipateStudyRequest request) {
         Member member = memberRepository.findByIdIfExists(request.memberId());
         validateIsSameMemberId(authMember, request.memberId());
         PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, request.nickname());
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member,
+                request.nickname());
         pomodoroProgress.generateContents(pomodoroRoom.getTotalCycle());
         PomodoroProgress saved = pomodoroProgressRepository.save(pomodoroProgress);
         return saved.getId();
