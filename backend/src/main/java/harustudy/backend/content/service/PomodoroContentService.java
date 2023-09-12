@@ -36,6 +36,7 @@ public class PomodoroContentService {
     private final PomodoroProgressRepository pomodoroProgressRepository;
     private final PomodoroContentRepository pomodoroContentRepository;
 
+    @Transactional(readOnly = true)
     public PomodoroContentsResponse findContentsWithFilter(
             AuthMember authMember, Long studyId, Long progressId, @Nullable Integer cycle
     ) {
