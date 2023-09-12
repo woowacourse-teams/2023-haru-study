@@ -1,54 +1,28 @@
-import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+
+import useFetch from '@Hooks/api/useFetch';
 
 import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
-import { requestDeleteProgress, requestGetCheckProgresses } from '@Apis/index';
+import { requestGetCheckProgresses } from '@Apis/index';
 
-import { ApiError } from '../../errors';
+import type { ResponseCheckProgresses } from '@Types/api';
 
-const useCheckProgresses = (isHost: boolean) => {
+const useCheckProgresses = () => {
   const { studyId } = useParams();
 
   const { data: memberInfo } = useMemberInfo();
 
-  const [nickname, setNickname] = useState<string | null>(null);
-
-  const [progressId, setProgressId] = useState<number>(0);
+  const result = useFetch<ResponseCheckProgresses>(() =>
+    requestGetCheckProgresses(studyId ?? '', memberInfo?.memberId ?? ''),
+  );
 
   if (!studyId) {
     const error = new Error('잘못된 접근입니다.');
     throw error;
   }
 
-  const restart = async () => {
-    await requestDeleteProgress(studyId, progressId);
-    setNickname('');
-    return;
-  };
-
-  const checkProgresses = useCallback(async () => {
-    if (isHost || !memberInfo) {
-      return setNickname('');
-    }
-
-    try {
-      const { data } = await requestGetCheckProgresses(studyId, memberInfo.memberId);
-      setNickname(data.progresses[0].nickname);
-      setProgressId(data.progresses[0].progressId);
-    } catch (reason) {
-      if (reason instanceof ApiError && reason.code === 1201) {
-        return setNickname('');
-      }
-      throw reason;
-    }
-  }, [studyId, isHost, memberInfo]);
-
-  useEffect(() => {
-    checkProgresses();
-  }, [checkProgresses, isHost, memberInfo]);
-
-  return { studyId, nickname, restart };
+  return { studyId, result };
 };
 
 export default useCheckProgresses;
