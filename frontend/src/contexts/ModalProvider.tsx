@@ -4,14 +4,14 @@ import { createContext, useCallback, useContext, useState } from 'react';
 import Modal from '@Components/common/Modal/Modal';
 import Alert from '@Components/common/Modal/Template/Alert';
 
-type ModalContext = {
+export type ModalContextType = {
   isOpen: boolean;
   openModal: (modalContents: ReactNode) => void;
   openAlert: (message: string, onClose?: () => void) => void;
   closeModal: () => void;
 };
 
-const ModalContext = createContext<ModalContext | null>(null);
+export const ModalContext = createContext<ModalContextType | null>(null);
 
 const ModalProvider = ({ children }: PropsWithChildren) => {
   const [modalContents, setModalContents] = useState<ReactNode | null>(null);
