@@ -3,6 +3,7 @@ import { Component } from 'react';
 
 import type { ModalContextType } from '@Contexts/ModalProvider';
 import { ModalContext } from '@Contexts/ModalProvider';
+import { ApiError } from '@Errors/index';
 
 type AlertErrorBoundaryState = {
   error: Error | null;
@@ -14,6 +15,11 @@ class AlertErrorBoundary extends Component<PropsWithChildren, AlertErrorBoundary
   };
 
   static getDerivedStateFromError(error: Error) {
+    if (error instanceof ApiError) {
+      if (error.code === 1402 || error.code === 1405) {
+        throw error;
+      }
+    }
     return { error: error };
   }
 
