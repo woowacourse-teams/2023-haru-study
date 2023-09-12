@@ -1,15 +1,15 @@
-import ErrorBoundary from '@Components/common/ErrorBoundary/ErrorBoundary';
+import AlertErrorBoundary from '@Components/common/ErrorBoundary/AlertErrorBoundary';
 import CreateStudyForm from '@Components/create/CreateStudyForm/CreateStudyForm';
 
 import StudyParticipationLayout from './layout/StudyParticipationLayout';
 
 const CreateStudy = () => {
   return (
-    <ErrorBoundary>
-      <StudyParticipationLayout headerText="스터디 개설하기">
+    <StudyParticipationLayout headerText="스터디 개설하기">
+      <AlertErrorBoundary>
         <CreateStudyForm />
-      </StudyParticipationLayout>
-    </ErrorBoundary>
+      </AlertErrorBoundary>
+    </StudyParticipationLayout>
   );
 };
 

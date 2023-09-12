@@ -70,7 +70,9 @@ export const requestPostCreateStudy = async (
   const locationHeader = response.headers.get('Location');
   const studyId = locationHeader?.split('/').pop() as string;
 
-  return { studyId, response };
+  const data = response.data;
+
+  return { studyId, data };
 };
 
 export const requestGetAuthenticateParticipationCode = (participantCode: string) =>

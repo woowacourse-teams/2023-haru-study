@@ -42,10 +42,10 @@ const CreateStudyForm = () => {
     const result = await mutate();
 
     if (result) {
-      const { studyId, response } = result;
+      const { studyId, data } = result;
 
       navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
-        state: { participantCode: response.data.participantCode, studyName, isHost: true },
+        state: { participantCode: data.participantCode, studyName, isHost: true },
       });
     }
   };
