@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
+import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
+
 import color from '@Styles/color';
 
 import { useProgressInfo, useStudyInfo } from '@Contexts/StudyProgressProvider';
@@ -12,8 +14,8 @@ import StudyingForm from '../StudyingForm/StudyingForm';
 
 const StudyBoard = () => {
   const navigate = useNavigate();
-  const { studyId, timePerCycle } = useStudyInfo();
-  const { step, currentCycle } = useProgressInfo();
+  const { studyId } = useStudyInfo();
+  const { step } = useProgressInfo();
 
   if (step === 'done') {
     alert('이미 끝난 스터디입니다.');
@@ -23,12 +25,14 @@ const StudyBoard = () => {
 
   return (
     <Container>
-      <Sidebar step={step} cycle={currentCycle} studyMinutes={timePerCycle} />
-      <Contents>
-        {step === 'planning' && <PlanningForm />}
-        {step === 'studying' && <StudyingForm />}
-        {step === 'retrospect' && <RetrospectForm />}
-      </Contents>
+      <Sidebar />
+      <AlertErrorBoundary>
+        <Contents>
+          {step === 'planning' && <PlanningForm />}
+          {step === 'studying' && <StudyingForm />}
+          {step === 'retrospect' && <RetrospectForm />}
+        </Contents>
+      </AlertErrorBoundary>
     </Container>
   );
 };
