@@ -21,7 +21,6 @@ const useMutation = <T>(request: () => Promise<T>) => {
 
   useEffect(() => {
     if (error) {
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw error;
     }
   }, [error]);
