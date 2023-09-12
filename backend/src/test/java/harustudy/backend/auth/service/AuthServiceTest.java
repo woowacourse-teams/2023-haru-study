@@ -33,6 +33,9 @@ import org.springframework.transaction.annotation.Transactional;
 class AuthServiceTest {
 
     @Autowired
+    private OauthService oauthService;
+
+    @Autowired
     private AuthService authService;
 
     @Autowired
@@ -57,7 +60,7 @@ class AuthServiceTest {
                         userInfo.imageUrl()));
 
         // when
-        TokenResponse response = authService.oauthLogin(request);
+        TokenResponse response = oauthService.oauthLogin(request);
 
         // then
         String memberId = authService.parseMemberId(response.accessToken());

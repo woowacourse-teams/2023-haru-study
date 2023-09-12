@@ -1,24 +1,18 @@
 package harustudy.backend.auth.service;
 
-import harustudy.backend.auth.config.OauthProperties;
-import harustudy.backend.auth.config.OauthProperty;
 import harustudy.backend.auth.config.TokenConfig;
 import harustudy.backend.auth.domain.RefreshToken;
 import harustudy.backend.auth.dto.OauthLoginRequest;
-import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
 import harustudy.backend.auth.exception.InvalidAccessTokenException;
 import harustudy.backend.auth.exception.InvalidRefreshTokenException;
-import harustudy.backend.auth.infrastructure.GoogleOauthClient;
 import harustudy.backend.auth.repository.RefreshTokenRepository;
 import harustudy.backend.auth.util.JwtTokenProvider;
-import harustudy.backend.auth.util.OauthUserInfoExtractor;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import io.jsonwebtoken.JwtException;
-import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,27 +23,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService {
 
-    private final OauthProperties oauthProperties;
-    private final GoogleOauthClient googleOauthClient;
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenConfig tokenConfig;
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public TokenResponse oauthLogin(OauthLoginRequest request) {
-        UserInfo userInfo = requestUserInfo(request.oauthProvider(), request.code());
-        Member member = saveOrUpdateMember(request.oauthProvider(), userInfo); // TODO: 트랜잭션 분리
+    public TokenResponse userLogin(OauthLoginRequest request, UserInfo userInfo) {
+        Member member = saveOrUpdateMember(request.oauthProvider(), userInfo);
         String accessToken = generateAccessToken(member.getId());
         RefreshToken refreshToken = saveRefreshTokenOf(member);
         return TokenResponse.forLoggedIn(accessToken, refreshToken);
-    }
-
-    private UserInfo requestUserInfo(String oauthProvider, String code) {
-        OauthProperty oauthProperty = oauthProperties.get(oauthProvider);
-        OauthTokenResponse oauthToken = googleOauthClient.requestOauthToken(code, oauthProperty);
-        Map<String, Object> oauthUserInfo =
-                googleOauthClient.requestOauthUserInfo(oauthProperty, oauthToken.accessToken());
-        return OauthUserInfoExtractor.extract(oauthProvider, oauthUserInfo);
     }
 
     private Member saveOrUpdateMember(String oauthProvider, UserInfo userInfo) {

@@ -4,6 +4,7 @@ import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.exception.RefreshTokenNotExistsException;
 import harustudy.backend.auth.service.AuthService;
+import harustudy.backend.auth.service.OauthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
@@ -25,6 +26,7 @@ public class AuthController {
     @Value("${refresh-token.expire-length}")
     private Long refreshTokenExpireLength;
 
+    private final OauthService oauthService;
     private final AuthService authService;
 
     @Operation(summary = "비회원 로그인 요청")
@@ -40,7 +42,7 @@ public class AuthController {
             HttpServletResponse httpServletResponse,
             @RequestBody OauthLoginRequest request
     ) {
-        TokenResponse tokenResponse = authService.oauthLogin(request);
+        TokenResponse tokenResponse = oauthService.oauthLogin(request);
         Cookie cookie = setUpRefreshTokenCookie(tokenResponse);
         httpServletResponse.addCookie(cookie);
         return ResponseEntity.ok(tokenResponse);
