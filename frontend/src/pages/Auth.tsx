@@ -8,6 +8,8 @@ import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
+import { useModal } from '@Contexts/ModalProvider';
+
 import { getUrlQuery } from '@Utils/getUrlQuery';
 import tokenStorage from '@Utils/tokenStorage';
 
@@ -17,6 +19,8 @@ import type { AuthProvider } from '@Types/auth';
 
 const Auth = () => {
   const navigate = useNavigate();
+
+  const { closeModal } = useModal();
 
   const provider = getUrlQuery<AuthProvider>('provider');
   const code = getUrlQuery('code');
@@ -49,7 +53,8 @@ const Auth = () => {
 
   useEffect(() => {
     requestAuthToken();
-  }, [requestAuthToken]);
+    closeModal();
+  }, [closeModal, requestAuthToken]);
 
   return (
     <Layout>

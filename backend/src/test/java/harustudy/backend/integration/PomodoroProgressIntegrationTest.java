@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.domain.PomodoroStatus;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;
-import harustudy.backend.room.domain.PomodoroRoom;
+import harustudy.backend.study.domain.PomodoroStudy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -22,18 +22,18 @@ import org.springframework.test.web.servlet.MvcResult;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class PomodoroProgressIntegrationTest extends IntegrationTest {
 
-    private PomodoroRoom pomodoroRoom;
+    private PomodoroStudy pomodoroStudy;
     private PomodoroProgress pomodoroProgress;
     private MemberDto memberDto;
 
     @BeforeEach
     void setUp() {
         super.setUp();
-        pomodoroRoom = new PomodoroRoom("roomName", 3, 20);
+        pomodoroStudy = new PomodoroStudy("studyName", 3, 20);
         memberDto = createMember("member1");
-        pomodoroProgress = new PomodoroProgress(pomodoroRoom, memberDto.member(), "nickname");
+        pomodoroProgress = new PomodoroProgress(pomodoroStudy, memberDto.member(), "nickname");
 
-        entityManager.persist(pomodoroRoom);
+        entityManager.persist(pomodoroStudy);
         entityManager.persist(pomodoroProgress);
 
         entityManager.flush();
@@ -44,7 +44,7 @@ class PomodoroProgressIntegrationTest extends IntegrationTest {
     void progressId로_진행도를_조회한다() throws Exception {
         // given, when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/{studyId}/progresses/{progressId}", pomodoroRoom.getId(),
+                        get("/api/studies/{studyId}/progresses/{progressId}", pomodoroStudy.getId(),
                                 pomodoroProgress.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header(HttpHeaders.AUTHORIZATION, memberDto.createAuthorizationHeader()))
@@ -68,7 +68,7 @@ class PomodoroProgressIntegrationTest extends IntegrationTest {
         // when, then
         mockMvc.perform(
                         post("/api/studies/{studyId}/progresses/{progressId}/next-step",
-                                pomodoroRoom.getId(), pomodoroProgress.getId())
+                                pomodoroStudy.getId(), pomodoroProgress.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header(HttpHeaders.AUTHORIZATION, memberDto.createAuthorizationHeader()))
                 .andExpect(status().isNoContent());

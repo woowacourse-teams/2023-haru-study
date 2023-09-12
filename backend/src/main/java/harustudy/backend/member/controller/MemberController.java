@@ -23,7 +23,7 @@ public class MemberController {
     public ResponseEntity<MemberResponse> findOauthProfile(
             @Authenticated AuthMember authMember
     ) {
-        MemberResponse response = memberService.findOauthProfile(authMember);
+        MemberResponse response = memberService.findMemberProfile(authMember);
         return ResponseEntity.ok(response);
     }
 }

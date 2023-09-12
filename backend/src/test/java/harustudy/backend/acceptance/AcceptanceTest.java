@@ -20,10 +20,10 @@ import harustudy.backend.content.dto.WriteRetrospectRequest;
 import harustudy.backend.integration.LoginResponse;
 import harustudy.backend.progress.dto.ParticipateStudyRequest;
 import harustudy.backend.progress.dto.PomodoroProgressesResponse;
-import harustudy.backend.room.dto.CreatePomodoroRoomRequest;
-import harustudy.backend.room.dto.CreatePomodoroRoomResponse;
-import harustudy.backend.room.dto.PomodoroRoomResponse;
-import harustudy.backend.room.dto.PomodoroRoomsResponse;
+import harustudy.backend.study.dto.CreatePomodoroStudyRequest;
+import harustudy.backend.study.dto.CreatePomodoroStudyResponse;
+import harustudy.backend.study.dto.PomodoroStudyResponse;
+import harustudy.backend.study.dto.PomodoroStudiesResponse;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -96,8 +96,8 @@ class AcceptanceTest {
         회원으로_스터디를_진행한다();
         회원으로_스터디를_진행한다();
         LoginResponse 로그인_정보 = 구글_로그인을_진행한다();
-        List<PomodoroRoomResponse> 회원으로_완료한_스터디_목록 = 회원으로_진행했던_모든_스터디_목록을_조회한다(로그인_정보);
-        for (PomodoroRoomResponse 스터디_정보 : 회원으로_완료한_스터디_목록) {
+        List<PomodoroStudyResponse> 회원으로_완료한_스터디_목록 = 회원으로_진행했던_모든_스터디_목록을_조회한다(로그인_정보);
+        for (PomodoroStudyResponse 스터디_정보 : 회원으로_완료한_스터디_목록) {
             스터디_종료_후_결과_조회(로그인_정보, 스터디_정보.studyId());
         }
     }
@@ -116,7 +116,7 @@ class AcceptanceTest {
         스터디_종료_후_결과_조회(로그인_정보, 스터디_아이디);
     }
 
-    private List<PomodoroRoomResponse> 회원으로_진행했던_모든_스터디_목록을_조회한다(LoginResponse 로그인_정보)
+    private List<PomodoroStudyResponse> 회원으로_진행했던_모든_스터디_목록을_조회한다(LoginResponse 로그인_정보)
             throws Exception {
         long memberId = Long.parseLong(jwtTokenProvider
                 .parseSubject(로그인_정보.tokenResponse().accessToken(), tokenConfig.secretKey()));
@@ -129,10 +129,10 @@ class AcceptanceTest {
                 .andReturn();
 
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        PomodoroRoomsResponse pomodoroRoomsResponse = objectMapper.readValue(jsonResponse,
-                PomodoroRoomsResponse.class);
+        PomodoroStudiesResponse pomodoroStudiesResponse = objectMapper.readValue(jsonResponse,
+                PomodoroStudiesResponse.class);
 
-        return pomodoroRoomsResponse.studies();
+        return pomodoroStudiesResponse.studies();
     }
 
     private LoginResponse 비회원_로그인을_진행한다() throws Exception {
@@ -169,7 +169,7 @@ class AcceptanceTest {
     }
 
     private String 스터디를_개설한다(LoginResponse 로그인_정보) throws Exception {
-        CreatePomodoroRoomRequest request = new CreatePomodoroRoomRequest("roomName", 1, 20);
+        CreatePomodoroStudyRequest request = new CreatePomodoroStudyRequest("studyName", 1, 20);
         String jsonRequest = objectMapper.writeValueAsString(request);
         MvcResult result = mockMvc.perform(
                         post("/api/studies")
@@ -179,8 +179,8 @@ class AcceptanceTest {
                 .andExpect(status().isCreated())
                 .andReturn();
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        CreatePomodoroRoomResponse response = objectMapper.readValue(jsonResponse,
-                CreatePomodoroRoomResponse.class);
+        CreatePomodoroStudyResponse response = objectMapper.readValue(jsonResponse,
+                CreatePomodoroStudyResponse.class);
         return response.participantCode();
     }
 
@@ -192,9 +192,9 @@ class AcceptanceTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        PomodoroRoomsResponse responses = objectMapper.readValue(jsonResponse,
-                PomodoroRoomsResponse.class);
-        PomodoroRoomResponse response = responses.studies().get(0);
+        PomodoroStudiesResponse responses = objectMapper.readValue(jsonResponse,
+                PomodoroStudiesResponse.class);
+        PomodoroStudyResponse response = responses.studies().get(0);
         return response.studyId();
     }
 
