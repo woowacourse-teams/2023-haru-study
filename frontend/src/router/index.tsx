@@ -5,7 +5,6 @@ import CreateStudy from '@Pages/CreateStudy';
 import Landing from '@Pages/Landing';
 import MemberRecord from '@Pages/MemberRecord';
 import NotFoundPage from '@Pages/NotFoundPage';
-import StudyBoard from '@Pages/StudyBoard';
 import StudyParticipation from '@Pages/StudyParticipation';
 import StudyPreparation from '@Pages/StudyPreparation';
 import StudyProgress from '@Pages/StudyProgress';
