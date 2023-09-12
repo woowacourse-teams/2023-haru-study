@@ -16,7 +16,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public MemberResponse findOauthProfile(AuthMember authMember) {
+    public MemberResponse findMemberProfile(AuthMember authMember) {
         Member authorizedMember = memberRepository.findById(authMember.id())
                 .orElseThrow(MemberNotFoundException::new);
 
