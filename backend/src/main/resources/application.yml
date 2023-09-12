@@ -5,6 +5,7 @@ spring:
         ddl-auto: create-drop
         format_sql: true
     show-sql: true
+    open-in-view: false
 
   datasource:
     url: jdbc:h2:mem:testdb;MODE=MySQL
