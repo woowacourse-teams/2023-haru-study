@@ -2,7 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 
 type Status = 'pending' | 'fulfilled' | 'error';
 
-const useFetch = <T>(request: () => Promise<T>) => {
+type Options = {
+  suspense?: boolean;
+};
+
+const useFetch = <T>(request: () => Promise<T>, { suspense = true }: Options = {}) => {
   const [promise, setPromise] = useState<Promise<void>>();
   const [status, setStatus] = useState<Status>('pending');
   const [result, setResult] = useState<T>();
@@ -23,16 +27,14 @@ const useFetch = <T>(request: () => Promise<T>) => {
     setPromise(request().then(resolvePromise, rejectPromise));
   }, [request, resolvePromise, rejectPromise]);
 
-  if (status === 'pending' && promise) {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
+  if (suspense && status === 'pending' && promise) {
     throw promise;
   }
   if (status === 'error') {
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw error;
   }
 
-  return result;
+  return { result, isLoading: status === 'pending', error: error };
 };
 
 export default useFetch;
