@@ -39,6 +39,29 @@ public class PomodoroProgressService {
         return PomodoroProgressResponse.from(pomodoroProgress);
     }
 
+    // TODO: 임시용이므로 이후에 제거
+    public PomodoroProgressesResponse tempFindPomodoroProgressWithFilter(
+            AuthMember authMember, Long studyId, Long memberId
+    ) {
+        PomodoroStudy pomodoroStudy = pomodoroStudyRepository.findByIdIfExists(studyId);
+        if (Objects.isNull(memberId)) {
+            validateEverParticipated(authMember, pomodoroStudy);
+            return getPomodoroProgressesResponseWithoutMemberFilter(pomodoroStudy);
+        }
+        Member member = memberRepository.findByIdIfExists(memberId);
+        validateIsSameMemberId(authMember, memberId);
+        return tempGetPomodoroProgressesResponseWithMemberFilter(pomodoroStudy, member);
+    }
+
+    // TODO: 임시용이므로 이후에 제거
+    private PomodoroProgressesResponse tempGetPomodoroProgressesResponseWithMemberFilter(
+            PomodoroStudy pomodoroStudy, Member member) {
+        return pomodoroProgressRepository.findByPomodoroStudyAndMember(pomodoroStudy, member)
+                .map(PomodoroProgressResponse::from)
+                .map(response -> PomodoroProgressesResponse.from(List.of(response)))
+                .orElseGet(() -> PomodoroProgressesResponse.from(null));
+    }
+
     // TODO: 동적쿼리로 변경(memberId 유무에 따른 분기처리)
     public PomodoroProgressesResponse findPomodoroProgressWithFilter(
             AuthMember authMember, Long studyId, @Nullable Long memberId
