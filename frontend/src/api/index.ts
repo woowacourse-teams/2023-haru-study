@@ -6,11 +6,11 @@ import type {
   ResponseMemberRecordContents,
   ResponseOneStudyInfo,
   ResponseMemberContents,
-  ResponseProgresses,
   ResponseStudies,
   ResponseStudyData,
   ResponseStudyDataList,
   ResponseStudyMembers,
+  ResponseCheckProgresses,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
@@ -75,11 +75,17 @@ export const requestPostCreateStudy = async (
   return { studyId, data };
 };
 
-export const requestGetAuthenticateParticipationCode = (participantCode: string) =>
-  http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`);
+export const requestGetAuthenticateParticipationCode = async (participantCode: string) => {
+  const response = http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`);
 
-export const requestGetCheckProgresses = async (studyId: string, memberId: string) =>
-  http.get<ResponseProgresses>(`/api/studies/${studyId}/progresses?memberId=${memberId}`);
+  return (await response).data;
+};
+
+export const requestGetCheckProgresses = async (studyId: string, memberId: string) => {
+  const response = http.get<ResponseCheckProgresses>(`/api/temp/studies/${studyId}/progresses?memberId=${memberId}`);
+
+  return (await response).data;
+};
 
 export const requestPostRegisterProgress = (nickname: string, studyId: string, memberId: string) =>
   http.post(`/api/studies/${studyId}/progresses`, {

@@ -21,8 +21,8 @@ const ParticipationCodeInput = () => {
     const result = await mutate();
 
     if (result) {
-      navigate(`${ROUTES_PATH.preparation}/${result.data.studies[0].studyId}`, {
-        state: { participantCode: participantCodeInput.state, studyName: result.data.studies[0].name, isHost: false },
+      navigate(`${ROUTES_PATH.preparation}/${result.studies[0].studyId}`, {
+        state: { participantCode: participantCodeInput.state, studyName: result.studies[0].name, isHost: false },
       });
     }
   };
