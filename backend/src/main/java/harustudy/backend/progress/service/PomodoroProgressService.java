@@ -9,10 +9,10 @@ import harustudy.backend.progress.dto.ParticipateStudyRequest;
 import harustudy.backend.progress.dto.PomodoroProgressResponse;
 import harustudy.backend.progress.dto.PomodoroProgressesResponse;
 import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
-import harustudy.backend.progress.exception.ProgressNotBelongToRoomException;
+import harustudy.backend.progress.exception.ProgressNotBelongToStudyException;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
-import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.repository.PomodoroRoomRepository;
+import harustudy.backend.study.domain.PomodoroStudy;
+import harustudy.backend.study.repository.PomodoroStudyRepository;
 import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
@@ -28,14 +28,14 @@ public class PomodoroProgressService {
 
     private final MemberRepository memberRepository;
     private final PomodoroProgressRepository pomodoroProgressRepository;
-    private final PomodoroRoomRepository pomodoroRoomRepository;
+    private final PomodoroStudyRepository pomodoroStudyRepository;
 
     public PomodoroProgressResponse findPomodoroProgress(
             AuthMember authMember, Long studyId, Long progressId
     ) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
+        PomodoroStudy pomodoroStudy = pomodoroStudyRepository.findByIdIfExists(studyId);
         PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByIdIfExists(progressId);
-        validateProgressIsRelatedWith(pomodoroProgress, authMember, pomodoroRoom);
+        validateProgressIsRelatedWith(pomodoroProgress, authMember, pomodoroStudy);
         return PomodoroProgressResponse.from(pomodoroProgress);
     }
 
@@ -43,27 +43,27 @@ public class PomodoroProgressService {
     public PomodoroProgressesResponse findPomodoroProgressWithFilter(
             AuthMember authMember, Long studyId, @Nullable Long memberId
     ) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
+        PomodoroStudy pomodoroStudy = pomodoroStudyRepository.findByIdIfExists(studyId);
         if (Objects.isNull(memberId)) {
-            validateEverParticipated(authMember, pomodoroRoom);
-            return getPomodoroProgressesResponseWithoutMemberFilter(pomodoroRoom);
+            validateEverParticipated(authMember, pomodoroStudy);
+            return getPomodoroProgressesResponseWithoutMemberFilter(pomodoroStudy);
         }
         Member member = memberRepository.findByIdIfExists(memberId);
         validateIsSameMemberId(authMember, memberId);
-        return getPomodoroProgressesResponseWithMemberFilter(pomodoroRoom, member);
+        return getPomodoroProgressesResponseWithMemberFilter(pomodoroStudy, member);
     }
 
-    private void validateEverParticipated(AuthMember authMember, PomodoroRoom pomodoroRoom) {
+    private void validateEverParticipated(AuthMember authMember, PomodoroStudy pomodoroStudy) {
         Member member = memberRepository.findByIdIfExists(authMember.id());
-        pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
+        pomodoroProgressRepository.findByPomodoroStudyAndMember(pomodoroStudy, member)
                 .orElseThrow(AuthorizationException::new);
     }
 
     private PomodoroProgressesResponse getPomodoroProgressesResponseWithoutMemberFilter(
-            PomodoroRoom pomodoroRoom
+            PomodoroStudy pomodoroStudy
     ) {
         List<PomodoroProgressResponse> responses =
-                pomodoroProgressRepository.findByPomodoroRoom(pomodoroRoom)
+                pomodoroProgressRepository.findByPomodoroStudy(pomodoroStudy)
                         .stream()
                         .map(PomodoroProgressResponse::from)
                         .collect(Collectors.toList());
@@ -71,10 +71,10 @@ public class PomodoroProgressService {
     }
 
     private PomodoroProgressesResponse getPomodoroProgressesResponseWithMemberFilter(
-            PomodoroRoom pomodoroRoom, Member member
+            PomodoroStudy pomodoroStudy, Member member
     ) {
         PomodoroProgressResponse response =
-                pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
+                pomodoroProgressRepository.findByPomodoroStudyAndMember(pomodoroStudy, member)
                         .map(PomodoroProgressResponse::from)
                         .orElseThrow(PomodoroProgressNotFoundException::new);
         return PomodoroProgressesResponse.from(List.of(response));
@@ -82,18 +82,18 @@ public class PomodoroProgressService {
 
     public void proceed(AuthMember authMember, Long studyId, Long progressId) {
         PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByIdIfExists(progressId);
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
+        PomodoroStudy pomodoroStudy = pomodoroStudyRepository.findByIdIfExists(studyId);
 
-        validateProgressIsRelatedWith(pomodoroProgress, authMember, pomodoroRoom);
+        validateProgressIsRelatedWith(pomodoroProgress, authMember, pomodoroStudy);
         pomodoroProgress.proceed();
     }
 
     public Long participateStudy(AuthMember authMember, Long studyId, ParticipateStudyRequest request) {
         Member member = memberRepository.findByIdIfExists(request.memberId());
         validateIsSameMemberId(authMember, request.memberId());
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, request.nickname());
-        pomodoroProgress.generateContents(pomodoroRoom.getTotalCycle());
+        PomodoroStudy pomodoroStudy = pomodoroStudyRepository.findByIdIfExists(studyId);
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroStudy, member, request.nickname());
+        pomodoroProgress.generateContents(pomodoroStudy.getTotalCycle());
         PomodoroProgress saved = pomodoroProgressRepository.save(pomodoroProgress);
         return saved.getId();
     }
@@ -105,10 +105,10 @@ public class PomodoroProgressService {
     }
 
     private void validateProgressIsRelatedWith(
-            PomodoroProgress pomodoroProgress, AuthMember authMember, PomodoroRoom pomodoroRoom
+            PomodoroProgress pomodoroProgress, AuthMember authMember, PomodoroStudy pomodoroStudy
     ) {
         validateMemberOwns(pomodoroProgress, authMember);
-        validateProgressIsIncludedIn(pomodoroRoom, pomodoroProgress);
+        validateProgressIsIncludedIn(pomodoroStudy, pomodoroProgress);
     }
 
     private void validateMemberOwns(PomodoroProgress pomodoroProgress, AuthMember authMember) {
@@ -118,18 +118,18 @@ public class PomodoroProgressService {
         }
     }
 
-    private void validateProgressIsIncludedIn(PomodoroRoom pomodoroRoom,
+    private void validateProgressIsIncludedIn(PomodoroStudy pomodoroStudy,
             PomodoroProgress pomodoroProgress) {
-        if (pomodoroProgress.isNotIncludedIn(pomodoroRoom)) {
-            throw new ProgressNotBelongToRoomException();
+        if (pomodoroProgress.isNotIncludedIn(pomodoroStudy)) {
+            throw new ProgressNotBelongToStudyException();
         }
     }
 
     public void deleteProgress(AuthMember authMember, Long studyId, Long progressId) {
-        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
-        validateEverParticipated(authMember, pomodoroRoom);
+        PomodoroStudy pomodoroStudy = pomodoroStudyRepository.findByIdIfExists(studyId);
+        validateEverParticipated(authMember, pomodoroStudy);
         PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByIdIfExists(progressId);
-        validateProgressIsRelatedWith(pomodoroProgress, authMember, pomodoroRoom);
+        validateProgressIsRelatedWith(pomodoroProgress, authMember, pomodoroStudy);
         pomodoroProgressRepository.delete(pomodoroProgress);
     }
 }

@@ -1,4 +1,4 @@
-package harustudy.backend.room.exception;
+package harustudy.backend.study.exception;
 
 import harustudy.backend.common.exception.HaruStudyException;
 

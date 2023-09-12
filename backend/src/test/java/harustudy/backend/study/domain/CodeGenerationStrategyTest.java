@@ -1,4 +1,4 @@
-package harustudy.backend.room.domain;
+package harustudy.backend.study.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
