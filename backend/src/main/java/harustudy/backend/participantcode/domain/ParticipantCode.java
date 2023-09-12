@@ -10,7 +10,7 @@ public class ParticipantCode {
 //    private Long id;
 
     //    @OneToOne
-    private final Long pomodoroRoomId;
+    private final Long pomodoroStudyId;
 
     @Transient
     private GenerationStrategy generationStrategy;
@@ -25,8 +25,8 @@ public class ParticipantCode {
     private LocalDateTime createdDate;
 
 
-    public ParticipantCode(Long pomodoroRoomId, GenerationStrategy generationStrategy) {
-        this.pomodoroRoomId = pomodoroRoomId;
+    public ParticipantCode(Long pomodoroStudyId, GenerationStrategy generationStrategy) {
+        this.pomodoroStudyId = pomodoroStudyId;
         this.generationStrategy = generationStrategy;
         this.code = generationStrategy.generate();
         this.expirationPeriod = generationStrategy.EXPIRATION_PERIOD_IN_SECONDS;
