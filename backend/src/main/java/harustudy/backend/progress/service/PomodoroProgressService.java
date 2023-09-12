@@ -14,12 +14,12 @@ import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.room.domain.PomodoroRoom;
 import harustudy.backend.room.repository.PomodoroRoomRepository;
 import jakarta.annotation.Nullable;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +37,29 @@ public class PomodoroProgressService {
         PomodoroProgress pomodoroProgress = pomodoroProgressRepository.findByIdIfExists(progressId);
         validateProgressIsRelatedWith(pomodoroProgress, authMember, pomodoroRoom);
         return PomodoroProgressResponse.from(pomodoroProgress);
+    }
+
+    // TODO: 임시용이므로 이후에 제거
+    public PomodoroProgressesResponse tempFindPomodoroProgressWithFilter(
+            AuthMember authMember, Long studyId, Long memberId
+    ) {
+        PomodoroRoom pomodoroRoom = pomodoroRoomRepository.findByIdIfExists(studyId);
+        if (Objects.isNull(memberId)) {
+            validateEverParticipated(authMember, pomodoroRoom);
+            return getPomodoroProgressesResponseWithoutMemberFilter(pomodoroRoom);
+        }
+        Member member = memberRepository.findByIdIfExists(memberId);
+        validateIsSameMemberId(authMember, memberId);
+        return tempGetPomodoroProgressesResponseWithMemberFilter(pomodoroRoom, member);
+    }
+
+    // TODO: 임시용이므로 이후에 제거
+    private PomodoroProgressesResponse tempGetPomodoroProgressesResponseWithMemberFilter(
+            PomodoroRoom pomodoroRoom, Member member) {
+        return pomodoroProgressRepository.findByPomodoroRoomAndMember(pomodoroRoom, member)
+                .map(PomodoroProgressResponse::from)
+                .map(response -> PomodoroProgressesResponse.from(List.of(response)))
+                .orElseGet(() -> PomodoroProgressesResponse.from(null));
     }
 
     // TODO: 동적쿼리로 변경(memberId 유무에 따른 분기처리)
@@ -119,7 +142,7 @@ public class PomodoroProgressService {
     }
 
     private void validateProgressIsIncludedIn(PomodoroRoom pomodoroRoom,
-            PomodoroProgress pomodoroProgress) {
+                                              PomodoroProgress pomodoroProgress) {
         if (pomodoroProgress.isNotIncludedIn(pomodoroRoom)) {
             throw new ProgressNotBelongToRoomException();
         }
