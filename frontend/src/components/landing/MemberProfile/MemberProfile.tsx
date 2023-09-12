@@ -32,10 +32,12 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
 const MemberProfile = () => {
   const navigate = useNavigate();
 
-  const { data } = useMemberInfo();
+  const { data, isLoading } = useMemberInfo();
   const { clearMemberInfo } = useMemberInfoAction();
 
-  const isLoading = !data;
+  if (!data) {
+    return <></>;
+  }
 
   if (isLoading)
     return (

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ErrorCodeView {
 
-    @GetMapping("/error-code")
+    @GetMapping("/api/error-code")
     public String errorCodeView(Model model) {
         List<ExceptionSituation> exceptionSituations = ExceptionMapper.getExceptionSituations();
         model.addAttribute("exceptionSituations", exceptionSituations);

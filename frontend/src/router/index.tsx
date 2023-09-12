@@ -3,7 +3,6 @@ import { createBrowserRouter } from 'react-router-dom';
 import Auth from '@Pages/Auth';
 import CreateStudy from '@Pages/CreateStudy';
 import Landing from '@Pages/Landing';
-import Login from '@Pages/Login';
 import MemberRecord from '@Pages/MemberRecord';
 import NotFoundPage from '@Pages/NotFoundPage';
 import StudyParticipation from '@Pages/StudyParticipation';
@@ -24,10 +23,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Landing />,
-      },
-      {
-        path: ROUTES_PATH.login,
-        element: <Login />,
       },
       {
         path: ROUTES_PATH.auth,
