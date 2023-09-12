@@ -11,13 +11,13 @@ import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.progress.exception.NicknameLengthException;
 import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
 import harustudy.backend.progress.exception.PomodoroProgressStatusException;
-import harustudy.backend.progress.exception.ProgressNotBelongToRoomException;
-import harustudy.backend.room.exception.ParticipantCodeExpiredException;
-import harustudy.backend.room.exception.ParticipantCodeNotFoundException;
-import harustudy.backend.room.exception.PomodoroRoomNameLengthException;
-import harustudy.backend.room.exception.PomodoroTimePerCycleException;
-import harustudy.backend.room.exception.PomodoroTotalCycleException;
-import harustudy.backend.room.exception.RoomNotFoundException;
+import harustudy.backend.progress.exception.ProgressNotBelongToStudyException;
+import harustudy.backend.study.exception.ParticipantCodeExpiredException;
+import harustudy.backend.study.exception.ParticipantCodeNotFoundException;
+import harustudy.backend.study.exception.PomodoroStudyNameLengthException;
+import harustudy.backend.study.exception.PomodoroTimePerCycleException;
+import harustudy.backend.study.exception.PomodoroTotalCycleException;
+import harustudy.backend.study.exception.StudyNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class ExceptionMapper {
         setUpMemberException();
         setUpPomodoroContentException();
         setUpPomodoroProgressException();
-        setUpRoomException();
+        setUpStudyException();
         setUpAuthenticationException();
         setUpAuthorizationException();
     }
@@ -50,20 +50,20 @@ public class ExceptionMapper {
                 ExceptionSituation.of("해당 스터디에 참여한 상태가 아닙니다.", NOT_FOUND, 1201));
         mapper.put(PomodoroProgressStatusException.class,
                 ExceptionSituation.of("스터디 진행 상태가 적절하지 않습니다.", BAD_REQUEST, 1202));
-        mapper.put(ProgressNotBelongToRoomException.class,
+        mapper.put(ProgressNotBelongToStudyException.class,
                 ExceptionSituation.of("해당 스터디에 참여한 기록이 없습니다.", BAD_REQUEST, 1203));
         mapper.put(NicknameLengthException.class,
                 ExceptionSituation.of("닉네임 길이가 유효하지 않습니다.", BAD_REQUEST, 1204));
     }
 
-    private static void setUpRoomException() {
+    private static void setUpStudyException() {
         mapper.put(ParticipantCodeNotFoundException.class,
                 ExceptionSituation.of("참여 코드가 만료되었거나 존재하지 않습니다.", NOT_FOUND, 1300));
         mapper.put(ParticipantCodeExpiredException.class,
                 ExceptionSituation.of("만료된 참여코드입니다.", BAD_REQUEST, 1301));
-        mapper.put(RoomNotFoundException.class,
+        mapper.put(StudyNotFoundException.class,
                 ExceptionSituation.of("해당하는 스터디가 없습니다.", NOT_FOUND, 1302));
-        mapper.put(PomodoroRoomNameLengthException.class,
+        mapper.put(PomodoroStudyNameLengthException.class,
                 ExceptionSituation.of("스터디 이름의 길이가 적절하지 않습니다.", BAD_REQUEST, 1304));
         mapper.put(PomodoroTimePerCycleException.class,
                 ExceptionSituation.of("시간 당 사이클 횟수가 적절하지 않습니다.", BAD_REQUEST, 1305));

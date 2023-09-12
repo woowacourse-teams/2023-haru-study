@@ -5,8 +5,8 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-class PomodoroRoomIntegrationTest extends IntegrationTest {
-//
+class PomodoroStudyIntegrationTest extends IntegrationTest {
+
 //    @Autowired
 //    private ObjectMapper objectMapper;
 //
@@ -15,8 +15,8 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
 //
 //    private ParticipantCode participantCode1;
 //    private ParticipantCode participantCode2;
-//    private PomodoroRoom pomodoroRoom1;
-//    private PomodoroRoom pomodoroRoom2;
+//    private PomodoroStudy pomodoroStudy1;
+//    private PomodoroStudy pomodoroStudy2;
 //    private MemberDto memberDto1;
 //
 //    @BeforeEach
@@ -24,16 +24,16 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
 //        super.setMockMvc();
 //        participantCode1 = new ParticipantCode(new CodeGenerationStrategy());
 //        participantCode2 = new ParticipantCode(new CodeGenerationStrategy());
-//        pomodoroRoom1 = new PomodoroRoom("room1", 3, 20, participantCode1);
-//        pomodoroRoom2 = new PomodoroRoom("room2", 4, 30, participantCode2);
+//        pomodoroStudy1 = new PomodoroStudy("study1", 3, 20, participantCode1);
+//        pomodoroStudy2 = new PomodoroStudy("study2", 4, 30, participantCode2);
 //        memberDto1 = createMember("member1");
-//        PomodoroProgress pomodoroProgress1 = new PomodoroProgress(pomodoroRoom1,
+//        PomodoroProgress pomodoroProgress1 = new PomodoroProgress(pomodoroStudy1,
 //                memberDto1.member(), "nickname");
 //
 //        entityManager.persist(participantCode1);
 //        entityManager.persist(participantCode2);
-//        entityManager.persist(pomodoroRoom1);
-//        entityManager.persist(pomodoroRoom2);
+//        entityManager.persist(pomodoroStudy1);
+//        entityManager.persist(pomodoroStudy2);
 //        entityManager.persist(pomodoroProgress1);
 //
 //        entityManager.flush();
@@ -43,10 +43,10 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
 //    @Test
 //    void 스터디_아이디로_스터디를_조회한다() throws Exception {
 //        // given
-//        Long roomId = pomodoroRoom1.getId();
+//        Long studyId = pomodoroStudy1.getId();
 //
 //        // when
-//        MvcResult result = mockMvc.perform(get("/api/studies/{studyId}", roomId)
+//        MvcResult result = mockMvc.perform(get("/api/studies/{studyId}", studyId)
 //                        .accept(MediaType.APPLICATION_JSON)
 //                        .header(HttpHeaders.AUTHORIZATION, memberDto1.createAuthorizationHeader()))
 //                .andExpect(status().isOk())
@@ -54,14 +54,14 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
 //
 //        // then
 //        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-//        PomodoroRoomResponse response = objectMapper.readValue(jsonResponse,
-//                PomodoroRoomResponse.class);
+//        PomodoroStudyResponse response = objectMapper.readValue(jsonResponse,
+//                PomodoroStudyResponse.class);
 //
 //        assertSoftly(softly -> {
-//            softly.assertThat(response.studyId()).isEqualTo(pomodoroRoom1.getId());
-//            softly.assertThat(response.name()).isEqualTo(pomodoroRoom1.getName());
-//            softly.assertThat(response.totalCycle()).isEqualTo(pomodoroRoom1.getTotalCycle());
-//            softly.assertThat(response.timePerCycle()).isEqualTo(pomodoroRoom1.getTimePerCycle());
+//            softly.assertThat(response.studyId()).isEqualTo(pomodoroStudy1.getId());
+//            softly.assertThat(response.name()).isEqualTo(pomodoroStudy1.getName());
+//            softly.assertThat(response.totalCycle()).isEqualTo(pomodoroStudy1.getTotalCycle());
+//            softly.assertThat(response.timePerCycle()).isEqualTo(pomodoroStudy1.getTimePerCycle());
 //        });
 //    }
 //
@@ -79,17 +79,17 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
 //
 //        // then
 //        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-//        PomodoroRoomsResponse response = objectMapper.readValue(jsonResponse,
-//                PomodoroRoomsResponse.class);
-//        List<PomodoroRoomResponse> studies = response.studies();
+//        PomodoroStudyResponse response = objectMapper.readValue(jsonResponse,
+//                PomodoroStudyResponse.class);
+//        List<PomodoroStudyResponse> studies = response.studies();
 //
 //        assertSoftly(softly -> {
 //            softly.assertThat(studies).hasSize(1);
-//            softly.assertThat(studies.get(0).studyId()).isEqualTo(pomodoroRoom1.getId());
-//            softly.assertThat(studies.get(0).name()).isEqualTo(pomodoroRoom1.getName());
-//            softly.assertThat(studies.get(0).totalCycle()).isEqualTo(pomodoroRoom1.getTotalCycle());
+//            softly.assertThat(studies.get(0).studyId()).isEqualTo(pomodoroStudy1.getId());
+//            softly.assertThat(studies.get(0).name()).isEqualTo(pomodoroStudy1.getName());
+//            softly.assertThat(studies.get(0).totalCycle()).isEqualTo(pomodoroStudy1.getTotalCycle());
 //            softly.assertThat(studies.get(0).timePerCycle())
-//                    .isEqualTo(pomodoroRoom1.getTimePerCycle());
+//                    .isEqualTo(pomodoroStudy1.getTimePerCycle());
 //        });
 //    }
 //
@@ -105,17 +105,17 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
 //
 //        // then
 //        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-//        PomodoroRoomsResponse response = objectMapper.readValue(jsonResponse,
-//                PomodoroRoomsResponse.class);
-//        List<PomodoroRoomResponse> studies = response.studies();
+//        PomodoroStudyResponse response = objectMapper.readValue(jsonResponse,
+//                PomodoroStudyResponse.class);
+//        List<PomodoroStudyResponse> studies = response.studies();
 //
 //        assertSoftly(softly -> {
 //            softly.assertThat(studies).hasSize(1);
-//            softly.assertThat(studies.get(0).studyId()).isEqualTo(pomodoroRoom1.getId());
-//            softly.assertThat(studies.get(0).name()).isEqualTo(pomodoroRoom1.getName());
-//            softly.assertThat(studies.get(0).totalCycle()).isEqualTo(pomodoroRoom1.getTotalCycle());
+//            softly.assertThat(studies.get(0).studyId()).isEqualTo(pomodoroStudy1.getId());
+//            softly.assertThat(studies.get(0).name()).isEqualTo(pomodoroStudy1.getName());
+//            softly.assertThat(studies.get(0).totalCycle()).isEqualTo(pomodoroStudy1.getTotalCycle());
 //            softly.assertThat(studies.get(0).timePerCycle())
-//                    .isEqualTo(pomodoroRoom1.getTimePerCycle());
+//                    .isEqualTo(pomodoroStudy1.getTimePerCycle());
 //        });
 //    }
 //
@@ -130,29 +130,29 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
 //
 //        // then
 //        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-//        PomodoroRoomsResponse response = objectMapper.readValue(jsonResponse,
-//                PomodoroRoomsResponse.class);
-//        List<PomodoroRoomResponse> studies = response.studies();
+//        PomodoroStudyResponse response = objectMapper.readValue(jsonResponse,
+//                PomodoroStudyResponse.class);
+//        List<PomodoroStudyResponse> studies = response.studies();
 //
 //        assertSoftly(softly -> {
 //            softly.assertThat(studies).hasSize(2);
-//            softly.assertThat(studies.get(0).studyId()).isEqualTo(pomodoroRoom1.getId());
-//            softly.assertThat(studies.get(0).name()).isEqualTo(pomodoroRoom1.getName());
-//            softly.assertThat(studies.get(0).totalCycle()).isEqualTo(pomodoroRoom1.getTotalCycle());
+//            softly.assertThat(studies.get(0).studyId()).isEqualTo(pomodoroStudy1.getId());
+//            softly.assertThat(studies.get(0).name()).isEqualTo(pomodoroStudy1.getName());
+//            softly.assertThat(studies.get(0).totalCycle()).isEqualTo(pomodoroStudy1.getTotalCycle());
 //            softly.assertThat(studies.get(0).timePerCycle())
-//                    .isEqualTo(pomodoroRoom1.getTimePerCycle());
-//            softly.assertThat(studies.get(1).studyId()).isEqualTo(pomodoroRoom2.getId());
-//            softly.assertThat(studies.get(1).name()).isEqualTo(pomodoroRoom2.getName());
-//            softly.assertThat(studies.get(1).totalCycle()).isEqualTo(pomodoroRoom2.getTotalCycle());
+//                    .isEqualTo(pomodoroStudy1.getTimePerCycle());
+//            softly.assertThat(studies.get(1).studyId()).isEqualTo(pomodoroStudy2.getId());
+//            softly.assertThat(studies.get(1).name()).isEqualTo(pomodoroStudy2.getName());
+//            softly.assertThat(studies.get(1).totalCycle()).isEqualTo(pomodoroStudy2.getTotalCycle());
 //            softly.assertThat(studies.get(1).timePerCycle())
-//                    .isEqualTo(pomodoroRoom2.getTimePerCycle());
+//                    .isEqualTo(pomodoroStudy2.getTimePerCycle());
 //        });
 //    }
 //
 //    @Test
 //    void 스터디를_개설한다() throws Exception {
 //        // given
-//        CreatePomodoroRoomRequest request = new CreatePomodoroRoomRequest("studyName", 1, 20);
+//        CreatePomodoroStudyRequest request = new CreatePomodoroStudyRequest("studyName", 1, 20);
 //        String jsonRequest = objectMapper.writeValueAsString(request);
 //
 //        // when
@@ -166,8 +166,8 @@ class PomodoroRoomIntegrationTest extends IntegrationTest {
 //
 //        // then
 //        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-//        CreatePomodoroRoomResponse response = objectMapper.readValue(jsonResponse,
-//                CreatePomodoroRoomResponse.class);
+//        CreatePomodoroStudyResponse response = objectMapper.readValue(jsonResponse,
+//                CreatePomodoroStudyResponse.class);
 //
 //        assertThat(response.participantCode())
 //                .isAlphabetic()
