@@ -117,8 +117,7 @@ public class PomodoroProgressService {
         Member member = memberRepository.findByIdIfExists(request.memberId());
         validateIsSameMemberId(authMember, request.memberId());
         PomodoroStudy pomodoroStudy = pomodoroStudyRepository.findByIdIfExists(studyId);
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroStudy, member,
-                request.nickname());
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroStudy, member, request.nickname());
         pomodoroProgress.generateContents(pomodoroStudy.getTotalCycle());
         PomodoroProgress saved = pomodoroProgressRepository.save(pomodoroProgress);
         return saved.getId();
