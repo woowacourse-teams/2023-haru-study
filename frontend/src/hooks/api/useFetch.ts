@@ -25,7 +25,7 @@ const useFetch = <T>(request: () => Promise<T>, { suspense = true }: Options = {
   useEffect(() => {
     setStatus('pending');
     setPromise(request().then(resolvePromise, rejectPromise));
-  }, [request, resolvePromise, rejectPromise]);
+  }, []);
 
   if (suspense && status === 'pending' && promise) {
     throw promise;
