@@ -13,8 +13,9 @@ const useCheckProgresses = () => {
 
   const { data: memberInfo } = useMemberInfo();
 
-  const result = useFetch<ResponseCheckProgresses>(() =>
-    requestGetCheckProgresses(studyId ?? '', memberInfo?.memberId ?? ''),
+  const { result } = useFetch<ResponseCheckProgresses>(
+    () => requestGetCheckProgresses(studyId ?? '', memberInfo?.memberId ?? ''),
+    { suspense: true },
   );
 
   if (!studyId) {
