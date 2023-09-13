@@ -12,8 +12,10 @@ const Landing = () => {
         <Header />
         <MemberProfile />
       </LandingHeader>
-      <LandingMainSection />
-      <GuideSection />
+      <LandingContents>
+        <LandingMainSection />
+        <GuideSection />
+      </LandingContents>
     </>
   );
 };
@@ -25,4 +27,10 @@ const LandingHeader = styled.div`
   align-items: center;
 
   padding-right: 40px;
+`;
+
+const LandingContents = styled.div`
+  width: 90%;
+
+  margin: 0 auto;
 `;
