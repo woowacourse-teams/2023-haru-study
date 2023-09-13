@@ -19,20 +19,15 @@ type Props = {
 const MemberRegister = ({ studyId, studyName }: Props) => {
   const navigate = useNavigate();
 
-  const { isLoading, registerProgress } = useRegisterMember();
-
   const nickNameInput = useInput(true);
 
+  const { isLoading, mutate } = useRegisterMember(nickNameInput.state ?? '', studyId);
+
   const handleOnClickStartButton = async () => {
-    if (!nickNameInput.state || !studyId) {
-      alert('잘못된 접근입니다.');
-      return;
-    }
-
-    await registerProgress(nickNameInput.state, studyId);
-
-    navigate(`${ROUTES_PATH.board}/${studyId}`);
+    const result = await mutate();
+    if (result?.ok) return navigate(`${ROUTES_PATH.board}/${studyId}`);
   };
+
   return (
     <>
       <Input

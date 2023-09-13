@@ -1,26 +1,15 @@
-import { useState } from 'react';
+import useMutation from '@Hooks/api/useMutation';
 
 import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
 import { requestPostRegisterProgress } from '@Apis/index';
 
-const useRegisterProgress = () => {
-  const [isLoading, setIsLoading] = useState(false);
-
+const useRegisterProgress = (nickname: string, studyId: string) => {
   const { data } = useMemberInfo();
 
-  const registerProgress = async (nickname: string, studyId: string) => {
-    if (!data) return;
+  const { isLoading, mutate } = useMutation(() => requestPostRegisterProgress(nickname, studyId, data!.memberId));
 
-    try {
-      setIsLoading(true);
-      await requestPostRegisterProgress(nickname, studyId, data.memberId);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return { isLoading, registerProgress };
+  return { isLoading, mutate };
 };
 
 export default useRegisterProgress;

@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { css, styled } from 'styled-components';
 
+import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
 import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
-import AlertErrorBoundary from '@Components/common/ErrorBoundary/AlertErrorBoundary';
 
 import useCheckProgresses from '@Hooks/participation/useCheckProgresses';
 
@@ -20,13 +21,25 @@ type Props = {
 const ParticipationContents = ({ participantCode, studyName, isHost }: Props) => {
   const { result, studyId } = useCheckProgresses();
 
+  const [isRegisterShow, setRegisterShow] = useState(false);
+
+  const handleShowMemberRegister = () => {
+    setRegisterShow(true);
+  };
+
   return result ? (
     <Layout>
       {isHost && <ParticipationCodeCopier participantCode={participantCode} />}
       {
         <AlertErrorBoundary>
-          {result.progresses ? (
-            <MemberRestart studyName={studyName} nickname={result.progresses[0].nickname} studyId={studyId} />
+          {result.progresses && !isRegisterShow ? (
+            <MemberRestart
+              studyName={studyName}
+              nickname={result.progresses[0].nickname}
+              studyId={studyId}
+              progressId={result.progresses[0].progressId}
+              showMemberRegister={handleShowMemberRegister}
+            />
           ) : (
             <MemberRegister studyId={studyId} studyName={studyName} />
           )}
