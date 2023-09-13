@@ -25,7 +25,7 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
 
   const handleOnClickStartButton = async () => {
     const result = await mutate();
-    if (result?.ok) return navigate(`${ROUTES_PATH.board}/${studyId}`);
+    if (result?.ok) return navigate(`${ROUTES_PATH.progress}/${studyId}`);
   };
 
   return (

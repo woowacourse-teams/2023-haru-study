@@ -3,7 +3,6 @@ import { Component } from 'react';
 
 import type { ModalContextType } from '@Contexts/ModalProvider';
 import { ModalContext } from '@Contexts/ModalProvider';
-
 import { ApiError } from '@Errors/index';
 
 type AlertErrorBoundaryState = {

@@ -15,8 +15,8 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
 import harustudy.backend.progress.exception.PomodoroProgressStatusException;
-import harustudy.backend.room.domain.PomodoroRoom;
-import harustudy.backend.room.exception.RoomNotFoundException;
+import harustudy.backend.study.domain.PomodoroStudy;
+import harustudy.backend.study.exception.StudyNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
@@ -40,19 +40,19 @@ class PomodoroContentServiceTest {
     @Autowired
     private PomodoroContentService pomodoroContentService;
 
-    private PomodoroRoom pomodoroRoom;
+    private PomodoroStudy pomodoroStudy;
     private Member member;
     private PomodoroProgress pomodoroProgress;
     private PomodoroContent pomodoroContent;
 
     @BeforeEach
     void setUp() {
-        pomodoroRoom = new PomodoroRoom("roomName", 1, 20);
+        pomodoroStudy = new PomodoroStudy("studyName", 1, 20);
         member = new Member("nickname", "email", "imageUrl", LoginType.GUEST);
-        pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, "nickname");
+        pomodoroProgress = new PomodoroProgress(pomodoroStudy, member, "nickname");
         pomodoroContent = new PomodoroContent(pomodoroProgress, 1);
 
-        entityManager.persist(pomodoroRoom);
+        entityManager.persist(pomodoroStudy);
         entityManager.persist(member);
         entityManager.persist(pomodoroProgress);
         entityManager.persist(pomodoroContent);
@@ -77,7 +77,7 @@ class PomodoroContentServiceTest {
 
         // when, then
         assertThatThrownBy(
-                () -> pomodoroContentService.writePlan(authMember, pomodoroRoom.getId(), request))
+                () -> pomodoroContentService.writePlan(authMember, pomodoroStudy.getId(), request))
                 .isInstanceOf(PomodoroProgressStatusException.class);
     }
 
@@ -90,7 +90,7 @@ class PomodoroContentServiceTest {
 
         // when, then
         assertThatCode(
-                () -> pomodoroContentService.writePlan(authMember, pomodoroRoom.getId(), request))
+                () -> pomodoroContentService.writePlan(authMember, pomodoroStudy.getId(), request))
                 .doesNotThrowAnyException();
     }
 
@@ -103,7 +103,7 @@ class PomodoroContentServiceTest {
 
         // when, then
         assertThatThrownBy(
-                () -> pomodoroContentService.writeRetrospect(authMember, pomodoroRoom.getId(),
+                () -> pomodoroContentService.writeRetrospect(authMember, pomodoroStudy.getId(),
                         request))
                 .isInstanceOf(PomodoroProgressStatusException.class);
     }
@@ -117,7 +117,7 @@ class PomodoroContentServiceTest {
 
         // when, then
         assertThatThrownBy(
-                () -> pomodoroContentService.writeRetrospect(authMember, pomodoroRoom.getId(),
+                () -> pomodoroContentService.writeRetrospect(authMember, pomodoroStudy.getId(),
                         request))
                 .isInstanceOf(PomodoroProgressStatusException.class);
     }
@@ -140,7 +140,7 @@ class PomodoroContentServiceTest {
 
         // when, then
         assertThatCode(
-                () -> pomodoroContentService.writeRetrospect(authMember, pomodoroRoom.getId(),
+                () -> pomodoroContentService.writeRetrospect(authMember, pomodoroStudy.getId(),
                         request))
                 .doesNotThrowAnyException();
     }
@@ -159,7 +159,7 @@ class PomodoroContentServiceTest {
 
         // when
         PomodoroContentsResponse pomodoroContentsResponse =
-                pomodoroContentService.findContentsWithFilter(authMember, pomodoroRoom.getId(),
+                pomodoroContentService.findContentsWithFilter(authMember, pomodoroStudy.getId(),
                         pomodoroProgress.getId(), 1);
         PomodoroContentResponse expectedPomodoroContentResponse =
                 new PomodoroContentResponse(1, plan, retrospect);
@@ -197,7 +197,7 @@ class PomodoroContentServiceTest {
 
         // when
         PomodoroContentsResponse pomodoroContentsResponse = pomodoroContentService.findContentsWithFilter(authMember,
-                pomodoroRoom.getId(), pomodoroProgress.getId(), null);
+                pomodoroStudy.getId(), pomodoroProgress.getId(), null);
 
         List<PomodoroContentResponse> expectedPomodoroContentResponses = List.of(
                 new PomodoroContentResponse(pomodoroContent.getCycle(), plan, retrospect),
@@ -219,7 +219,7 @@ class PomodoroContentServiceTest {
         assertThatThrownBy(
                 () -> pomodoroContentService.findContentsWithFilter(authMember, 999L,
                         pomodoroProgress.getId(), null))
-                .isInstanceOf(RoomNotFoundException.class);
+                .isInstanceOf(StudyNotFoundException.class);
     }
 
     @Test
@@ -230,7 +230,7 @@ class PomodoroContentServiceTest {
         // when, then
         assertThatThrownBy(
                 () -> pomodoroContentService.findContentsWithFilter(authMember,
-                        pomodoroRoom.getId(), 999L, null))
+                        pomodoroStudy.getId(), 999L, null))
                 .isInstanceOf(PomodoroProgressNotFoundException.class);
     }
 }

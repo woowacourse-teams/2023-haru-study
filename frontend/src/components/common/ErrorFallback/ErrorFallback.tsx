@@ -40,11 +40,14 @@ const Layout = styled.section<{ height: string }>`
   align-items: center;
   justify-content: center;
   gap: 20px;
+
   p {
     display: flex;
     align-items: center;
+
     gap: 10px;
   }
+
   a {
     color: ${color.blue[500]};
     text-decoration: underline;

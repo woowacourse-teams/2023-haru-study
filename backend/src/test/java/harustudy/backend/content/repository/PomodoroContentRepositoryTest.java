@@ -6,7 +6,7 @@ import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.room.domain.PomodoroRoom;
+import harustudy.backend.study.domain.PomodoroStudy;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,11 +32,11 @@ class PomodoroContentRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        PomodoroRoom pomodoroRoom = new PomodoroRoom("roomName", 3, 20);
+        PomodoroStudy pomodoroStudy = new PomodoroStudy("studyName", 3, 20);
         Member member = new Member("member", "email", "imageUrl", LoginType.GUEST);
-        pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, "nickname");
+        pomodoroProgress = new PomodoroProgress(pomodoroStudy, member, "nickname");
 
-        testEntityManager.persist(pomodoroRoom);
+        testEntityManager.persist(pomodoroStudy);
         testEntityManager.persist(member);
         testEntityManager.persist(pomodoroProgress);
     }

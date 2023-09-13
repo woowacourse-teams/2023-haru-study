@@ -25,7 +25,7 @@ const MemberRestart = ({ studyName, nickname, studyId, progressId, showMemberReg
   const { mutate } = useMutation(() => requestDeleteProgress(studyId, progressId));
 
   const handleOnClickContinueStart = async () => {
-    navigate(`${ROUTES_PATH.board}/${studyId}`);
+    navigate(`${ROUTES_PATH.progress}/${studyId}`);
   };
 
   const restart = async () => {
