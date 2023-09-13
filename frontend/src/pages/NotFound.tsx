@@ -9,7 +9,7 @@ import { lightTheme } from '@Styles/theme';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-const NotFoundPage = () => {
+const NotFound = () => {
   return (
     <ThemeProvider theme={lightTheme}>
       <GlobalStyles />
@@ -28,7 +28,7 @@ const NotFoundPage = () => {
   );
 };
 
-export default NotFoundPage;
+export default NotFound;
 
 const Layout = styled.div`
   height: 100vh;
