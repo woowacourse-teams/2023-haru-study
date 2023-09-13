@@ -1,8 +1,8 @@
 type Props = {
-  color: string;
+  color?: string;
 };
 
-const ResetIcon = ({ color }: Props) => {
+const ResetIcon = ({ color = '#000000' }: Props) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
       <path
