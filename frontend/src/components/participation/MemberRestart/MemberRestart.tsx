@@ -18,7 +18,7 @@ const MemberRestart = ({ studyName, nickname, studyId, restart }: Props) => {
   const navigate = useNavigate();
 
   const handleOnClickContinueStart = async () => {
-    navigate(`${ROUTES_PATH.board}/${studyId}`);
+    navigate(`${ROUTES_PATH.progress}/${studyId}`);
   };
 
   return (

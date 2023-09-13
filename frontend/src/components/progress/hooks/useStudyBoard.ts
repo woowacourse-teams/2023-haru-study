@@ -17,13 +17,9 @@ const useStudyBoard = () => {
 
   const fetchStudyMetaData = useCallback(async () => {
     try {
-      if (!studyId) {
-        throw new Error('정상적인 경로로 접근해주세요.');
-      }
+      if (!studyId) throw new Error('정상적인 경로로 접근해주세요.');
 
-      if (!memberInfo) {
-        return;
-      }
+      if (!memberInfo) return;
 
       const { data: fetchedStudyInfo } = await requestGetOneStudyData(studyId);
       const { data: fetchedProgressInfo } = await requestGetMemberProgress(studyId, memberInfo.memberId);

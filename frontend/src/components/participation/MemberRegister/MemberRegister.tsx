@@ -31,7 +31,7 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
 
     await registerProgress(nickNameInput.state, studyId);
 
-    navigate(`${ROUTES_PATH.board}/${studyId}`);
+    navigate(`${ROUTES_PATH.progress}/${studyId}`);
   };
   return (
     <>

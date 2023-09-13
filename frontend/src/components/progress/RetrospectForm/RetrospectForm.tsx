@@ -5,42 +5,29 @@ import Button from '@Components/common/Button/Button';
 import QuestionTextarea from '@Components/common/QuestionTextarea/QuestionTextarea';
 import Typography from '@Components/common/Typography/Typography';
 
-import useRetrospectForm from '@Hooks/board/useRetrospectForm';
 import useDisplay from '@Hooks/common/useDisplay';
 
 import { ROUTES_PATH } from '@Constants/routes';
 import { RETROSPECT_QUESTIONS } from '@Constants/study';
 
+import { useStudyInfo } from '@Contexts/StudyProgressProvider';
+
 import ArrowIcon from '@Assets/icons/ArrowIcon';
 
-type Props = {
-  isLastCycle: boolean;
-  onClickSubmitButton: () => Promise<void>;
-  studyId: string;
-  progressId: string;
-};
+import useRetrospectForm from '../hooks/useRetrospectForm';
 
-const RetrospectForm = ({ isLastCycle, onClickSubmitButton, studyId, progressId }: Props) => {
+const RetrospectForm = () => {
+  const { questionTextareaProps, isInvalidForm, isSubmitLoading, isLastCycle, submitForm } = useRetrospectForm();
+  const { studyId } = useStudyInfo();
+
   const navigate = useNavigate();
-  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = useRetrospectForm(
-    studyId,
-    progressId,
-    onClickSubmitButton,
-  );
-
   const { isShow: isOpenOptionalQuestion, toggleShow: toggleOptionalQuestion } = useDisplay();
 
-  const handleClickButton = async () => {
-    try {
-      await submitForm();
+  const handleSubmitForm = async () => {
+    await submitForm();
 
-      if (isLastCycle) {
-        navigate(`${ROUTES_PATH.record}/${studyId}`);
-        return;
-      }
-    } catch (error) {
-      if (!(error instanceof Error)) return;
-      alert(error.message);
+    if (isLastCycle) {
+      navigate(`${ROUTES_PATH.record}/${studyId}`);
     }
   };
 
@@ -74,7 +61,7 @@ const RetrospectForm = ({ isLastCycle, onClickSubmitButton, studyId, progressId 
       <Button
         variant="success"
         type="submit"
-        onClick={handleClickButton}
+        onClick={handleSubmitForm}
         isLoading={isSubmitLoading}
         disabled={isInvalidForm}
       >

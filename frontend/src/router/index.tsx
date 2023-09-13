@@ -5,9 +5,9 @@ import CreateStudy from '@Pages/CreateStudy';
 import Landing from '@Pages/Landing';
 import MemberRecord from '@Pages/MemberRecord';
 import NotFoundPage from '@Pages/NotFoundPage';
-import StudyBoard from '@Pages/StudyBoard';
 import StudyParticipation from '@Pages/StudyParticipation';
 import StudyPreparation from '@Pages/StudyPreparation';
+import StudyProgress from '@Pages/StudyProgress';
 import StudyRecord from '@Pages/StudyRecord';
 
 import { ROUTES_PATH } from '@Constants/routes';
@@ -29,8 +29,8 @@ const router = createBrowserRouter([
         element: <Auth />,
       },
       {
-        path: `${ROUTES_PATH.board}/:studyId`,
-        element: <StudyBoard />,
+        path: `${ROUTES_PATH.progress}/:studyId`,
+        element: <StudyProgress />,
       },
       {
         path: `${ROUTES_PATH.record}/:studyId`,

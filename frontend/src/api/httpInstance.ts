@@ -38,14 +38,14 @@ http.registerInterceptor({
     if (response.ok) return response;
 
     if (isApiErrorData(response.data)) {
-      if (response.data.code === 1403) {
+      if (response.data.code === 1403 || response.data.code === 1404) {
         return refreshAndRefetch(response);
       }
 
-      throw new ApiError(response.data.message, response.data.code);
+      throw new ApiError(response.data.message, response.data.code, response.config);
     }
 
-    throw new UnknownApiError();
+    throw new UnknownApiError(response.config);
   },
 });
 

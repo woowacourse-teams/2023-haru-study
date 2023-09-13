@@ -49,9 +49,10 @@ class Http {
   }
 
   request<T extends object = object>(url: string, config: RequestInit) {
-    try {
-      config = { ...this.defaultConfig, ...this.interceptor.onRequest(config) };
+    config = { ...this.defaultConfig, ...this.interceptor.onRequest(config) };
+    config.headers = { ...this.defaultConfig.headers, ...config.headers };
 
+    try {
       return fetch(`${this.baseURL}${url}`, config)
         .then((response) => processHttpResponse<T>(response, config))
         .then(this.interceptor.onResponse)

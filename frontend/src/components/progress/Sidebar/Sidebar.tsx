@@ -4,6 +4,8 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
+import { useProgressInfo, useStudyInfo } from '@Contexts/StudyProgressProvider';
+
 import type { Step } from '@Types/study';
 
 import Timer from '../Timer/Timer';
@@ -26,17 +28,16 @@ const SIDEBAR_INFO: Record<Step, { theme: string; stepKeyword: string; paragraph
   },
 };
 
-type Props = {
-  step: Step;
-  cycle: number;
-  studyMinutes: number;
-};
+const Sidebar = () => {
+  const { timePerCycle } = useStudyInfo();
+  const { step, currentCycle } = useProgressInfo();
 
-const Sidebar = ({ step, cycle, studyMinutes }: Props) => {
+  if (step === 'done') return;
+
   const theme = SIDEBAR_INFO[step].theme;
   const stepKeyword = SIDEBAR_INFO[step].stepKeyword;
   const paragraph =
-    step === 'retrospect' ? `${studyMinutes}${SIDEBAR_INFO[step].paragraph}` : SIDEBAR_INFO[step].paragraph;
+    step === 'retrospect' ? `${timePerCycle}${SIDEBAR_INFO[step].paragraph}` : SIDEBAR_INFO[step].paragraph;
 
   return (
     <Layout background={theme}>
@@ -53,9 +54,9 @@ const Sidebar = ({ step, cycle, studyMinutes }: Props) => {
       >
         {paragraph}
       </Typography>
-      <Timer studyMinutes={studyMinutes} step={step} />
+      <Timer studyMinutes={timePerCycle} step={step} />
       <Typography variant="p1" color={color.white}>
-        {cycle}번째 사이클 - {stepKeyword}
+        {currentCycle}번째 사이클 - {stepKeyword}
       </Typography>
     </Layout>
   );
