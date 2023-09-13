@@ -1,33 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import useErrorBoundary from '@Hooks/common/useErrorBoundary';
-
-import { ApiError, UnknownApiError } from '@Errors/index';
-
-const useMutation = <T>(request: () => Promise<T>, onSuccess?: () => void, onError?: () => void) => {
+const useMutation = <T>(request: () => Promise<T>) => {
+  const [result, setResult] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const { setError } = useErrorBoundary();
+  const [error, setError] = useState<unknown | null>(null);
 
   const mutate = async () => {
+    setIsLoading(true);
+
     try {
-      setIsLoading(true);
-      const data = await request();
-
-      onSuccess?.();
-
-      return data;
+      const result = await request();
+      setResult(result);
+      return result;
     } catch (reason) {
-      onError?.();
-      if (reason instanceof ApiError || reason instanceof UnknownApiError) {
-        setError?.(reason);
-      }
+      setError(reason);
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { mutate, isLoading };
+  useEffect(() => {
+    if (error) {
+      throw error;
+    }
+  }, [error]);
+
+  return { mutate, result, isLoading, error };
 };
 
 export default useMutation;

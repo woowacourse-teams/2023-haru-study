@@ -1,47 +1,34 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import type { ApiError, UnknownApiError } from '@Errors/index';
+type Status = 'pending' | 'fulfilled' | 'error';
 
-const useFetch = <T>(
-  request: () => Promise<T>,
-  onSuccess?: () => void,
-  onError?: (reason: ApiError | UnknownApiError | Error) => void,
-) => {
+const useFetch = <T>(request: () => Promise<T>) => {
   const [promise, setPromise] = useState<Promise<void>>();
-  const [status, setStatus] = useState<'pending' | 'fulfilled' | 'error'>('pending');
+  const [status, setStatus] = useState<Status>('pending');
   const [result, setResult] = useState<T>();
-  const [error, setError] = useState<ApiError | UnknownApiError | Error>();
+  const [error, setError] = useState<Error>();
 
-  const resolvePromise = useCallback(
-    (result: T) => {
-      setStatus('fulfilled');
-      setResult(result);
-      onSuccess?.();
-    },
-    [onSuccess],
-  );
-
-  const rejectPromise = useCallback(
-    (reason: ApiError | UnknownApiError | Error) => {
-      setStatus('error');
-      setError(reason);
-      onError?.(reason);
-    },
-    [onError],
-  );
-
-  const handlePromise = useCallback(() => {
-    setStatus('pending');
-    setPromise(request().then(resolvePromise, rejectPromise));
-  }, [request, rejectPromise, resolvePromise]);
-
-  useEffect(() => {
-    handlePromise();
+  const resolvePromise = useCallback((result: T) => {
+    setStatus('fulfilled');
+    setResult(result);
   }, []);
 
-  if (status === 'pending' && promise) throw promise;
+  const rejectPromise = useCallback((error: Error) => {
+    setStatus('error');
+    setError(error);
+  }, []);
 
-  if (status === 'error') throw error;
+  useEffect(() => {
+    setStatus('pending');
+    setPromise(request().then(resolvePromise, rejectPromise));
+  }, []);
+
+  if (status === 'pending' && promise) {
+    throw promise;
+  }
+  if (status === 'error') {
+    throw error;
+  }
 
   return result;
 };
