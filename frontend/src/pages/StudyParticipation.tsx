@@ -1,4 +1,4 @@
-import AlertErrorBoundary from '@Components/common/ErrorBoundary/AlertErrorBoundary';
+import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
 import ParticipationCodeInput from '@Components/participation/ParticipationCodeInput/ParticipationCodeInput';
 
 import StudyParticipationLayout from './layout/StudyParticipationLayout';
