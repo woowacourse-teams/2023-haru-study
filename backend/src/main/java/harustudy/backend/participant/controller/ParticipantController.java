@@ -52,7 +52,7 @@ public class ParticipantController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "필터링 조건으로 스터디 진행도 조회(임시)")
+    @Operation(summary = "필터링 조건으로 스터디 참여자 조회(임시)")
     @GetMapping("/api/temp/studies/{studyId}/participants")
     public ResponseEntity<ParticipantsResponse> findParticipantsWithFilterTemp(
             @Authenticated AuthMember authMember,
@@ -90,7 +90,7 @@ public class ParticipantController {
                 URI.create("/api/studies/" + studyId + "/participants/" + participantId)).build();
     }
 
-    @Operation(summary = "스터디 진행도 삭제")
+    @Operation(summary = "스터디 참여자 삭제")
     @ApiResponse(responseCode = "204")
     @DeleteMapping("/api/studies/{studyId}/participants/{participantId}")
     public ResponseEntity<Void> delete(
