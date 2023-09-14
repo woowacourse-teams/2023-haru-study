@@ -14,7 +14,7 @@ import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.exception.ParticipantNotFoundException;
-import harustudy.backend.participant.exception.ParticipantStepException;
+import harustudy.backend.participant.exception.StudyStepException;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.exception.StudyNotFoundException;
 import jakarta.persistence.EntityManager;
@@ -78,7 +78,7 @@ class ContentServiceTest {
         // when, then
         assertThatThrownBy(
                 () -> contentService.writePlan(authMember, study.getId(), request))
-                .isInstanceOf(ParticipantStepException.class);
+                .isInstanceOf(StudyStepException.class);
     }
 
     @Test
@@ -105,7 +105,7 @@ class ContentServiceTest {
         assertThatThrownBy(
                 () -> contentService.writeRetrospect(authMember, study.getId(),
                         request))
-                .isInstanceOf(ParticipantStepException.class);
+                .isInstanceOf(StudyStepException.class);
     }
 
     @Test
@@ -119,7 +119,7 @@ class ContentServiceTest {
         assertThatThrownBy(
                 () -> contentService.writeRetrospect(authMember, study.getId(),
                         request))
-                .isInstanceOf(ParticipantStepException.class);
+                .isInstanceOf(StudyStepException.class);
     }
 
     @Test

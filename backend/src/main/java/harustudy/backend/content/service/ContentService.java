@@ -13,7 +13,7 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.exception.ParticipantNotFoundException;
-import harustudy.backend.participant.exception.ParticipantStepException;
+import harustudy.backend.participant.exception.StudyStepException;
 import harustudy.backend.participant.exception.ParticipantNotBelongToStudyException;
 import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.study.domain.Study;
@@ -120,7 +120,7 @@ public class ContentService {
 
     private void validateParticipantIsPlanning(Participant participant) {
         if (participant.isNotPlanning()) {
-            throw new ParticipantStepException();
+            throw new StudyStepException();
         }
     }
 
@@ -153,13 +153,13 @@ public class ContentService {
 
     private void validateParticipantIsRetrospect(Participant participant) {
         if (participant.isNotRetrospect()) {
-            throw new ParticipantStepException();
+            throw new StudyStepException();
         }
     }
 
     private void validateIsPlanFilled(Content recentContent) {
         if (recentContent.hasEmptyPlan()) {
-            throw new ParticipantStepException();
+            throw new StudyStepException();
         }
     }
 }
