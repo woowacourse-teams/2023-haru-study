@@ -27,13 +27,13 @@ public class ParticipantService {
 
     private final MemberRepository memberRepository;
     private final ParticipantRepository participantRepository;
-    private final StudyRepository StudyRepository;
+    private final StudyRepository studyRepository;
 
     @Transactional(readOnly = true)
     public ParticipantResponse findParticipant(
             AuthMember authMember, Long studyId, Long participantId
     ) {
-        Study study = StudyRepository.findByIdIfExists(studyId);
+        Study study = studyRepository.findByIdIfExists(studyId);
         Participant participant = participantRepository.findByIdIfExists(participantId);
         validateParticipantIsRelatedWith(participant, authMember, study);
         return ParticipantResponse.from(participant);
@@ -43,7 +43,7 @@ public class ParticipantService {
     public ParticipantsResponse tempFindParticipantWithFilter(
             AuthMember authMember, Long studyId, Long memberId
     ) {
-        Study study = StudyRepository.findByIdIfExists(studyId);
+        Study study = studyRepository.findByIdIfExists(studyId);
         if (Objects.isNull(memberId)) {
             validateEverParticipated(authMember, study);
             return getParticipantsResponseWithoutMemberFilter(study);
@@ -67,7 +67,7 @@ public class ParticipantService {
     public ParticipantsResponse findParticipantsWithFilter(
             AuthMember authMember, Long studyId, @Nullable Long memberId
     ) {
-        Study study = StudyRepository.findByIdIfExists(studyId);
+        Study study = studyRepository.findByIdIfExists(studyId);
         if (Objects.isNull(memberId)) {
             validateEverParticipated(authMember, study);
             return getParticipantsResponseWithoutMemberFilter(study);
@@ -106,7 +106,7 @@ public class ParticipantService {
 
     public void proceed(AuthMember authMember, Long studyId, Long participantId) {
         Participant participant = participantRepository.findByIdIfExists(participantId);
-        Study study = StudyRepository.findByIdIfExists(studyId);
+        Study study = studyRepository.findByIdIfExists(studyId);
 
         validateParticipantIsRelatedWith(participant, authMember, study);
         participant.proceed();
@@ -116,7 +116,7 @@ public class ParticipantService {
             ParticipateStudyRequest request) {
         Member member = memberRepository.findByIdIfExists(request.memberId());
         validateIsSameMemberId(authMember, request.memberId());
-        Study study = StudyRepository.findByIdIfExists(studyId);
+        Study study = studyRepository.findByIdIfExists(studyId);
         Participant participant = new Participant(study, member, request.nickname());
         participant.generateContents(study.getTotalCycle());
         Participant saved = participantRepository.save(participant);
@@ -151,7 +151,7 @@ public class ParticipantService {
     }
 
     public void deleteParticipant(AuthMember authMember, Long studyId, Long participantId) {
-        Study study = StudyRepository.findByIdIfExists(studyId);
+        Study study = studyRepository.findByIdIfExists(studyId);
         validateEverParticipated(authMember, study);
         Participant participant = participantRepository.findByIdIfExists(participantId);
         validateParticipantIsRelatedWith(participant, authMember, study);

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class StudyController {
 
-    private final StudyService StudyService;
+    private final StudyService studyService;
 
     @Operation(summary = "단일 스터디 정보 조회")
     @GetMapping("/api/studies/{studyId}")
@@ -28,7 +28,7 @@ public class StudyController {
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId
     ) {
-        StudyResponse response = StudyService.findStudy(studyId);
+        StudyResponse response = studyService.findStudy(studyId);
         return ResponseEntity.ok(response);
     }
 
@@ -39,7 +39,7 @@ public class StudyController {
             @RequestParam(required = false) Long memberId,
             @RequestParam(required = false) String participantCode
     ) {
-        StudiesResponse response = StudyService.findStudyWithFilter(
+        StudiesResponse response = studyService.findStudyWithFilter(
                 memberId, participantCode);
         return ResponseEntity.ok(response);
     }
@@ -51,7 +51,7 @@ public class StudyController {
             @Authenticated AuthMember authMember,
             @RequestBody CreateStudyRequest request
     ) {
-        CreateStudyResponse response = StudyService.createStudy(request);
+        CreateStudyResponse response = studyService.createStudy(request);
         return ResponseEntity.created(URI.create("/api/studies/" + response.studyId()))
                 .body(response);
     }
