@@ -1,6 +1,8 @@
 import type { PropsWithChildren } from 'react';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { createContext, useContext, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import useFetch from '@Hooks/api/useFetch';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
@@ -10,74 +12,35 @@ import { requestGetMemberInfo } from '@Apis/index';
 
 import type { MemberInfo } from '@Types/member';
 
-import { ApiError } from '@Errors/index';
-
 type Actions = {
-  initMemberInfo: (memberInfo: MemberInfo) => void;
+  refetchMemberInfo: () => void;
   clearMemberInfo: () => void;
 };
 
-const MemberInfoContext = createContext<{ memberInfo: MemberInfo | null; isLoading: boolean }>({
-  memberInfo: null,
-  isLoading: false,
-});
+const MemberInfoContext = createContext<MemberInfo | null>(null);
 
 const MemberInfoActionContext = createContext<Actions | null>(null);
 
 const MemberInfoProvider = ({ children }: PropsWithChildren) => {
-  const [memberInfo, setMemberInfo] = useState<MemberInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { result, clearResult, refetch } = useFetch(() => requestGetMemberInfo());
+  const memberInfo = result?.data || null;
 
   const navigate = useNavigate();
-  const { pathname } = useLocation();
 
   const actions: Actions = useMemo(
     () => ({
-      initMemberInfo: (memberInfo: MemberInfo) => {
-        setMemberInfo(memberInfo);
-      },
+      refetchMemberInfo: () => refetch,
       clearMemberInfo: () => {
         tokenStorage.clear();
-        setMemberInfo(null);
+        clearResult();
         navigate(ROUTES_PATH.landing);
       },
     }),
-    [navigate],
+    [clearResult, navigate, refetch],
   );
 
-  const fetchMemberInfo = useCallback(async () => {
-    try {
-      const { data } = await requestGetMemberInfo();
-      actions.initMemberInfo(data);
-    } catch (reason) {
-      // Interceptor로 로직 변경 예정
-      if (reason instanceof ApiError && (reason.code === 1402 || reason.code === 1405)) {
-        actions.clearMemberInfo();
-        return;
-      }
-
-      throw reason;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [actions]);
-
-  useEffect(() => {
-    if (pathname === ROUTES_PATH.auth) return;
-
-    if (memberInfo) return;
-
-    fetchMemberInfo();
-  }, [navigate, pathname, fetchMemberInfo, memberInfo, actions]);
-
-  useEffect(() => {
-    if (!memberInfo && !isLoading) {
-      navigate(ROUTES_PATH.landing);
-    }
-  }, [isLoading, memberInfo, navigate]);
-
   return (
-    <MemberInfoContext.Provider value={{ memberInfo, isLoading }}>
+    <MemberInfoContext.Provider value={memberInfo}>
       <MemberInfoActionContext.Provider value={actions}>{children}</MemberInfoActionContext.Provider>
     </MemberInfoContext.Provider>
   );
@@ -85,11 +48,7 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
 
 export default MemberInfoProvider;
 
-export const useMemberInfo = () => {
-  const value = useContext(MemberInfoContext);
-
-  return { data: value.memberInfo, isLoading: value.isLoading };
-};
+export const useMemberInfo = () => useContext(MemberInfoContext);
 
 export const useMemberInfoAction = () => {
   const value = useContext(MemberInfoActionContext);
