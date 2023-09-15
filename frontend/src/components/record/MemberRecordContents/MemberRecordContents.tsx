@@ -16,7 +16,6 @@ const MemberRecordContents = () => {
   const { data, isLoading } = useMemberInfo();
   const memberId = data?.memberId;
 
-  // data 옵션널 제거 필요
   if (data?.loginType === 'guest') {
     navigate('/404');
   }
@@ -28,7 +27,6 @@ const MemberRecordContents = () => {
         $style={css`
           font-weight: 600;
 
-          // 제거 될 스켈레톤 UI
           ${isLoading &&
           css`
             width: 80%;
@@ -48,7 +46,6 @@ const MemberRecordContents = () => {
           </SkeletonLayout>
         }
       >
-        {/*  data 옵션널 제거 필요 */}
         {memberId && <MemberRecordList memberId={memberId} />}
       </Suspense>
     </>
