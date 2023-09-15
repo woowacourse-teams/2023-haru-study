@@ -2,6 +2,7 @@ import { css, styled } from 'styled-components';
 
 import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
 import Tabs from '@Components/common/Tabs/Tabs';
+import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
 import useMemberRecordContents from '@Hooks/record/useMemberRecordContents';
@@ -26,7 +27,7 @@ type Props = {
 };
 
 const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCycle }: Props) => {
-  const { memberRecordContents } = useMemberRecordContents(studyId, progressId);
+  const { memberRecordContents, isLoading } = useMemberRecordContents(studyId, progressId);
 
   const isDoneCycle = (selectedTabCycle: number) => {
     if (isCompleted) return true;
@@ -44,6 +45,10 @@ const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCyc
 
     return '이(가)';
   };
+
+  if (isLoading) {
+    return <TabsSkeleton />;
+  }
 
   return (
     <ProgressRecordLayout>

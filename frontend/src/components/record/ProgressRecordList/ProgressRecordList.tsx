@@ -1,7 +1,6 @@
-import { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import Accordion from '@Components/common/Accordion/Accordion';
-import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
 import useStudyMembers from '@Hooks/record/useStudyMembers';
@@ -28,15 +27,13 @@ const ProgressRecordList = ({ studyId, isRefetch }: Props) => {
             <Typography variant="h5">{nickname}의 기록</Typography>
           </Accordion.Header>
           <Accordion.Panel>
-            <Suspense fallback={<TabsSkeleton />}>
-              <ProgressRecord
-                studyId={studyId}
-                progressId={progressId}
-                nickname={nickname}
-                isCompleted={step === 'done'}
-                currentCycle={currentCycle}
-              />
-            </Suspense>
+            <ProgressRecord
+              studyId={studyId}
+              progressId={progressId}
+              nickname={nickname}
+              isCompleted={step === 'done'}
+              currentCycle={currentCycle}
+            />
           </Accordion.Panel>
         </Accordion.Item>
       ))}
