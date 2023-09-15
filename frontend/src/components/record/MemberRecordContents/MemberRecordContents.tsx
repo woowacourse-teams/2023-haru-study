@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { styled, css } from 'styled-components';
+import { css } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
@@ -9,6 +9,7 @@ import { TextSkeletonStyle } from '@Styles/common';
 import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
 import MemberRecordList from '../MemberRecordList/MemberRecordList';
+import MemberRecordListSkeleton from '../MemberRecordList/MemberRecordListSkeleton';
 
 const MemberRecordContents = () => {
   const navigate = useNavigate();
@@ -37,15 +38,7 @@ const MemberRecordContents = () => {
       >
         {data?.name}님의 스터디 기록
       </Typography>
-      <Suspense
-        fallback={
-          <SkeletonLayout>
-            <SkeletonItem />
-            <SkeletonItem />
-            <SkeletonItem />
-          </SkeletonLayout>
-        }
-      >
+      <Suspense fallback={<MemberRecordListSkeleton />}>
         {memberId && <MemberRecordList memberId={memberId} />}
       </Suspense>
     </>
@@ -53,15 +46,3 @@ const MemberRecordContents = () => {
 };
 
 export default MemberRecordContents;
-
-const SkeletonLayout = styled.div`
-  display: grid;
-  row-gap: 40px;
-
-  max-width: 1200px;
-`;
-
-const SkeletonItem = styled.div`
-  height: 130px;
-  ${TextSkeletonStyle}
-`;
