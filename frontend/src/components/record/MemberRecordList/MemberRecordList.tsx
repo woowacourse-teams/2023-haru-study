@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
-import useMemberRecord from '@Hooks/record/useMemberRecord';
+import useMemberStudyListData from '@Hooks/record/useMemberStudyListData';
 
 import color from '@Styles/color';
 
@@ -23,7 +23,7 @@ type Props = {
 const MemberRecordList = ({ memberId }: Props) => {
   const navigate = useNavigate();
 
-  const { studyList, isLoading } = useMemberRecord(memberId);
+  const { studyList, isLoading } = useMemberStudyListData(memberId);
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
 

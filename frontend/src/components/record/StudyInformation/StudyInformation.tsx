@@ -2,7 +2,7 @@ import { css } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
-import useStudyRecordData from '@Hooks/record/useStudyRecordData';
+import useStudyData from '@Hooks/record/useStudyData';
 
 import color from '@Styles/color';
 
@@ -20,7 +20,7 @@ type Props = {
 };
 
 const StudyInformation = ({ studyId }: Props) => {
-  const { studyBasicInfo, isLoading } = useStudyRecordData(studyId);
+  const { studyBasicInfo, isLoading } = useStudyData(studyId);
 
   const displayDate = studyBasicInfo?.createdDateTime
     ? date.format(new Date(studyBasicInfo?.createdDateTime))
