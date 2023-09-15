@@ -14,10 +14,10 @@ import MemberRecordListSkeleton from '../MemberRecordList/MemberRecordListSkelet
 const MemberRecordContents = () => {
   const navigate = useNavigate();
 
-  const { data, isLoading } = useMemberInfo();
-  const memberId = data?.memberId;
+  const memberInfo = useMemberInfo();
+  const memberId = memberInfo?.memberId;
 
-  if (data?.loginType === 'guest') {
+  if (memberInfo?.loginType === 'guest') {
     navigate('/404');
   }
 
@@ -28,7 +28,7 @@ const MemberRecordContents = () => {
         $style={css`
           font-weight: 600;
 
-          ${isLoading &&
+          ${!memberInfo &&
           css`
             width: 80%;
             min-width: 400px;
@@ -36,7 +36,7 @@ const MemberRecordContents = () => {
           `}
         `}
       >
-        {data?.name}님의 스터디 기록
+        {memberInfo?.name}님의 스터디 기록
       </Typography>
       <Suspense fallback={<MemberRecordListSkeleton />}>
         {memberId && <MemberRecordList memberId={memberId} />}
