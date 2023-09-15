@@ -4,7 +4,7 @@ type Status = 'pending' | 'fulfilled' | 'error';
 
 type Options = {
   suspense?: boolean;
-  enable?: boolean;
+  enabled?: boolean;
 
   onSuccess?: <T>(result: T) => void;
   onError?: (error: Error) => void;
@@ -12,7 +12,7 @@ type Options = {
 
 const useFetch = <T>(
   request: () => Promise<T>,
-  { suspense = true, enable = true, onSuccess, onError }: Options = {},
+  { suspense = true, enabled = true, onSuccess, onError }: Options = {},
 ) => {
   const [promise, setPromise] = useState<Promise<void> | null>(null);
   const [status, setStatus] = useState<Status>('pending');
@@ -43,10 +43,10 @@ const useFetch = <T>(
   }, [rejectPromise, request, resolvePromise]);
 
   useEffect(() => {
-    if (enable) {
+    if (enabled) {
       fetch();
     }
-  }, [enable, fetch]);
+  }, [enabled, fetch]);
 
   const clearResult = () => setResult(null);
 
