@@ -79,7 +79,7 @@ const CreateStudyForm = () => {
             position: relative;
           `}
         >
-          <Select.Trigger triggerText="횟수를 선택해주세요" />
+          <Select.Trigger triggerText="횟수를 선택해주세요" testId="cycle" />
           <Select.List
             $style={css`
               position: absolute;
@@ -100,7 +100,7 @@ const CreateStudyForm = () => {
             position: relative;
           `}
         >
-          <Select.Trigger triggerText="학습 시간을 선택해주세요" />
+          <Select.Trigger triggerText="학습 시간을 선택해주세요" testId="timepercycle" />
           <Select.List
             $style={css`
               position: absolute;
