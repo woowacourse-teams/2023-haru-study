@@ -122,16 +122,16 @@ const ProgressRecordLayout = styled.div`
 `;
 
 const TabItemContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 90px;
-  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
 
   margin-top: 20px;
 `;
 
 const TabItemSection = styled.div`
-  display: grid;
-  row-gap: 45px;
-  align-items: flex-start;
+  width: 46%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 45px;
 `;

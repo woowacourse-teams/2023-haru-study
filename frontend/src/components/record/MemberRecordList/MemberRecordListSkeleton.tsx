@@ -15,8 +15,9 @@ const MemberRecordListSkeleton = () => {
 export default MemberRecordListSkeleton;
 
 const SkeletonLayout = styled.div`
-  display: grid;
-  row-gap: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 
   max-width: 1200px;
 `;

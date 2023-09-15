@@ -3,8 +3,9 @@ import { styled } from 'styled-components';
 import color from '@Styles/color';
 
 export const StudyInformationLayout = styled.div`
-  display: grid;
-  row-gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 
   h2 {
     margin-bottom: 20px;
@@ -12,12 +13,25 @@ export const StudyInformationLayout = styled.div`
 `;
 
 export const StudyInfoContainer = styled.div`
-  display: grid;
-  grid-template-columns: 20px 160px 160px;
+  display: flex;
   align-items: center;
-  column-gap: 10px;
+  gap: 10px;
+
+  :nth-child(1) {
+    width: 30px;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  :nth-child(2) {
+    width: 160px;
+  }
 
   :nth-child(3) {
+    width: 160px;
     text-align: end;
   }
 
