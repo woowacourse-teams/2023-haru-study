@@ -4,9 +4,7 @@ import Accordion from '@Components/common/Accordion/Accordion';
 import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
-import useFetch from '@Hooks/api/useFetch';
-
-import { requestGetStudyMembers } from '@Apis/index';
+import useStudyMembers from '@Hooks/record/useStudyMembers';
 
 import ProgressRecord from '../ProgressRecord/ProgressRecord';
 
@@ -16,9 +14,7 @@ type Props = {
 };
 
 const ProgressRecordList = forwardRef(({ studyId, isRefetch }: Props) => {
-  const { result, refetch } = useFetch(() => requestGetStudyMembers(studyId));
-
-  const memberProgresses = result ? result.data.progresses : [];
+  const { memberProgresses, refetch } = useStudyMembers(studyId);
 
   useEffect(() => {
     if (isRefetch) refetch();
