@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
-import useFetch from '@Hooks/api/useFetch';
+import useMemberRecord from '@Hooks/record/useMemberRecord';
 
 import color from '@Styles/color';
 
@@ -14,25 +14,20 @@ import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
 import date from '@Utils/date';
 
-import { requestGetMemberStudyListData } from '@Apis/index';
-
 import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
 
-// memberId 옵션널 제거 필요
 type Props = {
-  memberId?: string;
+  memberId: string;
 };
 
-// memberId 기본 값 수정 필요
-const MemberRecordList = ({ memberId = '1' }: Props) => {
+const MemberRecordList = ({ memberId }: Props) => {
   const navigate = useNavigate();
 
-  const { result } = useFetch(() => requestGetMemberStudyListData(memberId));
-  const studyList = result ? result.data.studies : [];
+  const { studyList, isLoading } = useMemberRecord(memberId);
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
 
-  if (result && studyList.length === 0) return <EmptyMemberRecord />;
+  if (!isLoading && studyList.length === 0) return <EmptyMemberRecord />;
 
   return (
     <Layout>
