@@ -29,7 +29,7 @@ const StudyEffectGuide = () => {
       <Typography variant="h2">사이클 요소 별 학습 효과</Typography>
       <StudyEffectList>
         {STUDY_EFFECT.map(({ icon, title, description }) => (
-          <StudyEffectItem>
+          <StudyEffectItem key={title}>
             <StudyEffectTitle>
               {icon}
               {title}
