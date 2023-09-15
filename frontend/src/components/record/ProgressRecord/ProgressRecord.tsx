@@ -2,10 +2,9 @@ import { css, styled } from 'styled-components';
 
 import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
 import Tabs from '@Components/common/Tabs/Tabs';
-import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
-import useProgressRecord from '@Hooks/record/useProgressRecord';
+import useFetch from '@Hooks/api/useFetch';
 
 import color from '@Styles/color';
 
@@ -15,6 +14,8 @@ import GoalIcon from '@Assets/icons/GoalIcon';
 import PencilIcon from '@Assets/icons/PencilIcon';
 
 import { getKeys } from '@Utils/getKeys';
+
+import { requestGetMemberRecordContents } from '@Apis/index';
 
 import type { Plan, Retrospect } from '@Types/study';
 
@@ -27,11 +28,8 @@ type Props = {
 };
 
 const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCycle }: Props) => {
-  const { memberRecordContents, isLoading } = useProgressRecord(studyId, progressId);
-
-  if (isLoading) {
-    return <TabsSkeleton />;
-  }
+  const { result } = useFetch(() => requestGetMemberRecordContents(studyId, progressId));
+  const memberRecordContents = result ? result.data.content : [];
 
   const isDoneCycle = (selectedTabCycle: number) => {
     if (isCompleted) return true;
@@ -110,6 +108,7 @@ export default ProgressRecord;
 
 const ProgressRecordLayout = styled.div`
   padding: 40px 30px;
+  min-height: 308px;
 
   h5 {
     display: flex;
