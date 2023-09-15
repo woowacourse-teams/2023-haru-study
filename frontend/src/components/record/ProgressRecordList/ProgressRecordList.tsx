@@ -1,4 +1,4 @@
-import { Suspense, forwardRef, useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import Accordion from '@Components/common/Accordion/Accordion';
 import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
@@ -13,7 +13,7 @@ type Props = {
   isRefetch: boolean;
 };
 
-const ProgressRecordList = forwardRef(({ studyId, isRefetch }: Props) => {
+const ProgressRecordList = ({ studyId, isRefetch }: Props) => {
   const { memberProgresses, refetch } = useStudyMembers(studyId);
 
   useEffect(() => {
@@ -42,6 +42,6 @@ const ProgressRecordList = forwardRef(({ studyId, isRefetch }: Props) => {
       ))}
     </Accordion>
   );
-});
+};
 
 export default ProgressRecordList;
