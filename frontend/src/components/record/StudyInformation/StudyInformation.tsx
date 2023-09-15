@@ -2,7 +2,7 @@ import { css } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
-import useFetch from '@Hooks/api/useFetch';
+import useStudyRecordData from '@Hooks/record/useStudyRecordData';
 
 import color from '@Styles/color';
 
@@ -12,8 +12,6 @@ import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
 import date from '@Utils/date';
 
-import { requestGetStudyData } from '@Apis/index';
-
 import StudyInformationSkeleton from './StudyInformationSkeleton';
 import { StudyInfoContainer, StudyInformationLayout } from './style';
 
@@ -22,10 +20,7 @@ type Props = {
 };
 
 const StudyInformation = ({ studyId }: Props) => {
-  const { result, isLoading } = useFetch(() => requestGetStudyData(studyId), {
-    suspense: false,
-  });
-  const studyBasicInfo = result?.data;
+  const { studyBasicInfo, isLoading } = useStudyRecordData(studyId);
 
   const displayDate = studyBasicInfo?.createdDateTime
     ? date.format(new Date(studyBasicInfo?.createdDateTime))
