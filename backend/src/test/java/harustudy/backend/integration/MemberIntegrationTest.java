@@ -5,8 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import harustudy.backend.member.dto.MemberResponse;
-import harustudy.backend.progress.domain.PomodoroProgress;
-import harustudy.backend.study.domain.PomodoroStudy;
+import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.study.domain.Study;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class MemberIntegrationTest extends IntegrationTest {
 
-    private PomodoroStudy study;
+    private Study study;
     private MemberDto memberDto1;
     private MemberDto memberDto2;
 
@@ -27,19 +27,19 @@ class MemberIntegrationTest extends IntegrationTest {
     void setUp() {
         super.setUp();
 
-        study = new PomodoroStudy("studyName", 1, 20);
+        study = new Study("studyName", 1, 20);
 
         memberDto1 = createMember("member1");
         memberDto2 = createMember("member2");
 
-        PomodoroProgress pomodoroProgress1 = new PomodoroProgress(study, memberDto1.member(),
+        Participant participant1 = new Participant(study, memberDto1.member(),
                 "name1");
-        PomodoroProgress pomodoroProgress2 = new PomodoroProgress(study, memberDto2.member(),
+        Participant participant2 = new Participant(study, memberDto2.member(),
                 "name2");
 
         entityManager.persist(study);
-        entityManager.persist(pomodoroProgress1);
-        entityManager.persist(pomodoroProgress2);
+        entityManager.persist(participant1);
+        entityManager.persist(participant2);
     }
 
     @Test
