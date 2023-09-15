@@ -14,6 +14,7 @@ const MemberRecordContents = () => {
   const navigate = useNavigate();
 
   const { data, isLoading } = useMemberInfo();
+  const memberId = data?.memberId;
 
   // data 옵션널 제거 필요
   if (data?.loginType === 'guest') {
@@ -48,7 +49,7 @@ const MemberRecordContents = () => {
         }
       >
         {/*  data 옵션널 제거 필요 */}
-        <MemberRecordList memberId={data?.memberId} />
+        {memberId && <MemberRecordList memberId={memberId} />}
       </Suspense>
     </>
   );
