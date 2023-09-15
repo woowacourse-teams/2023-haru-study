@@ -27,6 +27,7 @@ const MemberRecordContents = () => {
         $style={css`
           font-weight: 600;
 
+          // 제거 될 스켈레톤 UI
           ${isLoading &&
           css`
             width: 80%;
