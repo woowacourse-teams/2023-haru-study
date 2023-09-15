@@ -10,9 +10,7 @@ type Props = {
 };
 
 const ResetButton = ({ refetchProgressRecordList, isRefetch }: Props) => {
-  const handleClickResetButton = () => {
-    refetchProgressRecordList();
-  };
+  const handleClickResetButton = () => refetchProgressRecordList();
 
   return (
     <Layout onClick={handleClickResetButton} role="presentation" $rotateAnimation={isRefetch}>
