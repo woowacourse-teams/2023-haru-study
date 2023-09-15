@@ -35,10 +35,14 @@ const LandingButton = () => {
     return (
       <ButtonContainer $isLogin={isLogin}>
         <Link to={ROUTES_PATH.create}>
-          <Button variant="primary">스터디 개설하기</Button>
+          <Button variant="primary" $block={false} size="small">
+            스터디 개설하기
+          </Button>
         </Link>
         <Link to={ROUTES_PATH.participation}>
-          <Button variant="outlined">스터디 참여하기</Button>
+          <Button variant="outlined" $block={false} size="small">
+            스터디 참여하기
+          </Button>
         </Link>
       </ButtonContainer>
     );
@@ -51,6 +55,8 @@ const LandingButton = () => {
         onClick={() => {
           openModal(<LoginModalContents />);
         }}
+        $block={false}
+        size="small"
       >
         하루스터디 시작하기
       </Button>
@@ -73,15 +79,11 @@ type ButtonContainerProps = {
 };
 
 const ButtonContainer = styled.div<ButtonContainerProps>`
-  display: grid;
-  column-gap: 10px;
+  display: flex;
+  gap: 10px;
 
-  ${({ $isLogin }) => css`
-    grid-template-columns: ${$isLogin ? '1fr 1fr' : '1fr'};
-  `}
-
-  @media screen and (max-width: 800px) {
-    grid-template-columns: 1fr;
-    row-gap: 20px;
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
   }
 `;
