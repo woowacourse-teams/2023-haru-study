@@ -3,8 +3,9 @@ import { styled } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
+import useFetch from '@Hooks/api/useFetch';
+
 import color from '@Styles/color';
-import { TextSkeletonStyle } from '@Styles/common';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
@@ -13,34 +14,29 @@ import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
 import date from '@Utils/date';
 
-import type { StudyBasicInfo } from '@Types/study';
+import { requestGetMemberStudyListData } from '@Apis/index';
 
 import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
 
+// memberId 옵션널 제거 필요
 type Props = {
-  studyList: StudyBasicInfo[] | null;
-  isLoading: boolean;
+  memberId?: string;
 };
 
-const MemberRecordList = ({ studyList, isLoading }: Props) => {
+// memberId 기본 값 수정 필요
+const MemberRecordList = ({ memberId = '1' }: Props) => {
   const navigate = useNavigate();
+
+  const { result } = useFetch(() => requestGetMemberStudyListData(memberId));
+  const studyList = result ? result.data.studies : [];
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
 
-  if (isLoading)
-    return (
-      <SkeletonLayout>
-        <SkeletonItem />
-        <SkeletonItem />
-        <SkeletonItem />
-      </SkeletonLayout>
-    );
-
-  if (studyList?.length === 0) return <EmptyMemberRecord />;
+  if (result && studyList.length === 0) return <EmptyMemberRecord />;
 
   return (
     <Layout>
-      {studyList?.map(({ studyId, name, createdDateTime, totalCycle, timePerCycle }) => {
+      {studyList.map(({ studyId, name, createdDateTime, totalCycle, timePerCycle }) => {
         return (
           <StudyItem key={studyId} onClick={() => handleClickStudyItem(studyId)}>
             <StudyNameDateContainer>
@@ -120,16 +116,4 @@ const StudyCycleInfoContainer = styled.div`
     font-size: 1.8rem;
     font-weight: 400;
   }
-`;
-
-const SkeletonLayout = styled.div`
-  display: grid;
-  row-gap: 40px;
-
-  max-width: 1200px;
-`;
-
-const SkeletonItem = styled.div`
-  height: 130px;
-  ${TextSkeletonStyle}
 `;
