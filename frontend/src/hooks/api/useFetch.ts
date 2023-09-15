@@ -23,9 +23,13 @@ const useFetch = <T>(request: () => Promise<T>, { suspense = true }: Options = {
     setError(error);
   }, []);
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     setStatus('pending');
     setPromise(request().then(resolvePromise, rejectPromise));
+  }, []);
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   if (suspense && status === 'pending' && promise) {
@@ -35,7 +39,7 @@ const useFetch = <T>(request: () => Promise<T>, { suspense = true }: Options = {
     throw error;
   }
 
-  return { result, isLoading: status === 'pending', error: error };
+  return { result, isLoading: status === 'pending', error: error, refetch: fetchData };
 };
 
 export default useFetch;
