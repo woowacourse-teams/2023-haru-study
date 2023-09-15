@@ -4,7 +4,7 @@ import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
 import Tabs from '@Components/common/Tabs/Tabs';
 import Typography from '@Components/common/Typography/Typography';
 
-import useFetch from '@Hooks/api/useFetch';
+import useMemberRecordContents from '@Hooks/record/useMemberRecordContents';
 
 import color from '@Styles/color';
 
@@ -14,8 +14,6 @@ import GoalIcon from '@Assets/icons/GoalIcon';
 import PencilIcon from '@Assets/icons/PencilIcon';
 
 import { getKeys } from '@Utils/getKeys';
-
-import { requestGetMemberRecordContents } from '@Apis/index';
 
 import type { Plan, Retrospect } from '@Types/study';
 
@@ -28,8 +26,7 @@ type Props = {
 };
 
 const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCycle }: Props) => {
-  const { result } = useFetch(() => requestGetMemberRecordContents(studyId, progressId));
-  const memberRecordContents = result ? result.data.content : [];
+  const { memberRecordContents } = useMemberRecordContents(studyId, progressId);
 
   const isDoneCycle = (selectedTabCycle: number) => {
     if (isCompleted) return true;
