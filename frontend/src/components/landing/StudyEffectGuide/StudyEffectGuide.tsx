@@ -61,6 +61,7 @@ const Layout = styled.div`
 const StudyEffectList = styled.ul`
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 50px;
 
   @media screen and (max-width: 768px) {

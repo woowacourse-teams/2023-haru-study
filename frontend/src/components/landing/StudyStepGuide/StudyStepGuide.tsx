@@ -88,6 +88,8 @@ const StepGuideImage = styled.div`
 `;
 
 const StepGuideDescription = styled.div`
+  width: 40%;
+
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -96,6 +98,8 @@ const StepGuideDescription = styled.div`
   white-space: pre-line;
 
   @media screen and (max-width: 768px) {
+    width: 100%;
+
     h2 {
       font-size: 32px;
     }
