@@ -116,7 +116,7 @@ const STUDY_MEMBERS: { progresses: MemberProgress[] } = {
 };
 
 const STUDY_METADATA = {
-  studyName: '안오면 지상렬',
+  name: '안오면 지상렬',
   totalCycle: 3,
   timePerCycle: 25,
   createdDateTime: '2023-08-15T06:25:39.093Z',

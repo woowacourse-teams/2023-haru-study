@@ -1,21 +1,27 @@
+import { forwardRef, useEffect } from 'react';
+
 import Accordion from '@Components/common/Accordion/Accordion';
-import AccordionSkeleton from '@Components/common/Accordion/AccordionSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
-import type { MemberProgress } from '@Types/study';
+import useFetch from '@Hooks/api/useFetch';
+
+import { requestGetStudyMembers } from '@Apis/index';
 
 import ProgressRecord from '../ProgressRecord/ProgressRecord';
 
 type Props = {
-  memberProgresses: MemberProgress[];
-  studyId?: string;
-  isLoading: boolean;
+  studyId: string;
+  isRefetch: boolean;
 };
 
-const ProgressRecordList = ({ memberProgresses = [], studyId = '', isLoading }: Props) => {
-  if (isLoading) {
-    return <AccordionSkeleton />;
-  }
+const ProgressRecordList = forwardRef(({ studyId, isRefetch }: Props) => {
+  const { result, refetch } = useFetch(() => requestGetStudyMembers(studyId));
+
+  const memberProgresses = result ? result.data.progresses : [];
+
+  useEffect(() => {
+    if (isRefetch) refetch();
+  }, [isRefetch, refetch]);
 
   return (
     <Accordion>
@@ -37,6 +43,6 @@ const ProgressRecordList = ({ memberProgresses = [], studyId = '', isLoading }: 
       ))}
     </Accordion>
   );
-};
+});
 
 export default ProgressRecordList;
