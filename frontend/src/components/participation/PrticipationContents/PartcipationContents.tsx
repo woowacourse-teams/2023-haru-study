@@ -4,7 +4,7 @@ import { css, styled } from 'styled-components';
 import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
 import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
 
-import useCheckProgresses from '@Hooks/participation/useCheckProgresses';
+import useCheckProgresses from '@Components/participation/hooks/useCheckProgresses';
 
 import color from '@Styles/color';
 

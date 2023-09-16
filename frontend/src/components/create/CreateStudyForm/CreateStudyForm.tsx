@@ -5,9 +5,8 @@ import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Select from '@Components/common/Select/Select';
 import Typography from '@Components/common/Typography/Typography';
-
-import useCreateStudy from '@Hooks/create/useCreateStudy';
-import useCreateStudyForm from '@Hooks/create/useCreateStudyForm';
+import useCreateStudy from '@Components/create/hooks/useCreateStudy';
+import useCreateStudyForm from '@Components/create/hooks/useCreateStudyForm';
 
 import color from '@Styles/color';
 
