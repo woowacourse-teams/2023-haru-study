@@ -3,9 +3,8 @@ import { useEffect } from 'react';
 import Accordion from '@Components/common/Accordion/Accordion';
 import Typography from '@Components/common/Typography/Typography';
 
-import useStudyMembers from '@Hooks/record/useStudyMembers';
-
 import ProgressRecord from '../ProgressRecord/ProgressRecord';
+import useStudyMembers from '../hooks/useStudyMembers';
 
 type Props = {
   studyId: string;

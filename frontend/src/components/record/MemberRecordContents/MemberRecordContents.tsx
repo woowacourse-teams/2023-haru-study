@@ -4,8 +4,6 @@ import { css } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
-import { TextSkeletonStyle } from '@Styles/common';
-
 import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
 import MemberRecordList from '../MemberRecordList/MemberRecordList';
@@ -27,13 +25,6 @@ const MemberRecordContents = () => {
         variant="h2"
         $style={css`
           font-weight: 600;
-
-          ${!memberInfo &&
-          css`
-            width: 80%;
-            min-width: 400px;
-            ${TextSkeletonStyle}
-          `}
         `}
       >
         {memberInfo?.name}님의 스터디 기록

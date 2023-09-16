@@ -2,8 +2,6 @@ import { css } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
-import useStudyData from '@Hooks/record/useStudyData';
-
 import color from '@Styles/color';
 
 import CalenderIcon from '@Assets/icons/CalenderIcon';
@@ -14,6 +12,7 @@ import date from '@Utils/date';
 
 import StudyInformationSkeleton from './StudyInformationSkeleton';
 import { StudyInfoContainer, StudyInformationLayout } from './style';
+import useStudyData from '../hooks/useStudyData';
 
 type Props = {
   studyId: string;

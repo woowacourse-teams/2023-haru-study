@@ -5,8 +5,6 @@ import Tabs from '@Components/common/Tabs/Tabs';
 import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
-import useMemberRecordContents from '@Hooks/record/useMemberRecordContents';
-
 import color from '@Styles/color';
 
 import { PLAN_KEYWORDS, RETROSPECT_KEYWORDS } from '@Constants/study';
@@ -17,6 +15,8 @@ import PencilIcon from '@Assets/icons/PencilIcon';
 import { getKeys } from '@Utils/getKeys';
 
 import type { Plan, Retrospect } from '@Types/study';
+
+import useMemberRecordContents from '../hooks/useMemberRecordContents';
 
 type Props = {
   studyId: string;

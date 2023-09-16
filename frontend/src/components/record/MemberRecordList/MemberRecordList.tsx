@@ -3,8 +3,6 @@ import { styled } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
-import useMemberStudyListData from '@Hooks/record/useMemberStudyListData';
-
 import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
@@ -15,6 +13,7 @@ import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 import date from '@Utils/date';
 
 import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
+import useMemberStudyListData from '../hooks/useMemberStudyListData';
 
 type Props = {
   memberId: string;
