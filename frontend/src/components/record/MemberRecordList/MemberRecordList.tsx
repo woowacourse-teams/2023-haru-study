@@ -4,7 +4,6 @@ import { styled } from 'styled-components';
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
-import { TextSkeletonStyle } from '@Styles/common';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
@@ -13,34 +12,25 @@ import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
 import date from '@Utils/date';
 
-import type { StudyBasicInfo } from '@Types/study';
-
 import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
+import useMemberStudyListData from '../hooks/useMemberStudyListData';
 
 type Props = {
-  studyList: StudyBasicInfo[] | null;
-  isLoading: boolean;
+  memberId: string;
 };
 
-const MemberRecordList = ({ studyList, isLoading }: Props) => {
+const MemberRecordList = ({ memberId }: Props) => {
   const navigate = useNavigate();
+
+  const { studyList, isLoading } = useMemberStudyListData(memberId);
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
 
-  if (isLoading)
-    return (
-      <SkeletonLayout>
-        <SkeletonItem />
-        <SkeletonItem />
-        <SkeletonItem />
-      </SkeletonLayout>
-    );
-
-  if (studyList?.length === 0) return <EmptyMemberRecord />;
+  if (!isLoading && studyList.length === 0) return <EmptyMemberRecord />;
 
   return (
     <Layout>
-      {studyList?.map(({ studyId, name, createdDateTime, totalCycle, timePerCycle }) => {
+      {studyList.map(({ studyId, name, createdDateTime, totalCycle, timePerCycle }) => {
         return (
           <StudyItem key={studyId} onClick={() => handleClickStudyItem(studyId)}>
             <StudyNameDateContainer>
@@ -120,16 +110,4 @@ const StudyCycleInfoContainer = styled.div`
     font-size: 1.8rem;
     font-weight: 400;
   }
-`;
-
-const SkeletonLayout = styled.div`
-  display: grid;
-  row-gap: 40px;
-
-  max-width: 1200px;
-`;
-
-const SkeletonItem = styled.div`
-  height: 130px;
-  ${TextSkeletonStyle}
 `;
