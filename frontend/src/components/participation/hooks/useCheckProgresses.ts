@@ -13,15 +13,11 @@ const useCheckProgresses = () => {
 
   const memberInfo = useMemberInfo();
 
-  const { result } = useFetch<ResponseCheckProgresses>(
-    () => requestGetCheckProgresses(studyId ?? '', memberInfo?.memberId ?? ''),
-    { suspense: true },
+  const { result } = useFetch<ResponseCheckProgresses>(() =>
+    requestGetCheckProgresses(studyId ?? '', memberInfo?.memberId ?? ''),
   );
 
-  if (!studyId) {
-    const error = new Error('잘못된 접근입니다.');
-    throw error;
-  }
+  if (!studyId) throw new Error('잘못된 접근입니다.');
 
   return { studyId, result };
 };
