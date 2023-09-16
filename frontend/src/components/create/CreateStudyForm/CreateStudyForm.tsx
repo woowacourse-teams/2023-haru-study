@@ -36,10 +36,10 @@ const CreateStudyForm = () => {
     isSelectedOptions,
   } = useCreateStudyForm();
 
-  const { mutate, isLoading } = useCreateStudy(studyName, totalCycle, timePerCycle);
+  const { createStudy, isLoading } = useCreateStudy(studyName, totalCycle, timePerCycle);
 
   const handleClickCreateStudyButton = async () => {
-    const result = await mutate();
+    const result = await createStudy();
 
     if (result) {
       const { studyId, data } = result;

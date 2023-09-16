@@ -15,11 +15,11 @@ const useCreateStudy = (
   totalCycle: TotalCycleOptions | null,
   timePerCycle: StudyTimePerCycleOptions | null,
 ) => {
-  const { mutate, isLoading } = useMutation<CreateStudyResult>(() =>
+  const { mutate: createStudy, isLoading } = useMutation<CreateStudyResult>(() =>
     requestPostCreateStudy(studyName, totalCycle, timePerCycle),
   );
 
-  return { mutate, isLoading };
+  return { createStudy, isLoading };
 };
 
 export default useCreateStudy;
