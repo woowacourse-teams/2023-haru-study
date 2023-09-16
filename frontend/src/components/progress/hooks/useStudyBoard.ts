@@ -13,7 +13,7 @@ const useStudyBoard = () => {
   const [error, setError] = useState<Error>();
 
   const { studyId } = useParams();
-  const { data: memberInfo } = useMemberInfo();
+  const memberInfo = useMemberInfo();
 
   const fetchStudyMetaData = useCallback(async () => {
     try {
