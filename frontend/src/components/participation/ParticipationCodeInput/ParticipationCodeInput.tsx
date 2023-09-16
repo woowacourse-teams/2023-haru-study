@@ -15,10 +15,10 @@ const ParticipationCodeInput = () => {
 
   const participantCodeInput = useInput(false);
 
-  const { mutate, isLoading } = useParticipationCode(participantCodeInput.state ?? '');
+  const { authenticateParticipationCode, isLoading } = useParticipationCode(participantCodeInput.state ?? '');
 
   const handleOnClickParticipateButton = async () => {
-    const result = await mutate();
+    const result = await authenticateParticipationCode();
 
     if (result) {
       navigate(`${ROUTES_PATH.preparation}/${result.studies[0].studyId}`, {
