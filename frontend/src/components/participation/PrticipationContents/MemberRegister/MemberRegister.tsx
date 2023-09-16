@@ -4,9 +4,9 @@ import { styled } from 'styled-components';
 import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
+import useRegisterMember from '@Components/participation/hooks/useRegisterProgress';
 
 import useInput from '@Hooks/common/useInput';
-import useRegisterMember from '@Hooks/participation/useRegisterProgress';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 import { ROUTES_PATH } from '@Constants/routes';

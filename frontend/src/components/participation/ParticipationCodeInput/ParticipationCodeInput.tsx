@@ -4,9 +4,9 @@ import { css, styled } from 'styled-components';
 import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
+import useParticipationCode from '@Components/participation/hooks/useParticipationCode';
 
 import useInput from '@Hooks/common/useInput';
-import useParticipationCode from '@Hooks/participation/useParticipationCode';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
