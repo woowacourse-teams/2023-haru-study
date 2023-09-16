@@ -40,7 +40,7 @@ const useFetch = <T>(
   const fetch = useCallback(() => {
     setStatus('pending');
     setPromise(request().then(resolvePromise, rejectPromise));
-  }, [rejectPromise, request, resolvePromise]);
+  }, []);
 
   useEffect(() => {
     if (enabled) {
