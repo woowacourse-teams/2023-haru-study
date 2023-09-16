@@ -6,7 +6,7 @@ const useMemberRecordContents = (studyId: string, progressId: string) => {
   const { result, isLoading } = useFetch(() => requestGetMemberRecordContents(studyId, progressId), {
     suspense: false,
   });
-  const memberRecordContents = result ? result.data.content : [];
+  const memberRecordContents = result?.data.content || [];
 
   return { memberRecordContents, isLoading };
 };

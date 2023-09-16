@@ -4,7 +4,7 @@ import { requestGetMemberStudyListData } from '@Apis/index';
 
 const useMemberStudyListData = (memberId: string) => {
   const { result, isLoading } = useFetch(() => requestGetMemberStudyListData(memberId));
-  const studyList = result ? result.data.studies : [];
+  const studyList = result?.data.studies || [];
 
   return { studyList, isLoading };
 };
