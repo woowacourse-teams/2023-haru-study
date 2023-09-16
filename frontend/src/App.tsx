@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
@@ -16,9 +17,11 @@ const App = () => {
       <GlobalStyles />
       <ModalProvider>
         <GlobalErrorBoundary fallback={ErrorFallback}>
-          <MemberInfoProvider>
-            <Outlet />
-          </MemberInfoProvider>
+          <Suspense fallback={<div>로딩 중...</div>}>
+            <MemberInfoProvider>
+              <Outlet />
+            </MemberInfoProvider>
+          </Suspense>
         </GlobalErrorBoundary>
       </ModalProvider>
     </ThemeProvider>
