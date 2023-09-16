@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
-import useRegisterMember from '@Components/participation/hooks/useRegisterProgress';
+import useRegisterProgress from '@Components/participation/hooks/useRegisterProgress';
 
 import useInput from '@Hooks/common/useInput';
 
@@ -21,7 +21,7 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
 
   const nickNameInput = useInput(true);
 
-  const { isLoading, registerProgress } = useRegisterMember(nickNameInput.state ?? '', studyId);
+  const { isLoading, registerProgress } = useRegisterProgress(nickNameInput.state ?? '', studyId);
 
   const handleOnClickStartButton = async () => {
     const result = await registerProgress();
