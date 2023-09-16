@@ -21,10 +21,10 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
 
   const nickNameInput = useInput(true);
 
-  const { isLoading, mutate } = useRegisterMember(nickNameInput.state ?? '', studyId);
+  const { isLoading, registerProgress } = useRegisterMember(nickNameInput.state ?? '', studyId);
 
   const handleOnClickStartButton = async () => {
-    const result = await mutate();
+    const result = await registerProgress();
     if (result?.ok) return navigate(`${ROUTES_PATH.progress}/${studyId}`);
   };
 

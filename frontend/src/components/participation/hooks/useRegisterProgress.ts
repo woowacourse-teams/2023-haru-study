@@ -7,9 +7,9 @@ import { requestPostRegisterProgress } from '@Apis/index';
 const useRegisterProgress = (nickname: string, studyId: string) => {
   const { data } = useMemberInfo();
 
-  const { isLoading, mutate } = useMutation(() => requestPostRegisterProgress(nickname, studyId, data!.memberId));
+  const { isLoading, mutate: registerProgress } = useMutation(() => requestPostRegisterProgress(nickname, studyId, data!.memberId));
 
-  return { isLoading, mutate };
+  return { isLoading, registerProgress };
 };
 
 export default useRegisterProgress;
