@@ -21,7 +21,7 @@ const StudyProgressActionContext = createContext<StudyProgressAction | null>(nul
 const StudyProgressProvider = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate();
   const { studyId } = useParams();
-  const { data: memberInfo } = useMemberInfo();
+  const memberInfo = useMemberInfo();
 
   const [studyInfo, setStudyInfo] = useState<StudyInfo | null>(null);
   const [progressInfo, setProgressInfo] = useState<ProgressInfo | null>(null);

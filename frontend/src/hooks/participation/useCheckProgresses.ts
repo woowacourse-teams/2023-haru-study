@@ -10,7 +10,7 @@ import { ApiError } from '../../errors';
 const useCheckProgresses = (isHost: boolean) => {
   const { studyId } = useParams();
 
-  const { data: memberInfo } = useMemberInfo();
+  const memberInfo = useMemberInfo();
 
   const [nickname, setNickname] = useState<string | null>(null);
 
