@@ -12,6 +12,7 @@ import harustudy.backend.content.repository.ContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.participant.domain.Step;
 import harustudy.backend.participant.exception.ParticipantNotFoundException;
 import harustudy.backend.participant.exception.StudyStepException;
 import harustudy.backend.participant.exception.ParticipantNotBelongToStudyException;
@@ -96,20 +97,15 @@ public class ContentService {
 
     public void writePlan(AuthMember authMember, Long studyId, WritePlanRequest request) {
         Member member = memberRepository.findByIdIfExists(authMember.id());
-        Participant participant = findParticipantFrom(studyId, request.participantId());
-        validateMemberOwnsParticipant(member, participant);
-        validateParticipantIsPlanning(participant);
-        Content recentContent = findContentWithSameCycle(participant);
-        recentContent.changePlan(request.plan());
-    }
+        Study study = studyRepository.findByIdIfExists(studyId);
+        Participant participant = participantRepository.findByIdIfExists(request.participantId());
 
-    private Participant findParticipantFrom(Long studyId, Long participantId) {
-        Study study = studyRepository.findById(studyId)
-                .orElseThrow(StudyNotFoundException::new);
-        Participant participant = participantRepository.findById(participantId)
-                .orElseThrow(ParticipantNotFoundException::new);
         validateParticipantBelongsToStudy(study, participant);
-        return participant;
+        validateMemberOwnsParticipant(member, participant);
+        validateStudyIsPlanning(study);
+
+        Content recentContent = findContentWithSameCycle(study, participant);
+        recentContent.changePlan(request.plan());
     }
 
     private void validateParticipantBelongsToStudy(Study study, Participant participant) {
@@ -118,28 +114,32 @@ public class ContentService {
         }
     }
 
-    private void validateParticipantIsPlanning(Participant participant) {
-        if (participant.isNotPlanning()) {
+    private void validateStudyIsPlanning(Study study) {
+        if (!study.isStep(Step.PLANNING)) {
             throw new StudyStepException();
         }
     }
 
-    private Content findContentWithSameCycle(Participant participant) {
+    private Content findContentWithSameCycle(Study study, Participant participant) {
         List<Content> contents = contentRepository.findByParticipant(
                 participant);
 
         return contents.stream()
-                .filter(content -> content.hasSameCycleWith(participant))
+                .filter(content -> content.hasSameCycleWith(study))
                 .findAny()
                 .orElseThrow(ContentNotFoundException::new);
     }
 
     public void writeRetrospect(AuthMember authMember, Long studyId, WriteRetrospectRequest request) {
         Member member = memberRepository.findByIdIfExists(authMember.id());
-        Participant participant = findParticipantFrom(studyId, request.participantId());
+        Study study = studyRepository.findByIdIfExists(studyId);
+        Participant participant = participantRepository.findByIdIfExists(request.participantId());
+
+        validateParticipantBelongsToStudy(study, participant);
         validateMemberOwnsParticipant(member, participant);
-        validateParticipantIsRetrospect(participant);
-        Content recentContent = findContentWithSameCycle(participant);
+        validateStudyIsRetrospect(study);
+
+        Content recentContent = findContentWithSameCycle(study, participant);
         validateIsPlanFilled(recentContent);
 
         recentContent.changeRetrospect(request.retrospect());
@@ -151,8 +151,8 @@ public class ContentService {
         }
     }
 
-    private void validateParticipantIsRetrospect(Participant participant) {
-        if (participant.isNotRetrospect()) {
+    private void validateStudyIsRetrospect(Study study) {
+        if (!study.isStep(Step.RETROSPECT)) {
             throw new StudyStepException();
         }
     }

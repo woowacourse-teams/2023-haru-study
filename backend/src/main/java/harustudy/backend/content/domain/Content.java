@@ -3,6 +3,7 @@ package harustudy.backend.content.domain;
 import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.common.MapStringConverter;
 import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.study.domain.Study;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -58,8 +59,8 @@ public class Content extends BaseTimeEntity {
         this.retrospect = retrospect;
     }
 
-    public boolean hasSameCycleWith(Participant participant) {
-        return cycle.equals(participant.getCurrentCycle());
+    public boolean hasSameCycleWith(Study study) {
+        return cycle.equals(study.getCurrentCycle());
     }
 
     public boolean hasEmptyPlan() {

@@ -69,8 +69,9 @@ class ContentServiceTest {
         // given
         AuthMember authMember = new AuthMember(member.getId());
 
-        participant.proceed();
-        entityManager.merge(participant);
+        study.proceed();
+        study.proceed();
+        entityManager.merge(study);
 
         WritePlanRequest request = new WritePlanRequest(participant.getId(),
                 Map.of("plan", "abc"));
@@ -84,6 +85,8 @@ class ContentServiceTest {
     @Test
     void 계획_단계에서는_계획을_작성할_수_있다() {
         // given
+        study.proceed();
+        entityManager.merge(study);
         AuthMember authMember = new AuthMember(member.getId());
         WritePlanRequest request = new WritePlanRequest(participant.getId(),
                 Map.of("plan", "abc"));
@@ -128,10 +131,11 @@ class ContentServiceTest {
         AuthMember authMember = new AuthMember(member.getId());
         content.changePlan(Map.of("plan", "abc"));
 
-        participant.proceed();
-        participant.proceed();
+        study.proceed();
+        study.proceed();
+        study.proceed();
 
-        entityManager.merge(participant);
+        entityManager.merge(study);
         entityManager.merge(content);
         FLUSH_AND_CLEAR_CONTEXT();
 
@@ -174,10 +178,10 @@ class ContentServiceTest {
         // given
         AuthMember authMember = new AuthMember(member.getId());
 
-        participant.proceed();
-        participant.proceed();
-        participant.proceed();
-        participant.proceed();
+        study.proceed();
+        study.proceed();
+        study.proceed();
+        study.proceed();
 
         Map<String, String> plan = Map.of("plan", "abc");
         Map<String, String> retrospect = Map.of("retrospect", "abc");
@@ -190,7 +194,7 @@ class ContentServiceTest {
         anotherContent.changePlan(anotherCyclePlan);
         anotherContent.changeRetrospect(anotherCycleRetrospect);
 
-        entityManager.merge(participant);
+        entityManager.merge(study);
         entityManager.merge(content);
         entityManager.persist(anotherContent);
         FLUSH_AND_CLEAR_CONTEXT();

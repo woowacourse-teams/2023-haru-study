@@ -57,6 +57,9 @@ public class ContentIntegrationTest extends IntegrationTest {
                 Map.of("plan", "test"));
         String body = objectMapper.writeValueAsString(request);
 
+        study.proceed();
+        entityManager.merge(study);
+
         // when, then
         mockMvc.perform(
                         post("/api/studies/{studyId}/contents/write-plan", study.getId())
@@ -70,10 +73,11 @@ public class ContentIntegrationTest extends IntegrationTest {
     void 회고를_작성할_수_있다() throws Exception {
         // given
         content.changePlan(Map.of("plan", "test"));
-        participant.proceed();
-        participant.proceed();
+        study.proceed();
+        study.proceed();
+        study.proceed();
 
-        entityManager.merge(participant);
+        entityManager.merge(study);
         entityManager.merge(content);
         FLUSH_AND_CLEAR_CONTEXT();
 
@@ -96,11 +100,12 @@ public class ContentIntegrationTest extends IntegrationTest {
         Map<String, String> plan = Map.of("plan", "test");
         Map<String, String> retrospect = Map.of("retrospect", "test");
         content.changePlan(plan);
-        participant.proceed();
-        participant.proceed();
+        study.proceed();
+        study.proceed();
         content.changeRetrospect(retrospect);
-        participant.proceed();
+        study.proceed();
 
+        entityManager.merge(study);
         entityManager.merge(content);
         FLUSH_AND_CLEAR_CONTEXT();
 
