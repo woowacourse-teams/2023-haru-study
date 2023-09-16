@@ -1,5 +1,6 @@
 package harustudy.backend.study.service;
 
+import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.repository.MemberRepository;
@@ -81,8 +82,8 @@ public class StudyService {
         return CreateStudyResponse.from(savedStudy, participantCode);
     }
 
-    private ParticipantCode generateUniqueCode(Long studyId) {
-        ParticipantCode participantCode = new ParticipantCode(studyId, generationStrategy);
+    private ParticipantCode generateUniqueCode(Long study) {
+        ParticipantCode participantCode = new ParticipantCode(study, generationStrategy);
         while (isParticipantCodePresent(participantCode)) {
             participantCode.regenerate();
         }
@@ -92,5 +93,17 @@ public class StudyService {
     private boolean isParticipantCodePresent(ParticipantCode participantCode) {
         return participantCodeRepository.findByCode(participantCode.getCode())
                 .isPresent();
+    }
+
+    public void proceed(AuthMember authMember, Long studyId) {
+        Study study = studyRepository.findByIdIfExists(studyId);
+
+        validateIsHost(authMember, study);
+        study.proceed();
+        // TODO: SSE 이벤트 발행
+    }
+
+    private void validateIsHost(AuthMember authMember, Study study) {
+        // TODO: 방장인지 확인 로직 추가
     }
 }

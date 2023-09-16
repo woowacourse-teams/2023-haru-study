@@ -28,7 +28,7 @@ public class ParticipantController {
 
     private final ParticipantService participantService;
 
-    @Operation(summary = "단일 스터디 진행도 조회")
+    @Operation(summary = "단일 스터디 참여자 조회")
     @GetMapping("/api/studies/{studyId}/participants/{participantId}")
     public ResponseEntity<ParticipantResponse> findParticipant(
             @Authenticated AuthMember authMember,
@@ -62,19 +62,6 @@ public class ParticipantController {
         ParticipantsResponse response =
                 participantService.tempFindParticipantWithFilter(authMember, studyId, memberId);
         return ResponseEntity.ok(response);
-    }
-
-
-    @Operation(summary = "다음 스터디 단계로 이동")
-    @ApiResponse(responseCode = "204")
-    @PostMapping("/api/studies/{studyId}/participants/{participantId}/next-step")
-    public ResponseEntity<Void> proceed(
-            @Authenticated AuthMember authMember,
-            @PathVariable Long studyId,
-            @PathVariable Long participantId
-    ) {
-        participantService.proceed(authMember, studyId, participantId);
-        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "스터디 참여")

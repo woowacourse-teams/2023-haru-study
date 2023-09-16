@@ -83,11 +83,12 @@ class AcceptanceTest {
         String 참여_코드 = 스터디를_개설한다(로그인_정보);
         Long 스터디_아이디 = 스터디를_조회한다(로그인_정보, 참여_코드);
         Long 참여자_아이디 = 스터디에_참여한다(로그인_정보, 스터디_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_계획을_작성한다(로그인_정보, 스터디_아이디, 참여자_아이디);
-        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 참여자_아이디);
-        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 참여자_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_회고를_작성한다(로그인_정보, 스터디_아이디, 참여자_아이디);
-        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 참여자_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_종료_후_결과_조회(로그인_정보, 스터디_아이디);
     }
 
@@ -108,11 +109,12 @@ class AcceptanceTest {
         String 참여_코드 = 스터디를_개설한다(로그인_정보);
         Long 스터디_아이디 = 스터디를_조회한다(로그인_정보, 참여_코드);
         Long 진행도_아이디 = 스터디에_참여한다(로그인_정보, 스터디_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_계획을_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
-        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
-        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_회고를_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
-        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_종료_후_결과_조회(로그인_정보, 스터디_아이디);
     }
 
@@ -223,18 +225,16 @@ class AcceptanceTest {
         WritePlanRequest request = new WritePlanRequest(참여자_아이디, Map.of("plan", "test"));
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(post("/api/studies/{studyId}/contents/write-plan",
-                        스터디_아이디)
+        mockMvc.perform(post("/api/studies/{studyId}/contents/write-plan", 스터디_아이디)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest)
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isOk());
     }
 
-    private void 스터디_상태를_다음_단계로_넘긴다(LoginResponse 로그인_정보, Long 스터디_아이디, Long 참여자_아이디)
+    private void 스터디_상태를_다음_단계로_넘긴다(LoginResponse 로그인_정보, Long 스터디_아이디)
             throws Exception {
-        mockMvc.perform(post("/api/studies/{studyId}/participants/{participantId}/next-step",
-                        스터디_아이디, 참여자_아이디)
+        mockMvc.perform(post("/api/studies/{studyId}/next-step", 스터디_아이디)
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isNoContent());
     }

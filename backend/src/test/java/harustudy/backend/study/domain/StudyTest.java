@@ -2,7 +2,10 @@ package harustudy.backend.study.domain;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.participant.domain.Step;
 import harustudy.backend.study.exception.StudyNameLengthException;
 import harustudy.backend.study.exception.TimePerCycleException;
 import harustudy.backend.study.exception.TotalCycleException;
@@ -11,6 +14,8 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.stream.IntStream;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -71,5 +76,66 @@ class StudyTest {
         // given, when, then
         assertThatThrownBy(() -> new Study("teo", 5, timePerCycle))
                 .isInstanceOf(TimePerCycleException.class);
+    }
+
+    @Test
+    void 다음_스터디_단계로_넘어갈_수_있다() {
+        // given
+        Study study = new Study("study", 1, 20);
+
+        // given
+        study.proceed();
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(study.getCurrentCycle()).isEqualTo(1);
+            softly.assertThat(study.getStep())
+                    .isEqualTo(Step.PLANNING);
+        });
+    }
+
+    @Test
+    void 마지막_사이클이_아니라면_회고_종료_후_사이클_수가_증가한다() {
+        // given
+        Study study = new Study("study", 2, 20);
+
+        // when
+        int stepCountPerCycle = 3;
+
+        study.proceed();
+
+        IntStream.range(0, stepCountPerCycle)
+                .forEach(i -> study.proceed());
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(study.getCurrentCycle()).isEqualTo(2);
+            softly.assertThat(study.getStep())
+                    .isEqualTo(Step.PLANNING);
+        });
+    }
+
+
+    @Test
+    void 마지막_사이클이라면_회고_이후_사이클은_그대로이며_종료_상태로_넘어간다() {
+        // given
+        int totalCycle = 3;
+        int stepCountPerCycle = 3;
+        Study study = new Study("study", totalCycle, 20);
+
+
+        study.proceed();
+
+        IntStream.range(0, stepCountPerCycle * totalCycle)
+                .forEach(i -> study.proceed());
+
+        // when
+        study.proceed();
+
+        // then
+        assertSoftly(softly -> {
+            softly.assertThat(study.getCurrentCycle()).isEqualTo(totalCycle);
+            softly.assertThat(study.getStep()).isEqualTo(Step.DONE);
+        });
     }
 }

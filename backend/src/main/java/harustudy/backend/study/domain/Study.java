@@ -2,21 +2,18 @@ package harustudy.backend.study.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.participant.domain.Step;
 import harustudy.backend.study.exception.StudyNameLengthException;
 import harustudy.backend.study.exception.TimePerCycleException;
 import harustudy.backend.study.exception.TotalCycleException;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -49,12 +46,21 @@ public class Study extends BaseTimeEntity {
     @OneToMany(mappedBy = "study")
     private List<Participant> participants = new ArrayList<>();
 
+    @NotNull
+    private Integer currentCycle;
+
+    @Enumerated(value = EnumType.STRING)
+    private Step step;
+
     public Study(@NotNull String name, @NotNull Integer totalCycle,
-            @NotNull Integer timePerCycle) {
+                 @NotNull Integer timePerCycle) {
         validate(name, totalCycle, timePerCycle);
         this.totalCycle = totalCycle;
         this.timePerCycle = timePerCycle;
         this.name = name;
+
+        this.currentCycle = 1;
+        this.step = Step.WAITING;
     }
 
     private void validate(String name, Integer totalCycle, Integer timePerCycle) {
@@ -79,5 +85,21 @@ public class Study extends BaseTimeEntity {
         if (timePerCycle < MIN_TIME_PER_CYCLE || timePerCycle > MAX_TIME_PER_CYCLE) {
             throw new TimePerCycleException();
         }
+    }
+
+    public void proceed() {
+        // TODO: 서비스로 뺄지 말지(일관성을 위해)
+        if (step.equals(Step.RETROSPECT)) {
+            if (currentCycle.equals(totalCycle)) {
+                step = Step.DONE;
+                return;
+            }
+            currentCycle++;
+        }
+        step = step.getNext();
+    }
+
+    public boolean isStep(Step step) {
+        return this.step == step;
     }
 }

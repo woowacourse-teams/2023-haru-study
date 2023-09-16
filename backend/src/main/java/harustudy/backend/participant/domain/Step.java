@@ -2,6 +2,7 @@ package harustudy.backend.participant.domain;
 
 public enum Step {
 
+    WAITING,
     PLANNING,
     STUDYING,
     RETROSPECT,
@@ -9,6 +10,7 @@ public enum Step {
 
     public Step getNext() {
         return switch (this) {
+            case WAITING -> PLANNING;
             case PLANNING -> STUDYING;
             case STUDYING -> RETROSPECT;
             case RETROSPECT -> PLANNING;
