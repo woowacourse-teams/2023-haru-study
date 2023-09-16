@@ -6,11 +6,11 @@ import type {
   ResponseMemberRecordContents,
   ResponseOneStudyInfo,
   ResponseMemberContents,
-  ResponseProgresses,
   ResponseStudies,
   ResponseStudyData,
   ResponseStudyDataList,
   ResponseStudyMembers,
+  ResponseCheckProgresses,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
@@ -60,8 +60,8 @@ export const requestNextStep = (studyId: string, progressId: string) =>
 
 export const requestPostCreateStudy = async (
   studyName: string,
-  totalCycle: TotalCycleOptions,
-  timePerCycle: StudyTimePerCycleOptions,
+  totalCycle: TotalCycleOptions | null,
+  timePerCycle: StudyTimePerCycleOptions | null,
 ) => {
   const response = await http.post<ResponseCreateStudy>(`/api/studies`, {
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
@@ -70,14 +70,22 @@ export const requestPostCreateStudy = async (
   const locationHeader = response.headers.get('Location');
   const studyId = locationHeader?.split('/').pop() as string;
 
-  return { studyId, response };
+  const data = response.data;
+
+  return { studyId, data };
 };
 
-export const requestGetAuthenticateParticipationCode = (participantCode: string) =>
-  http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`);
+export const requestGetAuthenticateParticipationCode = async (participantCode: string) => {
+  const response = http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`);
 
-export const requestGetCheckProgresses = async (studyId: string, memberId: string) =>
-  http.get<ResponseProgresses>(`/api/studies/${studyId}/progresses?memberId=${memberId}`);
+  return (await response).data;
+};
+
+export const requestGetCheckProgresses = async (studyId: string, memberId: string) => {
+  const response = http.get<ResponseCheckProgresses>(`/api/temp/studies/${studyId}/progresses?memberId=${memberId}`);
+
+  return (await response).data;
+};
 
 export const requestPostRegisterProgress = (nickname: string, studyId: string, memberId: string) =>
   http.post(`/api/studies/${studyId}/progresses`, {

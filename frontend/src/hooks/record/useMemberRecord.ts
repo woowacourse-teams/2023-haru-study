@@ -11,7 +11,7 @@ import type { StudyBasicInfo } from '@Types/study';
 const useMemberRecord = () => {
   const navigate = useNavigate();
 
-  const { data: memberInfo } = useMemberInfo();
+  const memberInfo  = useMemberInfo();
   const [studyList, setStudyList] = useState<StudyBasicInfo[] | null>(null);
   const isLoading = !studyList;
 

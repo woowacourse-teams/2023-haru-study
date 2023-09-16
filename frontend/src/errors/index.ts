@@ -1,10 +1,3 @@
-export class OfflineError extends Error {
-  constructor(message?: string) {
-    super(message || '인터넷 연결이 불안정 합니다. 네트워크 상태를 확인해주세요.');
-    this.name = 'Offline Error';
-  }
-}
-
 export class ApiError extends Error {
   code: number;
 

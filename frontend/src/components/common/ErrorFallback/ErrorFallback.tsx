@@ -35,7 +35,6 @@ export default ErrorFallback;
 const Layout = styled.section<{ height: string }>`
   width: 100%;
   height: ${({ height }) => height};
-
   display: flex;
   flex-direction: column;
   align-items: center;

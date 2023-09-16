@@ -4,9 +4,9 @@ import { styled } from 'styled-components';
 import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
+import useRegisterProgress from '@Components/participation/hooks/useRegisterProgress';
 
 import useInput from '@Hooks/common/useInput';
-import useRegisterMember from '@Hooks/participation/useRegisterProgress';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
 import { ROUTES_PATH } from '@Constants/routes';
@@ -19,20 +19,15 @@ type Props = {
 const MemberRegister = ({ studyId, studyName }: Props) => {
   const navigate = useNavigate();
 
-  const { isLoading, registerProgress } = useRegisterMember();
-
   const nickNameInput = useInput(true);
 
+  const { isLoading, registerProgress } = useRegisterProgress(nickNameInput.state ?? '', studyId);
+
   const handleOnClickStartButton = async () => {
-    if (!nickNameInput.state || !studyId) {
-      alert('잘못된 접근입니다.');
-      return;
-    }
-
-    await registerProgress(nickNameInput.state, studyId);
-
-    navigate(`${ROUTES_PATH.progress}/${studyId}`);
+    const result = await registerProgress();
+    if (result?.ok) return navigate(`${ROUTES_PATH.progress}/${studyId}`);
   };
+
   return (
     <>
       <Input
