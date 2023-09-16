@@ -27,7 +27,19 @@ const ParticipationContents = ({ participantCode, studyName, isHost }: Props) =>
     setRegisterShow(true);
   };
 
-  return result ? (
+  if (!result)
+    return (
+      <CircularProgress
+        size="x-large"
+        $style={css`
+          margin-top: 200px;
+          border: 2px solid ${color.blue[500]};
+          border-color: ${color.blue[500]} transparent transparent transparent;
+        `}
+      />
+    );
+
+  return (
     <Layout>
       {isHost && <ParticipationCodeCopier participantCode={participantCode} />}
       {
@@ -46,15 +58,6 @@ const ParticipationContents = ({ participantCode, studyName, isHost }: Props) =>
         </AlertErrorBoundary>
       }
     </Layout>
-  ) : (
-    <CircularProgress
-      size="x-large"
-      $style={css`
-        margin-top: 200px;
-        border: 2px solid ${color.blue[500]};
-        border-color: ${color.blue[500]} transparent transparent transparent;
-      `}
-    />
   );
 };
 
