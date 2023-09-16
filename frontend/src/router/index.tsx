@@ -4,7 +4,7 @@ import Auth from '@Pages/Auth';
 import CreateStudy from '@Pages/CreateStudy';
 import Landing from '@Pages/Landing';
 import MemberRecord from '@Pages/MemberRecord';
-import NotFoundPage from '@Pages/NotFoundPage';
+import NotFound from '@Pages/NotFound';
 import StudyParticipation from '@Pages/StudyParticipation';
 import StudyPreparation from '@Pages/StudyPreparation';
 import StudyProgress from '@Pages/StudyProgress';
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
   {
     path: ROUTES_PATH.landing,
     element: <App />,
-    errorElement: <NotFoundPage />,
+    errorElement: <NotFound />,
     children: [
       {
         index: true,

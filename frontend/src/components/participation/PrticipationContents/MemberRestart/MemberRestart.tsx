@@ -5,20 +5,33 @@ import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
 
+import useMutation from '@Hooks/api/useMutation';
+
 import { ROUTES_PATH } from '@Constants/routes';
+
+import { requestDeleteProgress } from '@Apis/index';
 
 type Props = {
   studyName: string;
-  nickname: string | null;
   studyId: string;
-  restart: () => void;
+  progressId: number;
+  nickname: string;
+  showMemberRegister: () => void;
 };
 
-const MemberRestart = ({ studyName, nickname, studyId, restart }: Props) => {
+const MemberRestart = ({ studyName, nickname, studyId, progressId, showMemberRegister }: Props) => {
   const navigate = useNavigate();
+
+  const { mutate } = useMutation(() => requestDeleteProgress(studyId, progressId));
 
   const handleOnClickContinueStart = async () => {
     navigate(`${ROUTES_PATH.progress}/${studyId}`);
+  };
+
+  const restart = async () => {
+    const result = await mutate();
+
+    if (result?.ok) return showMemberRegister();
   };
 
   return (
@@ -33,7 +46,7 @@ const MemberRestart = ({ studyName, nickname, studyId, restart }: Props) => {
           <StudyNameText>{studyName}</StudyNameText> 스터디에서 이미 학습을 진행한 기록이 있습니다.
         </Typography>
         <Input label={<Typography variant="p1">닉네임</Typography>}>
-          <Input.TextField value={nickname ?? ''} disabled={!!nickname} />
+          <Input.TextField value={nickname} disabled={!!nickname} />
         </Input>
       </div>
       <div>

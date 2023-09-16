@@ -4,6 +4,7 @@ import Header from '@Components/common/Header/Header';
 import GuideSection from '@Components/landing/GuideSection/GuideSection';
 import LandingMainSection from '@Components/landing/LandingMainSection/LandingMainSection';
 import MemberProfile from '@Components/landing/MemberProfile/MemberProfile';
+import Footer from '@Components/common/Footer/Footer';
 
 const Landing = () => {
   return (
@@ -12,8 +13,11 @@ const Landing = () => {
         <Header />
         <MemberProfile />
       </LandingHeader>
-      <LandingMainSection />
-      <GuideSection />
+      <LandingContents>
+        <LandingMainSection />
+        <GuideSection />
+      </LandingContents>
+      <Footer />
     </>
   );
 };
@@ -25,4 +29,10 @@ const LandingHeader = styled.div`
   align-items: center;
 
   padding-right: 40px;
+`;
+
+const LandingContents = styled.div`
+  width: 90%;
+
+  margin: 0 auto;
 `;

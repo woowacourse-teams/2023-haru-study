@@ -5,9 +5,8 @@ import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Select from '@Components/common/Select/Select';
 import Typography from '@Components/common/Typography/Typography';
-
-import useCreateStudy from '@Hooks/create/useCreateStudy';
-import useCreateStudyForm from '@Hooks/create/useCreateStudyForm';
+import useCreateStudy from '@Components/create/hooks/useCreateStudy';
+import useCreateStudyForm from '@Components/create/hooks/useCreateStudyForm';
 
 import color from '@Styles/color';
 
@@ -36,19 +35,18 @@ const CreateStudyForm = () => {
     isSelectedOptions,
   } = useCreateStudyForm();
 
-  const { isLoading, createStudy } = useCreateStudy();
+  const { createStudy, isLoading } = useCreateStudy(studyName, totalCycle, timePerCycle);
 
   const handleClickCreateStudyButton = async () => {
-    if (!studyName || !totalCycle || !timePerCycle) {
-      alert('이름의 길이와, 사이클 수, 사이클 당 시간을 다시 한번 확인해주세요');
-      return;
+    const result = await createStudy();
+
+    if (result) {
+      const { studyId, data } = result;
+
+      navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
+        state: { participantCode: data.participantCode, studyName, isHost: true },
+      });
     }
-
-    const { studyId, data } = await createStudy(studyName, totalCycle, timePerCycle);
-
-    navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
-      state: { participantCode: data.participantCode, studyName, isHost: true },
-    });
   };
 
   const handleClickExpectedTime = () => {
@@ -80,7 +78,7 @@ const CreateStudyForm = () => {
             position: relative;
           `}
         >
-          <Select.Trigger triggerText="횟수를 선택해주세요" />
+          <Select.Trigger triggerText="횟수를 선택해주세요" testId="cycle" />
           <Select.List
             $style={css`
               position: absolute;
@@ -101,7 +99,7 @@ const CreateStudyForm = () => {
             position: relative;
           `}
         >
-          <Select.Trigger triggerText="학습 시간을 선택해주세요" />
+          <Select.Trigger triggerText="학습 시간을 선택해주세요" testId="timepercycle" />
           <Select.List
             $style={css`
               position: absolute;

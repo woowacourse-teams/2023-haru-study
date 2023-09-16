@@ -1,45 +1,29 @@
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
-
-import planningStep from '@Assets/image/planningStep.png';
-import retrospectStep from '@Assets/image/retrospectStep.png';
-import studyingStep from '@Assets/image/studyingStep.png';
-
-const GUIDE = [
-  {
-    imageUrl: planningStep,
-    title: '목표 설정 단계',
-    description: `목표 설정 설명 목표 설정 목표 설정 설명 목표 목표 설정 설명 목표`,
-  },
-  {
-    imageUrl: retrospectStep,
-    title: '학습 단계',
-    description: `학습 단계 학습 단계 학습 단계 학습 단계 학습 단계 학습 단계 학습 단계`,
-  },
-  {
-    imageUrl: studyingStep,
-    title: '회고 단계',
-    description: `회고 단계 회고 단계 회고 단계 회고 단계 회고 단계 회고 단계 회고 단계 회고 단계 회고 단계 회고 단계 회고 단계 회고 단계`,
-  },
-] as const;
+import StudyStepGuide from '../StudyStepGuide/StudyStepGuide';
+import StudyEffectGuide from '../StudyEffectGuide/StudyEffectGuide';
 
 const GuideSection = () => {
   return (
     <Layout>
-      {GUIDE.map(({ imageUrl, title, description }) => {
-        return (
-          <Guide key={title}>
-            <img src={imageUrl} alt={title} />
-            <GuideContents>
-              <Typography variant="h2">{title}</Typography>
-              <Typography variant="p2">{description}</Typography>
-            </GuideContents>
-          </Guide>
-        );
-      })}
+      <Introduce>
+        <Typography variant="h2">하루스터디 학습 사이클</Typography>
+        <Typography
+          variant="p1"
+          fontWeight="500"
+          $style={css`
+            word-break: keep-all;
+          `}
+        >
+          한 사이클마다 <span>목표 설정 단계</span>, <span>학습 단계</span>, <span>회고 단계</span>로 구성되어 있으며,
+          <br />세 가지 단계를 짧은 주기로 여러번 반복하여 학습합니다.
+        </Typography>
+      </Introduce>
+      <StudyStepGuide />
+      <StudyEffectGuide />
     </Layout>
   );
 };
@@ -49,52 +33,37 @@ export default GuideSection;
 const Layout = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 135px;
+  gap: 180px;
 
-  padding: 135px 60px;
-
-  :nth-child(2n) {
-    flex-direction: row-reverse;
-  }
-
-  @media screen and (max-width: 800px) {
-    :nth-child(2n) {
-      flex-direction: column;
-    }
-  }
+  padding: 135px 0;
 `;
 
-const Guide = styled.div`
+const Introduce = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 80px;
+  flex-direction: column;
+  gap: 20px;
 
-  img {
-    width: 50%;
-    border-radius: 20px;
+  text-align: center;
 
-    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  span:nth-child(1) {
+    color: ${color.blue[500]};
   }
 
-  @media screen and (max-width: 800px) {
-    flex-direction: column;
-    gap: 60px;
-    img {
-      width: 90%;
+  span:nth-child(2) {
+    color: ${color.red[500]};
+  }
+
+  span:nth-child(3) {
+    color: ${color.teal[500]};
+  }
+
+  @media screen and (max-width: 768px) {
+    h2 {
+      font-size: 28px;
     }
-  }
-`;
 
-const GuideContents = styled.div`
-  width: 40%;
-
-  p {
-    margin-top: 20px;
-    color: ${color.neutral[500]};
-  }
-
-  @media screen and (max-width: 800px) {
-    width: 90%;
+    p {
+      font-size: 20px;
+    }
   }
 `;

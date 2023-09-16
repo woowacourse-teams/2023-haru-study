@@ -5,85 +5,86 @@ import Typography from '@Components/common/Typography/Typography';
 import color from '@Styles/color';
 
 import ArrowIcon from '@Assets/icons/ArrowIcon';
-import haruServiceImage from '@Assets/image/haruServiceImage.png';
+import heroImage from '@Assets/image/heroImage.png';
 
 import LandingButton from '../LandingButton/LandingButton';
 
 const LandingMainSection = () => {
   return (
-    <Layout>
-      <LandingContents>
-        <Typography variant="h2">
-          하루스터디만의 학습 사이클로
-          <br />
-          학습 효율성을 끌어올립니다.
-        </Typography>
-        <Typography
-          variant="p2"
-          $style={css`
-            color: ${color.neutral[500]};
-          `}
-        >
-          하루스터디 어쩌구 설명
-          <br />
-          하루스터디 어쩌구 설명 하루스터디 어쩌구 설명 하루스터디 어쩌구
-        </Typography>
-        <LandingButton />
-      </LandingContents>
-      <img src={haruServiceImage} alt="목표, 학습, 회고 스탭" />
+    <main>
+      <LandingHeader>
+        <LandingContents>
+          <Typography variant="h2">
+            <Emphasis>하루</Emphasis>스터디만의
+            <br />
+            학습 사이클을 통해
+            <br />
+            효율적으로 학습해보세요.
+          </Typography>
+          <LandingButton />
+        </LandingContents>
+        <HeroImage>
+          <img src={heroImage} alt="목표, 학습, 회고 스탭" />
+        </HeroImage>
+      </LandingHeader>
       <LoadMoreContents>
-        <Typography variant="p2">하루 스터디만의 학습 사이클이란?</Typography>
+        <Typography variant="p2">하루스터디만의 학습 사이클이란?</Typography>
         <ArrowIcon direction="down" />
       </LoadMoreContents>
-    </Layout>
+    </main>
   );
 };
 
 export default LandingMainSection;
 
-const Layout = styled.section`
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
+const LandingHeader = styled.div`
+  height: calc(100vh - 240px);
+
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-items: center;
-  column-gap: 40px;
-  row-gap: 40px;
-
-  padding: 0px 80px;
-
-  height: calc(100vh - 140px);
-  min-height: 500px;
-
-  img {
-    justify-self: flex-end;
-  }
-
-  @media screen and (max-width: 800px) {
-    grid-template-columns: 1fr;
-    img {
-      display: none;
-    }
-  }
 `;
 
 const LandingContents = styled.div`
-  justify-self: flex-start;
+  width: 40%;
 
   display: flex;
   flex-direction: column;
   gap: 40px;
+  align-self: center;
 
-  @media screen and (max-width: 800px) {
+  h2 {
+    font-weight: 500;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+
     justify-self: center;
+    text-align: center;
+
+    h2 {
+      font-size: 28px;
+    }
+  }
+`;
+
+const HeroImage = styled.div`
+  width: 50%;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+    width: 0;
   }
 `;
 
 const LoadMoreContents = styled.div`
-  grid-column: 1 / -1;
-  justify-items: center;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+`;
+
+const Emphasis = styled.span`
+  color: ${color.blue[500]};
 `;
