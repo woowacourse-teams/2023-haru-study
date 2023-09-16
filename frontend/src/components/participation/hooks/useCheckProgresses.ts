@@ -11,7 +11,7 @@ import type { ResponseCheckProgresses } from '@Types/api';
 const useCheckProgresses = () => {
   const { studyId } = useParams();
 
-  const { data: memberInfo } = useMemberInfo();
+  const memberInfo = useMemberInfo();
 
   const { result } = useFetch<ResponseCheckProgresses>(
     () => requestGetCheckProgresses(studyId ?? '', memberInfo?.memberId ?? ''),
