@@ -4,8 +4,9 @@ import { useCallback, useEffect, useState } from 'react';
 type Status = 'pending' | 'fulfilled' | 'error';
 
 type Options = {
-  suspense?: boolean;
   enabled?: boolean;
+  suspense?: boolean;
+  errorBoundary?: boolean;
 
   onSuccess?: <T>(result: T) => void;
   onError?: (error: Error) => void;
@@ -13,7 +14,7 @@ type Options = {
 
 const useFetch = <T>(
   request: () => Promise<T>,
-  { suspense = true, enabled = true, onSuccess, onError }: Options = {},
+  { enabled = true, suspense = true, errorBoundary = true, onSuccess, onError }: Options = {},
 ) => {
   const [promise, setPromise] = useState<Promise<void> | null>(null);
   const [status, setStatus] = useState<Status>('pending');
@@ -54,7 +55,7 @@ const useFetch = <T>(
   if (suspense && status === 'pending' && promise) {
     throw promise;
   }
-  if (status === 'error') {
+  if (errorBoundary && status === 'error') {
     throw error;
   }
 
