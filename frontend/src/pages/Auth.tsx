@@ -10,8 +10,8 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import { useModal } from '@Contexts/ModalProvider';
 
-import { getUrlQuery } from '@Utils/getUrlQuery';
 import tokenStorage from '@Utils/tokenStorage';
+import url from '@Utils/url';
 
 import { requestPostGuestLogin, requestPostOAuthLogin } from '@Apis/index';
 
@@ -22,8 +22,8 @@ const Auth = () => {
 
   const { closeModal } = useModal();
 
-  const provider = getUrlQuery<AuthProvider>('provider');
-  const code = getUrlQuery('code');
+  const provider = url.getQueryString<AuthProvider>('provider');
+  const code = url.getQueryString('code');
 
   const requestAuthToken = useCallback(async () => {
     try {
