@@ -23,11 +23,10 @@ const MemberInfoActionContext = createContext<Actions | null>(null);
 
 const MemberInfoProvider = ({ children }: PropsWithChildren) => {
   const { result, clearResult, refetch } = useFetch(() => requestGetMemberInfo(), { errorBoundary: false });
-  const memberInfo = result?.data || null;
-
-  console.log(memberInfo);
 
   const navigate = useNavigate();
+
+  const memberInfo = result?.data || null;
 
   const actions: Actions = useMemo(
     () => ({
