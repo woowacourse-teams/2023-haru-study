@@ -8,6 +8,7 @@ import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
+import { useMemberInfoAction } from '@Contexts/MemberInfoProvider';
 import { useModal } from '@Contexts/ModalProvider';
 
 import tokenStorage from '@Utils/tokenStorage';
@@ -18,38 +19,28 @@ import { requestPostGuestLogin, requestPostOAuthLogin } from '@Apis/index';
 import type { AuthProvider } from '@Types/auth';
 
 const Auth = () => {
-  const navigate = useNavigate();
+  const { refetchMemberInfo: fetchMemberInfo } = useMemberInfoAction();
 
+  const navigate = useNavigate();
   const { closeModal } = useModal();
 
   const provider = url.getQueryString<AuthProvider>('provider');
   const code = url.getQueryString('code');
 
   const requestAuthToken = useCallback(async () => {
-    try {
-      if (provider === 'guest') {
-        const {
-          data: { accessToken },
-        } = await requestPostGuestLogin();
-        tokenStorage.setAccessToken(accessToken);
+    let accessToken: string;
 
-        navigate(ROUTES_PATH.landing);
-        return;
-      }
-
-      const {
-        data: { accessToken },
-      } = await requestPostOAuthLogin(provider, code);
-      tokenStorage.setAccessToken(accessToken);
-
-      navigate(ROUTES_PATH.landing);
-    } catch (error) {
-      if (!(error instanceof Error)) throw error;
-      alert(error.message);
-
-      navigate(ROUTES_PATH.login);
+    if (provider === 'guest') {
+      accessToken = (await requestPostGuestLogin()).data.accessToken;
+    } else {
+      accessToken = (await requestPostOAuthLogin(provider, code)).data.accessToken;
     }
-  }, [code, provider, navigate]);
+
+    fetchMemberInfo();
+
+    tokenStorage.setAccessToken(accessToken);
+    navigate(ROUTES_PATH.landing);
+  }, [code, provider, fetchMemberInfo, navigate]);
 
   useEffect(() => {
     requestAuthToken();
