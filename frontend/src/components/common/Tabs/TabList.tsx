@@ -11,7 +11,7 @@ const TabList = () => {
         const isSelected = tab === selectedTab;
 
         return (
-          <Tab onClick={() => changeTab(tab)} key={`${tab}${index}`} $isSelected={isSelected}>
+          <Tab data-testid="tab" onClick={() => changeTab(tab)} key={`${tab}${index}`} $isSelected={isSelected}>
             {tab}
           </Tab>
         );
