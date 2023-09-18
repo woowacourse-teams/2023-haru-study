@@ -58,6 +58,6 @@ const ModalContainer = styled.div`
   overflow-y: auto;
 
   @media screen and (max-width: 768px) {
-    width: 80%;
+    max-width: 80%;
   }
 `;
