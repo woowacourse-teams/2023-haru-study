@@ -2,8 +2,8 @@ import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
+import ErrorBoundary from '@Components/common/ErrorBoundary/ErrorBoundary';
 import ErrorFallback from '@Components/common/ErrorFallback/ErrorFallback';
-import GlobalErrorBoundary from '@Components/common/GlobalErrorBoundary/GlobalErrorBoundary';
 
 import GlobalStyles from '@Styles/globalStyle';
 import { lightTheme } from '@Styles/theme';
@@ -16,13 +16,13 @@ const App = () => {
     <ThemeProvider theme={lightTheme}>
       <GlobalStyles />
       <ModalProvider>
-        <GlobalErrorBoundary fallback={ErrorFallback}>
-          <Suspense fallback={<div>로딩 중...</div>}>
-            <MemberInfoProvider>
+        <MemberInfoProvider>
+          <ErrorBoundary fallback={ErrorFallback}>
+            <Suspense fallback={<div>로딩 중...</div>}>
               <Outlet />
-            </MemberInfoProvider>
-          </Suspense>
-        </GlobalErrorBoundary>
+            </Suspense>
+          </ErrorBoundary>
+        </MemberInfoProvider>
       </ModalProvider>
     </ThemeProvider>
   );

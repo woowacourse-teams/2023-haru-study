@@ -22,14 +22,15 @@ const MemberInfoContext = createContext<MemberInfo | null>(null);
 const MemberInfoActionContext = createContext<Actions | null>(null);
 
 const MemberInfoProvider = ({ children }: PropsWithChildren) => {
-  const { result, clearResult, refetch } = useFetch(() => requestGetMemberInfo());
-  const memberInfo = result?.data || null;
+  const { result, clearResult, refetch } = useFetch(() => requestGetMemberInfo(), { errorBoundary: false });
 
   const navigate = useNavigate();
 
+  const memberInfo = result?.data || null;
+
   const actions: Actions = useMemo(
     () => ({
-      refetchMemberInfo: () => refetch,
+      refetchMemberInfo: refetch,
       clearMemberInfo: () => {
         tokenStorage.clear();
         clearResult();

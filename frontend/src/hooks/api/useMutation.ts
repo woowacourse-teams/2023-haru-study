@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 
 type Options = {
+  errorBoundary?: boolean;
+
   onSuccess?: <T>(result: T) => void;
   onError?: (error: Error) => void;
 };
 
-const useMutation = <T>(request: () => Promise<T>, { onSuccess, onError }: Options = {}) => {
+const useMutation = <T>(request: () => Promise<T>, { errorBoundary = true, onSuccess, onError }: Options = {}) => {
   const [result, setResult] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<unknown | null>(null);
@@ -28,10 +30,10 @@ const useMutation = <T>(request: () => Promise<T>, { onSuccess, onError }: Optio
   };
 
   useEffect(() => {
-    if (error) {
+    if (errorBoundary && error) {
       throw error;
     }
-  }, [error]);
+  }, [error, errorBoundary]);
 
   return { mutate, result, isLoading, error };
 };
