@@ -40,18 +40,23 @@ const StudyInformation = ({ studyId }: Props) => {
         {studyBasicInfo?.name} 스터디에서의 기록
       </Typography>
       <StudyInfoContainer>
-        <CalenderIcon color={color.neutral[700]} />
-        <Typography variant="p2">진행 날짜</Typography>
+        <Typography variant="p2">
+          <CalenderIcon color={color.neutral[700]} />
+          진행 날짜
+        </Typography>
         <Typography variant="p2">{displayDate}</Typography>
       </StudyInfoContainer>
       <StudyInfoContainer>
-        <CycleIcon color={color.neutral[700]} />
-        <Typography variant="p2">진행한 총 사이클</Typography>
+        <Typography variant="p2">
+          <CycleIcon color={color.neutral[700]} /> 진행한 총 사이클
+        </Typography>
         <Typography variant="p2">{studyBasicInfo?.totalCycle}회</Typography>
       </StudyInfoContainer>
       <StudyInfoContainer>
-        <TimeLineIcon color={color.neutral[700]} />
-        <Typography variant="p2">사이클 당 학습 시간</Typography>
+        <Typography variant="p2">
+          <TimeLineIcon color={color.neutral[700]} />
+          사이클 당 학습 시간
+        </Typography>
         <Typography variant="p2">{studyBasicInfo?.timePerCycle}분</Typography>
       </StudyInfoContainer>
     </StudyInformationLayout>

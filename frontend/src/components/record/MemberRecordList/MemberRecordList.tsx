@@ -80,6 +80,7 @@ const StudyItem = styled.li`
 
 const StudyNameDateContainer = styled.div`
   display: flex;
+  gap: 5px 10px;
   flex-wrap: wrap;
   justify-content: space-between;
 `;

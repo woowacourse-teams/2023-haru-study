@@ -32,4 +32,11 @@ const ContentsContainer = styled.div`
   margin: 0 auto;
   padding: 0px 60px;
   padding-bottom: 60px;
+
+  @media screen and (max-width: 768px) {
+    width: 90%;
+
+    padding: 0px;
+    padding-bottom: 60px;
+  }
 `;

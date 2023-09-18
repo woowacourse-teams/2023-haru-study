@@ -26,6 +26,10 @@ const TabListLayout = styled.ul`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   row-gap: 20px;
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 `;
 
 type TabProps = {
