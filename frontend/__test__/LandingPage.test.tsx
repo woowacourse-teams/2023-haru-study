@@ -62,8 +62,10 @@ describe('랜딩 페이지 테스트', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('스터디 개설하기')).toBeInTheDocument();
-      expect(screen.getByText('스터디 참여하기')).toBeInTheDocument();
+      screen.getAllByRole('button').forEach((button, index) => {
+        const buttonText = index === 0 ? '스터디 개설하기' : '스터디 참여하기';
+        expect(button.textContent).toBe(buttonText);
+      });
     });
   });
 });
