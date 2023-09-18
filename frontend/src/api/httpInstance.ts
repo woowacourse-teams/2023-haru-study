@@ -1,6 +1,9 @@
+import { ROUTES_PATH } from '@Constants/routes';
+
 import type { HttpResponse } from '@Utils/Http';
 import Http from '@Utils/Http';
 import tokenStorage from '@Utils/tokenStorage';
+import url from '@Utils/url';
 
 import type { ResponseAPIError } from '@Types/api';
 
@@ -13,9 +16,19 @@ const refreshAndRefetch = async <T extends object>(response: HttpResponse<T>) =>
     data: { accessToken },
   } = await http.post<{ accessToken: string }>('/api/auth/refresh');
 
+  console.log(accessToken);
+
   tokenStorage.setAccessToken(accessToken);
 
   return http.request<T>(response.url, response.config);
+};
+
+const logout = () => {
+  tokenStorage.clear();
+  if (url.getPathName() !== ROUTES_PATH.landing) {
+    alert('토큰이 만료 되었습니다. 다시 로그인 해주세요.');
+    url.changePathName(ROUTES_PATH.landing);
+  }
 };
 
 const isApiErrorData = (data: object): data is ResponseAPIError => {
@@ -38,8 +51,14 @@ http.registerInterceptor({
     if (response.ok) return response;
 
     if (isApiErrorData(response.data)) {
-      if (response.data.code === 1403 || response.data.code === 1404) {
+      const errorCode = response.data.code;
+
+      if (errorCode === 1403 || errorCode === 1404) {
         return refreshAndRefetch(response);
+      }
+
+      if (errorCode === 1402 || errorCode === 1405) {
+        logout();
       }
 
       throw new ApiError(response.data.message, response.data.code, response.config);

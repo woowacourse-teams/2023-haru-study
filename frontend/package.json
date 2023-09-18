@@ -13,7 +13,7 @@
     "ci": "yarn install --immutable --immutable-cache --check-cache"
   },
   "dependencies": {
-    "msw": "^1.2.2",
+    "msw": "^1.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.1",

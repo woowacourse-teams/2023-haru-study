@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { css, styled } from 'styled-components';
+import { styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 
