@@ -36,9 +36,9 @@ const Auth = () => {
       accessToken = (await requestPostOAuthLogin(provider, code)).data.accessToken;
     }
 
+    tokenStorage.setAccessToken(accessToken);
     fetchMemberInfo();
 
-    tokenStorage.setAccessToken(accessToken);
     navigate(ROUTES_PATH.landing);
   }, [code, provider, fetchMemberInfo, navigate]);
 

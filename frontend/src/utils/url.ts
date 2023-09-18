@@ -2,7 +2,7 @@ const url = {
   getPathName: () => window.location.pathname,
 
   changePathName: (pathname: string) => {
-    new URL(window.location.href).pathname = pathname;
+    window.location.pathname = pathname;
   },
 
   getQueryString: <T extends string>(name: string) =>
