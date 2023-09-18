@@ -35,7 +35,7 @@ const MemberRecordList = ({ memberId }: Props) => {
           <StudyItem key={studyId} onClick={() => handleClickStudyItem(studyId)}>
             <StudyNameDateContainer>
               <Typography variant="h6">{name} 스터디</Typography>
-              <StudyDate>{date.format(new Date(createdDateTime))}</StudyDate>
+              <StudyDate data-testid="progress-date">{date.format(new Date(createdDateTime))}</StudyDate>
             </StudyNameDateContainer>
             <StudyCycleInfoLayout>
               <StudyCycleInfoContainer>
