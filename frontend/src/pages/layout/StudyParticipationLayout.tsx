@@ -36,6 +36,6 @@ const Layout = styled.div`
   padding-bottom: 60px;
 
   @media screen and (max-width: 768px) {
-    width: 300px;
+    width: 90%;
   }
 `;
