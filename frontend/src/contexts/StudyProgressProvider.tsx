@@ -1,8 +1,7 @@
-import LoadingLayout from '@Pages/layout/LoadingLayout';
-import { type PropsWithChildren, createContext, useState, useEffect, useContext } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { type PropsWithChildren, createContext, useState, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 
-import { ROUTES_PATH } from '@Constants/routes';
+import useFetch from '@Hooks/api/useFetch';
 
 import { requestGetMemberProgress, requestGetOneStudyData, requestNextStep } from '@Apis/index';
 
@@ -19,13 +18,16 @@ const ProgressInfoContext = createContext<ProgressInfo | null>(null);
 const StudyProgressActionContext = createContext<StudyProgressAction | null>(null);
 
 const StudyProgressProvider = ({ children }: PropsWithChildren) => {
-  const navigate = useNavigate();
   const { studyId } = useParams();
-  const memberInfo = useMemberInfo();
+  if (!studyId) throw new Error('정상적인 경로로 접근해주세요.');
 
-  const [studyInfo, setStudyInfo] = useState<StudyInfo | null>(null);
+  const memberInfo = useMemberInfo();
   const [progressInfo, setProgressInfo] = useState<ProgressInfo | null>(null);
-  const [error, setError] = useState<Error | null>(null);
+
+  const { result: studyInfo } = useFetch(() => requestGetOneStudyData(studyId));
+  useFetch(() => requestGetMemberProgress(studyId, memberInfo!.memberId), {
+    onSuccess: setProgressInfo,
+  });
 
   const actions = {
     onNextStep: async () => {
@@ -51,34 +53,7 @@ const StudyProgressProvider = ({ children }: PropsWithChildren) => {
     },
   };
 
-  useEffect(() => {
-    const fetchStudyMetaData = async () => {
-      try {
-        if (!studyId) throw new Error('정상적인 경로로 접근해주세요.');
-
-        if (!memberInfo) return;
-
-        const { data: fetchedStudyInfo } = await requestGetOneStudyData(studyId);
-        const { data: fetchedProgressInfo } = await requestGetMemberProgress(studyId, memberInfo.memberId);
-
-        setStudyInfo(fetchedStudyInfo);
-        setProgressInfo(fetchedProgressInfo.progresses[0]);
-      } catch (reason) {
-        if (!(reason instanceof Error)) throw reason;
-        setError(reason);
-      }
-    };
-    fetchStudyMetaData();
-  }, [memberInfo, navigate, studyId]);
-
-  if (error) {
-    alert(error.message);
-    navigate(ROUTES_PATH.landing);
-  }
-
-  if (studyInfo === null || progressInfo === null) {
-    return <LoadingLayout />;
-  }
+  if (!studyInfo || !progressInfo) return;
 
   return (
     <StudyProgressActionContext.Provider value={actions}>

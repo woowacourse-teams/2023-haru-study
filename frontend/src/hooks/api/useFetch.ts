@@ -3,23 +3,23 @@ import { useCallback, useEffect, useState } from 'react';
 
 type Status = 'pending' | 'fulfilled' | 'error';
 
-type Options = {
+type Options<T> = {
   enabled?: boolean;
   suspense?: boolean;
   errorBoundary?: boolean;
 
-  onSuccess?: <T>(result: T) => void;
+  onSuccess?: (result: T) => void;
   onError?: (error: Error) => void;
 };
 
 const useFetch = <T>(
   request: () => Promise<T>,
-  { enabled = true, suspense = true, errorBoundary = true, onSuccess, onError }: Options = {},
+  { enabled = true, suspense = true, errorBoundary = true, onSuccess, onError }: Options<T> = {},
 ) => {
-  const [promise, setPromise] = useState<Promise<void> | null>(null);
   const [status, setStatus] = useState<Status>('pending');
+  const [promise, setPromise] = useState<Promise<void> | null>(null);
   const [result, setResult] = useState<T | null>(null);
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<Error | null>(null);
 
   const resolvePromise = useCallback(
     (result: T) => {
@@ -44,13 +44,13 @@ const useFetch = <T>(
     setPromise(request().then(resolvePromise, rejectPromise));
   }, []);
 
+  const clearResult = () => setResult(null);
+
   useEffect(() => {
     if (enabled) {
       fetch();
     }
   }, [enabled, fetch]);
-
-  const clearResult = () => setResult(null);
 
   if (suspense && status === 'pending' && promise) {
     throw promise;

@@ -1,10 +1,10 @@
 import { styled } from 'styled-components';
 
+import Footer from '@Components/common/Footer/Footer';
 import Header from '@Components/common/Header/Header';
 import GuideSection from '@Components/landing/GuideSection/GuideSection';
 import LandingMainSection from '@Components/landing/LandingMainSection/LandingMainSection';
 import MemberProfile from '@Components/landing/MemberProfile/MemberProfile';
-import Footer from '@Components/common/Footer/Footer';
 
 const Landing = () => {
   return (

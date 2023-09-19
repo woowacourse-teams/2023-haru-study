@@ -6,10 +6,10 @@ import { studyBoardHandlers } from './studyBoardHandler';
 import { studyRecordHandlers } from './studyRecordHandlers';
 
 export const handlers = [
+  ...studyRecordHandlers,
   ...createStudyHandlers,
   ...checkParticipantCodeHandlers,
   ...progressesHandlers,
-  ...studyRecordHandlers,
   ...studyBoardHandlers,
   ...authHandler,
 ];

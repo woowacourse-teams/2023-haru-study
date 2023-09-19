@@ -1,5 +1,4 @@
-import { useState } from 'react';
-
+import useMutation from '@Hooks/api/useMutation';
 import useQuestionTextarea from '@Hooks/common/useQuestionTextarea';
 
 import { useProgressInfo, useStudyInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
@@ -11,8 +10,16 @@ const usePlanningForm = () => {
   const { progressId } = useProgressInfo();
   const { onNextStep } = useStudyProgressAction();
 
-  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const { mutate: submitForm, isLoading: isSubmitLoading } = useMutation(async () => {
+    await requestWritePlan(studyId, progressId, {
+      toDo: questionTextareaProps.toDo.value,
+      completionCondition: questionTextareaProps.completionCondition.value,
+      expectedProbability: questionTextareaProps.expectedProbability.value,
+      expectedDifficulty: questionTextareaProps.expectedDifficulty.value,
+      whatCanYouDo: questionTextareaProps.whatCanYouDo.value,
+    });
+    await onNextStep();
+  });
 
   const questionTextareaProps = {
     toDo: useQuestionTextarea({
@@ -43,30 +50,6 @@ const usePlanningForm = () => {
     questionTextareaProps.expectedProbability.errorMessage ||
     questionTextareaProps.whatCanYouDo.errorMessage
   );
-
-  const submitForm = async () => {
-    setIsSubmitLoading(true);
-
-    try {
-      await requestWritePlan(studyId, progressId, {
-        toDo: questionTextareaProps.toDo.value,
-        completionCondition: questionTextareaProps.completionCondition.value,
-        expectedProbability: questionTextareaProps.expectedProbability.value,
-        expectedDifficulty: questionTextareaProps.expectedDifficulty.value,
-        whatCanYouDo: questionTextareaProps.whatCanYouDo.value,
-      });
-      await onNextStep();
-    } catch (reason) {
-      if (!(reason instanceof Error)) throw reason;
-      setError(reason);
-    } finally {
-      setIsSubmitLoading(false);
-    }
-  };
-
-  if (error) {
-    alert(error.message);
-  }
 
   return { questionTextareaProps, isSubmitLoading, isInvalidForm, submitForm };
 };

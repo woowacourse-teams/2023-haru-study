@@ -18,6 +18,10 @@ const StudyInformationSkeleton = () => {
           width: 80%;
           min-width: 400px;
           ${TextSkeletonStyle}
+
+          @media screen and (max-width: 768px) {
+            min-width: 100%;
+          }
         `}
       >
         Loading

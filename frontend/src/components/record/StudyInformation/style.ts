@@ -10,33 +10,45 @@ export const StudyInformationLayout = styled.div`
   h2 {
     margin-bottom: 20px;
   }
+
+  @media screen and (max-width: 768px) {
+    h2 {
+      margin-bottom: 0px;
+    }
+  }
 `;
 
 export const StudyInfoContainer = styled.div`
   display: flex;
+  max-width: 100%;
+  width: 350px;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
-
-  :nth-child(1) {
-    width: 30px;
-  }
 
   svg {
     width: 20px;
     height: 20px;
   }
 
-  :nth-child(2) {
-    width: 160px;
-  }
-
   :nth-child(3) {
-    width: 160px;
     text-align: end;
   }
 
   p {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     font-weight: 600;
     color: ${color.neutral[700]};
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+
+    :nth-child(3) {
+      text-align: start;
+      justify-content: space-between;
+    }
   }
 `;

@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
+import LoadingFallback from '@Components/common/LodingFallback/LoadingFallback';
 
 import color from '@Styles/color';
 
@@ -29,7 +31,11 @@ const StudyBoard = () => {
       <AlertErrorBoundary>
         <Contents>
           {step === 'planning' && <PlanningForm />}
-          {step === 'studying' && <StudyingForm />}
+          {step === 'studying' && (
+            <Suspense fallback={<LoadingFallback circleColor={color.red[500]} />}>
+              <StudyingForm />
+            </Suspense>
+          )}
           {step === 'retrospect' && <RetrospectForm />}
         </Contents>
       </AlertErrorBoundary>

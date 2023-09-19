@@ -124,6 +124,10 @@ const ProgressRecordLayout = styled.div`
   p {
     word-break: break-all;
   }
+
+  @media screen and (max-width: 768px) {
+    padding: 0;
+  }
 `;
 
 const TabItemContainer = styled.div`
@@ -131,6 +135,11 @@ const TabItemContainer = styled.div`
   justify-content: space-between;
 
   margin-top: 20px;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    gap: 40px;
+  }
 `;
 
 const TabItemSection = styled.div`
@@ -139,4 +148,22 @@ const TabItemSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 45px;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    gap: 20px;
+
+    svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    h5 {
+      font-size: 2.2rem;
+    }
+
+    p {
+      font-size: 1.8rem;
+    }
+  }
 `;

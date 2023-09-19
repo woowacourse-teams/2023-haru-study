@@ -56,4 +56,9 @@ const Layout = styled.div<LayoutProps>`
       cursor: default;
     `}
   `}
+
+  @media screen and (max-width: 768px) {
+    top: -40px;
+    padding: 0px;
+  }
 `;

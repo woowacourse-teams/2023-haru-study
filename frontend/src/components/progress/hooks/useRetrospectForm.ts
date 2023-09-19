@@ -1,5 +1,4 @@
-import { useState } from 'react';
-
+import useMutation from '@Hooks/api/useMutation';
 import useQuestionTextarea from '@Hooks/common/useQuestionTextarea';
 
 import { useProgressInfo, useStudyInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
@@ -11,8 +10,14 @@ const useRetrospectForm = () => {
   const { progressId, currentCycle } = useProgressInfo();
   const { onNextStep } = useStudyProgressAction();
 
-  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const { mutate: submitForm, isLoading: isSubmitLoading } = useMutation(async () => {
+    await requestWriteRetrospect(studyId, progressId, {
+      doneAsExpected: questionTextareaProps.doneAsExpected.value,
+      experiencedDifficulty: questionTextareaProps.experiencedDifficulty.value,
+      lesson: questionTextareaProps.lesson.value,
+    });
+    await onNextStep();
+  });
 
   const questionTextareaProps = {
     doneAsExpected: useQuestionTextarea({
@@ -35,28 +40,6 @@ const useRetrospectForm = () => {
   );
 
   const isLastCycle = totalCycle === currentCycle;
-
-  const submitForm = async () => {
-    setIsSubmitLoading(true);
-
-    try {
-      await requestWriteRetrospect(studyId, progressId, {
-        doneAsExpected: questionTextareaProps.doneAsExpected.value,
-        experiencedDifficulty: questionTextareaProps.experiencedDifficulty.value,
-        lesson: questionTextareaProps.lesson.value,
-      });
-      await onNextStep();
-    } catch (reason) {
-      if (!(reason instanceof Error)) throw reason;
-      setError(reason);
-    } finally {
-      setIsSubmitLoading(false);
-    }
-  };
-
-  if (error) {
-    alert(error.message);
-  }
 
   return { questionTextareaProps, isInvalidForm, isLastCycle, isSubmitLoading, submitForm };
 };
