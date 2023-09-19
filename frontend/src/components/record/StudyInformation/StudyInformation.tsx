@@ -1,4 +1,4 @@
-import { css } from 'styled-components';
+import { styled, css } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
@@ -31,27 +31,34 @@ const StudyInformation = ({ studyId }: Props) => {
 
   return (
     <StudyInformationLayout>
-      <Typography
-        variant="h2"
-        $style={css`
-          font-weight: 600;
-        `}
-      >
-        {studyBasicInfo?.name} 스터디에서의 기록
-      </Typography>
+      <Title>
+        <Typography
+          variant="h2"
+          $style={css`
+            font-weight: 600;
+          `}
+        >
+          {studyBasicInfo && `${studyBasicInfo.name} 스터디에서의 기록`}
+        </Typography>
+      </Title>
       <StudyInfoContainer>
-        <CalenderIcon color={color.neutral[700]} />
-        <Typography variant="p2">진행 날짜</Typography>
+        <Typography variant="p2">
+          <CalenderIcon color={color.neutral[700]} />
+          진행 날짜
+        </Typography>
         <Typography variant="p2">{displayDate}</Typography>
       </StudyInfoContainer>
       <StudyInfoContainer>
-        <CycleIcon color={color.neutral[700]} />
-        <Typography variant="p2">진행한 총 사이클</Typography>
+        <Typography variant="p2">
+          <CycleIcon color={color.neutral[700]} /> 진행한 총 사이클
+        </Typography>
         <Typography variant="p2">{studyBasicInfo?.totalCycle}회</Typography>
       </StudyInfoContainer>
       <StudyInfoContainer>
-        <TimeLineIcon color={color.neutral[700]} />
-        <Typography variant="p2">사이클 당 학습 시간</Typography>
+        <Typography variant="p2">
+          <TimeLineIcon color={color.neutral[700]} />
+          사이클 당 학습 시간
+        </Typography>
         <Typography variant="p2">{studyBasicInfo?.timePerCycle}분</Typography>
       </StudyInfoContainer>
     </StudyInformationLayout>
@@ -59,3 +66,11 @@ const StudyInformation = ({ studyId }: Props) => {
 };
 
 export default StudyInformation;
+
+const Title = styled.span`
+  @media screen and (max-width: 768px) {
+    h2 {
+      font-size: 3.2rem;
+    }
+  }
+`;
