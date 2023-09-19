@@ -3,8 +3,9 @@ import { css, styled } from 'styled-components';
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
-import StudyStepGuide from '../StudyStepGuide/StudyStepGuide';
+
 import StudyEffectGuide from '../StudyEffectGuide/StudyEffectGuide';
+import StudyStepGuide from '../StudyStepGuide/StudyStepGuide';
 
 const GuideSection = () => {
   return (

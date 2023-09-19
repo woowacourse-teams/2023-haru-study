@@ -6,6 +6,7 @@ import ChattingLink from '@Components/landing/ChattingLink/ChattingLink';
 import GuideSection from '@Components/landing/GuideSection/GuideSection';
 import LandingMainSection from '@Components/landing/LandingMainSection/LandingMainSection';
 import MemberProfile from '@Components/landing/MemberProfile/MemberProfile';
+import StartSection from '@Components/landing/StartSection/StartSection';
 
 const Landing = () => {
   return (
@@ -17,6 +18,7 @@ const Landing = () => {
       <LandingContents>
         <LandingMainSection />
         <GuideSection />
+        <StartSection />
       </LandingContents>
       <Footer />
       <ChattingLink />

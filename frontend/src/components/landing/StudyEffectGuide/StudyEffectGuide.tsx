@@ -1,9 +1,12 @@
+import { styled } from 'styled-components';
+
+import Typography from '@Components/common/Typography/Typography';
+
+import color from '@Styles/color';
+
 import GoalIcon from '@Assets/icons/GoalIcon';
 import PencilIcon from '@Assets/icons/PencilIcon';
 import TimeLineIcon from '@Assets/icons/TimeLineIcon';
-import Typography from '@Components/common/Typography/Typography';
-import color from '@Styles/color';
-import { styled } from 'styled-components';
 
 const STUDY_EFFECT = [
   {
