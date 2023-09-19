@@ -11,7 +11,6 @@ const useStepTimer = (studyMinutes: number, step: Step) => {
   const { start, stop, reset, leftSeconds, isTicking } = useTimer(INIT_SECONDS);
 
   useEffect(() => {
-    console.log(123);
     if (step === 'planning' || step === 'retrospect') {
       reset(INIT_SECONDS);
     } else {
