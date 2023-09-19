@@ -7,7 +7,7 @@ import color from '@Styles/color';
 
 import type { Step } from '@Types/study';
 
-import useTimer from '../hooks/useTimer';
+import useStepTimer from '../hooks/useStepTimer';
 
 const BUTTON_COLOR: Record<Step, string> = {
   planning: color.blue[500],
@@ -21,12 +21,12 @@ type Props = {
 };
 
 const Timer = ({ studyMinutes, step }: Props) => {
-  const { start, stop, leftTime, isTicking } = useTimer(studyMinutes, step);
+  const { start, stop, leftSeconds, isTicking } = useStepTimer(studyMinutes, step);
 
-  const leftMinutes = Math.floor(leftTime / 60)
+  const minutes = Math.floor(leftSeconds / 60)
     .toString()
     .padStart(2, '0');
-  const leftSeconds = Math.floor(leftTime % 60)
+  const seconds = Math.floor(leftSeconds % 60)
     .toString()
     .padStart(2, '0');
 
@@ -45,9 +45,9 @@ const Timer = ({ studyMinutes, step }: Props) => {
         color={color.white}
         tabIndex={0}
         role="timer"
-        aria-label={`남은 시간 ${leftMinutes}분 ${leftSeconds}초`}
+        aria-label={`남은 시간 ${minutes}분 ${seconds}초`}
       >
-        {`${leftMinutes}:${leftSeconds}`}
+        {`${minutes}:${seconds}`}
       </Typography>
       <Button
         variant="outlined"
