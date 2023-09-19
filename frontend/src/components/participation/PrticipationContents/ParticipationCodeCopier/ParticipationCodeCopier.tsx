@@ -1,7 +1,6 @@
 import { css, styled } from 'styled-components';
 
 import Input from '@Components/common/Input/Input';
-import Typography from '@Components/common/Typography/Typography';
 
 import useClipBoard from '@Hooks/common/useClipBoard';
 
@@ -30,10 +29,7 @@ const ParticipationCodeCopier = ({ participantCode }: Props) => {
 
   return (
     <div>
-      <Input
-        label={<Typography variant="p1">참여코드</Typography>}
-        bottomText="스터디 참여코드를 스터디원들에게 공유하세요."
-      >
+      <Input label="참여코드" bottomText="스터디 참여코드를 스터디원들에게 공유하세요.">
         <TextFieldContainer>
           <Input.TextField
             value={participantCode}
@@ -50,18 +46,7 @@ const ParticipationCodeCopier = ({ participantCode }: Props) => {
         </TextFieldContainer>
       </Input>
       <button onClick={handleOnClickHelperMessage}>
-        <Typography
-          variant="p3"
-          $style={css`
-            position: absolute;
-            text-decoration: underline;
-            margin-top: 20px;
-            color: ${color.neutral[400]};
-            cursor: pointer;
-          `}
-        >
-          참여코드를 왜 공유해야하나요?
-        </Typography>
+        <HelperText>참여코드를 왜 공유해야하나요?</HelperText>
       </button>
     </div>
   );
@@ -87,4 +72,20 @@ const ClipBoardButton = styled.button`
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   margin-top: 10px;
+`;
+
+const HelperText = styled.p`
+  position: absolute;
+  margin-top: 20px;
+
+  font-size: 1.6rem;
+  font-weight: 300;
+  text-decoration: underline;
+  color: ${color.neutral[400]};
+
+  cursor: pointer;
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.4rem;
+  }
 `;
