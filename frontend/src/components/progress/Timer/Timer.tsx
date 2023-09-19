@@ -6,12 +6,15 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
+import audioPlayer from '@Utils/audioPlayer';
 import dom from '@Utils/dom';
 import format from '@Utils/format';
 
 import type { Step } from '@Types/study';
 
 import useStepTimer from '../hooks/useStepTimer';
+
+const alarmAudio = audioPlayer({ asset: `/sounds/alarm-digital.mp3` });
 
 const BUTTON_COLOR: Record<Step, string> = {
   planning: color.blue[500],
@@ -25,7 +28,13 @@ type Props = {
 };
 
 const Timer = ({ studyMinutes, step }: Props) => {
-  const { start, stop, leftSeconds, isTicking } = useStepTimer(studyMinutes, step);
+  const { start, stop, leftSeconds, isTicking } = useStepTimer({
+    studyMinutes,
+    step,
+    onComplete: () => {
+      alarmAudio.play();
+    },
+  });
 
   const formattedTime = format.time(leftSeconds);
 
