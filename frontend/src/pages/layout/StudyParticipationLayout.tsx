@@ -37,5 +37,14 @@ const Layout = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 90%;
+
+    h2 {
+      font-size: 3.2rem;
+    }
+
+    input {
+      font-size: 1.8rem;
+      padding: 14px;
+    }
   }
 `;

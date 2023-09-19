@@ -58,4 +58,14 @@ export default MemberRegister;
 const LabelContainer = styled.div`
   display: flex;
   gap: 5px;
+
+  @media screen and (max-width: 768px) {
+    h5 {
+      font-size: 1.8rem;
+    }
+
+    p {
+      font-size: 1.8rem;
+    }
+  }
 `;

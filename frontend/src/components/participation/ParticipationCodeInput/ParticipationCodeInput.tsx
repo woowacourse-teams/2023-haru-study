@@ -3,7 +3,6 @@ import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
-import Typography from '@Components/common/Typography/Typography';
 import useParticipationCode from '@Components/participation/hooks/useParticipationCode';
 
 import useInput from '@Hooks/common/useInput';
@@ -29,10 +28,7 @@ const ParticipationCodeInput = () => {
 
   return (
     <Layout>
-      <Input
-        label={<Typography variant="p1">참여코드</Typography>}
-        bottomText="스터디장에게 받은 참여코드를 입력하세요."
-      >
+      <Input label="참여코드" bottomText="스터디장에게 받은 참여코드를 입력하세요.">
         <Input.TextField onChange={participantCodeInput.onChangeInput} />
       </Input>
 
