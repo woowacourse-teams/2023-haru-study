@@ -1,4 +1,4 @@
-import { css } from 'styled-components';
+import { styled, css } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
@@ -31,14 +31,16 @@ const StudyInformation = ({ studyId }: Props) => {
 
   return (
     <StudyInformationLayout>
-      <Typography
-        variant="h2"
-        $style={css`
-          font-weight: 600;
-        `}
-      >
-        {studyBasicInfo?.name} 스터디에서의 기록
-      </Typography>
+      <Title>
+        <Typography
+          variant="h2"
+          $style={css`
+            font-weight: 600;
+          `}
+        >
+          {studyBasicInfo && `${studyBasicInfo.name} 스터디에서의 기록`}
+        </Typography>
+      </Title>
       <StudyInfoContainer>
         <Typography variant="p2">
           <CalenderIcon color={color.neutral[700]} />
@@ -64,3 +66,11 @@ const StudyInformation = ({ studyId }: Props) => {
 };
 
 export default StudyInformation;
+
+const Title = styled.span`
+  @media screen and (max-width: 768px) {
+    h2 {
+      font-size: 3.2rem;
+    }
+  }
+`;

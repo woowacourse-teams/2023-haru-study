@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { css } from 'styled-components';
+import { styled, css } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
@@ -21,14 +21,16 @@ const MemberRecordContents = () => {
 
   return (
     <>
-      <Typography
-        variant="h2"
-        $style={css`
-          font-weight: 600;
-        `}
-      >
-        {memberInfo?.name}님의 스터디 기록
-      </Typography>
+      <Title>
+        <Typography
+          variant="h2"
+          $style={css`
+            font-weight: 600;
+          `}
+        >
+          {memberInfo && `${memberInfo.name}님의 스터디 기록`}
+        </Typography>
+      </Title>
       <Suspense fallback={<MemberRecordListSkeleton />}>
         {memberId && <MemberRecordList memberId={memberId} />}
       </Suspense>
@@ -37,3 +39,11 @@ const MemberRecordContents = () => {
 };
 
 export default MemberRecordContents;
+
+const Title = styled.span`
+  @media screen and (max-width: 768px) {
+    h2 {
+      font-size: 3.2rem;
+    }
+  }
+`;
