@@ -44,6 +44,11 @@ const Layout = styled.button<Props & { $isOpen: boolean }>`
     border-bottom-left-radius: ${$isOpen ? 'none' : '7px'};
     ${$style}
   `};
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.8rem;
+    padding: 14px;
+  }
 `;
 
 const Mark = styled.p`
