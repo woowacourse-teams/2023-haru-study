@@ -35,7 +35,7 @@ const MemberRestart = ({ studyName, nickname, studyId, progressId, showMemberReg
   };
 
   return (
-    <>
+    <Layout>
       <div>
         <Typography
           variant="p1"
@@ -82,15 +82,36 @@ const MemberRestart = ({ studyName, nickname, studyId, progressId, showMemberReg
           </Button>
         </ButtonContainer>
       </div>
-    </>
+    </Layout>
   );
 };
 
 export default MemberRestart;
 
+const Layout = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+
+  @media screen and (max-width: 768px) {
+    p {
+      font-size: 2rem;
+    }
+  }
+`;
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    gap: 10px;
+
+    button {
+      width: 100%;
+    }
+  }
 `;
 
 const StudyNameText = styled.span`
