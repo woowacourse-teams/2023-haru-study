@@ -34,4 +34,8 @@ const Layout = styled.div`
   width: 520px;
   margin: 0 auto;
   padding-bottom: 60px;
+
+  @media screen and (max-width: 768px) {
+    width: 90%;
+  }
 `;
