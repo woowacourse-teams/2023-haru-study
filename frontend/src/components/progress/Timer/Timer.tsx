@@ -1,9 +1,13 @@
+import { useEffect } from 'react';
 import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
+
+import dom from '@Utils/dom';
+import format from '@Utils/format';
 
 import type { Step } from '@Types/study';
 
@@ -23,12 +27,13 @@ type Props = {
 const Timer = ({ studyMinutes, step }: Props) => {
   const { start, stop, leftSeconds, isTicking } = useStepTimer(studyMinutes, step);
 
-  const minutes = Math.floor(leftSeconds / 60)
-    .toString()
-    .padStart(2, '0');
-  const seconds = Math.floor(leftSeconds % 60)
-    .toString()
-    .padStart(2, '0');
+  const formattedTime = format.time(leftSeconds);
+
+  useEffect(() => {
+    dom.updateTitle(formattedTime);
+
+    return () => dom.updateTitle('하루스터디');
+  }, [formattedTime]);
 
   const buttonColor = BUTTON_COLOR[step];
   const buttonText = isTicking ? '정지' : '시작';
@@ -45,9 +50,9 @@ const Timer = ({ studyMinutes, step }: Props) => {
         color={color.white}
         tabIndex={0}
         role="timer"
-        aria-label={`남은 시간 ${minutes}분 ${seconds}초`}
+        aria-label={`남은 시간 ${formattedTime}`}
       >
-        {`${minutes}:${seconds}`}
+        {`${formattedTime}`}
       </Typography>
       <Button
         variant="outlined"
