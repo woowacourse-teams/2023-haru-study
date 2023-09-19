@@ -35,6 +35,11 @@ const Layout = styled.div`
   display: flex;
   align-items: flex-end;
   gap: 10px;
+
+  @media screen and (max-width: 768px) {
+    bottom: 18px;
+    right: 18px;
+  }
 `;
 
 type GuideMessageProps = {
@@ -62,10 +67,5 @@ const Link = styled.a`
   svg {
     width: 24px;
     height: 24px;
-  }
-
-  @media screen and (max-width: 768px) {
-    bottom: 18px;
-    right: 18px;
   }
 `;
