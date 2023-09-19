@@ -37,13 +37,25 @@ export const requestPostOAuthLogin = (provider: OAuthProvider, code: string) =>
 
 export const requestGetMemberInfo = () => http.get<ResponseMemberInfo>('/api/me');
 
-export const requestGetOneStudyData = (studyId: string) => http.get<ResponseOneStudyInfo>(`/api/studies/${studyId}`);
+export const requestGetOneStudyData = async (studyId: string) => {
+  const { data } = await http.get<ResponseOneStudyInfo>(`/api/studies/${studyId}`);
 
-export const requestGetMemberProgress = (studyId: string, memberId: string) =>
-  http.get<ResponseMemberProgress>(`/api/studies/${studyId}/progresses?memberId=${memberId}`);
+  return data;
+};
 
-export const requestGetMemberContents = (studyId: string, progressId: string, cycle: number) =>
-  http.get<ResponseMemberContents>(`/api/studies/${studyId}/contents?progressId=${progressId}&cycle=${cycle}`);
+export const requestGetMemberProgress = async (studyId: string, memberId: string) => {
+  const { data } = await http.get<ResponseMemberProgress>(`/api/studies/${studyId}/progresses?memberId=${memberId}`);
+
+  return data.progresses[0];
+};
+
+export const requestGetMemberContents = async (studyId: string, progressId: string, cycle: number) => {
+  const { data } = await http.get<ResponseMemberContents>(
+    `/api/studies/${studyId}/contents?progressId=${progressId}&cycle=${cycle}`,
+  );
+
+  return data.content[0].plan;
+};
 
 export const requestWritePlan = (studyId: string, progressId: string, plan: PlanList) =>
   http.post(`/api/studies/${studyId}/contents/write-plan`, {
