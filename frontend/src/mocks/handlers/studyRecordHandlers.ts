@@ -53,6 +53,54 @@ const STUDY_CONTENT = {
         lesson: '글을 한 번에 쓰려고 하지말고 중간중간 틈틈이 기록을 해놔야 할 것 같아요.',
       },
     },
+    {
+      cycle: 4,
+      plan: {
+        toDo: '미션 회고 글 포스팅',
+        completionCondition: '한 챕터의 내용을 완성',
+        expectedProbability: '60%',
+        expectedDifficulty: '좋은 글을 쓰기 위해 고민이 많아질 수 있다.',
+        whatCanYouDo: '글을 완벽하게 쓰려고 하기보단 러프하게 먼저 쓴다.',
+      },
+      retrospect: {
+        doneAsExpected: '한 챕터의 절반 정도 작성한 것 같습니다.',
+        experiencedDifficulty:
+          '캡처하고 붙여 넣느라 시간이 좀 걸렸습니다. 그리고 챕터의 방향성이 조금 수정되어서 원할하게 작성하지 못했습니다.',
+        lesson: '글을 한 번에 쓰려고 하지말고 중간중간 틈틈이 기록을 해놔야 할 것 같아요.',
+      },
+    },
+    {
+      cycle: 5,
+      plan: {
+        toDo: '미션 회고 글 포스팅',
+        completionCondition: '한 챕터의 내용을 완성',
+        expectedProbability: '60%',
+        expectedDifficulty: '좋은 글을 쓰기 위해 고민이 많아질 수 있다.',
+        whatCanYouDo: '글을 완벽하게 쓰려고 하기보단 러프하게 먼저 쓴다.',
+      },
+      retrospect: {
+        doneAsExpected: '한 챕터의 절반 정도 작성한 것 같습니다.',
+        experiencedDifficulty:
+          '캡처하고 붙여 넣느라 시간이 좀 걸렸습니다. 그리고 챕터의 방향성이 조금 수정되어서 원할하게 작성하지 못했습니다.',
+        lesson: '글을 한 번에 쓰려고 하지말고 중간중간 틈틈이 기록을 해놔야 할 것 같아요.',
+      },
+    },
+    {
+      cycle: 6,
+      plan: {
+        toDo: '미션 회고 글 포스팅',
+        completionCondition: '한 챕터의 내용을 완성',
+        expectedProbability: '60%',
+        expectedDifficulty: '좋은 글을 쓰기 위해 고민이 많아질 수 있다.',
+        whatCanYouDo: '글을 완벽하게 쓰려고 하기보단 러프하게 먼저 쓴다.',
+      },
+      retrospect: {
+        doneAsExpected: '한 챕터의 절반 정도 작성한 것 같습니다.',
+        experiencedDifficulty:
+          '캡처하고 붙여 넣느라 시간이 좀 걸렸습니다. 그리고 챕터의 방향성이 조금 수정되어서 원할하게 작성하지 못했습니다.',
+        lesson: '글을 한 번에 쓰려고 하지말고 중간중간 틈틈이 기록을 해놔야 할 것 같아요.',
+      },
+    },
   ],
 };
 

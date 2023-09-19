@@ -23,13 +23,11 @@ const TabList = () => {
 export default TabList;
 
 const TabListLayout = styled.ul`
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  width: 100%;
+  display: flex;
   row-gap: 20px;
 
-  @media screen and (max-width: 768px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  overflow-x: scroll;
 `;
 
 type TabProps = {
@@ -41,7 +39,7 @@ const Tab = styled.li<TabProps>`
   align-items: center;
   justify-content: center;
 
-  padding-bottom: 5px;
+  padding: 0px 10px 5px;
 
   font-size: 1.8rem;
   text-align: center;
