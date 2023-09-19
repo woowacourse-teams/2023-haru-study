@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const useTimer = (initSeconds: number) => {
+type Options = {
+  onStart?: () => void;
+  onStop?: () => void;
+  onComplete?: () => void;
+};
+
+const useTimer = (initSeconds: number, { onStart, onStop, onComplete }: Options = {}) => {
   const timerId = useRef<NodeJS.Timer | null>(null);
   const startTime = useRef(Date.now());
   const seconds = useRef(initSeconds);
@@ -25,8 +31,9 @@ const useTimer = (initSeconds: number) => {
     if (leftSeconds <= 1) {
       setIsTicking(false);
       clear();
+      onComplete?.();
     }
-  }, [leftSeconds]);
+  }, [leftSeconds, onComplete]);
 
   useEffect(() => {
     if (isTicking) {
@@ -39,12 +46,14 @@ const useTimer = (initSeconds: number) => {
   const start = useCallback(() => {
     startTime.current = Date.now();
     setIsTicking(true);
-  }, []);
+    onStart?.();
+  }, [onStart]);
 
   const stop = useCallback(() => {
     seconds.current = leftSeconds;
     setIsTicking(false);
-  }, [leftSeconds]);
+    onStop?.();
+  }, [leftSeconds, onStop]);
 
   const reset = useCallback((newSeconds?: number) => {
     if (newSeconds) {

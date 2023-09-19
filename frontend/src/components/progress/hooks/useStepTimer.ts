@@ -1,14 +1,22 @@
 import { useEffect } from 'react';
 
-import useTimer from '@Hooks/common/useTImer';
+import useTimer from '@Hooks/common/useTimer';
 
 import type { Step } from '@Types/study';
 
 const INIT_SECONDS = 600;
 const SECONDS_PER_MINUTE = 60;
 
-const useStepTimer = (studyMinutes: number, step: Step) => {
-  const { start, stop, reset, leftSeconds, isTicking } = useTimer(INIT_SECONDS);
+type Params = {
+  studyMinutes: number;
+  step: Step;
+  onStart?: () => void;
+  onStop?: () => void;
+  onComplete?: () => void;
+};
+
+const useStepTimer = ({ studyMinutes, step, onStart, onStop, onComplete }: Params) => {
+  const { start, stop, reset, leftSeconds, isTicking } = useTimer(INIT_SECONDS, { onStart, onStop, onComplete });
 
   useEffect(() => {
     if (step === 'planning' || step === 'retrospect') {
