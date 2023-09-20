@@ -21,7 +21,7 @@ const Layout = styled.div`
   align-items: center;
   gap: 40px;
 
-  padding: 80px 0px 160px;
+  padding: 50px 0px 160px;
 
   @media screen and (max-width: 768px) {
     padding: 60px 0px 120px;
