@@ -3,29 +3,30 @@ import { css, styled } from 'styled-components';
 
 import color from '@Styles/color';
 
-import ChatIcon from '@Assets/icons/ChatIcon';
+import ReportIcon from '@Assets/icons/ReportIon';
 
-const OPEN_CHATTING_LINK = 'https://open.kakao.com/o/gDt2u0Hf';
+const BUG_REPORTING_LINK =
+  'https://docs.google.com/forms/d/e/1FAIpQLSdwvz3y9xYc9PHCLw1LiaLB8TGfGao91cVs_NwERHSV9c5Mfg/viewform';
 
-const ChattingLink = () => {
+const BugReportingLink = () => {
   const [isHoverIcon, setIsHoverIcon] = useState(false);
 
   return (
     <Layout>
-      <GuideMessage $isHoverIcon={isHoverIcon}>다른 사람과 함께 학습하고 싶다면?</GuideMessage>
+      <GuideMessage $isHoverIcon={isHoverIcon}>불편사항 피드백하기</GuideMessage>
       <Link
-        href={OPEN_CHATTING_LINK}
+        href={BUG_REPORTING_LINK}
         target="_blank"
         onMouseEnter={() => setIsHoverIcon(true)}
         onMouseLeave={() => setIsHoverIcon(false)}
       >
-        <ChatIcon color="rgba(34,34,34)" />
+        <ReportIcon color="rgba(34,34,34)" />
       </Link>
     </Layout>
   );
 };
 
-export default ChattingLink;
+export default BugReportingLink;
 
 const Layout = styled.div`
   display: flex;
@@ -52,7 +53,7 @@ const GuideMessage = styled.p<GuideMessageProps>`
 const Link = styled.a`
   cursor: pointer;
 
-  background-color: ${color.brand.kakao};
+  background-color: ${color.neutral[200]};
 
   padding: 12px;
   border-radius: 14px;

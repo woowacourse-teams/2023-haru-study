@@ -2,10 +2,10 @@ import { styled } from 'styled-components';
 
 import Footer from '@Components/common/Footer/Footer';
 import Header from '@Components/common/Header/Header';
-import ChattingLink from '@Components/landing/ChattingLink/ChattingLink';
 import GuideSection from '@Components/landing/GuideSection/GuideSection';
 import LandingMainSection from '@Components/landing/LandingMainSection/LandingMainSection';
 import MemberProfile from '@Components/landing/MemberProfile/MemberProfile';
+import SideLink from '@Components/landing/SideLink/SideLik';
 import StartSection from '@Components/landing/StartSection/StartSection';
 
 const Landing = () => {
@@ -21,7 +21,7 @@ const Landing = () => {
         <StartSection />
       </LandingContents>
       <Footer />
-      <ChattingLink />
+      <SideLink />
     </>
   );
 };
