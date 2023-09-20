@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
@@ -17,7 +18,9 @@ const App = () => {
       <ModalProvider>
         <MemberInfoProvider>
           <ErrorBoundary fallback={ErrorFallback}>
-            <Outlet />
+            <Suspense>
+              <Outlet />
+            </Suspense>
           </ErrorBoundary>
         </MemberInfoProvider>
       </ModalProvider>
