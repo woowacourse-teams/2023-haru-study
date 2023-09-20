@@ -41,6 +41,7 @@
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
+    "copy-webpack-plugin": "^11.0.0",
     "dotenv-webpack": "^8.0.1",
     "eslint": "^8.44.0",
     "eslint-config-airbnb-typescript": "^17.0.0",

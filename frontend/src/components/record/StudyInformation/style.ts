@@ -39,7 +39,7 @@ export const StudyInfoContainer = styled.div`
     display: flex;
     align-items: center;
     gap: 5px;
-    font-weight: 600;
+    font-weight: 700;
     color: ${color.neutral[700]};
   }
 

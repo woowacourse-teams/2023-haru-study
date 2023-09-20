@@ -112,6 +112,6 @@ const StudyCycleInfoContainer = styled.div`
   :last-child {
     margin-left: 10px;
     font-size: 1.8rem;
-    font-weight: 400;
+    font-weight: 500;
   }
 `;

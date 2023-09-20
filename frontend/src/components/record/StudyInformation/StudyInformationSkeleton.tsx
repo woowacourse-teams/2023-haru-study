@@ -14,7 +14,7 @@ const StudyInformationSkeleton = () => {
       <Typography
         variant="h2"
         $style={css`
-          font-weight: 600;
+          font-weight: 700;
           width: 80%;
           min-width: 400px;
           ${TextSkeletonStyle}
