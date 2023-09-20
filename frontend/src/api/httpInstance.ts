@@ -16,8 +16,6 @@ const refreshAndRefetch = async <T extends object>(response: HttpResponse<T>) =>
     data: { accessToken },
   } = await http.post<{ accessToken: string }>('/api/auth/refresh');
 
-  console.log(accessToken);
-
   tokenStorage.setAccessToken(accessToken);
 
   return http.request<T>(response.url, response.config);
