@@ -7,6 +7,7 @@ import useFetch from '@Hooks/api/useFetch';
 import { ROUTES_PATH } from '@Constants/routes';
 
 import tokenStorage from '@Utils/tokenStorage';
+import url from '@Utils/url';
 
 import { requestGetMemberInfo } from '@Apis/index';
 
@@ -22,7 +23,10 @@ const MemberInfoContext = createContext<MemberInfo | null>(null);
 const MemberInfoActionContext = createContext<Actions | null>(null);
 
 const MemberInfoProvider = ({ children }: PropsWithChildren) => {
-  const { result, clearResult, refetch } = useFetch(() => requestGetMemberInfo(), { errorBoundary: false });
+  const { result, clearResult, refetch } = useFetch(() => requestGetMemberInfo(), {
+    errorBoundary: false,
+    enabled: url.getPathName() !== ROUTES_PATH.auth,
+  });
 
   const navigate = useNavigate();
 
