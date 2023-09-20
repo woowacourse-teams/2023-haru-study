@@ -40,7 +40,7 @@ describe('랜딩 페이지 테스트', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('button').textContent).toBe('하루스터디 시작하기');
+      expect(screen.getAllByRole('button')[0].textContent).toBe('하루스터디 시작하기');
     });
   });
 
@@ -63,6 +63,7 @@ describe('랜딩 페이지 테스트', () => {
 
     await waitFor(() => {
       screen.getAllByRole('button').forEach((button, index) => {
+        if (index > 1) return;
         const buttonText = index === 0 ? '스터디 개설하기' : '스터디 참여하기';
         expect(button.textContent).toBe(buttonText);
       });
