@@ -28,7 +28,7 @@ const Layout = styled.div`
   }
 
   h4 {
-    font-weight: 400;
+    font-weight: 500;
 
     @media screen and (max-width: 768px) {
       font-size: 2.4rem;

@@ -67,7 +67,7 @@ describe('스터디 준비 페이지 테스트', () => {
           </MemberInfoProvider>
         </ModalProvider>
       </MemoryRouter>,
-    )
+    );
 
     await waitFor(() => {
       expect(screen.getByText('하루')).toBeInTheDocument();

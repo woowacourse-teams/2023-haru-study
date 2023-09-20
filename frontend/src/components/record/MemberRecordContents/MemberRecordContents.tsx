@@ -25,7 +25,7 @@ const MemberRecordContents = () => {
         <Typography
           variant="h2"
           $style={css`
-            font-weight: 600;
+            font-weight: 700;
           `}
         >
           {memberInfo && `${memberInfo.name}님의 스터디 기록`}

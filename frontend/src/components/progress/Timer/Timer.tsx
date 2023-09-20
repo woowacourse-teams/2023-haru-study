@@ -6,6 +6,8 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
+import alarm from '@Assets/sounds/alarm.mp3';
+
 import audioPlayer from '@Utils/audioPlayer';
 import dom from '@Utils/dom';
 import format from '@Utils/format';
@@ -14,7 +16,7 @@ import type { Step } from '@Types/study';
 
 import useStepTimer from '../hooks/useStepTimer';
 
-const alarmAudio = audioPlayer({ asset: `/sounds/alarm-digital.mp3` });
+const alarmAudio = audioPlayer({ asset: alarm });
 
 const BUTTON_COLOR: Record<Step, string> = {
   planning: color.blue[500],

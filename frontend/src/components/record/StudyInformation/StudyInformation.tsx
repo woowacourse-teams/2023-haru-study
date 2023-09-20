@@ -35,7 +35,7 @@ const StudyInformation = ({ studyId }: Props) => {
         <Typography
           variant="h2"
           $style={css`
-            font-weight: 600;
+            font-weight: 700;
           `}
         >
           {studyBasicInfo && `${studyBasicInfo.name} 스터디에서의 기록`}
