@@ -1,11 +1,13 @@
 import { styled } from 'styled-components';
 
+import Image from '@Components/common/Image/Image';
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
 import ArrowIcon from '@Assets/icons/ArrowIcon';
-import heroImage from '@Assets/image/heroImage.png';
+import heroImageJpg from '@Assets/image/heroImage.jpg';
+import heroImageWebp from '@Assets/image/heroImage.webp';
 
 import LandingButton from '../LandingButton/LandingButton';
 
@@ -24,7 +26,7 @@ const LandingMainSection = () => {
           <LandingButton />
         </LandingContents>
         <HeroImage>
-          <img src={heroImage} alt="목표, 학습, 회고 스탭" />
+          <Image originUrl={heroImageJpg} webpUrl={heroImageWebp} alt="목표, 학습, 회고 스탭" />
         </HeroImage>
       </LandingHeader>
       <LoadMoreContents>
