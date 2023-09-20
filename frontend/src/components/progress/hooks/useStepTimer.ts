@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 
 import useTimer from '@Hooks/common/useTimer';
@@ -26,7 +27,6 @@ const useStepTimer = ({ studyMinutes, step, onStart, onStop, onComplete }: Param
     }
 
     start();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [studyMinutes, step]);
 
   return {
