@@ -53,7 +53,7 @@ const GuideMessage = styled.p<GuideMessageProps>`
 const Link = styled.a`
   cursor: pointer;
 
-  background-color: ${color.neutral[200]};
+  background-color: ${color.neutral[100]};
 
   padding: 12px;
   border-radius: 14px;
