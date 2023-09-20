@@ -10,7 +10,7 @@ import { ROUTES_PATH } from '@Constants/routes';
 import CycleIcon from '@Assets/icons/CycleIcon';
 import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
-import date from '@Utils/date';
+import format from '@Utils/format';
 
 import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
 import useMemberStudyListData from '../hooks/useMemberStudyListData';
@@ -35,7 +35,7 @@ const MemberRecordList = ({ memberId }: Props) => {
           <StudyItem key={studyId} onClick={() => handleClickStudyItem(studyId)}>
             <StudyNameDateContainer>
               <Typography variant="h6">{name} 스터디</Typography>
-              <StudyDate data-testid="progress-date">{date.format(new Date(createdDateTime))}</StudyDate>
+              <StudyDate data-testid="progress-date">{format.date(new Date(createdDateTime))}</StudyDate>
             </StudyNameDateContainer>
             <StudyCycleInfoLayout>
               <StudyCycleInfoContainer>

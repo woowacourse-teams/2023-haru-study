@@ -8,7 +8,7 @@ import CalenderIcon from '@Assets/icons/CalenderIcon';
 import CycleIcon from '@Assets/icons/CycleIcon';
 import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
-import date from '@Utils/date';
+import format from '@Utils/format';
 
 import StudyInformationSkeleton from './StudyInformationSkeleton';
 import { StudyInfoContainer, StudyInformationLayout } from './style';
@@ -22,7 +22,7 @@ const StudyInformation = ({ studyId }: Props) => {
   const { studyBasicInfo, isLoading } = useStudyData(studyId);
 
   const displayDate = studyBasicInfo?.createdDateTime
-    ? date.format(new Date(studyBasicInfo?.createdDateTime))
+    ? format.date(new Date(studyBasicInfo?.createdDateTime))
     : '/년 /월 /일';
 
   if (isLoading) {

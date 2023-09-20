@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
@@ -5,9 +6,15 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
+import audioPlayer from '@Utils/audioPlayer';
+import dom from '@Utils/dom';
+import format from '@Utils/format';
+
 import type { Step } from '@Types/study';
 
-import useTimer from '../hooks/useTimer';
+import useStepTimer from '../hooks/useStepTimer';
+
+const alarmAudio = audioPlayer({ asset: `/sounds/alarm-digital.mp3` });
 
 const BUTTON_COLOR: Record<Step, string> = {
   planning: color.blue[500],
@@ -21,14 +28,21 @@ type Props = {
 };
 
 const Timer = ({ studyMinutes, step }: Props) => {
-  const { start, stop, leftTime, isTicking } = useTimer(studyMinutes, step);
+  const { start, stop, leftSeconds, isTicking } = useStepTimer({
+    studyMinutes,
+    step,
+    onComplete: () => {
+      alarmAudio.play();
+    },
+  });
 
-  const leftMinutes = Math.floor(leftTime / 60)
-    .toString()
-    .padStart(2, '0');
-  const leftSeconds = Math.floor(leftTime % 60)
-    .toString()
-    .padStart(2, '0');
+  const formattedTime = format.time(leftSeconds);
+
+  useEffect(() => {
+    dom.updateTitle(formattedTime);
+
+    return () => dom.updateTitle('하루스터디');
+  }, [formattedTime]);
 
   const buttonColor = BUTTON_COLOR[step];
   const buttonText = isTicking ? '정지' : '시작';
@@ -45,9 +59,9 @@ const Timer = ({ studyMinutes, step }: Props) => {
         color={color.white}
         tabIndex={0}
         role="timer"
-        aria-label={`남은 시간 ${leftMinutes}분 ${leftSeconds}초`}
+        aria-label={`남은 시간 ${formattedTime}`}
       >
-        {`${leftMinutes}:${leftSeconds}`}
+        {`${formattedTime}`}
       </Typography>
       <Button
         variant="outlined"
