@@ -6,8 +6,8 @@ import Typography from '@Components/common/Typography/Typography';
 import color from '@Styles/color';
 
 import ArrowIcon from '@Assets/icons/ArrowIcon';
-import heroImageJpg from '@Assets/image/heroImage.jpg';
-import heroImageWebp from '@Assets/image/heroImage.webp';
+import heroImageJpg from '@Assets/images/heroImage.jpg';
+import heroImageWebp from '@Assets/images/heroImage.webp';
 
 import LandingButton from '../LandingButton/LandingButton';
 

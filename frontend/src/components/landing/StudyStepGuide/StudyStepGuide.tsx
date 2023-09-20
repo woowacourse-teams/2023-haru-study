@@ -5,12 +5,12 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
-import planningStepJpg from '@Assets/image/planningStep.jpg';
-import planningStepWebp from '@Assets/image/planningStep.webp';
-import retrospectStepJpg from '@Assets/image/retrospectStep.jpg';
-import retrospectStepWebp from '@Assets/image/retrospectStep.webp';
-import studyingStepJpg from '@Assets/image/studyingStep.jpg';
-import studyingStepWebp from '@Assets/image/studyingStep.webp';
+import planningStepJpg from '@Assets/images/planningStep.jpg';
+import planningStepWebp from '@Assets/images/planningStep.webp';
+import retrospectStepJpg from '@Assets/images/retrospectStep.jpg';
+import retrospectStepWebp from '@Assets/images/retrospectStep.webp';
+import studyingStepJpg from '@Assets/images/studyingStep.jpg';
+import studyingStepWebp from '@Assets/images/studyingStep.webp';
 
 const GUIDE = [
   {
