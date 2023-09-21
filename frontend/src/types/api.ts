@@ -59,8 +59,8 @@ type ResponseProgress = {
   step: Step;
 };
 
-export type ResponseProgresses = {
-  progresses: ResponseProgress[];
+export type ResponseCheckProgresses = {
+  progresses: ResponseProgress[] | null;
 };
 
 export type ResponseAuthToken = {

@@ -31,6 +31,8 @@ export default Header;
 
 const Layout = styled.header`
   padding: 40px;
+
+  display: flex;
 `;
 
 const Emphasis = styled.span`

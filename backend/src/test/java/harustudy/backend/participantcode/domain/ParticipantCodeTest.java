@@ -3,9 +3,7 @@ package harustudy.backend.participantcode.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-import harustudy.backend.room.domain.CodeGenerationStrategy;
-import harustudy.backend.room.domain.GenerationStrategy;
-import harustudy.backend.room.domain.ParticipantCode;
+import harustudy.backend.study.domain.PomodoroStudy;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -19,7 +17,8 @@ class ParticipantCodeTest {
         // given & when
         GenerationStrategy generationStrategy = new CodeGenerationStrategy();
         // then
-        assertThatCode(() -> new ParticipantCode(generationStrategy))
+        assertThatCode(
+                () -> new ParticipantCode(new PomodoroStudy("name", 1, 20), generationStrategy))
                 .doesNotThrowAnyException();
     }
 
@@ -27,7 +26,8 @@ class ParticipantCodeTest {
     void 기존_값과_다른_참여코드를_생성할_수_있다() {
         // given & when
         GenerationStrategy generationStrategy = new CodeGenerationStrategy();
-        ParticipantCode participantCode = new ParticipantCode(generationStrategy);
+        ParticipantCode participantCode = new ParticipantCode(new PomodoroStudy("name", 1, 20),
+                generationStrategy);
 
         String oldCode = participantCode.getCode();
         participantCode.regenerate();

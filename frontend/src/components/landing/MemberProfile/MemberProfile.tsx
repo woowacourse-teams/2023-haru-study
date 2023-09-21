@@ -1,10 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { css, styled } from 'styled-components';
+import { css } from 'styled-components';
 
 import type { MenuItem } from '@Components/common/Menu/Menu';
 import Menu from '@Components/common/Menu/Menu';
-
-import { DefaultSkeletonStyle } from '@Styles/common';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
@@ -32,19 +30,14 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
 const MemberProfile = () => {
   const navigate = useNavigate();
 
-  const { data } = useMemberInfo();
+  const memberInfo = useMemberInfo();
   const { clearMemberInfo } = useMemberInfoAction();
 
-  const isLoading = !data;
+  if (!memberInfo) {
+    return <></>;
+  }
 
-  if (isLoading)
-    return (
-      <LoadingImageWrapper>
-        <LoadingImage />
-      </LoadingImageWrapper>
-    );
-
-  const { name, imageUrl, loginType } = data;
+  const { name, imageUrl, loginType } = memberInfo;
 
   const guestMenu = (
     <Menu.Item onClick={clearMemberInfo} bottomSeparator>
@@ -84,17 +77,3 @@ const MemberProfile = () => {
 };
 
 export default MemberProfile;
-
-const LoadingImageWrapper = styled.div`
-  padding: 4px;
-  margin: 0 0 0 auto;
-`;
-
-const LoadingImage = styled.div`
-  width: 36px;
-  height: 36px;
-
-  border-radius: 50%;
-
-  ${DefaultSkeletonStyle}
-`;

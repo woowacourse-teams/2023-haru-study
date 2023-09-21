@@ -1,60 +1,65 @@
-import { css, styled } from 'styled-components';
+import { styled, css } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
-import { TextSkeletonStyle } from '@Styles/common';
 
 import CalenderIcon from '@Assets/icons/CalenderIcon';
 import CycleIcon from '@Assets/icons/CycleIcon';
 import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
-import date from '@Utils/date';
+import format from '@Utils/format';
+
+import StudyInformationSkeleton from './StudyInformationSkeleton';
+import { StudyInfoContainer, StudyInformationLayout } from './style';
+import useStudyData from '../hooks/useStudyData';
 
 type Props = {
-  studyName?: string;
-  totalCycle?: number;
-  timePerCycle?: number;
-  createdDateTime?: string;
-  $isLoading: boolean;
+  studyId: string;
 };
 
-const StudyInformation = ({ studyName, totalCycle, timePerCycle, createdDateTime, $isLoading }: Props) => {
-  const iconColor = $isLoading ? 'transparent' : color.neutral[700];
+const StudyInformation = ({ studyId }: Props) => {
+  const { studyBasicInfo, isLoading } = useStudyData(studyId);
 
-  const displayDate = createdDateTime ? date.format(new Date(createdDateTime)) : '/년 /월 /일';
+  const displayDate = studyBasicInfo?.createdDateTime
+    ? format.date(new Date(studyBasicInfo?.createdDateTime))
+    : '/년 /월 /일';
+
+  if (isLoading) {
+    return <StudyInformationSkeleton />;
+  }
 
   return (
     <StudyInformationLayout>
-      <Typography
-        variant="h2"
-        $style={css`
-          font-weight: 600;
-
-          ${$isLoading &&
-          css`
-            width: 80%;
-            min-width: 400px;
-            ${TextSkeletonStyle}
+      <Title>
+        <Typography
+          variant="h2"
+          $style={css`
+            font-weight: 700;
           `}
-        `}
-      >
-        {studyName} 스터디에서의 기록
-      </Typography>
-      <StudyInfoContainer $isLoading={$isLoading}>
-        <CalenderIcon color={iconColor} />
-        <Typography variant="p2">진행 날짜</Typography>
+        >
+          {studyBasicInfo && `${studyBasicInfo.name} 스터디에서의 기록`}
+        </Typography>
+      </Title>
+      <StudyInfoContainer>
+        <Typography variant="p2">
+          <CalenderIcon color={color.neutral[700]} />
+          진행 날짜
+        </Typography>
         <Typography variant="p2">{displayDate}</Typography>
       </StudyInfoContainer>
-      <StudyInfoContainer $isLoading={$isLoading}>
-        <CycleIcon color={iconColor} />
-        <Typography variant="p2">진행한 총 사이클</Typography>
-        <Typography variant="p2">{totalCycle}회</Typography>
+      <StudyInfoContainer>
+        <Typography variant="p2">
+          <CycleIcon color={color.neutral[700]} /> 진행한 총 사이클
+        </Typography>
+        <Typography variant="p2">{studyBasicInfo?.totalCycle}회</Typography>
       </StudyInfoContainer>
-      <StudyInfoContainer $isLoading={$isLoading}>
-        <TimeLineIcon color={iconColor} />
-        <Typography variant="p2">사이클 당 학습 시간</Typography>
-        <Typography variant="p2">{timePerCycle}분</Typography>
+      <StudyInfoContainer>
+        <Typography variant="p2">
+          <TimeLineIcon color={color.neutral[700]} />
+          사이클 당 학습 시간
+        </Typography>
+        <Typography variant="p2">{studyBasicInfo?.timePerCycle}분</Typography>
       </StudyInfoContainer>
     </StudyInformationLayout>
   );
@@ -62,42 +67,10 @@ const StudyInformation = ({ studyName, totalCycle, timePerCycle, createdDateTime
 
 export default StudyInformation;
 
-const StudyInformationLayout = styled.div`
-  display: grid;
-  row-gap: 20px;
-
-  h2 {
-    margin-bottom: 20px;
+const Title = styled.span`
+  @media screen and (max-width: 768px) {
+    h2 {
+      font-size: 3.2rem;
+    }
   }
-`;
-
-type StudyInfoContainerType = {
-  $isLoading: boolean;
-};
-
-const StudyInfoContainer = styled.div<StudyInfoContainerType>`
-  display: grid;
-  grid-template-columns: 20px 160px 160px;
-  align-items: center;
-  column-gap: 10px;
-
-  :nth-child(3) {
-    text-align: end;
-  }
-
-  p {
-    font-weight: 600;
-    color: ${color.neutral[700]};
-  }
-
-  ${({ $isLoading }) => css`
-    ${$isLoading &&
-    css`
-      width: 300px;
-      p {
-        color: transparent;
-      }
-      ${TextSkeletonStyle}
-    `}
-  `}
 `;
