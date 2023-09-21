@@ -5,7 +5,7 @@ import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participantcode.domain.GenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
-import harustudy.backend.participantcode.repository.InMemoryParticipantCodeRepository;
+import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.progress.domain.PomodoroProgress;
 import harustudy.backend.progress.repository.PomodoroProgressRepository;
 import harustudy.backend.study.domain.PomodoroStudy;
@@ -31,7 +31,7 @@ public class PomodoroStudyService {
     private final PomodoroProgressRepository pomodoroProgressRepository;
     private final MemberRepository memberRepository;
     private final GenerationStrategy generationStrategy;
-    private final InMemoryParticipantCodeRepository participantCodeRepository;
+    private final ParticipantCodeRepository participantCodeRepository;
 
     @Transactional(readOnly = true)
     public PomodoroStudyResponse findPomodoroStudy(Long studyId) {
@@ -44,8 +44,7 @@ public class PomodoroStudyService {
         if (Objects.nonNull(code)) {
             ParticipantCode participantCode = participantCodeRepository.findByCode(code)
                     .orElseThrow(ParticipantCodeNotFoundException::new);
-            Long pomodoroStudyId = participantCode.getPomodoroStudyId();
-            PomodoroStudy pomodoroStudy = pomodoroStudyRepository.findByIdIfExists(pomodoroStudyId);
+            PomodoroStudy pomodoroStudy = participantCode.getPomodoroStudy();
             return PomodoroStudiesResponse.from(List.of(pomodoroStudy));
         }
         if (Objects.nonNull(memberId)) {
@@ -75,14 +74,15 @@ public class PomodoroStudyService {
         PomodoroStudy pomodoroStudy = new PomodoroStudy(request.name(), request.totalCycle(),
                 request.timePerCycle());
         PomodoroStudy savedStudy = pomodoroStudyRepository.save(pomodoroStudy);
-        ParticipantCode participantCode = generateUniqueCode(pomodoroStudy.getId());
+
+        ParticipantCode participantCode = generateUniqueCode(pomodoroStudy);
         participantCodeRepository.save(participantCode);
 
         return CreatePomodoroStudyResponse.from(savedStudy, participantCode);
     }
 
-    private ParticipantCode generateUniqueCode(Long pomodoroStudyId) {
-        ParticipantCode participantCode = new ParticipantCode(pomodoroStudyId, generationStrategy);
+    private ParticipantCode generateUniqueCode(PomodoroStudy pomodoroStudy) {
+        ParticipantCode participantCode = new ParticipantCode(pomodoroStudy, generationStrategy);
         while (isParticipantCodePresent(participantCode)) {
             participantCode.regenerate();
         }
