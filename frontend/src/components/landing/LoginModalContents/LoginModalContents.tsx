@@ -33,10 +33,10 @@ const LoginModalContents = () => {
       </Typography>
       <ButtonContainer>
         <a href={googleOAuthUrl}>
-          <GoogleButton variant="outlined">
+          <OAutLoginButton variant="outlined">
             <GoogleIcon />
-            <LoginText>구글로 로그인</LoginText>
-          </GoogleButton>
+            <span>구글로 로그인</span>
+          </OAutLoginButton>
         </a>
         <DividedContainer>
           <DividedLine></DividedLine>
@@ -70,30 +70,29 @@ const ButtonContainer = styled.div`
 
   width: 360px;
 
-  svg {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-
-    display: flex;
-    margin: auto 0;
-  }
-
   @media screen and (max-width: 768px) {
     width: 95%;
   }
 `;
 
-const GoogleButton = styled(Button)`
+const OAutLoginButton = styled(Button)`
+  position: relative;
+
   border-radius: 8px;
   border: 1px solid ${color.neutral[300]};
 
   color: ${color.black};
   font-size: 1.8rem;
-`;
 
-const LoginText = styled.span`
-  position: relative;
+  svg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 32px;
+
+    display: flex;
+    margin: auto 0;
+  }
 `;
 
 const Emphasis = styled.span`
