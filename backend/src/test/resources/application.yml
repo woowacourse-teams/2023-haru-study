@@ -24,11 +24,11 @@ oauth2:
       user-info-uri: http://www.test.com
 
 jwt:
-  expire-length: 12345
-  guest-expire-length: 12345
-  secret-key: test-secret-key-test-secret-key-test-secret-key-test-secret-key-test-secret-key-test-secret-key
+  expire-length: 1
+  guest-expire-length: 1
+  secret-key: test-secret-key
 
 refresh-token:
-  expire-length: 12345
+  expire-length: 1
 
 cors-allow-origin: test

@@ -1,13 +1,13 @@
 package harustudy.backend.progress.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.progress.exception.NicknameLengthException;
-import harustudy.backend.study.domain.PomodoroStudy;
+import harustudy.backend.room.domain.CodeGenerationStrategy;
+import harustudy.backend.room.domain.ParticipantCode;
+import harustudy.backend.room.domain.PomodoroRoom;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -20,12 +20,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class PomodoroProgressTest {
 
-    private PomodoroStudy pomodoroStudy;
+    private PomodoroRoom pomodoroRoom;
     private Member member;
 
     @BeforeEach
     void setUp() {
-        pomodoroStudy = new PomodoroStudy("study", 3, 25);
+        ParticipantCode participantCode = new ParticipantCode(new CodeGenerationStrategy());
+        pomodoroRoom = new PomodoroRoom("room", 3, 25, participantCode);
         member = Member.guest();
     }
 
@@ -33,7 +34,7 @@ class PomodoroProgressTest {
     @ValueSource(strings = {"", "12345678901"})
     void 멤버의_닉네임이_1자_미만_10자_초과이면_예외를_던진다(String nickname) {
         // given, when, then
-        assertThatThrownBy(() -> new PomodoroProgress(pomodoroStudy, member, nickname))
+        assertThatThrownBy(() -> new PomodoroProgress(pomodoroRoom, member, nickname))
                 .isInstanceOf(NicknameLengthException.class);
     }
 
@@ -41,15 +42,15 @@ class PomodoroProgressTest {
     @ValueSource(strings = {"1", "1234567890"})
     void 멤버의_닉네임이_1자_이상_10자_이하이면_정상_케이스이다(String nickname) {
         // given, when, then
-        assertThatCode(() -> new PomodoroProgress(pomodoroStudy, member, nickname))
+        assertThatCode(() -> new PomodoroProgress(pomodoroRoom, member, nickname))
                 .doesNotThrowAnyException();
     }
 
     @Test
     void 닉네임이_동일한지_확인할_수_있다() {
         // given
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroStudy, member, "nickname");
-        PomodoroProgress otherProgress = new PomodoroProgress(pomodoroStudy, member, "nickname");
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, "nickname");
+        PomodoroProgress otherProgress = new PomodoroProgress(pomodoroRoom, member, "nickname");
 
         // when, then
         assertThat(pomodoroProgress.hasSameNicknameWith(otherProgress)).isTrue();
@@ -58,8 +59,8 @@ class PomodoroProgressTest {
     @Test
     void 닉네임이_다른지_확인할_수_있다() {
         // given
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroStudy, member, "nickname");
-        PomodoroProgress otherProgress = new PomodoroProgress(pomodoroStudy, member, "another");
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, "nickname");
+        PomodoroProgress otherProgress = new PomodoroProgress(pomodoroRoom, member, "another");
 
         // when, then
         assertThat(pomodoroProgress.hasSameNicknameWith(otherProgress)).isFalse();
@@ -68,7 +69,7 @@ class PomodoroProgressTest {
     @Test
     void 다음_스터디_단계로_넘어갈_수_있다() {
         // given
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroStudy, member, "nickname");
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, "nickname");
 
         // given
         pomodoroProgress.proceed();
@@ -84,7 +85,7 @@ class PomodoroProgressTest {
     @Test
     void 마지막_사이클이_아니라면_회고_종료_후_사이클_수가_증가한다() {
         // given
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroStudy, member, "nickname");
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, "nickname");
 
         // when
         int statusCountPerCycle = 3;
@@ -104,7 +105,7 @@ class PomodoroProgressTest {
     @Test
     void 마지막_사이클이라면_회고_이후_사이클은_그대로이며_종료_상태로_넘어간다() {
         // given
-        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroStudy, member, "nickname");
+        PomodoroProgress pomodoroProgress = new PomodoroProgress(pomodoroRoom, member, "nickname");
 
         int statusCountPerCycle = 3;
         int totalCycle = 3;

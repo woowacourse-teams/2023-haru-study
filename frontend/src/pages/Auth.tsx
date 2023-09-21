@@ -8,44 +8,43 @@ import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-import { useMemberInfoAction } from '@Contexts/MemberInfoProvider';
-import { useModal } from '@Contexts/ModalProvider';
+import { getUrlQuery } from '@Utils/getUrlQuery';
 
-import tokenStorage from '@Utils/tokenStorage';
-import url from '@Utils/url';
-
-import { requestPostGuestLogin, requestPostOAuthLogin } from '@Apis/index';
+import { requestGuestLogin, requestOAuthLogin } from '@Apis/index';
 
 import type { AuthProvider } from '@Types/auth';
 
 const Auth = () => {
-  const { refetchMemberInfo: fetchMemberInfo } = useMemberInfoAction();
-
   const navigate = useNavigate();
-  const { closeModal } = useModal();
 
-  const provider = url.getQueryString<AuthProvider>('provider');
-  const code = url.getQueryString('code');
+  const provider = getUrlQuery<AuthProvider>('provider');
+  const code = getUrlQuery('code');
 
   const requestAuthToken = useCallback(async () => {
-    let accessToken: string;
+    try {
+      if (provider === 'guest') {
+        const { accessToken } = await requestGuestLogin();
+        sessionStorage.setItem('accessToken', accessToken);
 
-    if (provider === 'guest') {
-      accessToken = (await requestPostGuestLogin()).data.accessToken;
-    } else {
-      accessToken = (await requestPostOAuthLogin(provider, code)).data.accessToken;
+        navigate(ROUTES_PATH.landing);
+        return;
+      }
+
+      const { accessToken } = await requestOAuthLogin(provider, code);
+      sessionStorage.setItem('accessToken', accessToken);
+
+      navigate(ROUTES_PATH.landing);
+    } catch (error) {
+      if (!(error instanceof Error)) throw error;
+      alert(error.message);
+
+      navigate(ROUTES_PATH.login);
     }
-
-    tokenStorage.setAccessToken(accessToken);
-    fetchMemberInfo();
-
-    navigate(ROUTES_PATH.landing);
-  }, [code, provider, fetchMemberInfo, navigate]);
+  }, [code, provider, navigate]);
 
   useEffect(() => {
     requestAuthToken();
-    closeModal();
-  }, [closeModal, requestAuthToken]);
+  }, [requestAuthToken]);
 
   return (
     <Layout>

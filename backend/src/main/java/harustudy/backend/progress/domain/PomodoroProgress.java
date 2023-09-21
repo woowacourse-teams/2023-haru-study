@@ -4,7 +4,7 @@ import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.content.domain.PomodoroContent;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.progress.exception.NicknameLengthException;
-import harustudy.backend.study.domain.PomodoroStudy;
+import harustudy.backend.room.domain.PomodoroRoom;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -34,8 +34,8 @@ public class PomodoroProgress extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pomodoro_study_id")
-    private PomodoroStudy pomodoroStudy;
+    @JoinColumn(name = "pomodoro_room_id")
+    private PomodoroRoom pomodoroRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -52,8 +52,8 @@ public class PomodoroProgress extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private PomodoroStatus pomodoroStatus;
 
-    public PomodoroProgress(PomodoroStudy pomodoroStudy, Member member, String nickname) {
-        this.pomodoroStudy = pomodoroStudy;
+    public PomodoroProgress(PomodoroRoom pomodoroRoom, Member member, String nickname) {
+        this.pomodoroRoom = pomodoroRoom;
         this.member = member;
         this.nickname = nickname;
         this.currentCycle = 1;
@@ -78,7 +78,7 @@ public class PomodoroProgress extends BaseTimeEntity {
     public void proceed() {
         // TODO: 서비스로 뺄지 말지(일관성을 위해)
         if (pomodoroStatus.equals(PomodoroStatus.RETROSPECT)) {
-            if (currentCycle.equals(pomodoroStudy.getTotalCycle())) {
+            if (currentCycle.equals(pomodoroRoom.getTotalCycle())) {
                 pomodoroStatus = PomodoroStatus.DONE;
                 return;
             }
@@ -87,8 +87,8 @@ public class PomodoroProgress extends BaseTimeEntity {
         pomodoroStatus = pomodoroStatus.getNext();
     }
 
-    public boolean isProgressOf(PomodoroStudy pomodoroStudy) {
-        return this.pomodoroStudy.getId().equals(pomodoroStudy.getId());
+    public boolean isProgressOf(PomodoroRoom pomodoroRoom) {
+        return this.pomodoroRoom.getId().equals(pomodoroRoom.getId());
     }
 
     public boolean isOwnedBy(Member member) {
@@ -111,7 +111,7 @@ public class PomodoroProgress extends BaseTimeEntity {
         return pomodoroStatus != PomodoroStatus.RETROSPECT;
     }
 
-    public boolean isNotIncludedIn(PomodoroStudy other) {
-        return !pomodoroStudy.getId().equals(other.getId());
+    public boolean isNotIncludedIn(PomodoroRoom other) {
+        return !pomodoroRoom.getId().equals(other.getId());
     }
 }

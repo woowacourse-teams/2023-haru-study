@@ -50,7 +50,7 @@ class MemberServiceTest {
         AuthMember authMember = new AuthMember(member1.getId());
 
         // when
-        MemberResponse foundMember = memberService.findMemberProfile(authMember);
+        MemberResponse foundMember = memberService.findOauthProfile(authMember);
 
         //then
         assertSoftly(softly -> {

@@ -54,7 +54,7 @@ const Layout = styled.div`
 
   p {
     font-size: 2rem;
-    font-weight: 500;
+    font-weight: 400;
   }
 
   svg {

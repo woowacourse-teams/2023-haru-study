@@ -2,7 +2,7 @@ package harustudy.backend.auth;
 
 import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.auth.service.AuthService;
-import harustudy.backend.auth.util.BearerAuthorizationParser;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -16,9 +16,9 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final AuthService authService;
+    private static final int ACCESS_TOKEN_LOCATION = 1;
 
-    private final BearerAuthorizationParser bearerAuthorizationParser;
+    private final AuthService authService;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -29,7 +29,8 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     public AuthMember resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                       NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String authorizationHeader = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        String accessToken = bearerAuthorizationParser.parse(authorizationHeader);
+        Objects.requireNonNull(authorizationHeader);
+        String accessToken = authorizationHeader.split(" ")[ACCESS_TOKEN_LOCATION];
         long memberId = Long.parseLong(authService.parseMemberId(accessToken));
         return new AuthMember(memberId);
     }

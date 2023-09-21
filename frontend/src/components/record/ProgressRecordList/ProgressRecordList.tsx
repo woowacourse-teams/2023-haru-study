@@ -1,22 +1,21 @@
-import { useEffect } from 'react';
-
 import Accordion from '@Components/common/Accordion/Accordion';
+import AccordionSkeleton from '@Components/common/Accordion/AccordionSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
+import type { MemberProgress } from '@Types/study';
+
 import ProgressRecord from '../ProgressRecord/ProgressRecord';
-import useStudyMembers from '../hooks/useStudyMembers';
 
 type Props = {
-  studyId: string;
-  isRefetch: boolean;
+  memberProgresses: MemberProgress[];
+  studyId?: string;
+  isLoading: boolean;
 };
 
-const ProgressRecordList = ({ studyId, isRefetch }: Props) => {
-  const { memberProgresses, refetch } = useStudyMembers(studyId);
-
-  useEffect(() => {
-    if (isRefetch) refetch();
-  }, [isRefetch, refetch]);
+const ProgressRecordList = ({ memberProgresses = [], studyId = '', isLoading }: Props) => {
+  if (isLoading) {
+    return <AccordionSkeleton />;
+  }
 
   return (
     <Accordion>

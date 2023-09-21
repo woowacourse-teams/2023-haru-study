@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public MemberResponse findMemberProfile(AuthMember authMember) {
+    public MemberResponse findOauthProfile(AuthMember authMember) {
         Member authorizedMember = memberRepository.findById(authMember.id())
                 .orElseThrow(MemberNotFoundException::new);
 

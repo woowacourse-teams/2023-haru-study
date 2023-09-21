@@ -49,7 +49,7 @@ const Select = ({ children, label, $style }: Props) => {
       value={{ selectedItem, isOpen, changeSelectedItem, toggleOpen, triggerSuffixText, changeTriggerSuffixText }}
     >
       <Layout $style={$style} ref={ref}>
-        <StyledLabel>{label}</StyledLabel>
+        <label>{label}</label>
         {children}
       </Layout>
     </SelectContext.Provider>
@@ -64,15 +64,6 @@ const Layout = styled.div<Pick<Props, '$style'>>`
   ${({ $style }) => css`
     ${$style};
   `}
-`;
-
-const StyledLabel = styled.label`
-  font-size: 2.4rem;
-  font-weight: 300;
-
-  @media screen and (max-width: 768px) {
-    font-size: 2rem;
-  }
 `;
 
 Select.Trigger = SelectTrigger;

@@ -2,7 +2,9 @@ package harustudy.backend.member.controller;
 
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.common.SwaggerExceptionResponse;
 import harustudy.backend.member.dto.MemberResponse;
+import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,12 +20,15 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @SwaggerExceptionResponse({
+            MemberNotFoundException.class
+    })
     @Operation(summary = "멤버 Oauth 프로필 정보 조회")
     @GetMapping("/api/me")
     public ResponseEntity<MemberResponse> findOauthProfile(
             @Authenticated AuthMember authMember
     ) {
-        MemberResponse response = memberService.findMemberProfile(authMember);
+        MemberResponse response = memberService.findOauthProfile(authMember);
         return ResponseEntity.ok(response);
     }
 }

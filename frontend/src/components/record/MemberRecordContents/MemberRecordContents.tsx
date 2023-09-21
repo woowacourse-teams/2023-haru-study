@@ -1,49 +1,45 @@
-import { Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { styled, css } from 'styled-components';
+import { css } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
-import { useMemberInfo } from '@Contexts/MemberInfoProvider';
+import useMemberRecord from '@Hooks/record/useMemberRecord';
+
+import { TextSkeletonStyle } from '@Styles/common';
 
 import MemberRecordList from '../MemberRecordList/MemberRecordList';
-import MemberRecordListSkeleton from '../MemberRecordList/MemberRecordListSkeleton';
 
 const MemberRecordContents = () => {
   const navigate = useNavigate();
 
-  const memberInfo = useMemberInfo();
-  const memberId = memberInfo?.memberId;
+  const { name, studyList, isLoading, loginType } = useMemberRecord({
+    errorHandler: (error) => alert(error.message),
+  });
 
-  if (memberInfo?.loginType === 'guest') {
+  if (loginType === 'guest') {
     navigate('/404');
   }
 
   return (
     <>
-      <Title>
-        <Typography
-          variant="h2"
-          $style={css`
-            font-weight: 700;
+      <Typography
+        variant="h2"
+        $style={css`
+          font-weight: 600;
+
+          ${isLoading &&
+          css`
+            width: 80%;
+            min-width: 400px;
+            ${TextSkeletonStyle}
           `}
-        >
-          {memberInfo && `${memberInfo.name}님의 스터디 기록`}
-        </Typography>
-      </Title>
-      <Suspense fallback={<MemberRecordListSkeleton />}>
-        {memberId && <MemberRecordList memberId={memberId} />}
-      </Suspense>
+        `}
+      >
+        {name}님의 스터디 기록
+      </Typography>
+      <MemberRecordList studyList={studyList} isLoading={isLoading} />
     </>
   );
 };
 
 export default MemberRecordContents;
-
-const Title = styled.span`
-  @media screen and (max-width: 768px) {
-    h2 {
-      font-size: 3.2rem;
-    }
-  }
-`;

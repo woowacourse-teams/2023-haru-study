@@ -11,7 +11,7 @@ const TabList = () => {
         const isSelected = tab === selectedTab;
 
         return (
-          <Tab data-testid="tab" onClick={() => changeTab(tab)} key={`${tab}${index}`} $isSelected={isSelected}>
+          <Tab onClick={() => changeTab(tab)} key={`${tab}${index}`} $isSelected={isSelected}>
             {tab}
           </Tab>
         );
@@ -23,11 +23,9 @@ const TabList = () => {
 export default TabList;
 
 const TabListLayout = styled.ul`
-  width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
   row-gap: 20px;
-
-  overflow-x: scroll;
 `;
 
 type TabProps = {
@@ -39,7 +37,7 @@ const Tab = styled.li<TabProps>`
   align-items: center;
   justify-content: center;
 
-  padding: 0px 10px 5px;
+  padding-bottom: 5px;
 
   font-size: 1.8rem;
   text-align: center;

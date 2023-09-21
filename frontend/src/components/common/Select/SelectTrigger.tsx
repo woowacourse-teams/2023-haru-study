@@ -8,16 +8,15 @@ import { useSelectContext } from './SelectContext';
 
 type Props = {
   triggerText?: string;
-  testId?: string;
 
   $style?: CSSProp;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
-const SelectTrigger = ({ triggerText = '선택', testId, ...props }: Props) => {
+const SelectTrigger = ({ triggerText = '선택', ...props }: Props) => {
   const { isOpen, selectedItem, toggleOpen, triggerSuffixText } = useSelectContext();
 
   return (
-    <Layout {...props} $isOpen={isOpen} onClick={toggleOpen} data-testid={testId}>
+    <Layout {...props} $isOpen={isOpen} onClick={toggleOpen}>
       {selectedItem === null ? triggerText : selectedItem.toString() + triggerSuffixText}
       {isOpen ? <Mark>&#9650;</Mark> : <Mark>&#9660;</Mark>}
     </Layout>
@@ -44,11 +43,6 @@ const Layout = styled.button<Props & { $isOpen: boolean }>`
     border-bottom-left-radius: ${$isOpen ? 'none' : '7px'};
     ${$style}
   `};
-
-  @media screen and (max-width: 768px) {
-    font-size: 1.8rem;
-    padding: 14px;
-  }
 `;
 
 const Mark = styled.p`

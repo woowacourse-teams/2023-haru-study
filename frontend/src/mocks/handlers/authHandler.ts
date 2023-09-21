@@ -1,7 +1,5 @@
 import { rest } from 'msw';
 
-import { hasCookie } from '@Utils/cookie';
-
 const USER_MOCK = {
   memberId: '1',
   name: '맘모스',
@@ -55,19 +53,6 @@ export const authHandler = [
   }),
 
   rest.post('/api/auth/refresh', (req, res, ctx) => {
-    const hasRefreshToken = hasCookie('refreshToken');
-
-    if (!hasRefreshToken) {
-      return res(
-        ctx.status(401),
-        ctx.delay(100),
-        ctx.json({
-          message: '토큰이 없습니다.',
-          code: 1405,
-        }),
-      );
-    }
-
     const newAccessToken =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxMjM0NTY3fQ.NUiutjXo0mcIBU5fWxfjpBEvPxakFiBaUCg4THKAYpQ';
 

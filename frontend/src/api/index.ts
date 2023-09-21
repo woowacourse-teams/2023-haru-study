@@ -1,3 +1,5 @@
+import http from '@Utils/http';
+
 import type {
   ResponseMemberProgress,
   ResponseAuthToken,
@@ -6,103 +8,157 @@ import type {
   ResponseMemberRecordContents,
   ResponseOneStudyInfo,
   ResponseMemberContents,
+  ResponseProgresses,
   ResponseStudies,
   ResponseStudyData,
   ResponseStudyDataList,
   ResponseStudyMembers,
-  ResponseCheckProgresses,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
-import http from './httpInstance';
+const BASE_URL = '';
 
-export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyData>(`/api/studies/${studyId}`);
+// 옛날거
 
-export const requestGetMemberStudyListData = (memberId: string) =>
-  http.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`);
+export const requestRegisterMember = async (nickname: string, studyId: string) => {
+  const response = await http.post(`${BASE_URL}/api/studies/${studyId}/members`, {
+    body: JSON.stringify({ nickname }),
+  });
 
-export const requestGetStudyMembers = (studyId: string) =>
-  http.get<ResponseStudyMembers>(`/api/studies/${studyId}/progresses`);
+  const locationHeader = response.headers.get('Location');
+  const memberId = locationHeader?.split('/').pop() as string;
 
-export const requestGetMemberRecordContents = (studyId: string, progressId: string) =>
-  http.get<ResponseMemberRecordContents>(`/api/studies/${studyId}/contents?progressId=${progressId}`);
+  return { memberId };
+};
 
-export const requestPostGuestLogin = () => http.post<ResponseAuthToken>(`/api/auth/guest`);
+export const requestSubmitPlanningForm = (studyId: string, memberId: string, plans: PlanList) =>
+  http.post(`/api/studies/${studyId}/members/${memberId}/content/plans`, {
+    body: JSON.stringify(plans),
+  });
 
-export const requestPostOAuthLogin = (provider: OAuthProvider, code: string) =>
-  http.post<ResponseAuthToken>(`/api/auth/login`, {
+export const requestGetStudyData = (studyId: string, accessToken: string) =>
+  http.get<ResponseStudyData>(`/api/studies/${studyId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+export const requestGetMemberStudyListData = (memberId: string, accessToken: string) =>
+  http.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+export const requestGetStudyMembers = (studyId: string, accessToken: string) =>
+  http.get<ResponseStudyMembers>(`/api/studies/${studyId}/progresses`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+export const requestGetMemberRecordContents = (studyId: string, progressId: string, accessToken: string) =>
+  http.get<ResponseMemberRecordContents>(`/api/studies/${studyId}/contents?progressId=${progressId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+// 새로 적용되는 api
+export const requestGuestLogin = async () => {
+  const response = await http.post(`${BASE_URL}/api/auth/guest`);
+
+  return (await response.json()) as ResponseAuthToken;
+};
+
+export const requestOAuthLogin = async (provider: OAuthProvider, code: string) => {
+  const response = await http.post(`${BASE_URL}/api/auth/login`, {
     body: JSON.stringify({ oauthProvider: provider, code }),
   });
 
-export const requestGetMemberInfo = () => http.get<ResponseMemberInfo>('/api/me');
-
-export const requestGetOneStudyData = async (studyId: string) => {
-  const { data } = await http.get<ResponseOneStudyInfo>(`/api/studies/${studyId}`);
-
-  return data;
+  return (await response.json()) as ResponseAuthToken;
 };
 
-export const requestGetMemberProgress = async (studyId: string, memberId: string) => {
-  const { data } = await http.get<ResponseMemberProgress>(`/api/studies/${studyId}/progresses?memberId=${memberId}`);
+export const requestMemberInfo = (accessToken: string) =>
+  http.get<ResponseMemberInfo>('/api/me', {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
 
-  return data.progresses[0];
+export const requestAccessTokenRefresh = async () => {
+  const response = await http.post(`${BASE_URL}/api/auth/refresh`);
+
+  return (await response.json()) as ResponseAuthToken;
 };
 
-export const requestGetMemberContents = async (studyId: string, progressId: string, cycle: number) => {
-  const { data } = await http.get<ResponseMemberContents>(
-    `/api/studies/${studyId}/contents?progressId=${progressId}&cycle=${cycle}`,
+export const requestGetOneStudyData = (accessToken: string, studyId: string) =>
+  http.get<ResponseOneStudyInfo>(`${BASE_URL}/api/studies/${studyId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+export const requestGetMemberProgress = (accessToken: string, studyId: string, memberId: string) =>
+  http.get<ResponseMemberProgress>(`${BASE_URL}/api/studies/${studyId}/progresses?memberId=${memberId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+export const requestGetMemberContents = (accessToken: string, studyId: string, progressId: string, cycle: number) =>
+  http.get<ResponseMemberContents>(
+    `${BASE_URL}/api/studies/${studyId}/contents?progressId=${progressId}&cycle=${cycle}`,
+    {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    },
   );
 
-  return data.content[0].plan;
-};
-
-export const requestWritePlan = (studyId: string, progressId: string, plan: PlanList) =>
-  http.post(`/api/studies/${studyId}/contents/write-plan`, {
+export const requestWritePlan = (accessToken: string, studyId: string, progressId: string, plan: PlanList) =>
+  http.post(`${BASE_URL}/api/studies/${studyId}/contents/write-plan`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
     body: JSON.stringify({ progressId, plan: plan }),
   });
 
-export const requestWriteRetrospect = (studyId: string, progressId: string, retrospect: RetrospectList) =>
-  http.post(`/api/studies/${studyId}/contents/write-retrospect`, {
+export const requestWriteRetrospect = (
+  accessToken: string,
+  studyId: string,
+  progressId: string,
+  retrospect: RetrospectList,
+) =>
+  http.post(`${BASE_URL}/api/studies/${studyId}/contents/write-retrospect`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
     body: JSON.stringify({ progressId, retrospect: retrospect }),
   });
 
-export const requestNextStep = (studyId: string, progressId: string) =>
-  http.post(`/api/studies/${studyId}/progresses/${progressId}/next-step`);
+export const requestNextStep = (accessToken: string, studyId: string, progressId: string) =>
+  http.post(`${BASE_URL}/api/studies/${studyId}/progresses/${progressId}/next-step`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
 
-export const requestPostCreateStudy = async (
+export const requestCreateStudy = async (
   studyName: string,
-  totalCycle: TotalCycleOptions | null,
-  timePerCycle: StudyTimePerCycleOptions | null,
+  totalCycle: TotalCycleOptions,
+  timePerCycle: StudyTimePerCycleOptions,
+  accessToken: string,
 ) => {
-  const response = await http.post<ResponseCreateStudy>(`/api/studies`, {
+  const response = await http.post(`/api/studies`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
   });
 
   const locationHeader = response.headers.get('Location');
   const studyId = locationHeader?.split('/').pop() as string;
 
-  const data = response.data;
+  const result = (await response.json()) as ResponseCreateStudy;
 
-  return { studyId, data };
+  return { studyId, result };
 };
 
-export const requestGetAuthenticateParticipationCode = async (participantCode: string) => {
-  const response = http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`);
+export const requestAuthenticateParticipationCode = (participantCode: string, accessToken: string) =>
+  http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
 
-  return (await response).data;
-};
+export const requestCheckProgresses = async (studyId: string, memberId: string, accessToken: string) =>
+  http.get<ResponseProgresses>(`/api/studies/${studyId}/progresses?memberId=${memberId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
 
-export const requestGetCheckProgresses = async (studyId: string, memberId: string) => {
-  const response = http.get<ResponseCheckProgresses>(`/api/temp/studies/${studyId}/progresses?memberId=${memberId}`);
-
-  return (await response).data;
-};
-
-export const requestPostRegisterProgress = (nickname: string, studyId: string, memberId: string) =>
+export const requestRegisterProgress = (nickname: string, studyId: string, memberId: string, accessToken: string) =>
   http.post(`/api/studies/${studyId}/progresses`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
     body: JSON.stringify({ memberId, nickname }),
   });
 
-export const requestDeleteProgress = (studyId: string, progressId: number) =>
-  http.delete(`/api/studies/${studyId}/progresses/${progressId}`);
+export const requestDeleteProgress = (studyId: string, progressId: number, accessToken: string) =>
+  http.delete(`/api/studies/${studyId}/progresses/${progressId}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });

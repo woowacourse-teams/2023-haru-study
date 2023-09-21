@@ -5,6 +5,8 @@ import Tabs from '@Components/common/Tabs/Tabs';
 import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
+import useProgressRecord from '@Hooks/record/useProgressRecord';
+
 import color from '@Styles/color';
 
 import { PLAN_KEYWORDS, RETROSPECT_KEYWORDS } from '@Constants/study';
@@ -16,8 +18,6 @@ import { getKeys } from '@Utils/getKeys';
 
 import type { Plan, Retrospect } from '@Types/study';
 
-import useMemberRecordContents from '../hooks/useMemberRecordContents';
-
 type Props = {
   studyId: string;
   progressId: string;
@@ -27,7 +27,13 @@ type Props = {
 };
 
 const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCycle }: Props) => {
-  const { memberRecordContents, isLoading } = useMemberRecordContents(studyId, progressId);
+  const { memberRecordContents, isLoading } = useProgressRecord(studyId, progressId, {
+    errorHandler: (error) => alert(error.message),
+  });
+
+  if (isLoading) {
+    return <TabsSkeleton />;
+  }
 
   const isDoneCycle = (selectedTabCycle: number) => {
     if (isCompleted) return true;
@@ -45,10 +51,6 @@ const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCyc
 
     return '이(가)';
   };
-
-  if (isLoading) {
-    return <TabsSkeleton />;
-  }
 
   return (
     <ProgressRecordLayout>
@@ -110,7 +112,6 @@ export default ProgressRecord;
 
 const ProgressRecordLayout = styled.div`
   padding: 40px 30px;
-  min-height: 308px;
 
   h5 {
     display: flex;
@@ -124,46 +125,19 @@ const ProgressRecordLayout = styled.div`
   p {
     word-break: break-all;
   }
-
-  @media screen and (max-width: 768px) {
-    padding: 0;
-  }
 `;
 
 const TabItemContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 90px;
+  align-items: flex-start;
 
   margin-top: 20px;
-
-  @media screen and (max-width: 768px) {
-    flex-direction: column;
-    gap: 40px;
-  }
 `;
 
 const TabItemSection = styled.div`
-  width: 46%;
-
-  display: flex;
-  flex-direction: column;
-  gap: 45px;
-
-  @media screen and (max-width: 768px) {
-    width: 100%;
-    gap: 20px;
-
-    svg {
-      width: 15px;
-      height: 15px;
-    }
-
-    h5 {
-      font-size: 2.2rem;
-    }
-
-    p {
-      font-size: 1.8rem;
-    }
-  }
+  display: grid;
+  row-gap: 45px;
+  align-items: flex-start;
 `;

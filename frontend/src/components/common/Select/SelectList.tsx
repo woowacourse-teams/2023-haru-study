@@ -1,24 +1,14 @@
-import type { EventHandler, HTMLAttributes, MouseEvent, ReactNode, SyntheticEvent } from 'react';
+import type { HTMLAttributes, MouseEvent, ReactNode } from 'react';
 import { Children, cloneElement, isValidElement } from 'react';
 import type { CSSProp } from 'styled-components';
 import { css, styled } from 'styled-components';
 
 import color from '@Styles/color';
 
+import { composeEventHandlers } from '@Utils/domEventHandler';
+
 import { useSelectContext } from './SelectContext';
 import type { ItemProps } from './SelectItem';
-
-export type ComposeEventHandlers = <E extends SyntheticEvent<unknown, Event>>(
-  externalEventHandler?: EventHandler<E>,
-  innerEventHandler?: EventHandler<E>,
-) => EventHandler<E>;
-
-const composeEventHandlers: ComposeEventHandlers = (externalEventHandler, innerEventHandler) => {
-  return (event) => {
-    externalEventHandler?.(event);
-    innerEventHandler?.(event);
-  };
-};
 
 type Props = {
   children: ReactNode;

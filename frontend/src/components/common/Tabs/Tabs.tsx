@@ -23,10 +23,4 @@ Tabs.Item = TabItem;
 const TabsLayout = styled.div`
   display: grid;
   row-gap: 40px;
-
-  @media screen and (max-width: 768px) {
-    row-gap: 20px;
-
-    font-size: 1.4rem;
-  }
 `;

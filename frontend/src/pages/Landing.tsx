@@ -1,42 +1,22 @@
 import { styled } from 'styled-components';
 
-import Footer from '@Components/common/Footer/Footer';
-import Header from '@Components/common/Header/Header';
-import GuideSection from '@Components/landing/GuideSection/GuideSection';
-import LandingMainSection from '@Components/landing/LandingMainSection/LandingMainSection';
-import MemberProfile from '@Components/landing/MemberProfile/MemberProfile';
-import SideLink from '@Components/landing/SideLink/SideLik';
-import StartSection from '@Components/landing/StartSection/StartSection';
+import Hero from '@Components/landing/Hero/Hero';
+import LandingContents from '@Components/landing/LandingContents/LandingContents';
 
 const Landing = () => {
   return (
-    <>
-      <LandingHeader>
-        <Header />
-        <MemberProfile />
-      </LandingHeader>
-      <LandingContents>
-        <LandingMainSection />
-        <GuideSection />
-        <StartSection />
-      </LandingContents>
-      <Footer />
-      <SideLink />
-    </>
+    <LandingLayout>
+      <Hero />
+      <LandingContents />
+    </LandingLayout>
   );
 };
 
 export default Landing;
 
-const LandingHeader = styled.div`
-  display: flex;
-  align-items: center;
+const LandingLayout = styled.div`
+  display: grid;
+  grid-template-columns: auto 450px;
 
-  padding-right: 40px;
-`;
-
-const LandingContents = styled.div`
-  width: 90%;
-
-  margin: 0 auto;
+  height: 100vh;
 `;

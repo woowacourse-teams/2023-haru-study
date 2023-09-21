@@ -4,8 +4,10 @@ import { css, styled } from 'styled-components';
 import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Select from '@Components/common/Select/Select';
-import useCreateStudy from '@Components/create/hooks/useCreateStudy';
-import useCreateStudyForm from '@Components/create/hooks/useCreateStudyForm';
+import Typography from '@Components/common/Typography/Typography';
+
+import useCreateStudy from '@Hooks/create/useCreateStudy';
+import useCreateStudyForm from '@Hooks/create/useCreateStudyForm';
 
 import color from '@Styles/color';
 
@@ -34,16 +36,23 @@ const CreateStudyForm = () => {
     isSelectedOptions,
   } = useCreateStudyForm();
 
-  const { createStudy, isLoading } = useCreateStudy(studyName, totalCycle, timePerCycle);
+  const errorHandler = (error: Error) => {
+    alert(error.message);
+  };
+
+  const { isLoading, createStudy } = useCreateStudy(errorHandler);
 
   const handleClickCreateStudyButton = async () => {
-    const result = await createStudy();
+    if (!studyName || !totalCycle || !timePerCycle) {
+      alert('이름의 길이와, 사이클 수, 사이클 당 시간을 다시 한번 확인해주세요');
+      return;
+    }
 
-    if (result) {
-      const { studyId, data } = result;
+    const data = await createStudy(studyName, totalCycle, timePerCycle);
 
-      navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
-        state: { participantCode: data.participantCode, studyName, isHost: true },
+    if (data) {
+      navigate(`${ROUTES_PATH.preparation}/${data.studyId}`, {
+        state: { participantCode: data.result.participantCode, studyName, isHost: true },
       });
     }
   };
@@ -55,7 +64,10 @@ const CreateStudyForm = () => {
   return (
     <Layout>
       <Container>
-        <Input label="스터디의 이름은 무엇인가요?" errorMessage={ERROR_MESSAGE.studyName}>
+        <Input
+          label={<Typography variant="p1">스터디의 이름은 무엇인가요?</Typography>}
+          errorMessage={ERROR_MESSAGE.studyName}
+        >
           <Input.TextField
             $style={css`
               padding: 10px;
@@ -69,12 +81,12 @@ const CreateStudyForm = () => {
           />
         </Input>
         <Select
-          label="사이클 횟수는 어떻게 되나요?"
+          label={<Typography variant="p1">사이클 횟수는 어떻게 되나요?</Typography>}
           $style={css`
             position: relative;
           `}
         >
-          <Select.Trigger triggerText="횟수를 선택해주세요" testId="cycle" />
+          <Select.Trigger triggerText="횟수를 선택해주세요" />
           <Select.List
             $style={css`
               position: absolute;
@@ -90,12 +102,12 @@ const CreateStudyForm = () => {
           </Select.List>
         </Select>
         <Select
-          label="한 사이클 당 학습 시간은 어떻게 되나요?"
+          label={<Typography variant="p1">한 사이클 당 학습 시간은 어떻게 되나요?</Typography>}
           $style={css`
             position: relative;
           `}
         >
-          <Select.Trigger triggerText="학습 시간을 선택해주세요" testId="timepercycle" />
+          <Select.Trigger triggerText="학습 시간을 선택해주세요" />
           <Select.List
             $style={css`
               position: absolute;
@@ -111,7 +123,12 @@ const CreateStudyForm = () => {
           </Select.List>
         </Select>
       </Container>
-      <TimeDescription>
+      <Typography
+        variant="p2"
+        $style={css`
+          text-align: center;
+        `}
+      >
         {isSelectedOptions ? (
           <>
             예상 스터디 시간은{' '}
@@ -123,7 +140,7 @@ const CreateStudyForm = () => {
         ) : (
           '사이클 횟수와 사이클 당 학습 시간을 선택하세요.'
         )}
-      </TimeDescription>
+      </Typography>
       <Button variant="primary" onClick={handleClickCreateStudyButton} disabled={isDisabled()} isLoading={isLoading}>
         스터디 개설하기
       </Button>
@@ -143,16 +160,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 70px;
-`;
-
-const TimeDescription = styled.p`
-  font-size: 2rem;
-  font-weight: 300;
-  text-align: center;
-
-  @media screen and (max-width: 768px) {
-    font-size: 1.6rem;
-  }
 `;
 
 const TimeText = styled.span`

@@ -1,38 +1,41 @@
-import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
+import Auth from '@Pages/Auth';
+import CreateStudy from '@Pages/CreateStudy';
 import Landing from '@Pages/Landing';
-import NotFound from '@Pages/NotFound';
+import Login from '@Pages/Login';
+import NotFoundPage from '@Pages/NotFoundPage';
+import MemberRecord from '@Pages/MemberRecord';
+import StudyBoard from '@Pages/StudyBoard';
+import StudyParticipation from '@Pages/StudyParticipation';
+import StudyPreparation from '@Pages/StudyPreparation';
+import StudyRecord from '@Pages/StudyRecord';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
 import App from '../App';
 
-const Auth = lazy(() => import(/* webpackChunkName: "Auth" */ '@Pages/Auth'));
-const StudyRecord = lazy(() => import('@Pages/StudyRecord'));
-const CreateStudy = lazy(() => import('@Pages/CreateStudy'));
-const MemberRecord = lazy(() => import('@Pages/MemberRecord'));
-const StudyProgress = lazy(() => import('@Pages/StudyProgress'));
-const StudyPreparation = lazy(() => import('@Pages/StudyPreparation'));
-const StudyParticipation = lazy(() => import('@Pages/StudyParticipation'));
-
 const router = createBrowserRouter([
   {
     path: ROUTES_PATH.landing,
     element: <App />,
-    errorElement: <NotFound />,
+    errorElement: <NotFoundPage />,
     children: [
       {
         index: true,
         element: <Landing />,
       },
       {
+        path: ROUTES_PATH.login,
+        element: <Login />,
+      },
+      {
         path: ROUTES_PATH.auth,
         element: <Auth />,
       },
       {
-        path: `${ROUTES_PATH.progress}/:studyId`,
-        element: <StudyProgress />,
+        path: `${ROUTES_PATH.board}/:studyId`,
+        element: <StudyBoard />,
       },
       {
         path: `${ROUTES_PATH.record}/:studyId`,

@@ -1,6 +1,6 @@
 package harustudy.backend.progress.exception;
 
-import harustudy.backend.common.exception.HaruStudyException;
+import harustudy.backend.common.HaruStudyException;
 
 public class PomodoroProgressNotFoundException extends HaruStudyException {
 

@@ -12,20 +12,11 @@ export const createStudyHandlers = [
 
     if (requestAuthToken === newAccessToken)
       return res(
-        // 성공
         ctx.status(201),
         ctx.set({ 'Content-Type': 'application/json', Location: '/api/v2/studies/1' }),
         ctx.json({
           participantCode: '123456',
         }),
-
-        // 에러
-        // ctx.status(404),
-        // ctx.json({
-        //   code: 1201,
-        //   message: '에러',
-        // }),
-
         ctx.delay(1000),
       );
 
@@ -37,20 +28,11 @@ export const createStudyHandlers = [
       );
 
     return res(
-      // 성공
       ctx.status(201),
       ctx.set({ 'Content-Type': 'application/json', Location: '/api/v2/studies/1' }),
       ctx.json({
         participantCode: '123456',
       }),
-
-      // 에러
-      // ctx.status(404),
-      // ctx.json({
-      //   code: 1201,
-      //   message: '에러',
-      // }),
-
       ctx.delay(1000),
     );
   }),

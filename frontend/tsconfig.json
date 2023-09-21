@@ -4,12 +4,11 @@
     "target": "esnext",
     "jsx": "react-jsx",
     "module": "esnext",
-    "moduleResolution": "Node",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src", "__test__"],
-  "exclude": ["node_modules/*"]
+  "include": ["src", "__test__"]
 }
