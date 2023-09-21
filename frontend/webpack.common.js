@@ -54,6 +54,10 @@ module.exports = () => {
             from: path.resolve(__dirname, 'public', 'fonts'),
             to: path.resolve(__dirname, 'dist', 'fonts'),
           },
+          {
+            from: path.resolve(__dirname, 'public', 'assets'),
+            to: path.resolve(__dirname, 'dist', 'assets'),
+          },
         ],
       }),
     ],
