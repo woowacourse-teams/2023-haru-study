@@ -1,36 +1,42 @@
 package harustudy.backend.participantcode.domain;
 
+import harustudy.backend.study.domain.PomodoroStudy;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
-import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class ParticipantCode {
 
-//    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    //    @OneToOne
-    private final Long pomodoroStudyId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id")
+    private PomodoroStudy pomodoroStudy;
+
+    @Column(unique = true, length = 6)
+    private String code;
 
     @Transient
     private GenerationStrategy generationStrategy;
 
-    //    @Indexed
-    private String code;
-
-    //    @TimeToLive
-    private Long expirationPeriod;
-
-    @Transient
-    private LocalDateTime createdDate;
-
-
-    public ParticipantCode(Long pomodoroStudyId, GenerationStrategy generationStrategy) {
-        this.pomodoroStudyId = pomodoroStudyId;
+    public ParticipantCode(PomodoroStudy pomodoroStudy, GenerationStrategy generationStrategy) {
+        this.pomodoroStudy = pomodoroStudy;
         this.generationStrategy = generationStrategy;
         this.code = generationStrategy.generate();
-        this.expirationPeriod = generationStrategy.EXPIRATION_PERIOD_IN_SECONDS;
-        this.createdDate = generationStrategy.getCreatedDate();
     }
 
     public void regenerate() {
@@ -39,9 +45,5 @@ public class ParticipantCode {
             generated = generationStrategy.generate();
         }
         code = generated;
-    }
-
-    public boolean isExpired() {
-        return createdDate.plusSeconds(expirationPeriod).isBefore(LocalDateTime.now());
     }
 }
