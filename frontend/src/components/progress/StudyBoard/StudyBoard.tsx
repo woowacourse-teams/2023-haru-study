@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
@@ -7,7 +7,12 @@ import LoadingFallback from '@Components/common/LodingFallback/LoadingFallback';
 
 import color from '@Styles/color';
 
+import { FAVICON_PATH } from '@Constants/asset';
+import { ROUTES_PATH } from '@Constants/routes';
+
 import { useProgressInfo, useStudyInfo } from '@Contexts/StudyProgressProvider';
+
+import dom from '@Utils/dom';
 
 import PlanningForm from '../PlanningForm/PlanningForm';
 import RetrospectForm from '../RetrospectForm/RetrospectForm';
@@ -19,9 +24,16 @@ const StudyBoard = () => {
   const { studyId } = useStudyInfo();
   const { step } = useProgressInfo();
 
+  useEffect(() => {
+    if (step === 'done') return;
+    dom.updateFavicon(FAVICON_PATH[step]);
+
+    return () => dom.updateFavicon(FAVICON_PATH.default);
+  }, [step]);
+
   if (step === 'done') {
     alert('이미 끝난 스터디입니다.');
-    navigate(`/record/${studyId}`);
+    navigate(`${ROUTES_PATH.record}/${studyId}`);
     return;
   }
 

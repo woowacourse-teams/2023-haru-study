@@ -41,7 +41,7 @@ const Timer = ({ studyMinutes, step }: Props) => {
   const formattedTime = format.time(leftSeconds);
 
   useEffect(() => {
-    dom.updateTitle(formattedTime);
+    dom.updateTitle(`${formattedTime} - 하루스터디`);
 
     return () => dom.updateTitle('하루스터디');
   }, [formattedTime]);
