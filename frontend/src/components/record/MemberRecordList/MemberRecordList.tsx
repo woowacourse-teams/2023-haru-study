@@ -4,48 +4,38 @@ import { styled } from 'styled-components';
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
-import { TextSkeletonStyle } from '@Styles/common';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
 import CycleIcon from '@Assets/icons/CycleIcon';
 import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
-import date from '@Utils/date';
-
-import type { StudyBasicInfo } from '@Types/study';
+import format from '@Utils/format';
 
 import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
+import useMemberStudyListData from '../hooks/useMemberStudyListData';
 
 type Props = {
-  studyList: StudyBasicInfo[] | null;
-  isLoading: boolean;
+  memberId: string;
 };
 
-const MemberRecordList = ({ studyList, isLoading }: Props) => {
+const MemberRecordList = ({ memberId }: Props) => {
   const navigate = useNavigate();
+
+  const { studyList, isLoading } = useMemberStudyListData(memberId);
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
 
-  if (isLoading)
-    return (
-      <SkeletonLayout>
-        <SkeletonItem />
-        <SkeletonItem />
-        <SkeletonItem />
-      </SkeletonLayout>
-    );
-
-  if (studyList?.length === 0) return <EmptyMemberRecord />;
+  if (!isLoading && studyList.length === 0) return <EmptyMemberRecord />;
 
   return (
     <Layout>
-      {studyList?.map(({ studyId, name, createdDateTime, totalCycle, timePerCycle }) => {
+      {studyList.map(({ studyId, name, createdDateTime, totalCycle, timePerCycle }) => {
         return (
           <StudyItem key={studyId} onClick={() => handleClickStudyItem(studyId)}>
             <StudyNameDateContainer>
               <Typography variant="h6">{name} 스터디</Typography>
-              <StudyDate>{date.format(new Date(createdDateTime))}</StudyDate>
+              <StudyDate data-testid="progress-date">{format.date(new Date(createdDateTime))}</StudyDate>
             </StudyNameDateContainer>
             <StudyCycleInfoLayout>
               <StudyCycleInfoContainer>
@@ -90,8 +80,12 @@ const StudyItem = styled.li`
 
 const StudyNameDateContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  gap: 10px;
   justify-content: space-between;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const StudyDate = styled.span`
@@ -118,18 +112,6 @@ const StudyCycleInfoContainer = styled.div`
   :last-child {
     margin-left: 10px;
     font-size: 1.8rem;
-    font-weight: 400;
+    font-weight: 500;
   }
-`;
-
-const SkeletonLayout = styled.div`
-  display: grid;
-  row-gap: 40px;
-
-  max-width: 1200px;
-`;
-
-const SkeletonItem = styled.div`
-  height: 130px;
-  ${TextSkeletonStyle}
 `;

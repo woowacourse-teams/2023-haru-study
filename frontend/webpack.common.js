@@ -1,15 +1,10 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = () => {
   return {
     entry: './src/index.tsx',
-    output: {
-      filename: 'bundle.js',
-      path: path.resolve(__dirname, 'dist'),
-      clean: true,
-      publicPath: '/',
-    },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.jsx'],
       alias: {
@@ -43,7 +38,7 @@ module.exports = () => {
           exclude: /node_modules/,
         },
         {
-          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          test: /\.(png|svg|jpg|jpeg|gif|mp3|webp)$/i,
           type: 'asset/resource',
         },
       ],
@@ -51,6 +46,19 @@ module.exports = () => {
     plugins: [
       new HtmlWebpackPlugin({
         template: 'public/index.html',
+      }),
+
+      new CopyPlugin({
+        patterns: [
+          {
+            from: path.resolve(__dirname, 'public', 'fonts'),
+            to: path.resolve(__dirname, 'dist', 'fonts'),
+          },
+          {
+            from: path.resolve(__dirname, 'public', 'assets'),
+            to: path.resolve(__dirname, 'dist', 'assets'),
+          },
+        ],
       }),
     ],
   };

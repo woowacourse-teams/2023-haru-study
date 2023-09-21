@@ -39,8 +39,8 @@ export const studyBoardHandlers = [
     return res(ctx.status(200), ctx.json({ progresses: [{ ...progress }] }), ctx.delay(500));
   }),
 
-  rest.post<RequestWritePlan>('/api/studies/:studyId/contents/write-plan', (req, res, ctx) => {
-    const { plan } = req.body;
+  rest.post<RequestWritePlan>('/api/studies/:studyId/contents/write-plan', async (req, res, ctx) => {
+    const { plan } = await req.json<RequestWritePlan>();
     planList = plan;
 
     return res(ctx.status(200), ctx.delay(600));

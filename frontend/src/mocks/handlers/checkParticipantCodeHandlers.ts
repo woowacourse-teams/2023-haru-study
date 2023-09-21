@@ -13,6 +13,7 @@ export const checkParticipantCodeHandlers = [
 
     if (requestAuthToken === newAccessToken && testParticipantCode === participantCode)
       return res(
+        // 성공
         ctx.status(200),
         ctx.json({
           studies: [
@@ -25,6 +26,12 @@ export const checkParticipantCodeHandlers = [
             },
           ],
         }),
+        // 에러
+        // ctx.status(404),
+        // ctx.json({
+        //   message: '에러',
+        //   code: 1234,
+        // }),
         ctx.delay(1000),
       );
 
@@ -54,6 +61,7 @@ export const checkParticipantCodeHandlers = [
       );
 
     return res(
+      // 성공
       ctx.status(200),
       ctx.json({
         studies: [
@@ -66,6 +74,12 @@ export const checkParticipantCodeHandlers = [
           },
         ],
       }),
+      // 에러
+      // ctx.status(404),
+      // ctx.json({
+      //   message: '에러',
+      //   code: 1234,
+      // }),
       ctx.delay(1000),
     );
   }),

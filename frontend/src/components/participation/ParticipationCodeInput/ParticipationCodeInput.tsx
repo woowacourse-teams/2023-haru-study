@@ -3,10 +3,9 @@ import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
-import Typography from '@Components/common/Typography/Typography';
+import useParticipationCode from '@Components/participation/hooks/useParticipationCode';
 
 import useInput from '@Hooks/common/useInput';
-import useParticipationCode from '@Hooks/participation/useParticipationCode';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
@@ -15,33 +14,21 @@ const ParticipationCodeInput = () => {
 
   const participantCodeInput = useInput(false);
 
-  const errorHandler = (error: Error) => {
-    alert(error.message);
-  };
-
-  const { authenticateParticipationCode, isLoading } = useParticipationCode(errorHandler);
+  const { authenticateParticipationCode, isLoading } = useParticipationCode(participantCodeInput.state ?? '');
 
   const handleOnClickParticipateButton = async () => {
-    if (!participantCodeInput.state) {
-      alert('참여코드를 입력해주세요.');
-      return;
-    }
+    const result = await authenticateParticipationCode();
 
-    const data = await authenticateParticipationCode(participantCodeInput.state);
-
-    if (data) {
-      navigate(`${ROUTES_PATH.preparation}/${data.studies[0].studyId}`, {
-        state: { participantCode: participantCodeInput.state, studyName: data.studies[0].name, isHost: false },
+    if (result) {
+      navigate(`${ROUTES_PATH.preparation}/${result.studies[0].studyId}`, {
+        state: { participantCode: participantCodeInput.state, studyName: result.studies[0].name, isHost: false },
       });
     }
   };
 
   return (
     <Layout>
-      <Input
-        label={<Typography variant="p1">참여코드</Typography>}
-        bottomText="스터디장에게 받은 참여코드를 입력하세요."
-      >
+      <Input label="참여코드" bottomText="스터디장에게 받은 참여코드를 입력하세요.">
         <Input.TextField onChange={participantCodeInput.onChangeInput} />
       </Input>
 

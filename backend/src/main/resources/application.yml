@@ -1,11 +1,11 @@
 spring:
   jpa:
-    hibernate:
-      ddl-auto: create-drop
     properties:
       hibernate:
+        ddl-auto: create-drop
         format_sql: true
     show-sql: true
+    open-in-view: false
 
   datasource:
     url: jdbc:h2:mem:testdb;MODE=MySQL
@@ -16,6 +16,9 @@ spring:
   h2:
     console:
       enabled: true
+
+  flyway:
+    enabled: false
 
   config:
     import: classpath:/submodule/application-auth-develop.yml

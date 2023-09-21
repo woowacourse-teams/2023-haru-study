@@ -90,12 +90,17 @@ const Layout = styled.div`
 `;
 
 const StyledLabel = styled.label<StyledLabel>`
-  font-weight: 200;
+  font-size: 2.4rem;
+  font-weight: 300;
 
   ${({ $labelSize = 'medium', $style, theme }) => css`
     color: ${theme.text};
     ${SIZE_TYPE[$labelSize]} ${$style};
   `}
+
+  @media screen and (max-width: 768px) {
+    font-size: 2rem;
+  }
 `;
 
 const StyledBottomText = styled.p<{ $error?: boolean }>`
@@ -103,6 +108,10 @@ const StyledBottomText = styled.p<{ $error?: boolean }>`
   margin-top: 10px;
   font-size: 1.6rem;
   font-weight: 200;
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.4rem;
+  }
 
   ${({ $error }) => css`
     color: ${$error ? color.red[600] : color.neutral[400]};

@@ -4,14 +4,12 @@ import { createStudyHandlers } from './createStudyHandlers';
 import { progressesHandlers } from './progressesHandlers';
 import { studyBoardHandlers } from './studyBoardHandler';
 import { studyRecordHandlers } from './studyRecordHandlers';
-import { studyStartHandlers } from './studyStartHandlers';
 
 export const handlers = [
-  ...studyBoardHandlers,
-  ...createStudyHandlers,
   ...studyRecordHandlers,
-  ...studyStartHandlers,
+  ...createStudyHandlers,
   ...checkParticipantCodeHandlers,
-  ...authHandler,
   ...progressesHandlers,
+  ...studyBoardHandlers,
+  ...authHandler,
 ];

@@ -49,4 +49,9 @@ const Layout = styled.div<Omit<ItemProps, 'value' | 'suffix'>>`
     background-color: ${theme.background};
     ${$style}
   `};
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.8rem;
+    padding: 14px;
+  }
 `;
