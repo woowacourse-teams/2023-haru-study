@@ -47,6 +47,10 @@ const GuideMessage = styled.p<GuideMessageProps>`
   `}
 
   transition: opacity 0.15s ease;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const Link = styled.a`
