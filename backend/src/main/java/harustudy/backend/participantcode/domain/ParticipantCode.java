@@ -25,7 +25,7 @@ public class ParticipantCode extends BaseTimeEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_id")
+    @JoinColumn(name = "pomodoro_study_id")
     private PomodoroStudy pomodoroStudy;
 
     @Column(unique = true, length = 6)
