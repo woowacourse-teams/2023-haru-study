@@ -1,5 +1,6 @@
 package harustudy.backend.participantcode.domain;
 
+import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.study.domain.PomodoroStudy;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class ParticipantCode {
+public class ParticipantCode extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
