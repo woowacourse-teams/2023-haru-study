@@ -95,7 +95,6 @@ public class StudyService {
                 .isPresent();
     }
 
-
     public void proceed(AuthMember authMember, Long studyId) {
         Study study = studyRepository.findByIdIfExists(studyId);
         validateIsHost(authMember, study);
