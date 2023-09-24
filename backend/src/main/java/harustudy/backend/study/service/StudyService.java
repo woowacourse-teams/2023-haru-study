@@ -45,45 +45,45 @@ public class StudyService {
         if (Objects.nonNull(code)) {
             ParticipantCode participantCode = participantCodeRepository.findByCode(code)
                     .orElseThrow(ParticipantCodeNotFoundException::new);
-            Study pomodoroStudy = participantCode.getStudy();
-            return StudiesResponse.from(List.of(pomodoroStudy));
+            Study study = participantCode.getStudy();
+            return StudiesResponse.from(List.of(study));
         }
         if (Objects.nonNull(memberId)) {
-            return findPomodoroStudyByMemberId(memberId);
+            return findStudyByMemberId(memberId);
         }
 
         return StudiesResponse.from(studyRepository.findAll());
     }
 
-    private StudiesResponse findPomodoroStudyByMemberId(Long memberId) {
+    private StudiesResponse findStudyByMemberId(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
-        List<Participant> pomodoroProgresses = participantRepository.findByMember(member);
+        List<Participant> participants = participantRepository.findByMember(member);
 
-        List<Study> pomodoroStudies = mapToPomodoroStudies(pomodoroProgresses);
+        List<Study> studies = mapToStudies(participants);
 
-        return StudiesResponse.from(pomodoroStudies);
+        return StudiesResponse.from(studies);
     }
 
-    private List<Study> mapToPomodoroStudies(List<Participant> pomodoroProgresses) {
-        return pomodoroProgresses.stream()
+    private List<Study> mapToStudies(List<Participant> participants) {
+        return participants.stream()
                 .map(Participant::getStudy)
                 .toList();
     }
 
     public CreateStudyResponse createStudy(CreateStudyRequest request) {
-        Study pomodoroStudy = new Study(request.name(), request.totalCycle(),
+        Study study = new Study(request.name(), request.totalCycle(),
                 request.timePerCycle());
-        Study savedStudy = studyRepository.save(pomodoroStudy);
+        Study savedStudy = studyRepository.save(study);
 
-        ParticipantCode participantCode = generateUniqueCode(pomodoroStudy);
+        ParticipantCode participantCode = generateUniqueCode(study);
         participantCodeRepository.save(participantCode);
 
         return CreateStudyResponse.from(savedStudy, participantCode);
     }
 
-    private ParticipantCode generateUniqueCode(Study pomodoroStudy) {
-        ParticipantCode participantCode = new ParticipantCode(pomodoroStudy, generationStrategy);
+    private ParticipantCode generateUniqueCode(Study study) {
+        ParticipantCode participantCode = new ParticipantCode(study, generationStrategy);
         while (isParticipantCodePresent(participantCode)) {
             participantCode.regenerate();
         }
