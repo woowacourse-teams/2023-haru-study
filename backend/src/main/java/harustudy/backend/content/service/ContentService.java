@@ -41,7 +41,7 @@ public class ContentService {
     public ContentsResponse findContentsWithFilter(
             AuthMember authMember, Long studyId, Long participantId, @Nullable Integer cycle
     ) {
-        List<Participant> participants = getParticipantIfAuthorized(
+        List<Participant> participants = getParticipantsIfAuthorized(
                 authMember, studyId);
         Participant participant = filterSingleParticipantById(
                 participants, participantId);
@@ -53,7 +53,7 @@ public class ContentService {
         return getContentsResponseWithCycleFilter(contents, cycle);
     }
 
-    private List<Participant> getParticipantIfAuthorized(AuthMember authMember, Long studyId) {
+    private List<Participant> getParticipantsIfAuthorized(AuthMember authMember, Long studyId) {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(StudyNotFoundException::new);
         List<Participant> participants = participantRepository.findAllByStudyFetchMember(
