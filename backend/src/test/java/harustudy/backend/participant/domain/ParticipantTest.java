@@ -1,20 +1,16 @@
 package harustudy.backend.participant.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
-
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.exception.NicknameLengthException;
 import harustudy.backend.study.domain.Study;
-import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import static org.assertj.core.api.Assertions.*;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -63,5 +59,33 @@ class ParticipantTest {
 
         // when, then
         assertThat(participant.hasSameNicknameWith(otherParticipant)).isFalse();
+    }
+
+    @Test
+    void 스터디에_참여하면_스터디의_참여_인원이_증가한다() {
+        // given, when
+        Participant participant = Participant.participateFrom(study, member, "nickname");
+
+        // then
+        assertThat(participant.getStudy().getParticipants()).hasSize(1);
+    }
+
+    @Test
+    void 스터디에_첫_번째로_참여하면_방장이다() {
+        // given, when
+        Participant host = Participant.participateFrom(study, member, "host");
+
+        // then
+        assertThat(host.getIsHost()).isTrue();
+    }
+
+    @Test
+    void 스터디에_첫_번째_이후로_참여하면_방장이_아니다() {
+        // given, when
+        Participant.participateFrom(study, member, "host");
+        Participant participant = Participant.participateFrom(study, member, "parti");
+
+        // then
+        assertThat(participant.getIsHost()).isFalse();
     }
 }
