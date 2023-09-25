@@ -55,7 +55,6 @@ public class StudyController {
                 .body(response);
     }
 
-    // TODO: SSE 이벤트하는 로직으로 변경시 SSE 컨트롤러로 이동할지 고려
     @Operation(summary = "다음 스터디 단계로 이동")
     @ApiResponse(responseCode = "204")
     @PostMapping("/api/studies/{studyId}/next-step")

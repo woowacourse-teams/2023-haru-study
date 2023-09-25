@@ -6,19 +6,19 @@ import harustudy.backend.study.domain.Study;
 import java.time.LocalDateTime;
 
 public record StudyResponse(Long studyId, String name, Integer totalCycle, Integer timePerCycle, Integer currentCycle,
-                            String studyStep, String progress, LocalDateTime createdDateTime) {
+                            String studyStep, String progressStep, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
 
     public static final String IN_PROGRESS = "inProgress";
 
     public static StudyResponse from(Study study) {
-        String roomStep = getRoomStep(study);
+        String studyStep = getStudyStep(study);
         String progressStep = getProgressStep(study);
 
         return new StudyResponse(study.getId(), study.getName(), study.getTotalCycle(), study.getTimePerCycle(),
-                study.getCurrentCycle(), roomStep, progressStep, study.getCreatedDate());
+                study.getCurrentCycle(), studyStep, progressStep, study.getCreatedDate(), study.getLastModifiedDate());
     }
 
-    private static String getRoomStep(Study study) {
+    private static String getStudyStep(Study study) {
         String roomStep;
         if (study.isStep(Step.PLANNING) ||  study.isStep(Step.STUDYING) || study.isStep(Step.RETROSPECT)) {
             roomStep = IN_PROGRESS;

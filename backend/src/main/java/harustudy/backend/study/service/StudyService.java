@@ -65,6 +65,7 @@ public class StudyService {
         return StudiesResponse.from(studies);
     }
 
+    // TODO: N+1
     private List<Study> mapToStudies(List<Participant> participants) {
         return participants.stream()
                 .map(Participant::getStudy)
@@ -79,7 +80,7 @@ public class StudyService {
         ParticipantCode participantCode = generateUniqueCode(study);
         participantCodeRepository.save(participantCode);
 
-        return CreateStudyResponse.from(savedStudy, participantCode);
+        return CreateStudyResponse.from(savedStudy);
     }
 
     private ParticipantCode generateUniqueCode(Study study) {

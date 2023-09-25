@@ -80,8 +80,7 @@ class AcceptanceTest {
     @Test
     void 회원으로_스터디를_진행한다() throws Exception {
         LoginResponse 로그인_정보 = 구글_로그인을_진행한다();
-        String 참여_코드 = 스터디를_개설한다(로그인_정보);
-        Long 스터디_아이디 = 스터디를_조회한다(로그인_정보, 참여_코드);
+        Long 스터디_아이디 = 스터디를_개설한다(로그인_정보);
         Long 참여자_아이디 = 스터디에_참여한다(로그인_정보, 스터디_아이디);
         스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_계획을_작성한다(로그인_정보, 스터디_아이디, 참여자_아이디);
@@ -106,8 +105,7 @@ class AcceptanceTest {
     @Test
     void 비회원으로_스터디를_진행한다() throws Exception {
         LoginResponse 로그인_정보 = 비회원_로그인을_진행한다();
-        String 참여_코드 = 스터디를_개설한다(로그인_정보);
-        Long 스터디_아이디 = 스터디를_조회한다(로그인_정보, 참여_코드);
+        Long 스터디_아이디 = 스터디를_개설한다(로그인_정보);
         Long 진행도_아이디 = 스터디에_참여한다(로그인_정보, 스터디_아이디);
         스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_계획을_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
@@ -170,7 +168,7 @@ class AcceptanceTest {
         return new LoginResponse(tokenResponse, refreshToken);
     }
 
-    private String 스터디를_개설한다(LoginResponse 로그인_정보) throws Exception {
+    private Long 스터디를_개설한다(LoginResponse 로그인_정보) throws Exception {
         CreateStudyRequest request = new CreateStudyRequest("studyName", 1, 20);
         String jsonRequest = objectMapper.writeValueAsString(request);
         MvcResult result = mockMvc.perform(
@@ -183,20 +181,6 @@ class AcceptanceTest {
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
         CreateStudyResponse response = objectMapper.readValue(jsonResponse,
                 CreateStudyResponse.class);
-        return response.participantCode();
-    }
-
-    private Long 스터디를_조회한다(LoginResponse 로그인_정보, String 참여_코드) throws Exception {
-        MvcResult result = mockMvc.perform(
-                        get("/api/studies")
-                                .param("participantCode", 참여_코드)
-                                .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
-                .andExpect(status().isOk())
-                .andReturn();
-        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        StudiesResponse responses = objectMapper.readValue(jsonResponse,
-                StudiesResponse.class);
-        StudyResponse response = responses.studies().get(0);
         return response.studyId();
     }
 

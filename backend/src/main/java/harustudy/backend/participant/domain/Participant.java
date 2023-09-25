@@ -45,6 +45,8 @@ public class Participant extends BaseTimeEntity {
 
     private String nickname;
 
+    private Boolean isHost;
+
     public Participant(Study study, Member member, String nickname) {
         this.study = study;
         this.member = member;

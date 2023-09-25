@@ -81,7 +81,7 @@ class StudyIntegrationTest extends IntegrationTest {
             softly.assertThat(response.timePerCycle()).isEqualTo(study1.getTimePerCycle());
             softly.assertThat(response.currentCycle()).isEqualTo(study1.getCurrentCycle());
             softly.assertThat(response.studyStep()).isEqualTo(StudyResponse.from(study1).studyStep());
-            softly.assertThat(response.progress()).isEqualTo(StudyResponse.from(study1).progress());
+            softly.assertThat(response.progressStep()).isEqualTo(StudyResponse.from(study1).progressStep());
         });
     }
 
@@ -187,10 +187,7 @@ class StudyIntegrationTest extends IntegrationTest {
         CreateStudyResponse response = objectMapper.readValue(jsonResponse,
                 CreateStudyResponse.class);
 
-        assertThat(response.participantCode())
-                .isAlphabetic()
-                .isUpperCase()
-                .hasSize(6);
+        assertThat(response.studyId()).isPositive();
     }
 
     @Test
