@@ -18,12 +18,12 @@ import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.content.dto.WritePlanRequest;
 import harustudy.backend.content.dto.WriteRetrospectRequest;
 import harustudy.backend.integration.LoginResponse;
-import harustudy.backend.progress.dto.ParticipateStudyRequest;
-import harustudy.backend.progress.dto.PomodoroProgressesResponse;
-import harustudy.backend.study.dto.CreatePomodoroStudyRequest;
-import harustudy.backend.study.dto.CreatePomodoroStudyResponse;
-import harustudy.backend.study.dto.PomodoroStudyResponse;
-import harustudy.backend.study.dto.PomodoroStudiesResponse;
+import harustudy.backend.participant.dto.ParticipateStudyRequest;
+import harustudy.backend.participant.dto.ParticipantsResponse;
+import harustudy.backend.study.dto.CreateStudyRequest;
+import harustudy.backend.study.dto.CreateStudyResponse;
+import harustudy.backend.study.dto.StudyResponse;
+import harustudy.backend.study.dto.StudiesResponse;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -82,12 +82,13 @@ class AcceptanceTest {
         LoginResponse 로그인_정보 = 구글_로그인을_진행한다();
         String 참여_코드 = 스터디를_개설한다(로그인_정보);
         Long 스터디_아이디 = 스터디를_조회한다(로그인_정보, 참여_코드);
-        Long 진행도_아이디 = 스터디에_참여한다(로그인_정보, 스터디_아이디);
-        스터디_계획을_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
-        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
-        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
-        스터디_회고를_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
-        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
+        Long 참여자_아이디 = 스터디에_참여한다(로그인_정보, 스터디_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
+        스터디_계획을_작성한다(로그인_정보, 스터디_아이디, 참여자_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
+        스터디_회고를_작성한다(로그인_정보, 스터디_아이디, 참여자_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_종료_후_결과_조회(로그인_정보, 스터디_아이디);
     }
 
@@ -96,8 +97,8 @@ class AcceptanceTest {
         회원으로_스터디를_진행한다();
         회원으로_스터디를_진행한다();
         LoginResponse 로그인_정보 = 구글_로그인을_진행한다();
-        List<PomodoroStudyResponse> 회원으로_완료한_스터디_목록 = 회원으로_진행했던_모든_스터디_목록을_조회한다(로그인_정보);
-        for (PomodoroStudyResponse 스터디_정보 : 회원으로_완료한_스터디_목록) {
+        List<StudyResponse> 회원으로_완료한_스터디_목록 = 회원으로_진행했던_모든_스터디_목록을_조회한다(로그인_정보);
+        for (StudyResponse 스터디_정보 : 회원으로_완료한_스터디_목록) {
             스터디_종료_후_결과_조회(로그인_정보, 스터디_정보.studyId());
         }
     }
@@ -108,15 +109,16 @@ class AcceptanceTest {
         String 참여_코드 = 스터디를_개설한다(로그인_정보);
         Long 스터디_아이디 = 스터디를_조회한다(로그인_정보, 참여_코드);
         Long 진행도_아이디 = 스터디에_참여한다(로그인_정보, 스터디_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_계획을_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
-        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
-        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_회고를_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
-        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디, 진행도_아이디);
+        스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_종료_후_결과_조회(로그인_정보, 스터디_아이디);
     }
 
-    private List<PomodoroStudyResponse> 회원으로_진행했던_모든_스터디_목록을_조회한다(LoginResponse 로그인_정보)
+    private List<StudyResponse> 회원으로_진행했던_모든_스터디_목록을_조회한다(LoginResponse 로그인_정보)
             throws Exception {
         long memberId = Long.parseLong(jwtTokenProvider
                 .parseSubject(로그인_정보.tokenResponse().accessToken(), tokenConfig.secretKey()));
@@ -129,10 +131,10 @@ class AcceptanceTest {
                 .andReturn();
 
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        PomodoroStudiesResponse pomodoroStudiesResponse = objectMapper.readValue(jsonResponse,
-                PomodoroStudiesResponse.class);
+        StudiesResponse StudiesResponse = objectMapper.readValue(jsonResponse,
+                StudiesResponse.class);
 
-        return pomodoroStudiesResponse.studies();
+        return StudiesResponse.studies();
     }
 
     private LoginResponse 비회원_로그인을_진행한다() throws Exception {
@@ -169,7 +171,7 @@ class AcceptanceTest {
     }
 
     private String 스터디를_개설한다(LoginResponse 로그인_정보) throws Exception {
-        CreatePomodoroStudyRequest request = new CreatePomodoroStudyRequest("studyName", 1, 20);
+        CreateStudyRequest request = new CreateStudyRequest("studyName", 1, 20);
         String jsonRequest = objectMapper.writeValueAsString(request);
         MvcResult result = mockMvc.perform(
                         post("/api/studies")
@@ -179,8 +181,8 @@ class AcceptanceTest {
                 .andExpect(status().isCreated())
                 .andReturn();
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        CreatePomodoroStudyResponse response = objectMapper.readValue(jsonResponse,
-                CreatePomodoroStudyResponse.class);
+        CreateStudyResponse response = objectMapper.readValue(jsonResponse,
+                CreateStudyResponse.class);
         return response.participantCode();
     }
 
@@ -192,9 +194,9 @@ class AcceptanceTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        PomodoroStudiesResponse responses = objectMapper.readValue(jsonResponse,
-                PomodoroStudiesResponse.class);
-        PomodoroStudyResponse response = responses.studies().get(0);
+        StudiesResponse responses = objectMapper.readValue(jsonResponse,
+                StudiesResponse.class);
+        StudyResponse response = responses.studies().get(0);
         return response.studyId();
     }
 
@@ -205,7 +207,7 @@ class AcceptanceTest {
         String jsonRequest = objectMapper.writeValueAsString(request);
 
         MvcResult result = mockMvc.perform(
-                        post("/api/studies/{studyId}/progresses", 스터디_아이디)
+                        post("/api/studies/{studyId}/participants", 스터디_아이디)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonRequest)
                                 .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
@@ -214,27 +216,25 @@ class AcceptanceTest {
 
         String location = result.getResponse().getHeader("Location");
         String[] split = location.split("/");
-        String progressId = split[split.length - 1];
+        String participantId = split[split.length - 1];
 
-        return Long.valueOf(progressId);
+        return Long.valueOf(participantId);
     }
 
-    private void 스터디_계획을_작성한다(LoginResponse 로그인_정보, Long 스터디_아이디, Long 진행도_아이디) throws Exception {
-        WritePlanRequest request = new WritePlanRequest(진행도_아이디, Map.of("plan", "test"));
+    private void 스터디_계획을_작성한다(LoginResponse 로그인_정보, Long 스터디_아이디, Long 참여자_아이디) throws Exception {
+        WritePlanRequest request = new WritePlanRequest(참여자_아이디, Map.of("plan", "test"));
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(post("/api/studies/{studyId}/contents/write-plan",
-                        스터디_아이디)
+        mockMvc.perform(post("/api/studies/{studyId}/contents/write-plan", 스터디_아이디)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest)
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isOk());
     }
 
-    private void 스터디_상태를_다음_단계로_넘긴다(LoginResponse 로그인_정보, Long 스터디_아이디, Long 진행도_아이디)
+    private void 스터디_상태를_다음_단계로_넘긴다(LoginResponse 로그인_정보, Long 스터디_아이디)
             throws Exception {
-        mockMvc.perform(post("/api/studies/{studyId}/progresses/{progressId}/next-step",
-                        스터디_아이디, 진행도_아이디)
+        mockMvc.perform(post("/api/studies/{studyId}/next-step", 스터디_아이디)
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isNoContent());
     }
@@ -253,16 +253,16 @@ class AcceptanceTest {
     }
 
     private void 스터디_종료_후_결과_조회(LoginResponse 로그인_정보, Long 스터디_아이디) throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/studies/{studyId}/progresses", 스터디_아이디)
+        MvcResult result = mockMvc.perform(get("/api/studies/{studyId}/participants", 스터디_아이디)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isOk())
                 .andReturn();
 
         String response = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        PomodoroProgressesResponse jsonResponse = objectMapper.readValue(response,
-                PomodoroProgressesResponse.class);
+        ParticipantsResponse jsonResponse = objectMapper.readValue(response,
+                ParticipantsResponse.class);
 
-        assertThat(jsonResponse.progresses()).hasSize(1);
+        assertThat(jsonResponse.participants()).hasSize(1);
     }
 }

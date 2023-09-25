@@ -6,17 +6,17 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import harustudy.backend.auth.exception.*;
-import harustudy.backend.content.exception.PomodoroContentNotFoundException;
+import harustudy.backend.content.exception.ContentNotFoundException;
 import harustudy.backend.member.exception.MemberNotFoundException;
-import harustudy.backend.progress.exception.NicknameLengthException;
-import harustudy.backend.progress.exception.PomodoroProgressNotFoundException;
-import harustudy.backend.progress.exception.PomodoroProgressStatusException;
-import harustudy.backend.progress.exception.ProgressNotBelongToStudyException;
+import harustudy.backend.participant.exception.NicknameLengthException;
+import harustudy.backend.participant.exception.ParticipantNotFoundException;
+import harustudy.backend.participant.exception.StudyStepException;
+import harustudy.backend.participant.exception.ParticipantNotBelongToStudyException;
 import harustudy.backend.study.exception.ParticipantCodeExpiredException;
 import harustudy.backend.study.exception.ParticipantCodeNotFoundException;
-import harustudy.backend.study.exception.PomodoroStudyNameLengthException;
-import harustudy.backend.study.exception.PomodoroTimePerCycleException;
-import harustudy.backend.study.exception.PomodoroTotalCycleException;
+import harustudy.backend.study.exception.StudyNameLengthException;
+import harustudy.backend.study.exception.TimePerCycleException;
+import harustudy.backend.study.exception.TotalCycleException;
 import harustudy.backend.study.exception.StudyNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,8 +28,8 @@ public class ExceptionMapper {
 
     static {
         setUpMemberException();
-        setUpPomodoroContentException();
-        setUpPomodoroProgressException();
+        setUpContentException();
+        setUpParticipantException();
         setUpStudyException();
         setUpAuthenticationException();
         setUpAuthorizationException();
@@ -40,17 +40,17 @@ public class ExceptionMapper {
                 ExceptionSituation.of("해당하는 멤버가 없습니다.", NOT_FOUND, 1002));
     }
 
-    private static void setUpPomodoroContentException() {
-        mapper.put(PomodoroContentNotFoundException.class,
+    private static void setUpContentException() {
+        mapper.put(ContentNotFoundException.class,
                 ExceptionSituation.of("해당하는 컨텐츠가 없습니다.", NOT_FOUND, 1100));
     }
 
-    private static void setUpPomodoroProgressException() {
-        mapper.put(PomodoroProgressNotFoundException.class,
+    private static void setUpParticipantException() {
+        mapper.put(ParticipantNotFoundException.class,
                 ExceptionSituation.of("해당 스터디에 참여한 상태가 아닙니다.", NOT_FOUND, 1201));
-        mapper.put(PomodoroProgressStatusException.class,
+        mapper.put(StudyStepException.class,
                 ExceptionSituation.of("스터디 진행 상태가 적절하지 않습니다.", BAD_REQUEST, 1202));
-        mapper.put(ProgressNotBelongToStudyException.class,
+        mapper.put(ParticipantNotBelongToStudyException.class,
                 ExceptionSituation.of("해당 스터디에 참여한 기록이 없습니다.", BAD_REQUEST, 1203));
         mapper.put(NicknameLengthException.class,
                 ExceptionSituation.of("닉네임 길이가 유효하지 않습니다.", BAD_REQUEST, 1204));
@@ -63,11 +63,11 @@ public class ExceptionMapper {
                 ExceptionSituation.of("만료된 참여코드입니다.", BAD_REQUEST, 1301));
         mapper.put(StudyNotFoundException.class,
                 ExceptionSituation.of("해당하는 스터디가 없습니다.", NOT_FOUND, 1302));
-        mapper.put(PomodoroStudyNameLengthException.class,
+        mapper.put(StudyNameLengthException.class,
                 ExceptionSituation.of("스터디 이름의 길이가 적절하지 않습니다.", BAD_REQUEST, 1304));
-        mapper.put(PomodoroTimePerCycleException.class,
+        mapper.put(TimePerCycleException.class,
                 ExceptionSituation.of("시간 당 사이클 횟수가 적절하지 않습니다.", BAD_REQUEST, 1305));
-        mapper.put(PomodoroTotalCycleException.class,
+        mapper.put(TotalCycleException.class,
                 ExceptionSituation.of("총 사이클 횟수가 적절하지 않습니다.", BAD_REQUEST, 1306));
     }
 

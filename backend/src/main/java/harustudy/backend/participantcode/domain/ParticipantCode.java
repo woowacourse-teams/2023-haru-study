@@ -1,7 +1,7 @@
 package harustudy.backend.participantcode.domain;
 
 import harustudy.backend.common.BaseTimeEntity;
-import harustudy.backend.study.domain.PomodoroStudy;
+import harustudy.backend.study.domain.Study;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,8 +25,8 @@ public class ParticipantCode extends BaseTimeEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pomodoro_study_id")
-    private PomodoroStudy pomodoroStudy;
+    @JoinColumn(name = "study_id")
+    private Study study;
 
     @Column(unique = true, length = 6)
     private String code;
@@ -34,8 +34,8 @@ public class ParticipantCode extends BaseTimeEntity {
     @Transient
     private GenerationStrategy generationStrategy;
 
-    public ParticipantCode(PomodoroStudy pomodoroStudy, GenerationStrategy generationStrategy) {
-        this.pomodoroStudy = pomodoroStudy;
+    public ParticipantCode(Study study, GenerationStrategy generationStrategy) {
+        this.study = study;
         this.generationStrategy = generationStrategy;
         this.code = generationStrategy.generate();
     }
