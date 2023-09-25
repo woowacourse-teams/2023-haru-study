@@ -5,22 +5,13 @@ import harustudy.backend.content.domain.Content;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.exception.NicknameLengthException;
 import harustudy.backend.study.domain.Study;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // TODO: 연관관계 편의 메소드 생성(memberContents에 넣는)
 @Getter
@@ -47,22 +38,32 @@ public class Participant extends BaseTimeEntity {
 
     private Boolean isHost;
 
+    // 정팩메 사용시 제거(테스트에서 사용중)
     public Participant(Study study, Member member, String nickname) {
         this.study = study;
         this.member = member;
         this.nickname = nickname;
+        this.isHost = false;
 
-        setHostIfEmptyParticipants(study);
         validateNicknameLength(nickname);
     }
 
-    private void setHostIfEmptyParticipants(Study study) {
-        if (study.isEmptyParticipants()) {
-            this.isHost = true;
-        }
+    private Participant(Study study, Member member, String nickname, Boolean isHost) {
+        this.study = study;
+        this.member = member;
+        this.nickname = nickname;
+        this.isHost = isHost;
     }
 
-    private void validateNicknameLength(String nickname) {
+    public static Participant participateFrom(Study study, Member member, String nickname) {
+        validateNicknameLength(nickname);
+        Participant participant = new Participant(study, member, nickname, study.isEmptyParticipants());
+        study.addParticipant(participant);
+        participant.generateContents(study.getTotalCycle());
+        return participant;
+    }
+
+    private static void validateNicknameLength(String nickname) {
         if (nickname.length() < 1 || nickname.length() > 10) {
             throw new NicknameLengthException();
         }
