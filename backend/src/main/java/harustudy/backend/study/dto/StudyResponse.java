@@ -6,7 +6,7 @@ import harustudy.backend.study.domain.Study;
 import java.time.LocalDateTime;
 
 public record StudyResponse(Long studyId, String name, Integer totalCycle, Integer timePerCycle, Integer currentCycle,
-                            String roomStep, String progressStep, LocalDateTime createdDateTime) {
+                            String studyStep, String progress, LocalDateTime createdDateTime) {
 
     public static final String IN_PROGRESS = "inProgress";
 

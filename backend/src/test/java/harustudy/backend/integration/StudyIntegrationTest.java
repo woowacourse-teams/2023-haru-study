@@ -80,8 +80,8 @@ class StudyIntegrationTest extends IntegrationTest {
             softly.assertThat(response.totalCycle()).isEqualTo(study1.getTotalCycle());
             softly.assertThat(response.timePerCycle()).isEqualTo(study1.getTimePerCycle());
             softly.assertThat(response.currentCycle()).isEqualTo(study1.getCurrentCycle());
-            softly.assertThat(response.roomStep()).isEqualTo(StudyResponse.from(study1).roomStep());
-            softly.assertThat(response.progressStep()).isEqualTo(StudyResponse.from(study1).progressStep());
+            softly.assertThat(response.studyStep()).isEqualTo(StudyResponse.from(study1).studyStep());
+            softly.assertThat(response.progress()).isEqualTo(StudyResponse.from(study1).progress());
         });
     }
 
@@ -108,8 +108,8 @@ class StudyIntegrationTest extends IntegrationTest {
 //            softly.assertThat(response.totalCycle()).isEqualTo(study1.getTotalCycle());
 //            softly.assertThat(response.timePerCycle()).isEqualTo(study1.getTimePerCycle());
 //            softly.assertThat(response.currentCycle()).isEqualTo(study1.getCurrentCycle());
-//            softly.assertThat(response.roomStep()).isEqualTo(study1.getStep().name().toLowerCase());
-//            softly.assertThat(response.progressStep()).isEqualTo(study1.getStep().name().toLowerCase());
+//            softly.assertThat(response.studyStep()).isEqualTo(study1.getStep().name().toLowerCase());
+//            softly.assertThat(response.progress()).isEqualTo(study1.getStep().name().toLowerCase());
 //        });
 //    }
 
@@ -133,8 +133,8 @@ class StudyIntegrationTest extends IntegrationTest {
             softly.assertThat(response.totalCycle()).isEqualTo(study1.getTotalCycle());
             softly.assertThat(response.timePerCycle()).isEqualTo(study1.getTimePerCycle());
             softly.assertThat(response.currentCycle()).isEqualTo(study1.getCurrentCycle());
-            softly.assertThat(response.roomStep()).isEqualTo(study1.getStep().name().toLowerCase());
-            softly.assertThat(response.progressStep()).isEqualTo(study1.getStep().name().toLowerCase());
+            softly.assertThat(response.studyStep()).isEqualTo(study1.getStep().name().toLowerCase());
+            softly.assertThat(response.progress()).isEqualTo(study1.getStep().name().toLowerCase());
         });
     }*/
 
