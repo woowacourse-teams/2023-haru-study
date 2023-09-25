@@ -52,7 +52,14 @@ public class Participant extends BaseTimeEntity {
         this.member = member;
         this.nickname = nickname;
 
+        setHostIfEmptyParticipants(study);
         validateNicknameLength(nickname);
+    }
+
+    private void setHostIfEmptyParticipants(Study study) {
+        if (study.isEmptyParticipants()) {
+            this.isHost = true;
+        }
     }
 
     private void validateNicknameLength(String nickname) {

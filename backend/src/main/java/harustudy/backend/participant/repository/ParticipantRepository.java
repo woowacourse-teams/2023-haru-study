@@ -19,7 +19,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     List<Participant> findAllByStudyFetchMember(
             @Param("study") Study study);
 
-
     List<Participant> findByMember(Member member);
 
     List<Participant> findByStudy(Study study);
@@ -28,4 +27,5 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
         return findById(id)
                 .orElseThrow(ParticipantNotFoundException::new);
     }
+
 }

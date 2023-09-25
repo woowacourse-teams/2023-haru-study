@@ -104,8 +104,7 @@ public class ParticipantService {
         return ParticipantsResponse.from(List.of(response));
     }
 
-    public Long participateStudy(AuthMember authMember, Long studyId,
-            ParticipateStudyRequest request) {
+    public Long participateStudy(AuthMember authMember, Long studyId, ParticipateStudyRequest request) {
         Member member = memberRepository.findByIdIfExists(request.memberId());
         validateIsSameMemberId(authMember, request.memberId());
         Study study = studyRepository.findByIdIfExists(studyId);
