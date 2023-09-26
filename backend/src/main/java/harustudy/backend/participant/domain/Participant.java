@@ -14,13 +14,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // TODO: 연관관계 편의 메소드 생성(memberContents에 넣는)
 @Getter
@@ -45,21 +44,30 @@ public class Participant extends BaseTimeEntity {
 
     private String nickname;
 
-    public Participant(Study study, Member member, String nickname) {
+    private Boolean isHost;
+
+    private Participant(Study study, Member member, String nickname, Boolean isHost) {
         this.study = study;
         this.member = member;
         this.nickname = nickname;
-
-        validateNicknameLength(nickname);
+        this.isHost = isHost;
     }
 
-    private void validateNicknameLength(String nickname) {
+    public static Participant instantiateParticipantWithContents(Study study, Member member, String nickname) {
+        validateNicknameLength(nickname);
+        Participant participant = new Participant(study, member, nickname, study.isEmptyParticipants());
+        study.addParticipant(participant);
+        participant.generateContents(study.getTotalCycle());
+        return participant;
+    }
+
+    private static void validateNicknameLength(String nickname) {
         if (nickname.length() < 1 || nickname.length() > 10) {
             throw new NicknameLengthException();
         }
     }
 
-    public void generateContents(int totalCycle) {
+    private void generateContents(int totalCycle) {
         for (int cycle = 1; cycle <= totalCycle; cycle++) {
             Content content = new Content(this, cycle);
             contents.add(content);

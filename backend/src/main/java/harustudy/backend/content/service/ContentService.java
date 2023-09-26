@@ -158,7 +158,7 @@ public class ContentService {
     }
 
     private void validateIsPlanFilled(Content recentContent) {
-        if (recentContent.hasEmptyPlan()) {
+        if (!recentContent.isPlanWritten()) {
             throw new StudyStepException();
         }
     }

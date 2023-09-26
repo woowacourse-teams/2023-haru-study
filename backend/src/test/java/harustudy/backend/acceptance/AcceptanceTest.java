@@ -18,16 +18,17 @@ import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.content.dto.WritePlanRequest;
 import harustudy.backend.content.dto.WriteRetrospectRequest;
 import harustudy.backend.integration.LoginResponse;
-import harustudy.backend.participant.dto.ParticipateStudyRequest;
 import harustudy.backend.participant.dto.ParticipantsResponse;
+import harustudy.backend.participant.dto.ParticipateStudyRequest;
+import harustudy.backend.participantcode.dto.ParticipantCodeResponse;
 import harustudy.backend.study.dto.CreateStudyRequest;
-import harustudy.backend.study.dto.CreateStudyResponse;
-import harustudy.backend.study.dto.StudyResponse;
 import harustudy.backend.study.dto.StudiesResponse;
+import harustudy.backend.study.dto.StudyResponse;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -80,8 +81,7 @@ class AcceptanceTest {
     @Test
     void 회원으로_스터디를_진행한다() throws Exception {
         LoginResponse 로그인_정보 = 구글_로그인을_진행한다();
-        String 참여_코드 = 스터디를_개설한다(로그인_정보);
-        Long 스터디_아이디 = 스터디를_조회한다(로그인_정보, 참여_코드);
+        Long 스터디_아이디 = 스터디를_개설한다(로그인_정보);
         Long 참여자_아이디 = 스터디에_참여한다(로그인_정보, 스터디_아이디);
         스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_계획을_작성한다(로그인_정보, 스터디_아이디, 참여자_아이디);
@@ -106,8 +106,7 @@ class AcceptanceTest {
     @Test
     void 비회원으로_스터디를_진행한다() throws Exception {
         LoginResponse 로그인_정보 = 비회원_로그인을_진행한다();
-        String 참여_코드 = 스터디를_개설한다(로그인_정보);
-        Long 스터디_아이디 = 스터디를_조회한다(로그인_정보, 참여_코드);
+        Long 스터디_아이디 = 스터디를_개설한다(로그인_정보);
         Long 진행도_아이디 = 스터디에_참여한다(로그인_정보, 스터디_아이디);
         스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_계획을_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
@@ -116,6 +115,13 @@ class AcceptanceTest {
         스터디_회고를_작성한다(로그인_정보, 스터디_아이디, 진행도_아이디);
         스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
         스터디_종료_후_결과_조회(로그인_정보, 스터디_아이디);
+    }
+
+    @Test
+    void 비회원으로_타인의_스터디에_참여한다() throws Exception {
+        String 참여_코드 = 타인의_스터디_참여_코드를_얻는다();
+        LoginResponse 로그인_정보 = 비회원_로그인을_진행한다();
+        참여_코드로_스터디_아이디를_얻는다(로그인_정보, 참여_코드);
     }
 
     private List<StudyResponse> 회원으로_진행했던_모든_스터디_목록을_조회한다(LoginResponse 로그인_정보)
@@ -170,7 +176,7 @@ class AcceptanceTest {
         return new LoginResponse(tokenResponse, refreshToken);
     }
 
-    private String 스터디를_개설한다(LoginResponse 로그인_정보) throws Exception {
+    private Long 스터디를_개설한다(LoginResponse 로그인_정보) throws Exception {
         CreateStudyRequest request = new CreateStudyRequest("studyName", 1, 20);
         String jsonRequest = objectMapper.writeValueAsString(request);
         MvcResult result = mockMvc.perform(
@@ -180,24 +186,11 @@ class AcceptanceTest {
                                 .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isCreated())
                 .andReturn();
-        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        CreateStudyResponse response = objectMapper.readValue(jsonResponse,
-                CreateStudyResponse.class);
-        return response.participantCode();
-    }
+        String locationHeader = result.getResponse().getHeader(HttpHeaders.LOCATION);
 
-    private Long 스터디를_조회한다(LoginResponse 로그인_정보, String 참여_코드) throws Exception {
-        MvcResult result = mockMvc.perform(
-                        get("/api/studies")
-                                .param("participantCode", 참여_코드)
-                                .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
-                .andExpect(status().isOk())
-                .andReturn();
-        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        StudiesResponse responses = objectMapper.readValue(jsonResponse,
-                StudiesResponse.class);
-        StudyResponse response = responses.studies().get(0);
-        return response.studyId();
+        String[] parsed = locationHeader.split("/");
+        System.out.println(locationHeader);
+        return Long.parseLong(parsed[3]);
     }
 
     private Long 스터디에_참여한다(LoginResponse 로그인_정보, Long 스터디_아이디) throws Exception {
@@ -264,5 +257,39 @@ class AcceptanceTest {
                 ParticipantsResponse.class);
 
         assertThat(jsonResponse.participants()).hasSize(1);
+    }
+
+    private String 타인의_스터디_참여_코드를_얻는다() throws Exception {
+        LoginResponse 로그인_정보 = 비회원_로그인을_진행한다();
+        Long 스터디_아이디 = 스터디를_개설한다(로그인_정보);
+        return 스터디_아이디로_참여_코드를_얻는다(로그인_정보, 스터디_아이디);
+    }
+
+    private String 스터디_아이디로_참여_코드를_얻는다(LoginResponse 로그인_정보, Long 스터디_아이디) throws Exception {
+        MvcResult result = mockMvc.perform(get("/api/participant-codes")
+                        .param("studyId", 스터디_아이디.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String response = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+        ParticipantCodeResponse jsonResponse = objectMapper.readValue(response,
+                ParticipantCodeResponse.class);
+
+        assertThat(jsonResponse.participantCode()).hasSize(6);
+        return jsonResponse.participantCode();
+    }
+
+    private void 참여_코드로_스터디_아이디를_얻는다(LoginResponse 로그인_정보, String 참여_코드) throws Exception {
+        MvcResult result = mockMvc.perform(get("/api/studies")
+                        .param("participantCode", 참여_코드)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
+                .andExpect(status().isOk())
+                .andReturn();
+        String response = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+        Assertions.assertDoesNotThrow(() -> objectMapper.readValue(response,
+                StudyResponse.class));
     }
 }
