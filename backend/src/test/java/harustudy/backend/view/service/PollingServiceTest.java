@@ -7,7 +7,7 @@ import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.view.dto.SubmitterResponse;
 import harustudy.backend.view.dto.SubmittersResponse;
-import harustudy.backend.view.exception.SubmitNotAllowedStepException;
+import harustudy.backend.view.exception.CannotSeeSubmittersException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -65,7 +65,7 @@ class PollingServiceTest {
         entityManager.clear();
 
         assertThatThrownBy(() -> pollingService.findSubmitters(study.getId()))
-                .isInstanceOf(SubmitNotAllowedStepException.class);
+                .isInstanceOf(CannotSeeSubmittersException.class);
     }
 
     @Test
@@ -100,7 +100,7 @@ class PollingServiceTest {
 
         // when, then
         assertThatThrownBy(() -> pollingService.findSubmitters(study.getId()))
-                .isInstanceOf(SubmitNotAllowedStepException.class);
+                .isInstanceOf(CannotSeeSubmittersException.class);
     }
 
     @Test
@@ -140,6 +140,6 @@ class PollingServiceTest {
 
         // when, then
         assertThatThrownBy(() -> pollingService.findSubmitters(study.getId()))
-                .isInstanceOf(SubmitNotAllowedStepException.class);
+                .isInstanceOf(CannotSeeSubmittersException.class);
     }
 }

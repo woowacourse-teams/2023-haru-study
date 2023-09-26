@@ -2,7 +2,7 @@ package harustudy.backend.view.service;
 
 import harustudy.backend.content.domain.Content;
 import harustudy.backend.participant.domain.Step;
-import harustudy.backend.view.exception.SubmitNotAllowedStepException;
+import harustudy.backend.view.exception.CannotSeeSubmittersException;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -25,7 +25,7 @@ public enum SubmitterCheckingStrategy {
                 .filter(each -> each.step.equals(step))
                 .map(each -> each.strategy)
                 .findFirst()
-                .orElseThrow(SubmitNotAllowedStepException::new)
+                .orElseThrow(CannotSeeSubmittersException::new)
                 .apply(content);
     }
 }
