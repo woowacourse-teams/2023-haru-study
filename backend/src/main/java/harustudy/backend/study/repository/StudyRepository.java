@@ -16,5 +16,5 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     }
 
     @Query("select s.step from Study s where s.id = :id")
-    Optional<Step> findProgressPollingInfoById(@Param("id") Long id);
+    Optional<Step> findStepById(@Param("id") Long id);
 }
