@@ -15,6 +15,11 @@ public class PollingService {
 
     private final StudyRepository studyRepository;
 
+    public WaitingResponse pollWaiting(Long studyId) {
+        Study study = studyRepository.findByIdIfExists(studyId);
+        return WaitingResponse.of(study, study.getParticipants());
+    }
+
     public ProgressPollingResponse pollProgress(Long studyId) {
         Step step = studyRepository.findStepById(studyId)
                 .orElseThrow(StudyNotFoundException::new);

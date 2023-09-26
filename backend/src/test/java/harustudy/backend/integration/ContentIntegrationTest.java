@@ -40,8 +40,8 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         study = new Study("studyName", 2, 20);
         memberDto = createMember("member1");
-        participant = new Participant(study, memberDto.member(), "nickname");
-        content = new Content(participant, 1);
+        participant = Participant.instantiateParticipantWithContents(study, memberDto.member(), "nickname");
+        content = participant.getContents().get(0);
 
         entityManager.persist(study);
         entityManager.persist(participant);
@@ -138,7 +138,7 @@ public class ContentIntegrationTest extends IntegrationTest {
         content.changePlan(plan);
         content.changeRetrospect(retrospect);
 
-        Content anotherContent = new Content(participant, 2);
+        Content anotherContent = participant.getContents().get(1);
         Map<String, String> anotherPlan = Map.of("plan", "test");
         Map<String, String> anotherRetrospect = Map.of("retrospect", "test");
         anotherContent.changePlan(anotherPlan);
@@ -146,7 +146,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         entityManager.merge(content);
         entityManager.merge(participant);
-        entityManager.persist(anotherContent);
+        entityManager.merge(anotherContent);
         FLUSH_AND_CLEAR_CONTEXT();
 
         // when

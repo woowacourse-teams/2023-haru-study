@@ -27,4 +27,11 @@ public class PollingController {
         ProgressPollingResponse progressPollingResponse = pollingService.pollProgress(studyId);
         return ResponseEntity.ok(progressPollingResponse);
     }
+    private final PollingService pollingService;
+
+    @GetMapping("/api/waiting")
+    public ResponseEntity<WaitingResponse> pollWaiting(@Authenticated AuthMember authMember, @RequestParam Long studyId) {
+        WaitingResponse waitingResponse = pollingService.pollWaiting(studyId);
+        return ResponseEntity.ok(waitingResponse);
+    }
 }

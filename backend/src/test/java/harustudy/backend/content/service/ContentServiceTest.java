@@ -49,8 +49,8 @@ class ContentServiceTest {
     void setUp() {
         study = new Study("studyName", 1, 20);
         member = new Member("nickname", "email", "imageUrl", LoginType.GUEST);
-        participant = new Participant(study, member, "nickname");
-        content = new Content(participant, 1);
+        participant = Participant.instantiateParticipantWithContents(study, member, "nickname");
+        content = participant.getContents().get(0);
 
         entityManager.persist(study);
         entityManager.persist(member);
@@ -135,8 +135,8 @@ class ContentServiceTest {
         study.proceed();
         study.proceed();
 
-        entityManager.merge(study);
         entityManager.merge(content);
+        entityManager.merge(study);
         FLUSH_AND_CLEAR_CONTEXT();
 
         WriteRetrospectRequest request = new WriteRetrospectRequest(participant.getId(),
@@ -144,8 +144,7 @@ class ContentServiceTest {
 
         // when, then
         assertThatCode(
-                () -> contentService.writeRetrospect(authMember, study.getId(),
-                        request))
+                () -> contentService.writeRetrospect(authMember, study.getId(), request))
                 .doesNotThrowAnyException();
     }
 
