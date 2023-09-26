@@ -1,5 +1,7 @@
 package harustudy.backend.view.controller;
 
+import harustudy.backend.auth.Authenticated;
+import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.view.dto.ProgressPollingResponse;
 import harustudy.backend.view.service.PollingService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +21,9 @@ public class PollingController {
 
     @Operation(summary = "진행 페이지 폴링")
     @GetMapping( "/api/progress")
-    public ResponseEntity<ProgressPollingResponse> progressPolling(@RequestParam Long studyId) {
+    public ResponseEntity<ProgressPollingResponse> progressPolling(
+            @Authenticated AuthMember authMember, @RequestParam Long studyId
+    ) {
         ProgressPollingResponse progressPollingResponse = pollingService.progressPolling(studyId);
         return ResponseEntity.ok(progressPollingResponse);
     }
