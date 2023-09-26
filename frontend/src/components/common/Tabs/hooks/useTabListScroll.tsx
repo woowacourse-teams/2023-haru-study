@@ -6,8 +6,8 @@ const useTabListScroll = (tabList: RefObject<HTMLUListElement>) => {
   const [isTabListOverFlow, setIsTabListOverFlow] = useState(false);
   const [scrollButtonPosition, setScrollButtonPosition] = useState<'start' | 'end' | 'both' | null>(null);
 
-  const hasStartScrollButton = scrollButtonPosition === 'start' || scrollButtonPosition === 'both';
-  const hasEndScrollButton = scrollButtonPosition === 'end' || scrollButtonPosition === 'both';
+  const hasStartScrollButton = ['start', 'both'].includes(scrollButtonPosition!);
+  const hasEndScrollButton = ['end', 'both'].includes(scrollButtonPosition!);
 
   const handleMoveScroll = (position: 'start' | 'end') => {
     if (!tabList.current) return;
