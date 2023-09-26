@@ -63,7 +63,11 @@ public class Content extends BaseTimeEntity {
         return cycle.equals(study.getCurrentCycle());
     }
 
-    public boolean hasEmptyPlan() {
-        return plan.isEmpty();
+    public boolean isPlanWritten() {
+        return !plan.isEmpty();
+    }
+
+    public boolean isRetrospectWritten() {
+        return !retrospect.isEmpty();
     }
 }
