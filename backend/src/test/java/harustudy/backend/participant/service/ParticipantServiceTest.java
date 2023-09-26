@@ -1,5 +1,15 @@
 package harustudy.backend.participant.service;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+
+import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.member.domain.Member;
+import harustudy.backend.participant.dto.ParticipateStudyRequest;
+import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
+import harustudy.backend.participantcode.domain.ParticipantCode;
+import harustudy.backend.study.domain.Study;
+import harustudy.backend.study.exception.StudyAlreadyStartedException;
 import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.member.domain.Member;
@@ -49,8 +59,10 @@ class ParticipantServiceTest {
     void setUp() {
         study1 = new Study("studyName1", 3, 20);
         study2 = new Study("studyName2", 3, 20);
+        
         ParticipantCode participantCode1 = new ParticipantCode(study1, new CodeGenerationStrategy());
         ParticipantCode participantCode2 = new ParticipantCode(study2, new CodeGenerationStrategy());
+        
         member1 = Member.guest();
         member2 = Member.guest();
 
@@ -64,6 +76,20 @@ class ParticipantServiceTest {
         entityManager.flush();
         entityManager.clear();
     }
+
+    @Test
+    void 이미_시작된_스터디에는_참여가_불가하다() {
+        // given
+        AuthMember authMember1 = new AuthMember(member1.getId());
+        ParticipateStudyRequest request = new ParticipateStudyRequest(member1.getId(), "nick");
+        Study study = entityManager.merge(study1);
+        study.proceed();
+        entityManager.flush();
+
+        // when, then
+        assertThatThrownBy(
+                () -> participantService.participateStudy(authMember1, study1.getId(), request))
+                .isInstanceOf(StudyAlreadyStartedException.class);
 
     @Test
     void 스터디의_모든_참여자_정보를_조회할_수_있다() {
