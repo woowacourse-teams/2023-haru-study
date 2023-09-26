@@ -40,11 +40,7 @@ public class Participant extends BaseTimeEntity {
 
     // 정팩메 사용시 제거(테스트에서 사용중)
     public Participant(Study study, Member member, String nickname) {
-        this.study = study;
-        this.member = member;
-        this.nickname = nickname;
-        this.isHost = false;
-
+        this(study, member, nickname, false);
         validateNicknameLength(nickname);
     }
 

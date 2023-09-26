@@ -134,8 +134,7 @@ public class ParticipantService {
         }
     }
 
-    private void validateParticipantIsIncludedIn(Study study,
-                                                 Participant participant) {
+    private void validateParticipantIsIncludedIn(Study study, Participant participant) {
         if (participant.isNotIncludedIn(study)) {
             throw new ParticipantNotBelongToStudyException();
         }
