@@ -2,8 +2,7 @@ import { css, styled } from 'styled-components';
 
 import color from '@Styles/color';
 
-import LeftArrow from '@Assets/icons/LeftArrowIcon';
-import RightArrow from '@Assets/icons/RightArrowIcon';
+import ArrowIcon from '@Assets/icons/ArrowIcon';
 
 type Props = {
   position: 'left' | 'right';
@@ -14,11 +13,7 @@ const TabListScrollButton = ({ position, moveScroll }: Props) => {
   return (
     <ScrollButton position={position}>
       <div>
-        {position === 'left' ? (
-          <LeftArrow color={color.neutral[500]} onClick={moveScroll} />
-        ) : (
-          <RightArrow color={color.neutral[500]} onClick={moveScroll} />
-        )}
+        <ArrowIcon direction={position} color={color.neutral[500]} onClick={moveScroll} />
       </div>
     </ScrollButton>
   );
@@ -60,16 +55,13 @@ const ScrollButton = styled.div<ScrollButtonProps>`
   z-index: 5;
 
   & > div {
+    width: 24px;
     display: flex;
     align-items: center;
-    width: 20px;
     height: 105%;
   }
 
   svg {
-    width: 16px;
-    height: 16px;
-
     cursor: pointer;
   }
 
