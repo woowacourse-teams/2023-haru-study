@@ -24,21 +24,20 @@ public class PollingService {
     public SubmittersResponse findSubmitters(Long studyId) {
         Study study = studyRepository.findByIdIfExists(studyId);
         List<Participant> participants = participantRepository.findByStudy(study);
-        List<SubmitterResponse> submitterResponses = generateSubmitterResponses(study, participants);
-        return new SubmittersResponse(submitterResponses);
+        return generateSubmitterResponses(study, participants);
     }
 
-    private List<SubmitterResponse> generateSubmitterResponses(Study study, List<Participant> participants) {
+    private SubmittersResponse generateSubmitterResponses(Study study, List<Participant> participants) {
         List<SubmitterResponse> submitterResponses = new ArrayList<>();
 
         for (Participant participant : participants) {
             Content currentCycleContent = extractCurrentCycleContent(study, participant);
 
-            submitterResponses.add(new SubmitterResponse(
+            submitterResponses.add(SubmitterResponse.of(
                     participant.getNickname(),
                     SubmitterCheckingStrategy.isSubmitted(study.getStep(), currentCycleContent)));
         }
-        return submitterResponses;
+        return SubmittersResponse.from(submitterResponses);
     }
 
     private Content extractCurrentCycleContent(Study study, Participant participant) {
