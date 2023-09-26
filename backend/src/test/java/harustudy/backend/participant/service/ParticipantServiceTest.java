@@ -66,7 +66,7 @@ class ParticipantServiceTest {
     }
 
     @Test
-    void 스터디의_모든_참여를_조회할_수_있다() {
+    void 스터디의_모든_참여자_정보를_조회할_수_있다() {
         // given
         Participant participant = new Participant(study2, member1, "nickname1");
         Participant anotherParticipant = new Participant(study2, member2, "nickname2");
@@ -90,7 +90,7 @@ class ParticipantServiceTest {
     }
 
     @Test
-    void 참여하지_않은_스터디에_대해서는_모든_참여를_조회할_수_없다() {
+    void 참여하지_않은_스터디에_대해서는_모든_참여자_정보를_조회할_수_없다() {
         // given
         AuthMember authMember = new AuthMember(member1.getId());
 
@@ -101,7 +101,7 @@ class ParticipantServiceTest {
     }
 
     @Test
-    void 특정_멤버의_참여를_조회할_수_있다() {
+    void 특정_멤버의_참여자_정보자_정보를_조회할_수_있다() {
         // given
         Participant participant = new Participant(study2, member1, "nickname1");
         Participant anotherParticipant = new Participant(study2, member2, "nickname2");
@@ -124,7 +124,7 @@ class ParticipantServiceTest {
     }
 
     @Test
-    void 자신의_소유가_아닌_참여는_조회할_수_없다() {
+    void 자신의_소유가_아닌_참여자_정보는_조회할_수_없다() {
         // given
         Participant participant = new Participant(study2, member1, "nickname1");
         AuthMember authMember = new AuthMember(member2.getId());
