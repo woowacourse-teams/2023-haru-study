@@ -1,5 +1,6 @@
 package harustudy.backend.view.dto;
 
+import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
 import harustudy.backend.participant.dto.ParticipantResponse;
 import harustudy.backend.study.domain.Study;
@@ -10,8 +11,8 @@ import static harustudy.backend.study.dto.StudyResponse.IN_PROGRESS;
 
 public record WaitingResponse(String studyStep, List<ParticipantResponse> participants) {
 
-    public static WaitingResponse of(Study study, List<ParticipantResponse> participants) {
-        return new WaitingResponse(getRoomStep(study), participants);
+    public static WaitingResponse of(Study study, List<Participant> participants) {
+        return new WaitingResponse(getRoomStep(study), mapToParticipantResponses(participants));
     }
 
     private static String getRoomStep(Study study) {
@@ -22,5 +23,11 @@ public record WaitingResponse(String studyStep, List<ParticipantResponse> partic
             roomStep = study.getStep().name().toLowerCase();
         }
         return roomStep;
+    }
+
+    private static List<ParticipantResponse> mapToParticipantResponses(List<Participant> participants) {
+        return participants.stream()
+                .map(ParticipantResponse::from)
+                .toList();
     }
 }
