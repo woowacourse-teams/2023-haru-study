@@ -27,5 +27,4 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
         return findById(id)
                 .orElseThrow(ParticipantNotFoundException::new);
     }
-
 }
