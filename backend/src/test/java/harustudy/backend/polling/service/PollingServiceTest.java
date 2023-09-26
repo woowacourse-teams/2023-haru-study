@@ -1,4 +1,4 @@
-package harustudy.backend.view.service;
+package harustudy.backend.polling.service;
 
 import harustudy.backend.content.domain.Content;
 import harustudy.backend.member.domain.LoginType;
@@ -6,10 +6,10 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.dto.ParticipantResponse;
 import harustudy.backend.study.domain.Study;
-import harustudy.backend.view.dto.SubmitterResponse;
-import harustudy.backend.view.dto.SubmittersResponse;
-import harustudy.backend.view.dto.WaitingResponse;
-import harustudy.backend.view.exception.CannotSeeSubmittersException;
+import harustudy.backend.polling.dto.SubmitterResponse;
+import harustudy.backend.polling.dto.SubmittersResponse;
+import harustudy.backend.polling.dto.WaitingResponse;
+import harustudy.backend.polling.exception.CannotSeeSubmittersException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -39,13 +39,19 @@ class PollingServiceTest {
     @Autowired
     private EntityManager entityManager;
 
+    private Member member1;
+    private Member member2;
+    private Member member3;
+    private Participant participant1;
+    private Participant participant2;
+    private Participant participant3;
     private Study study;
     private Content content1;
     private Content content2;
 
     @BeforeEach
     void setUp() {
-        study = new Study("studyName", 3, 20);
+        study = new Study("studyName", 1, 20);
 
         member1 = new Member("member1", "email", "url", LoginType.GUEST);
         member2 = new Member("member2", "email", "url", LoginType.GUEST);
@@ -55,8 +61,12 @@ class PollingServiceTest {
         participant2 = Participant.instantiateParticipantWithContents(study, member2, "parti2");
         participant3 = Participant.instantiateParticipantWithContents(study, member3, "parti3");
 
-        content1 = participant1.getContents.get(0);
-        content2 = participant2.getContents.get(0);
+        content1 = participant1.getContents().get(0);
+        content2 = participant2.getContents().get(0);
+
+        study.addParticipant(participant1);
+        study.addParticipant(participant2);
+        study.addParticipant(participant3);
 
         entityManager.persist(study);
         entityManager.persist(member1);
@@ -65,9 +75,6 @@ class PollingServiceTest {
         entityManager.persist(participant1);
         entityManager.persist(participant2);
         entityManager.persist(participant3);
-
-        entityManager.flush();
-        entityManager.clear();
     }
 
     @Test
@@ -82,9 +89,12 @@ class PollingServiceTest {
 
     @Test
     void 계획_단계에서는_제출_인원을_확인할_수_있다() {
+        // given
         study.proceed();
         content1.changePlan(Map.of("content", "written"));
 
+        entityManager.merge(content1);
+        entityManager.merge(study);
         entityManager.flush();
         entityManager.clear();
 
@@ -93,8 +103,9 @@ class PollingServiceTest {
 
         // then
         SubmittersResponse expected = new SubmittersResponse(List.of(
-                new SubmitterResponse("nickname1", true),
-                new SubmitterResponse("nickname2", false)
+                new SubmitterResponse("parti1", true),
+                new SubmitterResponse("parti2", false),
+                new SubmitterResponse("parti3", false)
         ));
 
         assertThat(submitters).usingRecursiveComparison()
@@ -131,8 +142,9 @@ class PollingServiceTest {
 
         // then
         SubmittersResponse expected = new SubmittersResponse(List.of(
-                new SubmitterResponse("nickname1", true),
-                new SubmitterResponse("nickname2", true)
+                new SubmitterResponse("parti1", true),
+                new SubmitterResponse("parti2", true),
+                new SubmitterResponse("parti3", false)
         ));
 
         assertThat(submitters).usingRecursiveComparison()
@@ -158,6 +170,9 @@ class PollingServiceTest {
     @Test
     void 스터디에_참여한_참여자들을_조회한다() {
         // given, when
+        entityManager.flush();
+        entityManager.clear();
+
         WaitingResponse response = pollingService.pollWaiting(study.getId());
 
         // then

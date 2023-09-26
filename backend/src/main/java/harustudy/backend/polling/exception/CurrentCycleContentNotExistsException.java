@@ -1,4 +1,4 @@
-package harustudy.backend.view.exception;
+package harustudy.backend.polling.exception;
 
 import harustudy.backend.common.exception.HaruStudyException;
 

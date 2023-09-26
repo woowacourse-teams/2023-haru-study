@@ -19,7 +19,7 @@ import harustudy.backend.study.exception.StudyNameLengthException;
 import harustudy.backend.study.exception.TimePerCycleException;
 import harustudy.backend.study.exception.TotalCycleException;
 import harustudy.backend.study.exception.StudyNotFoundException;
-import harustudy.backend.view.exception.CannotSeeSubmittersException;
+import harustudy.backend.polling.exception.CannotSeeSubmittersException;
 
 import java.util.LinkedHashMap;
 import java.util.List;

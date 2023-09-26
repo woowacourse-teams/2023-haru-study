@@ -1,14 +1,23 @@
-package harustudy.backend.view.service;
+package harustudy.backend.polling.service;
 
+import harustudy.backend.content.domain.Content;
+import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
+import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.exception.StudyNotFoundException;
 import harustudy.backend.study.repository.StudyRepository;
-import harustudy.backend.view.dto.ProgressResponse;
-import harustudy.backend.view.dto.WaitingResponse;
+import harustudy.backend.polling.dto.ProgressResponse;
+import harustudy.backend.polling.dto.SubmitterResponse;
+import harustudy.backend.polling.dto.SubmittersResponse;
+import harustudy.backend.polling.dto.WaitingResponse;
+import harustudy.backend.polling.exception.CurrentCycleContentNotExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -16,19 +25,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class PollingService {
 
     private final StudyRepository studyRepository;
+    private final ParticipantRepository participantRepository;
 
     public WaitingResponse pollWaiting(Long studyId) {
         Study study = studyRepository.findByIdIfExists(studyId);
         return WaitingResponse.of(study, study.getParticipants());
     }
-
     public ProgressResponse pollProgress(Long studyId) {
         Step step = studyRepository.findStepById(studyId)
                 .orElseThrow(StudyNotFoundException::new);
         return ProgressResponse.from(step);
     }
-    private final StudyRepository studyRepository;
-    private final ParticipantRepository participantRepository;
 
     public SubmittersResponse findSubmitters(Long studyId) {
         Study study = studyRepository.findByIdIfExists(studyId);

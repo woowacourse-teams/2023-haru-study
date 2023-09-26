@@ -3,7 +3,7 @@ package harustudy.backend.integration;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.dto.ParticipantResponse;
 import harustudy.backend.study.domain.Study;
-import harustudy.backend.view.dto.WaitingResponse;
+import harustudy.backend.polling.dto.WaitingResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

@@ -1,4 +1,4 @@
-package harustudy.backend.view.dto;
+package harustudy.backend.polling.dto;
 
 import harustudy.backend.participant.domain.Step;
 

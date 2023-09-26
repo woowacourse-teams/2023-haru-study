@@ -1,8 +1,8 @@
-package harustudy.backend.view.service;
+package harustudy.backend.polling.service;
 
 import harustudy.backend.content.domain.Content;
 import harustudy.backend.participant.domain.Step;
-import harustudy.backend.view.exception.CannotSeeSubmittersException;
+import harustudy.backend.polling.exception.CannotSeeSubmittersException;
 
 import java.util.Arrays;
 import java.util.function.Function;
