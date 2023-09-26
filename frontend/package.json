@@ -69,7 +69,5 @@
   "msw": {
     "workerDirectory": "public"
   },
-  "sideEffects": [
-    "./src/fonts/font.css"
-  ]
+  "sideEffects": false
 }
