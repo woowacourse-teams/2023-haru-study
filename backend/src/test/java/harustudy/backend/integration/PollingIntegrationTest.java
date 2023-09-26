@@ -62,14 +62,15 @@ class PollingIntegrationTest extends IntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
+        List<ParticipantResponse> expected = Stream.of(participant1, participant2, participant3)
+                .map(ParticipantResponse::from)
+                .toList();
+
         // then
         String jsonResponse = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         System.out.println("jsonResponse = " + jsonResponse);
         WaitingResponse waitingResponse = objectMapper.readValue(jsonResponse, WaitingResponse.class);
 
-        List<ParticipantResponse> expected = Stream.of(participant1, participant2, participant3)
-                .map(ParticipantResponse::from)
-                .toList();
 
         assertSoftly(softly -> {
             softly.assertThat(waitingResponse.studyStep()).isEqualTo(study.getStep().name().toLowerCase());
