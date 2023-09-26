@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
 import harustudy.backend.study.domain.Study;
-import harustudy.backend.view.dto.ProgressPollingResponse;
+import harustudy.backend.view.dto.ProgressResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,8 +37,8 @@ public class ViewIntegrationTest extends IntegrationTest {
         member1 = createMember("member1");
         member2 = createMember("member2");
 
-        Participant participant1 = new Participant(study, member1.member(), "nickname1");
-        Participant participant2 = new Participant(study, member2.member(), "nickname2");
+        Participant participant1 = Participant.instantiateParticipantWithContents(study, member1.member(), "nickname1");
+        Participant participant2 = Participant.instantiateParticipantWithContents(study, member2.member(), "nickname2");
 
         entityManager.persist(study);
         entityManager.persist(participant1);
@@ -63,8 +63,8 @@ public class ViewIntegrationTest extends IntegrationTest {
 
         //then
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        ProgressPollingResponse response = objectMapper.readValue(jsonResponse,
-                ProgressPollingResponse.class);
+        ProgressResponse response = objectMapper.readValue(jsonResponse,
+                ProgressResponse.class);
 
         assertThat(response.progressStep()).isEqualTo(expected);
     }

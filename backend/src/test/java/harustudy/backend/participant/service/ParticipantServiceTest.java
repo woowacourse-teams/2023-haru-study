@@ -1,15 +1,5 @@
 package harustudy.backend.participant.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
-
-import harustudy.backend.auth.dto.AuthMember;
-import harustudy.backend.member.domain.Member;
-import harustudy.backend.participant.dto.ParticipateStudyRequest;
-import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
-import harustudy.backend.participantcode.domain.ParticipantCode;
-import harustudy.backend.study.domain.Study;
-import harustudy.backend.study.exception.StudyAlreadyStartedException;
 import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.member.domain.Member;
@@ -21,8 +11,10 @@ import harustudy.backend.participant.exception.ParticipantNotBelongToStudyExcept
 import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.study.domain.Study;
+import harustudy.backend.study.exception.StudyAlreadyStartedException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
@@ -34,7 +26,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 
@@ -59,10 +51,10 @@ class ParticipantServiceTest {
     void setUp() {
         study1 = new Study("studyName1", 3, 20);
         study2 = new Study("studyName2", 3, 20);
-        
+
         ParticipantCode participantCode1 = new ParticipantCode(study1, new CodeGenerationStrategy());
         ParticipantCode participantCode2 = new ParticipantCode(study2, new CodeGenerationStrategy());
-        
+
         member1 = Member.guest();
         member2 = Member.guest();
 
@@ -90,6 +82,7 @@ class ParticipantServiceTest {
         assertThatThrownBy(
                 () -> participantService.participateStudy(authMember1, study1.getId(), request))
                 .isInstanceOf(StudyAlreadyStartedException.class);
+    }
 
     @Test
     void 스터디의_모든_참여자_정보를_조회할_수_있다() {
@@ -122,8 +115,8 @@ class ParticipantServiceTest {
         AuthMember authMember = new AuthMember(member1.getId());
 
         // when, then
-        assertThatThrownBy(() ->
-                participantService.findParticipantsWithFilter(authMember, study2.getId(), null))
+        AssertionsForClassTypes.assertThatThrownBy(() ->
+                        participantService.findParticipantsWithFilter(authMember, study2.getId(), null))
                 .isInstanceOf(AuthorizationException.class);
     }
 

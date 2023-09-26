@@ -112,7 +112,7 @@ public class ParticipantService {
         Member member = memberRepository.findByIdIfExists(request.memberId());
         validateIsSameMemberId(authMember, request.memberId());
         Study study = studyRepository.findByIdIfExists(studyId);
-        validateIsWaiting(study
+        validateIsWaiting(study);
         Participant participant = Participant.instantiateParticipantWithContents(study, member, request.nickname());
         Participant saved = participantRepository.save(participant);
         return saved.getId();
