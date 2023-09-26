@@ -18,7 +18,7 @@ public class PollingController {
     private final PollingService pollingService;
 
     @Operation(summary = "진행 페이지 폴링")
-    @GetMapping(path = "/api/progress")
+    @GetMapping( "/api/progress")
     public ResponseEntity<ProgressPollingResponse> progressPolling(@RequestParam Long studyId) {
         ProgressPollingResponse progressPollingResponse = pollingService.progressPolling(studyId);
         return ResponseEntity.ok(progressPollingResponse);
