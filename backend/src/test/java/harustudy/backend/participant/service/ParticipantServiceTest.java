@@ -1,6 +1,6 @@
 package harustudy.backend.participant.service;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 
 import harustudy.backend.auth.dto.AuthMember;
@@ -239,7 +239,8 @@ public class ParticipantServiceTest {
         entityManager.flush();
 
         // when, then
-        assertThrows(StudyAlreadyStartedException.class,
-                () -> participantService.participateStudy(authMember1, study1.getId(), request));
+        assertThatThrownBy(
+                () -> participantService.participateStudy(authMember1, study1.getId(), request))
+                .isInstanceOf(StudyAlreadyStartedException.class);
     }
 }
