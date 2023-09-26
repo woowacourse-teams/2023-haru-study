@@ -1,8 +1,21 @@
 package harustudy.backend.participant.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 
+import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.member.domain.Member;
+import harustudy.backend.participant.dto.ParticipateStudyRequest;
+import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
+import harustudy.backend.participantcode.domain.ParticipantCode;
+import harustudy.backend.study.domain.Study;
+import harustudy.backend.study.exception.StudyAlreadyStartedException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -181,4 +194,52 @@ public class ParticipantServiceTest {
 //            assertThat(participant.getStep()).isEqualTo(Step.PLANNING);
 //        });
 //    }
+
+    @Autowired
+    private ParticipantService participantService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    private Study study1;
+    private Study study2;
+    private Member member1;
+    private Member member2;
+
+    @BeforeEach
+    void setUp() {
+        study1 = new Study("studyName1", 3, 20);
+        study2 = new Study("studyName2", 3, 20);
+        ParticipantCode participantCode1 = new ParticipantCode(study1,
+                new CodeGenerationStrategy());
+        ParticipantCode participantCode2 = new ParticipantCode(study2,
+                new CodeGenerationStrategy());
+        member1 = Member.guest();
+        member2 = Member.guest();
+
+        entityManager.persist(study1);
+        entityManager.persist(study2);
+        entityManager.persist(participantCode1);
+        entityManager.persist(participantCode2);
+        entityManager.persist(member1);
+        entityManager.persist(member2);
+
+        entityManager.flush();
+        entityManager.clear();
+    }
+
+
+    @Test
+    void 이미_시작된_스터디에는_참여가_불가하다() {
+        // given
+        AuthMember authMember1 = new AuthMember(member1.getId());
+        ParticipateStudyRequest request = new ParticipateStudyRequest(member1.getId(), "nick");
+        Study study = entityManager.merge(study1);
+        study.proceed();
+        entityManager.flush();
+
+        // when, then
+        assertThrows(StudyAlreadyStartedException.class,
+                () -> participantService.participateStudy(authMember1, study1.getId(), request));
+    }
 }

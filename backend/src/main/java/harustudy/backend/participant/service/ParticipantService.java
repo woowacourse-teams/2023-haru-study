@@ -5,6 +5,7 @@ import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.participant.domain.Step;
 import harustudy.backend.participant.dto.ParticipateStudyRequest;
 import harustudy.backend.participant.dto.ParticipantResponse;
 import harustudy.backend.participant.dto.ParticipantsResponse;
@@ -12,6 +13,7 @@ import harustudy.backend.participant.exception.ParticipantNotFoundException;
 import harustudy.backend.participant.exception.ParticipantNotBelongToStudyException;
 import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.study.domain.Study;
+import harustudy.backend.study.exception.StudyAlreadyStartedException;
 import harustudy.backend.study.repository.StudyRepository;
 import jakarta.annotation.Nullable;
 import java.util.List;
@@ -109,6 +111,7 @@ public class ParticipantService {
         Member member = memberRepository.findByIdIfExists(request.memberId());
         validateIsSameMemberId(authMember, request.memberId());
         Study study = studyRepository.findByIdIfExists(studyId);
+        validateIsWaiting(study);
         Participant participant = new Participant(study, member, request.nickname());
         participant.generateContents(study.getTotalCycle());
         Participant saved = participantRepository.save(participant);
@@ -118,6 +121,12 @@ public class ParticipantService {
     private void validateIsSameMemberId(AuthMember authMember, Long memberId) {
         if (!(authMember.id().equals(memberId))) {
             throw new AuthorizationException();
+        }
+    }
+
+    private void validateIsWaiting(Study study) {
+        if (!study.isStep(Step.WAITING)) {
+            throw new StudyAlreadyStartedException();
         }
     }
 
