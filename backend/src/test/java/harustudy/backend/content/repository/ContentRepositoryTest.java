@@ -7,7 +7,7 @@ import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.study.domain.Study;
-import java.util.List;
+
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -34,11 +34,14 @@ class ContentRepositoryTest {
     void setUp() {
         Study study = new Study("studyName", 3, 20);
         Member member = new Member("member", "email", "imageUrl", LoginType.GUEST);
-        participant = new Participant(study, member, "nickname");
+        participant = Participant.instantiateParticipantWithContents(study, member, "nickname");
 
         testEntityManager.persist(study);
         testEntityManager.persist(member);
         testEntityManager.persist(participant);
+
+        testEntityManager.flush();
+        testEntityManager.clear();
     }
 
     @Test
@@ -54,12 +57,12 @@ class ContentRepositoryTest {
         testEntityManager.clear();
 
         // when
-        List<Content> found = contentRepository.findByParticipant(
-                participant);
+        Content found = contentRepository.findById(content.getId())
+                .orElseThrow();
 
         // then
-        assertThat(found.get(0).getPlan()).containsAllEntriesOf(plan);
-        assertThat(found.get(0).getRetrospect()).isEmpty();
+        assertThat(found.getPlan()).containsAllEntriesOf(plan);
+        assertThat(found.getRetrospect()).isEmpty();
     }
 
     @Test
@@ -78,11 +81,11 @@ class ContentRepositoryTest {
         testEntityManager.clear();
 
         // when
-        List<Content> found = contentRepository.findByParticipant(
-                participant);
+        Content found = contentRepository.findById(content.getId())
+                .orElseThrow();
 
         // then
-        assertThat(found.get(0).getPlan()).containsAllEntriesOf(plan);
-        assertThat(found.get(0).getRetrospect()).containsAllEntriesOf(retrospect);
+        assertThat(found.getPlan()).containsAllEntriesOf(plan);
+        assertThat(found.getRetrospect()).containsAllEntriesOf(retrospect);
     }
 }
