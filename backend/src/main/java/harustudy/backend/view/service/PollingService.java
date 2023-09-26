@@ -1,6 +1,6 @@
 package harustudy.backend.view.service;
 
-import harustudy.backend.study.domain.Study;
+import harustudy.backend.study.exception.StudyNotFoundException;
 import harustudy.backend.study.repository.StudyRepository;
 import harustudy.backend.view.dto.ProgressPollingResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +15,8 @@ public class PollingService {
     private final StudyRepository studyRepository;
 
     public ProgressPollingResponse progressPolling(Long studyId) {
-        // Dto 프로잭션 적용하기
-        Study study = studyRepository.findByIdIfExists(studyId);
-        return ProgressPollingResponse.from(study);
+        String step = studyRepository.findProgressPollingInfoById(studyId).orElseThrow(
+                StudyNotFoundException::new);
+        return ProgressPollingResponse.from(step);
     }
 }
