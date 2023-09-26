@@ -48,9 +48,9 @@ class PollingServiceTest {
         member2 = new Member("member2", "email", "url", LoginType.GUEST);
         member3 = new Member("member3", "email", "url", LoginType.GUEST);
 
-        participant1 = new Participant(study, member1, "parti1");
-        participant2 = new Participant(study, member2, "parti2");
-        participant3 = new Participant(study, member3, "parti3");
+        participant1 = Participant.participateFrom(study, member1, "parti1");
+        participant2 = Participant.participateFrom(study, member2, "parti2");
+        participant3 = Participant.participateFrom(study, member3, "parti3");
 
         entityManager.persist(study);
         entityManager.persist(member1);

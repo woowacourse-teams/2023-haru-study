@@ -30,7 +30,7 @@ class ParticipantIntegrationTest extends IntegrationTest {
         super.setUp();
         study = new Study("studyName", 3, 20);
         memberDto = createMember("member1");
-        participant = new Participant(study, memberDto.member(), "nickname");
+        participant = Participant.participateFrom(study, memberDto.member(), "nickname");
 
         entityManager.persist(study);
         entityManager.persist(participant);

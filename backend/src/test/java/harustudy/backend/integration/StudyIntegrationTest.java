@@ -48,7 +48,7 @@ class StudyIntegrationTest extends IntegrationTest {
         study1 = new Study("study1", 3, 20);
         study2 = new Study("study2", 4, 30);
         memberDto1 = createMember("member1");
-        Participant participant1 = new Participant(study1, memberDto1.member(), "nickname");
+        Participant participant1 = Participant.participateFrom(study1, memberDto1.member(), "nickname");
         entityManager.persist(study1);
         entityManager.persist(study2);
         entityManager.persist(participant1);

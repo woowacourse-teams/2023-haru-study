@@ -39,9 +39,9 @@ class PollingIntegrationTest extends IntegrationTest {
         memberDto1 = createMember("member1");
         memberDto2 = createMember("member2");
         memberDto3 = createMember("member3");
-        participant1 = new Participant(study, memberDto1.member(), "parti1");
-        participant2 = new Participant(study, memberDto2.member(), "parti2");
-        participant3 = new Participant(study, memberDto3.member(), "parti3");
+        participant1 = Participant.participateFrom(study, memberDto1.member(), "parti1");
+        participant2 = Participant.participateFrom(study, memberDto2.member(), "parti2");
+        participant3 = Participant.participateFrom(study, memberDto3.member(), "parti3");
 
         entityManager.persist(study);
         entityManager.persist(participant1);

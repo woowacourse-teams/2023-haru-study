@@ -46,12 +46,6 @@ public class Participant extends BaseTimeEntity {
 
     private Boolean isHost;
 
-    // 정팩메 사용시 제거(테스트에서 사용중)
-    public Participant(Study study, Member member, String nickname) {
-        this(study, member, nickname, false);
-        validateNicknameLength(nickname);
-    }
-
     private Participant(Study study, Member member, String nickname, Boolean isHost) {
         this.study = study;
         this.member = member;
@@ -73,7 +67,7 @@ public class Participant extends BaseTimeEntity {
         }
     }
 
-    public void generateContents(int totalCycle) {
+    private void generateContents(int totalCycle) {
         for (int cycle = 1; cycle <= totalCycle; cycle++) {
             Content content = new Content(this, cycle);
             contents.add(content);
