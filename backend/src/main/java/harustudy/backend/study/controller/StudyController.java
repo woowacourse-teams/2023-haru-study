@@ -3,9 +3,8 @@ package harustudy.backend.study.controller;
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.study.dto.CreateStudyRequest;
-import harustudy.backend.study.dto.CreateStudyResponse;
-import harustudy.backend.study.dto.StudyResponse;
 import harustudy.backend.study.dto.StudiesResponse;
+import harustudy.backend.study.dto.StudyResponse;
 import harustudy.backend.study.service.StudyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,7 +12,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "스터디 관련 기능")
 @RequiredArgsConstructor
@@ -46,16 +50,14 @@ public class StudyController {
     @Operation(summary = "스터디 생성")
     @ApiResponse(responseCode = "201")
     @PostMapping("/api/studies")
-    public ResponseEntity<CreateStudyResponse> createStudy(
+    public ResponseEntity<Void> createStudy(
             @Authenticated AuthMember authMember,
             @RequestBody CreateStudyRequest request
     ) {
-        CreateStudyResponse response = studyService.createStudy(request);
-        return ResponseEntity.created(URI.create("/api/studies/" + response.studyId()))
-                .body(response);
+        Long studyId = studyService.createStudy(request);
+        return ResponseEntity.created(URI.create("/api/studies/" + studyId)).build();
     }
 
-    // TODO: SSE 이벤트하는 로직으로 변경시 SSE 컨트롤러로 이동할지 고려
     @Operation(summary = "다음 스터디 단계로 이동")
     @ApiResponse(responseCode = "204")
     @PostMapping("/api/studies/{studyId}/next-step")
