@@ -18,7 +18,7 @@ public class PollingService {
     private final StudyRepository studyRepository;
     private final ParticipantRepository participantRepository;
 
-    public WaitingResponse waiting(Long studyId) {
+    public WaitingResponse pollWaiting(Long studyId) {
         Study study = studyRepository.findByIdIfExists(studyId);
         List<Participant> participants = participantRepository.findByStudy(study);
         List<ParticipantResponse> participantResponses = mapToParticipantResponses(participants);

@@ -67,7 +67,7 @@ class PollingServiceTest {
     @Test
     void 스터디에_참여한_참여자들을_폴링으로_조회한다() {
         // given, when
-        WaitingResponse response = pollingService.waiting(study.getId());
+        WaitingResponse response = pollingService.pollWaiting(study.getId());
 
         // then
         List<ParticipantResponse> expected = Stream.of(participant1, participant2, participant3)
