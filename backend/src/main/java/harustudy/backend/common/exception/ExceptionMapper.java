@@ -19,6 +19,8 @@ import harustudy.backend.study.exception.StudyNameLengthException;
 import harustudy.backend.study.exception.TimePerCycleException;
 import harustudy.backend.study.exception.TotalCycleException;
 import harustudy.backend.study.exception.StudyNotFoundException;
+import harustudy.backend.polling.exception.CannotSeeSubmittersException;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +74,8 @@ public class ExceptionMapper {
                 ExceptionSituation.of("총 사이클 횟수가 적절하지 않습니다.", BAD_REQUEST, 1306));
         mapper.put(StudyAlreadyStartedException.class,
                 ExceptionSituation.of("이미 시작된 스터디입니다.", BAD_REQUEST, 1307));
+        mapper.put(CannotSeeSubmittersException.class,
+                ExceptionSituation.of("해당 단계에서는 제출 여부를 조회할 수 없습니다.", BAD_REQUEST, 1308));
     }
 
     private static void setUpAuthenticationException() {

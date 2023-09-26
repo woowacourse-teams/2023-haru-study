@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
 import harustudy.backend.study.domain.Study;
-import harustudy.backend.view.dto.ProgressResponse;
+import harustudy.backend.polling.dto.ProgressResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
