@@ -125,7 +125,7 @@ const Button = ({
       variant={variant}
       isLoading={isLoading}
       size={size}
-      disabled={disabled}
+      disabled={disabled || isLoading}
       $block={$block}
       $style={$style}
       {...props}
