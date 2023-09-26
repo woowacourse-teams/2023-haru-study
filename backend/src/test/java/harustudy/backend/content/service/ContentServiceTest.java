@@ -49,7 +49,7 @@ class ContentServiceTest {
     void setUp() {
         study = new Study("studyName", 1, 20);
         member = new Member("nickname", "email", "imageUrl", LoginType.GUEST);
-        participant = Participant.participateFrom(study, member, "nickname");
+        participant = Participant.instantiateParticipantWithContents(study, member, "nickname");
         content = participant.getContents().get(0);
 
         entityManager.persist(study);

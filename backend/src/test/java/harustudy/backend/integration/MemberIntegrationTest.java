@@ -32,9 +32,9 @@ class MemberIntegrationTest extends IntegrationTest {
         memberDto1 = createMember("member1");
         memberDto2 = createMember("member2");
 
-        Participant participant1 = Participant.participateFrom(study, memberDto1.member(),
+        Participant participant1 = Participant.instantiateParticipantWithContents(study, memberDto1.member(),
                 "name1");
-        Participant participant2 = Participant.participateFrom(study, memberDto2.member(),
+        Participant participant2 = Participant.instantiateParticipantWithContents(study, memberDto2.member(),
                 "name2");
 
         entityManager.persist(study);

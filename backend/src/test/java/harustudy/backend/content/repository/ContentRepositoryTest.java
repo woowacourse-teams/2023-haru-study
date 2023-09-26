@@ -6,9 +6,8 @@ import harustudy.backend.content.domain.Content;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.domain.Participant;
-import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.study.domain.Study;
-import java.util.List;
+
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -35,7 +34,7 @@ class ContentRepositoryTest {
     void setUp() {
         Study study = new Study("studyName", 3, 20);
         Member member = new Member("member", "email", "imageUrl", LoginType.GUEST);
-        participant = Participant.participateFrom(study, member, "nickname");
+        participant = Participant.instantiateParticipantWithContents(study, member, "nickname");
 
         testEntityManager.persist(study);
         testEntityManager.persist(member);
