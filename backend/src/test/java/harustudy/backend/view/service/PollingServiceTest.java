@@ -126,4 +126,20 @@ class PollingServiceTest {
         assertThat(submitters).usingRecursiveComparison()
                 .isEqualTo(expected);
     }
+
+    @Test
+    void 스터디가_종료한_뒤에는_제출_인원을_확인하려_하면_예외가_발생한다() {
+        // given
+        study.proceed();
+        study.proceed();
+        study.proceed();
+        study.proceed();
+
+        entityManager.flush();
+        entityManager.clear();
+
+        // when, then
+        assertThatThrownBy(() -> pollingService.findSubmitters(study.getId()))
+                .isInstanceOf(SubmitNotAllowedStepException.class);
+    }
 }
