@@ -1,5 +1,6 @@
 package harustudy.backend.study.repository;
 
+import harustudy.backend.participant.domain.Step;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.exception.StudyNotFoundException;
 import java.util.Optional;
@@ -15,5 +16,5 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     }
 
     @Query("select s.step from Study s where s.id = :id")
-    Optional<String> findProgressPollingInfoById(@Param("id") Long id);
+    Optional<Step> findProgressPollingInfoById(@Param("id") Long id);
 }

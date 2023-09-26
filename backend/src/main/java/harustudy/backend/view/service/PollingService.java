@@ -1,5 +1,6 @@
 package harustudy.backend.view.service;
 
+import harustudy.backend.participant.domain.Step;
 import harustudy.backend.study.exception.StudyNotFoundException;
 import harustudy.backend.study.repository.StudyRepository;
 import harustudy.backend.view.dto.ProgressPollingResponse;
@@ -15,7 +16,7 @@ public class PollingService {
     private final StudyRepository studyRepository;
 
     public ProgressPollingResponse pollProgress(Long studyId) {
-        String step = studyRepository.findProgressPollingInfoById(studyId).orElseThrow(
+        Step step = studyRepository.findProgressPollingInfoById(studyId).orElseThrow(
                 StudyNotFoundException::new);
         return ProgressPollingResponse.from(step);
     }
