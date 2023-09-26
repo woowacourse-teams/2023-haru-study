@@ -5,20 +5,24 @@ import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.participant.domain.Step;
 import harustudy.backend.participant.dto.ParticipateStudyRequest;
 import harustudy.backend.participant.dto.ParticipantResponse;
 import harustudy.backend.participant.dto.ParticipantsResponse;
-import harustudy.backend.participant.exception.ParticipantNotFoundException;
+import harustudy.backend.participant.dto.ParticipateStudyRequest;
 import harustudy.backend.participant.exception.ParticipantNotBelongToStudyException;
+import harustudy.backend.participant.exception.ParticipantNotFoundException;
 import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.study.domain.Study;
+import harustudy.backend.study.exception.StudyAlreadyStartedException;
 import harustudy.backend.study.repository.StudyRepository;
 import jakarta.annotation.Nullable;
-import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Transactional
@@ -104,13 +108,12 @@ public class ParticipantService {
         return ParticipantsResponse.from(List.of(response));
     }
 
-    public Long participateStudy(AuthMember authMember, Long studyId,
-            ParticipateStudyRequest request) {
+    public Long participateStudy(AuthMember authMember, Long studyId, ParticipateStudyRequest request) {
         Member member = memberRepository.findByIdIfExists(request.memberId());
         validateIsSameMemberId(authMember, request.memberId());
         Study study = studyRepository.findByIdIfExists(studyId);
-        Participant participant = new Participant(study, member, request.nickname());
-        participant.generateContents(study.getTotalCycle());
+        validateIsWaiting(study);
+        Participant participant = Participant.instantiateParticipantWithContents(study, member, request.nickname());
         Participant saved = participantRepository.save(participant);
         return saved.getId();
     }
@@ -118,6 +121,12 @@ public class ParticipantService {
     private void validateIsSameMemberId(AuthMember authMember, Long memberId) {
         if (!(authMember.id().equals(memberId))) {
             throw new AuthorizationException();
+        }
+    }
+
+    private void validateIsWaiting(Study study) {
+        if (!study.isStep(Step.WAITING)) {
+            throw new StudyAlreadyStartedException();
         }
     }
 
@@ -135,8 +144,7 @@ public class ParticipantService {
         }
     }
 
-    private void validateParticipantIsIncludedIn(Study study,
-            Participant participant) {
+    private void validateParticipantIsIncludedIn(Study study, Participant participant) {
         if (participant.isNotIncludedIn(study)) {
             throw new ParticipantNotBelongToStudyException();
         }

@@ -1,23 +1,32 @@
 package harustudy.backend.view.service;
 
-import harustudy.backend.content.domain.Content;
-import harustudy.backend.participant.domain.Participant;
-import harustudy.backend.participant.repository.ParticipantRepository;
+import harustudy.backend.participant.domain.Step;
 import harustudy.backend.study.domain.Study;
+import harustudy.backend.study.exception.StudyNotFoundException;
 import harustudy.backend.study.repository.StudyRepository;
-import harustudy.backend.view.dto.SubmitterResponse;
-import harustudy.backend.view.dto.SubmittersResponse;
-import harustudy.backend.view.exception.CurrentCycleContentNotExistsException;
+import harustudy.backend.view.dto.ProgressResponse;
+import harustudy.backend.view.dto.WaitingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class PollingService {
 
+    private final StudyRepository studyRepository;
+
+    public WaitingResponse pollWaiting(Long studyId) {
+        Study study = studyRepository.findByIdIfExists(studyId);
+        return WaitingResponse.of(study, study.getParticipants());
+    }
+
+    public ProgressResponse pollProgress(Long studyId) {
+        Step step = studyRepository.findStepById(studyId)
+                .orElseThrow(StudyNotFoundException::new);
+        return ProgressResponse.from(step);
+    }
     private final StudyRepository studyRepository;
     private final ParticipantRepository participantRepository;
 

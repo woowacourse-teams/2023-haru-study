@@ -1,5 +1,10 @@
 package harustudy.backend.common.exception;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+
 import harustudy.backend.auth.exception.*;
 import harustudy.backend.content.exception.ContentNotFoundException;
 import harustudy.backend.member.exception.MemberNotFoundException;
@@ -9,6 +14,7 @@ import harustudy.backend.participant.exception.StudyStepException;
 import harustudy.backend.participant.exception.ParticipantNotBelongToStudyException;
 import harustudy.backend.study.exception.ParticipantCodeExpiredException;
 import harustudy.backend.study.exception.ParticipantCodeNotFoundException;
+import harustudy.backend.study.exception.StudyAlreadyStartedException;
 import harustudy.backend.study.exception.StudyNameLengthException;
 import harustudy.backend.study.exception.TimePerCycleException;
 import harustudy.backend.study.exception.TotalCycleException;
@@ -18,8 +24,6 @@ import harustudy.backend.view.exception.CannotSeeSubmittersException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.springframework.http.HttpStatus.*;
 
 public class ExceptionMapper {
 
@@ -68,6 +72,8 @@ public class ExceptionMapper {
                 ExceptionSituation.of("시간 당 사이클 횟수가 적절하지 않습니다.", BAD_REQUEST, 1305));
         mapper.put(TotalCycleException.class,
                 ExceptionSituation.of("총 사이클 횟수가 적절하지 않습니다.", BAD_REQUEST, 1306));
+        mapper.put(StudyAlreadyStartedException.class,
+                ExceptionSituation.of("이미 시작된 스터디입니다.", BAD_REQUEST, 1307));
         mapper.put(CannotSeeSubmittersException.class,
                 ExceptionSituation.of("해당 단계에서는 제출 여부를 조회할 수 없습니다.", BAD_REQUEST, 1308));
     }

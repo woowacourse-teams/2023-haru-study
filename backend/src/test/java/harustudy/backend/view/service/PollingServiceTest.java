@@ -4,14 +4,16 @@ import harustudy.backend.content.domain.Content;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.participant.dto.ParticipantResponse;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.view.dto.SubmitterResponse;
 import harustudy.backend.view.dto.SubmittersResponse;
+import harustudy.backend.view.dto.WaitingResponse;
 import harustudy.backend.view.exception.CannotSeeSubmittersException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,21 +21,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@DisplayNameGeneration(ReplaceUnderscores.class)
 @Transactional
 @SpringBootTest
 class PollingServiceTest {
 
     @Autowired
-    private EntityManager entityManager;
+    private PollingService pollingService;
 
     @Autowired
-    private PollingService pollingService;
+    private EntityManager entityManager;
 
     private Study study;
     private Content content1;
@@ -41,21 +45,29 @@ class PollingServiceTest {
 
     @BeforeEach
     void setUp() {
-        study = new Study("study", 1, 20);
-        Member member1 = new Member("name1", "email", "imageUrl", LoginType.GUEST);
-        Member member2 = new Member("name2", "email", "imageUrl", LoginType.GUEST);
-        Participant participant1 = new Participant(study, member1, "nickname1");
-        Participant participant2 = new Participant(study, member2, "nickname2");
-        content1 = new Content(participant1, 1);
-        content2 = new Content(participant2, 1);
+        study = new Study("studyName", 3, 20);
+
+        member1 = new Member("member1", "email", "url", LoginType.GUEST);
+        member2 = new Member("member2", "email", "url", LoginType.GUEST);
+        member3 = new Member("member3", "email", "url", LoginType.GUEST);
+
+        participant1 = Participant.instantiateParticipantWithContents(study, member1, "parti1");
+        participant2 = Participant.instantiateParticipantWithContents(study, member2, "parti2");
+        participant3 = Participant.instantiateParticipantWithContents(study, member3, "parti3");
+
+        content1 = participant1.getContents.get(0);
+        content2 = participant2.getContents.get(0);
 
         entityManager.persist(study);
         entityManager.persist(member1);
         entityManager.persist(member2);
+        entityManager.persist(member3);
         entityManager.persist(participant1);
         entityManager.persist(participant2);
-        entityManager.persist(content1);
-        entityManager.persist(content2);
+        entityManager.persist(participant3);
+
+        entityManager.flush();
+        entityManager.clear();
     }
 
     @Test
@@ -141,5 +153,22 @@ class PollingServiceTest {
         // when, then
         assertThatThrownBy(() -> pollingService.findSubmitters(study.getId()))
                 .isInstanceOf(CannotSeeSubmittersException.class);
+    }
+
+    @Test
+    void 스터디에_참여한_참여자들을_조회한다() {
+        // given, when
+        WaitingResponse response = pollingService.pollWaiting(study.getId());
+
+        // then
+        List<ParticipantResponse> expected = Stream.of(participant1, participant2, participant3)
+                .map(ParticipantResponse::from)
+                .toList();
+
+        assertSoftly(softly -> {
+            softly.assertThat(response.studyStep()).isEqualTo(study.getStep().name().toLowerCase());
+            softly.assertThat(response.participants().size()).isEqualTo(3);
+            softly.assertThat(response.participants()).containsExactlyInAnyOrderElementsOf(expected);
+        });
     }
 }

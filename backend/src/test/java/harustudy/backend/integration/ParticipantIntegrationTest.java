@@ -1,7 +1,6 @@
 package harustudy.backend.integration;
 
 import harustudy.backend.participant.domain.Participant;
-import harustudy.backend.participant.domain.Step;
 import harustudy.backend.participant.dto.ParticipantResponse;
 import harustudy.backend.study.domain.Study;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +29,7 @@ class ParticipantIntegrationTest extends IntegrationTest {
         super.setUp();
         study = new Study("studyName", 3, 20);
         memberDto = createMember("member1");
-        participant = new Participant(study, memberDto.member(), "nickname");
+        participant = Participant.instantiateParticipantWithContents(study, memberDto.member(), "nickname");
 
         entityManager.persist(study);
         entityManager.persist(participant);
