@@ -27,13 +27,29 @@ const useTabListScroll = (tabList: RefObject<HTMLUListElement>) => {
     const { scrollWidth, clientWidth, scrollLeft } = tabList.current!;
 
     const isEndOfList = Math.abs(scrollWidth - scrollLeft - clientWidth) < 1;
+    const isStartOfList = scrollLeft === 0;
 
-    if (isEndOfList) setScrollButtonPosition('start');
-    else if (scrollLeft === 0) setScrollButtonPosition('end');
-    else setScrollButtonPosition('both');
-
-    if (!isTabListOverFlow) setScrollButtonPosition(null);
+    updateScrollButtonPosition(isEndOfList, isStartOfList);
   }, [isTabListOverFlow, tabList]);
+
+  const updateScrollButtonPosition = (isEndOfList: boolean, isStartOfList: boolean) => {
+    if (!isTabListOverFlow) {
+      setScrollButtonPosition(null);
+      return;
+    }
+
+    if (isEndOfList) {
+      setScrollButtonPosition('start');
+      return;
+    }
+
+    if (isStartOfList) {
+      setScrollButtonPosition('end');
+      return;
+    }
+
+    setScrollButtonPosition('both');
+  };
 
   const handleTabListResize: ResizeObserverCallback = useCallback(
     ([tabList]) => {
