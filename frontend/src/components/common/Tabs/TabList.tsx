@@ -17,9 +17,20 @@ const TabList = () => {
   const hasStartScrollButton = scrollButtonPosition === 'start' || scrollButtonPosition === 'both';
   const hasEndScrollButton = scrollButtonPosition === 'end' || scrollButtonPosition === 'both';
 
-  console.log(scrollButtonPosition);
-
   const tabList = useRef<HTMLUListElement>(null);
+
+  const handleMoveScroll = (position: 'start' | 'end') => {
+    if (!tabList.current) return;
+
+    const { scrollLeft, clientWidth } = tabList.current;
+
+    const movedPosition = scrollLeft + (position === 'end' ? +(clientWidth / 2) : -(clientWidth / 2));
+
+    tabList.current.scrollTo({
+      left: movedPosition,
+      behavior: 'smooth',
+    });
+  };
 
   const handleScroll = useCallback(() => {
     const { scrollWidth, clientWidth, scrollLeft } = tabList.current!;
@@ -72,7 +83,7 @@ const TabList = () => {
       {hasStartScrollButton && (
         <ScrollButton position="left">
           <div>
-            <LeftArrow color={color.neutral[500]} />
+            <LeftArrow color={color.neutral[500]} onClick={() => handleMoveScroll('start')} />
           </div>
         </ScrollButton>
       )}
@@ -90,7 +101,7 @@ const TabList = () => {
       {hasEndScrollButton && (
         <ScrollButton position="right">
           <div>
-            <RightArrow color={color.neutral[500]} />
+            <RightArrow color={color.neutral[500]} onClick={() => handleMoveScroll('end')} />
           </div>
         </ScrollButton>
       )}
@@ -146,9 +157,6 @@ const ScrollButton = styled.div<ScrollButtonProps>`
   top: 0;
   height: 100%;
 
-  display: flex;
-  align-items: center;
-
   padding-bottom: 5px;
   border-bottom: 2px solid transparent;
 
@@ -162,10 +170,10 @@ const ScrollButton = styled.div<ScrollButtonProps>`
   }
 
   svg {
-    cursor: pointer;
-
     width: 16px;
     height: 16px;
+
+    cursor: pointer;
   }
 
   ${({ position }) => css`
