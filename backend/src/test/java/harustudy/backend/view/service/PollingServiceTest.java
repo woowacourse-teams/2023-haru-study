@@ -65,7 +65,7 @@ class PollingServiceTest {
     }
 
     @Test
-    void 스터디에_참여한_참여자들을_폴링으로_조회한다() {
+    void 스터디에_참여한_참여자들을_조회한다() {
         // given, when
         WaitingResponse response = pollingService.pollWaiting(study.getId());
 
