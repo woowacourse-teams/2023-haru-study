@@ -19,7 +19,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     List<Participant> findAllByStudyFetchMember(
             @Param("study") Study study);
 
-
     List<Participant> findByMember(Member member);
 
     List<Participant> findByStudy(Study study);

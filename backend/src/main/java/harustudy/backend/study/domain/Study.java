@@ -102,4 +102,12 @@ public class Study extends BaseTimeEntity {
     public boolean isStep(Step step) {
         return this.step == step;
     }
+
+    public boolean isEmptyParticipants() {
+        return participants.isEmpty();
+    }
+
+    public void addParticipant(Participant participant) {
+        participants.add(participant);
+    }
 }
