@@ -16,8 +16,8 @@ public class PollingService {
     private final StudyRepository studyRepository;
 
     public ProgressPollingResponse pollProgress(Long studyId) {
-        Step step = studyRepository.findStepById(studyId).orElseThrow(
-                StudyNotFoundException::new);
+        Step step = studyRepository.findStepById(studyId)
+                .orElseThrow(StudyNotFoundException::new);
         return ProgressPollingResponse.from(step);
     }
 }
