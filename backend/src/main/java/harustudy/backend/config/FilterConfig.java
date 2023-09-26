@@ -12,7 +12,7 @@ public class FilterConfig {
     public FilterRegistrationBean<CachingFilter> contentCachingFilter(){
         FilterRegistrationBean<CachingFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new CachingFilter());
-        registrationBean.addUrlPatterns("/api/participantCodes/*", "/api/studies/*", "/api/temp/*", "/api/auth/*", "/api/me/*");
+        registrationBean.addUrlPatterns("/api/participant-codes/*", "/api/studies/*", "/api/temp/*", "/api/auth/*", "/api/me/*");
         registrationBean.setOrder(1);
         registrationBean.setName("CachingFilter");
         return registrationBean;
