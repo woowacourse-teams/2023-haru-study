@@ -75,13 +75,14 @@ class ParticipantServiceTest {
         entityManager.persist(participant);
         entityManager.persist(anotherParticipant);
 
-        // when
-        ParticipantsResponse response = participantService.findParticipantsWithFilter(authMember1, study2.getId(), null);
-
         List<ParticipantResponse> responses = Stream.of(participant, anotherParticipant)
                 .map(ParticipantResponse::from)
                 .toList();
         ParticipantsResponse expected = ParticipantsResponse.from(responses);
+
+        // when
+        ParticipantsResponse response = participantService.findParticipantsWithFilter(authMember1, study2.getId(), null);
+
 
         // then
         assertThat(response).usingRecursiveComparison()
@@ -110,12 +111,12 @@ class ParticipantServiceTest {
         entityManager.persist(participant);
         entityManager.persist(anotherParticipant);
 
-        // when
-
-        ParticipantsResponse response = participantService.findParticipantsWithFilter(authMember1, study2.getId(), member1.getId());
         ParticipantsResponse expected = ParticipantsResponse.from(List.of(
                 ParticipantResponse.from(participant)
         ));
+
+        // when
+        ParticipantsResponse response = participantService.findParticipantsWithFilter(authMember1, study2.getId(), member1.getId());
 
         // then
         assertThat(response).usingRecursiveComparison()
