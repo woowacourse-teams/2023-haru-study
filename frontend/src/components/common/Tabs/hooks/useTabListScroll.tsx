@@ -24,7 +24,9 @@ const useTabListScroll = (tabList: RefObject<HTMLUListElement>) => {
   };
 
   const handleScroll = useCallback(() => {
-    const { scrollWidth, clientWidth, scrollLeft } = tabList.current!;
+    if (!tabList.current) return;
+
+    const { scrollWidth, clientWidth, scrollLeft } = tabList.current;
 
     const isEndOfList = Math.abs(scrollWidth - scrollLeft - clientWidth) < 1;
     const isStartOfList = scrollLeft === 0;
