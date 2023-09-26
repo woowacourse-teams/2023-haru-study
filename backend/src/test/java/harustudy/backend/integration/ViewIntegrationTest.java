@@ -9,6 +9,7 @@ import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.view.dto.ProgressPollingResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -61,7 +62,7 @@ public class ViewIntegrationTest extends IntegrationTest {
                 .andReturn();
 
         //then
-        String jsonResponse = result.getResponse().getContentAsString();
+        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
         ProgressPollingResponse response = objectMapper.readValue(jsonResponse,
                 ProgressPollingResponse.class);
 
@@ -70,7 +71,7 @@ public class ViewIntegrationTest extends IntegrationTest {
 
     void 스터디_진행() throws Exception {
         mockMvc.perform(
-                        post(String.format("/api/studies/%d/next-step", study.getId()))
+                        post("/api/studies/{studyId}/next-step", study.getId())
                                 .header(HttpHeaders.AUTHORIZATION, member1.createAuthorizationHeader()))
                 .andExpect(status().isNoContent());
     }

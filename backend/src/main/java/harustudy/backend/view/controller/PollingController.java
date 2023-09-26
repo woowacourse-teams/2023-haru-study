@@ -20,11 +20,11 @@ public class PollingController {
     private final PollingService pollingService;
 
     @Operation(summary = "진행 페이지 폴링")
-    @GetMapping( "/api/progress")
+    @GetMapping("/api/progress")
     public ResponseEntity<ProgressPollingResponse> progressPolling(
             @Authenticated AuthMember authMember, @RequestParam Long studyId
     ) {
-        ProgressPollingResponse progressPollingResponse = pollingService.progressPolling(studyId);
+        ProgressPollingResponse progressPollingResponse = pollingService.pollProgress(studyId);
         return ResponseEntity.ok(progressPollingResponse);
     }
 }

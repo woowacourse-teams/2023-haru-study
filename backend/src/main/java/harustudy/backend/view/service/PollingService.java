@@ -14,7 +14,7 @@ public class PollingService {
 
     private final StudyRepository studyRepository;
 
-    public ProgressPollingResponse progressPolling(Long studyId) {
+    public ProgressPollingResponse pollProgress(Long studyId) {
         String step = studyRepository.findProgressPollingInfoById(studyId).orElseThrow(
                 StudyNotFoundException::new);
         return ProgressPollingResponse.from(step);
