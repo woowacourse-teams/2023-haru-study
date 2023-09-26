@@ -4,16 +4,15 @@ import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.member.repository.MemberRepository;
-import harustudy.backend.participantcode.domain.GenerationStrategy;
-import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.repository.ParticipantRepository;
+import harustudy.backend.participantcode.domain.GenerationStrategy;
+import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.dto.CreateStudyRequest;
-import harustudy.backend.study.dto.CreateStudyResponse;
-import harustudy.backend.study.dto.StudyResponse;
 import harustudy.backend.study.dto.StudiesResponse;
+import harustudy.backend.study.dto.StudyResponse;
 import harustudy.backend.study.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.study.exception.StudyNotFoundException;
 import harustudy.backend.study.repository.StudyRepository;
@@ -72,15 +71,13 @@ public class StudyService {
                 .toList();
     }
 
-    public CreateStudyResponse createStudy(CreateStudyRequest request) {
+    public Long createStudy(CreateStudyRequest request) {
         Study study = new Study(request.name(), request.totalCycle(),
                 request.timePerCycle());
         Study savedStudy = studyRepository.save(study);
+        participantCodeRepository.save(generateUniqueCode(savedStudy));
 
-        ParticipantCode participantCode = generateUniqueCode(study);
-        participantCodeRepository.save(participantCode);
-
-        return CreateStudyResponse.from(savedStudy);
+        return savedStudy.getId();
     }
 
     private ParticipantCode generateUniqueCode(Study study) {

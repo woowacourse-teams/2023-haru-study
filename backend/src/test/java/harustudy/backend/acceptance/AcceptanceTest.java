@@ -18,13 +18,12 @@ import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.content.dto.WritePlanRequest;
 import harustudy.backend.content.dto.WriteRetrospectRequest;
 import harustudy.backend.integration.LoginResponse;
-import harustudy.backend.participant.dto.ParticipateStudyRequest;
 import harustudy.backend.participant.dto.ParticipantsResponse;
+import harustudy.backend.participant.dto.ParticipateStudyRequest;
 import harustudy.backend.participantcode.dto.ParticipantCodeResponse;
 import harustudy.backend.study.dto.CreateStudyRequest;
-import harustudy.backend.study.dto.CreateStudyResponse;
-import harustudy.backend.study.dto.StudyResponse;
 import harustudy.backend.study.dto.StudiesResponse;
+import harustudy.backend.study.dto.StudyResponse;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -187,10 +186,11 @@ class AcceptanceTest {
                                 .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isCreated())
                 .andReturn();
-        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        CreateStudyResponse response = objectMapper.readValue(jsonResponse,
-                CreateStudyResponse.class);
-        return response.studyId();
+        String locationHeader = result.getResponse().getHeader(HttpHeaders.LOCATION);
+
+        String[] parsed = locationHeader.split("/");
+        System.out.println(locationHeader);
+        return Long.parseLong(parsed[3]);
     }
 
     private Long 스터디에_참여한다(LoginResponse 로그인_정보, Long 스터디_아이디) throws Exception {
