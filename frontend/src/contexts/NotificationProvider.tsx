@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 type Notification = {
   variant: 'success' | 'error';
@@ -40,12 +41,13 @@ type Props = {
 };
 
 const Notifications = ({ notifications }: Props) => {
-  return (
+  return createPortal(
     <div>
       {notifications.map((item, index) => (
         <div key={index}>{item.message}</div>
       ))}
-    </div>
+    </div>,
+    document.getElementById('notification-root') as HTMLElement,
   );
 };
 
