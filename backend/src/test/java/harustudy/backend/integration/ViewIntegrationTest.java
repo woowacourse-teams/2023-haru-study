@@ -1,5 +1,6 @@
 package harustudy.backend.integration;
 
+import static harustudy.backend.testutils.EntityManagerUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -11,6 +12,7 @@ import harustudy.backend.study.domain.Study;
 import harustudy.backend.polling.dto.ProgressResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -43,6 +45,7 @@ public class ViewIntegrationTest extends IntegrationTest {
         entityManager.persist(study);
         entityManager.persist(participant1);
         entityManager.persist(participant2);
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
     }
 
     @ParameterizedTest

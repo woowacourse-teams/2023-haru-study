@@ -1,6 +1,7 @@
 package harustudy.backend.integration;
 
 
+import static harustudy.backend.testutils.EntityManagerUtil.FLUSH_AND_CLEAR_CONTEXT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,13 +42,13 @@ public class ContentIntegrationTest extends IntegrationTest {
         study = new Study("studyName", 2, 20);
         memberDto = createMember("member1");
         participant = Participant.instantiateParticipantWithContents(study, memberDto.member(), "nickname");
-        content = participant.getContents().get(0);
+        content = new Content(participant, 1);
 
         entityManager.persist(study);
         entityManager.persist(participant);
         entityManager.persist(content);
 
-        FLUSH_AND_CLEAR_CONTEXT();
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
     }
 
     @Test
@@ -59,6 +60,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         study.proceed();
         entityManager.merge(study);
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         // when, then
         mockMvc.perform(
@@ -79,7 +81,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         entityManager.merge(study);
         entityManager.merge(content);
-        FLUSH_AND_CLEAR_CONTEXT();
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         WriteRetrospectRequest request = new WriteRetrospectRequest(participant.getId(),
                 Map.of("retrospect", "test"));
@@ -107,7 +109,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         entityManager.merge(study);
         entityManager.merge(content);
-        FLUSH_AND_CLEAR_CONTEXT();
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         // when
         MvcResult result = mockMvc.perform(
@@ -138,7 +140,7 @@ public class ContentIntegrationTest extends IntegrationTest {
         content.changePlan(plan);
         content.changeRetrospect(retrospect);
 
-        Content anotherContent = participant.getContents().get(1);
+        Content anotherContent = new Content(participant, 1);
         Map<String, String> anotherPlan = Map.of("plan", "test");
         Map<String, String> anotherRetrospect = Map.of("retrospect", "test");
         anotherContent.changePlan(anotherPlan);
@@ -146,8 +148,8 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         entityManager.merge(content);
         entityManager.merge(participant);
-        entityManager.merge(anotherContent);
-        FLUSH_AND_CLEAR_CONTEXT();
+        entityManager.persist(anotherContent);
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         // when
         MvcResult result = mockMvc.perform(

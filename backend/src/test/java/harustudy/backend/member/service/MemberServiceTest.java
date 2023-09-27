@@ -1,5 +1,6 @@
 package harustudy.backend.member.service;
 
+import static harustudy.backend.testutils.EntityManagerUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -40,8 +41,7 @@ class MemberServiceTest {
 
         entityManager.persist(member1);
         entityManager.persist(member2);
-        entityManager.flush();
-        entityManager.clear();
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
     }
 
     @Test

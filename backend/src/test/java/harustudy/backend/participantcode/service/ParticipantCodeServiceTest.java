@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static harustudy.backend.testutils.EntityManagerUtil.*;
+
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @Transactional
@@ -32,8 +34,7 @@ class ParticipantCodeServiceTest {
         ParticipantCode participantCode = new ParticipantCode(study, new CodeGenerationStrategy());
         entityManager.persist(study);
         entityManager.persist(participantCode);
-        entityManager.flush();
-        entityManager.clear();
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         // when
         ParticipantCodeResponse result = participantCodeService.findParticipantCodeByStudyId(

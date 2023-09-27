@@ -114,6 +114,7 @@ public class ParticipantService {
         Study study = studyRepository.findByIdIfExists(studyId);
         validateIsWaiting(study);
         Participant participant = Participant.instantiateParticipantWithContents(study, member, request.nickname());
+        participant.generateContents(study.getTotalCycle());
         Participant saved = participantRepository.save(participant);
         return saved.getId();
     }

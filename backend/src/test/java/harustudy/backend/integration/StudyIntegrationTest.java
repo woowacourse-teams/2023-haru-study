@@ -1,5 +1,6 @@
 package harustudy.backend.integration;
 
+import static harustudy.backend.testutils.EntityManagerUtil.FLUSH_AND_CLEAR_CONTEXT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -52,9 +53,7 @@ class StudyIntegrationTest extends IntegrationTest {
         entityManager.persist(study1);
         entityManager.persist(study2);
         entityManager.persist(participant1);
-
-        entityManager.flush();
-        entityManager.clear();
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
     }
 
     @Test

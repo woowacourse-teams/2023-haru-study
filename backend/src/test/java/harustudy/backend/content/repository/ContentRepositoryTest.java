@@ -1,5 +1,6 @@
 package harustudy.backend.content.repository;
 
+import static harustudy.backend.testutils.EntityManagerUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import harustudy.backend.content.domain.Content;
@@ -9,6 +10,7 @@ import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.study.domain.Study;
 
 import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -40,8 +42,7 @@ class ContentRepositoryTest {
         testEntityManager.persist(member);
         testEntityManager.persist(participant);
 
-        testEntityManager.flush();
-        testEntityManager.clear();
+        FLUSH_AND_CLEAR_CONTEXT(testEntityManager);
     }
 
     @Test
@@ -53,8 +54,7 @@ class ContentRepositoryTest {
         content.changePlan(plan);
         testEntityManager.persist(content);
 
-        testEntityManager.flush();
-        testEntityManager.clear();
+        FLUSH_AND_CLEAR_CONTEXT(testEntityManager);
 
         // when
         Content found = contentRepository.findById(content.getId())
@@ -77,8 +77,7 @@ class ContentRepositoryTest {
         content.changeRetrospect(retrospect);
         testEntityManager.persist(content);
 
-        testEntityManager.flush();
-        testEntityManager.clear();
+        FLUSH_AND_CLEAR_CONTEXT(testEntityManager);
 
         // when
         Content found = contentRepository.findById(content.getId())

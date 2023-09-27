@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static harustudy.backend.testutils.EntityManagerUtil.FLUSH_AND_CLEAR_CONTEXT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -64,9 +65,7 @@ class ParticipantServiceTest {
         entityManager.persist(participantCode2);
         entityManager.persist(member1);
         entityManager.persist(member2);
-
-        entityManager.flush();
-        entityManager.clear();
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
     }
 
     @Test
@@ -76,7 +75,7 @@ class ParticipantServiceTest {
         ParticipateStudyRequest request = new ParticipateStudyRequest(member1.getId(), "nick");
         Study study = entityManager.merge(study1);
         study.proceed();
-        entityManager.flush();
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         // when, then
         assertThatThrownBy(
@@ -93,6 +92,7 @@ class ParticipantServiceTest {
 
         entityManager.persist(participant);
         entityManager.persist(anotherParticipant);
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         List<ParticipantResponse> responses = Stream.of(participant, anotherParticipant)
                 .map(ParticipantResponse::from)
@@ -129,6 +129,7 @@ class ParticipantServiceTest {
 
         entityManager.persist(participant);
         entityManager.persist(anotherParticipant);
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         ParticipantsResponse expected = ParticipantsResponse.from(List.of(
                 ParticipantResponse.from(participant)
@@ -150,6 +151,7 @@ class ParticipantServiceTest {
         AuthMember authMember = new AuthMember(member2.getId());
 
         entityManager.persist(participant);
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         // when, then
         assertThatThrownBy(() ->
@@ -166,6 +168,7 @@ class ParticipantServiceTest {
 
         entityManager.persist(participant1);
         entityManager.persist(participant2);
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         // when, then
         assertThatThrownBy(() ->

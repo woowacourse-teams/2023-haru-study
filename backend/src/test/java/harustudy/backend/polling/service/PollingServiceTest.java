@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static harustudy.backend.testutils.EntityManagerUtil.FLUSH_AND_CLEAR_CONTEXT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -48,6 +49,7 @@ class PollingServiceTest {
     private Study study;
     private Content content1;
     private Content content2;
+    private Content content3;
 
     @BeforeEach
     void setUp() {
@@ -61,12 +63,9 @@ class PollingServiceTest {
         participant2 = Participant.instantiateParticipantWithContents(study, member2, "parti2");
         participant3 = Participant.instantiateParticipantWithContents(study, member3, "parti3");
 
-        content1 = participant1.getContents().get(0);
-        content2 = participant2.getContents().get(0);
-
-        study.addParticipant(participant1);
-        study.addParticipant(participant2);
-        study.addParticipant(participant3);
+        content1 = new Content(participant1, 1);
+        content2 = new Content(participant2, 1);
+        content3 = new Content(participant3, 1);
 
         entityManager.persist(study);
         entityManager.persist(member1);
@@ -75,14 +74,15 @@ class PollingServiceTest {
         entityManager.persist(participant1);
         entityManager.persist(participant2);
         entityManager.persist(participant3);
+        entityManager.persist(content1);
+        entityManager.persist(content2);
+        entityManager.persist(content3);
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
     }
 
     @Test
     void 대기_상태에서_제출_인원을_확인하려_하면_예외가_발생한다() {
         // given, when, then
-        entityManager.flush();
-        entityManager.clear();
-
         assertThatThrownBy(() -> pollingService.findSubmitters(study.getId()))
                 .isInstanceOf(CannotSeeSubmittersException.class);
     }
@@ -93,21 +93,20 @@ class PollingServiceTest {
         study.proceed();
         content1.changePlan(Map.of("content", "written"));
 
-        entityManager.merge(content1);
         entityManager.merge(study);
-        entityManager.flush();
-        entityManager.clear();
+        entityManager.merge(content1);
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
-        // when
-        SubmittersResponse submitters = pollingService.findSubmitters(study.getId());
-
-        // then
         SubmittersResponse expected = new SubmittersResponse(List.of(
                 new SubmitterResponse("parti1", true),
                 new SubmitterResponse("parti2", false),
                 new SubmitterResponse("parti3", false)
         ));
 
+        // when
+        SubmittersResponse submitters = pollingService.findSubmitters(study.getId());
+
+        // then
         assertThat(submitters).usingRecursiveComparison()
                 .isEqualTo(expected);
     }
@@ -118,8 +117,8 @@ class PollingServiceTest {
         study.proceed();
         study.proceed();
 
-        entityManager.flush();
-        entityManager.clear();
+        entityManager.merge(study);
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         // when, then
         assertThatThrownBy(() -> pollingService.findSubmitters(study.getId()))
@@ -134,8 +133,10 @@ class PollingServiceTest {
         content1.changeRetrospect(Map.of("content", "written"));
         content2.changeRetrospect(Map.of("content", "written"));
 
-        entityManager.flush();
-        entityManager.clear();
+        entityManager.merge(study);
+        entityManager.merge(content1);
+        entityManager.merge(content2);
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         // when
         SubmittersResponse submitters = pollingService.findSubmitters(study.getId());
@@ -159,8 +160,8 @@ class PollingServiceTest {
         study.proceed();
         study.proceed();
 
-        entityManager.flush();
-        entityManager.clear();
+        entityManager.merge(study);
+        FLUSH_AND_CLEAR_CONTEXT(entityManager);
 
         // when, then
         assertThatThrownBy(() -> pollingService.findSubmitters(study.getId()))
@@ -170,9 +171,6 @@ class PollingServiceTest {
     @Test
     void 스터디에_참여한_참여자들을_조회한다() {
         // given, when
-        entityManager.flush();
-        entityManager.clear();
-
         WaitingResponse response = pollingService.pollWaiting(study.getId());
 
         // then
