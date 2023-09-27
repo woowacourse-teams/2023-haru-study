@@ -10,20 +10,23 @@ import { lightTheme } from '@Styles/theme';
 
 import MemberInfoProvider from '@Contexts/MemberInfoProvider';
 import ModalProvider from '@Contexts/ModalProvider';
+import NotificationProvider from '@Contexts/NotificationProvider';
 
 const App = () => {
   return (
     <ThemeProvider theme={lightTheme}>
       <GlobalStyles />
-      <ModalProvider>
-        <MemberInfoProvider>
-          <ErrorBoundary fallback={ErrorFallback}>
-            <Suspense>
-              <Outlet />
-            </Suspense>
-          </ErrorBoundary>
-        </MemberInfoProvider>
-      </ModalProvider>
+      <NotificationProvider>
+        <ModalProvider>
+          <MemberInfoProvider>
+            <ErrorBoundary fallback={ErrorFallback}>
+              <Suspense>
+                <Outlet />
+              </Suspense>
+            </ErrorBoundary>
+          </MemberInfoProvider>
+        </ModalProvider>
+      </NotificationProvider>
     </ThemeProvider>
   );
 };
