@@ -1,7 +1,6 @@
 package harustudy.backend.integration;
 
 
-import static harustudy.backend.testutils.EntityManagerUtil.flushAndClearContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
