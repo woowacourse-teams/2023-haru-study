@@ -51,4 +51,10 @@ const Notifications = ({ notifications }: Props) => {
 
 export const useNotification = () => {
   const value = useContext(NotificationContext);
+
+  if (!value) {
+    throw new Error('Notification 에러');
+  }
+
+  return value;
 };
