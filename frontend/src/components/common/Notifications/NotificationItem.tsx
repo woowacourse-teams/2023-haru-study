@@ -90,6 +90,9 @@ const Layout = styled.div<NotificationProps>`
 
   text-align: center;
 
+  word-break: keep-all;
+  white-space: pre-line;
+
   padding: 10px 20px;
   border-radius: 8px;
 
