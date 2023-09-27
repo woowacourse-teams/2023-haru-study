@@ -1,18 +1,20 @@
 import type { PropsWithChildren } from 'react';
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { css, keyframes, styled } from 'styled-components';
 
 import color from '@Styles/color';
 
+type NotificationType = 'default' | 'success' | 'error';
+
 type Notification = {
-  variant: 'success' | 'error';
+  type: NotificationType;
   message: string;
   id: number;
 };
 
 export type NotificationContextType = {
-  send: (args: Omit<Notification, 'id'>) => void;
+  send: (args: Partial<Omit<Notification, 'id'>>) => void;
 };
 
 export const NotificationContext = createContext<NotificationContextType | null>(null);
@@ -20,10 +22,10 @@ export const NotificationContext = createContext<NotificationContextType | null>
 const NotificationProvider = ({ children }: PropsWithChildren) => {
   const [notifications, setNotifications] = useState<Notification[] | null>(null);
 
-  const send = (args: Omit<Notification, 'id'>) =>
+  const send = ({ type = 'default', message = '' }: Partial<Omit<Notification, 'id'>>) =>
     setNotifications((prev) => {
-      if (!prev) return [{ ...args, id: Date.now() }];
-      return [...prev, { ...args, id: Date.now() }];
+      if (!prev) return [{ type, message, id: Date.now() }];
+      return [...prev, { type, message, id: Date.now() }];
     });
 
   const remove = (removedId: number) =>
@@ -52,15 +54,8 @@ type Props = {
 };
 
 const Notifications = ({ notifications, remove }: Props) => {
-  const ref = useRef<HTMLDivElement>(null);
-  // const [height, setHeight] = useState(0);
-
-  // useEffect(() => {
-  //   // if()
-  // }, []);
-
   return createPortal(
-    <Layout ref={ref}>
+    <Layout>
       {notifications.map((item) => (
         <Notification key={item.id} {...item} remove={remove} />
       ))}
@@ -69,15 +64,15 @@ const Notifications = ({ notifications, remove }: Props) => {
   );
 };
 
-const Notification = ({ remove, variant, id, message }: Notification & { remove: (removeId: number) => void }) => {
-  const [notificationAnimation, setNotificationAnimation] = useState<'appear' | 'disAppear'>('appear');
+const Notification = ({ remove, type, id, message }: Notification & { remove: (removeId: number) => void }) => {
+  const [notificationAnimation, setNotificationAnimation] = useState<'appear' | 'disappear'>('appear');
 
   useEffect(() => {
     const removeNotification = () => {
       return setTimeout(() => remove(id), 2000);
     };
     const changeNotificationAnimation = () => {
-      return setTimeout(() => setNotificationAnimation('disAppear'), 1800);
+      return setTimeout(() => setNotificationAnimation('disappear'), 1800);
     };
 
     removeNotification();
@@ -90,7 +85,7 @@ const Notification = ({ remove, variant, id, message }: Notification & { remove:
   }, [id, remove]);
 
   return (
-    <NotificationLayout variant={variant} key={id} $notificationAnimation={notificationAnimation}>
+    <NotificationLayout type={type} key={id} $notificationAnimation={notificationAnimation}>
       {message}
     </NotificationLayout>
   );
@@ -102,14 +97,13 @@ const Layout = styled.div`
   left: 0;
   right: 0;
   margin: 0 auto;
-  /* height: 500px; */
 
   display: flex;
   flex-direction: column;
 
   gap: 10px;
 
-  transition: height 0.8s ease;
+  transition: min-height 0.2s ease;
 
   width: 400px;
 
@@ -118,20 +112,23 @@ const Layout = styled.div`
   }
 `;
 
-type NotificationProps = Pick<Notification, 'variant'> & {
-  $notificationAnimation: string;
+type NotificationProps = Pick<Notification, 'type'> & {
+  $notificationAnimation: 'appear' | 'disappear';
 };
 
-const NOTIFICATION_VARIANT = {
+const NOTIFICATION_TYPE = {
+  default: css`
+    background-color: ${color.neutral[600]};
+  `,
   success: css`
     background-color: ${color.neutral[600]};
   `,
   error: css`
     background-color: ${color.red[500]};
   `,
-};
+} as const;
 
-const NotificationAnimation = keyframes`
+const NotificationAppearAnimation = keyframes`
   0% {
     transform: translateY(20px);
     opacity: 0.2;
@@ -155,19 +152,24 @@ const NotificationDisAppearAnimation = keyframes`
   }
 `;
 
+const NOTIFICATION_ANIMATION = {
+  appear: css`
+    animation: ${NotificationAppearAnimation} 0.2s ease forwards;
+  `,
+  disappear: css`
+    animation: ${NotificationDisAppearAnimation} 0.2s ease forwards;
+  `,
+} as const;
+
 const NotificationLayout = styled.div<NotificationProps>`
   color: ${color.white};
 
   padding: 10px 20px;
   border-radius: 8px;
 
-  transition: transform 0.2s ease;
-
-  ${({ variant, $notificationAnimation }) => css`
-    ${NOTIFICATION_VARIANT[variant]}
-    animation: ${$notificationAnimation === 'appear'
-      ? NotificationAnimation
-      : NotificationDisAppearAnimation} 0.2s ease forwards;
+  ${({ type, $notificationAnimation }) => css`
+    ${NOTIFICATION_TYPE[type]}
+    ${NOTIFICATION_ANIMATION[$notificationAnimation]}
   `}
 `;
 

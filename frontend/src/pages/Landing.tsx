@@ -20,7 +20,7 @@ const Landing = () => {
       <button
         onClick={() => {
           send({
-            variant: 'error',
+            type: 'error',
             message: String(number),
           });
           setNumber((prev) => prev + 1);
@@ -31,7 +31,7 @@ const Landing = () => {
       <button
         onClick={() => {
           send({
-            variant: 'success',
+            type: 'success',
             message: 'ㅋㅋㅋㅋ',
           });
         }}
