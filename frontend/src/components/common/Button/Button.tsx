@@ -168,7 +168,7 @@ const StyledButton = styled.button<Props>`
 
 type ButtonTextProps = Pick<Props, 'isLoading'>;
 
-const ButtonText = styled.p<ButtonTextProps>`
+const ButtonText = styled.div<ButtonTextProps>`
   ${({ isLoading }) => css`
     color: ${isLoading && 'transparent'};
   `}
