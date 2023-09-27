@@ -11,6 +11,8 @@ import harustudy.backend.study.domain.Study;
 import harustudy.backend.polling.dto.ProgressResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
+
+import harustudy.backend.testutils.EntityManagerUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -43,6 +45,7 @@ public class ViewIntegrationTest extends IntegrationTest {
         entityManager.persist(study);
         entityManager.persist(participant1);
         entityManager.persist(participant2);
+        EntityManagerUtil.flushAndClearContext(entityManager);
     }
 
     @ParameterizedTest

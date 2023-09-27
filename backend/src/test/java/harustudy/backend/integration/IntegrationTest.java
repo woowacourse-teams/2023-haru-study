@@ -68,11 +68,6 @@ class IntegrationTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    void FLUSH_AND_CLEAR_CONTEXT() {
-        entityManager.flush();
-        entityManager.clear();
-    }
-
     protected void setMockMvc() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }

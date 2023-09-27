@@ -4,6 +4,7 @@ import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.dto.ParticipantResponse;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.polling.dto.WaitingResponse;
+import harustudy.backend.testutils.EntityManagerUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -47,9 +48,7 @@ class PollingIntegrationTest extends IntegrationTest {
         entityManager.persist(participant1);
         entityManager.persist(participant2);
         entityManager.persist(participant3);
-
-        entityManager.flush();
-        entityManager.clear();
+        EntityManagerUtil.flushAndClearContext(entityManager);
     }
 
     @Test
