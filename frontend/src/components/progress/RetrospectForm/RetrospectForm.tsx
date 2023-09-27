@@ -80,24 +80,50 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
-
-  padding: 60px 85px;
 `;
 
 const QuestionLayout = styled.div`
   width: 100%;
-  height: 90%;
+
+  flex: 1;
 
   display: flex;
   flex-direction: column;
   gap: 40px;
 
   overflow-y: auto;
+
+  h5 {
+    font-size: 2rem;
+  }
 `;
 const QuestionList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 60px;
+
+  @media screen and (max-width: 768px) {
+    gap: 40px;
+
+    & > div {
+      padding: 16px 20px 10px 20px;
+    }
+
+    h6 {
+      min-height: 30px;
+
+      font-size: 1.8rem;
+    }
+
+    button {
+      padding: 8px 10px;
+      font-size: 1.4rem;
+    }
+
+    textarea {
+      height: 70px;
+    }
+  }
 `;
 
 const OptionalQuestionToggle = styled.button`
