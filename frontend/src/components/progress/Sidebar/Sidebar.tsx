@@ -78,4 +78,21 @@ const Layout = styled.div<{ background: string }>`
   background-color: ${({ background }) => background};
 
   transition: background-color 0.5s ease-in-out;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    height: 130px;
+
+    align-items: flex-start;
+
+    padding: 30px 20px 20px 20px;
+
+    h4 {
+      display: none;
+    }
+
+    p {
+      font-size: 2rem;
+    }
+  }
 `;
