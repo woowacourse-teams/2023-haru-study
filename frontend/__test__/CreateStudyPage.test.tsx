@@ -7,16 +7,19 @@ import CreateStudy from '@Pages/CreateStudy';
 
 import MemberInfoProvider from '@Contexts/MemberInfoProvider';
 import ModalProvider from '@Contexts/ModalProvider';
+import NotificationProvider from '@Contexts/NotificationProvider';
 
 describe('스터디 개설 페이지 테스트', () => {
   test('폼 입력 후 적절한 예상시간이 나오는지 확인한다.', async () => {
     render(
       <MemoryRouter initialEntries={['/create']}>
-        <ModalProvider>
-          <MemberInfoProvider>
-            <CreateStudy />
-          </MemberInfoProvider>
-        </ModalProvider>
+        <NotificationProvider>
+          <ModalProvider>
+            <MemberInfoProvider>
+              <CreateStudy />
+            </MemberInfoProvider>
+          </ModalProvider>
+        </NotificationProvider>
       </MemoryRouter>,
     );
 
