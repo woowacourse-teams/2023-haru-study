@@ -9,6 +9,12 @@ import StudyRecord from '@Pages/StudyRecord';
 import MemberInfoProvider from '@Contexts/MemberInfoProvider';
 import ModalProvider from '@Contexts/ModalProvider';
 
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
+
 jest.mock('react-router-dom', () => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {

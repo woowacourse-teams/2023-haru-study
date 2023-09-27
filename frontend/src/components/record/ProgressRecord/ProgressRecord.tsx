@@ -117,10 +117,6 @@ const ProgressRecordLayout = styled.div`
     align-items: center;
   }
 
-  svg {
-    margin-right: 10px;
-  }
-
   p {
     word-break: break-all;
   }
@@ -148,6 +144,10 @@ const TabItemSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 45px;
+
+  svg {
+    margin-right: 10px;
+  }
 
   @media screen and (max-width: 768px) {
     width: 100%;

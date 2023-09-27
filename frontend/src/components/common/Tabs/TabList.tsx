@@ -1,33 +1,53 @@
+import { useRef } from 'react';
 import { css, styled } from 'styled-components';
 
+import TabListScrollButton from './TabListScrollButton';
 import { useTabs } from './TabsContext';
+import useTabListScroll from './hooks/useTabListScroll';
 
 const TabList = () => {
+  const tabList = useRef<HTMLUListElement>(null);
+
   const { tabs, selectedTab, changeTab } = useTabs();
+  const { hasStartScrollButton, hasEndScrollButton, handleMoveScroll } = useTabListScroll(tabList);
 
   return (
-    <TabListLayout>
-      {tabs.map((tab, index) => {
-        const isSelected = tab === selectedTab;
+    <Layout>
+      {hasStartScrollButton && <TabListScrollButton position="left" moveScroll={() => handleMoveScroll('start')} />}
+      <TabListContainer ref={tabList}>
+        {tabs.map((tab, index) => {
+          const isSelected = tab === selectedTab;
 
-        return (
-          <Tab data-testid="tab" onClick={() => changeTab(tab)} key={`${tab}${index}`} $isSelected={isSelected}>
-            {tab}
-          </Tab>
-        );
-      })}
-    </TabListLayout>
+          return (
+            <Tab data-testid="tab" onClick={() => changeTab(tab)} key={`${tab}${index}`} $isSelected={isSelected}>
+              {tab}
+            </Tab>
+          );
+        })}
+      </TabListContainer>
+      {hasEndScrollButton && <TabListScrollButton position="right" moveScroll={() => handleMoveScroll('end')} />}
+    </Layout>
   );
 };
 
 export default TabList;
 
-const TabListLayout = styled.ul`
+const Layout = styled.div`
+  position: relative;
+`;
+
+const TabListContainer = styled.ul`
   width: 100%;
   display: flex;
   row-gap: 20px;
 
   overflow-x: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  scrollbar-width: none;
 `;
 
 type TabProps = {
