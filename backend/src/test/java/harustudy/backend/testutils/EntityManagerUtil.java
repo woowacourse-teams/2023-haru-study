@@ -5,12 +5,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 public class EntityManagerUtil {
 
-    public static void FLUSH_AND_CLEAR_CONTEXT(EntityManager entityManager) {
+    public static void flushAndClearContext(EntityManager entityManager) {
         entityManager.flush();
         entityManager.clear();
     }
 
-    public static void FLUSH_AND_CLEAR_CONTEXT(TestEntityManager entityManager) {
+    public static void flushAndClearContext(TestEntityManager entityManager) {
         entityManager.flush();
         entityManager.clear();
     }

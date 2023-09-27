@@ -42,7 +42,7 @@ class MemberIntegrationTest extends IntegrationTest {
         entityManager.persist(study);
         entityManager.persist(participant1);
         entityManager.persist(participant2);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        flushAndClearContext(entityManager);
     }
 
     @Test

@@ -34,7 +34,7 @@ class ParticipantCodeServiceTest {
         ParticipantCode participantCode = new ParticipantCode(study, new CodeGenerationStrategy());
         entityManager.persist(study);
         entityManager.persist(participantCode);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        flushAndClearContext(entityManager);
 
         // when
         ParticipantCodeResponse result = participantCodeService.findParticipantCodeByStudyId(

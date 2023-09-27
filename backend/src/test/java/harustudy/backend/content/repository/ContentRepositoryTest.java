@@ -42,7 +42,7 @@ class ContentRepositoryTest {
         testEntityManager.persist(member);
         testEntityManager.persist(participant);
 
-        FLUSH_AND_CLEAR_CONTEXT(testEntityManager);
+        flushAndClearContext(testEntityManager);
     }
 
     @Test
@@ -54,7 +54,7 @@ class ContentRepositoryTest {
         content.changePlan(plan);
         testEntityManager.persist(content);
 
-        FLUSH_AND_CLEAR_CONTEXT(testEntityManager);
+        flushAndClearContext(testEntityManager);
 
         // when
         Content found = contentRepository.findById(content.getId())
@@ -77,7 +77,7 @@ class ContentRepositoryTest {
         content.changeRetrospect(retrospect);
         testEntityManager.persist(content);
 
-        FLUSH_AND_CLEAR_CONTEXT(testEntityManager);
+        flushAndClearContext(testEntityManager);
 
         // when
         Content found = contentRepository.findById(content.getId())

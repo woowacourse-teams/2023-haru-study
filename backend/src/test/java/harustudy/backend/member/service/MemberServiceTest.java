@@ -41,7 +41,7 @@ class MemberServiceTest {
 
         entityManager.persist(member1);
         entityManager.persist(member2);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        flushAndClearContext(entityManager);
     }
 
     @Test

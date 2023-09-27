@@ -48,7 +48,7 @@ class PollingIntegrationTest extends IntegrationTest {
         entityManager.persist(participant1);
         entityManager.persist(participant2);
         entityManager.persist(participant3);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        flushAndClearContext(entityManager);
     }
 
     @Test

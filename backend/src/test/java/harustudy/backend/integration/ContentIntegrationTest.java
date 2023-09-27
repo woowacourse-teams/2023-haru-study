@@ -1,7 +1,7 @@
 package harustudy.backend.integration;
 
 
-import static harustudy.backend.testutils.EntityManagerUtil.FLUSH_AND_CLEAR_CONTEXT;
+import static harustudy.backend.testutils.EntityManagerUtil.flushAndClearContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -17,6 +17,8 @@ import harustudy.backend.study.domain.Study;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+
+import harustudy.backend.testutils.EntityManagerUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -48,7 +50,7 @@ public class ContentIntegrationTest extends IntegrationTest {
         entityManager.persist(participant);
         entityManager.persist(content);
 
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
     }
 
     @Test
@@ -60,7 +62,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         study.proceed();
         entityManager.merge(study);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when, then
         mockMvc.perform(
@@ -81,7 +83,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         entityManager.merge(study);
         entityManager.merge(content);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         WriteRetrospectRequest request = new WriteRetrospectRequest(participant.getId(),
                 Map.of("retrospect", "test"));
@@ -109,7 +111,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         entityManager.merge(study);
         entityManager.merge(content);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when
         MvcResult result = mockMvc.perform(
@@ -149,7 +151,7 @@ public class ContentIntegrationTest extends IntegrationTest {
         entityManager.merge(content);
         entityManager.merge(participant);
         entityManager.persist(anotherContent);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when
         MvcResult result = mockMvc.perform(

@@ -10,6 +10,7 @@ import harustudy.backend.polling.dto.SubmitterResponse;
 import harustudy.backend.polling.dto.SubmittersResponse;
 import harustudy.backend.polling.dto.WaitingResponse;
 import harustudy.backend.polling.exception.CannotSeeSubmittersException;
+import harustudy.backend.testutils.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static harustudy.backend.testutils.EntityManagerUtil.FLUSH_AND_CLEAR_CONTEXT;
+import static harustudy.backend.testutils.EntityManagerUtil.flushAndClearContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -77,7 +78,7 @@ class PollingServiceTest {
         entityManager.persist(content1);
         entityManager.persist(content2);
         entityManager.persist(content3);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
     }
 
     @Test
@@ -95,7 +96,7 @@ class PollingServiceTest {
 
         entityManager.merge(study);
         entityManager.merge(content1);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         SubmittersResponse expected = new SubmittersResponse(List.of(
                 new SubmitterResponse("parti1", true),
@@ -118,7 +119,7 @@ class PollingServiceTest {
         study.proceed();
 
         entityManager.merge(study);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when, then
         assertThatThrownBy(() -> pollingService.findSubmitters(study.getId()))
@@ -136,7 +137,7 @@ class PollingServiceTest {
         entityManager.merge(study);
         entityManager.merge(content1);
         entityManager.merge(content2);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when
         SubmittersResponse submitters = pollingService.findSubmitters(study.getId());
@@ -161,7 +162,7 @@ class PollingServiceTest {
         study.proceed();
 
         entityManager.merge(study);
-        FLUSH_AND_CLEAR_CONTEXT(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when, then
         assertThatThrownBy(() -> pollingService.findSubmitters(study.getId()))
