@@ -4,6 +4,7 @@ import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.dto.ParticipantResponse;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.polling.dto.WaitingResponse;
+import harustudy.backend.testutils.EntityManagerUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -16,7 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static harustudy.backend.testutils.EntityManagerUtil.*;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,7 +48,7 @@ class PollingIntegrationTest extends IntegrationTest {
         entityManager.persist(participant1);
         entityManager.persist(participant2);
         entityManager.persist(participant3);
-        flushAndClearContext(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
     }
 
     @Test

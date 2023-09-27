@@ -1,6 +1,5 @@
 package harustudy.backend.member.service;
 
-import static harustudy.backend.testutils.EntityManagerUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -8,6 +7,7 @@ import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.MemberResponse;
+import harustudy.backend.testutils.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +41,7 @@ class MemberServiceTest {
 
         entityManager.persist(member1);
         entityManager.persist(member2);
-        flushAndClearContext(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
     }
 
     @Test

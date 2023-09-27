@@ -3,6 +3,7 @@ package harustudy.backend.integration;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.dto.ParticipantResponse;
 import harustudy.backend.study.domain.Study;
+import harustudy.backend.testutils.EntityManagerUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -11,7 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static harustudy.backend.testutils.EntityManagerUtil.*;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,7 +34,7 @@ class ParticipantIntegrationTest extends IntegrationTest {
 
         entityManager.persist(study);
         entityManager.persist(participant);
-        flushAndClearContext(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
     }
 
     @Test

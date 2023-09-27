@@ -4,6 +4,7 @@ import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participantcode.dto.ParticipantCodeResponse;
 import harustudy.backend.study.domain.Study;
+import harustudy.backend.testutils.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static harustudy.backend.testutils.EntityManagerUtil.*;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -34,7 +34,7 @@ class ParticipantCodeServiceTest {
         ParticipantCode participantCode = new ParticipantCode(study, new CodeGenerationStrategy());
         entityManager.persist(study);
         entityManager.persist(participantCode);
-        flushAndClearContext(entityManager);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when
         ParticipantCodeResponse result = participantCodeService.findParticipantCodeByStudyId(
