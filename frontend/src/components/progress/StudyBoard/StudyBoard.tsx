@@ -10,6 +10,7 @@ import color from '@Styles/color';
 import { FAVICON_PATH } from '@Constants/asset';
 import { ROUTES_PATH } from '@Constants/routes';
 
+import { useNotification } from '@Contexts/NotificationProvider';
 import { useProgressInfo, useStudyInfo } from '@Contexts/StudyProgressProvider';
 
 import dom from '@Utils/dom';
@@ -23,6 +24,7 @@ const StudyBoard = () => {
   const navigate = useNavigate();
   const { studyId } = useStudyInfo();
   const { step } = useProgressInfo();
+  const { send } = useNotification();
 
   useEffect(() => {
     if (step === 'done') return;
@@ -32,7 +34,7 @@ const StudyBoard = () => {
   }, [step]);
 
   if (step === 'done') {
-    alert('이미 끝난 스터디입니다.');
+    send({ message: '이미 끝난 스터디입니다. \n스터디의 기록 페이지로 이동합니다.' });
     navigate(`${ROUTES_PATH.record}/${studyId}`);
     return;
   }

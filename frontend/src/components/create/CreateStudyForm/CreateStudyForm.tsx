@@ -14,11 +14,13 @@ import { ROUTES_PATH } from '@Constants/routes';
 import { STUDY_TIME_PER_CYCLE_OPTIONS, TOTAL_CYCLE_OPTIONS } from '@Constants/study';
 
 import { useModal } from '@Contexts/ModalProvider';
+import { useNotification } from '@Contexts/NotificationProvider';
 
 const CreateStudyForm = () => {
   const navigate = useNavigate();
 
   const { openAlert } = useModal();
+  const { send } = useNotification();
 
   const {
     studyName,
@@ -41,6 +43,8 @@ const CreateStudyForm = () => {
 
     if (result) {
       const { studyId, data } = result;
+
+      send({ type: 'success', message: '스터디가 개설되었습니다.' });
 
       navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
         state: { participantCode: data.participantCode, studyName, isHost: true },
