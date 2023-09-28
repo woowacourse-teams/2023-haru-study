@@ -8,8 +8,9 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import App from '../App';
 
-const Auth = lazy(() => import(/* webpackChunkName: "Auth" */ '@Pages/Auth'));
+const Auth = lazy(() => import('@Pages/Auth'));
 const StudyRecord = lazy(() => import('@Pages/StudyRecord'));
+const StudyMode = lazy(() => import('@Pages/StudyMode'));
 const CreateStudy = lazy(() => import('@Pages/CreateStudy'));
 const MemberRecord = lazy(() => import('@Pages/MemberRecord'));
 const StudyProgress = lazy(() => import('@Pages/StudyProgress'));
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: ROUTES_PATH.memberRecord,
         element: <MemberRecord />,
+      },
+      {
+        path: ROUTES_PATH.mode,
+        element: <StudyMode />,
       },
     ],
   },
