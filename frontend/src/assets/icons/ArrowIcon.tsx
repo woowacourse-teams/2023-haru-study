@@ -1,28 +1,21 @@
-type Props = {
-  direction?: 'up' | 'down';
-};
+import type { ComponentPropsWithoutRef } from 'react';
 
-const ArrowIcon = ({ direction = 'down' }: Props) => {
+type Props = {
+  color?: string;
+  direction?: 'up' | 'down' | 'left' | 'right';
+} & ComponentPropsWithoutRef<'svg'>;
+
+const ICON_DIRECTION = {
+  up: 'M1 11L8 5L15 11',
+  down: 'M15 5L8 11L1 5',
+  left: 'M11 15L5 8L11 1',
+  right: 'M5 1L11 8L5 15',
+} as const;
+
+const ArrowIcon = ({ color = 'black', direction = 'down', ...rest }: Props) => {
   return (
-    <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clipPath="url(#clip0_1371_134)">
-        <path
-          d={
-            direction === 'up'
-              ? 'M17.7085 28.125L25.0002 21.875L32.2918 28.125'
-              : 'M32.2915 21.875L24.9998 28.125L17.7082 21.875'
-          }
-          stroke="black"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </g>
-      <defs>
-        <clipPath id="clip0_1371_134">
-          <rect width="16.6667" height="16.6667" fill="white" transform="translate(16.6665 16.6667)" />
-        </clipPath>
-      </defs>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" {...rest}>
+      <path d={ICON_DIRECTION[direction]} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 };
