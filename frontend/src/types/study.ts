@@ -67,3 +67,5 @@ export type ProgressInfo = {
   currentCycle: number;
   step: Step | 'done';
 };
+
+export type StudyMode = 'together' | 'solo';

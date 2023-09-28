@@ -1,9 +1,15 @@
+import { useNavigate } from 'react-router-dom';
+
 import useMutation from '@Hooks/api/useMutation';
 
-import { requestPostCreateStudy } from '@Apis/index';
+import { ROUTES_PATH } from '@Constants/routes';
+
+import { useMemberInfo } from '@Contexts/MemberInfoProvider';
+
+import { requestPostCreateStudy, requestPostRegisterProgress } from '@Apis/index';
 
 import type { ResponseCreateStudy } from '@Types/api';
-import type { StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
+import type { StudyMode, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
 type CreateStudyResult = {
   studyId: string;
@@ -14,9 +20,27 @@ const useCreateStudy = (
   studyName: string,
   totalCycle: TotalCycleOptions | null,
   timePerCycle: StudyTimePerCycleOptions | null,
+  studyMode: StudyMode,
 ) => {
-  const { mutate: createStudy, isLoading } = useMutation<CreateStudyResult>(() =>
-    requestPostCreateStudy(studyName, totalCycle, timePerCycle),
+  const memberInfo = useMemberInfo();
+  const navigate = useNavigate();
+
+  const { mutate: createStudy, isLoading } = useMutation<CreateStudyResult>(
+    () => requestPostCreateStudy(studyName, totalCycle, timePerCycle),
+    {
+      onSuccess: async (result) => {
+        if (studyMode === 'together') {
+          return navigate(`${ROUTES_PATH.preparation}/${result.studyId}`, {
+            state: { participantCode: result.data.participantCode, studyName, isHost: true },
+          });
+        }
+
+        const nickname = memberInfo!.name.substring(0, 10);
+        await requestPostRegisterProgress(nickname, result.studyId, memberInfo!.memberId);
+
+        return navigate(`${ROUTES_PATH.progress}/${result.studyId}`);
+      },
+    },
   );
 
   return { createStudy, isLoading };
