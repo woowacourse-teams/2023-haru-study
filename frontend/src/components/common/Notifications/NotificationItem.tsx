@@ -57,7 +57,7 @@ const NotificationAppearAnimation = keyframes`
     }
   `;
 
-const NotificationDisAppearAnimation = keyframes`
+const NotificationDisappearAnimation = keyframes`
     0% {
       transform: translateY(0);
       opacity: 1;
@@ -74,7 +74,7 @@ const NOTIFICATION_ANIMATION = {
     animation: ${NotificationAppearAnimation} 0.2s ease forwards;
   `,
   disappear: css`
-    animation: ${NotificationDisAppearAnimation} 0.2s ease forwards;
+    animation: ${NotificationDisappearAnimation} 0.2s ease forwards;
   `,
 } as const;
 

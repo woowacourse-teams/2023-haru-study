@@ -1,4 +1,4 @@
-import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
+import NotificationBoundary from '@Components/common/NotificationBoundary/NotificationBoundary';
 import CreateStudyForm from '@Components/create/CreateStudyForm/CreateStudyForm';
 
 import StudyParticipationLayout from './layout/StudyParticipationLayout';
@@ -6,9 +6,9 @@ import StudyParticipationLayout from './layout/StudyParticipationLayout';
 const CreateStudy = () => {
   return (
     <StudyParticipationLayout headerText="스터디 개설하기">
-      <AlertErrorBoundary>
+      <NotificationBoundary>
         <CreateStudyForm />
-      </AlertErrorBoundary>
+      </NotificationBoundary>
     </StudyParticipationLayout>
   );
 };

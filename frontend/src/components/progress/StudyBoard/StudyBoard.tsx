@@ -2,8 +2,8 @@ import { Suspense, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
 import LoadingFallback from '@Components/common/LodingFallback/LoadingFallback';
+import NotificationBoundary from '@Components/common/NotificationBoundary/NotificationBoundary';
 
 import color from '@Styles/color';
 
@@ -42,7 +42,7 @@ const StudyBoard = () => {
   return (
     <Container>
       <Sidebar />
-      <AlertErrorBoundary>
+      <NotificationBoundary>
         <Contents>
           {step === 'planning' && <PlanningForm />}
           {step === 'studying' && (
@@ -52,7 +52,7 @@ const StudyBoard = () => {
           )}
           {step === 'retrospect' && <RetrospectForm />}
         </Contents>
-      </AlertErrorBoundary>
+      </NotificationBoundary>
     </Container>
   );
 };

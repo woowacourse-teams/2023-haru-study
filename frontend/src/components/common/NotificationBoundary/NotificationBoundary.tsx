@@ -5,12 +5,12 @@ import { NotificationContext, type NotificationContextType } from '@Contexts/Not
 
 import { ApiError } from '@Errors/index';
 
-type AlertErrorBoundaryState = {
+type NotificationBoundaryState = {
   error: Error | null;
 };
 
-class AlertErrorBoundary extends Component<PropsWithChildren, AlertErrorBoundaryState> {
-  state: AlertErrorBoundaryState = {
+class NotificationBoundary extends Component<PropsWithChildren, NotificationBoundaryState> {
+  state: NotificationBoundaryState = {
     error: null,
   };
 
@@ -41,4 +41,4 @@ class AlertErrorBoundary extends Component<PropsWithChildren, AlertErrorBoundary
   }
 }
 
-export default AlertErrorBoundary;
+export default NotificationBoundary;
