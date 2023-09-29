@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
@@ -10,14 +9,17 @@ import useCreateStudyForm from '@Components/create/hooks/useCreateStudyForm';
 import color from '@Styles/color';
 
 import { ERROR_MESSAGE } from '@Constants/errorMessage';
-import { ROUTES_PATH } from '@Constants/routes';
 import { STUDY_TIME_PER_CYCLE_OPTIONS, TOTAL_CYCLE_OPTIONS } from '@Constants/study';
 
 import { useModal } from '@Contexts/ModalProvider';
 
-const CreateStudyForm = () => {
-  const navigate = useNavigate();
+import type { StudyMode } from '@Types/study';
 
+type Props = {
+  studyMode: StudyMode;
+};
+
+const CreateStudyForm = ({ studyMode }: Props) => {
   const { openAlert } = useModal();
 
   const {
@@ -34,18 +36,10 @@ const CreateStudyForm = () => {
     isSelectedOptions,
   } = useCreateStudyForm();
 
-  const { createStudy, isLoading } = useCreateStudy(studyName, totalCycle, timePerCycle);
+  const { createStudy, isLoading } = useCreateStudy(studyName, totalCycle, timePerCycle, studyMode);
 
-  const handleClickCreateStudyButton = async () => {
-    const result = await createStudy();
-
-    if (result) {
-      const { studyId, data } = result;
-
-      navigate(`${ROUTES_PATH.preparation}/${studyId}`, {
-        state: { participantCode: data.participantCode, studyName, isHost: true },
-      });
-    }
+  const handleClickCreateStudyButton = () => {
+    createStudy();
   };
 
   const handleClickExpectedTime = () => {
@@ -125,7 +119,7 @@ const CreateStudyForm = () => {
         )}
       </TimeDescription>
       <Button variant="primary" onClick={handleClickCreateStudyButton} disabled={isDisabled()} isLoading={isLoading}>
-        스터디 개설하기
+        {studyMode === 'solo' ? '공부 시작하기' : '스터디 개설하기'}
       </Button>
     </Layout>
   );

@@ -8,4 +8,5 @@ export const ROUTES_PATH = {
   preparation: '/preparation',
   participation: '/participation',
   memberRecord: '/member-record',
+  mode: '/mode',
 } as const;
