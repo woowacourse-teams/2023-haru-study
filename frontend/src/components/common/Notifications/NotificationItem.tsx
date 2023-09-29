@@ -11,19 +11,12 @@ const NotificationItem = ({ remove, type, id, message }: Props) => {
   const [notificationAnimation, setNotificationAnimation] = useState<'appear' | 'disappear'>('appear');
 
   useEffect(() => {
-    const removeNotification = () => {
-      return setTimeout(() => remove(id), 2000);
-    };
-    const changeNotificationAnimation = () => {
-      return setTimeout(() => setNotificationAnimation('disappear'), 1800);
-    };
-
-    removeNotification();
-    changeNotificationAnimation();
+    const removeNotification = setTimeout(() => remove(id), 2000);
+    const changeNotificationAnimation = setTimeout(() => setNotificationAnimation('disappear'), 1800);
 
     return () => {
-      clearTimeout(removeNotification());
-      clearTimeout(changeNotificationAnimation());
+      clearTimeout(removeNotification);
+      clearTimeout(changeNotificationAnimation);
     };
   }, [id, remove]);
 

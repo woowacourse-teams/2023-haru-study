@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 
 import Notifications from '@Components/common/Notifications/Notifications';
 
@@ -26,11 +26,14 @@ const NotificationProvider = ({ children }: PropsWithChildren) => {
       return [...prev, { type, message, id: Date.now() }];
     });
 
-  const remove = (removedId: number) =>
-    setNotifications((prev) => {
-      if (!prev) return null;
-      return prev.filter(({ id }) => id !== removedId);
-    });
+  const remove = useCallback(
+    (removedId: number) =>
+      setNotifications((prev) => {
+        if (!prev) return null;
+        return prev.filter(({ id }) => id !== removedId);
+      }),
+    [],
+  );
 
   const value = {
     send,
