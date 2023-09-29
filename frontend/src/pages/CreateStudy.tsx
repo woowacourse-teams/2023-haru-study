@@ -14,7 +14,7 @@ const CreateStudy = () => {
   if (!(studyMode === 'together' || studyMode === 'solo')) return <NotFound />;
 
   return (
-    <StudyParticipationLayout headerText={studyMode === 'solo' ? '혼자 공부하기' : '스터디 개설하기'}>
+    <StudyParticipationLayout headerText={studyMode === 'solo' ? '공부 시작하기' : '스터디 개설하기'}>
       <AlertErrorBoundary>
         <CreateStudyForm studyMode={studyMode} />
       </AlertErrorBoundary>

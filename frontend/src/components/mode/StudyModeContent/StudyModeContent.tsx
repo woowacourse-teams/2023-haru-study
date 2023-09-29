@@ -33,7 +33,7 @@ const StudyModeContent = () => {
         onClick={handleClickStudyParticipationItem}
       />
       <StudyModeItem
-        title="혼자 공부하기"
+        title="공부 시작하기"
         description="다른 스터디원 없이 혼자 공부하고 싶어요"
         onClick={handleClickSoloStudyItem}
       />
