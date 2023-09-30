@@ -1,4 +1,4 @@
-import { css, styled } from 'styled-components';
+import { styled } from 'styled-components';
 
 import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
 import Tabs from '@Components/common/Tabs/Tabs';
@@ -20,20 +20,12 @@ import useMemberRecordContents from '../hooks/useMemberRecordContents';
 
 type Props = {
   studyId: string;
-  progressId: string;
+  participantId: string;
   nickname: string;
-  isCompleted: boolean;
-  currentCycle: number;
 };
 
-const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCycle }: Props) => {
-  const { memberRecordContents, isLoading } = useMemberRecordContents(studyId, progressId);
-
-  const isDoneCycle = (selectedTabCycle: number) => {
-    if (isCompleted) return true;
-
-    return currentCycle > selectedTabCycle;
-  };
+const ProgressRecord = ({ studyId, nickname, participantId }: Props) => {
+  const { memberRecordContents, isLoading } = useMemberRecordContents(studyId, participantId);
 
   const getPostPosition = (name: string) => {
     const charCode = name.charCodeAt(name.length - 1);
@@ -55,50 +47,38 @@ const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCyc
       <Tabs>
         {memberRecordContents?.map((content) => (
           <Tabs.Item key={content.cycle} label={`${content.cycle}번째 사이클`}>
-            {isDoneCycle(content.cycle) ? (
-              <TabItemContainer>
-                <TabItemSection>
-                  <Typography variant="h5">
-                    <GoalIcon color={color.blue[500]} />
-                    {nickname}
-                    {getPostPosition(nickname)} 작성한 목표
-                  </Typography>
-                  {getKeys<Plan>(PLAN_KEYWORDS).map((key) => (
-                    <QuestionAnswer
-                      key={key}
-                      question={PLAN_KEYWORDS[key]}
-                      answer={content.plan[key]}
-                      iconColor={color.blue[500]}
-                    />
-                  ))}
-                </TabItemSection>
-                <TabItemSection>
-                  <Typography variant="h5">
-                    <PencilIcon color={color.teal[500]} />
-                    {nickname}
-                    {getPostPosition(nickname)} 작성한 목표
-                  </Typography>
-                  {getKeys<Retrospect>(RETROSPECT_KEYWORDS).map((key) => (
-                    <QuestionAnswer
-                      key={key}
-                      question={RETROSPECT_KEYWORDS[key]}
-                      answer={content.retrospect[key]}
-                      iconColor={color.teal[500]}
-                    />
-                  ))}
-                </TabItemSection>
-              </TabItemContainer>
-            ) : (
-              <Typography
-                variant="p2"
-                key={content.cycle}
-                $style={css`
-                  margin-top: 40px;
-                `}
-              >
-                아직 사이클을 완료하지 않았어요. 사이클을 완료하면 기록을 볼 수 있어요.
-              </Typography>
-            )}
+            <TabItemContainer>
+              <TabItemSection>
+                <Typography variant="h5">
+                  <GoalIcon color={color.blue[500]} />
+                  {nickname}
+                  {getPostPosition(nickname)} 작성한 목표
+                </Typography>
+                {getKeys<Plan>(PLAN_KEYWORDS).map((key) => (
+                  <QuestionAnswer
+                    key={key}
+                    question={PLAN_KEYWORDS[key]}
+                    answer={content.plan[key]}
+                    iconColor={color.blue[500]}
+                  />
+                ))}
+              </TabItemSection>
+              <TabItemSection>
+                <Typography variant="h5">
+                  <PencilIcon color={color.teal[500]} />
+                  {nickname}
+                  {getPostPosition(nickname)} 작성한 목표
+                </Typography>
+                {getKeys<Retrospect>(RETROSPECT_KEYWORDS).map((key) => (
+                  <QuestionAnswer
+                    key={key}
+                    question={RETROSPECT_KEYWORDS[key]}
+                    answer={content.retrospect[key]}
+                    iconColor={color.teal[500]}
+                  />
+                ))}
+              </TabItemSection>
+            </TabItemContainer>
           </Tabs.Item>
         ))}
       </Tabs>

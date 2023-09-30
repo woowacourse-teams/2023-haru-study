@@ -23,7 +23,7 @@ export const requestGetMemberStudyListData = (memberId: string) =>
   http.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`);
 
 export const requestGetStudyMembers = (studyId: string) =>
-  http.get<ResponseStudyMembers>(`/api/studies/${studyId}/progresses`);
+  http.get<ResponseStudyMembers>(`/api/studies/${studyId}/participants`);
 
 export const requestGetMemberRecordContents = (studyId: string, progressId: string) =>
   http.get<ResponseMemberRecordContents>(`/api/studies/${studyId}/contents?progressId=${progressId}`);

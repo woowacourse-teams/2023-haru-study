@@ -16,11 +16,10 @@ export type Progress = {
   step: Step;
 };
 
-export type MemberProgress = {
-  progressId: string;
+export type Participant = {
+  participantId: string;
   nickname: string;
-  currentCycle: number;
-  step: Step | 'done';
+  isHost: boolean;
 };
 
 export type StudyBasicInfo = {

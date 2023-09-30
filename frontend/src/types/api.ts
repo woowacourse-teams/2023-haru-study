@@ -3,7 +3,7 @@ import type {
   ProgressInfo,
   RetrospectList,
   StudyInfo,
-  MemberProgress,
+  Participant,
   MemberRecordContent,
   PlanList,
   Step,
@@ -45,7 +45,7 @@ export type ResponseStudyDataList = {
 };
 
 export type ResponseStudyMembers = {
-  progresses: MemberProgress[];
+  participants: Participant[];
 };
 
 export type ResponseMemberRecordContents = {

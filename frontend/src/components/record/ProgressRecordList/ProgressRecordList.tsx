@@ -12,7 +12,7 @@ type Props = {
 };
 
 const ProgressRecordList = ({ studyId, isRefetch }: Props) => {
-  const { memberProgresses, refetch } = useStudyMembers(studyId);
+  const { participants, refetch } = useStudyMembers(studyId);
 
   useEffect(() => {
     if (isRefetch) refetch();
@@ -20,19 +20,13 @@ const ProgressRecordList = ({ studyId, isRefetch }: Props) => {
 
   return (
     <Accordion>
-      {memberProgresses.map(({ progressId, nickname, step, currentCycle }) => (
-        <Accordion.Item key={progressId}>
+      {participants.map(({ participantId, nickname }) => (
+        <Accordion.Item key={participantId}>
           <Accordion.Header>
             <Typography variant="h5">{nickname}의 기록</Typography>
           </Accordion.Header>
           <Accordion.Panel>
-            <ProgressRecord
-              studyId={studyId}
-              progressId={progressId}
-              nickname={nickname}
-              isCompleted={step === 'done'}
-              currentCycle={currentCycle}
-            />
+            <ProgressRecord studyId={studyId} participantId={participantId} nickname={nickname} />
           </Accordion.Panel>
         </Accordion.Item>
       ))}

@@ -6,9 +6,9 @@ import { requestGetStudyMembers } from '@Apis/index';
 
 const useStudyMembers = (studyId: string) => {
   const { result, refetch } = useFetch(() => requestGetStudyMembers(studyId));
-  const memberProgresses = result?.data.progresses || [];
+  const participants = result?.data.participants || [];
 
-  return { memberProgresses, refetch };
+  return { participants, refetch };
 };
 
 export default useStudyMembers;
