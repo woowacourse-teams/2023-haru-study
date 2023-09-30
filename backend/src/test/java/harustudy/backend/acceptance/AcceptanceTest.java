@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.auth.config.OauthProperty;
 import harustudy.backend.auth.config.TokenConfig;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
@@ -56,7 +55,7 @@ import org.springframework.web.context.WebApplicationContext;
 class AcceptanceTest {
 
     @MockBean
-    GoogleOauthClient googleOauthClient;
+    private GoogleOauthClient googleOauthClient;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -81,6 +80,7 @@ class AcceptanceTest {
     @Test
     void 회원으로_스터디를_진행한다() throws Exception {
         LoginResponse 로그인_정보 = 구글_로그인을_진행한다();
+        System.out.println("로그인_정보 = " + 로그인_정보);
         Long 스터디_아이디 = 스터디를_개설한다(로그인_정보);
         Long 참여자_아이디 = 스터디에_참여한다(로그인_정보, 스터디_아이디);
         스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
@@ -157,10 +157,12 @@ class AcceptanceTest {
         OauthLoginRequest request = new OauthLoginRequest("google", "oauthLoginCode");
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        given(googleOauthClient.requestOauthToken(any(String.class), any(OauthProperty.class)))
+        given(googleOauthClient.supports(any(String.class)))
+                .willReturn(true);
+        given(googleOauthClient.requestOauthToken(any(String.class), any(String.class)))
                 .willReturn(new OauthTokenResponse("mock-token-type", "mock-access-token",
                         "mock-scope"));
-        given(googleOauthClient.requestOauthUserInfo(any(OauthProperty.class), any(String.class)))
+        given(googleOauthClient.requestOauthUserInfo(any(String.class), any(String.class)))
                 .willReturn(Map.of("name", "mock-name", "email", "mock-email", "picture",
                         "mock-picture"));
 

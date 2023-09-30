@@ -3,7 +3,8 @@ package harustudy.backend.member.domain;
 public enum LoginType {
 
     GUEST,
-    GOOGLE;
+    GOOGLE,
+    KAKAO;
 
     public static LoginType from(String name) {
         return valueOf(name.toUpperCase());

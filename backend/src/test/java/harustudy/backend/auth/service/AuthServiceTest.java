@@ -5,7 +5,6 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import harustudy.backend.auth.config.OauthProperty;
 import harustudy.backend.auth.config.TokenConfig;
 import harustudy.backend.auth.domain.RefreshToken;
 import harustudy.backend.auth.dto.OauthLoginRequest;
@@ -53,9 +52,11 @@ class AuthServiceTest {
         OauthLoginRequest request = new OauthLoginRequest("google", "google-code");
         UserInfo userInfo = new UserInfo("test", "test@test.com", "test.png");
 
-        given(googleOauthClient.requestOauthToken(any(String.class), any(OauthProperty.class)))
+        given(googleOauthClient.supports(any(String.class)))
+                .willReturn(true);
+        given(googleOauthClient.requestOauthToken(any(String.class), any(String.class)))
                 .willReturn(new OauthTokenResponse("Bearer", "google-access-token", "scope"));
-        given(googleOauthClient.requestOauthUserInfo(any(OauthProperty.class), any(String.class)))
+        given(googleOauthClient.requestOauthUserInfo(any(String.class), any(String.class)))
                 .willReturn(Map.of("name", userInfo.name(), "email", userInfo.email(), "picture",
                         userInfo.imageUrl()));
 
