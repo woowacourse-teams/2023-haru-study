@@ -1,6 +1,7 @@
 package harustudy.backend.admin;
 
 import harustudy.backend.admin.service.AdminService;
+import harustudy.backend.auth.exception.AuthorizationException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -22,7 +23,12 @@ public class AdminInterceptor implements HandlerInterceptor {
         if (HttpMethod.OPTIONS.matches(request.getMethod())) {
             return true;
         }
-        HttpSession session = request.getSession();
+
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            throw new AuthorizationException();
+        }
+
         UUID uuid = (UUID) session.getAttribute("SESSION");
         adminService.validateSession(uuid);
         return true;
