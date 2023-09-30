@@ -1,5 +1,6 @@
 package harustudy.backend.config;
 
+import harustudy.backend.admin.AdminInterceptor;
 import harustudy.backend.auth.AuthArgumentResolver;
 import harustudy.backend.auth.AuthInterceptor;
 import harustudy.backend.common.LoggingInterceptor;
@@ -22,6 +23,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private final LoggingInterceptor loggingInterceptor;
     private final AuthInterceptor authInterceptor;
+    private final AdminInterceptor adminInterceptor;
+
     private final AuthArgumentResolver authArgumentResolver;
 
     @Value("${cors-allow-origin}")
@@ -39,6 +42,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/api/auth/**")
                 .excludePathPatterns("/api/error-code")
                 .excludePathPatterns("/api/resources/**");
+
+        registry.addInterceptor(adminInterceptor)
+                .addPathPatterns("/admin/**")
+                .excludePathPatterns("/admin/login")
+                .excludePathPatterns("/api/**");
     }
 
     @Override
