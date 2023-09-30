@@ -24,6 +24,7 @@ public class AdminController {
         UUID sessionId = adminService.login(request);
         HttpSession session = httpServletRequest.getSession();
         session.setAttribute("SESSION", sessionId);
+        session.setMaxInactiveInterval(3600);
 
         return ResponseEntity.ok().build();
     }
