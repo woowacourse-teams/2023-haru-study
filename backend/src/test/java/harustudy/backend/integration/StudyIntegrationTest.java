@@ -14,6 +14,7 @@ import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.dto.CreateStudyRequest;
 import harustudy.backend.study.dto.StudiesResponse;
 import harustudy.backend.study.dto.StudyResponse;
+import harustudy.backend.testutils.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -52,9 +53,7 @@ class StudyIntegrationTest extends IntegrationTest {
         entityManager.persist(study1);
         entityManager.persist(study2);
         entityManager.persist(participant1);
-
-        entityManager.flush();
-        entityManager.clear();
+        EntityManagerUtil.flushAndClearContext(entityManager);
     }
 
     @Test

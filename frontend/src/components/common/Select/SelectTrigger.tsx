@@ -4,6 +4,8 @@ import { css, styled } from 'styled-components';
 
 import color from '@Styles/color';
 
+import ArrowIcon from '@Assets/icons/ArrowIcon';
+
 import { useSelectContext } from './SelectContext';
 
 type Props = {
@@ -19,7 +21,7 @@ const SelectTrigger = ({ triggerText = '선택', testId, ...props }: Props) => {
   return (
     <Layout {...props} $isOpen={isOpen} onClick={toggleOpen} data-testid={testId}>
       {selectedItem === null ? triggerText : selectedItem.toString() + triggerSuffixText}
-      {isOpen ? <Mark>&#9650;</Mark> : <Mark>&#9660;</Mark>}
+      <ArrowIconWrapper>{isOpen ? <ArrowIcon direction="up" /> : <ArrowIcon direction="down" />}</ArrowIconWrapper>
     </Layout>
   );
 };
@@ -51,7 +53,6 @@ const Layout = styled.button<Props & { $isOpen: boolean }>`
   }
 `;
 
-const Mark = styled.p`
-  padding-top: 5px;
-  font-size: 1.4rem;
+const ArrowIconWrapper = styled.div`
+  align-self: center;
 `;

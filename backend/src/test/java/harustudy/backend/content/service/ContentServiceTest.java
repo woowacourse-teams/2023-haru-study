@@ -17,6 +17,7 @@ import harustudy.backend.participant.exception.ParticipantNotFoundException;
 import harustudy.backend.participant.exception.StudyStepException;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.exception.StudyNotFoundException;
+import harustudy.backend.testutils.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
@@ -50,18 +51,15 @@ class ContentServiceTest {
         study = new Study("studyName", 1, 20);
         member = new Member("nickname", "email", "imageUrl", LoginType.GUEST);
         participant = Participant.instantiateParticipantWithContents(study, member, "nickname");
-        content = participant.getContents().get(0);
+
+        content = new Content(participant, 1);
 
         entityManager.persist(study);
         entityManager.persist(member);
         entityManager.persist(participant);
         entityManager.persist(content);
-        FLUSH_AND_CLEAR_CONTEXT();
-    }
 
-    void FLUSH_AND_CLEAR_CONTEXT() {
-        entityManager.flush();
-        entityManager.clear();
+        EntityManagerUtil.flushAndClearContext(entityManager);
     }
 
     @Test
@@ -71,7 +69,9 @@ class ContentServiceTest {
 
         study.proceed();
         study.proceed();
+
         entityManager.merge(study);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         WritePlanRequest request = new WritePlanRequest(participant.getId(),
                 Map.of("plan", "abc"));
@@ -86,7 +86,10 @@ class ContentServiceTest {
     void 계획_단계에서는_계획을_작성할_수_있다() {
         // given
         study.proceed();
+
         entityManager.merge(study);
+        EntityManagerUtil.flushAndClearContext(entityManager);
+
         AuthMember authMember = new AuthMember(member.getId());
         WritePlanRequest request = new WritePlanRequest(participant.getId(),
                 Map.of("plan", "abc"));
@@ -137,7 +140,7 @@ class ContentServiceTest {
 
         entityManager.merge(content);
         entityManager.merge(study);
-        FLUSH_AND_CLEAR_CONTEXT();
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         WriteRetrospectRequest request = new WriteRetrospectRequest(participant.getId(),
                 Map.of("retrospect", "abc"));
@@ -158,7 +161,7 @@ class ContentServiceTest {
         content.changeRetrospect(retrospect);
 
         entityManager.merge(content);
-        FLUSH_AND_CLEAR_CONTEXT();
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when
         ContentsResponse contentsResponse =
@@ -196,7 +199,7 @@ class ContentServiceTest {
         entityManager.merge(study);
         entityManager.merge(content);
         entityManager.persist(anotherContent);
-        FLUSH_AND_CLEAR_CONTEXT();
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when
         ContentsResponse contentsResponse = contentService.findContentsWithFilter(authMember,

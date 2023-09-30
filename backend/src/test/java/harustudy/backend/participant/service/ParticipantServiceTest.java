@@ -12,6 +12,7 @@ import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.exception.StudyAlreadyStartedException;
+import harustudy.backend.testutils.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -64,9 +65,7 @@ class ParticipantServiceTest {
         entityManager.persist(participantCode2);
         entityManager.persist(member1);
         entityManager.persist(member2);
-
-        entityManager.flush();
-        entityManager.clear();
+        EntityManagerUtil.flushAndClearContext(entityManager);
     }
 
     @Test
@@ -76,7 +75,7 @@ class ParticipantServiceTest {
         ParticipateStudyRequest request = new ParticipateStudyRequest(member1.getId(), "nick");
         Study study = entityManager.merge(study1);
         study.proceed();
-        entityManager.flush();
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when, then
         assertThatThrownBy(
@@ -93,6 +92,7 @@ class ParticipantServiceTest {
 
         entityManager.persist(participant);
         entityManager.persist(anotherParticipant);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         List<ParticipantResponse> responses = Stream.of(participant, anotherParticipant)
                 .map(ParticipantResponse::from)
@@ -129,6 +129,7 @@ class ParticipantServiceTest {
 
         entityManager.persist(participant);
         entityManager.persist(anotherParticipant);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         ParticipantsResponse expected = ParticipantsResponse.from(List.of(
                 ParticipantResponse.from(participant)
@@ -150,6 +151,7 @@ class ParticipantServiceTest {
         AuthMember authMember = new AuthMember(member2.getId());
 
         entityManager.persist(participant);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when, then
         assertThatThrownBy(() ->
@@ -166,6 +168,7 @@ class ParticipantServiceTest {
 
         entityManager.persist(participant1);
         entityManager.persist(participant2);
+        EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when, then
         assertThatThrownBy(() ->

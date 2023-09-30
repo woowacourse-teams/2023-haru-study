@@ -57,7 +57,6 @@ public class Participant extends BaseTimeEntity {
         validateNicknameLength(nickname);
         Participant participant = new Participant(study, member, nickname, study.isEmptyParticipants());
         study.addParticipant(participant);
-        participant.generateContents(study.getTotalCycle());
         return participant;
     }
 
@@ -67,7 +66,7 @@ public class Participant extends BaseTimeEntity {
         }
     }
 
-    private void generateContents(int totalCycle) {
+    public void generateContents(int totalCycle) {
         for (int cycle = 1; cycle <= totalCycle; cycle++) {
             Content content = new Content(this, cycle);
             contents.add(content);

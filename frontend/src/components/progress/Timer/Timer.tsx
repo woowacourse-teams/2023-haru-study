@@ -106,4 +106,25 @@ const Layout = styled.div`
     line-height: 100%;
     margin-bottom: 20px;
   }
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+
+    flex-direction: row;
+    justify-content: space-between;
+
+    p {
+      display: none;
+    }
+
+    h1 {
+      font-size: 5.2rem;
+      margin-bottom: 0;
+    }
+
+    button {
+      width: 120px;
+      padding: 10px 24px;
+    }
+  }
 `;

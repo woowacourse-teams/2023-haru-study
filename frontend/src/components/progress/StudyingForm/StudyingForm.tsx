@@ -46,13 +46,12 @@ const Layout = styled.section`
   display: flex;
   flex-direction: column;
   gap: 30px;
-
-  padding: 60px 85px;
 `;
 
 const PlanResultList = styled.ul`
   width: 100%;
-  height: 90%;
+
+  flex: 1;
 
   display: flex;
   flex-direction: column;
@@ -63,4 +62,18 @@ const PlanResultList = styled.ul`
   border-radius: 14px;
 
   overflow-y: auto;
+
+  @media screen and (max-width: 768px) {
+    padding: 50px 20px;
+
+    gap: 40px;
+
+    h5 {
+      font-size: 2.2rem;
+    }
+
+    p {
+      font-size: 1.8rem;
+    }
+  }
 `;
