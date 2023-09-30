@@ -12,6 +12,7 @@ import { ERROR_MESSAGE } from '@Constants/errorMessage';
 import { STUDY_TIME_PER_CYCLE_OPTIONS, TOTAL_CYCLE_OPTIONS } from '@Constants/study';
 
 import { useModal } from '@Contexts/ModalProvider';
+import { useNotification } from '@Contexts/NotificationProvider';
 
 import type { StudyMode } from '@Types/study';
 
@@ -21,6 +22,7 @@ type Props = {
 
 const CreateStudyForm = ({ studyMode }: Props) => {
   const { openAlert } = useModal();
+  const { send } = useNotification();
 
   const {
     studyName,

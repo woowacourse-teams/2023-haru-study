@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { styled } from 'styled-components';
 
-import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
+import NotificationBoundary from '@Components/common/NotificationBoundary/NotificationBoundary';
 import useCheckProgresses from '@Components/participation/hooks/useCheckProgresses';
 
 import MemberRegister from './MemberRegister/MemberRegister';
@@ -27,7 +27,7 @@ const ParticipationContents = ({ participantCode, studyName, isHost }: Props) =>
     <Layout>
       {isHost && <ParticipationCodeCopier participantCode={participantCode} />}
       {result && (
-        <AlertErrorBoundary>
+        <NotificationBoundary>
           {result.progresses && !isRegisterShow ? (
             <MemberRestart
               studyName={studyName}
@@ -39,7 +39,7 @@ const ParticipationContents = ({ participantCode, studyName, isHost }: Props) =>
           ) : (
             <MemberRegister studyId={studyId} studyName={studyName} />
           )}
-        </AlertErrorBoundary>
+        </NotificationBoundary>
       )}
     </Layout>
   );

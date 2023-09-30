@@ -8,6 +8,7 @@ import StudyPreparation from '@Pages/StudyPreparation';
 
 import MemberInfoProvider from '@Contexts/MemberInfoProvider';
 import ModalProvider from '@Contexts/ModalProvider';
+import NotificationProvider from '@Contexts/NotificationProvider';
 
 jest.mock('react-router-dom', () => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -36,11 +37,13 @@ describe('스터디 준비 페이지 테스트', () => {
   test('요청한 Progresses 데이터가 없으면 닉네임 입력 폼이 보여진다.', async () => {
     render(
       <MemoryRouter initialEntries={[`/preparation/1`]}>
-        <ModalProvider>
-          <MemberInfoProvider>
-            <StudyPreparation />
-          </MemberInfoProvider>
-        </ModalProvider>
+        <NotificationProvider>
+          <ModalProvider>
+            <MemberInfoProvider>
+              <StudyPreparation />
+            </MemberInfoProvider>
+          </ModalProvider>
+        </NotificationProvider>
       </MemoryRouter>,
     );
 
@@ -61,11 +64,13 @@ describe('스터디 준비 페이지 테스트', () => {
 
     render(
       <MemoryRouter initialEntries={[`/preparation/1`]}>
-        <ModalProvider>
-          <MemberInfoProvider>
-            <StudyPreparation />
-          </MemberInfoProvider>
-        </ModalProvider>
+        <NotificationProvider>
+          <ModalProvider>
+            <MemberInfoProvider>
+              <StudyPreparation />
+            </MemberInfoProvider>
+          </ModalProvider>
+        </NotificationProvider>
       </MemoryRouter>,
     );
 
