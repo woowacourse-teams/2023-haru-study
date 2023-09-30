@@ -226,7 +226,7 @@ export const studyRecordHandlers = [
     return res(ctx.status(200), ctx.json(STUDY_MEMBERS), ctx.delay(400));
   }),
 
-  rest.get('/api/studies/:studyId/contents?progressId=1', (req, res, ctx) => {
+  rest.get('/api/studies/:studyId/contents?participant=1', (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
     if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(400));
