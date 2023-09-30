@@ -3,7 +3,7 @@ import type {
   ResponseAuthToken,
   ResponseCreateStudy,
   ResponseMemberInfo,
-  ResponseMemberRecordContents,
+  ResponseParticipantRecordContents,
   ResponseOneStudyInfo,
   ResponseMemberContents,
   ResponseStudies,
@@ -25,8 +25,8 @@ export const requestGetMemberStudyListData = (memberId: string) =>
 export const requestGetStudyMembers = (studyId: string) =>
   http.get<ResponseStudyMembers>(`/api/studies/${studyId}/participants`);
 
-export const requestGetMemberRecordContents = (studyId: string, progressId: string) =>
-  http.get<ResponseMemberRecordContents>(`/api/studies/${studyId}/contents?progressId=${progressId}`);
+export const requestGetParticipantRecordContents = (studyId: string, participantId: string) =>
+  http.get<ResponseParticipantRecordContents>(`/api/studies/${studyId}/contents?participantId=${participantId}`);
 
 export const requestPostGuestLogin = () => http.post<ResponseAuthToken>(`/api/auth/guest`);
 

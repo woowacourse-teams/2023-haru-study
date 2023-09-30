@@ -4,7 +4,7 @@ import type {
   RetrospectList,
   StudyInfo,
   Participant,
-  MemberRecordContent,
+  ParticipantRecordContent,
   PlanList,
   Step,
   StudyBasicInfo,
@@ -48,8 +48,8 @@ export type ResponseStudyMembers = {
   participants: Participant[];
 };
 
-export type ResponseMemberRecordContents = {
-  content: MemberRecordContent[];
+export type ResponseParticipantRecordContents = {
+  content: ParticipantRecordContent[];
 };
 
 type ResponseProgress = {

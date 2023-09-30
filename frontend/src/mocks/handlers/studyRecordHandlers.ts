@@ -87,18 +87,8 @@ const STUDY_CONTENT = {
     },
     {
       cycle: 6,
-      plan: {
-        toDo: '',
-        completionCondition: '',
-        expectedProbability: '',
-        expectedDifficulty: '',
-        whatCanYouDo: '',
-      },
-      retrospect: {
-        doneAsExpected: '',
-        experiencedDifficulty: '',
-        lesson: '',
-      },
+      plan: {},
+      retrospect: {},
     },
   ],
 };

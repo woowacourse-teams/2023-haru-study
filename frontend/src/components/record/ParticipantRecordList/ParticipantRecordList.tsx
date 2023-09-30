@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import Accordion from '@Components/common/Accordion/Accordion';
 import Typography from '@Components/common/Typography/Typography';
 
-import ProgressRecord from '../ProgressRecord/ProgressRecord';
+import ParticipantRecord from '../ParticipantRecord/ParticipantRecord';
 import useStudyMembers from '../hooks/useStudyMembers';
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
   isRefetch: boolean;
 };
 
-const ProgressRecordList = ({ studyId, isRefetch }: Props) => {
+const ParticipantRecordList = ({ studyId, isRefetch }: Props) => {
   const { participants, refetch } = useStudyMembers(studyId);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const ProgressRecordList = ({ studyId, isRefetch }: Props) => {
             <Typography variant="h5">{nickname}의 기록</Typography>
           </Accordion.Header>
           <Accordion.Panel>
-            <ProgressRecord studyId={studyId} participantId={participantId} nickname={nickname} />
+            <ParticipantRecord studyId={studyId} participantId={participantId} nickname={nickname} />
           </Accordion.Panel>
         </Accordion.Item>
       ))}
@@ -34,4 +34,4 @@ const ProgressRecordList = ({ studyId, isRefetch }: Props) => {
   );
 };
 
-export default ProgressRecordList;
+export default ParticipantRecordList;

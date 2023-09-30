@@ -36,7 +36,7 @@ export type StudyData = {
 } & StudyBasicInfo &
   Progress;
 
-export type MemberRecordContent = {
+export type ParticipantRecordContent = {
   cycle: number;
   plan: PlanList;
   retrospect: RetrospectList;

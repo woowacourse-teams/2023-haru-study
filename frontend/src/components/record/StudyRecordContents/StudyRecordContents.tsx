@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 
 import AccordionSkeleton from '@Components/common/Accordion/AccordionSkeleton';
 
-import ProgressRecordList from '../ProgressRecordList/ProgressRecordList';
+import ParticipantRecordList from '../ParticipantRecordList/ParticipantRecordList';
 import ResetButton from '../ResetButton/ResetButton';
 import StudyInformation from '../StudyInformation/StudyInformation';
 
@@ -15,7 +15,7 @@ const StudyRecordContents = () => {
 
   const [isRefetch, setIsRefetch] = useState(false);
 
-  const refetchProgressRecordList = () => {
+  const refetchParticipantRecordList = () => {
     setIsRefetch(true);
     setTimeout(() => {
       setIsRefetch(false);
@@ -25,9 +25,9 @@ const StudyRecordContents = () => {
   return (
     <Layout>
       <StudyInformation studyId={studyId} />
-      <ResetButton refetchProgressRecordList={refetchProgressRecordList} isRefetch={isRefetch} />
+      <ResetButton refetchParticipantRecordList={refetchParticipantRecordList} isRefetch={isRefetch} />
       <Suspense fallback={<AccordionSkeleton />}>
-        <ProgressRecordList studyId={studyId} isRefetch={isRefetch} />
+        <ParticipantRecordList studyId={studyId} isRefetch={isRefetch} />
       </Suspense>
     </Layout>
   );
