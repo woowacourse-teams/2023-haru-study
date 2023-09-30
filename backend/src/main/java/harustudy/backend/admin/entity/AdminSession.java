@@ -23,16 +23,16 @@ public class AdminSession extends BaseTimeEntity {
 
     private UUID uuid;
 
-    private LocalDateTime expiredDate;
+    private LocalDateTime expiredDateTime;
 
     public AdminSession(UUID value) {
         this.uuid = value;
-        this.expiredDate = LocalDateTime.now()
+        this.expiredDateTime = LocalDateTime.now()
                 .plus(1L, ChronoUnit.HOURS);
     }
 
     public void validateIsExpired() {
-        if (expiredDate.isBefore(LocalDateTime.now())) {
+        if (expiredDateTime.isBefore(LocalDateTime.now())) {
             throw new AdminSessionExpiredException();
         }
     }
