@@ -9,7 +9,7 @@ import type {
   ResponseStudies,
   ResponseStudyData,
   ResponseStudyDataList,
-  ResponseStudyMembers,
+  ResponseStudyParticipants,
   ResponseCheckProgresses,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
@@ -22,8 +22,8 @@ export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyDa
 export const requestGetMemberStudyListData = (memberId: string) =>
   http.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`);
 
-export const requestGetStudyMembers = (studyId: string) =>
-  http.get<ResponseStudyMembers>(`/api/studies/${studyId}/participants`);
+export const requestGetStudyParticipants = (studyId: string) =>
+  http.get<ResponseStudyParticipants>(`/api/studies/${studyId}/participants`);
 
 export const requestGetParticipantRecordContents = (studyId: string, participantId: string) =>
   http.get<ResponseParticipantRecordContents>(`/api/studies/${studyId}/contents?participantId=${participantId}`);

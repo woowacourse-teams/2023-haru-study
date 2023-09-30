@@ -44,7 +44,7 @@ export type ResponseStudyDataList = {
   studies: StudyBasicInfo[];
 };
 
-export type ResponseStudyMembers = {
+export type ResponseStudyParticipants = {
   participants: Participant[];
 };
 

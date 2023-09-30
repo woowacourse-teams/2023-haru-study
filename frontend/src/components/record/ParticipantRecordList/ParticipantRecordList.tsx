@@ -4,7 +4,7 @@ import Accordion from '@Components/common/Accordion/Accordion';
 import Typography from '@Components/common/Typography/Typography';
 
 import ParticipantRecord from '../ParticipantRecord/ParticipantRecord';
-import useStudyMembers from '../hooks/useStudyMembers';
+import useStudyParticipants from '../hooks/useStudyParticipants';
 
 type Props = {
   studyId: string;
@@ -12,7 +12,7 @@ type Props = {
 };
 
 const ParticipantRecordList = ({ studyId, isRefetch }: Props) => {
-  const { participants, refetch } = useStudyMembers(studyId);
+  const { participants, refetch } = useStudyParticipants(studyId);
 
   useEffect(() => {
     if (isRefetch) refetch();
