@@ -1,6 +1,7 @@
 package harustudy.backend.admin.controller;
 
 import harustudy.backend.admin.dto.AdminLoginRequest;
+import harustudy.backend.admin.dto.AdminParticipantResponse;
 import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.admin.service.AdminService;
 import harustudy.backend.study.dto.StudiesResponse;
@@ -37,5 +38,11 @@ public class AdminController {
     public ResponseEntity<List<AdminStudyResponse>> findStudies(Pageable pageable) {
         List<AdminStudyResponse> studies = adminService.findStudies(pageable);
         return ResponseEntity.ok(studies);
+    }
+
+    @GetMapping("/participants")
+    public ResponseEntity<List<AdminParticipantResponse>> findParticipants(Pageable pageable) {
+        List<AdminParticipantResponse> participants = adminService.findParticipants(pageable);
+        return ResponseEntity.ok(participants);
     }
 }
