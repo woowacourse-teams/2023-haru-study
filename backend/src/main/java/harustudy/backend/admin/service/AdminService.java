@@ -56,11 +56,7 @@ public class AdminService {
     }
 
     public List<AdminStudyResponse> findStudiesCreatedToday(Pageable pageable) {
-        LocalDateTime midnightTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
-                .withHour(0)
-                .withMinute(0)
-                .withSecond(0)
-                .withNano(0);
+        LocalDateTime midnightTime = findMidnightTime();
 
         return studyRepository.findAllByCreatedDateBetween(pageable, midnightTime, LocalDateTime.now())
                 .map(AdminStudyResponse::from)
@@ -68,15 +64,19 @@ public class AdminService {
     }
 
     public List<AdminStudyResponse> findStudiesDoneToday(Pageable pageable) {
-        LocalDateTime midnightTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
-                .withHour(0)
-                .withMinute(0)
-                .withSecond(0)
-                .withNano(0);
+        LocalDateTime midnightTime = findMidnightTime();
 
         return studyRepository.findAllByLastModifiedDateBetweenAndStepIs(pageable, midnightTime,
                 LocalDateTime.now(), Step.DONE)
                 .map(AdminStudyResponse::from)
                 .toList();
+    }
+
+    private LocalDateTime findMidnightTime() {
+        return LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+                .withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0);
     }
 }
