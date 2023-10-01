@@ -46,8 +46,7 @@ public class AdminService {
     }
 
     private UUID createSession() {
-        UUID uuid = UUID.randomUUID();
-        AdminSession adminSession = new AdminSession(uuid);
+        AdminSession adminSession = new AdminSession();
         AdminSession saved = adminSessionRepository.save(adminSession);
 
         return saved.getUuid();

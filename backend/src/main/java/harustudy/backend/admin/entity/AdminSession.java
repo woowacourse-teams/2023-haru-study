@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
-@NoArgsConstructor
 @Getter
 @Entity
 public class AdminSession extends BaseTimeEntity {
@@ -25,8 +24,8 @@ public class AdminSession extends BaseTimeEntity {
 
     private LocalDateTime expiredDateTime;
 
-    public AdminSession(UUID value) {
-        this.uuid = value;
+    public AdminSession() {
+        this.uuid = UUID.randomUUID();
         this.expiredDateTime = LocalDateTime.now()
                 .plus(1L, ChronoUnit.HOURS);
     }
