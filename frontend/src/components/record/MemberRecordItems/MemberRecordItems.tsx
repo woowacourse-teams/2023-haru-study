@@ -16,7 +16,7 @@ type Props = {
   memberRecords: StudyBasicInfo[];
 };
 
-const MemberRecordItem = ({ memberRecords }: Props) => {
+const MemberRecordItems = ({ memberRecords }: Props) => {
   const navigate = useNavigate();
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
@@ -48,7 +48,7 @@ const MemberRecordItem = ({ memberRecords }: Props) => {
   );
 };
 
-export default MemberRecordItem;
+export default MemberRecordItems;
 
 const Layout = styled.ul`
   display: flex;

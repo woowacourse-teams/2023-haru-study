@@ -14,11 +14,11 @@ const DAY_COLOR = {
 
 type DAY = keyof typeof DAY_COLOR;
 
-const CalendarDayOfWeeks = () => {
+const CalendarDayOfWeeks = ({ position = 'left' }: { position?: 'left' | 'center' }) => {
   return (
     <Layout>
       {['일', '월', '화', '수', '목', '금', '토'].map((dayOfWeek, index) => (
-        <DayOfWeek key={dayOfWeek} day={index as DAY}>
+        <DayOfWeek key={dayOfWeek} day={index as DAY} position={position}>
           {dayOfWeek}
         </DayOfWeek>
       ))}
@@ -34,15 +34,17 @@ const Layout = styled.ul`
 
 type DayOfWeekProps = {
   day: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  position: 'left' | 'center';
 };
 
 const DayOfWeek = styled.li<DayOfWeekProps>`
   flex: 1;
-  margin-left: 5px;
 
   color: ${color.black};
 
-  ${({ day }) => css`
-    color: ${DAY_COLOR[day]};
+  ${({ day, position }) => css`
+    color: ${position === 'left' ? DAY_COLOR[day] : color.black};
+    margin-left: ${position === 'left' && '5px'};
+    text-align: ${position === 'center' && 'center'};
   `}
 `;

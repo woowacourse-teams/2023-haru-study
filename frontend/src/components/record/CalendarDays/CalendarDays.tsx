@@ -46,9 +46,9 @@ const Days = styled.ul<DaysProps>`
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: ${({ $numberOfWeeks }) => `repeat(${$numberOfWeeks}, minmax(120px, auto))`};
   gap: 1px;
-  border: 1px solid ${color.neutral[100]};
+  border: 1px solid ${color.neutral[200]};
 
-  background-color: ${color.neutral[100]};
+  background-color: ${color.neutral[200]};
 
   li {
     padding: 5px;
@@ -78,7 +78,7 @@ const Day = styled.div<DayProps>`
   background-color: ${color.white};
 
   ${({ $isCurrentMonthDay, $isSunday, $isSaturday, $isToday }) => css`
-    opacity: ${$isCurrentMonthDay ? 1 : 0.5};
+    opacity: ${$isCurrentMonthDay ? 1 : 0.4};
     color: ${$isSaturday ? color.blue[600] : $isSunday ? color.red[600] : color.black};
 
     background-color: ${$isToday && color.neutral[100]};
