@@ -62,4 +62,16 @@ public class AdminController {
         List<AdminParticipantCodeResponse> participantCodes = adminService.findParticipantCodes(pageable);
         return ResponseEntity.ok(participantCodes);
     }
+
+    @GetMapping("/studies/created")
+    public ResponseEntity<List<AdminStudyResponse>> findStudiesCreatedToday(Pageable pageable) {
+        List<AdminStudyResponse> studies = adminService.findStudiesCreatedToday(pageable);
+        return ResponseEntity.ok(studies);
+    }
+
+    @GetMapping("/studies/done")
+    public ResponseEntity<List<AdminStudyResponse>> findStudiesDoneToday(Pageable pageable) {
+        List<AdminStudyResponse> studies = adminService.findStudiesDoneToday(pageable);
+        return ResponseEntity.ok(studies);
+    }
 }

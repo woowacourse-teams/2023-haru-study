@@ -8,6 +8,7 @@ import harustudy.backend.content.domain.Content;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.participant.domain.Step;
 import harustudy.backend.study.domain.Study;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -20,6 +21,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -99,5 +102,61 @@ class AdminServiceTest {
 
         // then
         assertThat(contents).hasSize(5);
+    }
+
+    @Test
+    void 오늘_개설된_스터디를_조회할_수_있다() {
+        // given
+        PageRequest pageRequest = PageRequest.of(0, 20);
+
+        Study study = new Study("name", 1, 20);
+        Study studyCreatedYesterday = new Study("name", 1, 20);
+
+        entityManager.persist(study);
+        entityManager.persist(studyCreatedYesterday);
+        entityManager.flush();
+
+        entityManager.createQuery("update Study set createdDate = :createdDate where id = :id")
+                .setParameter("createdDate", LocalDateTime.now().minus(1L, ChronoUnit.DAYS))
+                .setParameter("id", studyCreatedYesterday.getId())
+                .executeUpdate();
+
+        // when
+        List<AdminStudyResponse> studies = adminService.findStudiesCreatedToday(pageRequest);
+
+        // then
+        assertThat(studies).hasSize(16);
+    }
+
+    @Test
+    void 오늘_완료된_스터디를_조회할_수_있다() {
+        // given
+        PageRequest pageRequest = PageRequest.of(0, 5);
+
+        Study study = new Study("name", 1, 20);
+        Study studyDoneYesterday = new Study("name", 1, 20);
+
+        int stepLength = Step.values().length;
+        for (int i = 0; i < stepLength - 1; i++) {
+            study.proceed();
+            studyDoneYesterday.proceed();
+        }
+
+        entityManager.persist(study);
+        entityManager.persist(studyDoneYesterday);
+        entityManager.flush();
+
+        entityManager.createQuery("update Study set lastModifiedDate = :lastModifiedDate where id = :id")
+                .setParameter("lastModifiedDate", LocalDateTime.now().minus(1L, ChronoUnit.DAYS))
+                .setParameter("id", studyDoneYesterday.getId())
+                .executeUpdate();
+
+        // when
+        List<AdminStudyResponse> studies = adminService.findStudiesDoneToday(pageRequest);
+
+        // then
+        assertThat(studies)
+                .hasSize(1)
+                .allMatch(each -> each.step().equals(Step.DONE.name()));
     }
 }
