@@ -10,8 +10,6 @@ import { ROUTES_PATH } from '@Constants/routes';
 import CycleIcon from '@Assets/icons/CycleIcon';
 import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
-import format from '@Utils/format';
-
 import type { StudyBasicInfo } from '@Types/study';
 
 type Props = {
@@ -30,7 +28,7 @@ const MemberRecordList = ({ memberRecords }: Props) => {
           <StudyItem key={studyId} onClick={() => handleClickStudyItem(studyId)}>
             <StudyNameDateContainer>
               <Typography variant="h6">{name} 스터디</Typography>
-              <StudyDate data-testid="progress-date">{format.date(new Date(createdDateTime))}</StudyDate>
+              <StudyDate data-testid="progress-date">{createdDateTime}</StudyDate>
             </StudyNameDateContainer>
             <StudyCycleInfoLayout>
               <StudyCycleInfoContainer>
