@@ -1,7 +1,9 @@
 package harustudy.backend.auth.service;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -12,7 +14,9 @@ import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
+import harustudy.backend.auth.exception.InvalidAccessTokenException;
 import harustudy.backend.auth.infrastructure.GoogleOauthClient;
+import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import jakarta.persistence.EntityManager;
@@ -37,6 +41,9 @@ class AuthServiceTest {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     private TokenConfig tokenConfig;
@@ -108,5 +115,34 @@ class AuthServiceTest {
 
         // then
         assertThat(response.refreshToken()).isNotEqualTo(refreshToken.getUuid());
+    }
+
+    @Test
+    void 유효한_액세스_토큰의_유효성_검사_시_예외를_반환한다() {
+        // given
+        Long memberId = 1L;
+        String accessToken = jwtTokenProvider.builder()
+                .subject(String.valueOf(memberId))
+                .accessTokenExpireLength(999999L)
+                .secretKey(tokenConfig.secretKey())
+                .build();
+
+        // when, then
+        assertDoesNotThrow(() -> authService.validateAccessToken(accessToken));
+    }
+
+    @Test
+    void 만료된_액세스_토큰의_유효성_검사_시_예외를_반환한다() {
+        // given
+        Long memberId = 1L;
+        String accessToken = jwtTokenProvider.builder()
+                .subject(String.valueOf(memberId))
+                .accessTokenExpireLength(0L)
+                .secretKey(tokenConfig.secretKey())
+                .build();
+
+        // when, then
+        assertThatThrownBy(() -> authService.validateAccessToken(accessToken)).isInstanceOf(
+                InvalidAccessTokenException.class);
     }
 }
