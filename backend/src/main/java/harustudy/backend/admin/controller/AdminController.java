@@ -1,9 +1,6 @@
 package harustudy.backend.admin.controller;
 
-import harustudy.backend.admin.dto.AdminLoginRequest;
-import harustudy.backend.admin.dto.AdminMemberResponse;
-import harustudy.backend.admin.dto.AdminParticipantResponse;
-import harustudy.backend.admin.dto.AdminStudyResponse;
+import harustudy.backend.admin.dto.*;
 import harustudy.backend.admin.service.AdminService;
 import harustudy.backend.study.dto.StudiesResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,6 +32,12 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/members")
+    public ResponseEntity<List<AdminMemberResponse>> findMembers(Pageable pageable) {
+        List<AdminMemberResponse> members = adminService.findMembers(pageable);
+        return ResponseEntity.ok(members);
+    }
+
     @GetMapping("/studies")
     public ResponseEntity<List<AdminStudyResponse>> findStudies(Pageable pageable) {
         List<AdminStudyResponse> studies = adminService.findStudies(pageable);
@@ -47,9 +50,15 @@ public class AdminController {
         return ResponseEntity.ok(participants);
     }
 
-    @GetMapping("/members")
-    public ResponseEntity<List<AdminMemberResponse>> findMembers(Pageable pageable) {
-        List<AdminMemberResponse> members = adminService.findMembers(pageable);
-        return ResponseEntity.ok(members);
+    @GetMapping("/contents")
+    public ResponseEntity<List<AdminContentResponse>> findContents(Pageable pageable) {
+        List<AdminContentResponse> contents = adminService.findContents(pageable);
+        return ResponseEntity.ok(contents);
+    }
+
+    @GetMapping("/participant-codes")
+    public ResponseEntity<List<AdminParticipantCodeResponse>> findParticipantCodes(Pageable pageable) {
+        List<AdminParticipantCodeResponse> participantCodes = adminService.findParticipantCodes(pageable);
+        return ResponseEntity.ok(participantCodes);
     }
 }

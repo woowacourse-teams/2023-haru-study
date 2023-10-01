@@ -1,7 +1,9 @@
 package harustudy.backend.admin.service;
 
+import harustudy.backend.admin.dto.AdminContentResponse;
 import harustudy.backend.admin.dto.AdminLoginRequest;
 import harustudy.backend.admin.dto.AdminMemberResponse;
+import harustudy.backend.admin.dto.AdminParticipantCodeResponse;
 import harustudy.backend.admin.dto.AdminParticipantResponse;
 import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.admin.entity.AdminSession;
@@ -9,8 +11,10 @@ import harustudy.backend.admin.exception.AdminNotFoundException;
 import harustudy.backend.admin.exception.SessionNotFoundException;
 import harustudy.backend.admin.repository.AdminRepository;
 import harustudy.backend.admin.repository.AdminSessionRepository;
+import harustudy.backend.content.repository.ContentRepository;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participant.repository.ParticipantRepository;
+import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.study.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +32,8 @@ public class AdminService {
     private final StudyRepository studyRepository;
     private final ParticipantRepository participantRepository;
     private final MemberRepository memberRepository;
+    private final ContentRepository contentRepository;
+    private final ParticipantCodeRepository participantCodeRepository;
 
     public UUID login(AdminLoginRequest request) {
         String account = request.account();
@@ -69,6 +75,18 @@ public class AdminService {
     public List<AdminMemberResponse> findMembers(Pageable pageable) {
         return memberRepository.findAll(pageable)
                 .map(AdminMemberResponse::from)
+                .toList();
+    }
+
+    public List<AdminContentResponse> findContents(Pageable pageable) {
+        return contentRepository.findAll(pageable)
+                .map(AdminContentResponse::from)
+                .toList();
+    }
+
+    public List<AdminParticipantCodeResponse> findParticipantCodes(Pageable pageable) {
+        return participantCodeRepository.findAll(pageable)
+                .map(AdminParticipantCodeResponse::from)
                 .toList();
     }
 }
