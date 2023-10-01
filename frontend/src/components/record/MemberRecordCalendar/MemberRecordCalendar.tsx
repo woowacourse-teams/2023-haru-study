@@ -6,6 +6,7 @@ import color from '@Styles/color';
 import format from '@Utils/format';
 
 import CalendarControl from '../CalendarControl/CalendarControl';
+import CalendarDayOfWeeks from '../CalendarDayOfWeeks/CalendarDayOfWeeks';
 
 const MemberRecordCalendar = () => {
   const today = new Date();
@@ -82,18 +83,7 @@ const MemberRecordCalendar = () => {
         handleNavigationMonth={handleNavigationMonth}
       />
       <Calendar>
-        <DayOfWeek>
-          {['일', '월', '화', '수', '목', '금', '토'].map((dayOfWeek) => (
-            <li
-              key={dayOfWeek}
-              style={{
-                color: dayOfWeek === '일' ? color.red[600] : dayOfWeek === '토' ? color.blue[600] : color.black,
-              }}
-            >
-              {dayOfWeek}
-            </li>
-          ))}
-        </DayOfWeek>
+        <CalendarDayOfWeeks />
         <Days $numberOfWeeks={monthStorage.length / 7}>
           {monthStorage.map(({ fullDate, state, dayOfWeek, day }) => (
             <li key={fullDate}>
@@ -127,15 +117,6 @@ const Calendar = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
-`;
-
-const DayOfWeek = styled.ul`
-  display: flex;
-
-  li {
-    flex: 1;
-    margin-left: 5px;
-  }
 `;
 
 type DaysProps = {
