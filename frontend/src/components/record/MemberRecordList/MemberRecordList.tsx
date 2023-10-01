@@ -12,25 +12,20 @@ import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
 import format from '@Utils/format';
 
-import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
-import useMemberStudyListData from '../hooks/useMemberStudyListData';
+import type { StudyBasicInfo } from '@Types/study';
 
 type Props = {
-  memberId: string;
+  memberRecords: StudyBasicInfo[];
 };
 
-const MemberRecordList = ({ memberId }: Props) => {
+const MemberRecordList = ({ memberRecords }: Props) => {
   const navigate = useNavigate();
-
-  const { studyList, isLoading } = useMemberStudyListData(memberId);
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
 
-  if (!isLoading && studyList.length === 0) return <EmptyMemberRecord />;
-
   return (
     <Layout>
-      {studyList.map(({ studyId, name, createdDateTime, totalCycle, timePerCycle }) => {
+      {memberRecords.map(({ studyId, name, createdDateTime, totalCycle, timePerCycle }) => {
         return (
           <StudyItem key={studyId} onClick={() => handleClickStudyItem(studyId)}>
             <StudyNameDateContainer>

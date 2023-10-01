@@ -40,7 +40,7 @@ export type ResponsePlanList = PlanList;
 
 export type ResponseStudyData = StudyBasicInfo;
 
-export type ResponseStudyDataList = {
+export type ResponseMemberRecords = {
   studies: StudyBasicInfo[];
 };
 

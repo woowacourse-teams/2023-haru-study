@@ -8,8 +8,8 @@ import color from '@Styles/color';
 
 import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
-import MemberRecordList from '../MemberRecordList/MemberRecordList';
 import MemberRecordListSkeleton from '../MemberRecordList/MemberRecordListSkeleton';
+import MemberRecords from '../MemberRecords/MemberRecords';
 
 const MemberRecordContents = () => {
   const navigate = useNavigate();
@@ -17,15 +17,14 @@ const MemberRecordContents = () => {
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
 
   const memberInfo = useMemberInfo();
-  const memberId = memberInfo?.memberId;
 
   if (memberInfo?.loginType === 'guest') {
     navigate('/404');
   }
 
   return (
-    <>
-      {memberInfo && (
+    memberInfo && (
+      <>
         <Title>
           <Typography
             variant="h2"
@@ -44,11 +43,12 @@ const MemberRecordContents = () => {
             </ViewModeButton>
           </ViewModeButtonContainer>
         </Title>
-      )}
-      <Suspense fallback={<MemberRecordListSkeleton />}>
-        {memberId && <MemberRecordList memberId={memberId} />}
-      </Suspense>
-    </>
+        {/*  Suspense fallback 이후에 viewMode에 따라 분리 작업 필요 */}
+        <Suspense fallback={<MemberRecordListSkeleton />}>
+          <MemberRecords memberId={memberInfo.memberId} viewMode={viewMode} />
+        </Suspense>
+      </>
+    )
   );
 };
 

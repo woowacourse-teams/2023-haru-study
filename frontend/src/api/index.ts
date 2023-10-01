@@ -8,7 +8,7 @@ import type {
   ResponseMemberContents,
   ResponseStudies,
   ResponseStudyData,
-  ResponseStudyDataList,
+  ResponseMemberRecords,
   ResponseStudyMembers,
   ResponseCheckProgresses,
 } from '@Types/api';
@@ -19,8 +19,8 @@ import http from './httpInstance';
 
 export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyData>(`/api/studies/${studyId}`);
 
-export const requestGetMemberStudyListData = (memberId: string) =>
-  http.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`);
+export const requestGetMemberRecords = (memberId: string) =>
+  http.get<ResponseMemberRecords>(`/api/studies?memberId=${memberId}`);
 
 export const requestGetStudyMembers = (studyId: string) =>
   http.get<ResponseStudyMembers>(`/api/studies/${studyId}/progresses`);
