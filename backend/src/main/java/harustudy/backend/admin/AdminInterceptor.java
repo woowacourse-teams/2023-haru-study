@@ -1,6 +1,6 @@
 package harustudy.backend.admin;
 
-import harustudy.backend.admin.service.AdminService;
+import harustudy.backend.admin.service.AdminAuthService;
 import harustudy.backend.auth.exception.AuthorizationException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @Component
 public class AdminInterceptor implements HandlerInterceptor {
 
-    private final AdminService adminService;
+    private final AdminAuthService adminAuthService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -30,7 +30,7 @@ public class AdminInterceptor implements HandlerInterceptor {
         }
 
         UUID uuid = (UUID) session.getAttribute("SESSION");
-        adminService.validateSession(uuid);
+        adminAuthService.validateSession(uuid);
         return true;
     }
 }
