@@ -1,6 +1,7 @@
 package harustudy.backend.admin.service;
 
 import harustudy.backend.admin.dto.AdminLoginRequest;
+import harustudy.backend.admin.dto.AdminMemberResponse;
 import harustudy.backend.admin.dto.AdminParticipantResponse;
 import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.admin.entity.AdminSession;
@@ -8,6 +9,7 @@ import harustudy.backend.admin.exception.AdminNotFoundException;
 import harustudy.backend.admin.exception.SessionNotFoundException;
 import harustudy.backend.admin.repository.AdminRepository;
 import harustudy.backend.admin.repository.AdminSessionRepository;
+import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.study.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class AdminService {
     private final AdminSessionRepository adminSessionRepository;
     private final StudyRepository studyRepository;
     private final ParticipantRepository participantRepository;
+    private final MemberRepository memberRepository;
 
     public UUID login(AdminLoginRequest request) {
         String account = request.account();
@@ -60,6 +63,12 @@ public class AdminService {
     public List<AdminParticipantResponse> findParticipants(Pageable pageable) {
         return participantRepository.findAll(pageable)
                 .map(AdminParticipantResponse::from)
+                .toList();
+    }
+
+    public List<AdminMemberResponse> findMembers(Pageable pageable) {
+        return memberRepository.findAll(pageable)
+                .map(AdminMemberResponse::from)
                 .toList();
     }
 }
