@@ -35,12 +35,14 @@ const MemberRecordCalendar = () => {
 
     if (changedMonth === 0) {
       setYear((prev) => prev - 1);
+      setNavigationYear((prev) => prev - 1);
       setMonth(12);
       return;
     }
 
     if (changedMonth === 13) {
       setYear((prev) => prev + 1);
+      setNavigationYear((prev) => prev + 1);
       setMonth(1);
       return;
     }
@@ -69,13 +71,7 @@ const MemberRecordCalendar = () => {
   return (
     <Layout>
       <CalenderControlContainer ref={ref}>
-        <Typography
-          variant="p1"
-          onClick={() => {
-            setIsOpenCalendarNavigation((prev) => !prev);
-            setNavigationYear(year);
-          }}
-        >
+        <Typography variant="p1" onClick={() => setIsOpenCalendarNavigation((prev) => !prev)}>
           {year}년 {month}월
           <ArrowIcon direction="down" />
         </Typography>
@@ -153,6 +149,8 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
+
+  user-select: none;
 `;
 
 const CalenderControlContainer = styled.div`
@@ -188,7 +186,7 @@ const CalenderControlContainer = styled.div`
 const MonthShiftButtonContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
 
   margin-left: 20px;
 `;
@@ -222,8 +220,6 @@ const CalendarNavigation = styled.div`
   border-radius: 4px;
 
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-
-  user-select: none;
 
   z-index: 5;
 `;
@@ -278,8 +274,6 @@ const Calendar = styled.div`
 
 const DayOfWeek = styled.ul`
   display: flex;
-
-  user-select: none;
 
   li {
     flex: 1;
