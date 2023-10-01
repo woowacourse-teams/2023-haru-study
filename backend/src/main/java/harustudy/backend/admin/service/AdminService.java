@@ -1,14 +1,18 @@
 package harustudy.backend.admin.service;
 
 import harustudy.backend.admin.dto.AdminLoginRequest;
+import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.admin.entity.AdminSession;
 import harustudy.backend.admin.exception.AdminNotFoundException;
 import harustudy.backend.admin.exception.SessionNotFoundException;
 import harustudy.backend.admin.repository.AdminRepository;
 import harustudy.backend.admin.repository.AdminSessionRepository;
+import harustudy.backend.study.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -17,6 +21,7 @@ public class AdminService {
 
     private final AdminRepository adminRepository;
     private final AdminSessionRepository adminSessionRepository;
+    private final StudyRepository studyRepository;
 
     public UUID login(AdminLoginRequest request) {
         String account = request.account();
@@ -41,5 +46,11 @@ public class AdminService {
                 .orElseThrow(SessionNotFoundException::new);
 
         adminSession.validateIsExpired();
+    }
+
+    public List<AdminStudyResponse> findStudies(Pageable pageable) {
+        return studyRepository.findAll(pageable)
+                .map(AdminStudyResponse::from)
+                .toList();
     }
 }

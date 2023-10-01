@@ -1,14 +1,18 @@
 package harustudy.backend.admin.controller;
 
 import harustudy.backend.admin.dto.AdminLoginRequest;
+import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.admin.service.AdminService;
+import harustudy.backend.study.dto.StudiesResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -27,5 +31,11 @@ public class AdminController {
         session.setMaxInactiveInterval(3600);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/studies")
+    public ResponseEntity<List<AdminStudyResponse>> findStudies(Pageable pageable) {
+        List<AdminStudyResponse> studies = adminService.findStudies(pageable);
+        return ResponseEntity.ok(studies);
     }
 }
