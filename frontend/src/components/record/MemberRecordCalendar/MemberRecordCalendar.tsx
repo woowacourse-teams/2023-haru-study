@@ -1,12 +1,9 @@
 import { useState } from 'react';
-import { css, styled } from 'styled-components';
-
-import color from '@Styles/color';
-
-import format from '@Utils/format';
+import { styled } from 'styled-components';
 
 import CalendarControl from '../CalendarControl/CalendarControl';
 import CalendarDayOfWeeks from '../CalendarDayOfWeeks/CalendarDayOfWeeks';
+import CalendarDays from '../CalendarDays/CalendarDays';
 
 const MemberRecordCalendar = () => {
   const today = new Date();
@@ -84,20 +81,7 @@ const MemberRecordCalendar = () => {
       />
       <Calendar>
         <CalendarDayOfWeeks />
-        <Days $numberOfWeeks={monthStorage.length / 7}>
-          {monthStorage.map(({ fullDate, state, dayOfWeek, day }) => (
-            <li key={fullDate}>
-              <Day
-                $isCurrentMonthDay={state === 'cur'}
-                $isToday={fullDate === format.date(today)}
-                $isSunday={dayOfWeek === 0}
-                $isSaturday={dayOfWeek === 6}
-              >
-                {day}
-              </Day>
-            </li>
-          ))}
-        </Days>
+        <CalendarDays monthStorage={monthStorage} />
       </Calendar>
     </Layout>
   );
@@ -119,77 +103,22 @@ const Calendar = styled.div`
   gap: 5px;
 `;
 
-type DaysProps = {
-  $numberOfWeeks: number;
-};
-
-const Days = styled.ul<DaysProps>`
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: ${({ $numberOfWeeks }) => `repeat(${$numberOfWeeks}, minmax(120px, auto))`};
-  gap: 1px;
-  border: 1px solid ${color.neutral[100]};
-
-  background-color: ${color.neutral[100]};
-
-  li {
-    padding: 5px;
-
-    background-color: ${color.white};
-  }
-`;
-
-type DayProps = {
-  $isCurrentMonthDay: boolean;
-  $isToday: boolean;
-  $isSunday: boolean;
-  $isSaturday: boolean;
-};
-
-const Day = styled.div<DayProps>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 5px;
-  border-radius: 50%;
-
-  width: 30px;
-  height: 30px;
-
-  background-color: ${color.white};
-
-  ${({ $isCurrentMonthDay, $isSunday, $isSaturday, $isToday }) => css`
-    opacity: ${$isCurrentMonthDay ? 1 : 0.5};
-    color: ${$isSaturday ? color.blue[600] : $isSunday ? color.red[600] : color.black};
-
-    background-color: ${$isToday && color.neutral[100]};
-  `}
-`;
-
 //
 
-const getDatesPrevMonth = (
-  lastDatePrevMonth: Date,
-): {
+type MonthStorage = {
   day: number;
   dayOfWeek: number;
   fullDate: string;
   state: 'prev' | 'cur' | 'next';
-}[] => {
-  const storage: {
-    day: number;
-    dayOfWeek: number;
-    fullDate: string;
-    state: 'prev' | 'cur' | 'next';
-  }[] = [];
+}[];
 
+const getDatesPrevMonth = (lastDatePrevMonth: Date): MonthStorage => {
   const lastDate = lastDatePrevMonth.getDate(); // 이전달의 마지막 일
   const lastDay = lastDatePrevMonth.getDay(); // 이전달의 마지막 요일
   const prevMonth = lastDatePrevMonth.getMonth(); // 이전 달
   const prevYear = lastDatePrevMonth.getFullYear(); // 이전 년도
 
-  if (lastDay === 6) return storage; // 이전 달의 마지막 요일이 토요일 경우
+  if (lastDay === 6) return []; // 이전 달의 마지막 요일이 토요일 경우
 
   return Array.from({ length: lastDay + 1 }).map((_, index) => {
     const day = lastDate - lastDay + index;
@@ -204,15 +133,7 @@ const getDatesPrevMonth = (
   });
 };
 
-const getDatesCurrentMonth = (
-  firstDateCurrentMonth: Date,
-  lastDateCurrentMonth: Date,
-): {
-  day: number;
-  dayOfWeek: number;
-  fullDate: string;
-  state: 'prev' | 'cur' | 'next';
-}[] => {
+const getDatesCurrentMonth = (firstDateCurrentMonth: Date, lastDateCurrentMonth: Date): MonthStorage => {
   const firstDay = firstDateCurrentMonth.getDay(); // 이번달의 첫번째 요일
   const lastDate = lastDateCurrentMonth.getDate(); // 이번달의 마지막 일
   const currentMonth = firstDateCurrentMonth.getMonth(); // 이번 달
@@ -231,14 +152,7 @@ const getDatesCurrentMonth = (
   });
 };
 
-const getDatesNextMonth = (
-  firstDateNextMonth: Date,
-): {
-  day: number;
-  dayOfWeek: number;
-  fullDate: string;
-  state: 'prev' | 'cur' | 'next';
-}[] => {
+const getDatesNextMonth = (firstDateNextMonth: Date): MonthStorage => {
   const firstDate = firstDateNextMonth.getDate(); // 다음달의 첫번째 일
   const firstDay = firstDateNextMonth.getDay(); // 다음달의 첫번째 요일
   const nextMonth = firstDateNextMonth.getMonth(); // 다음 달
