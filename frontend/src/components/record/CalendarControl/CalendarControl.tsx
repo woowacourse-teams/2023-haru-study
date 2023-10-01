@@ -170,7 +170,7 @@ const YearNavigationButton = styled.div`
 const MonthNavigation = styled.ul`
   display: grid;
   grid-template-columns: repeat(4, 80px);
-  row-gap: 20px;
+  row-gap: 5px;
   justify-items: center;
 
   padding: 10px;
@@ -181,10 +181,19 @@ type MonthProps = {
 };
 
 const Month = styled.li<MonthProps>`
+  padding: 10px 20px;
+  border-radius: 4px;
+
+  transition: background-color 0.2s ease;
+
   cursor: pointer;
 
   ${({ $isCurMonth }) => css`
     color: ${$isCurMonth ? color.blue[500] : color.neutral[600]};
     font-weight: ${$isCurMonth ? 500 : 300};
   `}
+
+  &:hover {
+    background-color: ${color.blue[100]};
+  }
 `;
