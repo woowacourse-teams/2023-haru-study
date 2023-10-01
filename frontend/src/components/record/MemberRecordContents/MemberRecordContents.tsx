@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled, css } from 'styled-components';
 
@@ -8,13 +8,12 @@ import color from '@Styles/color';
 
 import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
-import MemberRecordListSkeleton from '../MemberRecordList/MemberRecordListSkeleton';
 import MemberRecords from '../MemberRecords/MemberRecords';
 
 const MemberRecordContents = () => {
   const navigate = useNavigate();
 
-  const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
+  const [viewMode, setViewMode] = useState<'calendar' | 'list'>('list');
 
   const memberInfo = useMemberInfo();
 
@@ -43,10 +42,7 @@ const MemberRecordContents = () => {
             </ViewModeButton>
           </ViewModeButtonContainer>
         </Title>
-        {/*  Suspense fallback 이후에 viewMode에 따라 분리 작업 필요 */}
-        <Suspense fallback={<MemberRecordListSkeleton />}>
-          <MemberRecords memberId={memberInfo.memberId} viewMode={viewMode} />
-        </Suspense>
+        <MemberRecords memberId={memberInfo.memberId} viewMode={viewMode} />
       </>
     )
   );

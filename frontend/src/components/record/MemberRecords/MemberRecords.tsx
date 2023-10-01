@@ -1,7 +1,8 @@
-import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
+import { Suspense } from 'react';
+
 import MemberRecordCalendar from '../MemberRecordCalendar/MemberRecordCalendar';
 import MemberRecordList from '../MemberRecordList/MemberRecordList';
-import useMemberRecords from '../hooks/useMemberRecords';
+import MemberRecordListSkeleton from '../MemberRecordList/MemberRecordListSkeleton';
 
 type Props = {
   memberId: string;
@@ -9,13 +10,13 @@ type Props = {
 };
 
 const MemberRecords = ({ memberId, viewMode }: Props) => {
-  const { memberRecords, isLoading } = useMemberRecords(memberId);
-
   if (viewMode === 'calendar') return <MemberRecordCalendar />;
 
-  if (!isLoading && memberRecords.length === 0) return <EmptyMemberRecord />;
-
-  return <MemberRecordList memberRecords={memberRecords} />;
+  return (
+    <Suspense fallback={<MemberRecordListSkeleton />}>
+      <MemberRecordList memberId={memberId} />
+    </Suspense>
+  );
 };
 
 export default MemberRecords;
