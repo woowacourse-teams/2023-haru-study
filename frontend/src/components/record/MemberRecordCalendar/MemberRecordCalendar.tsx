@@ -3,6 +3,8 @@ import { css, styled } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
+import useOutsideClick from '@Hooks/common/useOutsideClick';
+
 import color from '@Styles/color';
 
 import ArrowIcon from '@Assets/icons/ArrowIcon';
@@ -14,6 +16,10 @@ const MemberRecordCalendar = () => {
 
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth() + 1);
+  const [navigationYear, setNavigationYear] = useState(year);
+  const [isOpenCalendarNavigation, setIsOpenCalendarNavigation] = useState(false);
+
+  const ref = useOutsideClick<HTMLDivElement>(() => setIsOpenCalendarNavigation(false));
 
   const handleMonthShift = (type: 'next' | 'prev' | 'today') => {
     if (type === 'today') {
@@ -62,11 +68,17 @@ const MemberRecordCalendar = () => {
 
   return (
     <Layout>
-      <CalenderControlContainer>
-        <Typography variant="p1">
+      <CalenderControlContainer ref={ref}>
+        <Typography
+          variant="p1"
+          onClick={() => {
+            setIsOpenCalendarNavigation((prev) => !prev);
+            setNavigationYear(year);
+          }}
+        >
           {year}년 {month}월
+          <ArrowIcon direction="down" />
         </Typography>
-        <ArrowIcon direction="down" />
         <MonthShiftButtonContainer>
           <MonthShiftButton onClick={() => handleMonthShift('prev')}>
             <ArrowIcon direction="left" />
@@ -76,6 +88,32 @@ const MemberRecordCalendar = () => {
           </MonthShiftButton>
           <ShiftTodayButton onClick={() => handleMonthShift('today')}>오늘</ShiftTodayButton>
         </MonthShiftButtonContainer>
+        {isOpenCalendarNavigation && (
+          <CalendarNavigation>
+            <YearNavigation>
+              <div>{navigationYear}</div>
+              <YearNavigationButton>
+                <ArrowIcon direction="left" onClick={() => setNavigationYear((prev) => prev - 1)} />
+                <ArrowIcon direction="right" onClick={() => setNavigationYear((prev) => prev + 1)} />
+              </YearNavigationButton>
+            </YearNavigation>
+            <MonthNavigation>
+              {Array.from({ length: 12 }).map((_, index) => (
+                <Month
+                  $isCurMonth={index + 1 === month && year === navigationYear}
+                  key={index}
+                  onClick={() => {
+                    setYear(navigationYear);
+                    setMonth(index + 1);
+                    setIsOpenCalendarNavigation(false);
+                  }}
+                >
+                  {index + 1}월
+                </Month>
+              ))}
+            </MonthNavigation>
+          </CalendarNavigation>
+        )}
       </CalenderControlContainer>
       <Calendar>
         <DayOfWeek>
@@ -118,16 +156,32 @@ const Layout = styled.div`
 `;
 
 const CalenderControlContainer = styled.div`
+  position: relative;
+
   display: flex;
-  gap: 20px;
   align-items: center;
 
-  p {
-    width: 130px;
-  }
+  width: fit-content;
 
-  svg {
+  p {
+    width: 170px;
+
+    padding: 0px 3px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    border-radius: 4px;
+
+    transition: background-color 0.2s ease;
+
     cursor: pointer;
+
+    &:hover {
+      background-color: ${color.neutral[100]};
+    }
   }
 `;
 
@@ -155,6 +209,65 @@ const ShiftTodayButton = styled.div`
   border: 1px solid ${color.neutral[200]};
 
   cursor: pointer;
+`;
+
+const CalendarNavigation = styled.div`
+  position: absolute;
+  top: 40px;
+
+  background-color: ${color.white};
+
+  padding: 10px;
+  border: 1px solid ${color.neutral[100]};
+  border-radius: 4px;
+
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+  user-select: none;
+
+  z-index: 5;
+`;
+
+const YearNavigation = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  padding: 10px;
+
+  & > div {
+    font-weight: 700;
+  }
+`;
+
+const YearNavigationButton = styled.div`
+  display: flex;
+  gap: 20px;
+
+  svg {
+    cursor: pointer;
+  }
+`;
+
+const MonthNavigation = styled.ul`
+  display: grid;
+  grid-template-columns: repeat(4, 80px);
+  row-gap: 20px;
+  justify-items: center;
+
+  padding: 10px;
+`;
+
+type MonthProps = {
+  $isCurMonth: boolean;
+};
+
+const Month = styled.li<MonthProps>`
+  cursor: pointer;
+
+  ${({ $isCurMonth }) => css`
+    color: ${$isCurMonth ? color.blue[500] : color.neutral[600]};
+    font-weight: ${$isCurMonth ? 500 : 300};
+  `}
 `;
 
 const Calendar = styled.div`
