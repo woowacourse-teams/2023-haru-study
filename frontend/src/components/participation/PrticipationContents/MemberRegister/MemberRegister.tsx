@@ -47,7 +47,7 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
         onClick={handleOnClickStartButton}
         isLoading={isLoading}
       >
-        스터디 시작하기
+        스터디 입장하기
       </Button>
     </>
   );
