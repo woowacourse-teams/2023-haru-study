@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
@@ -23,19 +24,13 @@ type Props = {
 const MemberRecordCalendarDays = ({ monthStorage }: Props) => {
   const today = new Date();
 
+  const calendarRef = useRef<HTMLUListElement>(null);
+
   const navigate = useNavigate();
 
   const { send } = useNotification();
   const { openModal } = useModal();
-  const { temp } = useMemberCalendarRecord({ monthStorage });
-
-  const getDayFontColor = (dayOfWeek: number) => {
-    if (dayOfWeek === 0) return color.red[600];
-
-    if (dayOfWeek === 6) return color.blue[600];
-
-    return color.black;
-  };
+  const { temp, calendarData } = useMemberCalendarRecord({ monthStorage, calendarRef });
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
 
@@ -51,8 +46,16 @@ const MemberRecordCalendarDays = ({ monthStorage }: Props) => {
     });
   };
 
+  const getDayFontColor = (dayOfWeek: number) => {
+    if (dayOfWeek === 0) return color.red[600];
+
+    if (dayOfWeek === 6) return color.blue[600];
+
+    return color.black;
+  };
+
   return (
-    <Days $numberOfWeeks={temp.length / 7}>
+    <Days $numberOfWeeks={temp.length / 7} ref={calendarRef}>
       {temp.map(({ fullDate, state, dayOfWeek, day, records, restRecords }) => (
         <li key={fullDate}>
           <Day
@@ -62,18 +65,27 @@ const MemberRecordCalendarDays = ({ monthStorage }: Props) => {
             $fontColor={getDayFontColor(dayOfWeek)}
             $hasStudy={records.length > 0}
           >
-            {day}
+            <span>{day}</span>
+            <RestRecords
+              $isHidden={restRecords < 1 || calendarData === 'count'}
+              onClick={() => notifyRestRecords(fullDate, restRecords)}
+            >
+              +{restRecords}
+            </RestRecords>
           </Day>
-          {restRecords > 0 && (
-            <RestRecords onClick={() => notifyRestRecords(fullDate, restRecords)}>+{restRecords}</RestRecords>
+          {calendarData === 'name' ? (
+            <Records>
+              {records.slice(0, 3).map(({ studyId, name }) => (
+                <Study key={studyId} onClick={() => handleClickStudyItem(studyId)}>
+                  {name}
+                </Study>
+              ))}
+            </Records>
+          ) : (
+            <TotalRecordCount onClick={() => openRecordsDetail(fullDate, records)}>
+              {records.length > 0 ? <span>{records.length}</span> : ''}
+            </TotalRecordCount>
           )}
-          <Studies>
-            {records.slice(0, 3).map(({ studyId, name }) => (
-              <Study key={studyId} onClick={() => handleClickStudyItem(studyId)}>
-                {name}
-              </Study>
-            ))}
-          </Studies>
         </li>
       ))}
     </Days>
@@ -96,9 +108,8 @@ const Days = styled.ul<DaysProps>`
   background-color: ${color.neutral[200]};
 
   & > li {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto 1fr;
+    display: flex;
+    flex-direction: column;
     padding: 5px;
 
     background-color: ${color.white};
@@ -113,34 +124,40 @@ type DayProps = {
 };
 
 const Day = styled.div<DayProps>`
-  justify-self: flex-start;
-
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  padding: 5px;
-  border-radius: 50%;
-
-  width: 30px;
-  height: 30px;
+  justify-content: space-between;
 
   background-color: ${color.white};
 
-  ${({ $isCurrentMonthDay, $fontColor, $isToday, $hasStudy }) => css`
+  & > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    width: 30px;
+    height: 30px;
+
+    ${({ $isToday }) => css`
+      background-color: ${$isToday && color.neutral[100]};
+    `}
+  }
+
+  ${({ $isCurrentMonthDay, $fontColor, $hasStudy }) => css`
     opacity: ${$isCurrentMonthDay ? 1 : 0.4};
     color: ${$fontColor};
-
-    background-color: ${$isToday && color.neutral[100]};
 
     cursor: ${$hasStudy && 'pointer'};
   `}
 `;
 
-const RestRecords = styled.div`
-  justify-self: flex-end;
-  align-self: center;
+type RestRecordsProps = {
+  $isHidden: boolean;
+};
 
+const RestRecords = styled.div<RestRecordsProps>`
   display: flex;
   justify-content: center;
 
@@ -153,12 +170,13 @@ const RestRecords = styled.div`
   background-color: ${color.blue[50]};
 
   cursor: pointer;
+
+  ${({ $isHidden }) => css`
+    display: ${$isHidden ? 'none' : 'block'};
+  `}
 `;
 
-const Studies = styled.ul`
-  grid-column: 1 / -1;
-  align-self: flex-start;
-
+const Records = styled.ul`
   display: grid;
   row-gap: 4px;
 `;
@@ -174,4 +192,28 @@ const Study = styled.li`
   border-radius: 5px;
 
   cursor: pointer;
+`;
+
+const TotalRecordCount = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 1.8rem;
+
+  & > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background-color: ${color.neutral[50]};
+
+    cursor: pointer;
+  }
 `;

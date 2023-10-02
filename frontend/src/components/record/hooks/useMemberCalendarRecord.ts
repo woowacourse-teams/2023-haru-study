@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import format from '@Utils/format';
 
 import type { MonthStorage } from '@Types/record';
@@ -122,9 +124,12 @@ const STUDY_LIST: { studies: StudyBasicInfo[] } = {
 
 type Props = {
   monthStorage: MonthStorage;
+  calendarRef: React.RefObject<HTMLUListElement>;
 };
 
-const useMemberCalendarRecord = ({ monthStorage }: Props) => {
+const useMemberCalendarRecord = ({ monthStorage, calendarRef }: Props) => {
+  const [calendarData, setCalendarData] = useState<'name' | 'count'>('name');
+
   const studiesMap: Record<string, StudyBasicInfo[]> = {};
   STUDY_LIST.studies.forEach((study) => {
     const date = format.date(new Date(study.createdDateTime));
@@ -145,7 +150,21 @@ const useMemberCalendarRecord = ({ monthStorage }: Props) => {
     return { ...item, records, restRecords };
   }));
 
-  return { temp };
+  useEffect(() => {
+    const calendarResizeObserver = new ResizeObserver(([calendar]) => {
+      const calendarWidth = calendar.target.clientWidth;
+
+      if (calendarWidth < 750) return setCalendarData('count');
+
+      return setCalendarData('name');
+    });
+
+    if (!calendarRef.current) return;
+
+    calendarResizeObserver.observe(calendarRef.current);
+  }, [calendarRef]);
+
+  return { temp, calendarData };
 };
 
 export default useMemberCalendarRecord;
