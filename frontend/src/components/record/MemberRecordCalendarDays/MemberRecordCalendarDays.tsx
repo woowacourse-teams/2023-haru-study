@@ -58,21 +58,21 @@ const MemberRecordCalendarDays = ({ monthStorage }: Props) => {
     <Days $numberOfWeeks={temp.length / 7} ref={calendarRef}>
       {temp.map(({ fullDate, state, dayOfWeek, day, records, restRecords }) => (
         <li key={fullDate}>
-          <Day
-            onClick={() => openRecordsDetail(fullDate, records)}
-            $isCurrentMonthDay={state === 'cur'}
-            $isToday={fullDate === format.date(today)}
-            $fontColor={getDayFontColor(dayOfWeek)}
-            $hasStudy={records.length > 0}
-          >
-            <span>{day}</span>
+          <DayContainer $isCurrentMonthDay={state === 'cur'} $fontColor={getDayFontColor(dayOfWeek)}>
+            <Day
+              $hasStudy={records.length > 0}
+              $isToday={fullDate === format.date(today)}
+              onClick={() => openRecordsDetail(fullDate, records)}
+            >
+              {day}
+            </Day>
             <RestRecords
               $isHidden={restRecords < 1 || calendarData === 'count'}
               onClick={() => notifyRestRecords(fullDate, restRecords)}
             >
               +{restRecords}
             </RestRecords>
-          </Day>
+          </DayContainer>
           {calendarData === 'name' ? (
             <Records>
               {records.slice(0, 3).map(({ studyId, name }) => (
@@ -114,43 +114,56 @@ const Days = styled.ul<DaysProps>`
 
     background-color: ${color.white};
   }
+
+  @media screen and (max-width: 510px) {
+    font-size: 1.4rem;
+    grid-template-rows: ${({ $numberOfWeeks }) => `repeat(${$numberOfWeeks}, minmax(80px, auto))`};
+  }
 `;
 
-type DayProps = {
+type DayContainerProps = {
   $isCurrentMonthDay: boolean;
-  $isToday: boolean;
   $fontColor: string;
-  $hasStudy: boolean;
 };
 
-const Day = styled.div<DayProps>`
+const DayContainer = styled.div<DayContainerProps>`
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   background-color: ${color.white};
 
-  & > span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border-radius: 50%;
-
-    width: 30px;
-    height: 30px;
-
-    ${({ $isToday }) => css`
-      background-color: ${$isToday && color.neutral[100]};
-    `}
-  }
-
-  ${({ $isCurrentMonthDay, $fontColor, $hasStudy }) => css`
+  ${({ $isCurrentMonthDay, $fontColor }) => css`
     opacity: ${$isCurrentMonthDay ? 1 : 0.4};
     color: ${$fontColor};
+  `}
+`;
+
+type DayProps = {
+  $isToday: boolean;
+  $hasStudy: boolean;
+};
+
+const Day = styled.div<DayProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+
+  width: 30px;
+  height: 30px;
+
+  ${({ $isToday, $hasStudy }) => css`
+    background-color: ${$isToday && color.neutral[100]};
 
     cursor: ${$hasStudy && 'pointer'};
   `}
+
+  @media screen and (max-width: 360px) {
+    margin: 0 auto;
+    margin-top: 5px;
+  }
 `;
 
 type RestRecordsProps = {
@@ -215,5 +228,14 @@ const TotalRecordCount = styled.div`
     background-color: ${color.neutral[50]};
 
     cursor: pointer;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.4rem;
+
+    & > span {
+      width: 32px;
+      height: 32px;
+    }
   }
 `;

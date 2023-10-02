@@ -69,10 +69,21 @@ export default PeriodSelectionBar;
 
 const Layout = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: stretch;
   gap: 20px;
 
   user-select: none;
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.4rem;
+    flex-direction: column;
+    align-items: self-start;
+
+    button {
+      font-size: 1.4rem;
+    }
+  }
 `;
 
 const SelectPeriodButtonContainer = styled.div`
@@ -107,6 +118,10 @@ const SelectPeriodButton = styled.button<SelectPeriodButtonProps>`
     color: ${$isSelected && color.blue[500]};
     border-color: ${$isSelected && color.blue[500]};
   `}
+
+  @media screen and (max-width: 768px) {
+    padding: 4px 10px;
+  }
 `;
 
 const SelectCustomPeriodContainer = styled.div`
@@ -116,6 +131,10 @@ const SelectCustomPeriodContainer = styled.div`
 
   button {
     flex: 1;
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column-reverse;
   }
 `;
 

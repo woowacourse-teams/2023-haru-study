@@ -52,6 +52,8 @@ export default MemberRecordContents;
 
 const Title = styled.span`
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   justify-content: space-between;
   align-items: center;
 

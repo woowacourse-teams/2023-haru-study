@@ -37,6 +37,8 @@ const PeriodSelectCalendar = () => {
   const { startDate, endDate, isMiddleSelectedCustomDate, handleCustomPeriod, handleHoverDays } =
     useMemberRecordPeriod();
 
+  console.log(new Date(startDate?.replace(/./g, '/') || today));
+
   const { year, month, monthStorage, handleMonthShift, handleNavigationMonth, handleYearShift } = useCalendar(
     new Date(startDate || today),
   );

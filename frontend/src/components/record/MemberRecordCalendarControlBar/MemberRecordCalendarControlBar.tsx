@@ -81,6 +81,8 @@ const Layout = styled.div`
 
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 
   width: fit-content;
 
@@ -104,6 +106,10 @@ const Layout = styled.div`
       background-color: ${color.neutral[100]};
     }
   }
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.4rem;
+  }
 `;
 
 const MonthShiftButtonContainer = styled.div`
@@ -112,6 +118,10 @@ const MonthShiftButtonContainer = styled.div`
   gap: 10px;
 
   margin-left: 20px;
+
+  @media screen and (max-width: 768px) {
+    margin-left: 0px;
+  }
 `;
 
 const MonthShiftButton = styled.div`
@@ -176,6 +186,10 @@ const MonthNavigation = styled.ul`
   justify-items: center;
 
   padding: 10px;
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(4, 60px);
+  }
 `;
 
 type MonthProps = {
@@ -197,5 +211,9 @@ const Month = styled.li<MonthProps>`
 
   &:hover {
     background-color: ${color.blue[100]};
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 4px 8px;
   }
 `;
