@@ -17,14 +17,16 @@ export type ResponseAPIError = {
   code: number;
 };
 
-export type ResponseCreateStudy = { participantCode: string; studyName: string };
-
 type ResponseStudyInfo = {
   studyId: string;
   name: string;
   totalCycle: TotalCycleOptions;
   timePerCycle: StudyTimePerCycleOptions;
-  createdDateTime: Date;
+  currentCycle: number;
+  studyStep: string;
+  progressStep: string;
+  createdDate: string;
+  lastModifiedDate: string;
 };
 
 export type ResponseStudies = {

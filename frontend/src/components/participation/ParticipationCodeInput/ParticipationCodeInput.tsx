@@ -21,7 +21,7 @@ const ParticipationCodeInput = () => {
 
     if (result) {
       navigate(`${ROUTES_PATH.preparation}/${result.studies[0].studyId}`, {
-        state: { participantCode: participantCodeInput.state, studyName: result.studies[0].name, isHost: false },
+        state: { studyName: result.studies[0].name },
       });
     }
   };
@@ -41,7 +41,7 @@ const ParticipationCodeInput = () => {
           margin-top: 25px;
         `}
       >
-        스터디 참여하기
+        스터디 찾기
       </Button>
     </Layout>
   );
