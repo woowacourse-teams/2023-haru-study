@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public class CompositeOauthClient implements OauthClient{
+public class CompositeOauthClient implements OauthClient {
 
     private final List<OauthClient> oauthClients;
 

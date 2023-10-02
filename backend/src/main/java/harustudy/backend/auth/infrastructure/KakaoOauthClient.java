@@ -15,7 +15,7 @@ import java.util.Map;
 @Component
 public class KakaoOauthClient implements OauthClient {
 
-    public static final Map<String, List<String>> USER_INFO_PARAMETER = Map.of("property_keys",
+    private static final Map<String, List<String>> USER_INFO_PARAMETER = Map.of("property_keys",
             List.of("kakao_account.profile", "kakao_account.email"));
     private static final String PROVIDER_NAME = "kakao";
 
