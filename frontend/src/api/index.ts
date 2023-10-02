@@ -1,7 +1,6 @@
 import type {
   ResponseMemberProgress,
   ResponseAuthToken,
-  ResponseCreateStudy,
   ResponseMemberInfo,
   ResponseMemberRecordContents,
   ResponseOneStudyInfo,
@@ -75,16 +74,14 @@ export const requestPostCreateStudy = async (
   totalCycle: TotalCycleOptions | null,
   timePerCycle: StudyTimePerCycleOptions | null,
 ) => {
-  const response = await http.post<ResponseCreateStudy>(`/api/studies`, {
+  const response = await http.post(`/api/studies`, {
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
   });
 
   const locationHeader = response.headers.get('Location');
   const studyId = locationHeader?.split('/').pop() as string;
 
-  const data = response.data;
-
-  return { studyId, data };
+  return { studyId };
 };
 
 export const requestGetAuthenticateParticipationCode = async (participantCode: string) => {

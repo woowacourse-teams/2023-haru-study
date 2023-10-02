@@ -8,12 +8,10 @@ import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
 import { requestPostCreateStudy, requestPostRegisterProgress } from '@Apis/index';
 
-import type { ResponseCreateStudy } from '@Types/api';
 import type { StudyMode, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
 type CreateStudyResult = {
   studyId: string;
-  data: ResponseCreateStudy;
 };
 
 const useCreateStudy = (
@@ -31,7 +29,7 @@ const useCreateStudy = (
       onSuccess: async (result) => {
         if (studyMode === 'together') {
           return navigate(`${ROUTES_PATH.preparation}/${result.studyId}`, {
-            state: { participantCode: result.data.participantCode, studyName, isHost: true },
+            state: { studyName },
           });
         }
 

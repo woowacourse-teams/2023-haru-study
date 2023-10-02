@@ -14,10 +14,7 @@ export const createStudyHandlers = [
       return res(
         // 성공
         ctx.status(201),
-        ctx.set({ 'Content-Type': 'application/json', Location: '/api/v2/studies/1' }),
-        ctx.json({
-          participantCode: '123456',
-        }),
+        ctx.set({ 'Content-Type': 'application/json', Location: '/api/studies/1' }),
 
         // 에러
         // ctx.status(404),
@@ -39,10 +36,7 @@ export const createStudyHandlers = [
     return res(
       // 성공
       ctx.status(201),
-      ctx.set({ 'Content-Type': 'application/json', Location: '/api/v2/studies/1' }),
-      ctx.json({
-        participantCode: '123456',
-      }),
+      ctx.set({ 'Content-Type': 'application/json', Location: '/api/studies/1' }),
 
       // 에러
       // ctx.status(404),
