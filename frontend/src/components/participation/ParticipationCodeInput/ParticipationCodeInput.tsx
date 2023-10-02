@@ -3,7 +3,7 @@ import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
-import useParticipationCode from '@Components/participation/hooks/useParticipationCode';
+import useCheckParticipationCode from '@Components/participation/hooks/useCheckParticipationCode';
 
 import useInput from '@Hooks/common/useInput';
 
@@ -14,7 +14,7 @@ const ParticipationCodeInput = () => {
 
   const participantCodeInput = useInput(false);
 
-  const { authenticateParticipationCode, isLoading } = useParticipationCode(participantCodeInput.state ?? '');
+  const { authenticateParticipationCode, isLoading } = useCheckParticipationCode(participantCodeInput.state ?? '');
 
   const handleOnClickParticipateButton = async () => {
     const result = await authenticateParticipationCode();
