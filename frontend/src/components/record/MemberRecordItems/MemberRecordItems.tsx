@@ -10,16 +10,21 @@ import { ROUTES_PATH } from '@Constants/routes';
 import CycleIcon from '@Assets/icons/CycleIcon';
 import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
-import type { StudyBasicInfo } from '@Types/study';
+import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
+import useMemberRecords from '../hooks/useMemberRecords';
 
 type Props = {
-  memberRecords: StudyBasicInfo[];
+  memberId: string;
 };
 
-const MemberRecordItems = ({ memberRecords }: Props) => {
+const MemberRecordItems = ({ memberId }: Props) => {
+  const { memberRecords, isLoading } = useMemberRecords(memberId);
+
   const navigate = useNavigate();
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
+
+  if (!isLoading && memberRecords.length === 0) return <EmptyMemberRecord />;
   return (
     <Layout>
       {memberRecords.map(({ studyId, name, createdDateTime, totalCycle, timePerCycle }) => {
