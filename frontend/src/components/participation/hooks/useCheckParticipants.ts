@@ -8,7 +8,7 @@ import { requestGetCheckParticipants } from '@Apis/index';
 
 import type { ResponseCheckParticipants } from '@Types/api';
 
-const useCheckProgresses = () => {
+const useCheckParticipants = () => {
   const { studyId } = useParams();
 
   const memberInfo = useMemberInfo();
@@ -22,4 +22,4 @@ const useCheckProgresses = () => {
   return { studyId, result };
 };
 
-export default useCheckProgresses;
+export default useCheckParticipants;

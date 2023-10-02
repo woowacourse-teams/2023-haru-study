@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { styled } from 'styled-components';
 
 import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
-import useCheckProgresses from '@Components/participation/hooks/useCheckProgresses';
+import useCheckParticipants from '@Components/participation/hooks/useCheckParticipants';
 
 import MemberRegister from './MemberRegister/MemberRegister';
 import MemberRestart from './MemberRestart/MemberRestart';
@@ -12,7 +12,7 @@ type Props = {
 };
 
 const ParticipationContents = ({ studyName }: Props) => {
-  const { result, studyId } = useCheckProgresses();
+  const { result, studyId } = useCheckParticipants();
 
   const [isRegisterShow, setRegisterShow] = useState(false);
 
