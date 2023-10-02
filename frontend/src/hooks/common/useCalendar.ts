@@ -2,11 +2,11 @@ import { useState } from 'react';
 
 import calendar from '@Utils/calendar';
 
-const useCalendar = () => {
-  const today = new Date();
+const useCalendar = (date?: Date) => {
+  const standardDate = date || new Date();
 
-  const [year, setYear] = useState(today.getFullYear());
-  const [month, setMonth] = useState(today.getMonth() + 1);
+  const [year, setYear] = useState(standardDate.getFullYear());
+  const [month, setMonth] = useState(standardDate.getMonth() + 1);
   const [navigationYear, setNavigationYear] = useState(year);
 
   const handleMonthShift = (type: 'next' | 'prev' | 'today') => {

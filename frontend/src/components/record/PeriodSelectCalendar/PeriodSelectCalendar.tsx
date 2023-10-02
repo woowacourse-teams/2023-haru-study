@@ -37,7 +37,9 @@ const PeriodSelectCalendar = () => {
   const { startDate, endDate, isMiddleSelectedCustomDate, handleCustomPeriod, handleHoverDays } =
     useMemberRecordPeriod();
 
-  const { year, month, monthStorage, handleMonthShift, handleNavigationMonth, handleYearShift } = useCalendar();
+  const { year, month, monthStorage, handleMonthShift, handleNavigationMonth, handleYearShift } = useCalendar(
+    new Date(startDate || today),
+  );
 
   const getDayBackgroundColor = (fullDateDot: string, fullDate: string) => {
     if (startDate === fullDateDot || endDate === fullDateDot) return color.blue[200];
