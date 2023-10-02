@@ -27,16 +27,18 @@ const useCreateStudy = (
     () => requestPostCreateStudy(studyName, totalCycle, timePerCycle),
     {
       onSuccess: async (result) => {
-        if (studyMode === 'together') {
+        if (studyMode === 'group') {
           return navigate(`${ROUTES_PATH.preparation}/${result.studyId}`, {
             state: { studyName },
           });
         }
 
-        const nickname = memberInfo!.name.substring(0, 10);
-        await requestPostRegisterParticipants(nickname, result.studyId, memberInfo!.memberId);
+        if (studyMode === 'alone') {
+          const nickname = memberInfo!.name.substring(0, 10);
+          await requestPostRegisterParticipants(nickname, result.studyId, memberInfo!.memberId);
 
-        return navigate(`${ROUTES_PATH.progress}/${result.studyId}`);
+          return navigate(`${ROUTES_PATH.progress}/${result.studyId}`);
+        }
       },
     },
   );

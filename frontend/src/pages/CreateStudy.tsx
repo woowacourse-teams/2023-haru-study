@@ -11,10 +11,10 @@ import StudyParticipationLayout from './layout/StudyParticipationLayout';
 const CreateStudy = () => {
   const studyMode: StudyMode = url.getQueryString('mode');
 
-  if (!(studyMode === 'together' || studyMode === 'solo')) return <NotFound />;
+  if (!(studyMode === 'group' || studyMode === 'alone')) return <NotFound />;
 
   return (
-    <StudyParticipationLayout headerText={studyMode === 'solo' ? '혼자 공부하기' : '스터디 개설하기'}>
+    <StudyParticipationLayout headerText={studyMode === 'alone' ? '혼자 공부하기' : '스터디 개설하기'}>
       <AlertErrorBoundary>
         <CreateStudyForm studyMode={studyMode} />
       </AlertErrorBoundary>
