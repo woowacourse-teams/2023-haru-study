@@ -56,19 +56,19 @@ const MemberRecordCalendarDays = ({ monthStorage }: Props) => {
 
   return (
     <Days $numberOfWeeks={temp.length / 7} ref={calendarRef}>
-      {temp.map(({ fullDate, state, dayOfWeek, day, records, restRecords }) => (
-        <li key={fullDate}>
+      {temp.map(({ state, dayOfWeek, day, records, restRecords, date }, index) => (
+        <li key={index}>
           <DayContainer $isCurrentMonthDay={state === 'cur'} $fontColor={getDayFontColor(dayOfWeek)}>
             <Day
               $hasStudy={records.length > 0}
-              $isToday={fullDate === format.date(today)}
-              onClick={() => openRecordsDetail(fullDate, records)}
+              $isToday={format.date(date) === format.date(today)}
+              onClick={() => openRecordsDetail(format.date(date), records)}
             >
               {day}
             </Day>
             <RestRecords
               $isHidden={restRecords < 1 || calendarData === 'count'}
-              onClick={() => notifyRestRecords(fullDate, restRecords)}
+              onClick={() => notifyRestRecords(format.date(date), restRecords)}
             >
               +{restRecords}
             </RestRecords>
@@ -82,7 +82,7 @@ const MemberRecordCalendarDays = ({ monthStorage }: Props) => {
               ))}
             </Records>
           ) : (
-            <TotalRecordCount onClick={() => openRecordsDetail(fullDate, records)}>
+            <TotalRecordCount onClick={() => openRecordsDetail(format.date(date), records)}>
               {records.length > 0 ? <span>{records.length}</span> : ''}
             </TotalRecordCount>
           )}

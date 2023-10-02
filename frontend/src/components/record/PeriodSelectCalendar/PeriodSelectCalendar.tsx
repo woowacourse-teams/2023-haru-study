@@ -37,16 +37,16 @@ const PeriodSelectCalendar = () => {
   const { startDate, endDate, isMiddleSelectedCustomDate, handleCustomPeriod, handleHoverDays } =
     useMemberRecordPeriod();
 
-  console.log(new Date(startDate?.replace(/./g, '/') || today));
-
   const { year, month, monthStorage, handleMonthShift, handleNavigationMonth, handleYearShift } = useCalendar(
     new Date(startDate || today),
   );
 
-  const getDayBackgroundColor = (fullDateDot: string, fullDate: string) => {
-    if (startDate === fullDateDot || endDate === fullDateDot) return color.blue[200];
+  const getDayBackgroundColor = (date: Date, fullDate: string) => {
+    if (startDate && format.date(startDate) === fullDate) return color.blue[200];
 
-    if (isMiddleSelectedCustomDate(fullDateDot)) return color.blue[100];
+    if (endDate && format.date(endDate) === fullDate) return color.blue[200];
+
+    if (isMiddleSelectedCustomDate(date)) return color.blue[100];
 
     if (fullDate === format.date(today)) return color.neutral[100];
 
@@ -99,13 +99,13 @@ const PeriodSelectCalendar = () => {
       </Month>
       <CalendarDayOfWeeks position="center" />
       <Days>
-        {monthStorage.map(({ day, fullDate, state, fullDateDot }) => (
+        {monthStorage.map(({ day, state, date }, index) => (
           <Day
-            key={fullDate}
+            key={index}
             $isCurrentMonthDay={state === 'cur'}
-            onClick={() => handleCustomPeriod(fullDateDot)}
-            onMouseEnter={() => handleHoverDays(fullDateDot)}
-            $backgroundColor={getDayBackgroundColor(fullDateDot, fullDate)}
+            onClick={() => handleCustomPeriod(date)}
+            onMouseEnter={() => handleHoverDays(date)}
+            $backgroundColor={getDayBackgroundColor(date, format.date(date))}
           >
             {day}
           </Day>

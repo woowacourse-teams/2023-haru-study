@@ -1,6 +1,6 @@
 export type MonthStorage = {
   day: number;
   dayOfWeek: number;
-  fullDate: string;
+  date: Date;
   state: 'prev' | 'cur' | 'next';
 }[];

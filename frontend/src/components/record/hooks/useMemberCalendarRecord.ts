@@ -143,7 +143,7 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef }: Props) => {
   });
 
   const temp = (monthStorage = monthStorage.map((item) => {
-    const records = studiesMap[item.fullDate] || [];
+    const records = studiesMap[format.date(item.date)] || [];
 
     const restRecords = records && records.length > 3 ? records.length - 3 : 0;
 

@@ -11,6 +11,8 @@ import { PERIOD } from '@Constants/record';
 
 import CalenderIcon from '@Assets/icons/CalenderIcon';
 
+import format from '@Utils/format';
+
 import PeriodSelectCalendar from '../PeriodSelectCalendar/PeriodSelectCalendar';
 import type { Period } from '../contexts/MemberRecordPeriodProvider';
 import { useMemberRecordPeriod } from '../contexts/MemberRecordPeriodProvider';
@@ -44,9 +46,9 @@ const PeriodSelectionBar = () => {
           <SelectedDate $hasSelectedCustomPeriod={hasSelectedCustomPeriod}>
             {hasSelectedCustomPeriod ? (
               <>
-                <div>{startDate}</div>
+                <div>{startDate && format.date(startDate)}</div>
                 <div>~</div>
-                <div>{endDate}</div>
+                <div>{endDate && format.date(endDate)}</div>
               </>
             ) : (
               '날짜를 선택해주세요.'
@@ -161,7 +163,7 @@ type SelectedDateProps = {
 const SelectedDate = styled.div<SelectedDateProps>`
   padding: 10px 20px;
 
-  min-width: 260px;
+  min-width: 300px;
 
   border-right: 1px solid ${color.neutral[200]};
 
@@ -171,8 +173,6 @@ const SelectedDate = styled.div<SelectedDateProps>`
           display: grid;
           grid-template-columns: 1fr auto 1fr;
           justify-items: center;
-
-          letter-spacing: 1.2px;
         `
       : css`
           text-align: center;

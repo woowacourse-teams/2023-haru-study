@@ -7,74 +7,71 @@ export type Period = keyof typeof PERIOD;
 
 export type MemberRecordPeriodContextType = {
   period: Period | null;
-  startDate: string | null;
-  endDate: string | null;
+  startDate: Date | null;
+  endDate: Date | null;
   hasSelectedCustomPeriod: boolean;
-  isMiddleSelectedCustomDate: (date: string) => boolean;
+  isMiddleSelectedCustomDate: (date: Date) => boolean;
   handlePeriod: (period: Period | null) => void;
-  handleCustomPeriod: (date: string) => void;
-  handleHoverDays: (date: string) => void;
+  handleCustomPeriod: (date: Date) => void;
+  handleHoverDays: (date: Date) => void;
 };
 
 const MemberRecordPeriodContext = createContext<MemberRecordPeriodContextType | null>(null);
 
 const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
   const [period, setPeriod] = useState<Period | null>('entire');
-  const [customPeriod, setCustomPeriod] = useState<{ start: string | null; end: string | null }>({
+  const [customPeriod, setCustomPeriod] = useState<{ start: Date | null; end: Date | null }>({
     start: null,
     end: null,
   });
-  const [hoveredDay, setHoveredDay] = useState<string | null>(null);
+  const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
 
-  const isSoonSelectedDate = (date: string) => {
+  const isSoonSelectedDate = (date: Date) => {
     if (!hoveredDay || !customPeriod.start) return false;
 
-    if (new Date(hoveredDay) > new Date(customPeriod.start)) {
-      if (new Date(customPeriod.start) <= new Date(date) && new Date(hoveredDay) >= new Date(date)) return true;
+    if (hoveredDay > customPeriod.start) {
+      if (customPeriod.start <= date && hoveredDay >= date) return true;
 
       return false;
     } else {
-      if (new Date(customPeriod.start) >= new Date(date) && new Date(hoveredDay) <= new Date(date)) return true;
+      if (customPeriod.start >= date && hoveredDay <= date) return true;
 
       return false;
     }
   };
 
-  const isIncludeSelectDate = (date: string) => {
+  const isIncludeSelectDate = (date: Date) => {
     if (!customPeriod.start || !customPeriod.end) return false;
 
-    if (new Date(customPeriod.start) < new Date(date) && new Date(customPeriod.end) >= new Date(date)) return true;
+    if (customPeriod.start < date && customPeriod.end >= date) return true;
 
     return false;
   };
 
   const handlePeriod = (period: Period | null) => setPeriod(period);
 
-  const handleCustomPeriod = (fullDateDot: string) => {
-    setHoveredDay(fullDateDot);
+  const handleCustomPeriod = (date: Date) => {
+    setHoveredDay(date);
 
     if (!customPeriod.start) {
-      setCustomPeriod({ start: fullDateDot, end: null });
+      setCustomPeriod({ start: date, end: null });
 
       return;
     }
 
     if (!customPeriod.end) {
       setCustomPeriod((prev) => {
-        const startDateObject = new Date(prev.start!);
-        const endDateObject = new Date(fullDateDot);
-
-        if (startDateObject > endDateObject) return { start: fullDateDot, end: prev.start };
-        return { ...prev, end: fullDateDot };
+        if (prev.start! > date) return { start: date, end: prev.start };
+        return { ...prev, end: date };
       });
 
       return;
     }
 
-    setCustomPeriod({ start: fullDateDot, end: null });
+    setCustomPeriod({ start: date, end: null });
   };
 
-  const handleHoverDays = (date: string) => {
+  const handleHoverDays = (date: Date) => {
     if (!customPeriod.start) return;
     if (customPeriod.start && customPeriod.end) return;
 
@@ -86,7 +83,7 @@ const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
     startDate: customPeriod.start,
     endDate: customPeriod.end,
     hasSelectedCustomPeriod: !!customPeriod.start || !!customPeriod.end,
-    isMiddleSelectedCustomDate: (date: string) => isSoonSelectedDate(date) || isIncludeSelectDate(date),
+    isMiddleSelectedCustomDate: (date: Date) => isSoonSelectedDate(date) || isIncludeSelectDate(date),
     handlePeriod,
     handleCustomPeriod,
     handleHoverDays,
