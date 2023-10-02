@@ -2,9 +2,9 @@ import { styled } from 'styled-components';
 
 import useCalendar from '@Hooks/common/useCalendar';
 
-import CalendarControl from '../CalendarControl/CalendarControl';
 import CalendarDayOfWeeks from '../CalendarDayOfWeeks/CalendarDayOfWeeks';
-import CalendarDays from '../CalendarDays/CalendarDays';
+import MemberRecordCalendarControlBar from '../MemberRecordCalendarControlBar/MemberRecordCalendarControlBar';
+import MemberRecordCalendarDays from '../MemberRecordCalendarDays/MemberRecordCalendarDays';
 
 const MemberRecordCalendar = () => {
   const { year, month, navigationYear, monthStorage, handleMonthShift, handleNavigationMonth, handleNavigationYear } =
@@ -12,7 +12,7 @@ const MemberRecordCalendar = () => {
 
   return (
     <Layout>
-      <CalendarControl
+      <MemberRecordCalendarControlBar
         year={year}
         month={month}
         navigationYear={navigationYear}
@@ -21,8 +21,10 @@ const MemberRecordCalendar = () => {
         handleNavigationMonth={handleNavigationMonth}
       />
       <Calendar>
+        {/* 여기를 Suspense로 묶어야 함 */}
         <CalendarDayOfWeeks />
-        <CalendarDays monthStorage={monthStorage} />
+        {/* CalendarDays에서 date fetching */}
+        <MemberRecordCalendarDays monthStorage={monthStorage} />
       </Calendar>
     </Layout>
   );

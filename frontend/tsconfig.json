@@ -10,6 +10,6 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src", "__test__"],
+  "include": ["src", "__test__", "src/components/record/MemberRecordCalendarDays/MemberRecordCalendarDays.tsx"],
   "exclude": ["node_modules/*"]
 }

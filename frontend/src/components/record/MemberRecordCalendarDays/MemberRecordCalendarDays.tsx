@@ -15,7 +15,7 @@ type Props = {
   monthStorage: MonthStorage;
 };
 
-const CalendarDays = ({ monthStorage }: Props) => {
+const MemberRecordCalendarDays = ({ monthStorage }: Props) => {
   const today = new Date();
   return (
     <Days $numberOfWeeks={monthStorage.length / 7}>
@@ -35,7 +35,7 @@ const CalendarDays = ({ monthStorage }: Props) => {
   );
 };
 
-export default CalendarDays;
+export default MemberRecordCalendarDays;
 
 type DaysProps = {
   $numberOfWeeks: number;

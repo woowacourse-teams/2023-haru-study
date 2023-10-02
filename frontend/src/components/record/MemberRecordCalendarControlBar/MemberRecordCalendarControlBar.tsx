@@ -18,7 +18,7 @@ type Props = {
   handleNavigationMonth: (month: number) => void;
 };
 
-const CalendarControl = ({
+const MemberRecordCalendarControlBar = ({
   year,
   month,
   navigationYear,
@@ -74,7 +74,7 @@ const CalendarControl = ({
   );
 };
 
-export default CalendarControl;
+export default MemberRecordCalendarControlBar;
 
 const Layout = styled.div`
   position: relative;
