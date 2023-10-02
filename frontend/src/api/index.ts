@@ -2,14 +2,14 @@ import type {
   ResponseMemberProgress,
   ResponseAuthToken,
   ResponseMemberInfo,
-  ResponseMemberRecordContents,
+  ResponseParticipantRecordContents,
   ResponseOneStudyInfo,
   ResponseMemberContents,
   ResponseStudies,
   ResponseStudyData,
   ResponseStudyDataList,
-  ResponseStudyMembers,
   ResponseCheckParticipants,
+  ResponseStudyParticipants,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
@@ -21,11 +21,11 @@ export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyDa
 export const requestGetMemberStudyListData = (memberId: string) =>
   http.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`);
 
-export const requestGetStudyMembers = (studyId: string) =>
-  http.get<ResponseStudyMembers>(`/api/studies/${studyId}/progresses`);
+export const requestGetStudyParticipants = (studyId: string) =>
+  http.get<ResponseStudyParticipants>(`/api/studies/${studyId}/participants`);
 
-export const requestGetMemberRecordContents = (studyId: string, progressId: string) =>
-  http.get<ResponseMemberRecordContents>(`/api/studies/${studyId}/contents?progressId=${progressId}`);
+export const requestGetParticipantRecordContents = (studyId: string, participantId: string) =>
+  http.get<ResponseParticipantRecordContents>(`/api/studies/${studyId}/contents?participantId=${participantId}`);
 
 export const requestPostGuestLogin = () => http.post<ResponseAuthToken>(`/api/auth/guest`);
 

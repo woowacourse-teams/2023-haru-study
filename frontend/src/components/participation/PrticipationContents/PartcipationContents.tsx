@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { styled } from 'styled-components';
 
-import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
+import NotificationBoundary from '@Components/common/NotificationBoundary/NotificationBoundary';
 import useCheckParticipants from '@Components/participation/hooks/useCheckParticipants';
 
 import MemberRegister from './MemberRegister/MemberRegister';
@@ -23,7 +23,7 @@ const ParticipationContents = ({ studyName }: Props) => {
   return (
     <Layout>
       {result && (
-        <AlertErrorBoundary>
+        <NotificationBoundary>
           {result.participants && !isRegisterShow ? (
             <MemberRestart
               studyName={studyName}
@@ -35,7 +35,7 @@ const ParticipationContents = ({ studyName }: Props) => {
           ) : (
             <MemberRegister studyId={studyId} studyName={studyName} />
           )}
-        </AlertErrorBoundary>
+        </NotificationBoundary>
       )}
     </Layout>
   );

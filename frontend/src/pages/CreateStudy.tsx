@@ -1,4 +1,4 @@
-import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
+import NotificationBoundary from '@Components/common/NotificationBoundary/NotificationBoundary';
 import CreateStudyForm from '@Components/create/CreateStudyForm/CreateStudyForm';
 
 import url from '@Utils/url';
@@ -15,9 +15,9 @@ const CreateStudy = () => {
 
   return (
     <StudyParticipationLayout headerText={studyMode === 'alone' ? '혼자 공부하기' : '스터디 개설하기'}>
-      <AlertErrorBoundary>
+      <NotificationBoundary>
         <CreateStudyForm studyMode={studyMode} />
-      </AlertErrorBoundary>
+      </NotificationBoundary>
     </StudyParticipationLayout>
   );
 };

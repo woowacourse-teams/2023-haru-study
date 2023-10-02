@@ -7,6 +7,7 @@ import useClipBoard from '@Hooks/common/useClipBoard';
 import color from '@Styles/color';
 
 import { useModal } from '@Contexts/ModalProvider';
+import { useNotification } from '@Contexts/NotificationProvider';
 
 import ClipBoardIcon from '@Assets/icons/ClipBoardIcon';
 
@@ -17,10 +18,11 @@ type Props = {
 const ParticipationCodeCopier = ({ participantCode }: Props) => {
   const { copy } = useClipBoard();
   const { openAlert } = useModal();
+  const { send } = useNotification();
 
   const handleOnClickClipBoardButton = async () => {
     await copy(participantCode);
-    openAlert('클립보드에 복사되었습니다.');
+    send({ message: '클립보드에 복사되었습니다.' });
   };
 
   const handleOnClickHelperMessage = () => {

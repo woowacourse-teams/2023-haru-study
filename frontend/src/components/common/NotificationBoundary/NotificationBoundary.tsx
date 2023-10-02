@@ -1,17 +1,16 @@
 import type { PropsWithChildren } from 'react';
 import { Component } from 'react';
 
-import type { ModalContextType } from '@Contexts/ModalProvider';
-import { ModalContext } from '@Contexts/ModalProvider';
+import { NotificationContext, type NotificationContextType } from '@Contexts/NotificationProvider';
 
 import { ApiError } from '@Errors/index';
 
-type AlertErrorBoundaryState = {
+type NotificationBoundaryState = {
   error: Error | null;
 };
 
-class AlertErrorBoundary extends Component<PropsWithChildren, AlertErrorBoundaryState> {
-  state: AlertErrorBoundaryState = {
+class NotificationBoundary extends Component<PropsWithChildren, NotificationBoundaryState> {
+  state: NotificationBoundaryState = {
     error: null,
   };
 
@@ -24,12 +23,15 @@ class AlertErrorBoundary extends Component<PropsWithChildren, AlertErrorBoundary
     return { error: error };
   }
 
-  static contextType = ModalContext;
+  static contextType = NotificationContext;
 
   componentDidCatch(error: Error): void {
-    const { openAlert } = this.context as ModalContextType;
+    const { send } = this.context as NotificationContextType;
 
-    openAlert(error.message);
+    send({
+      type: 'error',
+      message: error.message,
+    });
   }
 
   render() {
@@ -39,4 +41,4 @@ class AlertErrorBoundary extends Component<PropsWithChildren, AlertErrorBoundary
   }
 }
 
-export default AlertErrorBoundary;
+export default NotificationBoundary;

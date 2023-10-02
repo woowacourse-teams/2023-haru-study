@@ -16,23 +16,21 @@ import { getKeys } from '@Utils/getKeys';
 
 import type { Plan, Retrospect } from '@Types/study';
 
-import useMemberRecordContents from '../hooks/useMemberRecordContents';
+import useParticipantRecordContents from '../hooks/useParticipantRecordContents';
 
 type Props = {
   studyId: string;
-  progressId: string;
+  participantId: string;
   nickname: string;
-  isCompleted: boolean;
-  currentCycle: number;
 };
 
-const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCycle }: Props) => {
-  const { memberRecordContents, isLoading } = useMemberRecordContents(studyId, progressId);
+const ParticipantRecord = ({ studyId, nickname, participantId }: Props) => {
+  const { participantRecordContents, isLoading } = useParticipantRecordContents(studyId, participantId);
 
   const isDoneCycle = (selectedTabCycle: number) => {
-    if (isCompleted) return true;
+    const retrospect = participantRecordContents[selectedTabCycle - 1].retrospect;
 
-    return currentCycle > selectedTabCycle;
+    return 'doneAsExpected' in retrospect;
   };
 
   const getPostPosition = (name: string) => {
@@ -51,9 +49,9 @@ const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCyc
   }
 
   return (
-    <ProgressRecordLayout>
+    <ParticipantRecordLayout>
       <Tabs>
-        {memberRecordContents?.map((content) => (
+        {participantRecordContents?.map((content) => (
           <Tabs.Item key={content.cycle} label={`${content.cycle}번째 사이클`}>
             {isDoneCycle(content.cycle) ? (
               <TabItemContainer>
@@ -102,13 +100,13 @@ const ProgressRecord = ({ studyId, nickname, progressId, isCompleted, currentCyc
           </Tabs.Item>
         ))}
       </Tabs>
-    </ProgressRecordLayout>
+    </ParticipantRecordLayout>
   );
 };
 
-export default ProgressRecord;
+export default ParticipantRecord;
 
-const ProgressRecordLayout = styled.div`
+const ParticipantRecordLayout = styled.div`
   padding: 40px 30px;
   min-height: 308px;
 
