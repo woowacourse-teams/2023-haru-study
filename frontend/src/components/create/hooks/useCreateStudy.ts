@@ -6,7 +6,7 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
-import { requestPostCreateStudy, requestPostRegisterProgress } from '@Apis/index';
+import { requestPostCreateStudy, requestPostRegisterParticipants } from '@Apis/index';
 
 import type { StudyMode, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
@@ -34,7 +34,7 @@ const useCreateStudy = (
         }
 
         const nickname = memberInfo!.name.substring(0, 10);
-        await requestPostRegisterProgress(nickname, result.studyId, memberInfo!.memberId);
+        await requestPostRegisterParticipants(nickname, result.studyId, memberInfo!.memberId);
 
         return navigate(`${ROUTES_PATH.progress}/${result.studyId}`);
       },

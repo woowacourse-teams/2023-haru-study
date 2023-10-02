@@ -98,8 +98,8 @@ export const requestGetCheckParticipants = async (studyId: string, memberId: str
   return (await response).data;
 };
 
-export const requestPostRegisterProgress = (nickname: string, studyId: string, memberId: string) =>
-  http.post(`/api/studies/${studyId}/progresses`, {
+export const requestPostRegisterParticipants = (nickname: string, studyId: string, memberId: string) =>
+  http.post(`/api/studies/${studyId}/participants`, {
     body: JSON.stringify({ memberId, nickname }),
   });
 
