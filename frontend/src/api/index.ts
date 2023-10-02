@@ -9,7 +9,7 @@ import type {
   ResponseStudyData,
   ResponseStudyDataList,
   ResponseStudyMembers,
-  ResponseCheckProgresses,
+  ResponseCheckParticipants,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
@@ -90,8 +90,10 @@ export const requestGetAuthenticateParticipationCode = async (participantCode: s
   return (await response).data;
 };
 
-export const requestGetCheckProgresses = async (studyId: string, memberId: string) => {
-  const response = http.get<ResponseCheckProgresses>(`/api/temp/studies/${studyId}/progresses?memberId=${memberId}`);
+export const requestGetCheckParticipants = async (studyId: string, memberId: string) => {
+  const response = http.get<ResponseCheckParticipants>(
+    `/api/temp/studies/${studyId}/participants?memberId=${memberId}`,
+  );
 
   return (await response).data;
 };
@@ -101,5 +103,5 @@ export const requestPostRegisterProgress = (nickname: string, studyId: string, m
     body: JSON.stringify({ memberId, nickname }),
   });
 
-export const requestDeleteProgress = (studyId: string, progressId: number) =>
-  http.delete(`/api/studies/${studyId}/progresses/${progressId}`);
+export const requestDeleteParticipant = (studyId: string, participantId: number) =>
+  http.delete(`/api/studies/${studyId}/participants/${participantId}`);

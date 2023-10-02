@@ -13,12 +13,12 @@ export const participantsHandlers = [
     if (requestAuthToken === newAccessToken && memberId === '1')
       return res(
         // 성공
-        ctx.status(200),
-        ctx.json({ participants: [{ participantId: 1, nickname: '하루', isHost: false }] }),
+        // ctx.status(200),
+        // ctx.json({ participants: [{ participantId: 1, nickname: '하루', isHost: false }] }),
 
         // participants가 없는 경우
-        // ctx.status(200),
-        // ctx.json({ participants: null }),
+        ctx.status(200),
+        ctx.json({ participants: null }),
 
         // 그 외 에러
         // ctx.status(404),
@@ -57,12 +57,12 @@ export const participantsHandlers = [
 
     return res(
       // 성공
-      ctx.status(200),
-      ctx.json({ participants: [{ participantId: 1, nickname: '하루', isHost: false }] }),
+      // ctx.status(200),
+      // ctx.json({ participants: [{ participantId: 1, nickname: '하루', isHost: false }] }),
 
       // participants가 없는 경우
-      // ctx.status(200),
-      // ctx.json({ participants: null }),
+      ctx.status(200),
+      ctx.json({ participants: null }),
 
       // 그 외 에러
       // ctx.status(404),
@@ -106,7 +106,7 @@ export const participantsHandlers = [
     );
   }),
 
-  rest.delete('/api/studies/:studyId/progresses/:progressId', (req, res, ctx) => {
+  rest.delete('/api/studies/:studyId/participants/:progressId', (req, res, ctx) => {
     return res(ctx.status(204));
   }),
 ];

@@ -33,6 +33,16 @@ export type ResponseStudies = {
   studies: ResponseStudyInfo[];
 };
 
+type ResponseParticipantInfo = {
+  participantId: number;
+  nickname: string;
+  isHost: boolean;
+};
+
+export type ResponseCheckParticipants = {
+  participants: ResponseParticipantInfo[] | null;
+};
+
 export type ResponseMemberStudyMetadata = {
   currentCycle: number;
   step: Step;
@@ -52,17 +62,6 @@ export type ResponseStudyMembers = {
 
 export type ResponseMemberRecordContents = {
   content: MemberRecordContent[];
-};
-
-type ResponseProgress = {
-  progressId: number;
-  nickname: string;
-  currentCycle: number;
-  step: Step;
-};
-
-export type ResponseCheckProgresses = {
-  progresses: ResponseProgress[] | null;
 };
 
 export type ResponseAuthToken = {

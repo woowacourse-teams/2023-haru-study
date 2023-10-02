@@ -6,15 +6,12 @@ import useCheckProgresses from '@Components/participation/hooks/useCheckProgress
 
 import MemberRegister from './MemberRegister/MemberRegister';
 import MemberRestart from './MemberRestart/MemberRestart';
-import ParticipationCodeCopier from './ParticipationCodeCopier/ParticipationCodeCopier';
 
 type Props = {
-  participantCode: string;
   studyName: string;
-  isHost: boolean;
 };
 
-const ParticipationContents = ({ participantCode, studyName, isHost }: Props) => {
+const ParticipationContents = ({ studyName }: Props) => {
   const { result, studyId } = useCheckProgresses();
 
   const [isRegisterShow, setRegisterShow] = useState(false);
@@ -25,15 +22,14 @@ const ParticipationContents = ({ participantCode, studyName, isHost }: Props) =>
 
   return (
     <Layout>
-      {isHost && <ParticipationCodeCopier participantCode={participantCode} />}
       {result && (
         <AlertErrorBoundary>
-          {result.progresses && !isRegisterShow ? (
+          {result.participants && !isRegisterShow ? (
             <MemberRestart
               studyName={studyName}
-              nickname={result.progresses[0].nickname}
+              nickname={result.participants[0].nickname}
               studyId={studyId}
-              progressId={result.progresses[0].progressId}
+              participantId={result.participants[0].participantId}
               showMemberRegister={handleShowMemberRegister}
             />
           ) : (
