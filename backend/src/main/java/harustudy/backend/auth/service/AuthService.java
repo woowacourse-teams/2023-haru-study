@@ -93,4 +93,9 @@ public class AuthService {
     public String parseMemberId(String accessToken) {
         return jwtTokenProvider.parseSubject(accessToken, tokenConfig.secretKey());
     }
+
+    public void deleteStringifiedRefreshToken(String refreshToken) {
+        UUID uuid = UUID.fromString(refreshToken);
+        refreshTokenRepository.deleteTokenWithoutContextUpdate(uuid);
+    }
 }

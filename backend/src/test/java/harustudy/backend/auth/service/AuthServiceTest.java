@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -144,5 +146,27 @@ class AuthServiceTest {
         // when, then
         assertThatThrownBy(() -> authService.validateAccessToken(accessToken)).isInstanceOf(
                 InvalidAccessTokenException.class);
+    }
+
+    @Test
+    void 갱신_토큰을_삭제한다() {
+        // given
+        Member member = new Member("test", "test@test.com", "test.png", LoginType.GOOGLE);
+        RefreshToken refreshToken = new RefreshToken(member,
+                tokenConfig.refreshTokenExpireLength());
+
+        entityManager.persist(member);
+        entityManager.persist(refreshToken);
+        entityManager.flush();
+        entityManager.clear();
+
+        // when
+        String stringifiedUUID = refreshToken.getUuid().toString();
+
+        // then
+        assertNotNull(entityManager.find(RefreshToken.class, refreshToken.getId()));
+        authService.deleteStringifiedRefreshToken(stringifiedUUID);
+        entityManager.clear();
+        assertNull(entityManager.find(RefreshToken.class, refreshToken.getId()));
     }
 }
