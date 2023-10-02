@@ -80,7 +80,6 @@ class AcceptanceTest {
     @Test
     void 회원으로_스터디를_진행한다() throws Exception {
         LoginResponse 로그인_정보 = 구글_로그인을_진행한다();
-        System.out.println("로그인_정보 = " + 로그인_정보);
         Long 스터디_아이디 = 스터디를_개설한다(로그인_정보);
         Long 참여자_아이디 = 스터디에_참여한다(로그인_정보, 스터디_아이디);
         스터디_상태를_다음_단계로_넘긴다(로그인_정보, 스터디_아이디);
