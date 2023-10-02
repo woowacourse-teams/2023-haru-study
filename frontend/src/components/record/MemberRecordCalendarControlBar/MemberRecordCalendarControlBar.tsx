@@ -162,6 +162,8 @@ const YearNavigationButton = styled.div`
   display: flex;
   gap: 20px;
 
+  opacity: 0.6;
+
   svg {
     cursor: pointer;
   }

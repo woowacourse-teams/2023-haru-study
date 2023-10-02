@@ -38,7 +38,9 @@ const useCalendar = () => {
     setMonth(changedMonth);
   };
 
-  const handleNavigationYear = (type: 'next' | 'prev') => {
+  const handleYearShift = (year: number) => setYear(year);
+
+  const handleNavigationYear = (type: 'next' | 'prev' | number) => {
     if (type === 'next') setNavigationYear((prev) => prev + 1);
     else setNavigationYear((prev) => prev - 1);
   };
@@ -50,7 +52,16 @@ const useCalendar = () => {
 
   const monthStorage = calendar.getMonthStorage(year, month);
 
-  return { year, month, navigationYear, handleMonthShift, handleNavigationMonth, handleNavigationYear, monthStorage };
+  return {
+    year,
+    month,
+    navigationYear,
+    handleMonthShift,
+    handleYearShift,
+    handleNavigationMonth,
+    handleNavigationYear,
+    monthStorage,
+  };
 };
 
 export default useCalendar;

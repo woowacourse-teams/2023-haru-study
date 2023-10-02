@@ -69,8 +69,8 @@ export default PeriodSelectionBar;
 
 const Layout = styled.div`
   display: flex;
-  align-items: center;
-  gap: 40px;
+  align-items: stretch;
+  gap: 20px;
 
   user-select: none;
 `;
@@ -99,7 +99,7 @@ type SelectPeriodButtonProps = {
 };
 
 const SelectPeriodButton = styled.button<SelectPeriodButtonProps>`
-  padding: 10px 20px;
+  padding: 8px 20px;
 
   border: 1px solid transparent;
 
@@ -111,8 +111,8 @@ const SelectPeriodButton = styled.button<SelectPeriodButtonProps>`
 
 const SelectCustomPeriodContainer = styled.div`
   display: flex;
-  gap: 10px;
   align-items: center;
+  gap: 10px;
 
   button {
     flex: 1;

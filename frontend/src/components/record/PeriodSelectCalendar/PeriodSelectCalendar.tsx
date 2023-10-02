@@ -1,6 +1,6 @@
 import { css, styled } from 'styled-components';
 
-import Typography from '@Components/common/Typography/Typography';
+import Menu from '@Components/common/Menu/Menu';
 
 import useCalendar from '@Hooks/common/useCalendar';
 
@@ -13,33 +13,60 @@ import format from '@Utils/format';
 import CalendarDayOfWeeks from '../CalendarDayOfWeeks/CalendarDayOfWeeks';
 import { useMemberRecordPeriod } from '../contexts/MemberRecordPeriodProvider';
 
+const MENU_ITEM_STYLE = css`
+  row-gap: 3px;
+  max-height: 320px;
+  overflow: auto;
+
+  font-size: 1.6rem;
+  font-weight: 300;
+`;
+
 const PeriodSelectCalendar = () => {
   const today = new Date();
 
   const { startDate, endDate, isMiddleSelectedCustomDate, handleCustomPeriod, handleHoverDays } =
     useMemberRecordPeriod();
 
-  const { year, month, monthStorage, handleMonthShift } = useCalendar();
+  const { year, month, monthStorage, handleMonthShift, handleNavigationMonth, handleYearShift } = useCalendar();
 
-  const getDayBackgroundColor = (date: string) => {
-    if (startDate === date || endDate === date) return color.blue[200];
+  const getDayBackgroundColor = (fullDateDot: string, fullDate: string) => {
+    if (startDate === fullDateDot || endDate === fullDateDot) return color.blue[200];
 
-    if (isMiddleSelectedCustomDate(date)) return color.blue[100];
+    if (isMiddleSelectedCustomDate(fullDateDot)) return color.blue[100];
 
-    if (date === format.date(today)) return color.neutral[100];
+    if (fullDate === format.date(today)) return color.neutral[100];
 
     return 'transparent';
   };
   return (
     <Layout>
       <Month>
-        <Typography variant="p2">
-          {year}년 {month}월
-        </Typography>
-        <div>
+        <CurrentYearMont>
+          <span>
+            <Menu trigger={<div>{year}년</div>} $menuListStyle={MENU_ITEM_STYLE}>
+              {Array.from({ length: today.getFullYear() - 2023 + 2 }).map((_, index) => (
+                <Menu.Item key={index} onClick={() => handleYearShift(2023 + index)}>
+                  {2023 + index}년
+                </Menu.Item>
+              ))}
+            </Menu>
+          </span>
+          <span>
+            <Menu trigger={<div>{month}월</div>} $menuListStyle={MENU_ITEM_STYLE}>
+              {Array.from({ length: 12 }).map((_, index) => (
+                <Menu.Item key={index} onClick={() => handleNavigationMonth(index + 1)}>
+                  {index + 1}월
+                </Menu.Item>
+              ))}
+            </Menu>
+          </span>
+        </CurrentYearMont>
+        <ShiftButton>
           <ArrowIcon direction="left" onClick={() => handleMonthShift('prev')} />
+          <TodayButton onClick={() => handleMonthShift('today')}>●</TodayButton>
           <ArrowIcon direction="right" onClick={() => handleMonthShift('next')} />
-        </div>
+        </ShiftButton>
       </Month>
       <CalendarDayOfWeeks position="center" />
       <Days>
@@ -49,7 +76,7 @@ const PeriodSelectCalendar = () => {
             $isCurrentMonthDay={state === 'cur'}
             onClick={() => handleCustomPeriod(fullDateDot)}
             onMouseEnter={() => handleHoverDays(fullDateDot)}
-            $backgroundColor={getDayBackgroundColor(fullDateDot)}
+            $backgroundColor={getDayBackgroundColor(fullDateDot, fullDate)}
           >
             {day}
           </Day>
@@ -87,18 +114,30 @@ const Month = styled.div`
   padding: 0px 10px;
   margin-bottom: 15px;
 
-  p {
-    font-weight: 500;
-  }
-
-  div {
-    display: flex;
-    gap: 20px;
-  }
-
   svg {
     cursor: pointer;
   }
+`;
+
+const ShiftButton = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  opacity: 0.6;
+`;
+
+const TodayButton = styled.div`
+  cursor: pointer;
+`;
+
+const CurrentYearMont = styled.span`
+  display: flex;
+
+  font-size: 2rem;
+  font-weight: 500;
+
+  cursor: pointer;
 `;
 
 const Days = styled.ul`

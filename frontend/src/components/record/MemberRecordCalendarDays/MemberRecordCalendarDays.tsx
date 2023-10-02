@@ -17,6 +17,15 @@ type Props = {
 
 const MemberRecordCalendarDays = ({ monthStorage }: Props) => {
   const today = new Date();
+
+  const getDayFontColor = (dayOfWeek: number) => {
+    if (dayOfWeek === 0) return color.red[600];
+
+    if (dayOfWeek === 6) return color.blue[600];
+
+    return color.black;
+  };
+
   return (
     <Days $numberOfWeeks={monthStorage.length / 7}>
       {monthStorage.map(({ fullDate, state, dayOfWeek, day }) => (
@@ -24,8 +33,7 @@ const MemberRecordCalendarDays = ({ monthStorage }: Props) => {
           <Day
             $isCurrentMonthDay={state === 'cur'}
             $isToday={fullDate === format.date(today)}
-            $isSunday={dayOfWeek === 0}
-            $isSaturday={dayOfWeek === 6}
+            $fontColor={getDayFontColor(dayOfWeek)}
           >
             {day}
           </Day>
@@ -60,8 +68,7 @@ const Days = styled.ul<DaysProps>`
 type DayProps = {
   $isCurrentMonthDay: boolean;
   $isToday: boolean;
-  $isSunday: boolean;
-  $isSaturday: boolean;
+  $fontColor: string;
 };
 
 const Day = styled.div<DayProps>`
@@ -77,9 +84,9 @@ const Day = styled.div<DayProps>`
 
   background-color: ${color.white};
 
-  ${({ $isCurrentMonthDay, $isSunday, $isSaturday, $isToday }) => css`
+  ${({ $isCurrentMonthDay, $fontColor, $isToday }) => css`
     opacity: ${$isCurrentMonthDay ? 1 : 0.4};
-    color: ${$isSaturday ? color.blue[600] : $isSunday ? color.red[600] : color.black};
+    color: ${$fontColor};
 
     background-color: ${$isToday && color.neutral[100]};
   `}
