@@ -157,6 +157,7 @@ const SelectedDate = styled.div<SelectedDateProps>`
         `
       : css`
           text-align: center;
+          opacity: 0.5;
         `}
   `}
 `;

@@ -13,6 +13,12 @@ import format from '@Utils/format';
 import CalendarDayOfWeeks from '../CalendarDayOfWeeks/CalendarDayOfWeeks';
 import { useMemberRecordPeriod } from '../contexts/MemberRecordPeriodProvider';
 
+const MENU_STYLE = css`
+  & > div {
+    padding: 0;
+  }
+`;
+
 const MENU_ITEM_STYLE = css`
   row-gap: 3px;
   max-height: 320px;
@@ -20,6 +26,9 @@ const MENU_ITEM_STYLE = css`
 
   font-size: 1.6rem;
   font-weight: 300;
+
+  top: 40px;
+  left: 5px;
 `;
 
 const PeriodSelectCalendar = () => {
@@ -42,9 +51,17 @@ const PeriodSelectCalendar = () => {
   return (
     <Layout>
       <Month>
-        <CurrentYearMont>
+        <CurrentYearMonth>
           <span>
-            <Menu trigger={<div>{year}년</div>} $menuListStyle={MENU_ITEM_STYLE}>
+            <Menu
+              trigger={
+                <MenuTrigger>
+                  {year}년 <ArrowIcon direction="down" />
+                </MenuTrigger>
+              }
+              $menuListStyle={MENU_ITEM_STYLE}
+              $style={MENU_STYLE}
+            >
               {Array.from({ length: today.getFullYear() - 2023 + 2 }).map((_, index) => (
                 <Menu.Item key={index} onClick={() => handleYearShift(2023 + index)}>
                   {2023 + index}년
@@ -53,7 +70,15 @@ const PeriodSelectCalendar = () => {
             </Menu>
           </span>
           <span>
-            <Menu trigger={<div>{month}월</div>} $menuListStyle={MENU_ITEM_STYLE}>
+            <Menu
+              trigger={
+                <MenuTrigger>
+                  {month}월 <ArrowIcon direction="down" />
+                </MenuTrigger>
+              }
+              $menuListStyle={MENU_ITEM_STYLE}
+              $style={MENU_STYLE}
+            >
               {Array.from({ length: 12 }).map((_, index) => (
                 <Menu.Item key={index} onClick={() => handleNavigationMonth(index + 1)}>
                   {index + 1}월
@@ -61,7 +86,7 @@ const PeriodSelectCalendar = () => {
               ))}
             </Menu>
           </span>
-        </CurrentYearMont>
+        </CurrentYearMonth>
         <ShiftButton>
           <ArrowIcon direction="left" onClick={() => handleMonthShift('prev')} />
           <TodayButton onClick={() => handleMonthShift('today')}>●</TodayButton>
@@ -111,11 +136,33 @@ const Month = styled.div`
   align-items: center;
   gap: 10px;
 
-  padding: 0px 10px;
-  margin-bottom: 15px;
+  padding: 0px 5px;
+  margin-bottom: 20px;
 
   svg {
     cursor: pointer;
+  }
+`;
+
+const MenuTrigger = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  border-radius: 8px;
+  padding: 2px 5px;
+
+  svg {
+    width: 6px;
+    height: 6px;
+
+    opacity: 0.6;
+  }
+
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${color.neutral[100]};
   }
 `;
 
@@ -131,7 +178,7 @@ const TodayButton = styled.div`
   cursor: pointer;
 `;
 
-const CurrentYearMont = styled.span`
+const CurrentYearMonth = styled.span`
   display: flex;
 
   font-size: 2rem;
