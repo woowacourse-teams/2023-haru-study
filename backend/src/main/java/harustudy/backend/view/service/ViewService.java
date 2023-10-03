@@ -1,10 +1,15 @@
 package harustudy.backend.view.service;
 
+import static harustudy.backend.view.utils.LocalDateConverter.convertEndDate;
+import static harustudy.backend.view.utils.LocalDateConverter.convertStartDate;
+
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
-import harustudy.backend.view.dto.RequestedPageInfoDto;
+import harustudy.backend.view.dto.CalenderStudyRecordsResponse;
 import harustudy.backend.view.dto.StudyRecordResponse;
 import harustudy.backend.view.dto.StudyRecordsPageResponse;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,19 +27,38 @@ public class ViewService {
 
     public StudyRecordsPageResponse findStudyRecordsPage(
             Long memberId,
-            RequestedPageInfoDto requestedPageInfoDto
+            Integer page,
+            Integer size,
+            LocalDate startDate,
+            LocalDate endDate
     ) {
-        PageRequest pageRequest = PageRequest.of(
-                requestedPageInfoDto.page(),
-                requestedPageInfoDto.size(),
-                Sort.by(Direction.ASC, "createdDate")
-        );
-        Page<Study> page = studyRepository.findStudyPageByMemberIdAndCreatedDate(
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Direction.ASC, "createdDate"));
+        Page<Study> studyPage = studyRepository.findPageByMemberIdAndCreatedDate(
                 memberId,
-                requestedPageInfoDto.startDate(),
-                requestedPageInfoDto.endDate(),
+                convertStartDate(startDate),
+                convertEndDate(endDate),
                 pageRequest);
 
-        return StudyRecordsPageResponse.of(page.map(StudyRecordResponse::of));
+        return StudyRecordsPageResponse.of(studyPage.map(StudyRecordResponse::of));
     }
+
+    public CalenderStudyRecordsResponse findStudyRecordsForCalender(
+            Long memberId,
+            LocalDate startDate,
+            LocalDate endDate
+    ) {
+        List<Study> studies = studyRepository.findByMemberIdAndCreatedDate(
+                memberId,
+                convertStartDate(startDate),
+                convertEndDate(endDate),
+                Sort.by(Direction.ASC, "createdDate")
+        );
+
+        List<StudyRecordResponse> studyRecords = studies.stream()
+                .map(StudyRecordResponse::of)
+                .toList();
+        return CalenderStudyRecordsResponse.of(studyRecords);
+    }
+
+
 }

@@ -2,7 +2,7 @@ package harustudy.backend.view.controller;
 
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.auth.dto.AuthMember;
-import harustudy.backend.view.dto.RequestedPageInfoDto;
+import harustudy.backend.view.dto.CalenderStudyRecordsResponse;
 import harustudy.backend.view.dto.StudyRecordsPageResponse;
 import harustudy.backend.view.service.ViewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,9 +32,26 @@ public class ViewController {
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
     ) {
+        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(
+                memberId,
+                page,
+                size,
+                startDate,
+                endDate
+        );
+        return ResponseEntity.ok(response);
+    }
 
-        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(memberId,
-                RequestedPageInfoDto.of(page, size, startDate, endDate));
+    @Operation(summary = "달력 기반 스터디 기록 조회")
+    @GetMapping("/api/view/calender/study-records")
+    public ResponseEntity<CalenderStudyRecordsResponse> findCalenderStudyRecords(
+            @Authenticated AuthMember authMember,
+            @RequestParam Long memberId,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
+    ) {
+        CalenderStudyRecordsResponse response = viewService.findStudyRecordsForCalender(
+                memberId, startDate, endDate);
         return ResponseEntity.ok(response);
     }
 }

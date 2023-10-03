@@ -7,7 +7,7 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
-import harustudy.backend.view.dto.RequestedPageInfoDto;
+import harustudy.backend.view.dto.CalenderStudyRecordsResponse;
 import harustudy.backend.view.dto.StudyRecordsPageResponse;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
@@ -61,14 +61,16 @@ class ViewServiceTest {
         Integer size = 5;
         LocalDate startDate = LocalDate.of(2023, 9, 20);
         LocalDate endDate = LocalDate.of(2023, 10, 10);
-        RequestedPageInfoDto requestedPageInfoDto = RequestedPageInfoDto.of(page, size, startDate, endDate);
 
         Long expectedTotalPages = Math.round((double) studyRepository.count() / (double) size);
 
         //when
         StudyRecordsPageResponse response = viewService.findStudyRecordsPage(
                 member.getId(),
-                requestedPageInfoDto
+                page,
+                size,
+                startDate,
+                endDate
         );
 
         //then
@@ -84,14 +86,16 @@ class ViewServiceTest {
         //given
         Integer page = 0;
         Integer size = 5;
-        RequestedPageInfoDto requestedPageInfoDto = RequestedPageInfoDto.of(page, size, null, null);
 
         Long expectedTotalPages = Math.round((double) studyRepository.count() / (double) size);
 
         //when
         StudyRecordsPageResponse response = viewService.findStudyRecordsPage(
                 member.getId(),
-                requestedPageInfoDto
+                page,
+                size,
+                null,
+                null
         );
 
         //then
@@ -99,6 +103,30 @@ class ViewServiceTest {
             softly.assertThat(response.studyRecords().size()).isEqualTo(5);
             softly.assertThat(response.pageInfo().pageNum()).isEqualTo(page);
             softly.assertThat(response.pageInfo().totalPages()).isEqualTo(expectedTotalPages.intValue());
+        });
+    }
+
+    @Test
+    void 달력_기반으로_스터디_기록을_조회한다() {
+        //given
+        LocalDate startDate = LocalDate.of(2023, 9, 20);
+        LocalDate endDate = LocalDate.of(2023, 10, 10);
+
+        LocalDate expectedTwoRecordsDate1 = LocalDate.of(2023, 9, 23);
+        LocalDate expectedTwoRecordsDate2 = LocalDate.of(2023, 10, 2);
+
+        //when
+        CalenderStudyRecordsResponse response = viewService.findStudyRecordsForCalender(
+                member.getId(),
+                startDate,
+                endDate
+        );
+
+        //then
+        assertSoftly(sotly -> {
+            sotly.assertThat(response.studyRecords().size()).isEqualTo(10);
+            sotly.assertThat(response.studyRecords().get(expectedTwoRecordsDate1).size()).isEqualTo(2);
+            sotly.assertThat(response.studyRecords().get(expectedTwoRecordsDate2).size()).isEqualTo(2);
         });
     }
 }
