@@ -74,7 +74,6 @@ class PollingIntegrationTest extends IntegrationTest {
 
         // then
         String jsonResponse = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        System.out.println("jsonResponse = " + jsonResponse);
         WaitingResponse waitingResponse = objectMapper.readValue(jsonResponse, WaitingResponse.class);
 
 
