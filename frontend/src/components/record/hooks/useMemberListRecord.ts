@@ -16,7 +16,7 @@ type Props = {
   period: Period | null;
 };
 
-const useMemberRecords = ({ memberId, startDate, endDate, period }: Props) => {
+const useMemberListRecord = ({ memberId, startDate, endDate, period }: Props) => {
   const [memberRecords, setMemberRecords] = useState<StudyBasicInfo[] | null>(null);
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [totalPagesNumber, setTotalPagesNumber] = useState<number>(1);
@@ -35,6 +35,7 @@ const useMemberRecords = ({ memberId, startDate, endDate, period }: Props) => {
 
   useEffect(() => {
     if (!result) return;
+
     const {
       studyRecords,
       pageInfo: { totalPages },
@@ -51,4 +52,4 @@ const useMemberRecords = ({ memberId, startDate, endDate, period }: Props) => {
   return { memberRecords, isLoading, totalPagesNumber, shiftPage, currentPageNumber };
 };
 
-export default useMemberRecords;
+export default useMemberListRecord;

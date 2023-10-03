@@ -4,7 +4,7 @@ import MemberRecordItems from '../MemberRecordItems/MemberRecordItems';
 import PaginationButton from '../PaginationButton/PaginationButton';
 import PeriodSelectionBar from '../PeriodSelectionBar/PeriodSelectionBar';
 import { useMemberRecordPeriod } from '../contexts/MemberRecordPeriodProvider';
-import useMemberRecords from '../hooks/useMemberRecords';
+import useMemberListRecord from '../hooks/useMemberListRecord';
 
 type Props = {
   memberId: string;
@@ -13,7 +13,7 @@ type Props = {
 const MemberRecordList = ({ memberId }: Props) => {
   const { fetchStartDate: startDate, fetchEndDate: endDate, period } = useMemberRecordPeriod();
 
-  const { memberRecords, isLoading, totalPagesNumber, currentPageNumber, shiftPage } = useMemberRecords({
+  const { memberRecords, isLoading, totalPagesNumber, currentPageNumber, shiftPage } = useMemberListRecord({
     memberId,
     startDate,
     endDate,

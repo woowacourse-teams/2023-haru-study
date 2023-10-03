@@ -17,18 +17,19 @@ const PaginationButton = ({ totalPagesNumber, currentPageNumber, shiftPage }: Pr
 
   const handleClickPageButton = (page: number) => {
     if (page < 1) {
-      send({ message: '첫 페이지입니다.' });
+      send({ message: '첫 페이지예요.' });
       return;
     }
 
     if (page > totalPagesNumber) {
-      send({ message: '마지막 페이지입니다.' });
+      send({ message: '마지막 페이지예요.' });
       return;
     }
 
     window.scroll({
       top: 0,
     });
+
     shiftPage(page);
   };
 
