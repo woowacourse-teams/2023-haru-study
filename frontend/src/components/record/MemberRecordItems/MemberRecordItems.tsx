@@ -3,25 +3,18 @@ import { styled } from 'styled-components';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
+import type { StudyBasicInfo } from '@Types/study';
+
 import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
 import MemberRecordItem from '../MemberRecordItem/MemberRecordItem';
 import MemberRecordListSkeleton from '../MemberRecordList/MemberRecordListSkeleton';
-import { useMemberRecordPeriod } from '../contexts/MemberRecordPeriodProvider';
-import useMemberRecords from '../hooks/useMemberRecords';
 
 type Props = {
-  memberId: string;
+  memberRecords: StudyBasicInfo[] | null;
+  isLoading: boolean;
 };
 
-const MemberRecordItems = ({ memberId }: Props) => {
-  const { fetchStartDate: startDate, fetchEndDate: endDate } = useMemberRecordPeriod();
-
-  const { memberRecords, isLoading } = useMemberRecords({
-    memberId,
-    startDate,
-    endDate,
-  });
-
+const MemberRecordItems = ({ memberRecords, isLoading }: Props) => {
   const navigate = useNavigate();
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);

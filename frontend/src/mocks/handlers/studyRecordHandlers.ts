@@ -185,7 +185,7 @@ const STUDY_LIST: {
     totalPages: number;
   };
 } = {
-  studyRecords: Array.from({ length: 78 }).map((_, index) => {
+  studyRecords: Array.from({ length: 218 }).map((_, index) => {
     return {
       studyId: String(index),
       name: `안오면 지상렬${index + 1} 전체`,
@@ -195,7 +195,7 @@ const STUDY_LIST: {
     };
   }),
   pageInfo: {
-    totalPages: 3,
+    totalPages: 10,
   },
 };
 

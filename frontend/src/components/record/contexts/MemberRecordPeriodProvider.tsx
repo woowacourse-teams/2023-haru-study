@@ -64,7 +64,8 @@ const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
     const day = today.getDate();
     const month = today.getMonth();
 
-    if (!period) setFetchDate({ start: format.date(customPeriod.start!), end: format.date(customPeriod.end!) });
+    if (!period)
+      setFetchDate({ start: format.date(customPeriod.start!, '-'), end: format.date(customPeriod.end!, '-') });
 
     if (period === 'entire') setFetchDate({ start: null, end: null });
 

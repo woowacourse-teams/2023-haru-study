@@ -1,5 +1,6 @@
 import MemberRecordCalendar from '../MemberRecordCalendar/MemberRecordCalendar';
 import MemberRecordList from '../MemberRecordList/MemberRecordList';
+import MemberRecordPeriodProvider from '../contexts/MemberRecordPeriodProvider';
 
 type Props = {
   memberId: string;
@@ -9,7 +10,11 @@ type Props = {
 const MemberRecords = ({ memberId, viewMode }: Props) => {
   if (viewMode === 'calendar') return <MemberRecordCalendar />;
 
-  return <MemberRecordList memberId={memberId} />;
+  return (
+    <MemberRecordPeriodProvider>
+      <MemberRecordList memberId={memberId} />
+    </MemberRecordPeriodProvider>
+  );
 };
 
 export default MemberRecords;
