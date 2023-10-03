@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { styled } from 'styled-components';
 
 import NotificationBoundary from '@Components/common/NotificationBoundary/NotificationBoundary';
@@ -12,22 +11,17 @@ type Props = {
 };
 
 const ParticipationContents = ({ studyName }: Props) => {
-  const { participantsResult, nickname, participantId, studyId } = useCheckParticipants();
-
-  const [isRegisterShow, setRegisterShow] = useState(false);
-
-  const handleShowMemberRegister = () => {
-    setRegisterShow(true);
-  };
+  const { participantsResult, nickname, participantId, studyId, handleShowMemberRegister, isShownMemeberRestart } =
+    useCheckParticipants();
 
   return (
     <Layout>
       {participantsResult && (
         <NotificationBoundary>
-          {nickname && !isRegisterShow ? (
+          {isShownMemeberRestart ? (
             <MemberRestart
               studyName={studyName}
-              nickname={nickname}
+              nickname={nickname!}
               studyId={studyId}
               participantId={participantId!}
               showMemberRegister={handleShowMemberRegister}

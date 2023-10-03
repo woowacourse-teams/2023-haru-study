@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import useFetch from '@Hooks/api/useFetch';
@@ -17,6 +18,14 @@ const useCheckParticipants = () => {
     requestGetCheckParticipants(studyId ?? '', memberInfo?.memberId ?? ''),
   );
 
+  const [isRegisterShow, setRegisterShow] = useState(false);
+
+  const handleShowMemberRegister = () => {
+    setRegisterShow(true);
+  };
+
+  const isShownMemeberRestart = result?.participants?.[0].nickname && !isRegisterShow;
+
   if (!studyId) throw new Error('잘못된 접근입니다.');
 
   return {
@@ -24,6 +33,8 @@ const useCheckParticipants = () => {
     participantsResult: result,
     nickname: result?.participants?.[0].nickname,
     participantId: result?.participants?.[0].participantId,
+    handleShowMemberRegister,
+    isShownMemeberRestart,
   };
 };
 
