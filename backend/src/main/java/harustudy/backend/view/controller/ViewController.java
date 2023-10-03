@@ -2,8 +2,8 @@ package harustudy.backend.view.controller;
 
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.auth.dto.AuthMember;
-import harustudy.backend.view.dto.CalenderStudyRecordsResponse;
-import harustudy.backend.view.dto.StudyRecordResponse;
+import harustudy.backend.view.dto.RequestedPageInfoDto;
+import harustudy.backend.view.dto.StudyRecordsPageResponse;
 import harustudy.backend.view.service.ViewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,20 +24,17 @@ public class ViewController {
 
     @Operation(summary = "스터디 기록 페이지 조회")
     @GetMapping("/api/view/study-records")
-    public ResponseEntity<StudyRecordResponse> findStudyRecordsPage(
+    public ResponseEntity<StudyRecordsPageResponse> findStudyRecordsPage(
             @Authenticated AuthMember authMember,
-            @RequestParam Long page,
-            @RequestParam Long size,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
+            @RequestParam Long memberId,
+            @RequestParam Integer page,
+            @RequestParam Integer size,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
     ) {
-        viewService.findStudyRecordsPage(authMember, page, size, startDate, endDate);
-        return ResponseEntity.ok(null);
-    }
 
-    @Operation(summary = "달력 기반 스터디 기록 조회")
-    @GetMapping("/api/view/calender/study-records")
-    public ResponseEntity<CalenderStudyRecordsResponse> findCalenderStudyRecords() {
-        return ResponseEntity.ok(CalenderStudyRecordsResponse.of());
+        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(memberId,
+                RequestedPageInfoDto.of(page, size, startDate, endDate));
+        return ResponseEntity.ok(response);
     }
 }
