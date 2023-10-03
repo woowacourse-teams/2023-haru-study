@@ -12,7 +12,7 @@ type Props = {
 };
 
 const ParticipationContents = ({ studyName }: Props) => {
-  const { result, studyId } = useCheckParticipants();
+  const { participantsResult, nickname, participantId, studyId } = useCheckParticipants();
 
   const [isRegisterShow, setRegisterShow] = useState(false);
 
@@ -22,14 +22,14 @@ const ParticipationContents = ({ studyName }: Props) => {
 
   return (
     <Layout>
-      {result && (
+      {participantsResult && (
         <NotificationBoundary>
-          {result.participants && !isRegisterShow ? (
+          {nickname && !isRegisterShow ? (
             <MemberRestart
               studyName={studyName}
-              nickname={result.participants[0].nickname}
+              nickname={nickname}
               studyId={studyId}
-              participantId={result.participants[0].participantId}
+              participantId={participantId!}
               showMemberRegister={handleShowMemberRegister}
             />
           ) : (

@@ -19,7 +19,12 @@ const useCheckParticipants = () => {
 
   if (!studyId) throw new Error('잘못된 접근입니다.');
 
-  return { studyId, result };
+  return {
+    studyId,
+    participantsResult: result,
+    nickname: result?.participants?.[0].nickname,
+    participantId: result?.participants?.[0].participantId,
+  };
 };
 
 export default useCheckParticipants;
