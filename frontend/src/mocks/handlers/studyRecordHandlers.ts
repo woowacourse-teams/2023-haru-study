@@ -1,6 +1,8 @@
 import { rest } from 'msw';
 
-import type { MemberProgress, StudyBasicInfo } from '@Types/study';
+import format from '@Utils/format';
+
+import type { MemberProgress } from '@Types/study';
 
 const STUDY_CONTENT = {
   content: [
@@ -170,37 +172,112 @@ const STUDY_METADATA = {
   createdDateTime: '2023-08-15T06:25:39.093Z',
 };
 
-const STUDY_LIST: { studies: StudyBasicInfo[] } = {
-  studies: [
-    {
-      studyId: '1',
-      name: '안오면 지상렬',
-      totalCycle: 3,
-      timePerCycle: 60,
+// 전체기간
+const STUDY_LIST: {
+  studyRecords: {
+    studyId: string;
+    name: string;
+    timePerCycle: number;
+    totalCycle: number;
+    createdDateTime: string;
+  }[];
+  pageInfo: {
+    totalPages: number;
+  };
+} = {
+  studyRecords: Array.from({ length: 78 }).map((_, index) => {
+    return {
+      studyId: String(index),
+      name: `안오면 지상렬${index + 1} 전체`,
+      totalCycle: Math.floor(Math.random() * 8),
+      timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
       createdDateTime: '2023-08-16T13:33:02.810Z',
-    },
-    {
-      studyId: '2',
-      name: '와도 지상렬 지상렬',
-      totalCycle: 6,
-      timePerCycle: 30,
-      createdDateTime: '2023-08-14T13:33:02.810Z',
-    },
-    {
-      studyId: '3',
-      name: '심야 공부방',
-      totalCycle: 3,
-      timePerCycle: 50,
-      createdDateTime: '2023-08-12T13:33:02.810Z',
-    },
-    {
-      studyId: '4',
-      name: '짧고 빠른 공부방',
-      totalCycle: 3,
-      timePerCycle: 20,
-      createdDateTime: '2023-08-11T13:33:02.810Z',
-    },
-  ],
+    };
+  }),
+  pageInfo: {
+    totalPages: 3,
+  },
+};
+
+// 3개월
+const STUDY_LIST2: {
+  studyRecords: {
+    studyId: string;
+    name: string;
+    timePerCycle: number;
+    totalCycle: number;
+    createdDateTime: string;
+  }[];
+  pageInfo: {
+    totalPages: number;
+  };
+} = {
+  studyRecords: Array.from({ length: 50 }).map((_, index) => {
+    return {
+      studyId: String(index),
+      name: `안오면 지상렬${index + 1} 3개월`,
+      totalCycle: Math.floor(Math.random() * 8),
+      timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+      createdDateTime: '2023-08-16T13:33:02.810Z',
+    };
+  }),
+  pageInfo: {
+    totalPages: 2,
+  },
+};
+
+// 1개월
+const STUDY_LIST3: {
+  studyRecords: {
+    studyId: string;
+    name: string;
+    timePerCycle: number;
+    totalCycle: number;
+    createdDateTime: string;
+  }[];
+  pageInfo: {
+    totalPages: number;
+  };
+} = {
+  studyRecords: Array.from({ length: 27 }).map((_, index) => {
+    return {
+      studyId: String(index),
+      name: `안오면 지상렬${index + 1} 1개월`,
+      totalCycle: Math.floor(Math.random() * 8),
+      timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+      createdDateTime: '2023-08-16T13:33:02.810Z',
+    };
+  }),
+  pageInfo: {
+    totalPages: 1,
+  },
+};
+
+// 1주일
+const STUDY_LIST4: {
+  studyRecords: {
+    studyId: string;
+    name: string;
+    timePerCycle: number;
+    totalCycle: number;
+    createdDateTime: string;
+  }[];
+  pageInfo: {
+    totalPages: number;
+  };
+} = {
+  studyRecords: Array.from({ length: 12 }).map((_, index) => {
+    return {
+      studyId: String(index),
+      name: `안오면 지상렬${index + 1} 1주일`,
+      totalCycle: Math.floor(Math.random() * 8),
+      timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+      createdDateTime: '2023-08-16T13:33:02.810Z',
+    };
+  }),
+  pageInfo: {
+    totalPages: 0,
+  },
 };
 
 const accessToken =
@@ -264,10 +341,47 @@ export const studyRecordHandlers = [
     return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(400));
   }),
 
-  rest.get('/api/studies?memberId=1', (req, res, ctx) => {
+  rest.get('/api/view/study-records', (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
-    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_LIST), ctx.delay(400));
+    const searchParams: Record<string, string> = {};
+
+    req.url.search
+      .substring(1)
+      .split('&')
+      .map((item) => item.split('='))
+      .forEach(([key, value]) => {
+        searchParams[key] = value;
+      });
+
+    const page = Number(searchParams.page);
+
+    const startDate = 'startDate' in searchParams ? searchParams.startDate : null;
+    const today = new Date();
+    const day = today.getDate();
+    const month = today.getMonth();
+
+    const studyList = !startDate
+      ? {
+          studyRecords: STUDY_LIST.studyRecords.slice(20 * page, 20 * (page + 1)),
+          pageInfo: STUDY_LIST.pageInfo,
+        }
+      : startDate === format.date(new Date(today.setMonth(month - 3)), '-')
+      ? {
+          studyRecords: STUDY_LIST2.studyRecords.slice(20 * page, 20 * (page + 1)),
+          pageInfo: STUDY_LIST2.pageInfo,
+        }
+      : startDate === format.date(new Date(today.setMonth(month - 1)), '-')
+      ? {
+          studyRecords: STUDY_LIST3.studyRecords.slice(20 * page, 20 * (page + 1)),
+          pageInfo: STUDY_LIST3.pageInfo,
+        }
+      : {
+          studyRecords: STUDY_LIST4.studyRecords.slice(20 * page, 20 * (page + 1)),
+          pageInfo: STUDY_LIST4.pageInfo,
+        };
+
+    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
 
     if (accessToken !== requestAuthToken)
       return res(
@@ -279,6 +393,6 @@ export const studyRecordHandlers = [
         }),
       );
 
-    return res(ctx.status(200), ctx.json(STUDY_LIST), ctx.delay(400));
+    return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
   }),
 ];

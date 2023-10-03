@@ -13,14 +13,44 @@ import type {
   ResponseCheckProgresses,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
-import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
+import type {
+  PlanList,
+  RetrospectList,
+  StudyBasicInfo,
+  StudyTimePerCycleOptions,
+  TotalCycleOptions,
+} from '@Types/study';
 
 import http from './httpInstance';
 
 export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyData>(`/api/studies/${studyId}`);
 
+// 제거
 export const requestGetMemberRecords = (memberId: string) =>
   http.get<ResponseMemberRecords>(`/api/studies?memberId=${memberId}`);
+
+type ResponseMemberPeriodList = {
+  studyRecords: StudyBasicInfo[];
+  pageInfo: {
+    pageNum: number;
+    totalPages: number;
+  };
+};
+
+export const requestGetMemberPeriodList = (
+  memberId: string,
+  page: number,
+  size: number,
+  startDate: string | null,
+  endDate: string | null,
+) => {
+  if (startDate && endDate)
+    return http.get<ResponseMemberPeriodList>(
+      `/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}&startDate=${startDate}&endDate=${endDate}`,
+    );
+
+  return http.get<ResponseMemberPeriodList>(`/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}`);
+};
 
 export const requestGetStudyMembers = (studyId: string) =>
   http.get<ResponseStudyMembers>(`/api/studies/${studyId}/progresses`);

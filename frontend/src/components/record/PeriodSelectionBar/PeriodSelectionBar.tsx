@@ -9,6 +9,8 @@ import color from '@Styles/color';
 
 import { PERIOD } from '@Constants/record';
 
+import { useNotification } from '@Contexts/NotificationProvider';
+
 import CalenderIcon from '@Assets/icons/CalenderIcon';
 
 import format from '@Utils/format';
@@ -20,13 +22,28 @@ import { useMemberRecordPeriod } from '../contexts/MemberRecordPeriodProvider';
 const periodTypes: Period[] = ['week', 'oneMonth', 'threeMonth', 'entire'];
 
 const PeriodSelectionBar = () => {
-  const { period, startDate, endDate, hasSelectedCustomPeriod, handlePeriod } = useMemberRecordPeriod();
+  const { send } = useNotification();
+
+  const { period, customStartDate, customEndDate, hasSelectedCustomPeriod, handlePeriod } = useMemberRecordPeriod();
 
   const [isOpenPeriodSelectCalendar, setIsOpenPeriodSelectCalendar] = useState(false);
 
   const ref = useOutsideClick<HTMLDivElement>(() => {
     setIsOpenPeriodSelectCalendar(false);
   });
+
+  const handleCustomPeriodSearch = () => {
+    if (!customStartDate || !customEndDate) {
+      send({
+        type: 'error',
+        message: '날짜가 모두 입력되지 않았어요.',
+      });
+
+      return;
+    }
+
+    handlePeriod(null);
+  };
 
   return (
     <Layout>
@@ -46,9 +63,9 @@ const PeriodSelectionBar = () => {
           <SelectedDate $hasSelectedCustomPeriod={hasSelectedCustomPeriod}>
             {hasSelectedCustomPeriod ? (
               <>
-                <div>{startDate && format.date(startDate)}</div>
+                <div>{customStartDate && format.date(customStartDate)}</div>
                 <div>~</div>
-                <div>{endDate && format.date(endDate)}</div>
+                <div>{customEndDate && format.date(customEndDate)}</div>
               </>
             ) : (
               '날짜를 선택해주세요.'
@@ -59,7 +76,7 @@ const PeriodSelectionBar = () => {
           </SelectDateButton>
           {isOpenPeriodSelectCalendar && <PeriodSelectCalendar />}
         </SelectDateWrapper>
-        <Button variant="outlined" size="x-small" onClick={() => handlePeriod(null)}>
+        <Button variant="outlined" size="x-small" onClick={handleCustomPeriodSearch}>
           조회
         </Button>
       </SelectCustomPeriodContainer>

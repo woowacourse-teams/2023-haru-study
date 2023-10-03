@@ -34,17 +34,17 @@ const MENU_ITEM_STYLE = css`
 const PeriodSelectCalendar = () => {
   const today = new Date();
 
-  const { startDate, endDate, isMiddleSelectedCustomDate, handleCustomPeriod, handleHoverDays } =
+  const { customStartDate, customEndDate, isMiddleSelectedCustomDate, handleCustomPeriod, handleHoverDays } =
     useMemberRecordPeriod();
 
   const { year, month, monthStorage, handleMonthShift, handleNavigationMonth, handleYearShift } = useCalendar(
-    new Date(startDate || today),
+    new Date(customStartDate || today),
   );
 
   const getDayBackgroundColor = (date: Date, fullDate: string) => {
-    if (startDate && format.date(startDate) === fullDate) return color.blue[200];
+    if (customStartDate && format.date(customStartDate) === fullDate) return color.blue[200];
 
-    if (endDate && format.date(endDate) === fullDate) return color.blue[200];
+    if (customEndDate && format.date(customEndDate) === fullDate) return color.blue[200];
 
     if (isMiddleSelectedCustomDate(date)) return color.blue[100];
 
@@ -215,8 +215,8 @@ const Day = styled.li<DayProps>`
   padding: 5px 10px;
   text-align: center;
 
-  width: 42px;
-  height: 42px;
+  max-width: 50px;
+  height: 50px;
 
   cursor: pointer;
 

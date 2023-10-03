@@ -3,12 +3,16 @@ import { createContext, useContext, useState } from 'react';
 
 import type { PERIOD } from '@Constants/record';
 
+import format from '@Utils/format';
+
 export type Period = keyof typeof PERIOD;
 
 export type MemberRecordPeriodContextType = {
   period: Period | null;
-  startDate: Date | null;
-  endDate: Date | null;
+  fetchStartDate: string | null;
+  fetchEndDate: string | null;
+  customStartDate: Date | null;
+  customEndDate: Date | null;
   hasSelectedCustomPeriod: boolean;
   isMiddleSelectedCustomDate: (date: Date) => boolean;
   handlePeriod: (period: Period | null) => void;
@@ -25,6 +29,11 @@ const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
     end: null,
   });
   const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
+
+  const [fetchDate, setFetchDate] = useState<{ start: string | null; end: string | null }>({
+    start: null,
+    end: null,
+  });
 
   const isSoonSelectedDate = (date: Date) => {
     if (!hoveredDay || !customPeriod.start) return false;
@@ -48,7 +57,26 @@ const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
     return false;
   };
 
-  const handlePeriod = (period: Period | null) => setPeriod(period);
+  const handlePeriod = (period: Period | null) => {
+    setPeriod(period);
+
+    const today = new Date();
+    const day = today.getDate();
+    const month = today.getMonth();
+
+    if (!period) setFetchDate({ start: format.date(customPeriod.start!), end: format.date(customPeriod.end!) });
+
+    if (period === 'entire') setFetchDate({ start: null, end: null });
+
+    if (period === 'week')
+      setFetchDate({ end: format.date(today, '-'), start: format.date(new Date(today.setDate(day - 7)), '-') });
+
+    if (period === 'oneMonth')
+      setFetchDate({ end: format.date(today, '-'), start: format.date(new Date(today.setMonth(month - 1)), '-') });
+
+    if (period === 'threeMonth')
+      setFetchDate({ end: format.date(today, '-'), start: format.date(new Date(today.setMonth(month - 3)), '-') });
+  };
 
   const handleCustomPeriod = (date: Date) => {
     setHoveredDay(date);
@@ -80,8 +108,10 @@ const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
 
   const value = {
     period,
-    startDate: customPeriod.start,
-    endDate: customPeriod.end,
+    fetchStartDate: fetchDate.start,
+    fetchEndDate: fetchDate.end,
+    customStartDate: customPeriod.start,
+    customEndDate: customPeriod.end,
     hasSelectedCustomPeriod: !!customPeriod.start || !!customPeriod.end,
     isMiddleSelectedCustomDate: (date: Date) => isSoonSelectedDate(date) || isIncludeSelectDate(date),
     handlePeriod,
