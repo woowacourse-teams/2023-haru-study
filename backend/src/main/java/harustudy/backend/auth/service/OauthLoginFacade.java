@@ -21,7 +21,6 @@ public class OauthLoginFacade {
     private final AuthService authService;
 
     public TokenResponse oauthLogin(OauthLoginRequest request) {
-        // TODO: webClient 관련 에러 핸들링
         UserInfo userInfo = requestUserInfo(request.oauthProvider(), request.code());
         return authService.userLogin(request, userInfo);
     }
