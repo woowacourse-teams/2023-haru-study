@@ -29,7 +29,7 @@ export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyDa
 export const requestGetMemberRecords = (memberId: string) =>
   http.get<ResponseMemberRecords>(`/api/studies?memberId=${memberId}`);
 
-type ResponseMemberPeriodList = {
+type ResponseMemberListRecord = {
   studyRecords: StudyBasicInfo[];
   pageInfo: {
     pageNum: number;
@@ -37,7 +37,7 @@ type ResponseMemberPeriodList = {
   };
 };
 
-export const requestGetMemberPeriodList = (
+export const requestGetMemberListRecord = (
   memberId: string,
   page: number,
   size: number,
@@ -45,12 +45,21 @@ export const requestGetMemberPeriodList = (
   endDate: string | null,
 ) => {
   if (startDate && endDate)
-    return http.get<ResponseMemberPeriodList>(
+    return http.get<ResponseMemberListRecord>(
       `/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}&startDate=${startDate}&endDate=${endDate}`,
     );
 
-  return http.get<ResponseMemberPeriodList>(`/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}`);
+  return http.get<ResponseMemberListRecord>(`/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}`);
 };
+
+type ResponseMemberCalenderRecord = {
+  studyRecords: Record<string, StudyBasicInfo[]>;
+};
+
+export const requestGetMemberCalendarRecord = (memberId: string, startDate: string, endDate: string) =>
+  http.get<ResponseMemberCalenderRecord>(
+    `/api/view/calendar/study-records?memberId=${memberId}&startDate=${startDate}&endDate=${endDate}`,
+  );
 
 export const requestGetStudyMembers = (studyId: string) =>
   http.get<ResponseStudyMembers>(`/api/studies/${studyId}/progresses`);

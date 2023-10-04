@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 
 import { TextSkeletonStyle } from '@Styles/common';
 
-const MemberRecordListSkeleton = () => {
+const MemberRecordItemsSkeleton = () => {
   return (
     <SkeletonLayout>
       <SkeletonItem />
@@ -12,7 +12,7 @@ const MemberRecordListSkeleton = () => {
   );
 };
 
-export default MemberRecordListSkeleton;
+export default MemberRecordItemsSkeleton;
 
 const SkeletonLayout = styled.div`
   display: flex;

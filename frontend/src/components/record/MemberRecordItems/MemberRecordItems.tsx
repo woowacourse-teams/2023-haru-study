@@ -5,9 +5,9 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import type { StudyBasicInfo } from '@Types/study';
 
+import MemberRecordItemsSkeleton from './MemberRecordItemsSkeleton';
 import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
 import MemberRecordItem from '../MemberRecordItem/MemberRecordItem';
-import MemberRecordListSkeleton from '../MemberRecordList/MemberRecordListSkeleton';
 
 type Props = {
   memberRecords: StudyBasicInfo[] | null;
@@ -19,7 +19,7 @@ const MemberRecordItems = ({ memberRecords, isLoading }: Props) => {
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
 
-  if (isLoading) return <MemberRecordListSkeleton />;
+  if (isLoading) return <MemberRecordItemsSkeleton />;
 
   if (memberRecords && memberRecords.length === 0) return <EmptyMemberRecord />;
 

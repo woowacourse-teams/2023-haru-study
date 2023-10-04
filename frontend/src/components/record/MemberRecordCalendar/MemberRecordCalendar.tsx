@@ -6,7 +6,11 @@ import CalendarDayOfWeeks from '../CalendarDayOfWeeks/CalendarDayOfWeeks';
 import MemberRecordCalendarControlBar from '../MemberRecordCalendarControlBar/MemberRecordCalendarControlBar';
 import MemberRecordCalendarDays from '../MemberRecordCalendarDays/MemberRecordCalendarDays';
 
-const MemberRecordCalendar = () => {
+type Props = {
+  memberId: string;
+};
+
+const MemberRecordCalendar = ({ memberId }: Props) => {
   const { year, month, navigationYear, monthStorage, handleMonthShift, handleNavigationMonth, handleNavigationYear } =
     useCalendar();
 
@@ -21,10 +25,8 @@ const MemberRecordCalendar = () => {
         handleNavigationMonth={handleNavigationMonth}
       />
       <Calendar>
-        {/* 여기를 Suspense로 묶어야 함 */}
         <CalendarDayOfWeeks />
-        {/* CalendarDays에서 date fetching */}
-        <MemberRecordCalendarDays monthStorage={monthStorage} />
+        <MemberRecordCalendarDays monthStorage={monthStorage} memberId={memberId} />
       </Calendar>
     </Layout>
   );

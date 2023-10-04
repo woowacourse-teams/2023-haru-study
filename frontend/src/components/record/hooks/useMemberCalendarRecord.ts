@@ -1,154 +1,48 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
+
+import useMutation from '@Hooks/api/useMutation';
 
 import format from '@Utils/format';
 
-import type { MonthStorage } from '@Types/record';
-import type { StudyBasicInfo } from '@Types/study';
+import { requestGetMemberCalendarRecord } from '@Apis/index';
 
-const STUDY_LIST: { studies: StudyBasicInfo[] } = {
-  studies: [
-    {
-      studyId: '1',
-      name: '짧고 빠른 공부방',
-      totalCycle: 3,
-      timePerCycle: 20,
-      createdDateTime: '2023-10-10T13:33:02.810Z',
-    },
-    {
-      studyId: '52',
-      name: '짧고 빠른 공부방',
-      totalCycle: 3,
-      timePerCycle: 20,
-      createdDateTime: '2023-10-10T13:33:02.810Z',
-    },
-    {
-      studyId: '53',
-      name: '짧고 빠른 공부방',
-      totalCycle: 3,
-      timePerCycle: 20,
-      createdDateTime: '2023-10-10T13:33:02.810Z',
-    },
-    {
-      studyId: '54',
-      name: '짧고 빠른 공부방',
-      totalCycle: 3,
-      timePerCycle: 20,
-      createdDateTime: '2023-10-10T13:33:02.810Z',
-    },
-    {
-      studyId: '41',
-      name: '짧고 빠른 공부방',
-      totalCycle: 3,
-      timePerCycle: 20,
-      createdDateTime: '2023-10-11T13:33:02.810Z',
-    },
-    {
-      studyId: '42',
-      name: '짧고 빠른 공부방2',
-      totalCycle: 3,
-      timePerCycle: 20,
-      createdDateTime: '2023-10-11T13:33:02.810Z',
-    },
-    {
-      studyId: '31',
-      name: '심야 공부방',
-      totalCycle: 3,
-      timePerCycle: 50,
-      createdDateTime: '2023-10-12T13:33:02.810Z',
-    },
-    {
-      studyId: '32',
-      name: '심야 공부방1',
-      totalCycle: 3,
-      timePerCycle: 50,
-      createdDateTime: '2023-10-12T13:33:02.810Z',
-    },
-    {
-      studyId: '33',
-      name: '심야 공부방2',
-      totalCycle: 3,
-      timePerCycle: 50,
-      createdDateTime: '2023-10-12T13:33:02.810Z',
-    },
-    {
-      studyId: '7',
-      name: '와도 지상렬 지상렬444444412312312312313123',
-      totalCycle: 6,
-      timePerCycle: 30,
-      createdDateTime: '2023-10-14T13:33:02.810Z',
-    },
-    {
-      studyId: '1',
-      name: '안오면 지상렬123123123',
-      totalCycle: 3,
-      timePerCycle: 60,
-      createdDateTime: '2023-10-16T13:33:02.810Z',
-    },
-    {
-      studyId: '5',
-      name: '안오면 지상렬222221231232',
-      totalCycle: 3,
-      timePerCycle: 60,
-      createdDateTime: '2023-10-16T13:33:02.810Z',
-    },
-    {
-      studyId: '6',
-      name: '안오면 지상렬3333333123123',
-      totalCycle: 3,
-      timePerCycle: 60,
-      createdDateTime: '2023-10-16T13:33:02.810Z',
-    },
-    {
-      studyId: '8',
-      name: '안오면 지상렬3333333123123',
-      totalCycle: 3,
-      timePerCycle: 60,
-      createdDateTime: '2023-10-16T13:33:02.810Z',
-    },
-    {
-      studyId: '9',
-      name: '와도 지상렬 지상렬444444412312 312312313123',
-      totalCycle: 3,
-      timePerCycle: 60,
-      createdDateTime: '2023-10-16T13:33:02.810Z',
-    },
-    {
-      studyId: '12',
-      name: '안오면 dfdsfee222222지상렬3333333123123',
-      totalCycle: 3,
-      timePerCycle: 60,
-      createdDateTime: '2023-11-01T13:33:02.810Z',
-    },
-  ],
-};
+import type { CalendarRecord, MonthStorage } from '@Types/record';
 
 type Props = {
   monthStorage: MonthStorage;
   calendarRef: React.RefObject<HTMLUListElement>;
+  memberId: string;
 };
 
-const useMemberCalendarRecord = ({ monthStorage, calendarRef }: Props) => {
+const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props) => {
+  const [calendarRecord, setCalendarRecord] = useState<CalendarRecord[]>([]);
   const [calendarData, setCalendarData] = useState<'name' | 'count'>('name');
 
-  const studiesMap: Record<string, StudyBasicInfo[]> = {};
-  STUDY_LIST.studies.forEach((study) => {
-    const date = format.date(new Date(study.createdDateTime));
+  const startDate = format.date(new Date(monthStorage.at(0)!.date), '-');
+  const endDate = format.date(new Date(monthStorage.at(-1)!.date), '-');
 
-    if (date in studiesMap) {
-      studiesMap[date] = [...studiesMap[date], study];
-      return;
-    }
+  const { mutate, isLoading } = useMutation(() => requestGetMemberCalendarRecord(memberId, startDate, endDate), {
+    onSuccess: (result) => {
+      if (!result) return;
 
-    studiesMap[date] = [study];
+      const studyRecords = result?.data.studyRecords;
+
+      const temp = (monthStorage = monthStorage.map((item) => {
+        const records = studyRecords[format.date(item.date, '-')] || [];
+
+        const restRecordsNumber = records && records.length > 3 ? records.length - 3 : 0;
+
+        return { ...item, records, restRecordsNumber };
+      }));
+
+      setCalendarRecord(temp);
+    },
   });
 
-  const temp = (monthStorage = monthStorage.map((item) => {
-    const records = studiesMap[format.date(item.date)] || [];
-
-    const restRecords = records && records.length > 3 ? records.length - 3 : 0;
-
-    return { ...item, records, restRecords };
-  }));
+  useEffect(() => {
+    mutate();
+  }, [startDate, endDate]);
 
   useEffect(() => {
     const calendarResizeObserver = new ResizeObserver(([calendar]) => {
@@ -164,7 +58,7 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef }: Props) => {
     calendarResizeObserver.observe(calendarRef.current);
   }, [calendarRef]);
 
-  return { temp, calendarData };
+  return { calendarRecord, calendarData, isLoading };
 };
 
 export default useMemberCalendarRecord;

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import useMutation from '@Hooks/api/useMutation';
 
-import { requestGetMemberPeriodList } from '@Apis/index';
+import { requestGetMemberListRecord } from '@Apis/index';
 
 import type { StudyBasicInfo } from '@Types/study';
 
@@ -22,7 +22,7 @@ const useMemberListRecord = ({ memberId, startDate, endDate, period }: Props) =>
   const [totalPagesNumber, setTotalPagesNumber] = useState<number>(1);
 
   const { mutate, result, isLoading } = useMutation(() =>
-    requestGetMemberPeriodList(memberId, currentPageNumber - 1, 20, startDate, endDate),
+    requestGetMemberListRecord(memberId, currentPageNumber - 1, 20, startDate, endDate),
   );
 
   const shiftPage = useCallback((page: number) => {

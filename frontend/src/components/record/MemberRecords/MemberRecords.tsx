@@ -8,7 +8,7 @@ type Props = {
 };
 
 const MemberRecords = ({ memberId, viewMode }: Props) => {
-  if (viewMode === 'calendar') return <MemberRecordCalendar />;
+  if (viewMode === 'calendar') return <MemberRecordCalendar memberId={memberId} />;
 
   return (
     <MemberRecordPeriodProvider>
