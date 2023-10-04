@@ -1,13 +1,11 @@
 package harustudy.backend.view.service;
 
-import static harustudy.backend.view.utils.LocalDateConverter.convertEndDate;
-import static harustudy.backend.view.utils.LocalDateConverter.convertStartDate;
-
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
 import harustudy.backend.view.dto.CalendarStudyRecordsResponse;
 import harustudy.backend.view.dto.StudyRecordResponse;
 import harustudy.backend.view.dto.StudyRecordsPageResponse;
+import harustudy.backend.view.utils.LocalDateConverter;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +29,12 @@ public class ViewService {
             LocalDate startDate,
             LocalDate endDate
     ) {
-        Page<Study> studyPage = studyRepository.findPageByMemberIdAndCreatedDate(memberId,
-                convertStartDate(startDate), convertEndDate(endDate), page);
+        Page<Study> studyPage = studyRepository.findPageByMemberIdAndCreatedDate(
+                memberId,
+                LocalDateConverter.convertStartDate(startDate),
+                LocalDateConverter.convertEndDate(endDate),
+                page
+        );
         return StudyRecordsPageResponse.from(studyPage.map(StudyRecordResponse::from));
     }
 
@@ -41,8 +43,10 @@ public class ViewService {
             LocalDate startDate,
             LocalDate endDate
     ) {
-        List<Study> studies = studyRepository.findByMemberIdAndCreatedDate(memberId,
-                convertStartDate(startDate), convertEndDate(endDate),
+        List<Study> studies = studyRepository.findByMemberIdAndCreatedDate(
+                memberId,
+                LocalDateConverter.convertStartDate(startDate),
+                LocalDateConverter.convertEndDate(endDate),
                 Sort.by(Direction.ASC, "createdDate")
         );
 
