@@ -56,6 +56,7 @@ public class ViewIntegrationTest extends IntegrationTest {
         //given
         Integer page = 0;
         Integer size = 5;
+        String sortColumn = "createdDate";
         LocalDate startDate = LocalDate.of(2023, 9, 20);
         LocalDate endDate = LocalDate.of(2023, 10, 10);
 
@@ -63,6 +64,7 @@ public class ViewIntegrationTest extends IntegrationTest {
                 "memberId", String.valueOf(memberDto.member().getId()),
                 "page", String.valueOf(page),
                 "size", String.valueOf(size),
+                "sort", sortColumn,
                 "startDate", startDate.toString(),
                 "endDate", endDate.toString()
         );
@@ -92,11 +94,13 @@ public class ViewIntegrationTest extends IntegrationTest {
         //given
         Integer page = 0;
         Integer size = 5;
+        String sortColumn = "createdDate";
 
         Map<String, String> params = Map.of(
                 "memberId", String.valueOf(memberDto.member().getId()),
                 "page", String.valueOf(page),
-                "size", String.valueOf(size)
+                "size", String.valueOf(size),
+                "sort", sortColumn
         );
         MultiValueMap<String, String> queryParams = createQueryParams(params);
 

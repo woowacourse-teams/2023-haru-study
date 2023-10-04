@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -26,18 +26,16 @@ public class ViewService {
     private final StudyRepository studyRepository;
 
     public StudyRecordsPageResponse findStudyRecordsPage(
+            Pageable page,
             Long memberId,
-            Integer page,
-            Integer size,
             LocalDate startDate,
             LocalDate endDate
     ) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Direction.ASC, "createdDate"));
         Page<Study> studyPage = studyRepository.findPageByMemberIdAndCreatedDate(
                 memberId,
                 convertStartDate(startDate),
                 convertEndDate(endDate),
-                pageRequest);
+                page);
 
         return StudyRecordsPageResponse.of(studyPage.map(StudyRecordResponse::of));
     }

@@ -18,6 +18,10 @@ import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +63,8 @@ class ViewServiceTest {
         //given
         Integer page = 0;
         Integer size = 5;
+        String sortColumn = "createdDate";
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Direction.ASC, sortColumn));
         LocalDate startDate = LocalDate.of(2023, 9, 20);
         LocalDate endDate = LocalDate.of(2023, 10, 10);
 
@@ -66,16 +72,15 @@ class ViewServiceTest {
 
         //when
         StudyRecordsPageResponse response = viewService.findStudyRecordsPage(
+                pageable,
                 member.getId(),
-                page,
-                size,
                 startDate,
                 endDate
         );
 
         //then
         assertSoftly(softly -> {
-            softly.assertThat(response.studyRecords().size()).isEqualTo(5);
+            softly.assertThat(response.studyRecords().size()).isEqualTo(size);
             softly.assertThat(response.pageInfo().pageNum()).isEqualTo(page);
             softly.assertThat(response.pageInfo().totalPages()).isEqualTo(expectedTotalPages.intValue());
         });
@@ -86,14 +91,15 @@ class ViewServiceTest {
         //given
         Integer page = 0;
         Integer size = 5;
+        String sortColumn = "createdDate";
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Direction.ASC, sortColumn));
 
         Long expectedTotalPages = Math.round((double) studyRepository.count() / (double) size);
 
         //when
         StudyRecordsPageResponse response = viewService.findStudyRecordsPage(
+                pageable,
                 member.getId(),
-                page,
-                size,
                 null,
                 null
         );
@@ -101,7 +107,7 @@ class ViewServiceTest {
         //then
         assertSoftly(softly -> {
             softly.assertThat(response.studyRecords().size()).isEqualTo(5);
-            softly.assertThat(response.pageInfo().pageNum()).isEqualTo(page);
+            softly.assertThat(response.pageInfo().pageNum()).isEqualTo(0);
             softly.assertThat(response.pageInfo().totalPages()).isEqualTo(expectedTotalPages.intValue());
         });
     }

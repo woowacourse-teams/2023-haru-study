@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,16 +27,14 @@ public class ViewController {
     @GetMapping("/api/view/study-records")
     public ResponseEntity<StudyRecordsPageResponse> findStudyRecordsPage(
             @Authenticated AuthMember authMember,
+            Pageable page,
             @RequestParam Long memberId,
-            @RequestParam Integer page,
-            @RequestParam Integer size,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
     ) {
         StudyRecordsPageResponse response = viewService.findStudyRecordsPage(
-                memberId,
                 page,
-                size,
+                memberId,
                 startDate,
                 endDate
         );
