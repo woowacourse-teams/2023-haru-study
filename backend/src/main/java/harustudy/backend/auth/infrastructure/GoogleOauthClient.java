@@ -2,6 +2,7 @@ package harustudy.backend.auth.infrastructure;
 
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.util.OauthWebClient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -11,6 +12,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Component
 public class GoogleOauthClient implements OauthClient {
 
@@ -32,10 +34,6 @@ public class GoogleOauthClient implements OauthClient {
 
     @Value("${oauth2.oauth-properties.google.user-info-uri}")
     private String userInfoUri;
-
-    public GoogleOauthClient(OauthWebClient oauthWebClient) {
-        this.oauthWebClient = oauthWebClient;
-    }
 
     public OauthTokenResponse requestOauthToken(String code, String providerName) {
         return oauthWebClient.requestOauthToken(tokenUri, setupFormData(code));
