@@ -67,7 +67,7 @@ const MemberRecordCalendarDay = ({ record, calendarData }: Props) => {
       {calendarData === 'name' ? (
         <Records>
           {records.slice(0, 3).map(({ studyId, name }) => (
-            <Record key={studyId} onClick={() => handleClickStudyItem(studyId)}>
+            <Record test-id="study-id" key={studyId} onClick={() => handleClickStudyItem(studyId)}>
               {name}
             </Record>
           ))}

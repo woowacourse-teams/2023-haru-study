@@ -21,7 +21,7 @@ const MemberRecordItem = ({ record, handleClickStudyItem }: Props) => {
     <StudyItem key={record.studyId} onClick={() => handleClickStudyItem(record.studyId)}>
       <StudyNameDateContainer>
         <Typography variant="h6">{record.name} 스터디</Typography>
-        <StudyDate data-testid="progress-date">{format.date(new Date(record.createdDateTime))}</StudyDate>
+        <StudyDate>{format.date(new Date(record.createdDateTime))}</StudyDate>
       </StudyNameDateContainer>
       <StudyCycleInfoLayout>
         <StudyCycleInfoContainer>
