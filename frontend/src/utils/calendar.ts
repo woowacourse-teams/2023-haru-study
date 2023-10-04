@@ -44,9 +44,6 @@ const calendar = {
         day,
         dayOfWeek,
         date: new Date(prevYear, prevMonth, day),
-        // fullDate: `${prevYear}년 ${prevMonth + 1}월 ${day}일`,
-        // fullDateDash: `${prevYear}-${prevMonth + 1}-${day}`,
-        // fullDateDot: `${prevYear}.${prevMonth + 1}.${day}`,
         state: 'prev',
       };
     });
@@ -67,9 +64,6 @@ const calendar = {
         day,
         dayOfWeek,
         date: new Date(currentYear, currentMonth, day),
-        // fullDate: `${currentYear}년 ${currentMonth + 1}월 ${day}일`,
-        // fullDateDash: `${currentYear}-${currentMonth + 1}-${day}`,
-        // fullDateDot: `${currentYear}.${currentMonth + 1}.${day}`,
         state: 'cur',
       };
     });
@@ -92,9 +86,6 @@ const calendar = {
         day,
         dayOfWeek,
         date: new Date(nextYear, nextMonth, day),
-        // fullDate: `${nextYear}년 ${nextMonth + 1}월 ${day}일`,
-        // fullDateDash: `${nextYear}-${nextMonth + 1}-${day}`,
-        // fullDateDot: `${nextYear}.${nextMonth + 1}.${day}`,
         state: 'next',
       };
     });
