@@ -54,9 +54,9 @@ class AuthServiceTest {
 
         given(googleOauthClient.supports(any(String.class)))
                 .willReturn(true);
-        given(googleOauthClient.requestOauthToken(any(String.class), any(String.class)))
+        given(googleOauthClient.requestOauthToken(any(String.class)))
                 .willReturn(new OauthTokenResponse("Bearer", "google-access-token", "scope"));
-        given(googleOauthClient.requestOauthUserInfo(any(String.class), any(String.class)))
+        given(googleOauthClient.requestOauthUserInfo(any(String.class)))
                 .willReturn(Map.of("name", userInfo.name(), "email", userInfo.email(), "picture",
                         userInfo.imageUrl()));
 

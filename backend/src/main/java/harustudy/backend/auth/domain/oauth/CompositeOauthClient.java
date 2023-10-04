@@ -2,6 +2,7 @@ package harustudy.backend.auth.domain.oauth;
 
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.exception.InvalidProviderNameException;
+import harustudy.backend.auth.util.OauthProviderManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,15 +16,17 @@ public class CompositeOauthClient implements OauthClient {
     private final List<OauthClient> oauthClients;
 
     @Override
-    public OauthTokenResponse requestOauthToken(String code, String providerName) {
+    public OauthTokenResponse requestOauthToken(String code) {
+        String providerName = OauthProviderManager.getCurrentProviderName();
         return getClient(providerName)
-                .requestOauthToken(code, providerName);
+                .requestOauthToken(code);
     }
 
     @Override
-    public Map<String, Object> requestOauthUserInfo(String accessToken, String providerName) {
+    public Map<String, Object> requestOauthUserInfo(String accessToken) {
+        String providerName = OauthProviderManager.getCurrentProviderName();
         return getClient(providerName)
-                .requestOauthUserInfo(accessToken, providerName);
+                .requestOauthUserInfo(accessToken);
     }
 
     private OauthClient getClient(String providerName) {

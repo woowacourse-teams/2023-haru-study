@@ -158,10 +158,10 @@ class AcceptanceTest {
 
         given(googleOauthClient.supports(any(String.class)))
                 .willReturn(true);
-        given(googleOauthClient.requestOauthToken(any(String.class), any(String.class)))
+        given(googleOauthClient.requestOauthToken(any(String.class)))
                 .willReturn(new OauthTokenResponse("mock-token-type", "mock-access-token",
                         "mock-scope"));
-        given(googleOauthClient.requestOauthUserInfo(any(String.class), any(String.class)))
+        given(googleOauthClient.requestOauthUserInfo(any(String.class)))
                 .willReturn(Map.of("name", "mock-name", "email", "mock-email", "picture",
                         "mock-picture"));
 

@@ -35,7 +35,7 @@ public class GoogleOauthClient implements OauthClient {
     @Value("${oauth2.oauth-properties.google.user-info-uri}")
     private String userInfoUri;
 
-    public OauthTokenResponse requestOauthToken(String code, String providerName) {
+    public OauthTokenResponse requestOauthToken(String code) {
         return oauthWebClient.requestOauthToken(tokenUri, setupFormData(code));
     }
 
@@ -49,7 +49,7 @@ public class GoogleOauthClient implements OauthClient {
         return formData;
     }
 
-    public Map<String, Object> requestOauthUserInfo(String accessToken, String providerName) {
+    public Map<String, Object> requestOauthUserInfo(String accessToken) {
         return oauthWebClient.requestOauthUserInfo(userInfoUri, accessToken);
     }
 

@@ -36,7 +36,7 @@ public class KakaoOauthClient implements OauthClient {
     private String userInfoUri;
 
     @Override
-    public OauthTokenResponse requestOauthToken(String code, String providerName) {
+    public OauthTokenResponse requestOauthToken(String code) {
         return oauthWebClient.requestOauthToken(tokenUri, setupFormData(code));
     }
 
@@ -51,7 +51,7 @@ public class KakaoOauthClient implements OauthClient {
     }
 
     @Override
-    public Map<String, Object> requestOauthUserInfo(String accessToken, String providerName) {
+    public Map<String, Object> requestOauthUserInfo(String accessToken) {
         return oauthWebClient.requestOauthUserInfo(userInfoUri, accessToken);
     }
 

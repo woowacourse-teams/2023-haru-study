@@ -1,5 +1,6 @@
 package harustudy.backend.auth.service;
 
+import harustudy.backend.auth.util.OauthProviderManager;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
@@ -23,9 +24,13 @@ public class OauthLoginFacade {
     }
 
     private UserInfo requestUserInfo(String oauthProvider, String code) {
-        OauthTokenResponse oauthToken = oauthClient.requestOauthToken(code, oauthProvider);
+        OauthProviderManager.setCurrentProviderName(oauthProvider);
+
+        OauthTokenResponse oauthToken = oauthClient.requestOauthToken(code);
         Map<String, Object> oauthUserInfo =
-                oauthClient.requestOauthUserInfo(oauthToken.accessToken(), oauthProvider);
+                oauthClient.requestOauthUserInfo(oauthToken.accessToken());
+
+        OauthProviderManager.clear();
         return OauthUserInfoExtractor.extract(oauthProvider, oauthUserInfo);
     }
 }
