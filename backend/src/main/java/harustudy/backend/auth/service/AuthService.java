@@ -96,6 +96,6 @@ public class AuthService {
 
     public void deleteStringifiedRefreshToken(String refreshToken) {
         UUID uuid = UUID.fromString(refreshToken);
-        refreshTokenRepository.deleteTokenWithoutContextUpdate(uuid);
+        refreshTokenRepository.deleteByUuidWithoutContextUpdate(uuid);
     }
 }

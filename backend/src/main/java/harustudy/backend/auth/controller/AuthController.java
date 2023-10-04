@@ -87,17 +87,19 @@ public class AuthController {
         String refreshToken = extractRefreshTokenFromCookie(request);
         authService.deleteStringifiedRefreshToken(refreshToken);
 
-        deleteCookies(request, response);
+        deleteRefreshTokenFromCookie(request, response);
 
         return ResponseEntity.ok().build();
     }
 
-    private void deleteCookies(HttpServletRequest request, HttpServletResponse response) {
+    private void deleteRefreshTokenFromCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                cookie.setMaxAge(0);
-                response.addCookie(cookie);
+                if (cookie.getName().equals("refreshToken")) {
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                }
             }
         }
     }

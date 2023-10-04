@@ -61,9 +61,6 @@ class IntegrationTest {
     @MockBean
     private GoogleOauthClient googleOauthClient;
 
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
-
     void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
@@ -94,7 +91,13 @@ class IntegrationTest {
         return new LoginResponse(tokenResponse, refreshToken);
     }
 
-    private RefreshToken saveRefreshTokenOf(Member member) {
+    protected Member generateAndSaveMemberNamedWith(String name) {
+        Member member = new Member(name, "email", "imageUrl", LoginType.GOOGLE);
+        entityManager.persist(member);
+        return member;
+    }
+
+    protected RefreshToken generateAndSaveRefreshTokenOf(Member member) {
         RefreshToken refreshToken = new RefreshToken(member,
                 tokenConfig.refreshTokenExpireLength());
         entityManager.persist(refreshToken);
@@ -102,13 +105,10 @@ class IntegrationTest {
     }
 
     protected MemberDto createMember(String name) {
-        Member member = new Member(name, "email", "imageUrl", LoginType.GOOGLE);
-        entityManager.persist(member);
+        Member member = generateAndSaveMemberNamedWith(name);
         String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(member.getId()),
                 tokenConfig.accessTokenExpireLength(), tokenConfig.secretKey());
-        RefreshToken refreshToken = new RefreshToken(member,
-                tokenConfig.refreshTokenExpireLength());
-        entityManager.persist(refreshToken);
+        RefreshToken refreshToken = generateAndSaveRefreshTokenOf(member);
         Cookie cookie = new Cookie("refreshToken", refreshToken.getUuid().toString());
         return new MemberDto(member, accessToken, cookie);
     }
