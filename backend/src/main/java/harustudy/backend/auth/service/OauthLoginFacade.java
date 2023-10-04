@@ -4,7 +4,7 @@ import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
-import harustudy.backend.auth.infrastructure.OauthClient;
+import harustudy.backend.auth.domain.oauth.OauthClient;
 import harustudy.backend.auth.util.OauthUserInfoExtractor;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;

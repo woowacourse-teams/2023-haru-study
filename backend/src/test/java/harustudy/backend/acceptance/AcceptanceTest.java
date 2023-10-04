@@ -12,7 +12,7 @@ import harustudy.backend.auth.config.TokenConfig;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
-import harustudy.backend.auth.infrastructure.GoogleOauthClient;
+import harustudy.backend.auth.domain.oauth.GoogleOauthClient;
 import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.content.dto.WritePlanRequest;
 import harustudy.backend.content.dto.WriteRetrospectRequest;

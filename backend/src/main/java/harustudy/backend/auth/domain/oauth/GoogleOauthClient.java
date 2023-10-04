@@ -1,4 +1,4 @@
-package harustudy.backend.auth.infrastructure;
+package harustudy.backend.auth.domain.oauth;
 
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.util.OauthWebClient;

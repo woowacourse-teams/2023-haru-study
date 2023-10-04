@@ -11,7 +11,7 @@ import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
-import harustudy.backend.auth.infrastructure.GoogleOauthClient;
+import harustudy.backend.auth.domain.oauth.GoogleOauthClient;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import jakarta.persistence.EntityManager;
