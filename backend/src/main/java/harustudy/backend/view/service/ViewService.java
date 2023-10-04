@@ -33,7 +33,7 @@ public class ViewService {
     ) {
         Page<Study> studyPage = studyRepository.findPageByMemberIdAndCreatedDate(memberId,
                 convertStartDate(startDate), convertEndDate(endDate), page);
-        return StudyRecordsPageResponse.of(studyPage.map(StudyRecordResponse::of));
+        return StudyRecordsPageResponse.from(studyPage.map(StudyRecordResponse::from));
     }
 
     public CalendarStudyRecordsResponse findStudyRecordsForCalendar(
@@ -49,8 +49,8 @@ public class ViewService {
         );
 
         List<StudyRecordResponse> studyRecords = studies.stream()
-                .map(StudyRecordResponse::of)
+                .map(StudyRecordResponse::from)
                 .toList();
-        return CalendarStudyRecordsResponse.of(studyRecords);
+        return CalendarStudyRecordsResponse.from(studyRecords);
     }
 }

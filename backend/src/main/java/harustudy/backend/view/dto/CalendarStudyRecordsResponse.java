@@ -9,7 +9,7 @@ public record CalendarStudyRecordsResponse(
         MultiValueMap<LocalDate, StudyRecordResponse> studyRecords
 ) {
 
-    public static CalendarStudyRecordsResponse of(List<StudyRecordResponse> records) {
+    public static CalendarStudyRecordsResponse from(List<StudyRecordResponse> records) {
         LinkedMultiValueMap<LocalDate, StudyRecordResponse> clusteredByCreatedDate = new LinkedMultiValueMap<>();
         for (StudyRecordResponse record : records) {
             clusteredByCreatedDate.add(

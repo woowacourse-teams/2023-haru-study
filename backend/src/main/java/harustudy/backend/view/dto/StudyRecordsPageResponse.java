@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 
 public record StudyRecordsPageResponse(List<StudyRecordResponse> studyRecords, PageInfoResponse pageInfo) {
 
-    public static StudyRecordsPageResponse of(Page<StudyRecordResponse> page) {
+    public static StudyRecordsPageResponse from(Page<StudyRecordResponse> page) {
         return new StudyRecordsPageResponse(
                 page.getContent(),
                 new PageInfoResponse(page.getNumber(), page.getTotalPages())

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public record StudyRecordResponse(Long studyId, String name, Integer totalCycle, Integer timePerCycle, LocalDateTime createdDate) {
 
-    public static StudyRecordResponse of(Study study) {
+    public static StudyRecordResponse from(Study study) {
         return new StudyRecordResponse(
                 study.getId(),
                 study.getName(),
