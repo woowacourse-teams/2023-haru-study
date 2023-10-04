@@ -120,7 +120,7 @@ class AuthServiceTest {
     }
 
     @Test
-    void 유효한_액세스_토큰의_유효성_검사_시_예외를_반환한다() {
+    void 유효한_액세스_토큰의_유효성_검사_시_예외를_반환하지_않는다() {
         // given
         Long memberId = 1L;
         String accessToken = jwtTokenProvider.builder()
