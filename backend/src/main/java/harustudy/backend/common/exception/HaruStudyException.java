@@ -1,11 +1,11 @@
 package harustudy.backend.common.exception;
 
-public class HaruStudyException extends RuntimeException {
+public abstract class HaruStudyException extends RuntimeException {
 
-    public HaruStudyException() {
+    protected HaruStudyException() {
     }
 
-    public HaruStudyException(String message) {
+    protected HaruStudyException(String message) {
         super(message);
     }
 }
