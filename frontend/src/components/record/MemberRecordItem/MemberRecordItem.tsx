@@ -53,6 +53,12 @@ const StudyItem = styled.li`
   padding: 20px;
 
   cursor: pointer;
+
+  transition: border 0.2s ease;
+
+  &:hover {
+    border: 1px solid ${color.blue[400]};
+  }
 `;
 
 const StudyNameDateContainer = styled.div`

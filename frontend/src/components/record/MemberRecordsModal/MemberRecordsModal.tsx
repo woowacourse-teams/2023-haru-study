@@ -19,7 +19,12 @@ const MemberRecordsModal = ({ fullDate, studies, handleClickStudyItem }: Props) 
   const { closeModal } = useModal();
   return (
     <Layout>
-      <Typography variant="h5">{fullDate}</Typography>
+      <Typography variant="h5">
+        <span>{fullDate}</span>
+        <Button variant="secondary" size="x-small" onClick={() => closeModal()} $block={false}>
+          닫기
+        </Button>
+      </Typography>
       <StudyList>
         {studies.map((record) => (
           <MemberRecordItem
@@ -33,7 +38,7 @@ const MemberRecordsModal = ({ fullDate, studies, handleClickStudyItem }: Props) 
         ))}
       </StudyList>
       <Button variant="secondary" size="x-small" onClick={() => closeModal()} $block={false}>
-        확인
+        닫기
       </Button>
     </Layout>
   );
@@ -50,6 +55,13 @@ const Layout = styled.div`
 
   button {
     align-self: flex-end;
+    font-weight: 300;
+  }
+
+  h5 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 `;
 
@@ -57,4 +69,6 @@ const StudyList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  overflow: auto;
 `;

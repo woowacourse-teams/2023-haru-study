@@ -36,13 +36,11 @@ const useMemberListRecord = ({ memberId, startDate, endDate, period }: Props) =>
   useEffect(() => {
     if (!result) return;
 
-    const {
-      studyRecords,
-      pageInfo: { totalPages },
-    } = result.data;
+    const { studyRecords, pageInfo } = result.data;
 
     setMemberRecords(studyRecords || []);
-    if (totalPagesNumber === 1 || totalPages !== totalPages + 1) setTotalPagesNumber(totalPages + 1);
+    if (totalPagesNumber === 1 || pageInfo.totalPages !== pageInfo.totalPages + 1)
+      setTotalPagesNumber(pageInfo.totalPages + 1);
   }, [result]);
 
   useEffect(() => {

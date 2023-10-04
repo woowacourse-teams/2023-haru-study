@@ -6,7 +6,6 @@ import color from '@Styles/color';
 import { ROUTES_PATH } from '@Constants/routes';
 
 import { useModal } from '@Contexts/ModalProvider';
-import { useNotification } from '@Contexts/NotificationProvider';
 
 import format from '@Utils/format';
 
@@ -28,7 +27,6 @@ const MemberRecordCalendarDay = ({ record, calendarData }: Props) => {
 
   const navigate = useNavigate();
 
-  const { send } = useNotification();
   const { openModal } = useModal();
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
@@ -37,12 +35,6 @@ const MemberRecordCalendarDay = ({ record, calendarData }: Props) => {
     if (studies.length < 1) return;
 
     openModal(<MemberRecordsModal fullDate={fullDate} studies={studies} handleClickStudyItem={handleClickStudyItem} />);
-  };
-
-  const notifyRestRecords = (fullDate: string, restRecords: number) => {
-    send({
-      message: `${fullDate}에 ${restRecords}개의 스터디를 더 완료했어요. 날짜를 클릭하면 자세한 정보를 알 수 있어요.`,
-    });
   };
 
   return (
@@ -59,7 +51,7 @@ const MemberRecordCalendarDay = ({ record, calendarData }: Props) => {
         </CalendarDay>
         <RestRecords
           $isHidden={restRecordsNumber < 1 || calendarData === 'count'}
-          onClick={() => notifyRestRecords(format.date(date), restRecordsNumber)}
+          onClick={() => openRecordsDetail(format.date(date), records)}
         >
           +{restRecordsNumber}
         </RestRecords>
