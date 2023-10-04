@@ -7,10 +7,12 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
+import harustudy.backend.testutils.EntityManagerUtil;
 import harustudy.backend.view.dto.CalendarStudyRecordsResponse;
 import harustudy.backend.view.dto.StudyRecordsPageResponse;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -22,12 +24,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-@Sql({"/import_dummy_studies.sql"})
 @Transactional
 @SpringBootTest
 class ViewServiceTest {
@@ -47,12 +47,33 @@ class ViewServiceTest {
     void setUp() {
         member = new Member("hiiro", "email", "imageUrl", LoginType.GUEST);
         entityManager.persist(member);
+        setUpWithNativeQuery();
+        EntityManagerUtil.flushAndClearContext(entityManager);
+    }
 
-        List<Study> allStudies = studyRepository.findAll();
-        for (Study study : allStudies) {
-            Participant participant = Participant.instantiateParticipantWithContents(study, member,
-                    "nickname");
-            entityManager.persist(participant);
+    private void setUpWithNativeQuery() {
+        LocalDateTime dateTime = LocalDateTime.of(2023, 10, 2, 18,0,0);
+        for(int i=0; i<10; i++) {
+            Study study1 = new Study("name", 1, 20);
+            Study study2 = new Study("name", 1, 20);
+            entityManager.persist(study1);
+            entityManager.persist(study2);
+
+            entityManager.createQuery("update Study set createdDate = :createdDate where id = :id")
+                    .setParameter("createdDate", dateTime)
+                    .setParameter("id", study1.getId())
+                    .executeUpdate();
+            entityManager.createQuery("update Study set createdDate = :createdDate where id = :id")
+                    .setParameter("createdDate", dateTime.minusHours(1L))
+                    .setParameter("id", study2.getId())
+                    .executeUpdate();
+
+            entityManager.persist(Participant.instantiateParticipantWithContents(study1,
+                    member, "nickname"));
+            entityManager.persist(Participant.instantiateParticipantWithContents(study2,
+                    member, "nickname"));
+
+            dateTime = dateTime.minusDays(1L);
         }
     }
 
@@ -64,13 +85,19 @@ class ViewServiceTest {
         String sortColumn = "createdDate";
         Pageable pageable = PageRequest.of(page, size, Sort.by(Direction.ASC, sortColumn));
         LocalDate startDate = LocalDate.of(2023, 9, 20);
-        LocalDate endDate = LocalDate.of(2023, 10, 10);
+        LocalDate endDate = LocalDate.of(2023, 10, 3);
 
         Long expectedTotalPages = Math.round((double) studyRepository.count() / (double) size);
 
         //when
         StudyRecordsPageResponse response = viewService.findStudyRecordsPage(pageable,
                 member.getId(), startDate, endDate);
+
+        List<Study> allStudies = studyRepository.findAll();
+        for (Study study : allStudies) {
+            System.out.println("study: " + study.getCreatedDate());
+        }
+
 
         //then
         assertSoftly(softly -> {

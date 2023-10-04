@@ -2,21 +2,19 @@ package harustudy.backend.integration;
 
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.study.domain.Study;
-import harustudy.backend.study.repository.StudyRepository;
+import harustudy.backend.testutils.EntityManagerUtil;
 import harustudy.backend.view.dto.StudyRecordsPageResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -27,11 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-@Sql({"/import_dummy_studies.sql"})
 public class ViewIntegrationTest extends IntegrationTest {
-
-    @Autowired
-    private StudyRepository studyRepository;
 
     private MemberDto memberDto;
 
@@ -39,15 +33,33 @@ public class ViewIntegrationTest extends IntegrationTest {
     void setUp() {
         super.setUp();
         memberDto = createMember("member");
+        setUpWithNativeQuery();
+        EntityManagerUtil.flushAndClearContext(entityManager);
+    }
 
-        List<Study> allStudies = studyRepository.findAll();
-        for (Study study : allStudies) {
-            Participant participant = Participant.instantiateParticipantWithContents(
-                    study,
-                    memberDto.member(),
-                    "nickname"
-            );
-            entityManager.persist(participant);
+    private void setUpWithNativeQuery() {
+        LocalDateTime dateTime = LocalDateTime.of(2023, 10, 2, 18,0,0);
+        for(int i=0; i<10; i++) {
+            Study study1 = new Study("name", 1, 20);
+            Study study2 = new Study("name", 1, 20);
+            entityManager.persist(study1);
+            entityManager.persist(study2);
+
+            entityManager.createQuery("update Study set createdDate = :createdDate where id = :id")
+                    .setParameter("createdDate", dateTime)
+                    .setParameter("id", study1.getId())
+                    .executeUpdate();
+            entityManager.createQuery("update Study set createdDate = :createdDate where id = :id")
+                    .setParameter("createdDate", dateTime.minusHours(1L))
+                    .setParameter("id", study2.getId())
+                    .executeUpdate();
+
+            entityManager.persist(Participant.instantiateParticipantWithContents(study1,
+                    memberDto.member(), "nickname"));
+            entityManager.persist(Participant.instantiateParticipantWithContents(study2,
+                    memberDto.member(), "nickname"));
+
+            dateTime = dateTime.minusDays(1L);
         }
     }
 
