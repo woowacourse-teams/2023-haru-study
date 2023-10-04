@@ -8,34 +8,17 @@ import type {
   ResponseMemberContents,
   ResponseStudies,
   ResponseStudyData,
-  ResponseMemberRecords,
   ResponseStudyMembers,
   ResponseCheckProgresses,
+  ResponseMemberListRecord,
+  ResponseMemberCalenderRecord,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
-import type {
-  PlanList,
-  RetrospectList,
-  StudyBasicInfo,
-  StudyTimePerCycleOptions,
-  TotalCycleOptions,
-} from '@Types/study';
+import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
 import http from './httpInstance';
 
 export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyData>(`/api/studies/${studyId}`);
-
-// 제거
-export const requestGetMemberRecords = (memberId: string) =>
-  http.get<ResponseMemberRecords>(`/api/studies?memberId=${memberId}`);
-
-type ResponseMemberListRecord = {
-  studyRecords: StudyBasicInfo[];
-  pageInfo: {
-    pageNum: number;
-    totalPages: number;
-  };
-};
 
 export const requestGetMemberListRecord = (
   memberId: string,
@@ -50,10 +33,6 @@ export const requestGetMemberListRecord = (
     );
 
   return http.get<ResponseMemberListRecord>(`/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}`);
-};
-
-type ResponseMemberCalenderRecord = {
-  studyRecords: Record<string, StudyBasicInfo[]>;
 };
 
 export const requestGetMemberCalendarRecord = (memberId: string, startDate: string, endDate: string) =>

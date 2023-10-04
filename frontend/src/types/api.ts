@@ -82,3 +82,15 @@ export type ResponseMemberContents = {
     retrospect: RetrospectList;
   }[];
 };
+
+export type ResponseMemberListRecord = {
+  studyRecords: StudyBasicInfo[];
+  pageInfo: {
+    pageNum: number;
+    totalPages: number;
+  };
+};
+
+export type ResponseMemberCalenderRecord = {
+  studyRecords: Record<string, StudyBasicInfo[]>;
+};
