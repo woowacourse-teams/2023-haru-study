@@ -28,7 +28,7 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
 
       const studyRecords = result?.data.studyRecords;
 
-      const temp = (monthStorage = monthStorage.map((item) => {
+      const calendarRecord = (monthStorage = monthStorage.map((item) => {
         const records = studyRecords[format.date(item.date, '-')] || [];
 
         const restRecordsNumber = records && records.length > 3 ? records.length - 3 : 0;
@@ -36,7 +36,7 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
         return { ...item, records, restRecordsNumber };
       }));
 
-      setCalendarRecord(temp);
+      setCalendarRecord(calendarRecord);
     },
   });
 

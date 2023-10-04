@@ -1,49 +1,25 @@
-import { useRef } from 'react';
-import { styled } from 'styled-components';
-
-import color from '@Styles/color';
-
 import type { MonthStorage } from '@Types/record';
 
 import MemberRecordCalendarDay from '../MemberRecordCalendarDay/MemberRecordCalendarDay';
+import MemberRecordCalendarDaySkeleton from '../MemberRecordCalendarDay/MemberRecordCalendarDaySkeleton';
 import useMemberCalendarRecord from '../hooks/useMemberCalendarRecord';
 
 type Props = {
   monthStorage: MonthStorage;
   memberId: string;
+  calendarRef: React.RefObject<HTMLUListElement>;
 };
 
-const MemberRecordCalendarDays = ({ monthStorage, memberId }: Props) => {
-  const calendarRef = useRef<HTMLUListElement>(null);
+const MemberRecordCalendarDays = ({ monthStorage, memberId, calendarRef }: Props) => {
+  const { calendarRecord, calendarData, isLoading } = useMemberCalendarRecord({ monthStorage, calendarRef, memberId });
 
-  const { calendarRecord, calendarData } = useMemberCalendarRecord({ monthStorage, calendarRef, memberId });
+  if (isLoading) {
+    return <MemberRecordCalendarDaySkeleton monthStorage={monthStorage} />;
+  }
 
-  return (
-    <Days $numberOfWeeks={calendarRecord.length / 7} ref={calendarRef}>
-      {calendarRecord.map((record, index) => (
-        <MemberRecordCalendarDay key={index} record={record} calendarData={calendarData} />
-      ))}
-    </Days>
-  );
+  return calendarRecord.map((record, index) => (
+    <MemberRecordCalendarDay key={index} record={record} calendarData={calendarData} />
+  ));
 };
 
 export default MemberRecordCalendarDays;
-
-type DaysProps = {
-  $numberOfWeeks: number;
-};
-
-const Days = styled.ul<DaysProps>`
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: ${({ $numberOfWeeks }) => `repeat(${$numberOfWeeks}, minmax(135px, auto))`};
-  gap: 1px;
-  border: 1px solid ${color.neutral[200]};
-
-  background-color: ${color.neutral[200]};
-
-  @media screen and (max-width: 510px) {
-    font-size: 1.4rem;
-    grid-template-rows: ${({ $numberOfWeeks }) => `repeat(${$numberOfWeeks}, minmax(80px, auto))`};
-  }
-`;

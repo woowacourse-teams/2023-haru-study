@@ -13,7 +13,7 @@ import MemberRecords from '../MemberRecords/MemberRecords';
 const MemberRecordContents = () => {
   const navigate = useNavigate();
 
-  const [viewMode, setViewMode] = useState<'calendar' | 'list'>('list');
+  const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
 
   const memberInfo = useMemberInfo();
 

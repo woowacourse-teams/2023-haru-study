@@ -13,6 +13,7 @@ import format from '@Utils/format';
 import type { CalendarRecord } from '@Types/record';
 import type { StudyBasicInfo } from '@Types/study';
 
+import CalendarDay from '../CalendarDay/CalendarDay';
 import MemberRecordsModal from '../MemberRecordsModal/MemberRecordsModal';
 
 type Props = {
@@ -44,23 +45,18 @@ const MemberRecordCalendarDay = ({ record, calendarData }: Props) => {
     });
   };
 
-  const getDayFontColor = (dayOfWeek: number) => {
-    if (dayOfWeek === 0) return color.red[600];
-
-    if (dayOfWeek === 6) return color.blue[600];
-
-    return color.black;
-  };
   return (
     <Layout>
-      <DayContainer $isCurrentMonthDay={state === 'cur'} $fontColor={getDayFontColor(dayOfWeek)}>
-        <Day
-          $hasStudy={records.length > 0}
-          $isToday={format.date(date) === format.date(today)}
+      <DayContainer>
+        <CalendarDay
+          hasStudy={records.length > 0}
+          isToday={format.date(date) === format.date(today)}
           onClick={() => openRecordsDetail(format.date(date), records)}
+          isCurrentMonthDay={state === 'cur'}
+          dayOfWeek={dayOfWeek}
         >
           {day}
-        </Day>
+        </CalendarDay>
         <RestRecords
           $isHidden={restRecordsNumber < 1 || calendarData === 'count'}
           onClick={() => notifyRestRecords(format.date(date), restRecordsNumber)}
@@ -90,54 +86,16 @@ export default MemberRecordCalendarDay;
 const Layout = styled.li`
   display: flex;
   flex-direction: column;
+  gap: 2px;
   padding: 5px;
 
   background-color: ${color.white};
 `;
 
-type DayContainerProps = {
-  $isCurrentMonthDay: boolean;
-  $fontColor: string;
-};
-
-const DayContainer = styled.div<DayContainerProps>`
+const DayContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  background-color: ${color.white};
-
-  ${({ $isCurrentMonthDay, $fontColor }) => css`
-    opacity: ${$isCurrentMonthDay ? 1 : 0.4};
-    color: ${$fontColor};
-  `}
-`;
-
-type DayProps = {
-  $isToday: boolean;
-  $hasStudy: boolean;
-};
-
-const Day = styled.div<DayProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-radius: 50%;
-
-  width: 30px;
-  height: 30px;
-
-  ${({ $isToday, $hasStudy }) => css`
-    background-color: ${$isToday && color.neutral[100]};
-
-    cursor: ${$hasStudy && 'pointer'};
-  `}
-
-  @media screen and (max-width: 360px) {
-    margin: 0 auto;
-    margin-top: 5px;
-  }
 `;
 
 type RestRecordsProps = {
@@ -175,7 +133,7 @@ const Record = styled.li`
   overflow: hidden;
   text-overflow: ellipsis;
 
-  background-color: ${color.neutral[50]};
+  background-color: ${color.neutral[100]};
   border-radius: 5px;
 
   cursor: pointer;
@@ -199,7 +157,7 @@ const TotalRecordCount = styled.div`
 
     border-radius: 50%;
 
-    background-color: ${color.neutral[50]};
+    background-color: ${color.neutral[100]};
 
     cursor: pointer;
   }
