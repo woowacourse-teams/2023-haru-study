@@ -11,11 +11,9 @@ import harustudy.backend.auth.util.OauthUserInfoExtractor;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
-@Transactional
 public class OauthLoginFacade {
 
     private final OauthProperties oauthProperties;
@@ -23,7 +21,7 @@ public class OauthLoginFacade {
     private final AuthService authService;
 
     public TokenResponse oauthLogin(OauthLoginRequest request) {
-        // TODO: 에러 핸들링
+        // TODO: webClient 관련 에러 핸들링
         UserInfo userInfo = requestUserInfo(request.oauthProvider(), request.code());
         return authService.userLogin(request, userInfo);
     }
