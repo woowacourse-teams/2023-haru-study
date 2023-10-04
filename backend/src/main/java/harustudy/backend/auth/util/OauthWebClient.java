@@ -35,13 +35,9 @@ public class OauthWebClient {
     }
 
     public Map<String, Object> requestOauthUserInfo(String userInfoUri, String accessToken) {
-        return requestOauthUserInfo(userInfoUri, accessToken, Collections.emptyMap());
-    }
-
-    public Map<String, Object> requestOauthUserInfo(String userInfoUri, String accessToken, Map<String, ?> parameters) {
         return WebClient.create()
                 .get()
-                .uri(userInfoUri, parameters)
+                .uri(userInfoUri)
                 .headers(header -> header.setBearerAuth(accessToken))
                 .retrieve()
                 .onStatus(HttpStatusCode::isError,

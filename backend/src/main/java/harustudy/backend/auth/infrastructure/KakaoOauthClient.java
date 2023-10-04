@@ -9,14 +9,11 @@ import org.springframework.util.MultiValueMap;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Map;
 
 @Component
 public class KakaoOauthClient implements OauthClient {
 
-    private static final Map<String, List<String>> USER_INFO_PARAMETER = Map.of("property_keys",
-            List.of("kakao_account.profile", "kakao_account.email"));
     private static final String PROVIDER_NAME = "kakao";
 
     private final OauthWebClient oauthWebClient;
@@ -57,7 +54,7 @@ public class KakaoOauthClient implements OauthClient {
 
     @Override
     public Map<String, Object> requestOauthUserInfo(String accessToken, String providerName) {
-        return oauthWebClient.requestOauthUserInfo(userInfoUri, accessToken, USER_INFO_PARAMETER);
+        return oauthWebClient.requestOauthUserInfo(userInfoUri, accessToken);
     }
 
     @Override
