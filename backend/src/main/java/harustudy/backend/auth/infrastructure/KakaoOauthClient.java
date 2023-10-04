@@ -24,6 +24,9 @@ public class KakaoOauthClient implements OauthClient {
     @Value("${oauth2.oauth-properties.kakao.client-id}")
     private String clientId;
 
+    @Value("${oauth2.oauth-properties.kakao.client-secret}")
+    private String clientSecret;
+
     @Value("${oauth2.oauth-properties.kakao.redirect-uri}")
     private String redirectUri;
 
@@ -45,6 +48,7 @@ public class KakaoOauthClient implements OauthClient {
     private MultiValueMap<String, String> setupFormData(String code) {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("client_id", clientId);
+        formData.add("client_secret", clientSecret);
         formData.add("code", URLDecoder.decode(code, StandardCharsets.UTF_8));
         formData.add("grant_type", "authorization_code");
         formData.add("redirect_uri", redirectUri);
