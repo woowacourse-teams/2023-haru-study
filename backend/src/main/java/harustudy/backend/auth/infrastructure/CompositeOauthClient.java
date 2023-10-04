@@ -3,11 +3,13 @@ package harustudy.backend.auth.infrastructure;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.exception.InvalidProviderNameException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
+@Component(value = "oauthClient")
 public class CompositeOauthClient implements OauthClient {
 
     private final List<OauthClient> oauthClients;
