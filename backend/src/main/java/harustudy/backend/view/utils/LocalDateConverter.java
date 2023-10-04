@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class LocalDateConverter {
 
-    private static final LocalDateTime DEFAULT_START_DATETIME = LocalDateTime.of(2023, 7, 27, 0, 0, 0, 0);
+    private static final LocalDateTime DEFAULT_START_DATETIME = LocalDateTime.of(1000, 1, 1, 0, 0, 0, 0);
 
     private LocalDateConverter() {
     }
