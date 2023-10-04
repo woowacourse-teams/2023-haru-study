@@ -2,15 +2,19 @@ package harustudy.backend.integration;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import harustudy.backend.auth.domain.RefreshToken;
 import harustudy.backend.auth.dto.TokenResponse;
+import harustudy.backend.member.domain.Member;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
@@ -60,7 +64,7 @@ class AuthIntegrationTest extends IntegrationTest {
     @Test
     void 액세스_토큰을_갱신한다() throws Exception {
         // given
-        MemberDto memberDto1 = createMember("member1");
+        MemberDto memberDto = createMember("member1");
 
         // access token을 재발급 하더라도 Date는 초 단위의 시간 정보를 담은 액세스 토큰을 생성하기 때문에
         // 같은 access token이 만들어지는 문제가 있어서 갱신된다는 것을 검증하기 위해 사용
@@ -70,7 +74,7 @@ class AuthIntegrationTest extends IntegrationTest {
         MvcResult result = mockMvc.perform(
                         post("/api/auth/refresh")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .cookie(memberDto1.cookie()))
+                                .cookie(memberDto.cookie()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -81,10 +85,26 @@ class AuthIntegrationTest extends IntegrationTest {
 
         assertSoftly(softly -> {
             softly.assertThat(response.accessToken()).isNotNull();
-            softly.assertThat(response.accessToken()).isNotEqualTo(memberDto1.accessToken());
+            softly.assertThat(response.accessToken()).isNotEqualTo(memberDto.accessToken());
             softly.assertThat(refreshToken).isNotNull();
             softly.assertThat(refreshToken.getName()).isEqualTo("refreshToken");
-            softly.assertThat(refreshToken.getValue()).isNotEqualTo(memberDto1.cookie().getValue());
+            softly.assertThat(refreshToken.getValue()).isNotEqualTo(memberDto.cookie().getValue());
         });
+    }
+
+    @Test
+    void 로그아웃한다() throws Exception {
+        // given
+        MemberDto memberDto = createMember("member1");
+        Member member = generateAndSaveMemberNamedWith("member1");
+        RefreshToken refreshToken = generateAndSaveRefreshTokenOf(member);
+
+        // when, then
+        mockMvc.perform(post("/api/auth/logout")
+                        .cookie(new Cookie("refreshToken", refreshToken.getUuid().toString()))
+                        .header(HttpHeaders.AUTHORIZATION, memberDto.createAuthorizationHeader()))
+                .andExpect(status().isOk())
+                .andExpect(cookie().maxAge("refreshToken", 0))
+                .andReturn();
     }
 }
