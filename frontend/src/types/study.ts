@@ -67,4 +67,4 @@ export type ProgressInfo = {
   step: Step | 'done';
 };
 
-export type StudyMode = 'together' | 'solo';
+export type StudyMode = 'group' | 'alone';

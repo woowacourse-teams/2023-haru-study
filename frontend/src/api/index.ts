@@ -1,7 +1,6 @@
 import type {
   ResponseMemberProgress,
   ResponseAuthToken,
-  ResponseCreateStudy,
   ResponseMemberInfo,
   ResponseParticipantRecordContents,
   ResponseOneStudyInfo,
@@ -9,8 +8,8 @@ import type {
   ResponseStudies,
   ResponseStudyData,
   ResponseStudyDataList,
+  ResponseCheckParticipants,
   ResponseStudyParticipants,
-  ResponseCheckProgresses,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
@@ -75,16 +74,14 @@ export const requestPostCreateStudy = async (
   totalCycle: TotalCycleOptions | null,
   timePerCycle: StudyTimePerCycleOptions | null,
 ) => {
-  const response = await http.post<ResponseCreateStudy>(`/api/studies`, {
+  const response = await http.post(`/api/studies`, {
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
   });
 
   const locationHeader = response.headers.get('Location');
   const studyId = locationHeader?.split('/').pop() as string;
 
-  const data = response.data;
-
-  return { studyId, data };
+  return { studyId };
 };
 
 export const requestGetAuthenticateParticipationCode = async (participantCode: string) => {
@@ -93,16 +90,18 @@ export const requestGetAuthenticateParticipationCode = async (participantCode: s
   return (await response).data;
 };
 
-export const requestGetCheckProgresses = async (studyId: string, memberId: string) => {
-  const response = http.get<ResponseCheckProgresses>(`/api/temp/studies/${studyId}/progresses?memberId=${memberId}`);
+export const requestGetCheckParticipants = async (studyId: string, memberId: string) => {
+  const response = http.get<ResponseCheckParticipants>(
+    `/api/temp/studies/${studyId}/participants?memberId=${memberId}`,
+  );
 
   return (await response).data;
 };
 
-export const requestPostRegisterProgress = (nickname: string, studyId: string, memberId: string) =>
-  http.post(`/api/studies/${studyId}/progresses`, {
+export const requestPostRegisterParticipants = (nickname: string, studyId: string, memberId: string) =>
+  http.post(`/api/studies/${studyId}/participants`, {
     body: JSON.stringify({ memberId, nickname }),
   });
 
-export const requestDeleteProgress = (studyId: string, progressId: number) =>
-  http.delete(`/api/studies/${studyId}/progresses/${progressId}`);
+export const requestDeleteParticipant = (studyId: string, participantId: number) =>
+  http.delete(`/api/studies/${studyId}/participants/${participantId}`);

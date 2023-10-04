@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 
-export const progressesHandlers = [
-  rest.get('/api/temp/studies/:studyId/progresses', (req, res, ctx) => {
+export const participantsHandlers = [
+  rest.get('/api/temp/studies/:studyId/participants', (req, res, ctx) => {
     const accessToken =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkxNTY4NDI4LCJleHAiOjE2OTE1NzIwMjh9.BfGH7jBxO_iixmlpzxHKV7d9ekJPegLxrpY9ME066ro';
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
@@ -14,11 +14,11 @@ export const progressesHandlers = [
       return res(
         // 성공
         // ctx.status(200),
-        // ctx.json({ progresses: [{ progressId: 1, nickname: '하루', currentCycle: 1, step: 'planning' }] }),
+        // ctx.json({ participants: [{ participantId: 1, nickname: '하루', isHost: false }] }),
 
-        // progresses가 없는 경우
+        // participants가 없는 경우
         ctx.status(200),
-        ctx.json({ progresses: null }),
+        ctx.json({ participants: null }),
 
         // 그 외 에러
         // ctx.status(404),
@@ -58,11 +58,11 @@ export const progressesHandlers = [
     return res(
       // 성공
       // ctx.status(200),
-      // ctx.json({ progresses: [{ progressId: 1, nickname: '하루', currentCycle: 1, step: 'planning' }] }),
+      // ctx.json({ participants: [{ participantId: 1, nickname: '하루', isHost: false }] }),
 
-      // progresses가 없는 경우
+      // participants가 없는 경우
       ctx.status(200),
-      ctx.json({ progresses: null }),
+      ctx.json({ participants: null }),
 
       // 그 외 에러
       // ctx.status(404),
@@ -72,7 +72,7 @@ export const progressesHandlers = [
     );
   }),
 
-  rest.post('/api/studies/:studyId/progresses', (req, res, ctx) => {
+  rest.post('/api/studies/:studyId/participants', (req, res, ctx) => {
     const accessToken =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkxNTY4NDI4LCJleHAiOjE2OTE1NzIwMjh9.BfGH7jBxO_iixmlpzxHKV7d9ekJPegLxrpY9ME066ro';
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
@@ -106,7 +106,7 @@ export const progressesHandlers = [
     );
   }),
 
-  rest.delete('/api/studies/:studyId/progresses/:progressId', (req, res, ctx) => {
+  rest.delete('/api/studies/:studyId/participants/:progressId', (req, res, ctx) => {
     return res(ctx.status(204));
   }),
 ];
