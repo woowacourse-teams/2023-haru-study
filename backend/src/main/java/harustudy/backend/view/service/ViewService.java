@@ -41,10 +41,8 @@ public class ViewService {
             LocalDate startDate,
             LocalDate endDate
     ) {
-        List<Study> studies = studyRepository.findByMemberIdAndCreatedDate(
-                memberId,
-                convertStartDate(startDate),
-                convertEndDate(endDate),
+        List<Study> studies = studyRepository.findByMemberIdAndCreatedDate(memberId,
+                convertStartDate(startDate), convertEndDate(endDate),
                 Sort.by(Direction.ASC, "createdDate")
         );
 

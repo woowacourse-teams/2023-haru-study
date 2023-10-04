@@ -34,6 +34,7 @@ class ViewServiceTest {
 
     @Autowired
     private ViewService viewService;
+
     @Autowired
     private StudyRepository studyRepository;
 
