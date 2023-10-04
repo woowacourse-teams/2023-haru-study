@@ -18,7 +18,7 @@ const CalendarDayOfWeeks = ({ position = 'left' }: { position?: 'left' | 'center
   return (
     <Layout>
       {DAY_OF_WEEKS.map((dayOfWeek) => (
-        <DayOfWeek key={dayOfWeek} dayOfWeek={dayOfWeek} position={position}>
+        <DayOfWeek key={dayOfWeek} $dayOfWeek={dayOfWeek} position={position}>
           {dayOfWeek}
         </DayOfWeek>
       ))}
@@ -33,7 +33,7 @@ const Layout = styled.ul`
 `;
 
 type DayOfWeekProps = {
-  dayOfWeek: (typeof DAY_OF_WEEKS)[number];
+  $dayOfWeek: (typeof DAY_OF_WEEKS)[number];
   position: 'left' | 'center';
 };
 
@@ -42,8 +42,8 @@ const DayOfWeek = styled.li<DayOfWeekProps>`
 
   color: ${color.black};
 
-  ${({ dayOfWeek, position }) => css`
-    color: ${position === 'left' ? DAY_COLOR[dayOfWeek] : color.black};
+  ${({ $dayOfWeek, position }) => css`
+    color: ${position === 'left' ? DAY_COLOR[$dayOfWeek] : color.black};
     margin-left: ${position === 'left' && '5px'};
     text-align: ${position === 'center' && 'center'};
   `}
