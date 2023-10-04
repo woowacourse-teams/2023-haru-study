@@ -7,7 +7,7 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
-import harustudy.backend.view.dto.CalenderStudyRecordsResponse;
+import harustudy.backend.view.dto.CalendarStudyRecordsResponse;
 import harustudy.backend.view.dto.StudyRecordsPageResponse;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
@@ -116,7 +116,7 @@ class ViewServiceTest {
         LocalDate expectedTwoRecordsDate2 = LocalDate.of(2023, 10, 2);
 
         //when
-        CalenderStudyRecordsResponse response = viewService.findStudyRecordsForCalender(
+        CalendarStudyRecordsResponse response = viewService.findStudyRecordsForCalendar(
                 member.getId(),
                 startDate,
                 endDate

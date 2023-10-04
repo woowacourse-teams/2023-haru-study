@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-public record CalenderStudyRecordsResponse(
+public record CalendarStudyRecordsResponse(
         MultiValueMap<LocalDate, StudyRecordResponse> studyRecords
 ) {
 
-    public static CalenderStudyRecordsResponse of(List<StudyRecordResponse> records) {
+    public static CalendarStudyRecordsResponse of(List<StudyRecordResponse> records) {
         LinkedMultiValueMap<LocalDate, StudyRecordResponse> clusteredByCreatedDate = new LinkedMultiValueMap<>();
         for (StudyRecordResponse record : records) {
             clusteredByCreatedDate.add(
@@ -17,6 +17,6 @@ public record CalenderStudyRecordsResponse(
                     record
             );
         }
-        return new CalenderStudyRecordsResponse(clusteredByCreatedDate);
+        return new CalendarStudyRecordsResponse(clusteredByCreatedDate);
     }
 }

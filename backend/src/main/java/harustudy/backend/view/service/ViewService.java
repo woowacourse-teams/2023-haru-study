@@ -5,7 +5,7 @@ import static harustudy.backend.view.utils.LocalDateConverter.convertStartDate;
 
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
-import harustudy.backend.view.dto.CalenderStudyRecordsResponse;
+import harustudy.backend.view.dto.CalendarStudyRecordsResponse;
 import harustudy.backend.view.dto.StudyRecordResponse;
 import harustudy.backend.view.dto.StudyRecordsPageResponse;
 import java.time.LocalDate;
@@ -42,7 +42,7 @@ public class ViewService {
         return StudyRecordsPageResponse.of(studyPage.map(StudyRecordResponse::of));
     }
 
-    public CalenderStudyRecordsResponse findStudyRecordsForCalender(
+    public CalendarStudyRecordsResponse findStudyRecordsForCalendar(
             Long memberId,
             LocalDate startDate,
             LocalDate endDate
@@ -57,7 +57,7 @@ public class ViewService {
         List<StudyRecordResponse> studyRecords = studies.stream()
                 .map(StudyRecordResponse::of)
                 .toList();
-        return CalenderStudyRecordsResponse.of(studyRecords);
+        return CalendarStudyRecordsResponse.of(studyRecords);
     }
 
 

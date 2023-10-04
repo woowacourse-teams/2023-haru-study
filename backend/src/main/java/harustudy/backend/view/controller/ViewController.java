@@ -2,7 +2,7 @@ package harustudy.backend.view.controller;
 
 import harustudy.backend.auth.Authenticated;
 import harustudy.backend.auth.dto.AuthMember;
-import harustudy.backend.view.dto.CalenderStudyRecordsResponse;
+import harustudy.backend.view.dto.CalendarStudyRecordsResponse;
 import harustudy.backend.view.dto.StudyRecordsPageResponse;
 import harustudy.backend.view.service.ViewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,14 +43,14 @@ public class ViewController {
     }
 
     @Operation(summary = "달력 기반 스터디 기록 조회")
-    @GetMapping("/api/view/calender/study-records")
-    public ResponseEntity<CalenderStudyRecordsResponse> findCalenderStudyRecords(
+    @GetMapping("/api/view/calendar/study-records")
+    public ResponseEntity<CalendarStudyRecordsResponse> findCalendarStudyRecords(
             @Authenticated AuthMember authMember,
             @RequestParam Long memberId,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
     ) {
-        CalenderStudyRecordsResponse response = viewService.findStudyRecordsForCalender(
+        CalendarStudyRecordsResponse response = viewService.findStudyRecordsForCalendar(
                 memberId, startDate, endDate);
         return ResponseEntity.ok(response);
     }

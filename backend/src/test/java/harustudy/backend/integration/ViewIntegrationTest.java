@@ -133,7 +133,7 @@ public class ViewIntegrationTest extends IntegrationTest {
         MultiValueMap<String, String> queryParams = createQueryParams(params);
 
         //then
-        mockMvc.perform(get("/api/view/calender/study-records")
+        mockMvc.perform(get("/api/view/calendar/study-records")
                         .params(queryParams)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, memberDto.createAuthorizationHeader()))
