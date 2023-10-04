@@ -32,12 +32,8 @@ public class ViewController {
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
     ) {
-        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(
-                page,
-                memberId,
-                startDate,
-                endDate
-        );
+        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(page, memberId,
+                startDate, endDate);
         return ResponseEntity.ok(response);
     }
 

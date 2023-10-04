@@ -31,12 +31,8 @@ public class ViewService {
             LocalDate startDate,
             LocalDate endDate
     ) {
-        Page<Study> studyPage = studyRepository.findPageByMemberIdAndCreatedDate(
-                memberId,
-                convertStartDate(startDate),
-                convertEndDate(endDate),
-                page);
-
+        Page<Study> studyPage = studyRepository.findPageByMemberIdAndCreatedDate(memberId,
+                convertStartDate(startDate), convertEndDate(endDate), page);
         return StudyRecordsPageResponse.of(studyPage.map(StudyRecordResponse::of));
     }
 
@@ -57,6 +53,4 @@ public class ViewService {
                 .toList();
         return CalendarStudyRecordsResponse.of(studyRecords);
     }
-
-
 }

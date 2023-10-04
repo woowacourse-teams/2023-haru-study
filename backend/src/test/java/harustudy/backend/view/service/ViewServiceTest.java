@@ -49,11 +49,8 @@ class ViewServiceTest {
 
         List<Study> allStudies = studyRepository.findAll();
         for (Study study : allStudies) {
-            Participant participant = Participant.instantiateParticipantWithContents(
-                    study,
-                    member,
-                    "nickname"
-            );
+            Participant participant = Participant.instantiateParticipantWithContents(study, member,
+                    "nickname");
             entityManager.persist(participant);
         }
     }
@@ -71,12 +68,8 @@ class ViewServiceTest {
         Long expectedTotalPages = Math.round((double) studyRepository.count() / (double) size);
 
         //when
-        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(
-                pageable,
-                member.getId(),
-                startDate,
-                endDate
-        );
+        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(pageable,
+                member.getId(), startDate, endDate);
 
         //then
         assertSoftly(softly -> {
@@ -97,12 +90,8 @@ class ViewServiceTest {
         Long expectedTotalPages = Math.round((double) studyRepository.count() / (double) size);
 
         //when
-        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(
-                pageable,
-                member.getId(),
-                null,
-                null
-        );
+        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(pageable,
+                member.getId(), null, null);
 
         //then
         assertSoftly(softly -> {
@@ -122,11 +111,8 @@ class ViewServiceTest {
         LocalDate expectedTwoRecordsDate2 = LocalDate.of(2023, 10, 2);
 
         //when
-        CalendarStudyRecordsResponse response = viewService.findStudyRecordsForCalendar(
-                member.getId(),
-                startDate,
-                endDate
-        );
+        CalendarStudyRecordsResponse response = viewService.findStudyRecordsForCalendar(member.getId(),
+                startDate, endDate);
 
         //then
         assertSoftly(sotly -> {
