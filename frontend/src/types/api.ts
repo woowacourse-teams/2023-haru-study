@@ -3,8 +3,8 @@ import type {
   ProgressInfo,
   RetrospectList,
   StudyInfo,
-  MemberProgress,
-  MemberRecordContent,
+  Participant,
+  ParticipantRecordContent,
   PlanList,
   Step,
   StudyBasicInfo,
@@ -17,18 +17,30 @@ export type ResponseAPIError = {
   code: number;
 };
 
-export type ResponseCreateStudy = { participantCode: string; studyName: string };
-
 type ResponseStudyInfo = {
   studyId: string;
   name: string;
   totalCycle: TotalCycleOptions;
   timePerCycle: StudyTimePerCycleOptions;
-  createdDateTime: Date;
+  currentCycle: number;
+  studyStep: string;
+  progressStep: string;
+  createdDate: string;
+  lastModifiedDate: string;
 };
 
 export type ResponseStudies = {
   studies: ResponseStudyInfo[];
+};
+
+type ResponseParticipantInfo = {
+  participantId: number;
+  nickname: string;
+  isHost: boolean;
+};
+
+export type ResponseCheckParticipants = {
+  participants: ResponseParticipantInfo[] | null;
 };
 
 export type ResponseMemberStudyMetadata = {
@@ -44,23 +56,12 @@ export type ResponseStudyDataList = {
   studies: StudyBasicInfo[];
 };
 
-export type ResponseStudyMembers = {
-  progresses: MemberProgress[];
+export type ResponseStudyParticipants = {
+  participants: Participant[];
 };
 
-export type ResponseMemberRecordContents = {
-  content: MemberRecordContent[];
-};
-
-type ResponseProgress = {
-  progressId: number;
-  nickname: string;
-  currentCycle: number;
-  step: Step;
-};
-
-export type ResponseCheckProgresses = {
-  progresses: ResponseProgress[] | null;
+export type ResponseParticipantRecordContents = {
+  content: ParticipantRecordContent[];
 };
 
 export type ResponseAuthToken = {

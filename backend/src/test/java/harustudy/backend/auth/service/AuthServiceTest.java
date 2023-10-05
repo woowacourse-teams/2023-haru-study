@@ -1,17 +1,24 @@
 package harustudy.backend.auth.service;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import harustudy.backend.auth.config.TokenConfig;
 import harustudy.backend.auth.domain.RefreshToken;
 import harustudy.backend.auth.domain.oauth.OauthClients;
+import harustudy.backend.auth.domain.oauth.GoogleOauthClient;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
+import harustudy.backend.auth.exception.InvalidAccessTokenException;
+import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import jakarta.persistence.EntityManager;
@@ -36,6 +43,9 @@ class AuthServiceTest {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     private TokenConfig tokenConfig;
@@ -107,5 +117,56 @@ class AuthServiceTest {
 
         // then
         assertThat(response.refreshToken()).isNotEqualTo(refreshToken.getUuid());
+    }
+
+    @Test
+    void 유효한_액세스_토큰의_유효성_검사_시_예외를_반환하지_않는다() {
+        // given
+        Long memberId = 1L;
+        String accessToken = jwtTokenProvider.builder()
+                .subject(String.valueOf(memberId))
+                .accessTokenExpireLength(999999L)
+                .secretKey(tokenConfig.secretKey())
+                .build();
+
+        // when, then
+        assertDoesNotThrow(() -> authService.validateAccessToken(accessToken));
+    }
+
+    @Test
+    void 만료된_액세스_토큰의_유효성_검사_시_예외를_반환한다() {
+        // given
+        Long memberId = 1L;
+        String accessToken = jwtTokenProvider.builder()
+                .subject(String.valueOf(memberId))
+                .accessTokenExpireLength(0L)
+                .secretKey(tokenConfig.secretKey())
+                .build();
+
+        // when, then
+        assertThatThrownBy(() -> authService.validateAccessToken(accessToken)).isInstanceOf(
+                InvalidAccessTokenException.class);
+    }
+
+    @Test
+    void 갱신_토큰을_삭제한다() {
+        // given
+        Member member = new Member("test", "test@test.com", "test.png", LoginType.GOOGLE);
+        RefreshToken refreshToken = new RefreshToken(member,
+                tokenConfig.refreshTokenExpireLength());
+
+        entityManager.persist(member);
+        entityManager.persist(refreshToken);
+        entityManager.flush();
+        entityManager.clear();
+
+        // when
+        String stringifiedUUID = refreshToken.getUuid().toString();
+
+        // then
+        assertNotNull(entityManager.find(RefreshToken.class, refreshToken.getId()));
+        authService.deleteStringifiedRefreshToken(stringifiedUUID);
+        entityManager.clear();
+        assertNull(entityManager.find(RefreshToken.class, refreshToken.getId()));
     }
 }

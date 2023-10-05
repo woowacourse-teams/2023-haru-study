@@ -2,14 +2,15 @@ import { Suspense, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
 import LoadingFallback from '@Components/common/LodingFallback/LoadingFallback';
+import NotificationBoundary from '@Components/common/NotificationBoundary/NotificationBoundary';
 
 import color from '@Styles/color';
 
 import { FAVICON_PATH } from '@Constants/asset';
 import { ROUTES_PATH } from '@Constants/routes';
 
+import { useNotification } from '@Contexts/NotificationProvider';
 import { useProgressInfo, useStudyInfo } from '@Contexts/StudyProgressProvider';
 
 import dom from '@Utils/dom';
@@ -23,6 +24,7 @@ const StudyBoard = () => {
   const navigate = useNavigate();
   const { studyId } = useStudyInfo();
   const { step } = useProgressInfo();
+  const { send } = useNotification();
 
   useEffect(() => {
     if (step === 'done') return;
@@ -32,7 +34,7 @@ const StudyBoard = () => {
   }, [step]);
 
   if (step === 'done') {
-    alert('이미 끝난 스터디입니다.');
+    send({ message: '이미 끝난 스터디입니다. \n스터디의 기록 페이지로 이동합니다.' });
     navigate(`${ROUTES_PATH.record}/${studyId}`);
     return;
   }
@@ -40,7 +42,7 @@ const StudyBoard = () => {
   return (
     <Container>
       <Sidebar />
-      <AlertErrorBoundary>
+      <NotificationBoundary>
         <Contents>
           {step === 'planning' && <PlanningForm />}
           {step === 'studying' && (
@@ -50,7 +52,7 @@ const StudyBoard = () => {
           )}
           {step === 'retrospect' && <RetrospectForm />}
         </Contents>
-      </AlertErrorBoundary>
+      </NotificationBoundary>
     </Container>
   );
 };
@@ -59,13 +61,26 @@ export default StudyBoard;
 
 const Container = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const Contents = styled.section`
   width: calc(100% - 590px);
-  min-width: 670px;
   height: 100vh;
 
   background-color: ${color.neutral[100]};
+
+  padding: 40px 85px;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    height: calc(100vh - 130px);
+
+    padding: 30px 20px;
+  }
 `;

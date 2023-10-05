@@ -17,9 +17,7 @@ const QuestionAnswer = ({ question, answer, iconColor }: Props) => {
   const answerTextColor = answer ? color.black : color.neutral[400];
   return (
     <Layout>
-      <IconWrapper>
-        <CircleCheckIcon circleColor={iconColor} />
-      </IconWrapper>
+      <CircleCheckIcon circleColor={iconColor} />
       <TypographyContainer>
         <Typography variant="h5">{question}</Typography>
         <Typography
@@ -41,17 +39,13 @@ export default QuestionAnswer;
 const Layout = styled.div`
   width: 100%;
   display: flex;
-  /* gap: 13px; */
+  gap: 12px;
 
   justify-content: space-between;
 `;
 
-const IconWrapper = styled.div`
-  padding-top: 5px;
-`;
-
 const TypographyContainer = styled.div`
-  width: 92%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;

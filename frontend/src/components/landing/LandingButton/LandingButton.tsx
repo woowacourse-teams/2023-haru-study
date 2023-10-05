@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
@@ -14,34 +14,17 @@ const LandingButton = () => {
   const { openModal } = useModal();
   const memberInfo = useMemberInfo();
   const isLogin = !!memberInfo;
+  const navigate = useNavigate();
 
-  if (isLogin) {
-    return (
-      <ButtonContainer $isLogin={isLogin}>
-        <Link to={ROUTES_PATH.create}>
-          <Button variant="primary" $block={false} size="small">
-            스터디 개설하기
-          </Button>
-        </Link>
-        <Link to={ROUTES_PATH.participation}>
-          <Button variant="outlined" $block={false} size="small">
-            스터디 참여하기
-          </Button>
-        </Link>
-      </ButtonContainer>
-    );
-  }
+  const handleClickStartButton = () => {
+    if (isLogin) return navigate(`${ROUTES_PATH.mode}`);
+
+    return openModal(<LoginModalContents />);
+  };
 
   return (
-    <ButtonContainer $isLogin={isLogin}>
-      <Button
-        variant="primary"
-        onClick={() => {
-          openModal(<LoginModalContents />);
-        }}
-        $block={false}
-        size="small"
-      >
+    <ButtonContainer>
+      <Button variant="primary" onClick={handleClickStartButton} $block={false} size="small">
         하루스터디 시작하기
       </Button>
     </ButtonContainer>
@@ -50,11 +33,7 @@ const LandingButton = () => {
 
 export default LandingButton;
 
-type ButtonContainerProps = {
-  $isLogin: boolean;
-};
-
-const ButtonContainer = styled.div<ButtonContainerProps>`
+const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
 
