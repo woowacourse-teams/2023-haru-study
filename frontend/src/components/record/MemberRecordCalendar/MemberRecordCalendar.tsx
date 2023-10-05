@@ -17,7 +17,7 @@ type Props = {
 const MemberRecordCalendar = ({ memberId }: Props) => {
   const calendarRef = useRef<HTMLUListElement>(null);
 
-  const { urlDate, updateUrlDate, updateUrlMonth } = useMemberCalendarRecordSearchParams();
+  const { urlDate, updateDate, updateMonth } = useMemberCalendarRecordSearchParams();
 
   const { year, month, navigationYear, monthStorage, handleMonthShift, handleNavigationMonth, handleNavigationYear } =
     useCalendar(urlDate);
@@ -31,8 +31,8 @@ const MemberRecordCalendar = ({ memberId }: Props) => {
         handleMonthShift={handleMonthShift}
         handleNavigationYear={handleNavigationYear}
         handleNavigationMonth={handleNavigationMonth}
-        updateUrlDate={updateUrlDate}
-        updateUrlMonth={updateUrlMonth}
+        updateDate={updateDate}
+        updateMonth={updateMonth}
       />
       <Calendar>
         <CalendarDayOfWeeks />

@@ -16,8 +16,8 @@ type Props = {
   handleMonthShift: (type: 'next' | 'prev' | 'today') => void;
   handleNavigationYear: (type: 'next' | 'prev') => void;
   handleNavigationMonth: (month: number) => void;
-  updateUrlMonth: (type: 'next' | 'prev' | 'today') => void;
-  updateUrlDate: (year: number, month: number) => void;
+  updateMonth: (type: 'next' | 'prev' | 'today') => void;
+  updateDate: (year: number, month: number) => void;
 };
 
 const MemberRecordCalendarControlBar = ({
@@ -27,21 +27,21 @@ const MemberRecordCalendarControlBar = ({
   handleMonthShift,
   handleNavigationYear,
   handleNavigationMonth,
-  updateUrlMonth,
-  updateUrlDate,
+  updateMonth,
+  updateDate,
 }: Props) => {
   const [isOpenCalendarNavigation, setIsOpenCalendarNavigation] = useState(false);
 
   const ref = useOutsideClick<HTMLDivElement>(() => setIsOpenCalendarNavigation(false));
 
   const handleClickMonthShiftButton = (type: 'prev' | 'next' | 'today') => {
-    updateUrlMonth(type);
     handleMonthShift(type);
+    updateMonth(type);
   };
 
   const handleClickMonthNavigation = (month: number) => {
-    updateUrlDate(navigationYear, month);
     handleNavigationMonth(month);
+    updateDate(navigationYear, month);
     setIsOpenCalendarNavigation(false);
   };
 

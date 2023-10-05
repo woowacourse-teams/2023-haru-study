@@ -34,7 +34,7 @@ const MENU_ITEM_STYLE = css`
 const PeriodSelectCalendar = () => {
   const today = new Date();
 
-  const { startDate, endDate, isMiddleSelectedCustomDate, updateUrlStartEndDate, updateHoverDays } =
+  const { startDate, endDate, isMiddleSelectedCustomDate, updateStartEndDate, updateHoverDays } =
     useMemberRecordPeriod();
 
   const { year, month, monthStorage, handleMonthShift, handleNavigationMonth, handleYearShift } = useCalendar(
@@ -103,7 +103,7 @@ const PeriodSelectCalendar = () => {
           <Day
             key={index}
             $isCurrentMonthDay={state === 'cur'}
-            onClick={() => updateUrlStartEndDate(date)}
+            onClick={() => updateStartEndDate(date)}
             onMouseEnter={() => updateHoverDays(date)}
             $backgroundColor={getDayBackgroundColor(date, format.date(date, '-'))}
           >

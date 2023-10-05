@@ -22,7 +22,7 @@ const periodTypes: Period[] = ['week', 'oneMonth', 'threeMonth', 'entire'];
 const PeriodSelectionBar = () => {
   const { send } = useNotification();
 
-  const { period, startDate, endDate, hasSelectedCustomPeriod, updateUrlPeriod } = useMemberRecordPeriod();
+  const { period, startDate, endDate, hasSelectedCustomPeriod, updatePeriod } = useMemberRecordPeriod();
 
   const [isOpenPeriodSelectCalendar, setIsOpenPeriodSelectCalendar] = useState(false);
 
@@ -40,7 +40,7 @@ const PeriodSelectionBar = () => {
       return;
     }
 
-    updateUrlPeriod('custom');
+    updatePeriod('custom');
   };
 
   return (
@@ -49,7 +49,7 @@ const PeriodSelectionBar = () => {
         {periodTypes.map((periodType) => (
           <SelectPeriodButton
             $isSelected={period === periodType}
-            onClick={() => updateUrlPeriod(periodType)}
+            onClick={() => updatePeriod(periodType)}
             key={periodType}
           >
             {PERIOD[periodType]}

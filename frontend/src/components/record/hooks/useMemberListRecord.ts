@@ -14,7 +14,7 @@ type Props = {
 };
 
 const useMemberListRecord = ({ memberId }: Props) => {
-  const { startDate, endDate, page, triggerSearchRecord, updateUrlPage } = useMemberRecordPeriod();
+  const { startDate, endDate, page, triggerSearchRecord, updatePage } = useMemberRecordPeriod();
 
   const [memberRecords, setMemberRecords] = useState<StudyBasicInfo[] | null>(null);
   const [totalPagesNumber, setTotalPagesNumber] = useState<number>(1);
@@ -23,7 +23,7 @@ const useMemberListRecord = ({ memberId }: Props) => {
     requestGetMemberListRecord(memberId, page - 1, 20, startDate, endDate),
   );
 
-  const shiftPage = (page: number) => updateUrlPage(page);
+  const shiftPage = (page: number) => updatePage(page);
 
   useEffect(() => {
     mutate();

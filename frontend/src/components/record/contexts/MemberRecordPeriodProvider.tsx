@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from 'react';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { createContext, useContext, useState } from 'react';
+
+import useSearchParams from '@Hooks/common/useSearchParams';
 
 import type { PERIOD } from '@Constants/record';
 
@@ -10,34 +11,32 @@ export type Period = keyof typeof PERIOD;
 
 export type MemberRecordPeriodContextType = {
   period: Period;
-  startDate: string | null;
-  endDate: string | null;
+  startDate?: string;
+  endDate?: string;
   page: number;
   hasSelectedCustomPeriod: boolean;
   triggerSearchRecord: number;
   isMiddleSelectedCustomDate: (date: Date) => boolean;
-  updateUrlPeriod: (period: Period) => void;
-  updateUrlStartEndDate: (date: Date) => void;
+  updatePeriod: (period: Period) => void;
+  updateStartEndDate: (date: Date) => void;
   updateHoverDays: (date: Date) => void;
-  updateUrlPage: (page: number) => void;
+  updatePage: (page: number) => void;
 };
 
 const MemberRecordPeriodContext = createContext<MemberRecordPeriodContextType | null>(null);
 
 const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const [urlParams, setUrlParams] = useState({
-    urlPeriod: searchParams.get('period') as Period,
-    urlPage: Number(searchParams.get('page')),
-    urlStartDate: searchParams.get('start'),
-    urlEndDate: searchParams.get('end'),
-  });
+  const { searchParams, updateSearchParams } = useSearchParams<{
+    period: Period;
+    page: string;
+    start?: string;
+    end?: string;
+  }>();
 
   const [triggerSearchRecord, setTriggerSearchRecord] = useState(0);
   const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
 
-  const updateUrlPeriod = (period: Period) => {
+  const updatePeriod = (period: Period) => {
     const today = new Date();
     const day = today.getDate();
     const month = today.getMonth();
@@ -54,114 +53,95 @@ const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
     if (period === 'threeMonth') newStartDate = format.date(new Date(today.setMonth(month - 3)), '-');
 
     if (period === 'custom') {
-      newStartDate = urlParams.urlStartDate;
-      newEndDate = urlParams.urlEndDate;
+      newStartDate = searchParams.start!;
+      newEndDate = searchParams.end!;
     }
 
-    setUrlParams({
-      urlPeriod: period,
-      urlPage: 1,
-      urlStartDate: newStartDate,
-      urlEndDate: newEndDate,
+    updateSearchParams({
+      period,
+      page: '1',
+      start: newStartDate,
+      end: newEndDate,
     });
 
     setTriggerSearchRecord((prev) => prev + 1);
   };
 
-  const updateUrlPage = (page: number) => {
-    setUrlParams((prev) => {
-      return {
-        ...prev,
-        urlPage: page,
-      };
-    });
+  const updatePage = (page: number) => {
+    updateSearchParams({ page: String(page) });
 
     setTriggerSearchRecord((prev) => prev + 1);
   };
 
-  const updateUrlStartEndDate = (date: Date) => {
+  const updateStartEndDate = (date: Date) => {
     setHoveredDay(date);
-
-    const { urlStartDate, urlEndDate } = urlParams;
 
     let newStartDate: null | string = null;
     let newEndDate: null | string = null;
 
-    if (!urlStartDate) newStartDate = format.date(new Date(date), '-');
+    if (!searchParams.start) newStartDate = format.date(new Date(date), '-');
 
-    if (urlStartDate && !urlEndDate && new Date(urlStartDate) > date) {
+    if (searchParams.start && !searchParams.end && new Date(searchParams.start) > date) {
       newStartDate = format.date(new Date(date), '-');
-      newEndDate = urlStartDate;
+      newEndDate = searchParams.start;
     }
 
-    if (urlStartDate && !urlEndDate && new Date(urlStartDate) < date) {
-      newStartDate = urlStartDate;
+    if (searchParams.start && !searchParams.end && new Date(searchParams.start) < date) {
+      newStartDate = searchParams.start;
       newEndDate = format.date(new Date(date), '-');
     }
 
-    if (urlStartDate && urlEndDate) newStartDate = format.date(new Date(date), '-');
+    if (searchParams.start && searchParams.end) newStartDate = format.date(new Date(date), '-');
 
-    setUrlParams((prev) => {
-      return {
-        ...prev,
-        urlStartDate: newStartDate,
-        urlEndDate: newEndDate,
-      };
+    updateSearchParams({
+      start: newStartDate,
+      end: newEndDate,
     });
   };
 
   const isSoonSelectedDate = (date: Date) => {
-    if (!hoveredDay || !urlParams.urlStartDate) return false;
+    if (!hoveredDay || !searchParams.start) return false;
 
-    const urlStartDateObject = new Date(urlParams.urlStartDate);
+    const startDateObject = new Date(searchParams.start);
 
-    if (hoveredDay > urlStartDateObject) {
-      if (urlStartDateObject <= date && hoveredDay >= date) return true;
+    if (hoveredDay > startDateObject) {
+      if (startDateObject <= date && hoveredDay >= date) return true;
 
       return false;
     } else {
-      if (urlStartDateObject >= date && hoveredDay <= date) return true;
+      if (startDateObject >= date && hoveredDay <= date) return true;
 
       return false;
     }
   };
 
   const isIncludeSelectDate = (date: Date) => {
-    if (!urlParams.urlStartDate || !urlParams.urlEndDate) return false;
+    if (!searchParams.start || !searchParams.end) return false;
 
-    if (new Date(urlParams.urlStartDate) < date && new Date(urlParams.urlEndDate) >= date) return true;
+    if (new Date(searchParams.start) < date && new Date(searchParams.end) >= date) return true;
 
     return false;
   };
 
   const updateHoverDays = (date: Date) => {
-    if (!urlParams.urlStartDate) return;
-    if (urlParams.urlStartDate && urlParams.urlEndDate) return;
+    if (!searchParams.start) return;
+    if (searchParams.start && searchParams.end) return;
 
     setHoveredDay(date);
   };
 
-  useEffect(() => {
-    setSearchParams({
-      period: urlParams.urlPeriod,
-      page: String(urlParams.urlPage),
-      ...(urlParams.urlStartDate && { start: urlParams.urlStartDate }),
-      ...(urlParams.urlEndDate && { end: urlParams.urlEndDate }),
-    });
-  }, [setSearchParams, urlParams]);
-
   const value = {
-    period: urlParams.urlPeriod,
-    startDate: urlParams.urlStartDate,
-    endDate: urlParams.urlEndDate,
-    page: urlParams.urlPage,
-    hasSelectedCustomPeriod: !!urlParams.urlStartDate || !!urlParams.urlEndDate,
+    period: searchParams.period,
+    startDate: searchParams.start,
+    endDate: searchParams.end,
+    page: searchParams.page ? Number(searchParams.page) : 1,
+    hasSelectedCustomPeriod: !!searchParams.start || !!searchParams.end,
     triggerSearchRecord,
     isMiddleSelectedCustomDate: (date: Date) => isSoonSelectedDate(date) || isIncludeSelectDate(date),
-    updateUrlPeriod,
-    updateUrlStartEndDate,
+    updatePeriod,
+    updateStartEndDate,
     updateHoverDays,
-    updateUrlPage,
+    updatePage,
   };
   return <MemberRecordPeriodContext.Provider value={value}>{children}</MemberRecordPeriodContext.Provider>;
 };
