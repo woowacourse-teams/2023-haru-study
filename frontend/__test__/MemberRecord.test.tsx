@@ -8,6 +8,7 @@ import MemberRecord from '@Pages/MemberRecord';
 
 import MemberInfoProvider from '@Contexts/MemberInfoProvider';
 import ModalProvider from '@Contexts/ModalProvider';
+import NotificationProvider from '@Contexts/NotificationProvider';
 
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
@@ -44,9 +45,11 @@ describe('나의 스터디 기록 페이지 테스트', () => {
     render(
       <MemoryRouter initialEntries={['/member-record']}>
         <ModalProvider>
-          <MemberInfoProvider>
-            <MemberRecord />
-          </MemberInfoProvider>
+          <NotificationProvider>
+            <MemberInfoProvider>
+              <MemberRecord />
+            </MemberInfoProvider>
+          </NotificationProvider>
         </ModalProvider>
       </MemoryRouter>,
     );

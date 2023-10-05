@@ -14,6 +14,7 @@ export type MemberRecordPeriodContextType = {
   endDate: string | null;
   page: number;
   hasSelectedCustomPeriod: boolean;
+  triggerSearchRecord: number;
   isMiddleSelectedCustomDate: (date: Date) => boolean;
   updateUrlPeriod: (period: Period) => void;
   updateUrlStartEndDate: (date: Date) => void;
@@ -33,6 +34,7 @@ const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
     urlEndDate: searchParams.get('end'),
   });
 
+  const [triggerSearchRecord, setTriggerSearchRecord] = useState(0);
   const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
 
   const updateUrlPeriod = (period: Period) => {
@@ -62,15 +64,20 @@ const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
       urlStartDate: newStartDate,
       urlEndDate: newEndDate,
     });
+
+    setTriggerSearchRecord((prev) => prev + 1);
   };
 
-  const updateUrlPage = (page: number) =>
+  const updateUrlPage = (page: number) => {
     setUrlParams((prev) => {
       return {
         ...prev,
         urlPage: page,
       };
     });
+
+    setTriggerSearchRecord((prev) => prev + 1);
+  };
 
   const updateUrlStartEndDate = (date: Date) => {
     setHoveredDay(date);
@@ -149,6 +156,7 @@ const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
     endDate: urlParams.urlEndDate,
     page: urlParams.urlPage,
     hasSelectedCustomPeriod: !!urlParams.urlStartDate || !!urlParams.urlEndDate,
+    triggerSearchRecord,
     isMiddleSelectedCustomDate: (date: Date) => isSoonSelectedDate(date) || isIncludeSelectDate(date),
     updateUrlPeriod,
     updateUrlStartEndDate,
