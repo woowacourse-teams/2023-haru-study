@@ -18,6 +18,17 @@ public enum OauthUserInfoExtractor {
                     .imageUrl(String.valueOf(attributes.get("picture")))
                     .build();
         }
+    },
+    KAKAO("kakao") {
+        @Override
+        public UserInfo from(Map<String, Object> attributes) {
+            Map<String, String> properties = (Map<String, String>) attributes.get("properties");
+            return UserInfo.builder()
+                    .name(properties.get("nickname"))
+                    .email(properties.get("email"))
+                    .imageUrl(properties.get("profile_image"))
+                    .build();
+        }
     };
 
     private final String providerName;
