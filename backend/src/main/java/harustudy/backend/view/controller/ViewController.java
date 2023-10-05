@@ -32,8 +32,8 @@ public class ViewController {
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
     ) {
-        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(page, memberId,
-                startDate, endDate);
+        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(authMember, page,
+                memberId, startDate, endDate);
         return ResponseEntity.ok(response);
     }
 
@@ -45,7 +45,7 @@ public class ViewController {
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate
     ) {
-        CalendarStudyRecordsResponse response = viewService.findStudyRecordsForCalendar(
+        CalendarStudyRecordsResponse response = viewService.findStudyRecordsForCalendar(authMember,
                 memberId, startDate, endDate);
         return ResponseEntity.ok(response);
     }

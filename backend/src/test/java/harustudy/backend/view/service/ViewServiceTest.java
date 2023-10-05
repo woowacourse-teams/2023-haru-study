@@ -1,7 +1,10 @@
 package harustudy.backend.view.service;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
+import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.domain.Participant;
@@ -80,6 +83,7 @@ class ViewServiceTest {
     @Test
     void 날짜_범위를_기준으로_스터디_기록을_페이지_조회한다() {
         //given
+        AuthMember authMember = new AuthMember(member.getId());
         Integer page = 0;
         Integer size = 5;
         String sortColumn = "createdDate";
@@ -90,7 +94,7 @@ class ViewServiceTest {
         Long expectedTotalPages = Math.round((double) studyRepository.count() / (double) size);
 
         //when
-        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(pageable,
+        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(authMember, pageable,
                 member.getId(), startDate, endDate);
 
         List<Study> allStudies = studyRepository.findAll();
@@ -110,6 +114,7 @@ class ViewServiceTest {
     @Test
     void 날짜_범위가_주어지지_않으면_전체_스터디_기록을_페이지_조회한다() {
         //given
+        AuthMember authMember = new AuthMember(member.getId());
         Integer page = 0;
         Integer size = 5;
         String sortColumn = "createdDate";
@@ -118,7 +123,7 @@ class ViewServiceTest {
         Long expectedTotalPages = Math.round((double) studyRepository.count() / (double) size);
 
         //when
-        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(pageable,
+        StudyRecordsPageResponse response = viewService.findStudyRecordsPage(authMember, pageable,
                 member.getId(), null, null);
 
         //then
@@ -130,8 +135,23 @@ class ViewServiceTest {
     }
 
     @Test
+    void 다른_멤버의_스터디_기록을_페이지_조회하면_인가_예외가_발생한다() {
+        //given
+        AuthMember authMember = new AuthMember(member.getId()+1L);
+        Integer page = 0;
+        Integer size = 5;
+        String sortColumn = "createdDate";
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Direction.ASC, sortColumn));
+
+        //when, then
+        assertThatThrownBy(() -> viewService.findStudyRecordsPage(authMember, pageable,
+                member.getId(), null, null)).isInstanceOf(AuthorizationException.class);
+    }
+
+    @Test
     void 달력_기반으로_스터디_기록을_조회한다() {
         //given
+        AuthMember authMember = new AuthMember(member.getId());
         LocalDate startDate = LocalDate.of(2023, 9, 20);
         LocalDate endDate = LocalDate.of(2023, 10, 10);
 
@@ -139,8 +159,8 @@ class ViewServiceTest {
         LocalDate expectedTwoRecordsDate2 = LocalDate.of(2023, 10, 2);
 
         //when
-        CalendarStudyRecordsResponse response = viewService.findStudyRecordsForCalendar(member.getId(),
-                startDate, endDate);
+        CalendarStudyRecordsResponse response = viewService.findStudyRecordsForCalendar(authMember,
+                member.getId(), startDate, endDate);
 
         //then
         assertSoftly(sotly -> {
@@ -148,5 +168,15 @@ class ViewServiceTest {
             sotly.assertThat(response.studyRecords().get(expectedTwoRecordsDate1).size()).isEqualTo(2);
             sotly.assertThat(response.studyRecords().get(expectedTwoRecordsDate2).size()).isEqualTo(2);
         });
+    }
+
+    @Test
+    void 다른_멤버의_스터디_기록을_달력_기반으로_조회하면_인가_예외가_발생한다() {
+        //given
+        AuthMember authMember = new AuthMember(member.getId()+1L);
+
+        //when, then
+        assertThatThrownBy(() -> viewService.findStudyRecordsForCalendar(authMember, member.getId(),
+                null, null)).isInstanceOf(AuthorizationException.class);
     }
 }
