@@ -24,7 +24,7 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     Optional<Step> findStepById(@Param("id") Long id);
 
     @Query("select s from Study s join s.participants p where p.member.id = :memberId and s.createdDate between :startDate and :endDate")
-    List<Study> findByMemberIdAndCreatedDate(
+    List<Study> findByMemberIdAndCreatedDateSortedBy(
             @Param("memberId") Long memberId,
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
