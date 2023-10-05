@@ -29,10 +29,12 @@ export const requestGetMemberListRecord = (
 ) => {
   if (startDate && endDate)
     return http.get<ResponseMemberListRecord>(
-      `/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}&startDate=${startDate}&endDate=${endDate}`,
+      `/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}&startDate=${startDate}&endDate=${endDate}&sort=createdDate,desc`,
     );
 
-  return http.get<ResponseMemberListRecord>(`/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}`);
+  return http.get<ResponseMemberListRecord>(
+    `/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}&sort=createdDate,desc`,
+  );
 };
 
 export const requestGetMemberCalendarRecord = (memberId: string, startDate: string, endDate: string) =>
