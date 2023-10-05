@@ -9,8 +9,6 @@ import color from '@Styles/color';
 
 import ArrowIcon from '@Assets/icons/ArrowIcon';
 
-import useMemberCalendarRecordSearchParams from '../hooks/useMemberCalendarRecordSearchParams';
-
 type Props = {
   year: number;
   month: number;
@@ -18,6 +16,8 @@ type Props = {
   handleMonthShift: (type: 'next' | 'prev' | 'today') => void;
   handleNavigationYear: (type: 'next' | 'prev') => void;
   handleNavigationMonth: (month: number) => void;
+  updateUrlMonth: (type: 'next' | 'prev' | 'today') => void;
+  updateUrlDate: (year: number, month: number) => void;
 };
 
 const MemberRecordCalendarControlBar = ({
@@ -27,10 +27,10 @@ const MemberRecordCalendarControlBar = ({
   handleMonthShift,
   handleNavigationYear,
   handleNavigationMonth,
+  updateUrlMonth,
+  updateUrlDate,
 }: Props) => {
   const [isOpenCalendarNavigation, setIsOpenCalendarNavigation] = useState(false);
-
-  const { updateUrlMonth, updateUrlDate } = useMemberCalendarRecordSearchParams();
 
   const ref = useOutsideClick<HTMLDivElement>(() => setIsOpenCalendarNavigation(false));
 

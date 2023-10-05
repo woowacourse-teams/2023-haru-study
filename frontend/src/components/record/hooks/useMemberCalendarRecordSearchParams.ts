@@ -5,13 +5,9 @@ const useMemberCalendarRecordSearchParams = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [urlParams, setUrlParams] = useState({
-    urlYear: searchParams.get('year') || String(new Date().getFullYear()),
-    urlMonth: searchParams.get('month') || String(new Date().getMonth() + 1),
+    urlYear: searchParams.get('year'),
+    urlMonth: searchParams.get('month'),
   });
-
-  useEffect(() => {
-    setSearchParams(urlParams);
-  }, [setSearchParams, urlParams]);
 
   const updateUrlMonth = (type: 'next' | 'prev' | 'today') => {
     let newUrlYear: string | null = null;
@@ -49,6 +45,17 @@ const useMemberCalendarRecordSearchParams = () => {
   const updateUrlDate = (year: number, month: number) => {
     setUrlParams({ urlYear: String(year), urlMonth: String(month) });
   };
+
+  useEffect(() => {
+    const { urlMonth, urlYear } = urlParams;
+
+    if (!urlMonth || !urlYear) return;
+
+    setSearchParams({
+      year: urlYear,
+      month: urlMonth,
+    });
+  }, [setSearchParams, urlParams]);
 
   return {
     urlDate: new Date(Number(urlParams.urlYear), Number(urlParams.urlMonth) - 1),
