@@ -46,7 +46,7 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "모든 멤버 조회")
+    @Operation(summary = "멤버 조회")
     @GetMapping("/admin/members")
     public ResponseEntity<AdminMembersResponse> findMembers(Pageable pageable, @RequestParam String loginType) {
         AdminMembersResponse response = adminService.findMembers(pageable, loginType);
