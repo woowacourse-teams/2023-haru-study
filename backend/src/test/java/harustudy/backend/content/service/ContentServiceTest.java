@@ -36,10 +36,11 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 class ContentServiceTest {
 
-    @PersistenceContext
-    private EntityManager entityManager;
     @Autowired
     private ContentService contentService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private Study study;
     private Member member;
