@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from 'react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import type { PERIOD } from '@Constants/record';
 
@@ -8,116 +9,151 @@ import format from '@Utils/format';
 export type Period = keyof typeof PERIOD;
 
 export type MemberRecordPeriodContextType = {
-  period: Period | null;
-  fetchStartDate: string | null;
-  fetchEndDate: string | null;
-  customStartDate: Date | null;
-  customEndDate: Date | null;
+  period: Period;
+  startDate: string | null;
+  endDate: string | null;
+  page: number;
   hasSelectedCustomPeriod: boolean;
   isMiddleSelectedCustomDate: (date: Date) => boolean;
-  handlePeriod: (period: Period | null) => void;
-  handleCustomPeriod: (date: Date) => void;
-  handleHoverDays: (date: Date) => void;
+  updateUrlPeriod: (period: Period) => void;
+  updateUrlStartEndDate: (date: Date) => void;
+  updateHoverDays: (date: Date) => void;
+  updateUrlPage: (page: number) => void;
 };
 
 const MemberRecordPeriodContext = createContext<MemberRecordPeriodContextType | null>(null);
 
 const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
-  const [period, setPeriod] = useState<Period | null>('entire');
-  const [customPeriod, setCustomPeriod] = useState<{ start: Date | null; end: Date | null }>({
-    start: null,
-    end: null,
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [urlParams, setUrlParams] = useState({
+    urlPeriod: searchParams.get('period') as Period,
+    urlPage: Number(searchParams.get('page')),
+    urlStartDate: searchParams.get('start'),
+    urlEndDate: searchParams.get('end'),
   });
+
   const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
 
-  const [fetchDate, setFetchDate] = useState<{ start: string | null; end: string | null }>({
-    start: null,
-    end: null,
-  });
+  const updateUrlPeriod = (period: Period) => {
+    const today = new Date();
+    const day = today.getDate();
+    const month = today.getMonth();
+
+    let newStartDate: null | string = null;
+    let newEndDate: null | string = format.date(today, '-');
+
+    if (period === 'entire') newEndDate = null;
+
+    if (period === 'week') newStartDate = format.date(new Date(today.setDate(day - 7)), '-');
+
+    if (period === 'oneMonth') newStartDate = format.date(new Date(today.setMonth(month - 1)), '-');
+
+    if (period === 'threeMonth') newStartDate = format.date(new Date(today.setMonth(month - 3)), '-');
+
+    if (period === 'custom') {
+      newStartDate = urlParams.urlStartDate;
+      newEndDate = urlParams.urlEndDate;
+    }
+
+    setUrlParams({
+      urlPeriod: period,
+      urlPage: 1,
+      urlStartDate: newStartDate,
+      urlEndDate: newEndDate,
+    });
+  };
+
+  const updateUrlPage = (page: number) =>
+    setUrlParams((prev) => {
+      return {
+        ...prev,
+        urlPage: page,
+      };
+    });
+
+  const updateUrlStartEndDate = (date: Date) => {
+    setHoveredDay(date);
+
+    const { urlStartDate, urlEndDate } = urlParams;
+
+    let newStartDate: null | string = null;
+    let newEndDate: null | string = null;
+
+    if (!urlStartDate) newStartDate = format.date(new Date(date), '-');
+
+    if (urlStartDate && !urlEndDate && new Date(urlStartDate) > date) {
+      newStartDate = format.date(new Date(date), '-');
+      newEndDate = urlStartDate;
+    }
+
+    if (urlStartDate && !urlEndDate && new Date(urlStartDate) < date) {
+      newStartDate = urlStartDate;
+      newEndDate = format.date(new Date(date), '-');
+    }
+
+    if (urlStartDate && urlEndDate) newStartDate = format.date(new Date(date), '-');
+
+    setUrlParams((prev) => {
+      return {
+        ...prev,
+        urlStartDate: newStartDate,
+        urlEndDate: newEndDate,
+      };
+    });
+  };
 
   const isSoonSelectedDate = (date: Date) => {
-    if (!hoveredDay || !customPeriod.start) return false;
+    if (!hoveredDay || !urlParams.urlStartDate) return false;
 
-    if (hoveredDay > customPeriod.start) {
-      if (customPeriod.start <= date && hoveredDay >= date) return true;
+    const urlStartDateObject = new Date(urlParams.urlStartDate);
+
+    if (hoveredDay > urlStartDateObject) {
+      if (urlStartDateObject <= date && hoveredDay >= date) return true;
 
       return false;
     } else {
-      if (customPeriod.start >= date && hoveredDay <= date) return true;
+      if (urlStartDateObject >= date && hoveredDay <= date) return true;
 
       return false;
     }
   };
 
   const isIncludeSelectDate = (date: Date) => {
-    if (!customPeriod.start || !customPeriod.end) return false;
+    if (!urlParams.urlStartDate || !urlParams.urlEndDate) return false;
 
-    if (customPeriod.start < date && customPeriod.end >= date) return true;
+    if (new Date(urlParams.urlStartDate) < date && new Date(urlParams.urlEndDate) >= date) return true;
 
     return false;
   };
 
-  const handlePeriod = (period: Period | null) => {
-    setPeriod(period);
-
-    const today = new Date();
-    const day = today.getDate();
-    const month = today.getMonth();
-
-    if (!period)
-      setFetchDate({ start: format.date(customPeriod.start!, '-'), end: format.date(customPeriod.end!, '-') });
-
-    if (period === 'entire') setFetchDate({ start: null, end: null });
-
-    if (period === 'week')
-      setFetchDate({ end: format.date(today, '-'), start: format.date(new Date(today.setDate(day - 7)), '-') });
-
-    if (period === 'oneMonth')
-      setFetchDate({ end: format.date(today, '-'), start: format.date(new Date(today.setMonth(month - 1)), '-') });
-
-    if (period === 'threeMonth')
-      setFetchDate({ end: format.date(today, '-'), start: format.date(new Date(today.setMonth(month - 3)), '-') });
-  };
-
-  const handleCustomPeriod = (date: Date) => {
-    setHoveredDay(date);
-
-    if (!customPeriod.start) {
-      setCustomPeriod({ start: date, end: null });
-
-      return;
-    }
-
-    if (!customPeriod.end) {
-      setCustomPeriod((prev) => {
-        if (prev.start! > date) return { start: date, end: prev.start };
-        return { ...prev, end: date };
-      });
-
-      return;
-    }
-
-    setCustomPeriod({ start: date, end: null });
-  };
-
-  const handleHoverDays = (date: Date) => {
-    if (!customPeriod.start) return;
-    if (customPeriod.start && customPeriod.end) return;
+  const updateHoverDays = (date: Date) => {
+    if (!urlParams.urlStartDate) return;
+    if (urlParams.urlStartDate && urlParams.urlEndDate) return;
 
     setHoveredDay(date);
   };
+
+  useEffect(() => {
+    setSearchParams({
+      period: urlParams.urlPeriod,
+      page: String(urlParams.urlPage),
+      ...(urlParams.urlStartDate && { start: urlParams.urlStartDate }),
+      ...(urlParams.urlEndDate && { end: urlParams.urlEndDate }),
+    });
+  }, [setSearchParams, urlParams]);
 
   const value = {
-    period,
-    fetchStartDate: fetchDate.start,
-    fetchEndDate: fetchDate.end,
-    customStartDate: customPeriod.start,
-    customEndDate: customPeriod.end,
-    hasSelectedCustomPeriod: !!customPeriod.start || !!customPeriod.end,
+    period: urlParams.urlPeriod,
+    startDate: urlParams.urlStartDate,
+    endDate: urlParams.urlEndDate,
+    page: urlParams.urlPage,
+    hasSelectedCustomPeriod: !!urlParams.urlStartDate || !!urlParams.urlEndDate,
     isMiddleSelectedCustomDate: (date: Date) => isSoonSelectedDate(date) || isIncludeSelectDate(date),
-    handlePeriod,
-    handleCustomPeriod,
-    handleHoverDays,
+    updateUrlPeriod,
+    updateUrlStartEndDate,
+    updateHoverDays,
+    updateUrlPage,
   };
   return <MemberRecordPeriodContext.Provider value={value}>{children}</MemberRecordPeriodContext.Provider>;
 };

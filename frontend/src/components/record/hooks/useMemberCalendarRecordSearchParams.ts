@@ -6,12 +6,12 @@ const useMemberCalendarRecordSearchParams = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const searchYear = searchParams.get('year');
-  const searchMonth = searchParams.get('month');
+  const urlYear = searchParams.get('year');
+  const urlMonth = searchParams.get('month');
 
-  const searchDate = new Date(Number(searchYear), Number(searchMonth) - 1);
+  const urlDate = new Date(Number(urlYear), Number(urlMonth) - 1);
 
-  const updateSearchMonth = (type: 'next' | 'prev' | 'today') => {
+  const updateUrlMonth = (type: 'next' | 'prev' | 'today') => {
     if (type === 'today') {
       const today = new Date();
       const year = String(today.getFullYear());
@@ -22,34 +22,34 @@ const useMemberCalendarRecordSearchParams = () => {
       return;
     }
 
-    const updatedMonth = Number(searchMonth) + (type === 'next' ? +1 : -1);
+    const updatedMonth = Number(urlMonth) + (type === 'next' ? +1 : -1);
 
     if (updatedMonth === 0) {
-      setSearchParams({ year: String(Number(searchYear) - 1), month: '12' });
+      setSearchParams({ year: String(Number(urlYear) - 1), month: '12' });
 
       return;
     }
 
     if (updatedMonth === 13) {
-      setSearchParams({ year: String(Number(searchYear) + 1), month: '1' });
+      setSearchParams({ year: String(Number(urlYear) + 1), month: '1' });
 
       return;
     }
 
-    setSearchParams({ year: searchYear || '2023', month: String(updatedMonth) });
+    setSearchParams({ year: urlYear || '2023', month: String(updatedMonth) });
   };
 
-  const updateSearchDate = (year: number, month: number) => {
+  const updateUrlDate = (year: number, month: number) => {
     setSearchParams({ year: String(year), month: String(month) });
   };
 
   useEffect(() => {
-    if (!searchYear || !searchMonth) {
+    if (!urlYear || !urlMonth) {
       navigate('/404');
     }
-  }, [searchYear, searchMonth, navigate]);
+  }, [urlYear, urlMonth, navigate]);
 
-  return { searchDate, updateSearchMonth, updateSearchDate };
+  return { urlDate, updateUrlMonth, updateUrlDate };
 };
 
 export default useMemberCalendarRecordSearchParams;

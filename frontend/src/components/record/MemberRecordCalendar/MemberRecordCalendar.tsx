@@ -17,10 +17,10 @@ type Props = {
 const MemberRecordCalendar = ({ memberId }: Props) => {
   const calendarRef = useRef<HTMLUListElement>(null);
 
-  const { searchDate } = useMemberCalendarRecordSearchParams();
+  const { urlDate } = useMemberCalendarRecordSearchParams();
 
   const { year, month, navigationYear, monthStorage, handleMonthShift, handleNavigationMonth, handleNavigationYear } =
-    useCalendar(searchDate);
+    useCalendar(urlDate);
 
   return (
     <Layout>

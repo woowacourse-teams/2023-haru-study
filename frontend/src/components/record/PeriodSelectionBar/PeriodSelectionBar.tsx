@@ -13,8 +13,6 @@ import { useNotification } from '@Contexts/NotificationProvider';
 
 import CalenderIcon from '@Assets/icons/CalenderIcon';
 
-import format from '@Utils/format';
-
 import PeriodSelectCalendar from '../PeriodSelectCalendar/PeriodSelectCalendar';
 import type { Period } from '../contexts/MemberRecordPeriodProvider';
 import { useMemberRecordPeriod } from '../contexts/MemberRecordPeriodProvider';
@@ -24,7 +22,7 @@ const periodTypes: Period[] = ['week', 'oneMonth', 'threeMonth', 'entire'];
 const PeriodSelectionBar = () => {
   const { send } = useNotification();
 
-  const { period, customStartDate, customEndDate, hasSelectedCustomPeriod, handlePeriod } = useMemberRecordPeriod();
+  const { period, startDate, endDate, hasSelectedCustomPeriod, updateUrlPeriod } = useMemberRecordPeriod();
 
   const [isOpenPeriodSelectCalendar, setIsOpenPeriodSelectCalendar] = useState(false);
 
@@ -33,7 +31,7 @@ const PeriodSelectionBar = () => {
   });
 
   const handleCustomPeriodSearch = () => {
-    if (!customStartDate || !customEndDate) {
+    if (!startDate || !endDate) {
       send({
         type: 'error',
         message: '날짜가 모두 입력되지 않았어요.',
@@ -42,7 +40,7 @@ const PeriodSelectionBar = () => {
       return;
     }
 
-    handlePeriod(null);
+    updateUrlPeriod('custom');
   };
 
   return (
@@ -51,7 +49,7 @@ const PeriodSelectionBar = () => {
         {periodTypes.map((periodType) => (
           <SelectPeriodButton
             $isSelected={period === periodType}
-            onClick={() => handlePeriod(periodType)}
+            onClick={() => updateUrlPeriod(periodType)}
             key={periodType}
           >
             {PERIOD[periodType]}
@@ -63,9 +61,9 @@ const PeriodSelectionBar = () => {
           <SelectedDate $hasSelectedCustomPeriod={hasSelectedCustomPeriod}>
             {hasSelectedCustomPeriod ? (
               <>
-                <div>{customStartDate && format.date(customStartDate)}</div>
+                <div>{startDate && startDate}</div>
                 <div>~</div>
-                <div>{customEndDate && format.date(customEndDate)}</div>
+                <div>{endDate && endDate}</div>
               </>
             ) : (
               '날짜를 선택해주세요.'

@@ -21,9 +21,11 @@ const MemberRecordContents = () => {
   const today = new Date();
 
   const handleClickViewModeButton = (mode: 'calendar' | 'list') => {
+    if (viewMode === mode) return;
+
     if (mode === 'calendar')
       navigate(`${ROUTES_PATH.memberRecord}/calendar?year=${today.getFullYear()}&month=${today.getMonth() + 1}`);
-    else navigate(`${ROUTES_PATH.memberRecord}/${mode}`);
+    else navigate(`${ROUTES_PATH.memberRecord}/${mode}?period=entire&page=1`);
   };
 
   if (memberInfo?.loginType === 'guest') {

@@ -30,17 +30,17 @@ const MemberRecordCalendarControlBar = ({
 }: Props) => {
   const [isOpenCalendarNavigation, setIsOpenCalendarNavigation] = useState(false);
 
-  const { updateSearchMonth, updateSearchDate } = useMemberCalendarRecordSearchParams();
+  const { updateUrlMonth, updateUrlDate } = useMemberCalendarRecordSearchParams();
 
   const ref = useOutsideClick<HTMLDivElement>(() => setIsOpenCalendarNavigation(false));
 
   const handleClickMonthShiftButton = (type: 'prev' | 'next' | 'today') => {
-    updateSearchMonth(type);
+    updateUrlMonth(type);
     handleMonthShift(type);
   };
 
   const handleClickMonthNavigation = (month: number) => {
-    updateSearchDate(navigationYear, month);
+    updateUrlDate(navigationYear, month);
     handleNavigationMonth(month);
     setIsOpenCalendarNavigation(false);
   };
