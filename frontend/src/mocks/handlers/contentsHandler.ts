@@ -15,7 +15,7 @@ type RequestWriteRetrospect = {
   retrospect: RetrospectList;
 };
 
-export const ContentsHandler = [
+export const contentsHandler = [
   // 스터디 계획 작성 API
   rest.post<RequestWritePlan>('/api/studies/:studyId/contents/write-plan', async (req, res, ctx) => {
     const { plan } = await req.json<RequestWritePlan>();
