@@ -6,9 +6,9 @@ import java.util.Map;
 
 public interface OauthClient {
 
-    OauthTokenResponse requestOauthToken(String code, String providerName);
+    OauthTokenResponse requestOauthToken(String code);
 
-    Map<String, Object> requestOauthUserInfo(String accessToken, String providerName);
+    Map<String, Object> requestOauthUserInfo(String accessToken);
 
-    Boolean supports(String providerName);
+    String getProviderName();
 }
