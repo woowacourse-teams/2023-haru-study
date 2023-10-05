@@ -1,6 +1,12 @@
 package harustudy.backend.admin.service;
 
-import harustudy.backend.admin.dto.*;
+import harustudy.backend.admin.dto.AdminContentResponse;
+import harustudy.backend.admin.dto.AdminMemberResponse;
+import harustudy.backend.admin.dto.AdminMembersResponse;
+import harustudy.backend.admin.dto.AdminParticipantCodeResponse;
+import harustudy.backend.admin.dto.AdminParticipantResponse;
+import harustudy.backend.admin.dto.AdminStudyContentResponse;
+import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.content.domain.Content;
 import harustudy.backend.content.repository.ContentRepository;
 import harustudy.backend.member.domain.LoginType;
@@ -78,7 +84,7 @@ public class AdminService {
         LocalDateTime midnightTime = findMidnightTime();
 
         return studyRepository.findAllByLastModifiedDateBetweenAndStepIs(pageable, midnightTime,
-                LocalDateTime.now(), Step.DONE)
+                        LocalDateTime.now(), Step.DONE)
                 .map(AdminStudyResponse::from)
                 .toList();
     }

@@ -1,7 +1,6 @@
 package harustudy.backend.admin.service;
 
 import harustudy.backend.admin.dto.AdminContentResponse;
-import harustudy.backend.admin.dto.AdminMemberResponse;
 import harustudy.backend.admin.dto.AdminMembersResponse;
 import harustudy.backend.admin.dto.AdminParticipantResponse;
 import harustudy.backend.admin.dto.AdminStudyContentResponse;
