@@ -2,12 +2,15 @@ package harustudy.backend.admin.service;
 
 import harustudy.backend.admin.dto.*;
 import harustudy.backend.content.repository.ContentRepository;
+import harustudy.backend.member.domain.LoginType;
+import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participant.domain.Step;
 import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.study.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,10 +42,14 @@ public class AdminService {
                 .toList();
     }
 
-    public List<AdminMemberResponse> findMembers(Pageable pageable) {
-        return memberRepository.findAll(pageable)
-                .map(AdminMemberResponse::from)
+    public AdminMembersResponse findMembers(Pageable pageable, String loginType) {
+        Page<Member> memberPages = memberRepository.findAllByLoginTypeIs(pageable, LoginType.from(loginType));
+
+        long totalCount = memberPages.getTotalElements();
+        List<AdminMemberResponse> responses = memberPages.map(AdminMemberResponse::from)
                 .toList();
+
+        return AdminMembersResponse.of(totalCount, responses);
     }
 
     public List<AdminContentResponse> findContents(Pageable pageable) {

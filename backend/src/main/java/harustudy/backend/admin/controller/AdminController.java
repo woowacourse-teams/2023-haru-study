@@ -1,6 +1,11 @@
 package harustudy.backend.admin.controller;
 
-import harustudy.backend.admin.dto.*;
+import harustudy.backend.admin.dto.AdminContentResponse;
+import harustudy.backend.admin.dto.AdminLoginRequest;
+import harustudy.backend.admin.dto.AdminMembersResponse;
+import harustudy.backend.admin.dto.AdminParticipantCodeResponse;
+import harustudy.backend.admin.dto.AdminParticipantResponse;
+import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.admin.service.AdminAuthService;
 import harustudy.backend.admin.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,7 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,9 +43,9 @@ public class AdminController {
     }
 
     @GetMapping("/members")
-    public ResponseEntity<List<AdminMemberResponse>> findMembers(Pageable pageable) {
-        List<AdminMemberResponse> members = adminService.findMembers(pageable);
-        return ResponseEntity.ok(members);
+    public ResponseEntity<AdminMembersResponse> findMembers(Pageable pageable, @RequestParam String loginType) {
+        AdminMembersResponse response = adminService.findMembers(pageable, loginType);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/studies")

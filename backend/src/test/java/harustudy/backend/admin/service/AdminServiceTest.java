@@ -2,6 +2,7 @@ package harustudy.backend.admin.service;
 
 import harustudy.backend.admin.dto.AdminContentResponse;
 import harustudy.backend.admin.dto.AdminMemberResponse;
+import harustudy.backend.admin.dto.AdminMembersResponse;
 import harustudy.backend.admin.dto.AdminParticipantResponse;
 import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.content.domain.Content;
@@ -57,16 +58,35 @@ class AdminServiceTest {
     }
 
     @Test
-    void 멤버를_페이징_기반으로_조회할_수_있다() {
+    void 게스트로_로그인한_멤버를_페이징_기반으로_조회할_수_있다() {
         // given
         PageRequest pageRequest = PageRequest.of(1, 5);
 
         // when
-        List<AdminMemberResponse> members = adminService.findMembers(pageRequest);
+        AdminMembersResponse response = adminService.findMembers(pageRequest, "GUEST");
 
         // then
-        assertThat(members).hasSize(5);
+        assertThat(response.totalCount()).isEqualTo(15);
+        assertThat(response.members()).hasSize(5);
     }
+
+    @Test
+    void 소셜_로그인한_멤버를_페이징_기반으로_조회할_수_있다() {
+        // given
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Member member = new Member("name", "email", "imageUrl", LoginType.GOOGLE);
+
+        entityManager.persist(member);
+        entityManager.flush();
+
+        // when
+        AdminMembersResponse response = adminService.findMembers(pageRequest, "GOOGLE");
+
+        // then
+        assertThat(response.totalCount()).isEqualTo(1);
+        assertThat(response.members()).hasSize(1);
+    }
+
 
     @Test
     void 스터디를_페이징_기반으로_조회할_수_있다() {
