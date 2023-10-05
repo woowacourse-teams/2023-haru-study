@@ -5,6 +5,7 @@ import harustudy.backend.admin.dto.AdminLoginRequest;
 import harustudy.backend.admin.dto.AdminMembersResponse;
 import harustudy.backend.admin.dto.AdminParticipantCodeResponse;
 import harustudy.backend.admin.dto.AdminParticipantResponse;
+import harustudy.backend.admin.dto.AdminStudyContentResponse;
 import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.admin.service.AdminAuthService;
 import harustudy.backend.admin.service.AdminService;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -82,5 +84,12 @@ public class AdminController {
     public ResponseEntity<List<AdminStudyResponse>> findStudiesDoneToday(Pageable pageable) {
         List<AdminStudyResponse> studies = adminService.findStudiesDoneToday(pageable);
         return ResponseEntity.ok(studies);
+    }
+
+    @GetMapping("/studies/{studyId}/contents")
+    public ResponseEntity<AdminStudyContentResponse> findContentsOfStudy(Pageable pageable,
+                                                                         @PathVariable Long studyId) {
+        AdminStudyContentResponse response = adminService.findContentsOfStudies(pageable, studyId);
+        return ResponseEntity.ok(response);
     }
 }

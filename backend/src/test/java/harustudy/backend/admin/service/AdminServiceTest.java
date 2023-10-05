@@ -4,6 +4,7 @@ import harustudy.backend.admin.dto.AdminContentResponse;
 import harustudy.backend.admin.dto.AdminMemberResponse;
 import harustudy.backend.admin.dto.AdminMembersResponse;
 import harustudy.backend.admin.dto.AdminParticipantResponse;
+import harustudy.backend.admin.dto.AdminStudyContentResponse;
 import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.content.domain.Content;
 import harustudy.backend.member.domain.LoginType;
@@ -13,6 +14,7 @@ import harustudy.backend.participant.domain.Step;
 import harustudy.backend.study.domain.Study;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -40,18 +42,21 @@ class AdminServiceTest {
     @Autowired
     private AdminService adminService;
 
+    private Study study;
+    private Content content;
+
     @BeforeEach
     void setUp() {
         int DUMMY_SIZE = 15;
 
         for (int i = 0; i < DUMMY_SIZE; i++) {
+            study = new Study("name", 1, 20);
             Member member = new Member("name", "email", "imageUrl", LoginType.GUEST);
-            Study study = new Study("name", 1, 20);
             Participant participant = Participant.instantiateParticipantWithContents(study, member, "nickname");
-            Content content = new Content(participant, 1);
+            content = new Content(participant, 1);
 
-            entityManager.persist(member);
             entityManager.persist(study);
+            entityManager.persist(member);
             entityManager.persist(participant);
             entityManager.persist(content);
         }
@@ -178,5 +183,22 @@ class AdminServiceTest {
         assertThat(studies)
                 .hasSize(1)
                 .allMatch(each -> each.step().equals(Step.DONE.name()));
+    }
+
+    @Test
+    void 특정_스터디의_정보와_관련_컨텐츠_정보를_조회할_수_있다() {
+        // given
+        PageRequest pageRequest = PageRequest.of(0, 5);
+
+        // when
+        AdminStudyContentResponse response = adminService.findContentsOfStudies(pageRequest, study.getId());
+
+        // then
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(response.studyId()).isEqualTo(study.getId());
+            softly.assertThat(response.studyName()).isEqualTo(study.getName());
+            softly.assertThat(response.contents()).hasSize(1);
+            softly.assertThat(response.contents()).contains(AdminContentResponse.from(content));
+        });
     }
 }

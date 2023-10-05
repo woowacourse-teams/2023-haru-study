@@ -1,6 +1,7 @@
 package harustudy.backend.admin.service;
 
 import harustudy.backend.admin.dto.*;
+import harustudy.backend.content.domain.Content;
 import harustudy.backend.content.repository.ContentRepository;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
@@ -8,6 +9,7 @@ import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participant.domain.Step;
 import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
+import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -79,6 +81,13 @@ public class AdminService {
                 LocalDateTime.now(), Step.DONE)
                 .map(AdminStudyResponse::from)
                 .toList();
+    }
+
+    public AdminStudyContentResponse findContentsOfStudies(Pageable pageable, Long studyId) {
+        Study study = studyRepository.findByIdIfExists(studyId);
+        List<Content> contents = contentRepository.findAllByStudy(pageable, study);
+
+        return AdminStudyContentResponse.of(study, contents);
     }
 
     private LocalDateTime findMidnightTime() {
