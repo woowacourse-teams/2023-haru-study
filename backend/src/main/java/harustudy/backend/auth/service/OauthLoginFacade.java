@@ -1,11 +1,10 @@
 package harustudy.backend.auth.service;
 
-import harustudy.backend.auth.util.OauthProviderManager;
+import harustudy.backend.auth.domain.oauth.OauthClients;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
-import harustudy.backend.auth.domain.oauth.OauthClient;
 import harustudy.backend.auth.util.OauthUserInfoExtractor;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OauthLoginFacade {
 
-    private final OauthClient oauthClient;
+    private final OauthClients oauthClients;
     private final AuthService authService;
 
     public TokenResponse oauthLogin(OauthLoginRequest request) {
@@ -24,13 +23,9 @@ public class OauthLoginFacade {
     }
 
     private UserInfo requestUserInfo(String oauthProvider, String code) {
-        OauthProviderManager.setCurrentProviderName(oauthProvider);
-
-        OauthTokenResponse oauthToken = oauthClient.requestOauthToken(code);
+        OauthTokenResponse oauthToken = oauthClients.requestOauthToken(oauthProvider, code);
         Map<String, Object> oauthUserInfo =
-                oauthClient.requestOauthUserInfo(oauthToken.accessToken());
-
-        OauthProviderManager.clear();
+                oauthClients.requestOauthUserInfo(oauthProvider, oauthToken.accessToken());
         return OauthUserInfoExtractor.extract(oauthProvider, oauthUserInfo);
     }
 }

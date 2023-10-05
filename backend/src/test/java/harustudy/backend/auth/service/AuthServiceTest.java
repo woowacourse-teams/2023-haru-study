@@ -7,11 +7,11 @@ import static org.mockito.BDDMockito.given;
 
 import harustudy.backend.auth.config.TokenConfig;
 import harustudy.backend.auth.domain.RefreshToken;
+import harustudy.backend.auth.domain.oauth.OauthClients;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
-import harustudy.backend.auth.domain.oauth.GoogleOauthClient;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import jakarta.persistence.EntityManager;
@@ -44,7 +44,7 @@ class AuthServiceTest {
     private EntityManager entityManager;
 
     @MockBean
-    private GoogleOauthClient googleOauthClient;
+    private OauthClients oauthClients;
 
     @Test
     void 구글_로그인시_멤버가_저장되고_멤버_아이디의_액세스_토큰과_갱신_토큰을_반환한다() {
@@ -52,11 +52,9 @@ class AuthServiceTest {
         OauthLoginRequest request = new OauthLoginRequest("google", "google-code");
         UserInfo userInfo = new UserInfo("test", "test@test.com", "test.png");
 
-        given(googleOauthClient.supports(any(String.class)))
-                .willReturn(true);
-        given(googleOauthClient.requestOauthToken(any(String.class)))
+        given(oauthClients.requestOauthToken(any(String.class), any(String.class)))
                 .willReturn(new OauthTokenResponse("Bearer", "google-access-token", "scope"));
-        given(googleOauthClient.requestOauthUserInfo(any(String.class)))
+        given(oauthClients.requestOauthUserInfo(any(String.class), any(String.class)))
                 .willReturn(Map.of("name", userInfo.name(), "email", userInfo.email(), "picture",
                         userInfo.imageUrl()));
 

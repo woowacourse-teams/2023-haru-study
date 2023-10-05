@@ -10,5 +10,5 @@ public interface OauthClient {
 
     Map<String, Object> requestOauthUserInfo(String accessToken);
 
-    Boolean supports(String providerName);
+    String getProviderName();
 }

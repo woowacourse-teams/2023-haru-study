@@ -56,7 +56,7 @@ public class KakaoOauthClient implements OauthClient {
     }
 
     @Override
-    public Boolean supports(String providerName) {
-        return PROVIDER_NAME.equals(providerName);
+    public String getProviderName() {
+        return PROVIDER_NAME;
     }
 }
