@@ -1,55 +1,60 @@
-import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const useMemberCalendarRecordSearchParams = () => {
-  const navigate = useNavigate();
-
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const urlYear = searchParams.get('year');
-  const urlMonth = searchParams.get('month');
+  const [urlParams, setUrlParams] = useState({
+    urlYear: searchParams.get('year') || String(new Date().getFullYear()),
+    urlMonth: searchParams.get('month') || String(new Date().getMonth() + 1),
+  });
 
-  const urlDate = new Date(Number(urlYear), Number(urlMonth) - 1);
+  useEffect(() => {
+    setSearchParams(urlParams);
+  }, [setSearchParams, urlParams]);
 
   const updateUrlMonth = (type: 'next' | 'prev' | 'today') => {
+    let newUrlYear: string | null = null;
+    let newUrlMonth: string | null = null;
+
     if (type === 'today') {
       const today = new Date();
-      const year = String(today.getFullYear());
-      const month = String(today.getMonth() + 1);
+      const currentYear = String(today.getFullYear());
+      const currentMonth = String(today.getMonth() + 1);
 
-      setSearchParams({ year, month });
-
-      return;
+      newUrlYear = currentYear;
+      newUrlMonth = currentMonth;
     }
 
-    const updatedMonth = Number(urlMonth) + (type === 'next' ? +1 : -1);
+    const updatedMonth = Number(urlParams.urlMonth) + (type === 'next' ? +1 : -1);
 
     if (updatedMonth === 0) {
-      setSearchParams({ year: String(Number(urlYear) - 1), month: '12' });
-
-      return;
+      newUrlYear = String(Number(urlParams.urlYear) - 1);
+      newUrlMonth = '12';
     }
 
     if (updatedMonth === 13) {
-      setSearchParams({ year: String(Number(urlYear) + 1), month: '1' });
-
-      return;
+      newUrlYear = String(Number(urlParams.urlYear) + 1);
+      newUrlMonth = '1';
     }
 
-    setSearchParams({ year: urlYear || '2023', month: String(updatedMonth) });
+    if (updatedMonth < 13 && updatedMonth > 1) {
+      newUrlYear = urlParams.urlYear || '2023';
+      newUrlMonth = String(updatedMonth);
+    }
+
+    setUrlParams({ urlYear: newUrlYear!, urlMonth: newUrlMonth! });
   };
 
   const updateUrlDate = (year: number, month: number) => {
-    setSearchParams({ year: String(year), month: String(month) });
+    setUrlParams({ urlYear: String(year), urlMonth: String(month) });
   };
 
-  useEffect(() => {
-    if (!urlYear || !urlMonth) {
-      navigate('/404');
-    }
-  }, [urlYear, urlMonth, navigate]);
-
-  return { urlDate, updateUrlMonth, updateUrlDate };
+  return {
+    urlDate: new Date(Number(urlParams.urlYear), Number(urlParams.urlMonth) - 1),
+    updateUrlMonth,
+    updateUrlDate,
+  };
 };
 
 export default useMemberCalendarRecordSearchParams;

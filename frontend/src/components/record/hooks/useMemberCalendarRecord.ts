@@ -24,9 +24,7 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
 
   const { mutate, isLoading } = useMutation(() => requestGetMemberCalendarRecord(memberId, startDate, endDate), {
     onSuccess: (result) => {
-      if (!result) return;
-
-      const studyRecords = result?.data.studyRecords;
+      const studyRecords = result.data.studyRecords;
 
       const calendarRecord = monthStorage.map((item) => {
         const records = studyRecords[format.date(item.date, '-')] || [];
