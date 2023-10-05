@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import calendar from '@Utils/calendar';
 
-const useCalendar = (date?: Date) => {
+const useCalendar = (date: Date | null) => {
   const standardDate = date || new Date();
 
   const [year, setYear] = useState(standardDate.getFullYear());
@@ -14,6 +14,7 @@ const useCalendar = (date?: Date) => {
       const today = new Date();
 
       setYear(today.getFullYear());
+      setNavigationYear(today.getFullYear());
       setMonth(today.getMonth() + 1);
 
       return;

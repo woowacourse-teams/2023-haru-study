@@ -9,6 +9,8 @@ import color from '@Styles/color';
 
 import ArrowIcon from '@Assets/icons/ArrowIcon';
 
+import useMemberCalendarRecordSearchParams from '../hooks/useMemberCalendarRecordSearchParams';
+
 type Props = {
   year: number;
   month: number;
@@ -28,7 +30,20 @@ const MemberRecordCalendarControlBar = ({
 }: Props) => {
   const [isOpenCalendarNavigation, setIsOpenCalendarNavigation] = useState(false);
 
+  const { updateSearchMonth, updateSearchDate } = useMemberCalendarRecordSearchParams();
+
   const ref = useOutsideClick<HTMLDivElement>(() => setIsOpenCalendarNavigation(false));
+
+  const handleClickMonthShiftButton = (type: 'prev' | 'next' | 'today') => {
+    updateSearchMonth(type);
+    handleMonthShift(type);
+  };
+
+  const handleClickMonthNavigation = (month: number) => {
+    updateSearchDate(navigationYear, month);
+    handleNavigationMonth(month);
+    setIsOpenCalendarNavigation(false);
+  };
 
   return (
     <Layout ref={ref}>
@@ -37,13 +52,13 @@ const MemberRecordCalendarControlBar = ({
         <ArrowIcon direction="down" />
       </Typography>
       <MonthShiftButtonContainer>
-        <MonthShiftButton onClick={() => handleMonthShift('prev')}>
+        <MonthShiftButton onClick={() => handleClickMonthShiftButton('prev')}>
           <ArrowIcon direction="left" />
         </MonthShiftButton>
-        <MonthShiftButton onClick={() => handleMonthShift('next')}>
+        <MonthShiftButton onClick={() => handleClickMonthShiftButton('next')}>
           <ArrowIcon direction="right" />
         </MonthShiftButton>
-        <ShiftTodayButton onClick={() => handleMonthShift('today')}>오늘</ShiftTodayButton>
+        <ShiftTodayButton onClick={() => handleClickMonthShiftButton('today')}>오늘</ShiftTodayButton>
       </MonthShiftButtonContainer>
       {isOpenCalendarNavigation && (
         <CalendarNavigation>
@@ -59,10 +74,7 @@ const MemberRecordCalendarControlBar = ({
               <Month
                 $isCurMonth={index + 1 === month && year === navigationYear}
                 key={index}
-                onClick={() => {
-                  handleNavigationMonth(index + 1);
-                  setIsOpenCalendarNavigation(false);
-                }}
+                onClick={() => handleClickMonthNavigation(index + 1)}
               >
                 {index + 1}월
               </Month>

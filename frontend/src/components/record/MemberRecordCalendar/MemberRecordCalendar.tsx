@@ -8,6 +8,7 @@ import color from '@Styles/color';
 import CalendarDayOfWeeks from '../CalendarDayOfWeeks/CalendarDayOfWeeks';
 import MemberRecordCalendarControlBar from '../MemberRecordCalendarControlBar/MemberRecordCalendarControlBar';
 import MemberRecordCalendarDays from '../MemberRecordCalendarDays/MemberRecordCalendarDays';
+import useMemberCalendarRecordSearchParams from '../hooks/useMemberCalendarRecordSearchParams';
 
 type Props = {
   memberId: string;
@@ -16,8 +17,10 @@ type Props = {
 const MemberRecordCalendar = ({ memberId }: Props) => {
   const calendarRef = useRef<HTMLUListElement>(null);
 
+  const { searchDate } = useMemberCalendarRecordSearchParams();
+
   const { year, month, navigationYear, monthStorage, handleMonthShift, handleNavigationMonth, handleNavigationYear } =
-    useCalendar();
+    useCalendar(searchDate);
 
   return (
     <Layout>

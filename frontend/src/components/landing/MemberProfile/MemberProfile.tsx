@@ -33,6 +33,8 @@ const MemberProfile = () => {
   const memberInfo = useMemberInfo();
   const { clearMemberInfo } = useMemberInfoAction();
 
+  const today = new Date();
+
   if (!memberInfo) {
     return <></>;
   }
@@ -47,7 +49,13 @@ const MemberProfile = () => {
 
   const memberMenu = (
     <>
-      <Menu.Item onClick={() => navigate(ROUTES_PATH.memberRecord)}>스터디 기록</Menu.Item>
+      <Menu.Item
+        onClick={() =>
+          navigate(`${ROUTES_PATH.memberRecord}/calendar?year=${today.getFullYear()}&month=${today.getMonth() + 1}`)
+        }
+      >
+        스터디 기록
+      </Menu.Item>
       <Menu.Item onClick={clearMemberInfo} bottomSeparator>
         로그아웃
       </Menu.Item>

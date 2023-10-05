@@ -1,21 +1,30 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { styled, css } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
+import { ROUTES_PATH } from '@Constants/routes';
+
 import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
 import MemberRecords from '../MemberRecords/MemberRecords';
 
 const MemberRecordContents = () => {
+  const { mode: viewMode } = useParams<{ mode: 'calendar' | 'list' }>();
+
   const navigate = useNavigate();
 
-  const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
-
   const memberInfo = useMemberInfo();
+
+  const today = new Date();
+
+  const handleClickViewModeButton = (mode: 'calendar' | 'list') => {
+    if (mode === 'calendar')
+      navigate(`${ROUTES_PATH.memberRecord}/calendar?year=${today.getFullYear()}&month=${today.getMonth() + 1}`);
+    else navigate(`${ROUTES_PATH.memberRecord}/${mode}`);
+  };
 
   if (memberInfo?.loginType === 'guest') {
     navigate('/404');
@@ -34,15 +43,15 @@ const MemberRecordContents = () => {
             {memberInfo.name}님의 스터디 기록
           </Typography>
           <ViewModeButtonContainer>
-            <ViewModeButton $isSelected={viewMode === 'list'} onClick={() => setViewMode('list')}>
+            <ViewModeButton $isSelected={viewMode === 'list'} onClick={() => handleClickViewModeButton('list')}>
               목록
             </ViewModeButton>
-            <ViewModeButton $isSelected={viewMode === 'calendar'} onClick={() => setViewMode('calendar')}>
+            <ViewModeButton $isSelected={viewMode === 'calendar'} onClick={() => handleClickViewModeButton('calendar')}>
               달력
             </ViewModeButton>
           </ViewModeButtonContainer>
         </Title>
-        <MemberRecords memberId={memberInfo.memberId} viewMode={viewMode} />
+        <MemberRecords memberId={memberInfo.memberId} viewMode={viewMode!} />
       </>
     )
   );
