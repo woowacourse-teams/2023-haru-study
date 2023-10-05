@@ -1,13 +1,15 @@
 import { authHandler } from './authHandler';
-import { participantsHandlers } from './participantsHandlers';
-import { studyBoardHandlers } from './studyBoardHandler';
-import { studyInfoHandlers } from './studyInfoHandlers';
+import { ContentsHandler } from './contentsHandler';
+import { participantsHandler } from './participantsHandler';
+import { pollingHandler } from './pollingHandler';
+import { studiesHandler } from './studiesHandler';
 import { studyRecordHandlers } from './studyRecordHandlers';
 
 export const handlers = [
-  ...studyInfoHandlers,
-  ...participantsHandlers,
-  ...studyRecordHandlers,
-  ...studyBoardHandlers,
   ...authHandler,
+  ...ContentsHandler,
+  ...participantsHandler,
+  ...pollingHandler,
+  ...studiesHandler,
+  ...studyRecordHandlers,
 ];
