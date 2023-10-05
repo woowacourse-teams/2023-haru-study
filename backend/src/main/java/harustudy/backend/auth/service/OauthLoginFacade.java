@@ -1,12 +1,10 @@
 package harustudy.backend.auth.service;
 
-import harustudy.backend.auth.config.OauthProperties;
-import harustudy.backend.auth.config.OauthProperty;
+import harustudy.backend.auth.domain.oauth.OauthClients;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
-import harustudy.backend.auth.infrastructure.GoogleOauthClient;
 import harustudy.backend.auth.util.OauthUserInfoExtractor;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OauthLoginFacade {
 
-    private final OauthProperties oauthProperties;
-    private final GoogleOauthClient googleOauthClient;
+    private final OauthClients oauthClients;
     private final AuthService authService;
 
     public TokenResponse oauthLogin(OauthLoginRequest request) {
@@ -26,10 +23,9 @@ public class OauthLoginFacade {
     }
 
     private UserInfo requestUserInfo(String oauthProvider, String code) {
-        OauthProperty oauthProperty = oauthProperties.get(oauthProvider);
-        OauthTokenResponse oauthToken = googleOauthClient.requestOauthToken(code, oauthProperty);
+        OauthTokenResponse oauthToken = oauthClients.requestOauthToken(oauthProvider, code);
         Map<String, Object> oauthUserInfo =
-                googleOauthClient.requestOauthUserInfo(oauthProperty, oauthToken.accessToken());
+                oauthClients.requestOauthUserInfo(oauthProvider, oauthToken.accessToken());
         return OauthUserInfoExtractor.extract(oauthProvider, oauthUserInfo);
     }
 }

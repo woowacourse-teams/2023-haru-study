@@ -1,10 +1,5 @@
 package harustudy.backend.common.exception;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
-
 import harustudy.backend.auth.exception.*;
 import harustudy.backend.content.exception.ContentNotFoundException;
 import harustudy.backend.member.exception.MemberNotFoundException;
@@ -24,6 +19,8 @@ import harustudy.backend.polling.exception.CannotSeeSubmittersException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.springframework.http.HttpStatus.*;
 
 public class ExceptionMapper {
 
@@ -91,6 +88,8 @@ public class ExceptionMapper {
                 ExceptionSituation.of("유효하지 않은 인증 헤더 형식입니다.", BAD_REQUEST, 1404));
         mapper.put(RefreshTokenNotExistsException.class,
                 ExceptionSituation.of("갱신 토큰이 존재하지 않습니다.", BAD_REQUEST, 1405));
+        mapper.put(OauthServerException.class,
+                ExceptionSituation.of("인증 서버에 문제가 생겼습니다.", INTERNAL_SERVER_ERROR, 1406));
     }
 
     private static void setUpAuthorizationException() {
