@@ -26,12 +26,14 @@ const MemberRecordList = ({ memberId }: Props) => {
       <PaginationButton
         totalPagesNumber={totalPagesNumber}
         currentPageNumber={currentPageNumber}
+        isLoading={isLoading}
         shiftPage={shiftPage}
       />
       <MemberRecordItems memberRecords={memberRecords} isLoading={isLoading} />
       <PaginationButton
         totalPagesNumber={totalPagesNumber}
         currentPageNumber={currentPageNumber}
+        isLoading={isLoading}
         shiftPage={shiftPage}
       />
     </Layout>

@@ -25,9 +25,9 @@ const MemberRecordItems = ({ memberRecords, isLoading }: Props) => {
 
   return (
     <Layout>
-      {memberRecords?.map((record) => {
-        return <MemberRecordItem key={record.studyId} record={record} handleClickStudyItem={handleClickStudyItem} />;
-      })}
+      {memberRecords?.map((record) => (
+        <MemberRecordItem key={record.studyId} record={record} handleClickStudyItem={handleClickStudyItem} />
+      ))}
     </Layout>
   );
 };

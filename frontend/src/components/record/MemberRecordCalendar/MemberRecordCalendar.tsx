@@ -65,6 +65,8 @@ type DaysProps = {
 };
 
 const CalendarWrapper = styled.ul<DaysProps>`
+  position: relative;
+
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: ${({ $numberOfWeeks }) => `repeat(${$numberOfWeeks}, minmax(135px, auto))`};

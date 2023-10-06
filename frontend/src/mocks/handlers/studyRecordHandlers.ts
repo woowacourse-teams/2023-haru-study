@@ -657,7 +657,7 @@ export const studyRecordHandlers = [
           pageInfo: STUDY_LIST4.pageInfo,
         };
 
-    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
+    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(studyList), ctx.delay(1000));
 
     if (accessToken !== requestAuthToken)
       return res(
@@ -669,7 +669,7 @@ export const studyRecordHandlers = [
         }),
       );
 
-    return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
+    return res(ctx.status(200), ctx.json(studyList), ctx.delay(1000));
   }),
 
   rest.get('/api/view/calendar/study-records', (req, res, ctx) => {

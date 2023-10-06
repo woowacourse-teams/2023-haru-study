@@ -16,8 +16,13 @@ type Props = {
 };
 
 const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props) => {
-  const [calendarRecord, setCalendarRecord] = useState<CalendarRecord[]>([]);
-  const [calendarData, setCalendarData] = useState<'name' | 'count'>('name');
+  const [calendarRecord, setCalendarRecord] = useState<CalendarRecord[]>(
+    monthStorage.map((item) => {
+      return { ...item, records: [], restRecordsNumber: 0 };
+    }),
+  );
+
+  const [calendarData, setCalendarData] = useState<'name' | 'count' | null>(null);
 
   const startDate = format.date(new Date(monthStorage.at(0)!.date), '-');
   const endDate = format.date(new Date(monthStorage.at(-1)!.date), '-');
@@ -51,7 +56,6 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
 
       return;
     }
-
     mutate();
   }, [startDate, endDate]);
 

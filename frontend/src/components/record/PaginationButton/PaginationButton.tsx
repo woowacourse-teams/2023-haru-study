@@ -9,10 +9,11 @@ import ArrowIcon from '@Assets/icons/ArrowIcon';
 type Props = {
   totalPagesNumber: number;
   currentPageNumber: number;
+  isLoading: boolean;
   shiftPage: (page: number) => void;
 };
 
-const PaginationButton = ({ totalPagesNumber, currentPageNumber, shiftPage }: Props) => {
+const PaginationButton = ({ totalPagesNumber, currentPageNumber, isLoading, shiftPage }: Props) => {
   const { send } = useNotification();
 
   const handleClickPageButton = (page: number) => {
@@ -33,33 +34,37 @@ const PaginationButton = ({ totalPagesNumber, currentPageNumber, shiftPage }: Pr
     shiftPage(page);
   };
 
-  const renderingPageButtons =
-    totalPagesNumber < 6
-      ? Array.from({ length: totalPagesNumber }).map((_, index) => index + 1)
-      : currentPageNumber < 5
-      ? [1, 2, 3, 4, 5]
-      : currentPageNumber === totalPagesNumber
-      ? Array.from({ length: totalPagesNumber })
-          .map((_, index) => index + 1)
-          .slice(-5)
-      : Array.from({ length: totalPagesNumber })
-          .map((_, index) => index + 1)
-          .slice(currentPageNumber - 4, currentPageNumber + 1);
+  const getRenderingPageButtons = () => {
+    const renderingPages = Array.from({ length: totalPagesNumber }).map((_, index) => index + 1);
+
+    if (totalPagesNumber < 6) return renderingPages.slice();
+
+    if (currentPageNumber < 5) return renderingPages.slice(0, 5);
+
+    if (currentPageNumber === totalPagesNumber) return renderingPages.slice(-5);
+
+    return renderingPages.slice(currentPageNumber - 4, currentPageNumber + 1);
+  };
 
   return (
     <Layout>
-      <Button onClick={() => handleClickPageButton(currentPageNumber - 1)}>
+      <Button disabled={isLoading} onClick={() => handleClickPageButton(currentPageNumber - 1)}>
         <ArrowIcon color={color.neutral[500]} direction="left" />
       </Button>
-      {renderingPageButtons.map((pageNumber) => {
+      {getRenderingPageButtons().map((pageNumber) => {
         const isCurrentButton = currentPageNumber === pageNumber;
         return (
-          <Button key={pageNumber} onClick={() => handleClickPageButton(pageNumber)} $isCurrentButton={isCurrentButton}>
+          <Button
+            disabled={isLoading}
+            key={pageNumber}
+            onClick={() => handleClickPageButton(pageNumber)}
+            $isCurrentButton={isCurrentButton}
+          >
             {pageNumber}
           </Button>
         );
       })}
-      <Button onClick={() => handleClickPageButton(currentPageNumber + 1)}>
+      <Button disabled={isLoading} onClick={() => handleClickPageButton(currentPageNumber + 1)}>
         <ArrowIcon color={color.neutral[500]} direction="right" />
       </Button>
     </Layout>

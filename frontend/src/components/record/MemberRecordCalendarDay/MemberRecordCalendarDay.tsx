@@ -17,7 +17,7 @@ import MemberRecordsModal from '../MemberRecordsModal/MemberRecordsModal';
 
 type Props = {
   record: CalendarRecord;
-  calendarData: 'name' | 'count';
+  calendarData: 'name' | 'count' | null;
 };
 
 const MemberRecordCalendarDay = ({ record, calendarData }: Props) => {
