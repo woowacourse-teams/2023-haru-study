@@ -16,7 +16,6 @@ import harustudy.backend.view.dto.StudyRecordsPageResponse;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -96,12 +95,6 @@ class ViewServiceTest {
         //when
         StudyRecordsPageResponse response = viewService.findStudyRecordsPage(authMember, pageable,
                 member.getId(), startDate, endDate);
-
-        List<Study> allStudies = studyRepository.findAll();
-        for (Study study : allStudies) {
-            System.out.println("study: " + study.getCreatedDate());
-        }
-
 
         //then
         assertSoftly(softly -> {
