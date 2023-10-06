@@ -2,8 +2,8 @@ import { authHandler } from './authHandler';
 import { contentsHandler } from './contentsHandler';
 import { participantsHandler } from './participantsHandler';
 import { pollingHandler } from './pollingHandler';
+import { queryHandlers } from './qeuryHandlers';
 import { studiesHandler } from './studiesHandler';
-import { studyRecordHandlers } from './studyRecordHandlers';
 
 export const handlers = [
   ...authHandler,
@@ -11,5 +11,5 @@ export const handlers = [
   ...participantsHandler,
   ...pollingHandler,
   ...studiesHandler,
-  ...studyRecordHandlers,
+  ...queryHandlers,
 ];
