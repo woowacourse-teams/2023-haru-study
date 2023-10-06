@@ -35,9 +35,9 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
   const actions: Actions = useMemo(
     () => ({
       refetchMemberInfo: refetch,
-      clearMemberInfo: async () => {
+      clearMemberInfo: () => {
         tokenStorage.removeAccessToken();
-        await requestPostLogout();
+        requestPostLogout();
         clearResult();
         navigate(ROUTES_PATH.landing);
       },
