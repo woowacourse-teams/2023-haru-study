@@ -21,7 +21,7 @@ const EmptyMemberRecord = () => {
           text-align: center;
         `}
       >
-        아직 완료한 스터디가 없어요.
+        완료한 스터디가 없어요.
         <br />
         스터디를 시작해 보세요.
       </Typography>
