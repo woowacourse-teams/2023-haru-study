@@ -74,7 +74,7 @@ const ParticipantRecordItem = ({ studyId, nickname, participantId }: Props) => {
                   <Typography variant="h5">
                     <PencilIcon color={color.teal[500]} />
                     {nickname}
-                    {getPostPosition(nickname)} 작성한 목표
+                    {getPostPosition(nickname)} 작성한 회고
                   </Typography>
                   {getKeys<Retrospect>(RETROSPECT_KEYWORDS).map((key) => (
                     <QuestionAnswer
