@@ -16,7 +16,7 @@ import {
 } from '../mockData';
 
 export const queryHandler = [
-  // 스터디 기록 페이지 조회
+  // 스터디 기록 페이지 조회 API
   rest.get('/api/view/study-records', (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
@@ -71,7 +71,7 @@ export const queryHandler = [
     return res(ctx.status(200), ctx.json(studyList), ctx.delay(1000));
   }),
 
-  // 달력 기반 스터디 기록 조회
+  // 달력 기반 스터디 기록 조회 API
   rest.get('/api/view/calendar/study-records', (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
