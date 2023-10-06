@@ -22,20 +22,6 @@ export type Participant = {
   isHost: boolean;
 };
 
-export type StudyBasicInfo = {
-  studyId: string;
-  name: string;
-  timePerCycle: StudyTimePerCycleOptions;
-  totalCycle: TotalCycleOptions;
-  createdDateTime: string;
-};
-
-export type StudyData = {
-  studyId: string;
-  memberId: string;
-} & StudyBasicInfo &
-  Progress;
-
 export type ParticipantRecordContent = {
   cycle: number;
   plan: PlanList;
@@ -50,14 +36,12 @@ export type Retrospect = 'doneAsExpected' | 'experiencedDifficulty' | 'lesson';
 
 export type RetrospectList = Record<Retrospect, string>;
 
-// 새로 바뀌는거
-
 export type StudyInfo = {
   studyId: string;
   name: string;
   totalCycle: number;
   timePerCycle: number;
-  createdDateTime: string;
+  createdDate: string;
 };
 
 export type ProgressInfo = {

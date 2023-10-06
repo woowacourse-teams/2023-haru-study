@@ -1,14 +1,13 @@
 import useFetch from '@Hooks/api/useFetch';
 
-import { requestGetStudyData } from '@Apis/index';
+import { requestGetOneStudyData } from '@Apis/index';
 
 const useStudyData = (studyId: string) => {
-  const { result, isLoading } = useFetch(() => requestGetStudyData(studyId), {
+  const { result, isLoading } = useFetch(() => requestGetOneStudyData(studyId), {
     suspense: false,
   });
-  const studyBasicInfo = result?.data;
 
-  return { studyBasicInfo, isLoading };
+  return { studyBasicInfo: result, isLoading };
 };
 
 export default useStudyData;

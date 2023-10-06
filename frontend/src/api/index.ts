@@ -6,17 +6,15 @@ import type {
   ResponseOneStudyInfo,
   ResponseMemberContents,
   ResponseStudies,
-  ResponseStudyData,
   ResponseMemberListRecord,
   ResponseMemberCalenderRecord,
   ResponseStudyParticipants,
+  ResponseCheckParticipants,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
 import http from './httpInstance';
-
-export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyData>(`/api/studies/${studyId}`);
 
 export const requestGetMemberListRecord = (
   memberId: string,
