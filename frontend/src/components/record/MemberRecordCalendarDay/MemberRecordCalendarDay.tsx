@@ -10,7 +10,7 @@ import { useModal } from '@Contexts/ModalProvider';
 import format from '@Utils/format';
 
 import type { CalendarRecord } from '@Types/record';
-import type { StudyBasicInfo } from '@Types/study';
+import type { StudyInfo } from '@Types/study';
 
 import CalendarDay from '../CalendarDay/CalendarDay';
 import MemberRecordsModal from '../MemberRecordsModal/MemberRecordsModal';
@@ -31,7 +31,7 @@ const MemberRecordCalendarDay = ({ record, calendarData }: Props) => {
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
 
-  const openRecordsDetail = (fullDate: string, studies: StudyBasicInfo[]) => {
+  const openRecordsDetail = (fullDate: string, studies: StudyInfo[]) => {
     if (studies.length < 1) return;
 
     openModal(<MemberRecordsModal fullDate={fullDate} studies={studies} handleClickStudyItem={handleClickStudyItem} />);

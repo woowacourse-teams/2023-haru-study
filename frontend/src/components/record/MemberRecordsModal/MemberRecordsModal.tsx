@@ -5,13 +5,13 @@ import Typography from '@Components/common/Typography/Typography';
 
 import { useModal } from '@Contexts/ModalProvider';
 
-import type { StudyBasicInfo } from '@Types/study';
+import type { StudyInfo } from '@Types/study';
 
 import MemberRecordItem from '../MemberRecordItem/MemberRecordItem';
 
 type Props = {
   fullDate: string;
-  studies: StudyBasicInfo[];
+  studies: StudyInfo[];
   handleClickStudyItem: (studyId: string) => void;
 };
 

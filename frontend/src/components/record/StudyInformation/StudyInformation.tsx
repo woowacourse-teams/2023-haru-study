@@ -21,9 +21,7 @@ type Props = {
 const StudyInformation = ({ studyId }: Props) => {
   const { studyBasicInfo, isLoading } = useStudyData(studyId);
 
-  const displayDate = studyBasicInfo?.createdDateTime
-    ? format.date(new Date(studyBasicInfo?.createdDateTime))
-    : '/년 /월 /일';
+  const displayDate = studyBasicInfo?.createdDate ? format.date(new Date(studyBasicInfo?.createdDate)) : '/년 /월 /일';
 
   if (isLoading) {
     return <StudyInformationSkeleton />;

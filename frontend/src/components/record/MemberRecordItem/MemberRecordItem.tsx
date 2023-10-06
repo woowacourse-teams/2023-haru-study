@@ -9,10 +9,10 @@ import TimeLineIcon from '@Assets/icons/TimeLineIcon';
 
 import format from '@Utils/format';
 
-import type { StudyBasicInfo } from '@Types/study';
+import type { StudyInfo } from '@Types/study';
 
 type Props = {
-  record: StudyBasicInfo;
+  record: StudyInfo;
   handleClickStudyItem: (studyId: string) => void;
 };
 
@@ -21,7 +21,7 @@ const MemberRecordItem = ({ record, handleClickStudyItem }: Props) => {
     <StudyItem key={record.studyId} onClick={() => handleClickStudyItem(record.studyId)}>
       <StudyNameDateContainer>
         <Typography variant="h6">{record.name} 스터디</Typography>
-        <StudyDate>{format.date(new Date(record.createdDateTime))}</StudyDate>
+        <StudyDate>{format.date(new Date(record.createdDate))}</StudyDate>
       </StudyNameDateContainer>
       <StudyCycleInfoLayout>
         <StudyCycleInfoContainer>

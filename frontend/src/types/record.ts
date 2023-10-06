@@ -1,4 +1,4 @@
-import type { StudyBasicInfo } from './study';
+import type { StudyInfo } from './study';
 
 export type MonthStorage = {
   day: number;
@@ -12,6 +12,6 @@ export type CalendarRecord = {
   dayOfWeek: number;
   date: Date;
   state: 'prev' | 'cur' | 'next';
-  records: StudyBasicInfo[];
+  records: StudyInfo[];
   restRecordsNumber: number;
 };

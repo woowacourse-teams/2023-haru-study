@@ -5,7 +5,7 @@ import useMutation from '@Hooks/api/useMutation';
 
 import { requestGetMemberListRecord } from '@Apis/index';
 
-import type { StudyBasicInfo } from '@Types/study';
+import type { StudyInfo } from '@Types/study';
 
 import { useMemberRecordPeriod } from '../contexts/MemberRecordPeriodProvider';
 
@@ -16,7 +16,7 @@ type Props = {
 const useMemberListRecord = ({ memberId }: Props) => {
   const { startDate, endDate, page, triggerSearchRecord, updatePage } = useMemberRecordPeriod();
 
-  const [memberRecords, setMemberRecords] = useState<StudyBasicInfo[] | null>(null);
+  const [memberRecords, setMemberRecords] = useState<StudyInfo[] | null>(null);
   const [totalPagesNumber, setTotalPagesNumber] = useState<number>(1);
 
   const { mutate, result, isLoading } = useMutation(() =>

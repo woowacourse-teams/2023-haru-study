@@ -3,14 +3,14 @@ import { styled } from 'styled-components';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-import type { StudyBasicInfo } from '@Types/study';
+import type { StudyInfo } from '@Types/study';
 
 import MemberRecordItemsSkeleton from './MemberRecordItemsSkeleton';
 import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
 import MemberRecordItem from '../MemberRecordItem/MemberRecordItem';
 
 type Props = {
-  memberRecords: StudyBasicInfo[] | null;
+  memberRecords: StudyInfo[] | null;
   isLoading: boolean;
 };
 
