@@ -1,11 +1,6 @@
 package harustudy.backend.study.service;
 
 import harustudy.backend.auth.dto.AuthMember;
-import harustudy.backend.member.domain.Member;
-import harustudy.backend.member.exception.MemberNotFoundException;
-import harustudy.backend.member.repository.MemberRepository;
-import harustudy.backend.participant.domain.Participant;
-import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.participantcode.domain.GenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
@@ -16,11 +11,12 @@ import harustudy.backend.study.dto.StudyResponse;
 import harustudy.backend.study.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.study.exception.StudyNotFoundException;
 import harustudy.backend.study.repository.StudyRepository;
-import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Transactional
@@ -28,8 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudyService {
 
     private final StudyRepository studyRepository;
-    private final ParticipantRepository participantRepository;
-    private final MemberRepository memberRepository;
     private final GenerationStrategy generationStrategy;
     private final ParticipantCodeRepository participantCodeRepository;
 
@@ -55,20 +49,8 @@ public class StudyService {
     }
 
     private StudiesResponse findStudyByMemberId(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
-        List<Participant> participants = participantRepository.findByMember(member);
-
-        List<Study> studies = mapToStudies(participants);
-
+        List<Study> studies = studyRepository.findByMemberId(memberId);
         return StudiesResponse.from(studies);
-    }
-
-    // TODO: N+1
-    private List<Study> mapToStudies(List<Participant> participants) {
-        return participants.stream()
-                .map(Participant::getStudy)
-                .toList();
     }
 
     public Long createStudy(CreateStudyRequest request) {
