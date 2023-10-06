@@ -4,6 +4,8 @@ import { rest } from 'msw';
 import format from '@Utils/format';
 
 import {
+  ACCESS_TOKEN,
+  NEW_ACCESS_TOKEN,
   STUDY_LIST_10,
   STUDY_LIST_8,
   STUDY_LIST_9,
@@ -13,13 +15,7 @@ import {
   STUDY_LIST_WEEK,
 } from '../mockData';
 
-const accessToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkxNTY4NDI4LCJleHAiOjE2OTE1NzIwMjh9.BfGH7jBxO_iixmlpzxHKV7d9ekJPegLxrpY9ME066ro';
-
-const newAccessToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxMjM0NTY3fQ.NUiutjXo0mcIBU5fWxfjpBEvPxakFiBaUCg4THKAYpQ';
-
-export const queryHandlers = [
+export const queryHandler = [
   // 스터디 기록 페이지 조회
   rest.get('/api/view/study-records', (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
@@ -60,9 +56,9 @@ export const queryHandlers = [
           pageInfo: STUDY_LIST_WEEK.pageInfo,
         };
 
-    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(studyList), ctx.delay(1000));
+    if (requestAuthToken === NEW_ACCESS_TOKEN) return res(ctx.status(200), ctx.json(studyList), ctx.delay(1000));
 
-    if (accessToken !== requestAuthToken)
+    if (ACCESS_TOKEN !== requestAuthToken)
       return res(
         ctx.status(401),
         ctx.delay(100),
@@ -94,9 +90,9 @@ export const queryHandlers = [
     const studyList =
       startDate === '2023-07-30' ? STUDY_LIST_8 : startDate === '2023-08-27' ? STUDY_LIST_9 : STUDY_LIST_10;
 
-    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
+    if (requestAuthToken === NEW_ACCESS_TOKEN) return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
 
-    if (accessToken !== requestAuthToken)
+    if (ACCESS_TOKEN !== requestAuthToken)
       return res(
         ctx.status(401),
         ctx.delay(100),
