@@ -52,7 +52,7 @@ export type ResponsePlanList = PlanList;
 
 export type ResponseStudyData = StudyBasicInfo;
 
-export type ResponseStudyDataList = {
+export type ResponseMemberRecords = {
   studies: StudyBasicInfo[];
 };
 
@@ -82,4 +82,16 @@ export type ResponseMemberContents = {
     plan: PlanList;
     retrospect: RetrospectList;
   }[];
+};
+
+export type ResponseMemberListRecord = {
+  studyRecords: StudyBasicInfo[];
+  pageInfo: {
+    pageNum: number;
+    totalPages: number;
+  };
+};
+
+export type ResponseMemberCalenderRecord = {
+  studyRecords: Record<string, StudyBasicInfo[]>;
 };

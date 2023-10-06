@@ -1,6 +1,8 @@
 import { rest } from 'msw';
 
-import type { Participant, StudyBasicInfo } from '@Types/study';
+import format from '@Utils/format';
+
+import type { MemberProgress } from '@Types/study';
 
 const STUDY_CONTENT = {
   content: [
@@ -150,38 +152,390 @@ const STUDY_METADATA = {
   createdDateTime: '2023-08-15T06:25:39.093Z',
 };
 
-const STUDY_LIST: { studies: StudyBasicInfo[] } = {
-  studies: [
-    {
-      studyId: '1',
-      name: '안오면 지상렬',
-      totalCycle: 3,
-      timePerCycle: 60,
+// 전체기간
+const STUDY_LIST: {
+  studyRecords: {
+    studyId: string;
+    name: string;
+    timePerCycle: number;
+    totalCycle: number;
+    createdDateTime: string;
+  }[];
+  pageInfo: {
+    totalPages: number;
+  };
+} = {
+  studyRecords: Array.from({ length: 218 }).map((_, index) => {
+    return {
+      studyId: String(index),
+      name: `안오면 지상렬${index + 1} 전체`,
+      totalCycle: Math.floor(Math.random() * 8) + 1,
+      timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
       createdDateTime: '2023-08-16T13:33:02.810Z',
-    },
-    {
-      studyId: '2',
-      name: '와도 지상렬 지상렬',
-      totalCycle: 6,
-      timePerCycle: 30,
-      createdDateTime: '2023-08-14T13:33:02.810Z',
-    },
-    {
-      studyId: '3',
-      name: '심야 공부방',
-      totalCycle: 3,
-      timePerCycle: 50,
-      createdDateTime: '2023-08-12T13:33:02.810Z',
-    },
-    {
-      studyId: '4',
-      name: '짧고 빠른 공부방',
-      totalCycle: 3,
-      timePerCycle: 20,
-      createdDateTime: '2023-08-11T13:33:02.810Z',
-    },
-  ],
+    };
+  }),
+  pageInfo: {
+    totalPages: 10,
+  },
 };
+
+// 3개월
+const STUDY_LIST2: {
+  studyRecords: {
+    studyId: string;
+    name: string;
+    timePerCycle: number;
+    totalCycle: number;
+    createdDateTime: string;
+  }[];
+  pageInfo: {
+    totalPages: number;
+  };
+} = {
+  studyRecords: Array.from({ length: 50 }).map((_, index) => {
+    return {
+      studyId: String(index),
+      name: `안오면 지상렬${index + 1} 3개월`,
+      totalCycle: Math.floor(Math.random() * 8) + 1,
+      timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+      createdDateTime: '2023-08-16T13:33:02.810Z',
+    };
+  }),
+  pageInfo: {
+    totalPages: 2,
+  },
+};
+
+// 1개월
+const STUDY_LIST3: {
+  studyRecords: {
+    studyId: string;
+    name: string;
+    timePerCycle: number;
+    totalCycle: number;
+    createdDateTime: string;
+  }[];
+  pageInfo: {
+    totalPages: number;
+  };
+} = {
+  studyRecords: Array.from({ length: 27 }).map((_, index) => {
+    return {
+      studyId: String(index),
+      name: `안오면 지상렬${index + 1} 1개월`,
+      totalCycle: Math.floor(Math.random() * 8) + 1,
+      timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+      createdDateTime: '2023-08-16T13:33:02.810Z',
+    };
+  }),
+  pageInfo: {
+    totalPages: 1,
+  },
+};
+
+// 1주일
+const STUDY_LIST4: {
+  studyRecords: {
+    studyId: string;
+    name: string;
+    timePerCycle: number;
+    totalCycle: number;
+    createdDateTime: string;
+  }[];
+  pageInfo: {
+    totalPages: number;
+  };
+} = {
+  studyRecords: Array.from({ length: 12 }).map((_, index) => {
+    return {
+      studyId: String(index),
+      name: `안오면 지상렬${index + 1} 1주일`,
+      totalCycle: Math.floor(Math.random() * 8) + 1,
+      timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+      createdDateTime: '2023-08-16T13:33:02.810Z',
+    };
+  }),
+  pageInfo: {
+    totalPages: 0,
+  },
+};
+
+// 8월 기록
+const STUDY_LIST5: {
+  studyRecords: Record<
+    string,
+    { studyId: string; name: string; timePerCycle: number; totalCycle: number; createdDateTime: string }[]
+  >;
+} = {
+  studyRecords: {
+    '2023-08-01': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-08-02': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-08-03': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-08-09': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-08-14': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-08-15': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-08-19': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-08-20': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-08-29': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-08-30': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+  },
+};
+
+// 9월 기록
+const STUDY_LIST6: {
+  studyRecords: Record<
+    string,
+    { studyId: string; name: string; timePerCycle: number; totalCycle: number; createdDateTime: string }[]
+  >;
+} = {
+  studyRecords: {
+    '2023-08-29': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-08-30': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-09-01': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-09-02': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-09-13': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-09-14': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-09-15': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-09-21': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-09-22': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-09-26': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-09-27': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-09-28': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-09-30': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+  },
+};
+
+const STUDY_LIST7: {
+  studyRecords: Record<
+    string,
+    { studyId: string; name: string; timePerCycle: number; totalCycle: number; createdDateTime: string }[]
+  >;
+} = {
+  studyRecords: {
+    '2023-10-01': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-10-02': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-10-03': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+    '2023-10-04': Array.from({ length: Math.floor(Math.random() * 5) + 1 }).map((_, index) => {
+      return {
+        studyId: String(index),
+        name: `안오면 지상렬${index + 1} 8월`,
+        totalCycle: Math.floor(Math.random() * 8) + 1,
+        timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+        createdDateTime: '2023-08-16T13:33:02.810Z',
+      };
+    }),
+  },
+};
+
+// 10월 기록
 
 const accessToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkxNTY4NDI4LCJleHAiOjE2OTE1NzIwMjh9.BfGH7jBxO_iixmlpzxHKV7d9ekJPegLxrpY9ME066ro';
@@ -244,10 +598,46 @@ export const studyRecordHandlers = [
     return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(400));
   }),
 
-  rest.get('/api/studies?memberId=1', (req, res, ctx) => {
+  rest.get('/api/view/study-records', (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
-    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_LIST), ctx.delay(400));
+    const searchParams: Record<string, string> = {};
+
+    req.url.search
+      .substring(1)
+      .split('&')
+      .map((item) => item.split('='))
+      .forEach(([key, value]) => {
+        searchParams[key] = value;
+      });
+
+    const page = Number(searchParams.page);
+
+    const startDate = 'startDate' in searchParams ? searchParams.startDate : null;
+    const today = new Date();
+    const month = today.getMonth();
+
+    const studyList = !startDate
+      ? {
+          studyRecords: STUDY_LIST.studyRecords.slice(20 * page, 20 * (page + 1)),
+          pageInfo: STUDY_LIST.pageInfo,
+        }
+      : startDate === format.date(new Date(today.setMonth(month - 3)), '-')
+      ? {
+          studyRecords: STUDY_LIST2.studyRecords.slice(20 * page, 20 * (page + 1)),
+          pageInfo: STUDY_LIST2.pageInfo,
+        }
+      : startDate === format.date(new Date(today.setMonth(month - 1)), '-')
+      ? {
+          studyRecords: STUDY_LIST3.studyRecords.slice(20 * page, 20 * (page + 1)),
+          pageInfo: STUDY_LIST3.pageInfo,
+        }
+      : {
+          studyRecords: STUDY_LIST4.studyRecords.slice(20 * page, 20 * (page + 1)),
+          pageInfo: STUDY_LIST4.pageInfo,
+        };
+
+    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(studyList), ctx.delay(1000));
 
     if (accessToken !== requestAuthToken)
       return res(
@@ -259,6 +649,38 @@ export const studyRecordHandlers = [
         }),
       );
 
-    return res(ctx.status(200), ctx.json(STUDY_LIST), ctx.delay(400));
+    return res(ctx.status(200), ctx.json(studyList), ctx.delay(1000));
+  }),
+
+  rest.get('/api/view/calendar/study-records', (req, res, ctx) => {
+    const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
+
+    const searchParams: Record<string, string> = {};
+
+    req.url.search
+      .substring(1)
+      .split('&')
+      .map((item) => item.split('='))
+      .forEach(([key, value]) => {
+        searchParams[key] = value;
+      });
+
+    const startDate = 'startDate' in searchParams ? searchParams.startDate : null;
+
+    const studyList = startDate === '2023-07-30' ? STUDY_LIST5 : startDate === '2023-08-27' ? STUDY_LIST6 : STUDY_LIST7;
+
+    if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
+
+    if (accessToken !== requestAuthToken)
+      return res(
+        ctx.status(401),
+        ctx.delay(100),
+        ctx.json({
+          message: '만료된 갱신 토큰입니다.',
+          code: 1403,
+        }),
+      );
+
+    return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
   }),
 ];

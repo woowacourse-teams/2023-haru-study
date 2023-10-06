@@ -52,7 +52,7 @@ const router = createBrowserRouter([
         element: <StudyParticipation />,
       },
       {
-        path: ROUTES_PATH.memberRecord,
+        path: `${ROUTES_PATH.memberRecord}/:mode`,
         element: <MemberRecord />,
       },
       {

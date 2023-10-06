@@ -7,8 +7,8 @@ import type {
   ResponseMemberContents,
   ResponseStudies,
   ResponseStudyData,
-  ResponseStudyDataList,
-  ResponseCheckParticipants,
+  ResponseMemberListRecord,
+  ResponseMemberCalenderRecord,
   ResponseStudyParticipants,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
@@ -18,8 +18,27 @@ import http from './httpInstance';
 
 export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyData>(`/api/studies/${studyId}`);
 
-export const requestGetMemberStudyListData = (memberId: string) =>
-  http.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`);
+export const requestGetMemberListRecord = (
+  memberId: string,
+  page: number,
+  size: number,
+  startDate?: string,
+  endDate?: string,
+) => {
+  if (startDate && endDate)
+    return http.get<ResponseMemberListRecord>(
+      `/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}&startDate=${startDate}&endDate=${endDate}&sort=createdDate,desc`,
+    );
+
+  return http.get<ResponseMemberListRecord>(
+    `/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}&sort=createdDate,desc`,
+  );
+};
+
+export const requestGetMemberCalendarRecord = (memberId: string, startDate: string, endDate: string) =>
+  http.get<ResponseMemberCalenderRecord>(
+    `/api/view/calendar/study-records?memberId=${memberId}&startDate=${startDate}&endDate=${endDate}`,
+  );
 
 export const requestGetStudyParticipants = (studyId: string) =>
   http.get<ResponseStudyParticipants>(`/api/studies/${studyId}/participants`);
