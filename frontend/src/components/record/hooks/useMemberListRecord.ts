@@ -36,7 +36,7 @@ const useMemberListRecord = ({ memberId }: Props) => {
 
     setMemberRecords(studyRecords || []);
     if (totalPagesNumber === 1 || pageInfo.totalPages !== pageInfo.totalPages + 1)
-      setTotalPagesNumber(pageInfo.totalPages + 1);
+      setTotalPagesNumber(pageInfo.totalPages);
   }, [result]);
 
   return { memberRecords, isLoading, totalPagesNumber, shiftPage, currentPageNumber: page };
