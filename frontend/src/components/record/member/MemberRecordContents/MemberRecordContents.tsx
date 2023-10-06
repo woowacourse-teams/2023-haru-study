@@ -9,7 +9,7 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 
-import MemberRecords from '../MemberRecords/MemberRecords';
+import MemberRecordMode from '../MemberRecordMode/MemberRecordMode';
 
 const MemberRecordContents = () => {
   const { mode: viewMode } = useParams<{ mode: 'calendar' | 'list' }>();
@@ -53,7 +53,7 @@ const MemberRecordContents = () => {
             </ViewModeButton>
           </ViewModeButtonContainer>
         </Title>
-        <MemberRecords memberId={memberInfo.memberId} viewMode={viewMode!} />
+        <MemberRecordMode memberId={memberInfo.memberId} viewMode={viewMode!} />
       </>
     )
   );

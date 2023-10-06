@@ -7,9 +7,9 @@ import color from '@Styles/color';
 
 import type { MonthStorage } from '@Types/record';
 
-import MemberRecordCalendarDay from '../MemberRecordCalendarDay/MemberRecordCalendarDay';
-import MemberRecordCalendarDaySkeleton from '../MemberRecordCalendarDay/MemberRecordCalendarDaySkeleton';
-import useMemberCalendarRecord from '../hooks/useMemberCalendarRecord';
+import useMemberCalendarRecord from '../../../hooks/useMemberCalendarRecord';
+import MemberRecordCalendarDayItem from '../MemberRecordCalendarDayItem/MemberRecordCalendarDayItem';
+import MemberRecordCalendarDayItemSkeleton from '../MemberRecordCalendarDayItem/MemberRecordCalendarDayItemSkeleton';
 
 type Props = {
   monthStorage: MonthStorage;
@@ -17,11 +17,11 @@ type Props = {
   calendarRef: React.RefObject<HTMLUListElement>;
 };
 
-const MemberRecordCalendarDays = ({ monthStorage, memberId, calendarRef }: Props) => {
+const MemberRecordCalendarDayList = ({ monthStorage, memberId, calendarRef }: Props) => {
   const { calendarRecord, calendarData, isLoading } = useMemberCalendarRecord({ monthStorage, calendarRef, memberId });
 
   if (isLoading && calendarData === 'name') {
-    return <MemberRecordCalendarDaySkeleton monthStorage={monthStorage} />;
+    return <MemberRecordCalendarDayItemSkeleton monthStorage={monthStorage} />;
   }
 
   return (
@@ -38,13 +38,13 @@ const MemberRecordCalendarDays = ({ monthStorage, memberId, calendarRef }: Props
         </LoadingBar>
       )}
       {calendarRecord.map((record, index) => (
-        <MemberRecordCalendarDay key={index} record={record} calendarData={calendarData} />
+        <MemberRecordCalendarDayItem key={index} record={record} calendarData={calendarData} />
       ))}
     </>
   );
 };
 
-export default MemberRecordCalendarDays;
+export default MemberRecordCalendarDayList;
 
 const LoadingBar = styled.div`
   position: absolute;

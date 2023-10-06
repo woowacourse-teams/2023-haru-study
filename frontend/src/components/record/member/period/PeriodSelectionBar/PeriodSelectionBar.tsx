@@ -13,9 +13,9 @@ import { useNotification } from '@Contexts/NotificationProvider';
 
 import CalenderIcon from '@Assets/icons/CalenderIcon';
 
+import type { Period } from '../../../contexts/MemberRecordPeriodProvider';
+import { useMemberRecordPeriod } from '../../../contexts/MemberRecordPeriodProvider';
 import PeriodSelectCalendar from '../PeriodSelectCalendar/PeriodSelectCalendar';
-import type { Period } from '../contexts/MemberRecordPeriodProvider';
-import { useMemberRecordPeriod } from '../contexts/MemberRecordPeriodProvider';
 
 const periodTypes: Period[] = ['week', 'oneMonth', 'threeMonth', 'entire'];
 

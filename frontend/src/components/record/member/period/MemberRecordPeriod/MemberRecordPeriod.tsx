@@ -1,15 +1,15 @@
 import { styled } from 'styled-components';
 
-import MemberRecordItems from '../MemberRecordItems/MemberRecordItems';
+import useMemberListRecord from '../../../hooks/useMemberListRecord';
+import MemberRecordPeriodList from '../MemberRecordPeriodList/MemberRecordPeriodList';
 import PaginationButton from '../PaginationButton/PaginationButton';
 import PeriodSelectionBar from '../PeriodSelectionBar/PeriodSelectionBar';
-import useMemberListRecord from '../hooks/useMemberListRecord';
 
 type Props = {
   memberId: string;
 };
 
-const MemberRecordList = ({ memberId }: Props) => {
+const MemberRecordPeriod = ({ memberId }: Props) => {
   const {
     memberRecords,
     isLoading,
@@ -29,7 +29,7 @@ const MemberRecordList = ({ memberId }: Props) => {
         isLoading={isLoading}
         shiftPage={shiftPage}
       />
-      <MemberRecordItems memberRecords={memberRecords} isLoading={isLoading} />
+      <MemberRecordPeriodList memberRecords={memberRecords} isLoading={isLoading} />
       {memberRecords && memberRecords.length > 3 && (
         <PaginationButton
           totalPagesNumber={totalPagesNumber}
@@ -42,7 +42,7 @@ const MemberRecordList = ({ memberId }: Props) => {
   );
 };
 
-export default MemberRecordList;
+export default MemberRecordPeriod;
 
 const Layout = styled.ul`
   display: flex;

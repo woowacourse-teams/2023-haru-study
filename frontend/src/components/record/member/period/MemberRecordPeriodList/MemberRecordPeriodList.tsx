@@ -5,21 +5,21 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import type { StudyInfo } from '@Types/study';
 
-import MemberRecordItemsSkeleton from './MemberRecordItemsSkeleton';
+import MemberRecordPeriodListSkeleton from './MemberRecordPeriodListSkeleton';
+import MemberRecordItem from '../../MemberRecordItem/MemberRecordItem';
 import EmptyMemberRecord from '../EmptyMemberRecord/EmptyMemberRecord';
-import MemberRecordItem from '../MemberRecordItem/MemberRecordItem';
 
 type Props = {
   memberRecords: StudyInfo[] | null;
   isLoading: boolean;
 };
 
-const MemberRecordItems = ({ memberRecords, isLoading }: Props) => {
+const MemberRecordPeriodList = ({ memberRecords, isLoading }: Props) => {
   const navigate = useNavigate();
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
 
-  if (isLoading) return <MemberRecordItemsSkeleton />;
+  if (isLoading) return <MemberRecordPeriodListSkeleton />;
 
   if (memberRecords && memberRecords.length === 0) return <EmptyMemberRecord />;
 
@@ -32,7 +32,7 @@ const MemberRecordItems = ({ memberRecords, isLoading }: Props) => {
   );
 };
 
-export default MemberRecordItems;
+export default MemberRecordPeriodList;
 
 const Layout = styled.ul`
   display: flex;

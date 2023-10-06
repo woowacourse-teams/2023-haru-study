@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import Accordion from '@Components/common/Accordion/Accordion';
 import Typography from '@Components/common/Typography/Typography';
 
-import ParticipantRecord from '../ParticipantRecord/ParticipantRecord';
-import useStudyParticipants from '../hooks/useStudyParticipants';
+import useStudyParticipants from '../../hooks/useStudyParticipants';
+import ParticipantRecordItem from '../ParticipantRecordItem/ParticipantRecordItem';
 
 type Props = {
   studyId: string;
@@ -26,7 +26,7 @@ const ParticipantRecordList = ({ studyId, isRefetch }: Props) => {
             <Typography variant="h5">{nickname}의 기록</Typography>
           </Accordion.Header>
           <Accordion.Panel>
-            <ParticipantRecord studyId={studyId} participantId={participantId} nickname={nickname} />
+            <ParticipantRecordItem studyId={studyId} participantId={participantId} nickname={nickname} />
           </Accordion.Panel>
         </Accordion.Item>
       ))}

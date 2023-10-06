@@ -13,7 +13,7 @@ type Props = {
   monthStorage: MonthStorage;
 };
 
-const MemberRecordCalendarDaySkeleton = ({ monthStorage }: Props) => {
+const MemberRecordCalendarDayItemSkeleton = ({ monthStorage }: Props) => {
   const today = new Date();
 
   return monthStorage.map(({ day, date, dayOfWeek, state }, index) => (
@@ -33,7 +33,7 @@ const MemberRecordCalendarDaySkeleton = ({ monthStorage }: Props) => {
   ));
 };
 
-export default MemberRecordCalendarDaySkeleton;
+export default MemberRecordCalendarDayItemSkeleton;
 
 const Item = styled.li`
   min-height: 135px;

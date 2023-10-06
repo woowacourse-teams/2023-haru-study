@@ -12,7 +12,7 @@ import format from '@Utils/format';
 
 import StudyInformationSkeleton from './StudyInformationSkeleton';
 import { StudyInfoContainer, StudyInformationLayout } from './style';
-import useStudyData from '../hooks/useStudyData';
+import useStudyData from '../../hooks/useStudyData';
 
 type Props = {
   studyId: string;

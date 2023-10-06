@@ -1,6 +1,7 @@
 import { css, styled } from 'styled-components';
 
 import Menu from '@Components/common/Menu/Menu';
+import { useMemberRecordPeriod } from '@Components/record/contexts/MemberRecordPeriodProvider';
 
 import useCalendar from '@Hooks/common/useCalendar';
 
@@ -10,8 +11,7 @@ import ArrowIcon from '@Assets/icons/ArrowIcon';
 
 import format from '@Utils/format';
 
-import CalendarDayOfWeeks from '../CalendarDayOfWeeks/CalendarDayOfWeeks';
-import { useMemberRecordPeriod } from '../contexts/MemberRecordPeriodProvider';
+import CalendarDayOfWeeks from '../../calendar/CalendarDayOfWeeks/CalendarDayOfWeeks';
 
 const MENU_STYLE = css`
   & > div {

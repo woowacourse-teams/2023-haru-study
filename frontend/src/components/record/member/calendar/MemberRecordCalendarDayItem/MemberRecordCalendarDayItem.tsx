@@ -13,14 +13,14 @@ import type { CalendarRecord } from '@Types/record';
 import type { StudyInfo } from '@Types/study';
 
 import CalendarDay from '../CalendarDay/CalendarDay';
-import MemberRecordsModal from '../MemberRecordsModal/MemberRecordsModal';
+import MemberRecordListModal from '../MemberRecordListModal/MemberRecordListModal';
 
 type Props = {
   record: CalendarRecord;
   calendarData: 'name' | 'count' | null;
 };
 
-const MemberRecordCalendarDay = ({ record, calendarData }: Props) => {
+const MemberRecordCalendarDayItem = ({ record, calendarData }: Props) => {
   const { state, records, day, date, restRecordsNumber, dayOfWeek } = record;
 
   const today = new Date();
@@ -34,7 +34,9 @@ const MemberRecordCalendarDay = ({ record, calendarData }: Props) => {
   const openRecordsDetail = (fullDate: string, studies: StudyInfo[]) => {
     if (studies.length < 1) return;
 
-    openModal(<MemberRecordsModal fullDate={fullDate} studies={studies} handleClickStudyItem={handleClickStudyItem} />);
+    openModal(
+      <MemberRecordListModal fullDate={fullDate} studies={studies} handleClickStudyItem={handleClickStudyItem} />,
+    );
   };
 
   return (
@@ -73,7 +75,7 @@ const MemberRecordCalendarDay = ({ record, calendarData }: Props) => {
   );
 };
 
-export default MemberRecordCalendarDay;
+export default MemberRecordCalendarDayItem;
 
 const Layout = styled.li`
   display: flex;

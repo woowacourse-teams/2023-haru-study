@@ -5,10 +5,10 @@ import useCalendar from '@Hooks/common/useCalendar';
 
 import color from '@Styles/color';
 
+import useMemberCalendarRecordSearchParams from '../../../hooks/useMemberCalendarRecordSearchParams';
 import CalendarDayOfWeeks from '../CalendarDayOfWeeks/CalendarDayOfWeeks';
 import MemberRecordCalendarControlBar from '../MemberRecordCalendarControlBar/MemberRecordCalendarControlBar';
-import MemberRecordCalendarDays from '../MemberRecordCalendarDays/MemberRecordCalendarDays';
-import useMemberCalendarRecordSearchParams from '../hooks/useMemberCalendarRecordSearchParams';
+import MemberRecordCalendarDayList from '../MemberRecordCalendarDayList/MemberRecordCalendarDayList';
 
 type Props = {
   memberId: string;
@@ -37,7 +37,7 @@ const MemberRecordCalendar = ({ memberId }: Props) => {
       <Calendar>
         <CalendarDayOfWeeks />
         <CalendarWrapper $numberOfWeeks={monthStorage.length / 7} ref={calendarRef}>
-          <MemberRecordCalendarDays monthStorage={monthStorage} memberId={memberId} calendarRef={calendarRef} />
+          <MemberRecordCalendarDayList monthStorage={monthStorage} memberId={memberId} calendarRef={calendarRef} />
         </CalendarWrapper>
       </Calendar>
     </Layout>
