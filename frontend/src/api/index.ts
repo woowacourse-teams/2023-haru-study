@@ -34,6 +34,8 @@ export const requestPostOAuthLogin = (provider: OAuthProvider, code: string) =>
     body: JSON.stringify({ oauthProvider: provider, code }),
   });
 
+export const requestPostLogout = () => http.post(`/api/auth/logout`);
+
 export const requestGetMemberInfo = () => http.get<ResponseMemberInfo>('/api/me');
 
 export const requestGetOneStudyData = async (studyId: string) => {
