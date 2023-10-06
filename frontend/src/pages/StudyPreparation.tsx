@@ -8,19 +8,19 @@ import ParticipationContents from '@Components/participation/PrticipationContent
 import StudyParticipationLayout from './layout/StudyParticipationLayout';
 
 type LocationState = {
-  state: { participantCode: string; studyName: string; isHost: boolean };
+  state: { studyName: string };
 };
 
 const StudyPreparation = () => {
   const {
-    state: { participantCode, studyName, isHost },
+    state: { studyName },
   } = useLocation() as LocationState;
 
   return (
     <MemberInfoGuard>
       <StudyParticipationLayout headerText={`${studyName} 스터디`}>
         <Suspense fallback={<LoadingFallback />}>
-          <ParticipationContents participantCode={participantCode} studyName={studyName} isHost={isHost} />
+          <ParticipationContents studyName={studyName} />
         </Suspense>
       </StudyParticipationLayout>
     </MemberInfoGuard>

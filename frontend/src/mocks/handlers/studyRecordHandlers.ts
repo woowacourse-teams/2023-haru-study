@@ -89,78 +89,58 @@ const STUDY_CONTENT = {
     },
     {
       cycle: 6,
-      plan: {
-        toDo: '미션 회고 글 포스팅',
-        completionCondition: '한 챕터의 내용을 완성',
-        expectedProbability: '60%',
-        expectedDifficulty: '좋은 글을 쓰기 위해 고민이 많아질 수 있다.',
-        whatCanYouDo: '글을 완벽하게 쓰려고 하기보단 러프하게 먼저 쓴다.',
-      },
-      retrospect: {
-        doneAsExpected: '한 챕터의 절반 정도 작성한 것 같습니다.',
-        experiencedDifficulty:
-          '캡처하고 붙여 넣느라 시간이 좀 걸렸습니다. 그리고 챕터의 방향성이 조금 수정되어서 원할하게 작성하지 못했습니다.',
-        lesson: '글을 한 번에 쓰려고 하지말고 중간중간 틈틈이 기록을 해놔야 할 것 같아요.',
-      },
+      plan: {},
+      retrospect: {},
     },
   ],
 };
 
-const STUDY_MEMBERS: { progresses: MemberProgress[] } = {
-  progresses: [
+const STUDY_MEMBERS: { participants: Participant[] } = {
+  participants: [
     {
-      progressId: '1',
+      participantId: '1',
       nickname: '노아',
-      currentCycle: 3,
-      step: 'done',
+      isHost: true,
     },
     {
-      progressId: '2',
+      participantId: '2',
       nickname: '룩소룩소룩소룩소룩소',
-      currentCycle: 2,
-      step: 'planning',
+      isHost: false,
     },
     {
-      progressId: '3',
+      participantId: '3',
       nickname: '엽토',
-      currentCycle: 3,
-      step: 'retrospect',
+      isHost: false,
     },
     {
-      progressId: '4',
+      participantId: '4',
       nickname: '테오',
-      currentCycle: 3,
-      step: 'done',
+      isHost: false,
     },
     {
-      progressId: '5',
+      participantId: '5',
       nickname: '모디',
-      currentCycle: 3,
-      step: 'done',
+      isHost: false,
     },
     {
-      progressId: '6',
+      participantId: '6',
       nickname: '히이로',
-      currentCycle: 3,
-      step: 'done',
+      isHost: false,
     },
     {
-      progressId: '7',
+      participantId: '7',
       nickname: '마코',
-      currentCycle: 3,
-      step: 'done',
+      isHost: false,
     },
     {
-      progressId: '8',
+      participantId: '8',
       nickname: '도밥',
-      currentCycle: 2,
-      step: 'retrospect',
+      isHost: false,
     },
     {
-      progressId: '9',
+      participantId: '9',
       nickname: 'noah',
-      currentCycle: 1,
-      step: 'retrospect',
+      isHost: false,
     },
   ],
 };
@@ -582,7 +562,7 @@ export const studyRecordHandlers = [
     return res(ctx.status(200), ctx.json(STUDY_METADATA), ctx.delay(400));
   }),
 
-  rest.get('/api/studies/1/progresses', (req, res, ctx) => {
+  rest.get('/api/studies/1/participants', (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
     if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_MEMBERS), ctx.delay(400));
@@ -600,7 +580,7 @@ export const studyRecordHandlers = [
     return res(ctx.status(200), ctx.json(STUDY_MEMBERS), ctx.delay(400));
   }),
 
-  rest.get('/api/studies/:studyId/contents?progressId=1', (req, res, ctx) => {
+  rest.get('/api/studies/:studyId/contents?participant=1', (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
     if (requestAuthToken === newAccessToken) return res(ctx.status(200), ctx.json(STUDY_CONTENT), ctx.delay(400));

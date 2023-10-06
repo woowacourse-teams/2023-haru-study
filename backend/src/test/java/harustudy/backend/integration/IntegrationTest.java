@@ -5,13 +5,12 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.auth.config.OauthProperty;
 import harustudy.backend.auth.config.TokenConfig;
 import harustudy.backend.auth.domain.RefreshToken;
+import harustudy.backend.auth.domain.oauth.OauthClients;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
-import harustudy.backend.auth.infrastructure.GoogleOauthClient;
 import harustudy.backend.auth.repository.RefreshTokenRepository;
 import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.member.domain.LoginType;
@@ -59,10 +58,7 @@ class IntegrationTest {
     private TokenConfig tokenConfig;
 
     @MockBean
-    private GoogleOauthClient googleOauthClient;
-
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
+    private OauthClients oauthClients;
 
     void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
@@ -76,10 +72,10 @@ class IntegrationTest {
         OauthLoginRequest request = new OauthLoginRequest("google", "oauthLoginCode");
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        given(googleOauthClient.requestOauthToken(any(String.class), any(OauthProperty.class)))
+        given(oauthClients.requestOauthToken(any(String.class), any(String.class)))
                 .willReturn(new OauthTokenResponse("mock-token-type", "mock-access-token",
                         "mock-scope"));
-        given(googleOauthClient.requestOauthUserInfo(any(OauthProperty.class), any(String.class)))
+        given(oauthClients.requestOauthUserInfo(any(String.class), any(String.class)))
                 .willReturn(Map.of("name", name, "email", "mock-email", "picture", "mock-picture"));
 
         MvcResult result = mockMvc.perform(
@@ -94,7 +90,13 @@ class IntegrationTest {
         return new LoginResponse(tokenResponse, refreshToken);
     }
 
-    private RefreshToken saveRefreshTokenOf(Member member) {
+    protected Member generateAndSaveMemberNamedWith(String name) {
+        Member member = new Member(name, "email", "imageUrl", LoginType.GOOGLE);
+        entityManager.persist(member);
+        return member;
+    }
+
+    protected RefreshToken generateAndSaveRefreshTokenOf(Member member) {
         RefreshToken refreshToken = new RefreshToken(member,
                 tokenConfig.refreshTokenExpireLength());
         entityManager.persist(refreshToken);
@@ -102,13 +104,10 @@ class IntegrationTest {
     }
 
     protected MemberDto createMember(String name) {
-        Member member = new Member(name, "email", "imageUrl", LoginType.GOOGLE);
-        entityManager.persist(member);
+        Member member = generateAndSaveMemberNamedWith(name);
         String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(member.getId()),
                 tokenConfig.accessTokenExpireLength(), tokenConfig.secretKey());
-        RefreshToken refreshToken = new RefreshToken(member,
-                tokenConfig.refreshTokenExpireLength());
-        entityManager.persist(refreshToken);
+        RefreshToken refreshToken = generateAndSaveRefreshTokenOf(member);
         Cookie cookie = new Cookie("refreshToken", refreshToken.getUuid().toString());
         return new MemberDto(member, accessToken, cookie);
     }

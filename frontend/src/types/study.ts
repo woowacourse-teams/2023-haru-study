@@ -16,11 +16,10 @@ export type Progress = {
   step: Step;
 };
 
-export type MemberProgress = {
-  progressId: string;
+export type Participant = {
+  participantId: string;
   nickname: string;
-  currentCycle: number;
-  step: Step | 'done';
+  isHost: boolean;
 };
 
 export type StudyBasicInfo = {
@@ -37,7 +36,7 @@ export type StudyData = {
 } & StudyBasicInfo &
   Progress;
 
-export type MemberRecordContent = {
+export type ParticipantRecordContent = {
   cycle: number;
   plan: PlanList;
   retrospect: RetrospectList;
@@ -68,4 +67,4 @@ export type ProgressInfo = {
   step: Step | 'done';
 };
 
-export type StudyMode = 'together' | 'solo';
+export type StudyMode = 'group' | 'alone';

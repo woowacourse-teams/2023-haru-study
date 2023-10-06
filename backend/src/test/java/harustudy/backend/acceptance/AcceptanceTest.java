@@ -8,12 +8,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import harustudy.backend.auth.config.OauthProperty;
 import harustudy.backend.auth.config.TokenConfig;
+import harustudy.backend.auth.domain.oauth.OauthClients;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
-import harustudy.backend.auth.infrastructure.GoogleOauthClient;
 import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.content.dto.WritePlanRequest;
 import harustudy.backend.content.dto.WriteRetrospectRequest;
@@ -56,7 +55,7 @@ import org.springframework.web.context.WebApplicationContext;
 class AcceptanceTest {
 
     @MockBean
-    GoogleOauthClient googleOauthClient;
+    private OauthClients oauthClients;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -157,10 +156,10 @@ class AcceptanceTest {
         OauthLoginRequest request = new OauthLoginRequest("google", "oauthLoginCode");
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        given(googleOauthClient.requestOauthToken(any(String.class), any(OauthProperty.class)))
+        given(oauthClients.requestOauthToken(any(String.class), any(String.class)))
                 .willReturn(new OauthTokenResponse("mock-token-type", "mock-access-token",
                         "mock-scope"));
-        given(googleOauthClient.requestOauthUserInfo(any(OauthProperty.class), any(String.class)))
+        given(oauthClients.requestOauthUserInfo(any(String.class), any(String.class)))
                 .willReturn(Map.of("name", "mock-name", "email", "mock-email", "picture",
                         "mock-picture"));
 

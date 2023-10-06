@@ -16,7 +16,7 @@ jest.mock('react-router-dom', () => {
     ...jest.requireActual('react-router-dom'),
     useLocation: () => {
       return {
-        state: { participantCode: '123456', studyName: '하루스터디', isHost: true },
+        state: { studyName: '하루스터디' },
       };
     },
     useParams: () => ({ studyId: '1' }),
@@ -24,8 +24,8 @@ jest.mock('react-router-dom', () => {
 });
 
 const server = setupServer(
-  rest.get('/api/temp/studies/:studyId/progresses', (_, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ progresses: null }));
+  rest.get('/api/temp/studies/:studyId/participants', (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ participants: null }));
   }),
 );
 
@@ -34,7 +34,7 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 describe('스터디 준비 페이지 테스트', () => {
-  test('요청한 Progresses 데이터가 없으면 닉네임 입력 폼이 보여진다.', async () => {
+  test('요청한 Participants 데이터가 없으면 닉네임 입력 폼이 보여진다.', async () => {
     render(
       <MemoryRouter initialEntries={[`/preparation/1`]}>
         <NotificationProvider>
@@ -52,12 +52,12 @@ describe('스터디 준비 페이지 테스트', () => {
     });
   });
 
-  test('요청한 Progresses 데이터가 있다면 이미 스터디 정보가 있다는 폼이 보여진다.', async () => {
+  test('요청한 Participants 데이터가 있다면 이미 스터디 정보가 있다는 폼이 보여진다.', async () => {
     server.use(
-      rest.get('/api/temp/studies/:studyId/progresses', (_, res, ctx) => {
+      rest.get('/api/temp/studies/:studyId/participants', (_, res, ctx) => {
         return res(
           ctx.status(200),
-          ctx.json({ progresses: [{ progressId: 1, nickname: '하루', currentCycle: 1, step: 'planning' }] }),
+          ctx.json({ participants: [{ participantId: 1, nickname: '하루', isHost: false }] }),
         );
       }),
     );

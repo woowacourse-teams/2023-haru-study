@@ -6,11 +6,11 @@ import ResetIcon from '@Assets/icons/ResetIcon';
 
 type Props = {
   isRefetch: boolean;
-  refetchProgressRecordList: () => void;
+  refetchParticipantRecordList: () => void;
 };
 
-const ResetButton = ({ refetchProgressRecordList, isRefetch }: Props) => {
-  const handleClickResetButton = () => refetchProgressRecordList();
+const ResetButton = ({ refetchParticipantRecordList, isRefetch }: Props) => {
+  const handleClickResetButton = () => refetchParticipantRecordList();
 
   return (
     <Layout onClick={handleClickResetButton} role="presentation" $rotateAnimation={isRefetch}>

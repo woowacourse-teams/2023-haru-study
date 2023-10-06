@@ -9,15 +9,15 @@ const StudyModeContent = () => {
   const navigate = useNavigate();
 
   const handleClickCreateStudyItem = () => {
-    navigate(`${ROUTES_PATH.create}?mode=together`);
+    navigate(`${ROUTES_PATH.create}?mode=group`);
   };
 
   const handleClickStudyParticipationItem = () => {
     navigate(`${ROUTES_PATH.participation}`);
   };
 
-  const handleClickSoloStudyItem = () => {
-    navigate(`${ROUTES_PATH.create}?mode=solo`);
+  const handleClickAloneStudyItem = () => {
+    navigate(`${ROUTES_PATH.create}?mode=alone`);
   };
 
   return (
@@ -35,7 +35,7 @@ const StudyModeContent = () => {
       <StudyModeItem
         title="혼자 공부하기"
         description="다른 스터디원 없이 혼자 공부하고 싶어요"
-        onClick={handleClickSoloStudyItem}
+        onClick={handleClickAloneStudyItem}
       />
     </Layout>
   );
