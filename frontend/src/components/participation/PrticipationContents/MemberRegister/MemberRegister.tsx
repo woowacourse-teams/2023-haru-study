@@ -25,7 +25,10 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
 
   const handleOnClickStartButton = async () => {
     const result = await registerParticipants();
-    if (result?.ok) return navigate(`${ROUTES_PATH.progress}/${studyId}`);
+    if (result?.ok)
+      return navigate(`${ROUTES_PATH.lobby}/${studyId}`, {
+        state: { studyName },
+      });
   };
 
   return (
