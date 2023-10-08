@@ -5,15 +5,15 @@ import Typography from '@Components/common/Typography/Typography';
 import color from '@Styles/color';
 
 type Props = {
-  waitingMembers: string[];
+  studyMembers: string[];
 };
 
-const StudyWaitingMembers = ({ waitingMembers }: Props) => {
+const StudyMembers = ({ studyMembers }: Props) => {
   return (
     <Layout>
       <Typography variant="p1">현재 참여한 스터디원</Typography>
       <MembersFiled>
-        {waitingMembers.map((member, index) => (
+        {studyMembers.map((member, index) => (
           <Typography key={index} variant="p2">
             {member}
           </Typography>
@@ -53,4 +53,4 @@ const MembersFiled = styled.div`
   border: 1px solid ${color.neutral[200]};
 `;
 
-export default StudyWaitingMembers;
+export default StudyMembers;
