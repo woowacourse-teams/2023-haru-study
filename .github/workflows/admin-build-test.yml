@@ -1,4 +1,4 @@
-name: frontend-build-test
+name: admin-frontend-build-test
 
 on:
   pull_request:
@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable --immutable-cache --check-cache
 
-      - name: Test & Build
+      - name: Build
         run: yarn build
       
       - name: action-slack
