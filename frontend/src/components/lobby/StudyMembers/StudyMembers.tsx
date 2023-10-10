@@ -3,34 +3,48 @@ import { css, styled } from 'styled-components';
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
+import { TextSkeletonStyle } from '@Styles/common';
+
+import type { Participant } from '@Types/study';
 
 type Props = {
-  studyMembers: string[];
+  studyMembers: Participant[];
 };
 
 const StudyMembers = ({ studyMembers }: Props) => {
   return (
     <Layout>
-      <Typography variant="p1">현재 참여한 스터디원</Typography>
-      <MembersFiled>
-        {studyMembers.map((member, index) => (
-          <Typography key={index} variant="p2">
-            {member}
-          </Typography>
-        ))}
-      </MembersFiled>
       <Typography
-        variant="p3"
+        variant="p1"
         $style={css`
-          align-self: center;
-          color: ${color.neutral[300]};
+          @media screen and (max-width: 768px) {
+            font-size: 2rem;
+          }
         `}
       >
-        스터디원들이 참여할 때까지 기다려주세요.
+        현재 참여한 스터디원
       </Typography>
+      <MemberList>
+        {studyMembers.length === 0 ? (
+          <>
+            <MemberNameSkeleton />
+            <MemberNameSkeleton />
+            <MemberNameSkeleton />
+          </>
+        ) : (
+          studyMembers.map((member) => (
+            <MemberName key={member.participantId}>
+              {member.nickname}
+              {member.isHost ? '(방장)' : ''}
+            </MemberName>
+          ))
+        )}
+      </MemberList>
     </Layout>
   );
 };
+
+export default StudyMembers;
 
 const Layout = styled.div`
   display: flex;
@@ -38,19 +52,28 @@ const Layout = styled.div`
   gap: 10px;
 `;
 
-const MembersFiled = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  justify-items: center;
-  align-items: center;
+const MemberList = styled.div`
+  min-height: 150px;
+
+  display: flex;
+  flex-wrap: wrap;
   gap: 30px;
 
-  width: 100%;
-  height: 100%;
-  padding: 50px 60px;
+  padding: 30px 40px;
 
   border-radius: 7px;
   border: 1px solid ${color.neutral[200]};
 `;
 
-export default StudyMembers;
+const MemberName = styled.p`
+  width: max-content;
+
+  font-size: 2rem;
+`;
+
+const MemberNameSkeleton = styled.div`
+  width: 60px;
+  height: 30px;
+
+  ${TextSkeletonStyle}
+`;

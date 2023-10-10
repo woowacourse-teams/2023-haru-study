@@ -17,17 +17,37 @@ export default meta;
 /**
  * `OneRow`는 멤버가 6명일때 한줄이되는 `StudyMembers` 스토리입니다.
  */
-export const OneRow: Story = {
+export const SixMembers: Story = {
   args: {
-    studyMembers: ['노아', '룩소', '엽토', '테오', '마코', '히이로'],
+    studyMembers: [
+      { participantId: '0', nickname: '노아', isHost: true },
+      { participantId: '1', nickname: '룩소', isHost: true },
+      { participantId: '2', nickname: '마코', isHost: true },
+      { participantId: '3', nickname: '히이로', isHost: true },
+      { participantId: '4', nickname: '테오', isHost: true },
+      { participantId: '5', nickname: '모디', isHost: true },
+    ],
   },
 };
 
 /**
  * `TwoRow`는 멤버가 12명일때 두줄이되는 `StudyMembers` 스토리입니다.
  */
-export const TwoRow: Story = {
+export const TwelveMembers: Story = {
   args: {
-    studyMembers: ['노아', '룩소', '엽토', '테오', '마코', '히이로', '모디', '왼손', '솔라', '준', '구구', '공원'],
+    studyMembers: [
+      { participantId: '0', nickname: '노아', isHost: true },
+      { participantId: '1', nickname: '룩소', isHost: true },
+      { participantId: '2', nickname: '마코', isHost: true },
+      { participantId: '3', nickname: '히이로', isHost: true },
+      { participantId: '4', nickname: '테오', isHost: true },
+      { participantId: '5', nickname: '모디', isHost: true },
+      { participantId: '6', nickname: '노아2', isHost: true },
+      { participantId: '7', nickname: '룩소2', isHost: true },
+      { participantId: '8', nickname: '마코2', isHost: true },
+      { participantId: '9', nickname: '히이로2', isHost: true },
+      { participantId: '10', nickname: '테오2', isHost: true },
+      { participantId: '11', nickname: '모디2', isHost: true },
+    ],
   },
 };
