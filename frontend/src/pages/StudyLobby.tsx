@@ -19,7 +19,7 @@ const StudyLobby = () => {
   return (
     <MemberInfoGuard>
       <StudyParticipationLayout headerText={headerText}>
-        <Suspense fallback={<LoadingFallback height="100vh" />}>
+        <Suspense fallback={<LoadingFallback />}>
           <StudyLobbyContents />
         </Suspense>
       </StudyParticipationLayout>
