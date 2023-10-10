@@ -10,6 +10,7 @@ import type {
   StudyBasicInfo,
   StudyTimePerCycleOptions,
   TotalCycleOptions,
+  StudyStatus,
 } from './study';
 
 export type ResponseAPIError = {
@@ -82,4 +83,13 @@ export type ResponseMemberContents = {
     plan: PlanList;
     retrospect: RetrospectList;
   }[];
+};
+
+export type ResponseParticipantCode = {
+  participantCode: string;
+};
+
+export type ResponseLobbyInfo = {
+  studyStep: StudyStatus;
+  participants: Participant[];
 };
