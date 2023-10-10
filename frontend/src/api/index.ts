@@ -10,6 +10,8 @@ import type {
   ResponseStudyDataList,
   ResponseCheckParticipants,
   ResponseStudyParticipants,
+  ResponseParticipantCode,
+  ResponseLobbyInfo,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
@@ -66,9 +68,6 @@ export const requestWriteRetrospect = (studyId: string, progressId: string, retr
     body: JSON.stringify({ progressId, retrospect: retrospect }),
   });
 
-export const requestNextStep = (studyId: string, progressId: string) =>
-  http.post(`/api/studies/${studyId}/progresses/${progressId}/next-step`);
-
 export const requestPostCreateStudy = async (
   studyName: string,
   totalCycle: TotalCycleOptions | null,
@@ -85,17 +84,17 @@ export const requestPostCreateStudy = async (
 };
 
 export const requestGetAuthenticateParticipationCode = async (participantCode: string) => {
-  const response = http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`);
+  const response = await http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`);
 
-  return (await response).data;
+  return response.data;
 };
 
 export const requestGetCheckParticipants = async (studyId: string, memberId: string) => {
-  const response = http.get<ResponseCheckParticipants>(
+  const response = await http.get<ResponseCheckParticipants>(
     `/api/temp/studies/${studyId}/participants?memberId=${memberId}`,
   );
 
-  return (await response).data;
+  return response.data;
 };
 
 export const requestPostRegisterParticipants = (nickname: string, studyId: string, memberId: string) =>
@@ -105,3 +104,25 @@ export const requestPostRegisterParticipants = (nickname: string, studyId: strin
 
 export const requestDeleteParticipant = (studyId: string, participantId: number) =>
   http.delete(`/api/studies/${studyId}/participants/${participantId}`);
+
+export const requestGetParticipantCode = async (studyId: string) => {
+  const response = await http.get<ResponseParticipantCode>(`/api/participant-codes?studyId=${studyId}`);
+
+  return response.data.participantCode;
+};
+
+export const requestGetParticipant = async (studyId: string, memberId: string) => {
+  const response = await http.get<ResponseStudyParticipants>(
+    `/api/studies/${studyId}/participants?memberId=${memberId}`,
+  );
+
+  return response.data.participants[0];
+};
+
+export const requestGetLobbyInfo = async (studyId: string) => {
+  const response = await http.get<ResponseLobbyInfo>(`/api/waiting?studyId=${studyId}`);
+
+  return response.data;
+};
+
+export const requestPostNextStep = (studyId: string) => http.post(`/api/studies/${studyId}/next-step`);
