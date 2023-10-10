@@ -10,7 +10,7 @@ export const pollingHandler = [
       ctx.status(200),
       ctx.json({
         studyStep: 'waiting',
-        participantId: STUDY_PARTICIPANT_LIST,
+        participants: STUDY_PARTICIPANT_LIST,
       }),
       ctx.delay(500),
     );

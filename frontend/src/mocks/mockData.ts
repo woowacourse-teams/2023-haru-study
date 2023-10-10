@@ -28,7 +28,7 @@ export const STUDY_INFO = {
 
 // 단일 스터디 참여자 조회 데이터
 export const STUDY_PARTICIPANT = {
-  participantId: 0,
+  participantId: 1123,
   nickname: '룩소',
   isHost: true,
 };
