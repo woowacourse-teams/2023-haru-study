@@ -9,6 +9,7 @@ import color from '@Styles/color';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
+import ChatIcon from '@Assets/icons/ChatIcon';
 import GoogleIcon from '@Assets/icons/GoogleIcon';
 
 const REDIRECT_URI_PARAMETER = '/auth?provider=google';
@@ -33,10 +34,16 @@ const LoginModalContents = () => {
       </Typography>
       <ButtonContainer>
         <a href={googleOAuthUrl}>
-          <OAutLoginButton variant="outlined">
+          <GoogleOAuthLoginButton variant="outlined">
             <GoogleIcon />
             <span>구글로 로그인</span>
-          </OAutLoginButton>
+          </GoogleOAuthLoginButton>
+        </a>
+        <a href={googleOAuthUrl}>
+          <KakaoOAuthLoginButton variant="outlined">
+            <ChatIcon color={color.black} />
+            <span>카카오로 로그인</span>
+          </KakaoOAuthLoginButton>
         </a>
         <DividedContainer>
           <DividedLine></DividedLine>
@@ -79,9 +86,7 @@ const OAutLoginButton = styled(Button)`
   position: relative;
 
   border-radius: 8px;
-  border: 1px solid ${color.neutral[300]};
 
-  color: ${color.black};
   font-size: 1.8rem;
 
   svg {
@@ -90,8 +95,30 @@ const OAutLoginButton = styled(Button)`
     bottom: 0;
     left: 32px;
 
+    width: 30px;
+    height: 30px;
+
     display: flex;
     margin: auto 0;
+  }
+`;
+
+const GoogleOAuthLoginButton = styled(OAutLoginButton)`
+  border: 1px solid ${color.neutral[300]};
+
+  color: ${color.black};
+`;
+
+const KakaoOAuthLoginButton = styled(OAutLoginButton)`
+  border: none;
+
+  color: rgba(0, 0, 0, 0.85);
+  background-color: ${color.brand.kakao};
+
+  &:hover {
+    &:enabled {
+      background-color: ${color.brand.kakao};
+    }
   }
 `;
 
