@@ -7,7 +7,6 @@ import type {
   ParticipantRecordContent,
   PlanList,
   Step,
-  StudyBasicInfo,
   StudyTimePerCycleOptions,
   TotalCycleOptions,
   StudyStatus,
@@ -47,14 +46,12 @@ export type ResponseCheckParticipants = {
 export type ResponseMemberStudyMetadata = {
   currentCycle: number;
   step: Step;
-} & StudyBasicInfo;
+} & StudyInfo;
 
 export type ResponsePlanList = PlanList;
 
-export type ResponseStudyData = StudyBasicInfo;
-
-export type ResponseStudyDataList = {
-  studies: StudyBasicInfo[];
+export type ResponseMemberRecords = {
+  studies: StudyInfo[];
 };
 
 export type ResponseStudyParticipants = {
@@ -92,4 +89,16 @@ export type ResponseParticipantCode = {
 export type ResponseLobbyInfo = {
   studyStep: StudyStatus;
   participants: Participant[];
+};
+
+export type ResponseMemberListRecord = {
+  studyRecords: StudyInfo[];
+  pageInfo: {
+    pageNum: number;
+    totalPages: number;
+  };
+};
+
+export type ResponseMemberCalenderRecord = {
+  studyRecords: Record<string, StudyInfo[]>;
 };

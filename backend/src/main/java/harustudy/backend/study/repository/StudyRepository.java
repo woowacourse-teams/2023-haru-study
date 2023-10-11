@@ -38,4 +38,7 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
             @Param("endDate") LocalDateTime endDate,
             Pageable pageable
     );
+
+    @Query("select s from Study s join s.participants p where p.member.id = :memberId")
+    List<Study> findByMemberId(Long memberId);
 }

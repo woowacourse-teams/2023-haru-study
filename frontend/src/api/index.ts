@@ -6,22 +6,39 @@ import type {
   ResponseOneStudyInfo,
   ResponseMemberContents,
   ResponseStudies,
-  ResponseStudyData,
-  ResponseStudyDataList,
-  ResponseCheckParticipants,
+  ResponseMemberListRecord,
+  ResponseMemberCalenderRecord,
   ResponseStudyParticipants,
   ResponseParticipantCode,
   ResponseLobbyInfo,
+  ResponseCheckParticipants,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
 import http from './httpInstance';
 
-export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyData>(`/api/studies/${studyId}`);
+export const requestGetMemberListRecord = (
+  memberId: string,
+  page: number,
+  size: number,
+  startDate?: string,
+  endDate?: string,
+) => {
+  if (startDate && endDate)
+    return http.get<ResponseMemberListRecord>(
+      `/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}&startDate=${startDate}&endDate=${endDate}&sort=createdDate,desc`,
+    );
 
-export const requestGetMemberStudyListData = (memberId: string) =>
-  http.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`);
+  return http.get<ResponseMemberListRecord>(
+    `/api/view/study-records?memberId=${memberId}&page=${page}&size=${size}&sort=createdDate,desc`,
+  );
+};
+
+export const requestGetMemberCalendarRecord = (memberId: string, startDate: string, endDate: string) =>
+  http.get<ResponseMemberCalenderRecord>(
+    `/api/view/calendar/study-records?memberId=${memberId}&startDate=${startDate}&endDate=${endDate}`,
+  );
 
 export const requestGetStudyParticipants = (studyId: string) =>
   http.get<ResponseStudyParticipants>(`/api/studies/${studyId}/participants`);
@@ -35,6 +52,8 @@ export const requestPostOAuthLogin = (provider: OAuthProvider, code: string) =>
   http.post<ResponseAuthToken>(`/api/auth/login`, {
     body: JSON.stringify({ oauthProvider: provider, code }),
   });
+
+export const requestPostLogout = () => http.post(`/api/auth/logout`);
 
 export const requestGetMemberInfo = () => http.get<ResponseMemberInfo>('/api/me');
 

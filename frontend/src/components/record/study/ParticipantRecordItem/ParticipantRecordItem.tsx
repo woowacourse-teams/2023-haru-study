@@ -16,7 +16,7 @@ import { getKeys } from '@Utils/getKeys';
 
 import type { Plan, Retrospect } from '@Types/study';
 
-import useParticipantRecordContents from '../hooks/useParticipantRecordContents';
+import useParticipantRecordContents from '../../hooks/useParticipantRecordContents';
 
 type Props = {
   studyId: string;
@@ -24,7 +24,7 @@ type Props = {
   nickname: string;
 };
 
-const ParticipantRecord = ({ studyId, nickname, participantId }: Props) => {
+const ParticipantRecordItem = ({ studyId, nickname, participantId }: Props) => {
   const { participantRecordContents, isLoading } = useParticipantRecordContents(studyId, participantId);
 
   const isDoneCycle = (selectedTabCycle: number) => {
@@ -74,7 +74,7 @@ const ParticipantRecord = ({ studyId, nickname, participantId }: Props) => {
                   <Typography variant="h5">
                     <PencilIcon color={color.teal[500]} />
                     {nickname}
-                    {getPostPosition(nickname)} 작성한 목표
+                    {getPostPosition(nickname)} 작성한 회고
                   </Typography>
                   {getKeys<Retrospect>(RETROSPECT_KEYWORDS).map((key) => (
                     <QuestionAnswer
@@ -104,7 +104,7 @@ const ParticipantRecord = ({ studyId, nickname, participantId }: Props) => {
   );
 };
 
-export default ParticipantRecord;
+export default ParticipantRecordItem;
 
 const ParticipantRecordLayout = styled.div`
   padding: 40px 30px;

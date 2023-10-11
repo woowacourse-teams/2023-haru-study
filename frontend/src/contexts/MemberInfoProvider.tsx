@@ -9,7 +9,7 @@ import { ROUTES_PATH } from '@Constants/routes';
 import tokenStorage from '@Utils/tokenStorage';
 import url from '@Utils/url';
 
-import { requestGetMemberInfo } from '@Apis/index';
+import { requestGetMemberInfo, requestPostLogout } from '@Apis/index';
 
 import type { MemberInfo } from '@Types/member';
 
@@ -36,7 +36,8 @@ const MemberInfoProvider = ({ children }: PropsWithChildren) => {
     () => ({
       refetchMemberInfo: refetch,
       clearMemberInfo: () => {
-        tokenStorage.clear();
+        tokenStorage.removeAccessToken();
+        requestPostLogout();
         clearResult();
         navigate(ROUTES_PATH.landing);
       },

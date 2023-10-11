@@ -6,6 +6,11 @@ import { hasCookie } from '@Utils/cookie';
 import { ACCESS_TOKEN, NEW_ACCESS_TOKEN, USER_DATA } from '../mockData';
 
 export const authHandler = [
+  // 로그아웃 API
+  rest.post('api/auth/logout', (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
   // 게스트 로그인 API
   rest.post('/api/auth/guest', (req, res, ctx) => {
     return res(
