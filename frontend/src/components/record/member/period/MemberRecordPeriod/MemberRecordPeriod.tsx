@@ -23,12 +23,14 @@ const MemberRecordPeriod = ({ memberId }: Props) => {
   return (
     <Layout>
       <PeriodSelectionBar />
-      <PaginationButton
-        totalPagesNumber={totalPagesNumber}
-        currentPageNumber={currentPageNumber}
-        isLoading={isLoading}
-        shiftPage={shiftPage}
-      />
+      {totalPagesNumber !== 0 && (
+        <PaginationButton
+          totalPagesNumber={totalPagesNumber}
+          currentPageNumber={currentPageNumber}
+          isLoading={isLoading}
+          shiftPage={shiftPage}
+        />
+      )}
       <MemberRecordPeriodList memberRecords={memberRecords} isLoading={isLoading} />
       {memberRecords && memberRecords.length > 3 && (
         <PaginationButton

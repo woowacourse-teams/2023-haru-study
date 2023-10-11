@@ -195,7 +195,7 @@ export const STUDY_LIST_ALL: {
     };
   }),
   pageInfo: {
-    totalPages: 10,
+    totalPages: 11,
   },
 };
 
@@ -222,7 +222,7 @@ export const STUDY_LIST_THREE_MONTH: {
     };
   }),
   pageInfo: {
-    totalPages: 2,
+    totalPages: 3,
   },
 };
 
@@ -249,7 +249,26 @@ export const STUDY_LIST_ONE_MONTH: {
     };
   }),
   pageInfo: {
-    totalPages: 1,
+    totalPages: 2,
+  },
+};
+
+// 1개월 목록 조회
+export const STUDY_LIST_EMPTY: {
+  studyRecords: {
+    studyId: string;
+    name: string;
+    timePerCycle: number;
+    totalCycle: number;
+    createdDate: string;
+  }[];
+  pageInfo: {
+    totalPages: number;
+  };
+} = {
+  studyRecords: [],
+  pageInfo: {
+    totalPages: 0,
   },
 };
 
