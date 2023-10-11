@@ -12,12 +12,14 @@ import { ROUTES_PATH } from '@Constants/routes';
 import ChatIcon from '@Assets/icons/ChatIcon';
 import GoogleIcon from '@Assets/icons/GoogleIcon';
 
-const REDIRECT_URI_PARAMETER = '/auth?provider=google';
+const GOOGLE_AUTH_REDIRECT_URI_PARAMETER = '/auth?provider=google';
+const KAKAO_AUTH_REDIRECT_URI_PARAMETER = '/auth?provider=kakao';
 
 const LoginModalContents = () => {
   const baseUri = `${window.location.protocol}//${window.location.host}`;
 
-  const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${baseUri}${REDIRECT_URI_PARAMETER}`;
+  const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${baseUri}${GOOGLE_AUTH_REDIRECT_URI_PARAMETER}`;
+  const kakaoOAUthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_CLIENT_ID}&redirect_uri=${baseUri}${KAKAO_AUTH_REDIRECT_URI_PARAMETER}&response_type=code`;
 
   return (
     <Layout>
@@ -39,7 +41,7 @@ const LoginModalContents = () => {
             <span>구글로 로그인</span>
           </GoogleOAuthLoginButton>
         </a>
-        <a href={googleOAuthUrl}>
+        <a href={kakaoOAUthUrl}>
           <KakaoOAuthLoginButton variant="outlined">
             <ChatIcon color={color.black} />
             <span>카카오로 로그인</span>
