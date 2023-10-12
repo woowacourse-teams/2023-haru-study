@@ -97,6 +97,7 @@ public class AuthController {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("refreshToken")) {
+                    cookie.setPath("/");
                     cookie.setMaxAge(0);
                     response.addCookie(cookie);
                 }
