@@ -32,9 +32,9 @@ const useStudyLobby = (studyId: string, memberId: string, onStartStudy: () => vo
     participantCode: participantCode,
     isHost: participantInfo?.isHost ?? false,
     studyMembers: lobbyInfo?.participants ?? [],
-    startStudy: () => startStudy(),
+    startStudy,
     isStarting,
-    exitStudy: () => exitStudy(),
+    exitStudy,
     isExiting,
   };
 };
