@@ -43,7 +43,11 @@ const useFetch = <T>(
 
   const fetch = useCallback(() => {
     setStatus('pending');
-    setPromise(request().then(resolvePromise, rejectPromise));
+
+    const requestPromise = request().then(resolvePromise, rejectPromise);
+    setPromise(requestPromise);
+
+    return requestPromise;
   }, []);
 
   const clearResult = () => setResult(null);
