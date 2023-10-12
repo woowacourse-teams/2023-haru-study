@@ -1,9 +1,9 @@
 import useFetch from '@Hooks/api/useFetch';
 
-import { requestGetOneStudyData } from '@Apis/index';
+import { requestGetStudyInfo } from '@Apis/index';
 
 const useStudyData = (studyId: string) => {
-  const { result, isLoading } = useFetch(() => requestGetOneStudyData(studyId), {
+  const { result, isLoading } = useFetch(() => requestGetStudyInfo(studyId), {
     suspense: false,
   });
 
