@@ -6,6 +6,8 @@ import Typography from '@Components/common/Typography/Typography';
 
 import useDisplay from '@Hooks/common/useDisplay';
 
+import color from '@Styles/color';
+
 import { PLAN_QUESTIONS } from '@Constants/study';
 
 import { useModal } from '@Contexts/ModalProvider';
@@ -63,9 +65,21 @@ const PlanningForm = () => {
           </QuestionList>
         )}
       </QuestionLayout>
-      <Button variant="primary" type="submit" onClick={submitForm} isLoading={isSubmitLoading} disabled={isInvalidForm}>
-        학습 시작하기
-      </Button>
+      <ButtonContainer>
+        <StyledButton
+          variant="primary"
+          type="submit"
+          onClick={submitForm}
+          isLoading={isSubmitLoading}
+          disabled={isInvalidForm}
+        >
+          목표 제출하기
+        </StyledButton>
+        <StyledButton variant="outlined" loadingCricleColor={color.blue[500]}>
+          학습 단계로
+          <ArrowIcon direction="right" color={color.blue[500]} />
+        </StyledButton>
+      </ButtonContainer>
     </Layout>
   );
 };
@@ -130,4 +144,32 @@ const OptionalQuestionToggle = styled.button`
   display: flex;
   align-items: center;
   gap: 10px;
+`;
+
+const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 20px;
+
+  @media screen and (max-width: 768px) {
+    gap: 10px;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  padding-left: 0;
+  padding-right: 0;
+
+  flex: 1;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 2rem;
+  }
 `;

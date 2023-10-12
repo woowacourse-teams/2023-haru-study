@@ -1,6 +1,8 @@
 import { type PropsWithChildren, createContext, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
+import LoadingFallback from '@Components/common/LodingFallback/LoadingFallback';
+
 import useFetch from '@Hooks/api/useFetch';
 import useMutation from '@Hooks/api/useMutation';
 
@@ -26,10 +28,14 @@ const StudyProgressProvider = ({ children }: PropsWithChildren) => {
 
   const memberInfo = useMemberInfo();
 
-  const { result: studyInfo, refetch: refetchStudyInfo } = useFetch(() => requestGetStudyInfo(studyId));
-  const { result: participantInfo } = useFetch(() => requestGetParticipant(studyId, memberInfo!.memberId));
+  const { result: studyInfo, refetch: refetchStudyInfo } = useFetch(() => requestGetStudyInfo(studyId), {
+    suspense: false,
+  });
+  const { result: participantInfo } = useFetch(() => requestGetParticipant(studyId, memberInfo!.memberId), {
+    suspense: false,
+  });
   const { mutate: moveToNextStep } = useMutation(() => requestPostNextStep(studyId), {
-    onSuccess: () => refetchStudyInfo(),
+    onSuccess: refetchStudyInfo,
   });
 
   const actions = {
@@ -37,7 +43,7 @@ const StudyProgressProvider = ({ children }: PropsWithChildren) => {
     moveToNextStep,
   };
 
-  if (!studyInfo || !participantInfo) return;
+  if (!studyInfo || !participantInfo) return <LoadingFallback height="100vh" />;
 
   return (
     <StudyProgressActionContext.Provider value={actions}>

@@ -20,7 +20,7 @@ export const STUDY_INFO = {
   totalCycle: 3,
   timePerCycle: 25,
   currentCycle: 1,
-  studyStep: 'progress',
+  studyStep: 'inProgress',
   progressStep: 'planning',
   createdDate: '2023-10-05T04:28:19.126Z',
   lastModifiedDate: '2023-10-05T04:28:19.126Z',

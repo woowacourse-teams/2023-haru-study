@@ -7,6 +7,8 @@ import color from '@Styles/color';
 
 import { PLAN_KEYWORDS } from '@Constants/study';
 
+import ArrowIcon from '@Assets/icons/ArrowIcon';
+
 import { getKeys } from '@Utils/getKeys';
 
 import type { Plan } from '@Types/study';
@@ -29,9 +31,14 @@ const StudyingForm = () => {
             />
           ))}
         </PlanResultList>
-        <Button variant="danger" onClick={submitForm} isLoading={isSubmitLoading}>
-          학습 마치기
-        </Button>
+        <NextStepButton
+          variant="outlined"
+          onClick={submitForm}
+          isLoading={isSubmitLoading}
+          loadingCricleColor={color.red[600]}
+        >
+          회고 단계로 <ArrowIcon direction="right" color={color.red[600]} />
+        </NextStepButton>
       </Layout>
     )
   );
@@ -75,5 +82,20 @@ const PlanResultList = styled.ul`
     p {
       font-size: 1.8rem;
     }
+  }
+`;
+
+const NextStepButton = styled(Button)`
+  border-color: ${color.red[600]};
+  color: ${color.red[600]};
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 2rem;
   }
 `;

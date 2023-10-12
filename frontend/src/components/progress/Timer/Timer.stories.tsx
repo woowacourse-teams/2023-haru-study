@@ -18,7 +18,7 @@ type Props = {
 const TimerWithBackground = ({ minutes, backgroundColor, step }: Props) => {
   return (
     <Background backgroundColor={backgroundColor}>
-      <Timer studyMinutes={minutes} step={step} />
+      <Timer studyMinutes={minutes} step={step} currentCycle={1} />
     </Background>
   );
 };
