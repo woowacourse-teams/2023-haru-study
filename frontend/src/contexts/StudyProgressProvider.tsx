@@ -1,64 +1,48 @@
-import { type PropsWithChildren, createContext, useState, useContext } from 'react';
+import { type PropsWithChildren, createContext, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
 import useFetch from '@Hooks/api/useFetch';
+import useMutation from '@Hooks/api/useMutation';
 
-import { requestGetMemberProgress, requestGetOneStudyData, requestNextStep } from '@Apis/index';
+import { requestGetParticipant, requestGetStudyInfo, requestPostNextStep } from '@Apis/index';
 
-import type { ProgressInfo, StudyInfo } from '@Types/study';
+import type { Participant, StudyInfo } from '@Types/study';
 
 import { useMemberInfo } from './MemberInfoProvider';
 
 type StudyProgressAction = {
-  onNextStep: () => Promise<void>;
+  updateStudyInfo: () => void;
+  moveToNextStep: () => Promise<void>;
 };
 
 const StudyInfoContext = createContext<StudyInfo | null>(null);
-const ProgressInfoContext = createContext<ProgressInfo | null>(null);
+const ParticipantInfoContext = createContext<Participant | null>(null);
 const StudyProgressActionContext = createContext<StudyProgressAction | null>(null);
 
 const StudyProgressProvider = ({ children }: PropsWithChildren) => {
   const { studyId } = useParams();
+
   if (!studyId) throw new Error('정상적인 경로로 접근해주세요.');
 
   const memberInfo = useMemberInfo();
-  const [progressInfo, setProgressInfo] = useState<ProgressInfo | null>(null);
 
-  const { result: studyInfo } = useFetch(() => requestGetOneStudyData(studyId));
-  useFetch(() => requestGetMemberProgress(studyId, memberInfo!.memberId), {
-    onSuccess: setProgressInfo,
+  const { result: studyInfo, refetch: refetchStudyInfo } = useFetch(() => requestGetStudyInfo(studyId));
+  const { result: participantInfo } = useFetch(() => requestGetParticipant(studyId, memberInfo!.memberId));
+  const { mutate: moveToNextStep } = useMutation(() => requestPostNextStep(studyId), {
+    onSuccess: () => refetchStudyInfo(),
   });
 
   const actions = {
-    onNextStep: async () => {
-      if (studyInfo === null || progressInfo === null) return;
-
-      await requestNextStep(studyInfo.studyId, progressInfo.progressId);
-
-      if (progressInfo.step === 'planning') {
-        setProgressInfo({ ...progressInfo, step: 'studying' });
-        return;
-      }
-      if (progressInfo.step === 'studying') {
-        setProgressInfo({ ...progressInfo, step: 'retrospect' });
-        return;
-      }
-      if (progressInfo.step === 'retrospect') {
-        setProgressInfo({
-          ...progressInfo,
-          currentCycle: progressInfo.currentCycle + 1,
-          step: 'planning',
-        });
-      }
-    },
+    updateStudyInfo: refetchStudyInfo,
+    moveToNextStep,
   };
 
-  if (!studyInfo || !progressInfo) return;
+  if (!studyInfo || !participantInfo) return;
 
   return (
     <StudyProgressActionContext.Provider value={actions}>
       <StudyInfoContext.Provider value={studyInfo}>
-        <ProgressInfoContext.Provider value={progressInfo}>{children}</ProgressInfoContext.Provider>
+        <ParticipantInfoContext.Provider value={participantInfo}>{children}</ParticipantInfoContext.Provider>
       </StudyInfoContext.Provider>
     </StudyProgressActionContext.Provider>
   );
@@ -76,8 +60,8 @@ export const useStudyInfo = () => {
   return studyInfo;
 };
 
-export const useProgressInfo = () => {
-  const progressInfo = useContext(ProgressInfoContext);
+export const useParticipantInfo = () => {
+  const progressInfo = useContext(ParticipantInfoContext);
 
   if (progressInfo === null) {
     throw new Error('스터디 정보를 불러오는 중 문제가 발생했습니다.');
