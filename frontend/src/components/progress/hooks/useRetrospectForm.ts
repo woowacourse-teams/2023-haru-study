@@ -1,22 +1,22 @@
 import useMutation from '@Hooks/api/useMutation';
 import useQuestionTextarea from '@Hooks/common/useQuestionTextarea';
 
-import { useProgressInfo, useStudyInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
+import { useParticipantInfo, useStudyInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
 
 import { requestWriteRetrospect } from '@Apis/index';
 
 const useRetrospectForm = () => {
-  const { studyId, totalCycle } = useStudyInfo();
-  const { progressId, currentCycle } = useProgressInfo();
-  const { onNextStep } = useStudyProgressAction();
+  const { studyId, totalCycle, currentCycle } = useStudyInfo();
+  const { participantId } = useParticipantInfo();
+  const { moveToNextStep } = useStudyProgressAction();
 
   const { mutate: submitForm, isLoading: isSubmitLoading } = useMutation(async () => {
-    await requestWriteRetrospect(studyId, progressId, {
+    await requestWriteRetrospect(studyId, participantId, {
       doneAsExpected: questionTextareaProps.doneAsExpected.value,
       experiencedDifficulty: questionTextareaProps.experiencedDifficulty.value,
       lesson: questionTextareaProps.lesson.value,
     });
-    await onNextStep();
+    await moveToNextStep();
   });
 
   const questionTextareaProps = {

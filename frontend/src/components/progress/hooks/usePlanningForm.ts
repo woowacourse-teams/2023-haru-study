@@ -1,24 +1,24 @@
 import useMutation from '@Hooks/api/useMutation';
 import useQuestionTextarea from '@Hooks/common/useQuestionTextarea';
 
-import { useProgressInfo, useStudyInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
+import { useParticipantInfo, useStudyInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
 
 import { requestWritePlan } from '@Apis/index';
 
 const usePlanningForm = () => {
   const { studyId } = useStudyInfo();
-  const { progressId } = useProgressInfo();
-  const { onNextStep } = useStudyProgressAction();
+  const { participantId } = useParticipantInfo();
+  const { moveToNextStep } = useStudyProgressAction();
 
   const { mutate: submitForm, isLoading: isSubmitLoading } = useMutation(async () => {
-    await requestWritePlan(studyId, progressId, {
+    await requestWritePlan(studyId, participantId, {
       toDo: questionTextareaProps.toDo.value,
       completionCondition: questionTextareaProps.completionCondition.value,
       expectedProbability: questionTextareaProps.expectedProbability.value,
       expectedDifficulty: questionTextareaProps.expectedDifficulty.value,
       whatCanYouDo: questionTextareaProps.whatCanYouDo.value,
     });
-    await onNextStep();
+    await moveToNextStep();
   });
 
   const questionTextareaProps = {

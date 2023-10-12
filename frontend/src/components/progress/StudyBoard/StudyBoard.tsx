@@ -11,7 +11,7 @@ import { FAVICON_PATH } from '@Constants/asset';
 import { ROUTES_PATH } from '@Constants/routes';
 
 import { useNotification } from '@Contexts/NotificationProvider';
-import { useProgressInfo, useStudyInfo } from '@Contexts/StudyProgressProvider';
+import { useStudyInfo } from '@Contexts/StudyProgressProvider';
 
 import dom from '@Utils/dom';
 
@@ -22,35 +22,32 @@ import StudyingForm from '../StudyingForm/StudyingForm';
 
 const StudyBoard = () => {
   const navigate = useNavigate();
-  const { studyId } = useStudyInfo();
-  const { step } = useProgressInfo();
+  const { studyId, studyStep, progressStep } = useStudyInfo();
   const { send } = useNotification();
 
-  useEffect(() => {
-    if (step === 'done') return;
-    dom.updateFavicon(FAVICON_PATH[step]);
-
-    return () => dom.updateFavicon(FAVICON_PATH.default);
-  }, [step]);
-
-  if (step === 'done') {
+  if (studyStep !== 'inProgress') {
     send({ message: '이미 끝난 스터디입니다. \n스터디의 기록 페이지로 이동합니다.' });
     navigate(`${ROUTES_PATH.record}/${studyId}`);
-    return;
   }
+
+  useEffect(() => {
+    dom.updateFavicon(FAVICON_PATH[progressStep]);
+
+    return () => dom.updateFavicon(FAVICON_PATH.default);
+  }, [progressStep]);
 
   return (
     <Container>
       <Sidebar />
       <NotificationBoundary>
         <Contents>
-          {step === 'planning' && <PlanningForm />}
-          {step === 'studying' && (
+          {progressStep === 'planning' && <PlanningForm />}
+          {progressStep === 'studying' && (
             <Suspense fallback={<LoadingFallback circleColor={color.red[500]} />}>
               <StudyingForm />
             </Suspense>
           )}
-          {step === 'retrospect' && <RetrospectForm />}
+          {progressStep === 'retrospect' && <RetrospectForm />}
         </Contents>
       </NotificationBoundary>
     </Container>
