@@ -19,7 +19,6 @@ const useMutation = <T>(request: () => Promise<T>, { errorBoundary = true, onSuc
       const result = await request();
       setResult(result);
       await onSuccess?.(result);
-      return result;
     } catch (reason) {
       if (!(reason instanceof Error)) throw reason;
       setError(reason);
