@@ -9,12 +9,13 @@ import type { Size } from '@Types/style';
 
 type Props = {
   size?: Size;
+  circleColor?: string;
   $style?: CSSProp;
 };
 
-const CircularProgress = ({ size = 'medium', $style }: Props) => {
+const CircularProgress = ({ size = 'medium', circleColor = color.white, $style }: Props) => {
   return (
-    <StyledCircularProgress size={size} $style={$style}>
+    <StyledCircularProgress size={size} $style={$style} circleColor={circleColor}>
       <div></div>
       <div></div>
       <div></div>
@@ -35,12 +36,12 @@ const StyledCircularProgress = styled.div<Props>`
     border-radius: 50%;
     animation: loading-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 
-    ${({ size = 'medium', $style }) => css`
+    ${({ size = 'medium', circleColor, $style }) => css`
       width: ${SIZE[size]};
       height: ${SIZE[size]};
 
-      border: 2px solid ${color.white};
-      border-color: ${color.white} transparent transparent transparent;
+      border: 2px solid ${circleColor};
+      border-color: ${circleColor} transparent transparent transparent;
 
       ${$style}
     `}
