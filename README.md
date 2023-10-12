@@ -1,7 +1,7 @@
 # 📖 하루스터디([haru-study.com](haru-study.com))
 
 ### 시스템 구성도
-![image](https://github.com/woowacourse-teams/2023-haru-study/assets/77962265/15963d75-ca21-4662-8a60-8381cab0523b)
+![image](https://user-images.githubusercontent.com/77962265/274247380-8997ba23-403e-4b26-bb1d-e1a801c29ff6.png)
 
 
 ### 팀 구성
