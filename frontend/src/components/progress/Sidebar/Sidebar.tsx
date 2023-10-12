@@ -4,7 +4,7 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
-import { useProgressInfo, useStudyInfo } from '@Contexts/StudyProgressProvider';
+import { useStudyInfo } from '@Contexts/StudyProgressProvider';
 
 import type { Step } from '@Types/study';
 
@@ -29,15 +29,14 @@ const SIDEBAR_INFO: Record<Step, { theme: string; stepKeyword: string; paragraph
 };
 
 const Sidebar = () => {
-  const { timePerCycle } = useStudyInfo();
-  const { step, currentCycle } = useProgressInfo();
+  const { timePerCycle, currentCycle, progressStep } = useStudyInfo();
 
-  if (step === 'done') return;
-
-  const theme = SIDEBAR_INFO[step].theme;
-  const stepKeyword = SIDEBAR_INFO[step].stepKeyword;
+  const theme = SIDEBAR_INFO[progressStep].theme;
+  const stepKeyword = SIDEBAR_INFO[progressStep].stepKeyword;
   const paragraph =
-    step === 'retrospect' ? `${timePerCycle}${SIDEBAR_INFO[step].paragraph}` : SIDEBAR_INFO[step].paragraph;
+    progressStep === 'retrospect'
+      ? `${timePerCycle}${SIDEBAR_INFO[progressStep].paragraph}`
+      : SIDEBAR_INFO[progressStep].paragraph;
 
   return (
     <Layout background={theme}>
@@ -54,7 +53,7 @@ const Sidebar = () => {
       >
         {paragraph}
       </Typography>
-      <Timer studyMinutes={timePerCycle} step={step} />
+      <Timer studyMinutes={timePerCycle} step={progressStep} />
       <Typography variant="p1" color={color.white}>
         {currentCycle}번째 사이클 - {stepKeyword}
       </Typography>
