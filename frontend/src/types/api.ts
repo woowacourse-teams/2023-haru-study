@@ -1,15 +1,12 @@
 import type { MemberInfo } from './member';
 import type {
-  ProgressInfo,
   RetrospectList,
   StudyInfo,
   Participant,
   ParticipantRecordContent,
   PlanList,
-  Step,
-  StudyTimePerCycleOptions,
-  TotalCycleOptions,
   StudyStatus,
+  Step,
 } from './study';
 
 export type ResponseAPIError = {
@@ -17,20 +14,8 @@ export type ResponseAPIError = {
   code: number;
 };
 
-type ResponseStudyInfo = {
-  studyId: string;
-  name: string;
-  totalCycle: TotalCycleOptions;
-  timePerCycle: StudyTimePerCycleOptions;
-  currentCycle: number;
-  studyStep: string;
-  progressStep: string;
-  createdDate: string;
-  lastModifiedDate: string;
-};
-
 export type ResponseStudies = {
-  studies: ResponseStudyInfo[];
+  studies: StudyInfo[];
 };
 
 type ResponseParticipantInfo = {
@@ -42,11 +27,6 @@ type ResponseParticipantInfo = {
 export type ResponseCheckParticipants = {
   participants: ResponseParticipantInfo[] | null;
 };
-
-export type ResponseMemberStudyMetadata = {
-  currentCycle: number;
-  step: Step;
-} & StudyInfo;
 
 export type ResponsePlanList = PlanList;
 
@@ -68,11 +48,7 @@ export type ResponseAuthToken = {
 
 export type ResponseMemberInfo = MemberInfo;
 
-export type ResponseOneStudyInfo = StudyInfo;
-
-export type ResponseMemberProgress = {
-  progresses: ProgressInfo[];
-};
+export type ResponseStudyInfo = StudyInfo;
 
 export type ResponseMemberContents = {
   content: {
@@ -89,6 +65,17 @@ export type ResponseParticipantCode = {
 export type ResponseLobbyInfo = {
   studyStep: StudyStatus;
   participants: Participant[];
+};
+
+export type ResponseMemberSubmitStatus = {
+  status: {
+    nickname: string;
+    submitted: boolean;
+  }[];
+};
+
+export type ResponseCurrentStep = {
+  progressStep: Step;
 };
 
 export type ResponseMemberListRecord = {

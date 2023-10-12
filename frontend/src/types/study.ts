@@ -43,14 +43,11 @@ export type StudyInfo = {
   name: string;
   totalCycle: number;
   timePerCycle: number;
-  createdDate: string;
-};
-
-export type ProgressInfo = {
-  progressId: string;
-  nickname: string;
   currentCycle: number;
-  step: Step | 'done';
+  studyStep: StudyStatus;
+  progressStep: Step;
+  createdDate: string;
+  lastModifiedDate: string;
 };
 
 export type StudyMode = 'group' | 'alone';
