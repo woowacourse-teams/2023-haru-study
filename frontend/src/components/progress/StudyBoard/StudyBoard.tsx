@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Suspense, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
@@ -21,18 +22,32 @@ import RetrospectForm from '../RetrospectForm/RetrospectForm';
 import Sidebar from '../Sidebar/Sidebar';
 import StudyingForm from '../StudyingForm/StudyingForm';
 
+const STEP_NOTIFICATION_MESSAGE = {
+  planning: '목표 설정 단계\n학습을 진행하기 전, 학습 목표를 설정해주세요.',
+  studying: '학습 진행 단계\n목표 달성을 위해 학습을 바로 진행하세요.',
+  retrospect: '회고 단계\n학습이 어땠는지 회고해보세요.',
+};
+
 const StudyBoard = () => {
   const navigate = useNavigate();
-  const { studyId, studyStep, progressStep } = useStudyInfo();
+  const { studyId, name, studyStep, progressStep } = useStudyInfo();
   const { send } = useNotification();
 
-  if (studyStep !== 'inProgress') {
-    send({ message: '이미 끝난 스터디입니다. \n스터디의 기록 페이지로 이동합니다.' });
-    navigate(`${ROUTES_PATH.record}/${studyId}`);
-  }
-
   useEffect(() => {
+    if (studyStep === 'waiting') {
+      send({ message: '스터디가 아직 시작되지 않았습니다.\n스터디 대기방으로 이동합니다.' });
+      navigate(`${ROUTES_PATH.lobby}/${studyId}`);
+      return;
+    }
+
+    if (studyStep === 'done') {
+      send({ message: '이미 끝난 스터디입니다.\n스터디의 기록 페이지로 이동합니다.' });
+      navigate(`${ROUTES_PATH.record}/${studyId}`, { state: { studyName: name } });
+      return;
+    }
+
     dom.updateFavicon(FAVICON_PATH[progressStep]);
+    send({ message: STEP_NOTIFICATION_MESSAGE[progressStep] });
 
     return () => dom.updateFavicon(FAVICON_PATH.default);
   }, [progressStep]);
