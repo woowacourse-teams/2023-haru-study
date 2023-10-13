@@ -3,13 +3,11 @@ import useMutation from '@Hooks/api/useMutation';
 import { requestGetAuthenticateParticipationCode } from '@Apis/index';
 
 const useCheckParticipationCode = (participantCode: string) => {
-  const {
-    result: studyResult,
-    mutate: authenticateParticipationCode,
-    isLoading,
-  } = useMutation(() => requestGetAuthenticateParticipationCode(participantCode));
+  const { mutate: authenticateParticipationCode, isLoading } = useMutation(() =>
+    requestGetAuthenticateParticipationCode(participantCode),
+  );
 
-  return { studyResult, authenticateParticipationCode, isLoading };
+  return { authenticateParticipationCode, isLoading };
 };
 
 export default useCheckParticipationCode;

@@ -21,18 +21,14 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
 
   const nickNameInput = useInput(true);
 
-  const { registerResult, isLoading, registerParticipants } = useRegisterParticipants(
-    nickNameInput.state ?? '',
-    studyId,
-  );
+  const { isLoading, registerParticipants } = useRegisterParticipants(nickNameInput.state ?? '', studyId);
 
   const handleOnClickStartButton = async () => {
     await registerParticipants();
 
-    if (registerResult?.ok)
-      return navigate(`${ROUTES_PATH.lobby}/${studyId}`, {
-        state: { studyName },
-      });
+    return navigate(`${ROUTES_PATH.lobby}/${studyId}`, {
+      state: { studyName },
+    });
   };
 
   return (

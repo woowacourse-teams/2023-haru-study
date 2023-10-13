@@ -7,13 +7,11 @@ import { requestPostRegisterParticipants } from '@Apis/index';
 const useRegisterParticipants = (nickname: string, studyId: string) => {
   const memberInfo = useMemberInfo();
 
-  const {
-    result: registerResult,
-    isLoading,
-    mutate: registerParticipants,
-  } = useMutation(() => requestPostRegisterParticipants(nickname, studyId, memberInfo!.memberId));
+  const { isLoading, mutate: registerParticipants } = useMutation(() =>
+    requestPostRegisterParticipants(nickname, studyId, memberInfo!.memberId),
+  );
 
-  return { registerResult, isLoading, registerParticipants };
+  return { isLoading, registerParticipants };
 };
 
 export default useRegisterParticipants;

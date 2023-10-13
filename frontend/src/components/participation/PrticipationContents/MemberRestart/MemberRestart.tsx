@@ -22,9 +22,7 @@ type Props = {
 const MemberRestart = ({ studyName, nickname, studyId, participantId, showMemberRegister }: Props) => {
   const navigate = useNavigate();
 
-  const { result: deleteMemberResult, mutate: deleteParticipant } = useMutation(() =>
-    requestDeleteParticipant(studyId, participantId),
-  );
+  const { mutate: deleteParticipant } = useMutation(() => requestDeleteParticipant(studyId, participantId));
 
   const handleOnClickContinueStart = async () => {
     navigate(`${ROUTES_PATH.progress}/${studyId}`);
@@ -33,7 +31,7 @@ const MemberRestart = ({ studyName, nickname, studyId, participantId, showMember
   const restart = async () => {
     await deleteParticipant();
 
-    if (deleteMemberResult?.ok) return showMemberRegister();
+    return showMemberRegister();
   };
 
   return (
