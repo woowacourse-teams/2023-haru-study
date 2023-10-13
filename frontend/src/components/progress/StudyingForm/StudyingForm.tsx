@@ -7,6 +7,8 @@ import color from '@Styles/color';
 
 import { PLAN_KEYWORDS } from '@Constants/study';
 
+import { useParticipantInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
+
 import ArrowIcon from '@Assets/icons/ArrowIcon';
 
 import { getKeys } from '@Utils/getKeys';
@@ -16,7 +18,9 @@ import type { Plan } from '@Types/study';
 import useStudyingForm from '../hooks/useStudyingForm';
 
 const StudyingForm = () => {
-  const { planList, isSubmitLoading, submitForm } = useStudyingForm();
+  const { isHost } = useParticipantInfo();
+  const { planList } = useStudyingForm();
+  const { moveToNextStep, moveToNextStepLoading } = useStudyProgressAction();
 
   return (
     planList && (
@@ -31,14 +35,16 @@ const StudyingForm = () => {
             />
           ))}
         </PlanResultList>
-        <NextStepButton
-          variant="outlined"
-          onClick={submitForm}
-          isLoading={isSubmitLoading}
-          loadingCricleColor={color.red[600]}
-        >
-          회고 단계로 <ArrowIcon direction="right" color={color.red[600]} />
-        </NextStepButton>
+        {isHost && (
+          <NextStepButton
+            variant="outlined"
+            onClick={moveToNextStep}
+            isLoading={moveToNextStepLoading}
+            loadingCricleColor={color.red[600]}
+          >
+            회고 단계로 <ArrowIcon direction="right" color={color.red[600]} />
+          </NextStepButton>
+        )}
       </Layout>
     )
   );

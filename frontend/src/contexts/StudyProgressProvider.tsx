@@ -6,6 +6,8 @@ import LoadingFallback from '@Components/common/LodingFallback/LoadingFallback';
 import useFetch from '@Hooks/api/useFetch';
 import useMutation from '@Hooks/api/useMutation';
 
+import type { HttpResponse } from '@Utils/Http';
+
 import { requestGetParticipant, requestGetStudyInfo, requestPostNextStep } from '@Apis/index';
 
 import type { Participant, StudyInfo } from '@Types/study';
@@ -14,7 +16,10 @@ import { useMemberInfo } from './MemberInfoProvider';
 
 type StudyProgressAction = {
   updateStudyInfo: () => void;
-  moveToNextStep: () => Promise<void>;
+  moveToNextStep: () => Promise<HttpResponse<object>>;
+
+  updateStudyInfoLoading: boolean;
+  moveToNextStepLoading: boolean;
 };
 
 const StudyInfoContext = createContext<StudyInfo | null>(null);
@@ -28,19 +33,25 @@ const StudyProgressProvider = ({ children }: PropsWithChildren) => {
 
   const memberInfo = useMemberInfo();
 
-  const { result: studyInfo, refetch: refetchStudyInfo } = useFetch(() => requestGetStudyInfo(studyId), {
+  const {
+    result: studyInfo,
+    refetch: updateStudyInfo,
+    isLoading: updateStudyInfoLoading,
+  } = useFetch(() => requestGetStudyInfo(studyId), {
     suspense: false,
   });
   const { result: participantInfo } = useFetch(() => requestGetParticipant(studyId, memberInfo!.memberId), {
     suspense: false,
   });
-  const { mutate: moveToNextStep } = useMutation(() => requestPostNextStep(studyId), {
-    onSuccess: refetchStudyInfo,
+  const { mutate: moveToNextStep, isLoading: moveToNextStepLoading } = useMutation(() => requestPostNextStep(studyId), {
+    onSuccess: updateStudyInfo,
   });
 
   const actions = {
-    updateStudyInfo: refetchStudyInfo,
+    updateStudyInfo,
     moveToNextStep,
+    updateStudyInfoLoading,
+    moveToNextStepLoading,
   };
 
   if (!studyInfo || !participantInfo) return <LoadingFallback height="100vh" />;

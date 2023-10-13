@@ -1,25 +1,31 @@
+import { useState } from 'react';
+
 import useMutation from '@Hooks/api/useMutation';
 import useQuestionTextarea from '@Hooks/common/useQuestionTextarea';
 
-import { useParticipantInfo, useStudyInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
+import { useParticipantInfo, useStudyInfo } from '@Contexts/StudyProgressProvider';
 
 import { requestWritePlan } from '@Apis/index';
 
 const usePlanningForm = () => {
   const { studyId } = useStudyInfo();
   const { participantId } = useParticipantInfo();
-  const { moveToNextStep } = useStudyProgressAction();
 
-  const { mutate: submitForm, isLoading: isSubmitLoading } = useMutation(async () => {
-    await requestWritePlan(studyId, participantId, {
-      toDo: questionTextareaProps.toDo.value,
-      completionCondition: questionTextareaProps.completionCondition.value,
-      expectedProbability: questionTextareaProps.expectedProbability.value,
-      expectedDifficulty: questionTextareaProps.expectedDifficulty.value,
-      whatCanYouDo: questionTextareaProps.whatCanYouDo.value,
-    });
-    await moveToNextStep();
-  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const { mutate: submitForm, isLoading: isSubmitLoading } = useMutation(
+    () =>
+      requestWritePlan(studyId, participantId, {
+        toDo: questionTextareaProps.toDo.value,
+        completionCondition: questionTextareaProps.completionCondition.value,
+        expectedProbability: questionTextareaProps.expectedProbability.value,
+        expectedDifficulty: questionTextareaProps.expectedDifficulty.value,
+        whatCanYouDo: questionTextareaProps.whatCanYouDo.value,
+      }),
+    {
+      onSuccess: () => setIsSubmitted(true),
+    },
+  );
 
   const questionTextareaProps = {
     toDo: useQuestionTextarea({
@@ -51,7 +57,13 @@ const usePlanningForm = () => {
     questionTextareaProps.whatCanYouDo.errorMessage
   );
 
-  return { questionTextareaProps, isSubmitLoading, isInvalidForm, submitForm };
+  return {
+    questionTextareaProps,
+    isInvalidForm,
+    submitForm,
+    isSubmitLoading,
+    isSubmitted,
+  };
 };
 
 export default usePlanningForm;

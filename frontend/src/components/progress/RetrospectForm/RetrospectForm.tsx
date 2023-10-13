@@ -12,28 +12,43 @@ import color from '@Styles/color';
 import { ROUTES_PATH } from '@Constants/routes';
 import { RETROSPECT_QUESTIONS } from '@Constants/study';
 
-import { useStudyInfo } from '@Contexts/StudyProgressProvider';
+import { useNotification } from '@Contexts/NotificationProvider';
+import { useParticipantInfo, useStudyInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
 
 import ArrowIcon from '@Assets/icons/ArrowIcon';
 
+import useParticipantsSubmit from '../hooks/useParticipantsSubmit';
 import useRetrospectForm from '../hooks/useRetrospectForm';
 
 const RetrospectForm = () => {
-  const { questionTextareaProps, isInvalidForm, isSubmitLoading, isLastCycle, submitForm } = useRetrospectForm();
-  const { studyId } = useStudyInfo();
-
   const navigate = useNavigate();
   const { isShow: isOpenOptionalQuestion, toggleShow: toggleOptionalQuestion } = useDisplay();
+  const { send } = useNotification();
 
-  const handleSubmitForm = async () => {
+  const { isHost } = useParticipantInfo();
+  const { studyId, totalCycle, currentCycle } = useStudyInfo();
+  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = useRetrospectForm();
+  const { checkAllParticipantSubmitted, checkParticipantSubmittedLoading } = useParticipantsSubmit();
+  const { moveToNextStep, moveToNextStepLoading } = useStudyProgressAction();
+
+  const isLastCycle = totalCycle === currentCycle;
+
+  const submitRetrospectForm = async () => {
     await submitForm();
 
-    if (isLastCycle) {
-      navigate(`${ROUTES_PATH.record}/${studyId}`);
-    }
+    send({ message: '회고 제출에 성공했습니다!', type: 'success' });
   };
 
-  const buttonText = isLastCycle ? '스터디 종료' : '다음 사이클로';
+  const moveToNextCycle = async () => {
+    const isAllParticipantSubmitted = await checkAllParticipantSubmitted();
+    const notiMessage = isLastCycle ? '그래도 스터디를 종료하시겠습니까?' : '그래도 다음 사이클로 넘어가시겠습니까?';
+
+    if (!isAllParticipantSubmitted && !confirm(`아직 제출을 하지 않은 스터디원이 있습니다. ${notiMessage}`)) return;
+
+    await moveToNextStep();
+
+    if (isLastCycle) navigate(`${ROUTES_PATH.record}/${studyId}`);
+  };
 
   return (
     <Layout>
@@ -64,16 +79,23 @@ const RetrospectForm = () => {
         <StyledButton
           variant="success"
           type="submit"
-          onClick={handleSubmitForm}
+          onClick={submitRetrospectForm}
           isLoading={isSubmitLoading}
           disabled={isInvalidForm}
         >
           회고 제출하기
         </StyledButton>
-        <NextStepButton variant="outlined" loadingCricleColor={color.teal[600]}>
-          {buttonText}
-          <ArrowIcon direction="right" color={color.teal[600]} />
-        </NextStepButton>
+        {isHost && (
+          <NextStepButton
+            variant="outlined"
+            loadingCricleColor={color.teal[600]}
+            onClick={moveToNextCycle}
+            isLoading={checkParticipantSubmittedLoading || moveToNextStepLoading}
+          >
+            {isLastCycle ? '스터디 종료' : '다음 사이클로'}
+            <ArrowIcon direction="right" color={color.teal[600]} />
+          </NextStepButton>
+        )}
       </ButtonContainer>
     </Layout>
   );

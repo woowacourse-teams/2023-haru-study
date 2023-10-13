@@ -11,20 +11,47 @@ import color from '@Styles/color';
 import { PLAN_QUESTIONS } from '@Constants/study';
 
 import { useModal } from '@Contexts/ModalProvider';
+import { useNotification } from '@Contexts/NotificationProvider';
+import { useParticipantInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
 
 import ArrowIcon from '@Assets/icons/ArrowIcon';
 
 import GuideModal from '../GuideModal/GuideModal';
+import useParticipantsSubmit from '../hooks/useParticipantsSubmit';
 import usePlanningForm from '../hooks/usePlanningForm';
 
 const PlanningForm = () => {
-  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = usePlanningForm();
-
   const { isShow: isOpenOptionalQuestion, toggleShow: toggleOptionalQuestion } = useDisplay();
   const { openModal } = useModal();
+  const { send } = useNotification();
 
-  const handleClickGuideButton = (question: 'toDo' | 'completionCondition') => () => {
+  const { isHost } = useParticipantInfo();
+  const { questionTextareaProps, isInvalidForm, isSubmitLoading, isSubmitted, submitForm } = usePlanningForm();
+  const { checkAllParticipantSubmitted, checkParticipantSubmittedLoading } = useParticipantsSubmit();
+  const { moveToNextStep, moveToNextStepLoading } = useStudyProgressAction();
+
+  const openGuide = (question: 'toDo' | 'completionCondition') => () => {
     openModal(<GuideModal question={question} />);
+  };
+
+  const submitPlanningForm = async () => {
+    await submitForm();
+    send({
+      message: '학습 목표 제출에 성공했습니다!',
+      type: 'success',
+    });
+  };
+
+  const moveToStudyingStep = async () => {
+    const isAllParticipantSubmitted = await checkAllParticipantSubmitted();
+
+    if (
+      !isAllParticipantSubmitted &&
+      !confirm('아직 목표 제출을 하지 않은 스터디원이 있습니다. 그래도 학습 단계로 넘어가시겠습니까?')
+    )
+      return;
+
+    await moveToNextStep();
   };
 
   return (
@@ -36,12 +63,12 @@ const PlanningForm = () => {
         <QuestionList>
           <QuestionTextarea
             question={PLAN_QUESTIONS.toDo}
-            onClickGuideButton={handleClickGuideButton('toDo')}
+            onClickGuideButton={openGuide('toDo')}
             {...questionTextareaProps.toDo}
           />
           <QuestionTextarea
             question={PLAN_QUESTIONS.completionCondition}
-            onClickGuideButton={handleClickGuideButton('completionCondition')}
+            onClickGuideButton={openGuide('completionCondition')}
             {...questionTextareaProps.completionCondition}
           />
         </QuestionList>
@@ -69,16 +96,23 @@ const PlanningForm = () => {
         <StyledButton
           variant="primary"
           type="submit"
-          onClick={submitForm}
+          onClick={submitPlanningForm}
           isLoading={isSubmitLoading}
-          disabled={isInvalidForm}
+          disabled={isInvalidForm || isSubmitted}
         >
-          목표 제출하기
+          {isSubmitted ? '제출 완료' : '목표 제출하기'}
         </StyledButton>
-        <StyledButton variant="outlined" loadingCricleColor={color.blue[500]}>
-          학습 단계로
-          <ArrowIcon direction="right" color={color.blue[500]} />
-        </StyledButton>
+        {isHost && (
+          <StyledButton
+            variant="outlined"
+            loadingCricleColor={color.blue[500]}
+            onClick={moveToStudyingStep}
+            isLoading={checkParticipantSubmittedLoading || moveToNextStepLoading}
+          >
+            학습 단계로
+            <ArrowIcon direction="right" color={color.blue[500]} />
+          </StyledButton>
+        )}
       </ButtonContainer>
     </Layout>
   );

@@ -16,6 +16,7 @@ import { useStudyInfo } from '@Contexts/StudyProgressProvider';
 import dom from '@Utils/dom';
 
 import PlanningForm from '../PlanningForm/PlanningForm';
+import ProgressPolling from '../ProgressPolling/ProgressPolling';
 import RetrospectForm from '../RetrospectForm/RetrospectForm';
 import Sidebar from '../Sidebar/Sidebar';
 import StudyingForm from '../StudyingForm/StudyingForm';
@@ -50,6 +51,7 @@ const StudyBoard = () => {
           {progressStep === 'retrospect' && <RetrospectForm />}
         </Contents>
       </NotificationBoundary>
+      <ProgressPolling />
     </Container>
   );
 };
