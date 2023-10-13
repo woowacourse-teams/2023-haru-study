@@ -1,25 +1,25 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import StudyMembers from './StudyMembers';
+import ParticipantList from './ParticipantList';
 
-type Story = StoryObj<typeof StudyMembers>;
+type Story = StoryObj<typeof ParticipantList>;
 
 /**
- * `StudyMembers` 컴포넌트는 어떤 스터디원이 들어왔는지 보여주는 컴포넌트입니다.
+ * `ParticipantList` 컴포넌트는 어떤 스터디원이 들어왔는지 보여주는 컴포넌트입니다.
  */
-const meta: Meta<typeof StudyMembers> = {
-  title: 'WAITING/StudyMembers',
-  component: StudyMembers,
+const meta: Meta<typeof ParticipantList> = {
+  title: 'WAITING/ParticipantList',
+  component: ParticipantList,
 };
 
 export default meta;
 
 /**
- * `OneRow`는 멤버가 6명일때 한줄이되는 `StudyMembers` 스토리입니다.
+ * `OneRow`는 멤버가 6명일때 한줄이되는 `ParticipantList` 스토리입니다.
  */
 export const SixMembers: Story = {
   args: {
-    studyMembers: [
+    participantList: [
       { participantId: '0', nickname: '노아', isHost: true },
       { participantId: '1', nickname: '룩소', isHost: true },
       { participantId: '2', nickname: '마코', isHost: true },
@@ -31,11 +31,11 @@ export const SixMembers: Story = {
 };
 
 /**
- * `TwoRow`는 멤버가 12명일때 두줄이되는 `StudyMembers` 스토리입니다.
+ * `TwoRow`는 멤버가 12명일때 두줄이되는 `ParticipantList` 스토리입니다.
  */
 export const TwelveMembers: Story = {
   args: {
-    studyMembers: [
+    participantList: [
       { participantId: '0', nickname: '노아', isHost: true },
       { participantId: '1', nickname: '룩소', isHost: true },
       { participantId: '2', nickname: '마코', isHost: true },

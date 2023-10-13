@@ -9,7 +9,7 @@ import { ROUTES_PATH } from '@Constants/routes';
 import { useMemberInfo } from '@Contexts/MemberInfoProvider';
 import { useNotification } from '@Contexts/NotificationProvider';
 
-import StudyMembers from '../StudyMembers/StudyMembers';
+import ParticipantList from '../ParticipantList/ParticipantList';
 import useStudyLobby from '../hooks/useStudyLobby';
 
 const StudyLobbyContents = () => {
@@ -30,7 +30,7 @@ const StudyLobbyContents = () => {
     navigate(ROUTES_PATH.landing);
   };
 
-  const { isHost, participantCode, studyMembers, startStudy, isStarting, exitStudy, isExiting } = useStudyLobby(
+  const { isHost, participantCode, participantList, startStudy, isStarting, exitStudy, isExiting } = useStudyLobby(
     studyId,
     memberInfo!.memberId,
     onStartStudy,
@@ -51,7 +51,7 @@ const StudyLobbyContents = () => {
     participantCode && (
       <Layout>
         <ParticipantCodeCopier participantCode={participantCode}></ParticipantCodeCopier>
-        <StudyMembers studyMembers={studyMembers} />
+        <ParticipantList participantList={participantList} />
         <BottomButtonWrapper>
           {isHost ? (
             <>

@@ -31,7 +31,7 @@ const useStudyLobby = (studyId: string, memberId: string, onStartStudy: () => vo
   return {
     participantCode: participantCode,
     isHost: participantInfo?.isHost ?? false,
-    studyMembers: lobbyInfo?.participants ?? [],
+    participantList: lobbyInfo?.participants ?? [],
     startStudy,
     isStarting,
     exitStudy,

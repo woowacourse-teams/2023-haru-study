@@ -8,10 +8,10 @@ import { TextSkeletonStyle } from '@Styles/common';
 import type { Participant } from '@Types/study';
 
 type Props = {
-  studyMembers: Participant[];
+  participantList: Participant[];
 };
 
-const StudyMembers = ({ studyMembers }: Props) => {
+const ParticipantList = ({ participantList }: Props) => {
   return (
     <Layout>
       <Typography
@@ -25,14 +25,14 @@ const StudyMembers = ({ studyMembers }: Props) => {
         현재 참여한 스터디원
       </Typography>
       <MemberList>
-        {studyMembers.length === 0 ? (
+        {participantList.length === 0 ? (
           <>
             <MemberNameSkeleton />
             <MemberNameSkeleton />
             <MemberNameSkeleton />
           </>
         ) : (
-          studyMembers.map((member) => (
+          participantList.map((member) => (
             <MemberName key={member.participantId}>
               {member.nickname}
               {member.isHost ? '(방장)' : ''}
@@ -44,7 +44,7 @@ const StudyMembers = ({ studyMembers }: Props) => {
   );
 };
 
-export default StudyMembers;
+export default ParticipantList;
 
 const Layout = styled.div`
   display: flex;
