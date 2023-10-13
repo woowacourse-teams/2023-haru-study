@@ -23,7 +23,7 @@ export const STUDY_INFO = {
   studyStep: 'inProgress',
   progressStep: 'planning',
   createdDate: '2023-10-05T04:28:19.126Z',
-  lastModifiedDate: '2023-10-05T04:28:19.126Z',
+  lastModifiedDate: new Date().toISOString(),
 };
 
 // 단일 스터디 참여자 조회 데이터

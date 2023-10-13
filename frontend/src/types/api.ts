@@ -53,8 +53,8 @@ export type ResponseStudyInfo = StudyInfo;
 export type ResponseMemberContents = {
   content: {
     cycle: number;
-    plan: PlanList;
-    retrospect: RetrospectList;
+    plan: Partial<PlanList>;
+    retrospect: Partial<RetrospectList>;
   }[];
 };
 

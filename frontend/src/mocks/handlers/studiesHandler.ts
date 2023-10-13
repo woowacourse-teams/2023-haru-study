@@ -75,7 +75,7 @@ export const studiesHandler = [
     }
 
     STUDY_INFO.progressStep = getNextStep();
-    STUDY_INFO.lastModifiedDate = Date.now().toString();
+    STUDY_INFO.lastModifiedDate = new Date().toISOString();
 
     return res(ctx.status(200), ctx.delay(600));
   }),
