@@ -23,12 +23,14 @@ type Props = {
   studyMinutes: number;
   step: Step;
   currentCycle: number;
+  lastModifiedDate: string;
 };
 
-const Timer = ({ studyMinutes, step, currentCycle }: Props) => {
+const Timer = ({ studyMinutes, step, currentCycle, lastModifiedDate }: Props) => {
   const { leftSeconds } = useStepTimer({
     studyMinutes,
     step,
+    lastModifiedDate,
     onComplete: alarmAudio.play,
   });
 

@@ -5,10 +5,12 @@ import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
+import { useModal } from '@Contexts/ModalProvider';
 import { useStudyInfo } from '@Contexts/StudyProgressProvider';
 
 import type { Step } from '@Types/study';
 
+import StudyInfoModal from '../StudyInfoModal/StudyInfoModal';
 import Timer from '../Timer/Timer';
 
 const SIDEBAR_INFO: Record<Step, { theme: string; buttonColor: string; paragraph: string }> = {
@@ -30,12 +32,19 @@ const SIDEBAR_INFO: Record<Step, { theme: string; buttonColor: string; paragraph
 };
 
 const Sidebar = () => {
-  const { timePerCycle, currentCycle, progressStep } = useStudyInfo();
+  const { openModal } = useModal();
+
+  const studyInfo = useStudyInfo();
+  const { timePerCycle, currentCycle, progressStep, lastModifiedDate } = studyInfo;
 
   const paragraph =
     progressStep === 'retrospect'
       ? `${timePerCycle}${SIDEBAR_INFO[progressStep].paragraph}`
       : SIDEBAR_INFO[progressStep].paragraph;
+
+  const openStudyInfo = () => {
+    openModal(<StudyInfoModal {...studyInfo} />);
+  };
 
   return (
     <Layout background={SIDEBAR_INFO[progressStep].theme}>
@@ -52,9 +61,14 @@ const Sidebar = () => {
       >
         {paragraph}
       </Typography>
-      <Timer studyMinutes={timePerCycle} step={progressStep} currentCycle={currentCycle} />
-      <StudyInfoButton variant="primary" background={SIDEBAR_INFO[progressStep].buttonColor}>
-        스터디 정보
+      <Timer
+        studyMinutes={timePerCycle}
+        step={progressStep}
+        currentCycle={currentCycle}
+        lastModifiedDate={lastModifiedDate}
+      />
+      <StudyInfoButton variant="primary" background={SIDEBAR_INFO[progressStep].buttonColor} onClick={openStudyInfo}>
+        스터디 현황
       </StudyInfoButton>
     </Layout>
   );
