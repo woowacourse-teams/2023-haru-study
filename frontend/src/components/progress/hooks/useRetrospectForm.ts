@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import useMutation from '@Hooks/api/useMutation';
 import useQuestionTextarea from '@Hooks/common/useQuestionTextarea';
 
@@ -9,12 +11,18 @@ const useRetrospectForm = () => {
   const { studyId } = useStudyInfo();
   const { participantId } = useParticipantInfo();
 
-  const { mutate: submitForm, isLoading: isSubmitLoading } = useMutation(() =>
-    requestWriteRetrospect(studyId, participantId, {
-      doneAsExpected: questionTextareaProps.doneAsExpected.value,
-      experiencedDifficulty: questionTextareaProps.experiencedDifficulty.value,
-      lesson: questionTextareaProps.lesson.value,
-    }),
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const { mutate: submitForm, isLoading: isSubmitLoading } = useMutation(
+    () =>
+      requestWriteRetrospect(studyId, participantId, {
+        doneAsExpected: questionTextareaProps.doneAsExpected.value,
+        experiencedDifficulty: questionTextareaProps.experiencedDifficulty.value,
+        lesson: questionTextareaProps.lesson.value,
+      }),
+    {
+      onSuccess: () => setIsSubmitted(true),
+    },
   );
 
   const questionTextareaProps = {
@@ -37,7 +45,7 @@ const useRetrospectForm = () => {
     questionTextareaProps.lesson.errorMessage
   );
 
-  return { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm };
+  return { questionTextareaProps, isInvalidForm, isSubmitLoading, isSubmitted, submitForm };
 };
 
 export default useRetrospectForm;

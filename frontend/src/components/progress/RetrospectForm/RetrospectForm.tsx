@@ -27,7 +27,7 @@ const RetrospectForm = () => {
 
   const { isHost } = useParticipantInfo();
   const { studyId, totalCycle, currentCycle } = useStudyInfo();
-  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = useRetrospectForm();
+  const { questionTextareaProps, isInvalidForm, isSubmitLoading, isSubmitted, submitForm } = useRetrospectForm();
   const { checkAllParticipantSubmitted, checkParticipantSubmittedLoading } = useParticipantsSubmit();
   const { moveToNextStep, moveToNextStepLoading } = useStudyProgressAction();
 
@@ -81,9 +81,9 @@ const RetrospectForm = () => {
           type="submit"
           onClick={submitRetrospectForm}
           isLoading={isSubmitLoading}
-          disabled={isInvalidForm}
+          disabled={isInvalidForm || isSubmitted}
         >
-          회고 제출하기
+          {isSubmitted ? '제출 완료' : '회고 제출하기'}
         </StyledButton>
         {isHost && (
           <NextStepButton

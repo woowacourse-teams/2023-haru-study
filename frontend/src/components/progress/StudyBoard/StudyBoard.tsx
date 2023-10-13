@@ -36,13 +36,13 @@ const StudyBoard = () => {
   useEffect(() => {
     if (studyStep === 'waiting') {
       send({ message: '스터디가 아직 시작되지 않았습니다.\n스터디 대기방으로 이동합니다.' });
-      navigate(`${ROUTES_PATH.lobby}/${studyId}`);
+      navigate(`${ROUTES_PATH.lobby}/${studyId}`, { state: { studyName: name } });
       return;
     }
 
     if (studyStep === 'done') {
       send({ message: '이미 끝난 스터디입니다.\n스터디의 기록 페이지로 이동합니다.' });
-      navigate(`${ROUTES_PATH.record}/${studyId}`, { state: { studyName: name } });
+      navigate(`${ROUTES_PATH.record}/${studyId}`);
       return;
     }
 
