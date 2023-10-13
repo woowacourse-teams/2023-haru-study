@@ -22,7 +22,7 @@ const StudyLobbyContents = () => {
   if (!studyId) throw new Error('잘못 된 접근입니다.');
 
   const onStartStudy = () => {
-    send({ message: '스터디가 시작되었습니다.\n사이클의 목표를 설정해보세요.' });
+    send({ message: '스터디가 시작되었습니다.' });
     navigate(`${ROUTES_PATH.progress}/${studyId}`);
   };
 
