@@ -1,30 +1,33 @@
 package harustudy.backend.auth.domain.oauth;
 
 import harustudy.backend.auth.dto.OauthTokenResponse;
-import org.springframework.stereotype.Component;
-
+import harustudy.backend.auth.exception.InvalidProviderNameException;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
 @Component
 public class OauthClients {
 
-    private final Map<String, OauthClient> clientMappings;
-
-    public OauthClients(List<OauthClient> clientMappings) {
-        this.clientMappings = clientMappings.stream()
-                .collect(Collectors.toMap(OauthClient::getProviderName, Function.identity()));
-    }
+    private final List<OauthClient> oauthClients;
 
     public OauthTokenResponse requestOauthToken(String oauthProvider, String code) {
-        return clientMappings.get(oauthProvider)
-                .requestOauthToken(code);
+        OauthClient oauthClient = selectClientSupports(oauthProvider);
+        return oauthClient.requestOauthToken(code);
     }
 
+
     public Map<String, Object> requestOauthUserInfo(String oauthProvider, String accessToken) {
-        return clientMappings.get(oauthProvider)
-                .requestOauthUserInfo(accessToken);
+        OauthClient oauthClient = selectClientSupports(oauthProvider);
+        return oauthClient.requestOauthUserInfo(accessToken);
+    }
+
+    private OauthClient selectClientSupports(String oauthProvider) {
+        return oauthClients.stream()
+                .filter(oauthClient -> oauthClient.supports(oauthProvider))
+                .findAny()
+                .orElseThrow(InvalidProviderNameException::new);
     }
 }

@@ -2,15 +2,14 @@ package harustudy.backend.auth.domain.oauth;
 
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.util.OauthWebClient;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
@@ -35,6 +34,7 @@ public class GoogleOauthClient implements OauthClient {
     @Value("${oauth2.oauth-properties.google.user-info-uri}")
     private String userInfoUri;
 
+    @Override
     public OauthTokenResponse requestOauthToken(String code) {
         return oauthWebClient.requestOauthToken(tokenUri, setupFormData(code));
     }
@@ -49,12 +49,13 @@ public class GoogleOauthClient implements OauthClient {
         return formData;
     }
 
+    @Override
     public Map<String, Object> requestOauthUserInfo(String accessToken) {
         return oauthWebClient.requestOauthUserInfo(userInfoUri, accessToken);
     }
 
     @Override
-    public String getProviderName() {
-        return PROVIDER_NAME;
+    public boolean supports(String oauthClient) {
+        return oauthClient.equals(PROVIDER_NAME);
     }
 }
