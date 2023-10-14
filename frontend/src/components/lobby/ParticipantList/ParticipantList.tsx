@@ -5,13 +5,20 @@ import Typography from '@Components/common/Typography/Typography';
 import color from '@Styles/color';
 import { TextSkeletonStyle } from '@Styles/common';
 
-import type { Participant } from '@Types/study';
+import useLobbyInfoPolling from '../hooks/useLobbyInfoPolling';
 
 type Props = {
-  participantList: Participant[];
+  studyId: string;
+  onStartStudy: () => void;
 };
 
-const ParticipantList = ({ participantList }: Props) => {
+const ParticipantList = ({ studyId, onStartStudy }: Props) => {
+  const { participantList, studyStatus } = useLobbyInfoPolling(studyId);
+
+  if (studyStatus && studyStatus !== 'waiting') {
+    onStartStudy();
+  }
+
   return (
     <Layout>
       <Typography

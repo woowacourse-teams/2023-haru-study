@@ -26,7 +26,7 @@ const ProgressPolling = () => {
     }
   }, [result]);
 
-  return <></>;
+  return null;
 };
 
 export default ProgressPolling;

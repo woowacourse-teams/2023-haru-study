@@ -30,7 +30,7 @@ const StudyLobbyContents = () => {
     navigate(ROUTES_PATH.landing);
   };
 
-  const { isHost, participantCode, participantList, startStudy, isStarting, exitStudy, isExiting } = useStudyLobby(
+  const { isHost, participantCode, startStudy, isStarting, exitStudy, isExiting } = useStudyLobby(
     studyId,
     memberInfo!.memberId,
     onStartStudy,
@@ -51,7 +51,7 @@ const StudyLobbyContents = () => {
     participantCode && (
       <Layout>
         <ParticipantCodeCopier participantCode={participantCode}></ParticipantCodeCopier>
-        <ParticipantList participantList={participantList} />
+        <ParticipantList studyId={studyId} onStartStudy={onStartStudy} />
         <BottomButtonWrapper>
           {isHost ? (
             <>
