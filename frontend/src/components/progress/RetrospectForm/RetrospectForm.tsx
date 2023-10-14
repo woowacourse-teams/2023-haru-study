@@ -57,7 +57,11 @@ const RetrospectForm = () => {
           다음 항목에 답변해주세요.
         </Typography>
         <QuestionList>
-          <QuestionTextarea question={RETROSPECT_QUESTIONS.doneAsExpected} {...questionTextareaProps.doneAsExpected} />
+          <QuestionTextarea
+            question={RETROSPECT_QUESTIONS.doneAsExpected}
+            disabled={isSubmitted}
+            {...questionTextareaProps.doneAsExpected}
+          />
         </QuestionList>
         <OptionalQuestionToggle onClick={toggleOptionalQuestion}>
           <Typography variant="h5" fontWeight="600">
@@ -69,9 +73,14 @@ const RetrospectForm = () => {
           <QuestionList>
             <QuestionTextarea
               question={RETROSPECT_QUESTIONS.experiencedDifficulty}
+              disabled={isSubmitted}
               {...questionTextareaProps.experiencedDifficulty}
             />
-            <QuestionTextarea question={RETROSPECT_QUESTIONS.lesson} {...questionTextareaProps.lesson} />
+            <QuestionTextarea
+              question={RETROSPECT_QUESTIONS.lesson}
+              disabled={isSubmitted}
+              {...questionTextareaProps.lesson}
+            />
           </QuestionList>
         )}
       </QuestionLayout>

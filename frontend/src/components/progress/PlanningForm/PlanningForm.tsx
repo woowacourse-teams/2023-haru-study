@@ -64,11 +64,13 @@ const PlanningForm = () => {
           <QuestionTextarea
             question={PLAN_QUESTIONS.toDo}
             onClickGuideButton={openGuide('toDo')}
+            disabled={isSubmitted}
             {...questionTextareaProps.toDo}
           />
           <QuestionTextarea
             question={PLAN_QUESTIONS.completionCondition}
             onClickGuideButton={openGuide('completionCondition')}
+            disabled={isSubmitted}
             {...questionTextareaProps.completionCondition}
           />
         </QuestionList>
@@ -82,13 +84,19 @@ const PlanningForm = () => {
           <QuestionList>
             <QuestionTextarea
               question={PLAN_QUESTIONS.expectedProbability}
+              disabled={isSubmitted}
               {...questionTextareaProps.expectedProbability}
             />
             <QuestionTextarea
               question={PLAN_QUESTIONS.expectedDifficulty}
+              disabled={isSubmitted}
               {...questionTextareaProps.expectedDifficulty}
             />
-            <QuestionTextarea question={PLAN_QUESTIONS.whatCanYouDo} {...questionTextareaProps.whatCanYouDo} />
+            <QuestionTextarea
+              question={PLAN_QUESTIONS.whatCanYouDo}
+              disabled={isSubmitted}
+              {...questionTextareaProps.whatCanYouDo}
+            />
           </QuestionList>
         )}
       </QuestionLayout>
