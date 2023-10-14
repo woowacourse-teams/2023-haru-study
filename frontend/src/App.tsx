@@ -4,6 +4,7 @@ import { ThemeProvider } from 'styled-components';
 
 import ErrorBoundary from '@Components/common/ErrorBoundary/ErrorBoundary';
 import ErrorFallback from '@Components/common/ErrorFallback/ErrorFallback';
+import ScrollToTop from '@Components/common/ScrollToTop/ScrollToTop';
 
 import GlobalStyles from '@Styles/globalStyle';
 import { lightTheme } from '@Styles/theme';
@@ -21,6 +22,7 @@ const App = () => {
           <MemberInfoProvider>
             <ErrorBoundary fallback={ErrorFallback}>
               <Suspense>
+                <ScrollToTop />
                 <Outlet />
               </Suspense>
             </ErrorBoundary>
