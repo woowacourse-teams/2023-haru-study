@@ -105,7 +105,7 @@ const PlanningForm = () => {
         {isHost && (
           <StyledButton
             variant="outlined"
-            loadingCricleColor={color.blue[500]}
+            loadingCircleColor={color.blue[500]}
             onClick={moveToStudyingStep}
             isLoading={checkParticipantSubmittedLoading || moveToNextStepLoading}
           >

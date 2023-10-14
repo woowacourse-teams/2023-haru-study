@@ -104,7 +104,7 @@ type Props = {
   variant: keyof typeof VARIANT_TYPE;
   size?: ButtonSizeType;
   isLoading?: boolean;
-  loadingCricleColor?: string;
+  loadingCircleColor?: string;
   $block?: boolean;
   $style?: CSSProp;
 };
@@ -115,7 +115,7 @@ const Button = ({
   onClick,
   disabled,
   isLoading,
-  loadingCricleColor,
+  loadingCircleColor,
   size = 'medium',
   $block = true,
   $style,
@@ -134,7 +134,7 @@ const Button = ({
     >
       {isLoading && (
         <CircularProgressLayout>
-          <CircularProgress size={size} circleColor={loadingCricleColor} />
+          <CircularProgress size={size} circleColor={loadingCircleColor} />
         </CircularProgressLayout>
       )}
       <ButtonText isLoading={isLoading}>{children}</ButtonText>

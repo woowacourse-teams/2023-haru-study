@@ -88,7 +88,7 @@ const RetrospectForm = () => {
         {isHost && (
           <NextStepButton
             variant="outlined"
-            loadingCricleColor={color.teal[600]}
+            loadingCircleColor={color.teal[600]}
             onClick={moveToNextCycle}
             isLoading={checkParticipantSubmittedLoading || moveToNextStepLoading}
           >

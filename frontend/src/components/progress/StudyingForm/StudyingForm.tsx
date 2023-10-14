@@ -40,7 +40,7 @@ const StudyingForm = () => {
             variant="outlined"
             onClick={moveToNextStep}
             isLoading={moveToNextStepLoading}
-            loadingCricleColor={color.red[600]}
+            loadingCircleColor={color.red[600]}
           >
             회고 단계로 <ArrowIcon direction="right" color={color.red[600]} />
           </NextStepButton>
