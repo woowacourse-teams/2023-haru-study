@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
@@ -5,19 +7,36 @@ import Typography from '@Components/common/Typography/Typography';
 import color from '@Styles/color';
 import { TextSkeletonStyle } from '@Styles/common';
 
+import { ROUTES_PATH } from '@Constants/routes';
+
+import { useModal } from '@Contexts/ModalProvider';
+import { useNotification } from '@Contexts/NotificationProvider';
+
 import useLobbyInfoPolling from '../hooks/useLobbyInfoPolling';
 
 type Props = {
   studyId: string;
-  onStartStudy: () => void;
 };
 
-const ParticipantList = ({ studyId, onStartStudy }: Props) => {
+const ParticipantList = ({ studyId }: Props) => {
+  const navigate = useNavigate();
+  const { send } = useNotification();
+  const { openAlert } = useModal();
+
   const { participantList, studyStatus } = useLobbyInfoPolling(studyId);
 
-  if (studyStatus && studyStatus !== 'waiting') {
-    onStartStudy();
-  }
+  useEffect(() => {
+    if (studyStatus && studyStatus !== 'waiting') {
+      send({ message: '스터디가 시작되었습니다.' });
+      navigate(`${ROUTES_PATH.progress}/${studyId}`, { state: { block: false } });
+    }
+
+    if (participantList?.length === 0) {
+      openAlert('스터디장이 스터디를 종료했습니다. 메인 페이지로 이동합니다.', () => {
+        navigate(ROUTES_PATH.landing, { state: { block: false } });
+      });
+    }
+  }, [participantList, studyStatus]);
 
   return (
     <Layout>
@@ -32,7 +51,7 @@ const ParticipantList = ({ studyId, onStartStudy }: Props) => {
         현재 참여한 스터디원
       </Typography>
       <MemberList>
-        {participantList.length === 0 ? (
+        {participantList === undefined ? (
           <>
             <MemberNameSkeleton />
             <MemberNameSkeleton />

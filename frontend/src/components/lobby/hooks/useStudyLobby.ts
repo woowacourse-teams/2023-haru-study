@@ -8,13 +8,11 @@ import {
   requestPostNextStep,
 } from '@Apis/index';
 
-const useStudyLobby = (studyId: string, memberId: string, onStartStudy: () => void) => {
+const useStudyLobby = (studyId: string, memberId: string) => {
   const { result: participantCode } = useFetch(() => requestGetParticipantCode(studyId));
   const { result: participantInfo } = useFetch(() => requestGetParticipant(studyId, memberId));
 
-  const { mutate: startStudy, isLoading: isStarting } = useMutation(() => requestPostNextStep(studyId), {
-    onSuccess: onStartStudy,
-  });
+  const { mutate: startStudy, isLoading: isStarting } = useMutation(() => requestPostNextStep(studyId));
   const { mutate: exitStudy, isLoading: isExiting } = useMutation(() =>
     requestDeleteParticipant(studyId, Number(participantInfo?.participantId)),
   );

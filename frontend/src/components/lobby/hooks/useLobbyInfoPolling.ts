@@ -9,7 +9,7 @@ const useLobbyInfoPolling = (studyId: string) => {
   });
 
   return {
-    participantList: lobbyInfo?.participants ?? [],
+    participantList: lobbyInfo?.participants,
     studyStatus: lobbyInfo?.studyStep,
   };
 };

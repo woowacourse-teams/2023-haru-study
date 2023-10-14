@@ -21,23 +21,25 @@ const StudyLobbyContents = () => {
 
   if (!studyId) throw new Error('잘못 된 접근입니다.');
 
-  const onStartStudy = () => {
-    send({ message: '스터디가 시작되었습니다.' });
-    navigate(`${ROUTES_PATH.progress}/${studyId}`);
-  };
+  const { isHost, participantCode, startStudy, isStarting, exitStudy, isExiting } = useStudyLobby(
+    studyId,
+    memberInfo!.memberId,
+  );
 
   const navigateToHome = () => {
     navigate(ROUTES_PATH.landing);
   };
 
-  const { isHost, participantCode, startStudy, isStarting, exitStudy, isExiting } = useStudyLobby(
-    studyId,
-    memberInfo!.memberId,
-    onStartStudy,
-  );
+  const handleStartStudy = async () => {
+    await startStudy();
+
+    send({ message: '스터디를 시작합니다.' });
+    navigate(`${ROUTES_PATH.progress}/${studyId}`, { state: { block: false } });
+  };
 
   unstable_useBlocker(({ nextLocation }) => {
-    if (nextLocation.pathname === `${ROUTES_PATH.progress}/${studyId}`) return false;
+    const state = nextLocation.state as { block: boolean } | null;
+    if (state?.block === false) return false;
 
     if (confirm('정말로 스터디를 나가시겠습니까?')) {
       exitStudy();
@@ -51,12 +53,12 @@ const StudyLobbyContents = () => {
     participantCode && (
       <Layout>
         <ParticipantCodeCopier participantCode={participantCode}></ParticipantCodeCopier>
-        <ParticipantList studyId={studyId} onStartStudy={onStartStudy} />
+        <ParticipantList studyId={studyId} />
         <BottomButtonWrapper>
           {isHost ? (
             <>
               <WaitingMessageWrapper>인원이 모두 참여했다면 시작 버튼을 눌러주세요.</WaitingMessageWrapper>
-              <Button variant="primary" onClick={startStudy} isLoading={isStarting}>
+              <Button variant="primary" onClick={handleStartStudy} isLoading={isStarting}>
                 스터디 시작하기
               </Button>
               <Button variant="outlined" onClick={navigateToHome} isLoading={isExiting}>
