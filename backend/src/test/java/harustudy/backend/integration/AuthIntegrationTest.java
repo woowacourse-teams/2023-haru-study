@@ -46,7 +46,7 @@ class AuthIntegrationTest extends IntegrationTest {
     void 비회원_로그인을_한다() throws Exception {
         // given, when
         MockHttpServletResponse response = mockMvc.perform(
-                        post("/api/auth/guest"))
+                        post("/api/v2/auth/guest"))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
@@ -72,7 +72,7 @@ class AuthIntegrationTest extends IntegrationTest {
 
         // when
         MvcResult result = mockMvc.perform(
-                        post("/api/auth/refresh")
+                        post("/api/v2/auth/refresh")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .cookie(memberDto.cookie()))
                 .andExpect(status().isOk())
@@ -100,7 +100,7 @@ class AuthIntegrationTest extends IntegrationTest {
         RefreshToken refreshToken = generateAndSaveRefreshTokenOf(member);
 
         // when, then
-        mockMvc.perform(post("/api/auth/logout")
+        mockMvc.perform(post("/api/v2/auth/logout")
                         .cookie(new Cookie("refreshToken", refreshToken.getUuid().toString()))
                         .header(HttpHeaders.AUTHORIZATION, memberDto.createAuthorizationHeader()))
                 .andExpect(status().isOk())

@@ -30,20 +30,20 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loggingInterceptor)
-                .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/error-code")
-                .excludePathPatterns("/api/resources/**");
+                .addPathPatterns("/api/v2/**")
+                .excludePathPatterns("/api/v2/error-code")
+                .excludePathPatterns("/api/v2/resources/**");
 
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/auth/**")
-                .excludePathPatterns("/api/error-code")
-                .excludePathPatterns("/api/resources/**");
+                .addPathPatterns("/api/v2/**")
+                .excludePathPatterns("/api/v2/auth/**")
+                .excludePathPatterns("/api/v2/error-code")
+                .excludePathPatterns("/api/v2/resources/**");
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
+        registry.addMapping("/api/v2/**")
                 .allowedOriginPatterns(corsAllowOrigins)
                 .allowedMethods("*")
                 .allowCredentials(true);
@@ -51,7 +51,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/api/resources/**")
+        registry.addResourceHandler("/api/v2/resources/**")
                 .addResourceLocations("classpath:/static/")
                 .setUseLastModified(true)
                 .setCacheControl(CacheControl.maxAge(Duration.ofDays(365)).cachePublic());

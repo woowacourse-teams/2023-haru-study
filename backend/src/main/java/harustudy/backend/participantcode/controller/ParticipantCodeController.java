@@ -20,7 +20,7 @@ public class ParticipantCodeController {
     private final ParticipantCodeService participantCodeService;
 
     @Operation(summary = "스터디 아이디로 참여 코드 조회")
-    @GetMapping("/api/participant-codes")
+    @GetMapping("/api/v2/participant-codes")
     public ResponseEntity<ParticipantCodeResponse> findParticipantCodeByStudyId(
             @Authenticated AuthMember authMember,
             @RequestParam Long studyId

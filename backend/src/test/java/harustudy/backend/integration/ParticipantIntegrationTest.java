@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -41,7 +40,7 @@ class ParticipantIntegrationTest extends IntegrationTest {
     void participantId로_참여자를_조회한다() throws Exception {
         // given, when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/{studyId}/participants/{participantId}", study.getId(),
+                        get("/api/v2/studies/{studyId}/participants/{participantId}", study.getId(),
                                 participant.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header(HttpHeaders.AUTHORIZATION, memberDto.createAuthorizationHeader()))

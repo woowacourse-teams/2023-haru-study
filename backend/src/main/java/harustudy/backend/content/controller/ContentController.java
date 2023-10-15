@@ -25,7 +25,7 @@ public class ContentController {
     private final ContentService contentService;
 
     @Operation(summary = "필터링 조건으로 멤버 컨텐츠 조회")
-    @GetMapping("/api/studies/{studyId}/contents")
+    @GetMapping("/api/v2/studies/{studyId}/contents")
     public ResponseEntity<ContentsResponse> findMemberContentsWithFilter(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId,
@@ -37,7 +37,7 @@ public class ContentController {
     }
 
     @Operation(summary = "스터디 계획 작성")
-    @PostMapping("/api/studies/{studyId}/contents/write-plan")
+    @PostMapping("/api/v2/studies/{studyId}/contents/write-plan")
     public ResponseEntity<Void> writePlan(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId,
@@ -48,7 +48,7 @@ public class ContentController {
     }
 
     @Operation(summary = "스터디 회고 작성")
-    @PostMapping("/api/studies/{studyId}/contents/write-retrospect")
+    @PostMapping("/api/v2/studies/{studyId}/contents/write-retrospect")
     public ResponseEntity<Void> writeRetrospect(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId,

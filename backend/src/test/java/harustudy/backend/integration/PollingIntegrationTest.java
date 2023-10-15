@@ -61,7 +61,7 @@ class PollingIntegrationTest extends IntegrationTest {
     @Test
     void 스터디에_참여한_참여자들을_폴링으로_조회한다() throws Exception {
         // given, when
-        MvcResult mvcResult = mockMvc.perform(get("/api/waiting")
+        MvcResult mvcResult = mockMvc.perform(get("/api/v2/waiting")
                         .param("studyId", String.valueOf(study.getId()))
                         .accept(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, memberDto1.createAuthorizationHeader()))
@@ -94,7 +94,7 @@ class PollingIntegrationTest extends IntegrationTest {
 
         //when
         MvcResult result = mockMvc.perform(
-                        get("/api/progress")
+                        get("/api/v2/progress")
                                 .header(HttpHeaders.AUTHORIZATION, memberDto1.createAuthorizationHeader())
                                 .param("studyId", String.valueOf(study.getId())))
                 .andExpect(status().isOk())
@@ -110,7 +110,7 @@ class PollingIntegrationTest extends IntegrationTest {
 
     void 스터디_진행() throws Exception {
         mockMvc.perform(
-                        post("/api/studies/{studyId}/next-step", study.getId())
+                        post("/api/v2/studies/{studyId}/next-step", study.getId())
                                 .header(HttpHeaders.AUTHORIZATION, memberDto1.createAuthorizationHeader()))
                 .andExpect(status().isNoContent());
     }
