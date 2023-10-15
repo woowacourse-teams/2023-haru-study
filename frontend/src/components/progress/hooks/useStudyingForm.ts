@@ -1,19 +1,16 @@
 import useFetch from '@Hooks/api/useFetch';
-import useMutation from '@Hooks/api/useMutation';
 
-import { useProgressInfo, useStudyInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
+import { useParticipantInfo, useStudyInfo } from '@Contexts/StudyProgressProvider';
 
-import { requestGetMemberContents } from '@Apis/index';
+import { requestGetMemberPlan } from '@Apis/index';
 
 const useStudyingForm = () => {
-  const { studyId } = useStudyInfo();
-  const { progressId, currentCycle } = useProgressInfo();
-  const { onNextStep } = useStudyProgressAction();
+  const { studyId, currentCycle } = useStudyInfo();
+  const { participantId } = useParticipantInfo();
 
-  const { result: planList } = useFetch(() => requestGetMemberContents(studyId, progressId, currentCycle));
-  const { mutate: submitForm, isLoading: isSubmitLoading } = useMutation(() => onNextStep());
+  const { result: planList } = useFetch(() => requestGetMemberPlan(studyId, participantId, currentCycle));
 
-  return { planList, isSubmitLoading, submitForm };
+  return { planList };
 };
 
 export default useStudyingForm;

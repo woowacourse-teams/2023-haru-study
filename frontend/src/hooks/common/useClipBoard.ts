@@ -1,24 +1,17 @@
 import { useState, useCallback } from 'react';
 
-type CopyFunction = (text: string) => Promise<void>;
-
 const useClipBoard = () => {
-  const [isCopy, setIsCopy] = useState<boolean>(false);
+  const [isCopied, setIsCopied] = useState<boolean>(false);
 
-  const copy: CopyFunction = useCallback(
+  const copy = useCallback(
     async (text: string) => {
-      try {
-        await navigator.clipboard.writeText(text);
-        setIsCopy(true);
-      } catch (error) {
-        setIsCopy(false);
-        console.error(error);
-      }
+      await navigator.clipboard.writeText(text);
+      setIsCopied(true);
     },
-    [setIsCopy],
+    [setIsCopied],
   );
 
-  return { isCopy, copy };
+  return { isCopied, copy };
 };
 
 export default useClipBoard;

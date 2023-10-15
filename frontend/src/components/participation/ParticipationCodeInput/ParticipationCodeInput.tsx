@@ -17,11 +17,11 @@ const ParticipationCodeInput = () => {
   const { authenticateParticipationCode, isLoading } = useCheckParticipationCode(participantCodeInput.state ?? '');
 
   const handleOnClickParticipateButton = async () => {
-    const result = await authenticateParticipationCode();
+    const studyResult = await authenticateParticipationCode();
 
-    if (result) {
-      navigate(`${ROUTES_PATH.preparation}/${result.studies[0].studyId}`, {
-        state: { studyName: result.studies[0].name },
+    if (studyResult) {
+      navigate(`${ROUTES_PATH.preparation}/${studyResult.studies[0].studyId}`, {
+        state: { studyName: studyResult.studies[0].name },
       });
     }
   };

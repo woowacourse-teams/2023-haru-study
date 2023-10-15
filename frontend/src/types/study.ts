@@ -4,6 +4,8 @@ export type TotalCycleOptions = (typeof TOTAL_CYCLE_OPTIONS)[number];
 
 export type StudyTimePerCycleOptions = (typeof STUDY_TIME_PER_CYCLE_OPTIONS)[number];
 
+export type StudyStatus = 'waiting' | 'inProgress' | 'done';
+
 export type Step = 'planning' | 'studying' | 'retrospect';
 
 export type Member = {
@@ -41,14 +43,11 @@ export type StudyInfo = {
   name: string;
   totalCycle: number;
   timePerCycle: number;
-  createdDate: string;
-};
-
-export type ProgressInfo = {
-  progressId: string;
-  nickname: string;
   currentCycle: number;
-  step: Step | 'done';
+  studyStep: StudyStatus;
+  progressStep: Step;
+  createdDate: string;
+  lastModifiedDate: string;
 };
 
 export type StudyMode = 'group' | 'alone';

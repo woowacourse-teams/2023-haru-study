@@ -16,6 +16,7 @@ const MemberRecord = lazy(() => import('@Pages/MemberRecord'));
 const StudyProgress = lazy(() => import('@Pages/StudyProgress'));
 const StudyPreparation = lazy(() => import('@Pages/StudyPreparation'));
 const StudyParticipation = lazy(() => import('@Pages/StudyParticipation'));
+const StudyLobby = lazy(() => import('@Pages/StudyLobby'));
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: ROUTES_PATH.mode,
         element: <StudyMode />,
+      },
+      {
+        path: `${ROUTES_PATH.lobby}/:studyId`,
+        element: <StudyLobby />,
       },
     ],
   },

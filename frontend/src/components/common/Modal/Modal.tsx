@@ -48,13 +48,13 @@ const Backdrop = styled.div`
 `;
 
 const ModalContainer = styled.div`
+  width: 500px;
+
   padding: 20px;
   border-radius: 8px;
 
   background-color: ${color.white};
 
-  width: 500px;
-  max-height: 600px;
   overflow-y: auto;
 
   @media screen and (max-width: 768px) {

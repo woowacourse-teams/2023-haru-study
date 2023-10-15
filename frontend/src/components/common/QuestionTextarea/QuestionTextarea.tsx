@@ -39,7 +39,7 @@ const QuestionTextarea = ({ question, errorMessage, onClickGuideButton, ...props
 
 export default QuestionTextarea;
 
-const Layout = styled.div`
+const Layout = styled.div<{ disabled?: boolean }>`
   width: 100%;
 
   padding: 16px 30px 10px 30px;
@@ -91,6 +91,11 @@ const Textarea = styled.textarea`
   resize: none;
   outline: none;
   border: none;
+
+  &:disabled {
+    background-color: #fff;
+    color: ${color.neutral[400]};
+  }
 `;
 
 const ErrorMessageWrapper = styled.div`

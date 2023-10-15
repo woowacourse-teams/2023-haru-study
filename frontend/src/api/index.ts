@@ -1,15 +1,18 @@
 import type {
-  ResponseMemberProgress,
   ResponseAuthToken,
   ResponseMemberInfo,
   ResponseParticipantRecordContents,
-  ResponseOneStudyInfo,
+  ResponseStudyInfo,
   ResponseMemberContents,
   ResponseStudies,
   ResponseMemberListRecord,
   ResponseMemberCalenderRecord,
   ResponseStudyParticipants,
+  ResponseParticipantCode,
+  ResponseLobbyInfo,
   ResponseCheckParticipants,
+  ResponseMemberSubmitStatus,
+  ResponseCurrentStep,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
@@ -55,38 +58,29 @@ export const requestPostLogout = () => http.post(`/api/auth/logout`);
 
 export const requestGetMemberInfo = () => http.get<ResponseMemberInfo>('/api/me');
 
-export const requestGetOneStudyData = async (studyId: string) => {
-  const { data } = await http.get<ResponseOneStudyInfo>(`/api/studies/${studyId}`);
+export const requestGetStudyInfo = async (studyId: string) => {
+  const { data: studyInfo } = await http.get<ResponseStudyInfo>(`/api/studies/${studyId}`);
 
-  return data;
+  return studyInfo;
 };
 
-export const requestGetMemberProgress = async (studyId: string, memberId: string) => {
-  const { data } = await http.get<ResponseMemberProgress>(`/api/studies/${studyId}/progresses?memberId=${memberId}`);
-
-  return data.progresses[0];
-};
-
-export const requestGetMemberContents = async (studyId: string, progressId: string, cycle: number) => {
+export const requestGetMemberPlan = async (studyId: string, participantId: string, cycle: number) => {
   const { data } = await http.get<ResponseMemberContents>(
-    `/api/studies/${studyId}/contents?progressId=${progressId}&cycle=${cycle}`,
+    `/api/studies/${studyId}/contents?participantId=${participantId}&cycle=${cycle}`,
   );
 
   return data.content[0].plan;
 };
 
-export const requestWritePlan = (studyId: string, progressId: string, plan: PlanList) =>
+export const requestWritePlan = (studyId: string, participantId: string, plan: PlanList) =>
   http.post(`/api/studies/${studyId}/contents/write-plan`, {
-    body: JSON.stringify({ progressId, plan: plan }),
+    body: JSON.stringify({ participantId, plan: plan }),
   });
 
-export const requestWriteRetrospect = (studyId: string, progressId: string, retrospect: RetrospectList) =>
+export const requestWriteRetrospect = (studyId: string, participantId: string, retrospect: RetrospectList) =>
   http.post(`/api/studies/${studyId}/contents/write-retrospect`, {
-    body: JSON.stringify({ progressId, retrospect: retrospect }),
+    body: JSON.stringify({ participantId, retrospect: retrospect }),
   });
-
-export const requestNextStep = (studyId: string, progressId: string) =>
-  http.post(`/api/studies/${studyId}/progresses/${progressId}/next-step`);
 
 export const requestPostCreateStudy = async (
   studyName: string,
@@ -104,17 +98,17 @@ export const requestPostCreateStudy = async (
 };
 
 export const requestGetAuthenticateParticipationCode = async (participantCode: string) => {
-  const response = http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`);
+  const response = await http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`);
 
-  return (await response).data;
+  return response.data;
 };
 
 export const requestGetCheckParticipants = async (studyId: string, memberId: string) => {
-  const response = http.get<ResponseCheckParticipants>(
+  const response = await http.get<ResponseCheckParticipants>(
     `/api/temp/studies/${studyId}/participants?memberId=${memberId}`,
   );
 
-  return (await response).data;
+  return response.data;
 };
 
 export const requestPostRegisterParticipants = (nickname: string, studyId: string, memberId: string) =>
@@ -124,3 +118,31 @@ export const requestPostRegisterParticipants = (nickname: string, studyId: strin
 
 export const requestDeleteParticipant = (studyId: string, participantId: number) =>
   http.delete(`/api/studies/${studyId}/participants/${participantId}`);
+
+export const requestGetParticipantCode = async (studyId: string) => {
+  const response = await http.get<ResponseParticipantCode>(`/api/participant-codes?studyId=${studyId}`);
+
+  return response.data.participantCode;
+};
+
+export const requestGetParticipant = async (studyId: string, memberId: string) => {
+  const response = await http.get<ResponseStudyParticipants>(
+    `/api/studies/${studyId}/participants?memberId=${memberId}`,
+  );
+
+  return response.data.participants[0];
+};
+
+export const requestGetLobbyInfo = async (studyId: string) => {
+  const response = await http.get<ResponseLobbyInfo>(`/api/waiting?studyId=${studyId}`);
+
+  return response.data;
+};
+
+export const requestPostNextStep = (studyId: string) => http.post(`/api/studies/${studyId}/next-step`);
+
+export const requestGetMemberSubmitStatus = (studyId: string) =>
+  http.get<ResponseMemberSubmitStatus>(`/api/submitted?studyId=${studyId}`);
+
+export const requestGetCurrentStep = (studyId: string) =>
+  http.get<ResponseCurrentStep>(`/api/progress?studyId=${studyId}`);

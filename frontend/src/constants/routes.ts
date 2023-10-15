@@ -9,4 +9,5 @@ export const ROUTES_PATH = {
   participation: '/participation',
   memberRecord: '/member-record',
   mode: '/mode',
+  lobby: '/lobby',
 } as const;
