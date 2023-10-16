@@ -30,8 +30,12 @@ public class PollingService {
 
     public WaitingResponse pollWaiting(Long studyId) {
         Study study = studyRepository.findByIdIfExists(studyId);
-        return WaitingResponse.of(study, study.getParticipants());
+        if (doesHostExists(study.getParticipants())) {
+            return WaitingResponse.of(study, study.getParticipants());
+        }
+        return WaitingResponse.of(study, Collections.emptyList());
     }
+
     public ProgressResponse pollProgress(Long studyId) {
         Step step = studyRepository.findStepById(studyId)
                 .orElseThrow(StudyNotFoundException::new);
@@ -41,10 +45,7 @@ public class PollingService {
     public SubmittersResponse findSubmitters(Long studyId) {
         Study study = studyRepository.findByIdIfExists(studyId);
         List<Participant> participants = participantRepository.findByStudy(study);
-        if (doesHostExists(participants)) {
-            return generateSubmitterResponses(study, participants);
-        }
-        return generateEmptyResponse();
+        return generateSubmitterResponses(study, participants);
     }
 
     private boolean doesHostExists(List<Participant> participants) {
