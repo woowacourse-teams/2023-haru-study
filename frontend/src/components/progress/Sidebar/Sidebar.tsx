@@ -43,7 +43,7 @@ const Sidebar = () => {
       : SIDEBAR_INFO[progressStep].paragraph;
 
   const openStudyInfo = () => {
-    openModal(<StudyInfoModal {...studyInfo} />);
+    openModal(<StudyInfoModal studyInfo={studyInfo} />);
   };
 
   return (

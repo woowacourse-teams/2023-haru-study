@@ -18,11 +18,7 @@ export type ResponseStudies = {
   studies: StudyInfo[];
 };
 
-type ResponseParticipantInfo = {
-  participantId: number;
-  nickname: string;
-  isHost: boolean;
-};
+type ResponseParticipantInfo = Participant;
 
 export type ResponseCheckParticipants = {
   participants: ResponseParticipantInfo[] | null;

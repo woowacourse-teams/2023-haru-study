@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
@@ -7,6 +8,7 @@ import useFetch from '@Hooks/api/useFetch';
 
 import color from '@Styles/color';
 
+import { ROUTES_PATH } from '@Constants/routes';
 import { STEP_KEYWORDS } from '@Constants/study';
 
 import { useModal } from '@Contexts/ModalProvider';
@@ -15,7 +17,13 @@ import { requestGetMemberSubmitStatus } from '@Apis/index';
 
 import type { Step, StudyInfo } from '@Types/study';
 
-const StudyInfoModal = ({ studyId, name, totalCycle, timePerCycle, currentCycle, progressStep }: StudyInfo) => {
+type Props = {
+  studyInfo: StudyInfo;
+};
+
+const StudyInfoModal = ({ studyInfo }: Props) => {
+  const { studyId, name, totalCycle, timePerCycle, currentCycle, progressStep } = studyInfo;
+  const navigate = useNavigate();
   const { closeModal } = useModal();
 
   const { result: studySubmitStatus } = useFetch(
@@ -26,6 +34,13 @@ const StudyInfoModal = ({ studyId, name, totalCycle, timePerCycle, currentCycle,
     },
     { suspense: false, refetchInterval: 2000 },
   );
+
+  const handleExitStudy = () => {
+    if (confirm('정말로 진행 중인 스터디를 나가시겠습니까?')) {
+      navigate(ROUTES_PATH.landing);
+      closeModal();
+    }
+  };
 
   const getSubmitStatusText = (progressStep: Step, isSubmitted: boolean) => {
     if (progressStep === 'studying') return '학습 중';
@@ -39,9 +54,14 @@ const StudyInfoModal = ({ studyId, name, totalCycle, timePerCycle, currentCycle,
   return (
     <Layout>
       <Section>
-        <Typography variant="h5" fontWeight="700">
-          {name} 스터디
-        </Typography>
+        <TitleContainer>
+          <Typography variant="h5" fontWeight="700">
+            {name} 스터디
+          </Typography>
+          <ExitButton variant="outlined" size="x-small" onClick={handleExitStudy}>
+            스터디 나가기
+          </ExitButton>
+        </TitleContainer>
         <InfoContainer>
           <Typography variant="h6">총 사이클 횟수</Typography>
           <Typography variant="h6">{totalCycle}회</Typography>
@@ -53,11 +73,10 @@ const StudyInfoModal = ({ studyId, name, totalCycle, timePerCycle, currentCycle,
       </Section>
       <Separator />
       <Section>
-        <TitleContainer>
-          <Typography variant="h5" fontWeight="700">
-            스터디원 현황
-          </Typography>
-        </TitleContainer>
+        <Typography variant="h5" fontWeight="700">
+          스터디원 현황
+        </Typography>
+
         <ParticipantContainer>
           {studySubmitStatus === null ? (
             <>
@@ -117,12 +136,6 @@ const InfoContainer = styled.div`
   align-items: center;
 `;
 
-const TitleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-`;
-
 const ParticipantContainer = styled.div`
   height: 270px;
 
@@ -142,10 +155,29 @@ const CurrentStep = styled(Typography)`
   text-align: center;
 `;
 
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+`;
+
+const ExitButton = styled(Button)`
+  width: fit-content;
+
+  border: none;
+
+  padding-left: 6px;
+  padding-right: 6px;
+
+  color: ${color.red[500]};
+`;
+
 const CloseButton = styled(Button)`
   width: fit-content;
-  float: right;
+  font-weight: 500;
 
+  float: right;
   margin-top: 18px;
 `;
 
