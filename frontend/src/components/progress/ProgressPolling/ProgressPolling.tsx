@@ -12,19 +12,26 @@ const ProgressPolling = () => {
   const { studyId, progressStep } = useStudyInfo();
   const { updateStudyInfo } = useStudyProgressAction();
 
-  const { result } = useFetch(() => requestGetCurrentStep(studyId), {
-    refetchInterval: 3000,
-    enabled: !isHost,
-    suspense: false,
-  });
+  const { result: fetchedProgressStep } = useFetch(
+    async () => {
+      const { data } = await requestGetCurrentStep(studyId);
+
+      return data.progressStep;
+    },
+    {
+      refetchInterval: 3000,
+      enabled: !isHost,
+      suspense: false,
+    },
+  );
 
   useEffect(() => {
-    if (!result) return;
+    if (!fetchedProgressStep) return;
 
-    if (progressStep !== result.data.progressStep) {
+    if (progressStep !== fetchedProgressStep) {
       updateStudyInfo();
     }
-  }, [result]);
+  }, [fetchedProgressStep]);
 
   return null;
 };

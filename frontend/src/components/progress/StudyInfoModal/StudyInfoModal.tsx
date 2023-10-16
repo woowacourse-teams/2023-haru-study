@@ -32,8 +32,6 @@ const StudyInfoModal = ({ studyId, name, totalCycle, timePerCycle, currentCycle,
     { suspense: false },
   );
 
-  // 리프레시 버튼
-
   const getSubmitStatusText = (progressStep: Step, isSubmitted: boolean) => {
     if (progressStep === 'studying') return '학습 중';
 

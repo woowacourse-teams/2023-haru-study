@@ -41,7 +41,7 @@ const StudyBoard = () => {
     }
 
     if (studyStep === 'done') {
-      send({ message: '이미 끝난 스터디입니다.\n스터디의 기록 페이지로 이동합니다.' });
+      send({ message: '스터디가 종료되었습니다.\n스터디 기록 페이지로 이동합니다.' });
       navigate(`${ROUTES_PATH.record}/${studyId}`);
       return;
     }
@@ -50,7 +50,7 @@ const StudyBoard = () => {
     send({ message: STEP_NOTIFICATION_MESSAGE[progressStep] });
 
     return () => dom.updateFavicon(FAVICON_PATH.default);
-  }, [progressStep]);
+  }, [progressStep, studyStep]);
 
   return (
     <Container>
