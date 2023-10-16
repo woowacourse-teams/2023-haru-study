@@ -12,6 +12,7 @@ import harustudy.backend.polling.dto.SubmitterResponse;
 import harustudy.backend.polling.dto.SubmittersResponse;
 import harustudy.backend.polling.dto.WaitingResponse;
 import harustudy.backend.polling.exception.CurrentCycleContentNotExistsException;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +41,15 @@ public class PollingService {
     public SubmittersResponse findSubmitters(Long studyId) {
         Study study = studyRepository.findByIdIfExists(studyId);
         List<Participant> participants = participantRepository.findByStudy(study);
-        return generateSubmitterResponses(study, participants);
+        if (doesHostExists(participants)) {
+            return generateSubmitterResponses(study, participants);
+        }
+        return generateEmptyResponse();
+    }
+
+    private boolean doesHostExists(List<Participant> participants) {
+        return participants.stream()
+                .anyMatch(Participant::getIsHost);
     }
 
     private SubmittersResponse generateSubmitterResponses(Study study, List<Participant> participants) {
@@ -54,6 +63,10 @@ public class PollingService {
                     SubmitterCheckingStrategy.isSubmitted(study.getStep(), currentCycleContent)));
         }
         return SubmittersResponse.from(submitterResponses);
+    }
+
+    private SubmittersResponse generateEmptyResponse() {
+        return SubmittersResponse.from(Collections.emptyList());
     }
 
     private Content extractCurrentCycleContent(Study study, Participant participant) {
