@@ -140,8 +140,6 @@ public class ContentService {
         validateStudyIsRetrospect(study);
 
         Content recentContent = findContentWithSameCycle(study, participant);
-        validateIsPlanFilled(recentContent);
-
         recentContent.changeRetrospect(request.retrospect());
     }
 
@@ -153,12 +151,6 @@ public class ContentService {
 
     private void validateStudyIsRetrospect(Study study) {
         if (!study.isStep(Step.RETROSPECT)) {
-            throw new StudyStepException();
-        }
-    }
-
-    private void validateIsPlanFilled(Content recentContent) {
-        if (!recentContent.isPlanWritten()) {
             throw new StudyStepException();
         }
     }
