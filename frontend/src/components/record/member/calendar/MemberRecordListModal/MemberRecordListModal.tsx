@@ -51,7 +51,10 @@ const Layout = styled.div`
   flex-direction: column;
   gap: 20px;
 
-  padding: 20px 10px;
+  padding: 10px;
+
+  max-height: 600px;
+  overflow-y: auto;
 
   button {
     align-self: flex-end;
