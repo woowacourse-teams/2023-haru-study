@@ -10,6 +10,7 @@ import java.util.function.Function;
 public enum SubmitterCheckingStrategy {
 
     PLANNING(Step.PLANNING, Content::isPlanWritten),
+    STUDYING(Step.STUDYING, content -> true),
     RETROSPECT(Step.RETROSPECT, Content::isRetrospectWritten);
 
     private final Step step;

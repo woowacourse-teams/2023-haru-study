@@ -45,7 +45,15 @@ public class PollingService {
     public SubmittersResponse findSubmitters(Long studyId) {
         Study study = studyRepository.findByIdIfExists(studyId);
         List<Participant> participants = participantRepository.findByStudy(study);
-        return generateSubmitterResponses(study, participants);
+        if (doesHostExists(participants)) {
+            return generateSubmitterResponses(study, participants);
+        }
+        return generateEmptyResponse();
+    }
+
+    private boolean doesHostExists(List<Participant> participants) {
+        return participants.stream()
+                .anyMatch(Participant::getIsHost);
     }
 
     private boolean doesHostExists(List<Participant> participants) {
