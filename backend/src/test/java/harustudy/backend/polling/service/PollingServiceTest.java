@@ -184,4 +184,20 @@ class PollingServiceTest {
             softly.assertThat(response.participants()).containsExactlyInAnyOrderElementsOf(expected);
         });
     }
+
+    @Test
+    void 대기방에서_방장이_나가면_참여자가_없는_것으로_반환된다() {
+        // given
+        Participant participant = entityManager.merge(participant1);
+        Content content = entityManager.merge(content1);
+        entityManager.remove(participant);
+        entityManager.remove(content);
+        EntityManagerUtil.flushAndClearContext(entityManager);
+
+        // when
+        SubmittersResponse response = pollingService.findSubmitters(study.getId());
+
+        // then
+        assertThat(response.status()).hasSize(0);
+    }
 }
