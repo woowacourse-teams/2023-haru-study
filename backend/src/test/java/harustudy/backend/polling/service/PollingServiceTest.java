@@ -195,9 +195,9 @@ class PollingServiceTest {
         EntityManagerUtil.flushAndClearContext(entityManager);
 
         // when
-        SubmittersResponse response = pollingService.findSubmitters(study.getId());
+        WaitingResponse response = pollingService.pollWaiting(study.getId());
 
         // then
-        assertThat(response.status()).hasSize(0);
+        assertThat(response.participants()).hasSize(0);
     }
 }
