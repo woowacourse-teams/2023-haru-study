@@ -1,7 +1,6 @@
 import { styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
-import RefreshButton from '@Components/common/RefreshButton/RefreshButton';
 import Typography from '@Components/common/Typography/Typography';
 
 import useFetch from '@Hooks/api/useFetch';
@@ -19,17 +18,13 @@ import type { Step, StudyInfo } from '@Types/study';
 const StudyInfoModal = ({ studyId, name, totalCycle, timePerCycle, currentCycle, progressStep }: StudyInfo) => {
   const { closeModal } = useModal();
 
-  const {
-    result: studySubmitStatus,
-    isLoading: refetchLoading,
-    refetch: refetchSubmitStatus,
-  } = useFetch(
+  const { result: studySubmitStatus } = useFetch(
     async () => {
       const { data } = await requestGetMemberSubmitStatus(studyId);
 
       return data.status;
     },
-    { suspense: false },
+    { suspense: false, refetchInterval: 2000 },
   );
 
   const getSubmitStatusText = (progressStep: Step, isSubmitted: boolean) => {
@@ -62,10 +57,9 @@ const StudyInfoModal = ({ studyId, name, totalCycle, timePerCycle, currentCycle,
           <Typography variant="h5" fontWeight="700">
             스터디원 현황
           </Typography>
-          <RefreshButton onClick={refetchSubmitStatus} diameter={24} />
         </TitleContainer>
         <ParticipantContainer>
-          {refetchLoading ? (
+          {studySubmitStatus === null ? (
             <>
               <InfoContainer>
                 <ParticipantSkeleton />
