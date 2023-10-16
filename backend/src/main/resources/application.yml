@@ -4,8 +4,6 @@ spring:
       hibernate:
         ddl-auto: create-drop
         format_sql: true
-        jdbc:
-          time_zone: UTC
     show-sql: true
     open-in-view: false
   datasource:
