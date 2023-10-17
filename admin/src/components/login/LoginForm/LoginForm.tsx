@@ -1,23 +1,9 @@
-import type { ChangeEventHandler, FormEventHandler } from 'react';
-import { useState } from 'react';
 import { styled } from 'styled-components';
 
+import useLogin from '../hooks/useLogin';
+
 const LoginForm = () => {
-  const [account, setAccount] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setAccount(e.target.value);
-  };
-
-  const handlePasswordChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit: FormEventHandler = (e) => {
-    e.preventDefault();
-    console.log('submit');
-  };
+  const { account, password, handleUsernameChange, handlePasswordChange, handleSubmit } = useLogin();
 
   return (
     <FormContainer onSubmit={handleSubmit}>
