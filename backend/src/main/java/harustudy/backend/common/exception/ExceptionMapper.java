@@ -2,6 +2,7 @@ package harustudy.backend.common.exception;
 
 import harustudy.backend.auth.exception.*;
 import harustudy.backend.content.exception.ContentNotFoundException;
+import harustudy.backend.member.exception.EmptyUnregisterReasonException;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.participant.exception.NicknameLengthException;
 import harustudy.backend.participant.exception.ParticipantNotFoundException;
@@ -38,6 +39,8 @@ public class ExceptionMapper {
     private static void setUpMemberException() {
         mapper.put(MemberNotFoundException.class,
                 ExceptionSituation.of("해당하는 멤버가 없습니다.", NOT_FOUND, 1002));
+        mapper.put(EmptyUnregisterReasonException.class,
+                ExceptionSituation.of("빈 탈퇴 사유는 작성이 불가능합니다.", BAD_REQUEST, 1003));
     }
 
     private static void setUpContentException() {

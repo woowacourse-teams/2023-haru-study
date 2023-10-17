@@ -7,6 +7,7 @@ import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.MemberResponse;
+import harustudy.backend.member.dto.UnregisterRequest;
 import harustudy.backend.testutils.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -62,5 +63,18 @@ class MemberServiceTest {
             assertThat(foundMember.loginType()).isEqualTo(
                     member1.getLoginType().name().toLowerCase());
         });
+    }
+
+    @Test
+    void 회원_탈퇴를_진행할_수_있다() {
+        // given
+        AuthMember authMember = new AuthMember(member1.getId());
+        UnregisterRequest request = new UnregisterRequest("unregister reason");
+
+        memberService.unregister(authMember, request);
+
+        // when, then
+        Member member = entityManager.find(Member.class, member1.getId());
+        assertThat(member).isNull();
     }
 }
