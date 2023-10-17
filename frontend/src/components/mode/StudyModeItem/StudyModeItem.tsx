@@ -8,11 +8,12 @@ type Props = {
   title: string;
   description: string;
   onClick: () => void;
+  disabled?: boolean;
 };
 
-const StudyModeItem = ({ title, description, onClick }: Props) => {
+const StudyModeItem = ({ title, description, onClick, disabled }: Props) => {
   return (
-    <Layout onClick={onClick}>
+    <Layout onClick={onClick} disabled={disabled}>
       <TextContainer>
         <TitleText>{title}</TitleText>
         <DescriptionText>{description}</DescriptionText>
@@ -26,7 +27,7 @@ const StudyModeItem = ({ title, description, onClick }: Props) => {
 
 export default StudyModeItem;
 
-const Layout = styled.div`
+const Layout = styled.button`
   display: flex;
   justify-content: space-between;
 
@@ -38,9 +39,12 @@ const Layout = styled.div`
   border: 1px solid ${color.neutral[200]};
   border-radius: 10px;
 
-  cursor: pointer;
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: ${color.neutral[50]};
   }
 
@@ -52,10 +56,12 @@ const Layout = styled.div`
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 17px;
 `;
 
 const TitleText = styled.p`
+  align-self: flex-start;
+
   font-size: 2.4rem;
   font-weight: 700;
 

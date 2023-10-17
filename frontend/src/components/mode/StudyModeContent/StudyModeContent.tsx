@@ -26,11 +26,13 @@ const StudyModeContent = () => {
         title="스터디 개설하기"
         description="스터디원들을 초대해서 함께 공부하고 싶어요"
         onClick={handleClickCreateStudyItem}
+        disabled
       />
       <StudyModeItem
         title="스터디 참여하기"
         description="스터디장에게 받은 참여코드가 있어요"
         onClick={handleClickStudyParticipationItem}
+        disabled
       />
       <StudyModeItem
         title="혼자 공부하기"
