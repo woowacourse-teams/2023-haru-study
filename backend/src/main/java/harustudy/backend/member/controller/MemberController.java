@@ -18,9 +18,9 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @Operation(summary = "멤버 Oauth 프로필 정보 조회")
+    @Operation(summary = "멤버 프로필 조회")
     @GetMapping("/api/me")
-    public ResponseEntity<MemberResponse> findOauthProfile(
+    public ResponseEntity<MemberResponse> findProfile(
             @Authenticated AuthMember authMember
     ) {
         MemberResponse response = memberService.findMemberProfile(authMember);
