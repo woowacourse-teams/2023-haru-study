@@ -116,7 +116,7 @@ export const requestPostRegisterParticipants = (nickname: string, studyId: strin
     body: JSON.stringify({ memberId, nickname }),
   });
 
-export const requestDeleteParticipant = (studyId: string, participantId: number) =>
+export const requestDeleteParticipant = (studyId: string, participantId: string) =>
   http.delete(`/api/studies/${studyId}/participants/${participantId}`);
 
 export const requestGetParticipantCode = async (studyId: string) => {

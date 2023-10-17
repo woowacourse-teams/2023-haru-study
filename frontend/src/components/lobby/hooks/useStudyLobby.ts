@@ -14,7 +14,7 @@ const useStudyLobby = (studyId: string, memberId: string) => {
 
   const { mutate: startStudy, isLoading: isStarting } = useMutation(() => requestPostNextStep(studyId));
   const { mutate: exitStudy, isLoading: isExiting } = useMutation(() =>
-    requestDeleteParticipant(studyId, Number(participantInfo?.participantId)),
+    requestDeleteParticipant(studyId, participantInfo!.participantId),
   );
 
   return {

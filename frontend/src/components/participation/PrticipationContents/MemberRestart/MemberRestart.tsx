@@ -14,7 +14,7 @@ import { requestDeleteParticipant } from '@Apis/index';
 type Props = {
   studyName: string;
   studyId: string;
-  participantId: number;
+  participantId: string;
   nickname: string;
   showMemberRegister: () => void;
 };
