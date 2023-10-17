@@ -12,7 +12,6 @@ import static org.mockito.BDDMockito.given;
 import harustudy.backend.auth.config.TokenConfig;
 import harustudy.backend.auth.domain.RefreshToken;
 import harustudy.backend.auth.domain.oauth.OauthClients;
-import harustudy.backend.auth.domain.oauth.GoogleOauthClient;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
@@ -24,6 +23,7 @@ import harustudy.backend.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.Map;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
@@ -169,4 +169,34 @@ class AuthServiceTest {
         entityManager.clear();
         assertNull(entityManager.find(RefreshToken.class, refreshToken.getId()));
     }
+
+    @Test
+    void 이메일은_같지만_프로바이더가_다른_경우는_신규_로그인으로_인식한다() {
+        // given
+        Member googleLoginMember = new Member("test", "test@test.com", "imageUrl", LoginType.GOOGLE);
+        entityManager.persist(googleLoginMember);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        OauthLoginRequest request = new OauthLoginRequest("kakao", "kakao-code");
+        UserInfo userInfo = new UserInfo("test", "test@test.com", "test.png");
+
+        given(oauthClients.requestOauthToken(any(), any()))
+                .willReturn(new OauthTokenResponse("tokenType", "accessToken", "scope"));
+        given(oauthClients.requestOauthUserInfo(any(), any()))
+                .willReturn(Map.of("nickname", userInfo.name(), "email", userInfo.email(), "profile_image_url", userInfo.imageUrl()));
+
+        // when
+        TokenResponse tokenResponse = oauthLoginFacade.oauthLogin(request);
+        Long memberId = Long.parseLong(authService.parseMemberId(tokenResponse.accessToken()));
+
+        // then
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(tokenResponse.accessToken()).isNotNull();
+            softly.assertThat(tokenResponse.refreshToken()).isNotNull();
+            softly.assertThat(googleLoginMember.getId()).isNotEqualTo(memberId);
+        });
+    }
+
 }

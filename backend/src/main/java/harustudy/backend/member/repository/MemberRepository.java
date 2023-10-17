@@ -1,5 +1,6 @@
 package harustudy.backend.member.repository;
 
+import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import java.util.Optional;
@@ -12,5 +13,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
                 .orElseThrow(MemberNotFoundException::new);
     }
 
-    Optional<Member> findByEmail(String email);
+    Optional<Member> findByEmailAndLoginType(String email, LoginType loginType);
 }
