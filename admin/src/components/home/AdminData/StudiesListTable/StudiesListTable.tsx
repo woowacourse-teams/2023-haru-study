@@ -1,3 +1,5 @@
+import { styled } from 'styled-components';
+
 import useFetch from '@Hooks/useFetch';
 
 import { getKeys } from '@Utils/index';
@@ -15,11 +17,11 @@ const StudiesListTable = () => {
 
   return (
     <>
-      <table>
+      <Table>
         <thead>
           <tr>
             {keys.map((key) => (
-              <th key={key}>{key}</th>
+              <Th key={key}>{key}</Th>
             ))}
           </tr>
         </thead>
@@ -27,14 +29,14 @@ const StudiesListTable = () => {
           {studies.data.map((study, index) => (
             <tr key={index}>
               {keys.map((key) => (
-                <td key={key}>
-                  {key === 'detail' ? <button onClick={() => console.log(study.id)}>상세보기</button> : study[key]}
-                </td>
+                <Td key={key}>
+                  {key === 'detail' ? <Button onClick={() => console.log(study.id)}>상세보기</Button> : study[key]}
+                </Td>
               ))}
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
 
       <Pagenation totalPage={studies.totalPage} page={page} changePage={changePage} limitPageCount={5} />
     </>
@@ -42,3 +44,28 @@ const StudiesListTable = () => {
 };
 
 export default StudiesListTable;
+
+const Table = styled.table`
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+`;
+
+const Th = styled.th`
+  border: 1px solid #e5e5e5;
+  padding: 8px;
+  text-align: center;
+`;
+
+const Td = styled.td`
+  border: 1px solid #e5e5e5;
+  padding: 8px;
+  text-align: center;
+`;
+
+const Button = styled.button`
+  background-color: #3b82f6;
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+`;
