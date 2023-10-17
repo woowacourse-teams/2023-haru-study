@@ -1,3 +1,8 @@
+export const MOCK_LOGIN_DATA = {
+  account: 'haru',
+  password: '1234',
+} as const;
+
 export const STUDIES_MOCK_DATA = [
   {
     id: 0,
