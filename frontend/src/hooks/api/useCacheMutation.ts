@@ -52,8 +52,6 @@ const useCacheMutation = <T>(
   const updateCacheData = async () => {
     const result = await request();
 
-    if (cacheStorage.isEqualData(result, cacheData)) return;
-
     await onSuccess?.(result);
     setResult(result);
 
