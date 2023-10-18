@@ -24,7 +24,7 @@ const MemberRecordCalendarDayList = ({ monthStorage, memberId, calendarRef }: Pr
       {isLoading && (
         <LoadingBar>
           <CircularProgress
-            size="small"
+            size="x-large"
             $style={css`
               border: 2px solid ${color.blue[500]};
               border-color: ${color.blue[500]} transparent transparent transparent;
