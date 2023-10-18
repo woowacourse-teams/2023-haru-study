@@ -1,6 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { rest } from 'msw';
 
+import { API_BASIC_URL } from '@Apis/index';
+
 import type { PlanList, RetrospectList } from '@Types/study';
 
 import { STUDY_CONTENT } from '../mockData';
@@ -17,7 +19,7 @@ type RequestWriteRetrospect = {
 
 export const contentsHandler = [
   // 스터디 계획 작성 API
-  rest.post<RequestWritePlan>('/api/studies/:studyId/contents/write-plan', async (req, res, ctx) => {
+  rest.post<RequestWritePlan>(`${API_BASIC_URL}/studies/:studyId/contents/write-plan`, async (req, res, ctx) => {
     const { plan } = await req.json<RequestWritePlan>();
 
     STUDY_CONTENT[0].plan = plan;
@@ -26,16 +28,19 @@ export const contentsHandler = [
   }),
 
   // 스터디 회고 작성 API
-  rest.post<RequestWriteRetrospect>('/api/studies/:studyId/contents/write-retrospect', async (req, res, ctx) => {
-    const { retrospect } = await req.json<RequestWriteRetrospect>();
+  rest.post<RequestWriteRetrospect>(
+    `${API_BASIC_URL}/studies/:studyId/contents/write-retrospect`,
+    async (req, res, ctx) => {
+      const { retrospect } = await req.json<RequestWriteRetrospect>();
 
-    STUDY_CONTENT[0].retrospect = retrospect;
+      STUDY_CONTENT[0].retrospect = retrospect;
 
-    return res(ctx.status(200), ctx.delay(600));
-  }),
+      return res(ctx.status(200), ctx.delay(600));
+    },
+  ),
 
   // 멤버 컨텐츠 조회 API
-  rest.get('/api/studies/:studyId/contents', (req, res, ctx) => {
+  rest.get(`${API_BASIC_URL}/studies/:studyId/contents`, (req, res, ctx) => {
     const cycle = Number(req.url.searchParams.get('cycle'));
 
     if (cycle) {

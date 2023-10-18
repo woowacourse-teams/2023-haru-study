@@ -60,7 +60,7 @@ export const requestPostOAuthLogin = (provider: OAuthProvider, code: string) =>
 
 export const requestPostLogout = () => http.post(`${API_BASIC_URL}/auth/logout`);
 
-export const requestGetMemberInfo = () => http.get<ResponseMemberInfo>('/api/me');
+export const requestGetMemberInfo = () => http.get<ResponseMemberInfo>(`${API_BASIC_URL}/me`);
 
 export const requestGetStudyInfo = async (studyId: string) => {
   const { data: studyInfo } = await http.get<ResponseStudyInfo>(`${API_BASIC_URL}/studies/${studyId}`);

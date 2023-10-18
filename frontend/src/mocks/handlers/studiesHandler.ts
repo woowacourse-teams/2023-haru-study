@@ -1,13 +1,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { rest } from 'msw';
 
+import { API_BASIC_URL } from '@Apis/index';
+
 import type { Step } from '@Types/study';
 
 import { ACCESS_TOKEN, NEW_ACCESS_TOKEN, STUDY_INFO } from '../mockData';
 
 export const studiesHandler = [
   // 필터링 조건으로 스터디 조회 API
-  rest.get('/api/studies', (req, res, ctx) => {
+  rest.get(`${API_BASIC_URL}/studies`, (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
     const testParticipantCode = '123456';
@@ -42,7 +44,7 @@ export const studiesHandler = [
   }),
 
   // 스터디 생성 API
-  rest.post('/api/studies', (req, res, ctx) => {
+  rest.post(`${API_BASIC_URL}/studies`, (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
     const isAuthorized = [ACCESS_TOKEN, NEW_ACCESS_TOKEN].includes(requestAuthToken || '');
@@ -57,13 +59,13 @@ export const studiesHandler = [
 
     return res(
       ctx.status(201),
-      ctx.set({ 'Content-Type': 'application/json', Location: '/api/studies/1' }),
+      ctx.set({ 'Content-Type': 'application/json', Location: `${API_BASIC_URL}/studies/1` }),
       ctx.delay(1000),
     );
   }),
 
   // 다음 스터디 단계로 이동 API
-  rest.post('/api/studies/:studyId/next-step', (req, res, ctx) => {
+  rest.post(`${API_BASIC_URL}/studies/:studyId/next-step`, (req, res, ctx) => {
     const getNextStep = (): Step => {
       if (STUDY_INFO.progressStep === 'planning') return 'studying';
       if (STUDY_INFO.progressStep === 'studying') return 'retrospect';
@@ -81,7 +83,7 @@ export const studiesHandler = [
   }),
 
   // 단일 스터디 정보 조회 API
-  rest.get('/api/studies/:studyId', (req, res, ctx) => {
+  rest.get(`${API_BASIC_URL}/studies/:studyId`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(STUDY_INFO), ctx.delay(1000));
   }),
 ];
