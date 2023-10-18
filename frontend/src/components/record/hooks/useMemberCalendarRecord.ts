@@ -28,23 +28,31 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
   const startDate = format.date(new Date(monthStorage.at(0)!.date), '-');
   const endDate = format.date(new Date(monthStorage.at(-1)!.date), '-');
 
-  const { mutate, isLoading } = useCacheMutation(() => requestGetMemberCalendarRecord(memberId, startDate, endDate), {
-    queryKey: [startDate, endDate],
-    cacheTime: 60 * 60 * 1000,
-    onSuccess: (result) => {
-      const studyRecords = result.data.studyRecords;
-      const calendarRecord = monthStorage.map((item) => {
-        const records = studyRecords[format.date(item.date, '-')] || [];
-        const restRecordsNumber = records && records.length > 3 ? records.length - 3 : 0;
-        return { ...item, records, restRecordsNumber };
-      });
-      setCalendarRecord(calendarRecord);
+  const { mutate, result, isLoading } = useCacheMutation(
+    () => requestGetMemberCalendarRecord(memberId, startDate, endDate),
+    {
+      queryKey: [startDate, endDate],
+      cacheTime: 60 * 60 * 1000,
     },
-  });
+  );
 
   useEffect(() => {
-    debouncing(mutate);
+    if (result) debouncing(mutate);
+    else mutate();
   }, [startDate, endDate]);
+
+  useEffect(() => {
+    if (!result) return;
+
+    const studyRecords = result.data.studyRecords;
+    const calendarRecord = monthStorage.map((item) => {
+      const records = studyRecords[format.date(item.date, '-')] || [];
+      const restRecordsNumber = records && records.length > 3 ? records.length - 3 : 0;
+      return { ...item, records, restRecordsNumber };
+    });
+
+    setCalendarRecord(calendarRecord);
+  }, [result]);
 
   useEffect(() => {
     const calendarResizeObserver = new ResizeObserver(([calendar]) => {

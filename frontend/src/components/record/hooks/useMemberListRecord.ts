@@ -32,7 +32,8 @@ const useMemberListRecord = ({ memberId }: Props) => {
   const shiftPage = (page: number) => updatePage(page);
 
   useEffect(() => {
-    debouncing(mutate);
+    if (result) debouncing(mutate);
+    else mutate();
   }, [triggerSearchRecord]);
 
   useEffect(() => {
