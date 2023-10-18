@@ -413,4 +413,35 @@ export const STUDIES_CREATED_MOCK_DATA = [
     createdDate: '2023-10-05T12:33:07.932Z',
     lastModifiedDate: '2023-10-05T12:33:07.932Z',
   },
-]
+] as const;
+
+export const PARTICIPANTS_MOCK_DATA = [
+  {
+    id: 0,
+    studyId: 0,
+    memberId: 0,
+    nickname: '엽토',
+    isHost: true,
+  },
+  {
+    id: 0,
+    studyId: 0,
+    memberId: 0,
+    nickname: '룩소',
+    isHost: true,
+  },
+  {
+    id: 0,
+    studyId: 0,
+    memberId: 0,
+    nickname: '노아',
+    isHost: false,
+  },
+  {
+    id: 0,
+    studyId: 0,
+    memberId: 0,
+    nickname: '마코',
+    isHost: true,
+  },
+] as const;

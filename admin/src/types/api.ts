@@ -1,4 +1,4 @@
-import type { Content, Study } from '.';
+import type { Content, Participant, Study } from '.';
 
 export type ResponseStudies = {
   totalPage: number;
@@ -10,4 +10,9 @@ export type ResponseStudiesDetail = {
   studyName: string;
   totalPage: number;
   contents: Content[];
+};
+
+export type ResponseParticipant = {
+  totalPage: number;
+  data: Participant[];
 };

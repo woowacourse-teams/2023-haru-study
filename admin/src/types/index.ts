@@ -34,3 +34,11 @@ export type Content = {
   plan: Partial<PlanList>;
   retrospect: Partial<RetrospectList>;
 };
+
+export type Participant = {
+  id: number;
+  studyId: number;
+  memberId: number;
+  nickname: string;
+  isHost: boolean;
+};

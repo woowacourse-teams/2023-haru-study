@@ -31,3 +31,11 @@ export const RETROSPECT_KEYWORDS = {
   experiencedDifficulty: '학습 과정에서의 겪은 어려움',
   lesson: '학습을 통해 느낀 점',
 } as const;
+
+export const PARTICIPANT_KEYWORDS = {
+  id: '참여자 아이디',
+  studyId: '스터디 아이디',
+  memberId: '멤버 아이디',
+  nickname: '닉네임',
+  isHost: '방장여부',
+};
