@@ -36,7 +36,7 @@ public class AuthService {
     }
 
     private Member saveOrUpdateMember(String oauthProvider, UserInfo userInfo) {
-        Member member = memberRepository.findByEmail(userInfo.email())
+        Member member = memberRepository.findByEmailAndLoginType(userInfo.email(), LoginType.from(oauthProvider))
                 .map(entity -> entity.updateUserInfo(userInfo.name(), userInfo.email(), userInfo.imageUrl()))
                 .orElseGet(() -> userInfo.toMember(LoginType.from(oauthProvider)));
         return memberRepository.save(member);
