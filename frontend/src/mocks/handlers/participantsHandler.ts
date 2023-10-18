@@ -1,11 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { rest } from 'msw';
 
+import { API_BASE_URL } from '@Apis/httpInstance';
+
 import { ACCESS_TOKEN, NEW_ACCESS_TOKEN, STUDY_PARTICIPANT, STUDY_PARTICIPANT_LIST } from '../mockData';
 
 export const participantsHandler = [
   // 참여자 조회 API
-  rest.get('/api/studies/:studyId/participants', (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/studies/:studyId/participants`, (req, res, ctx) => {
     const memberId = req.url.searchParams.get('memberId');
 
     if (memberId) {
@@ -16,13 +18,13 @@ export const participantsHandler = [
   }),
 
   // 단일 참여자 조회 API
-  rest.get('/api/studies/:studyId/participants/:participantId', (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/studies/:studyId/participants/:participantId`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(STUDY_PARTICIPANT), ctx.delay(1000));
   }),
 
   // 참여자 조회(임시) API
   // 참여 코드 입력 후 이어하기 여부 확인을 위한 API
-  rest.get('/api/temp/studies/:studyId/participants', (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/temp/studies/:studyId/participants`, (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
     const memberId = req.url.searchParams.get('memberId');
 
@@ -66,7 +68,7 @@ export const participantsHandler = [
   }),
 
   // 스터디 참여 API
-  rest.post('/api/studies/:studyId/participants', (req, res, ctx) => {
+  rest.post(`${API_BASE_URL}/studies/:studyId/participants`, (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
     if (requestAuthToken === NEW_ACCESS_TOKEN) {
@@ -81,12 +83,12 @@ export const participantsHandler = [
   }),
 
   // 스터디 참여자 삭제 API
-  rest.delete('/api/studies/:studyId/participants/:progressId', (req, res, ctx) => {
+  rest.delete(`${API_BASE_URL}/studies/:studyId/participants/:progressId`, (req, res, ctx) => {
     return res(ctx.status(204));
   }),
 
   // 스터디 참여 코드 조회 API
-  rest.get('/api/participant-codes', (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/participant-codes`, (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({

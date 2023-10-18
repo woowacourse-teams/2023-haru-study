@@ -3,16 +3,18 @@ import { rest } from 'msw';
 
 import { hasCookie } from '@Utils/cookie';
 
+import { API_BASE_URL } from '@Apis/httpInstance';
+
 import { ACCESS_TOKEN, NEW_ACCESS_TOKEN, USER_DATA } from '../mockData';
 
 export const authHandler = [
   // 로그아웃 API
-  rest.post('api/auth/logout', (req, res, ctx) => {
+  rest.post(`${API_BASE_URL}/auth/logout`, (req, res, ctx) => {
     return res(ctx.status(200));
   }),
 
   // 게스트 로그인 API
-  rest.post('/api/auth/guest', (req, res, ctx) => {
+  rest.post(`${API_BASE_URL}/auth/guest`, (req, res, ctx) => {
     return res(
       ctx.delay(2000),
       ctx.json({
@@ -22,7 +24,7 @@ export const authHandler = [
   }),
 
   // 소셜 로그인 API
-  rest.post('/api/auth/login', (req, res, ctx) => {
+  rest.post(`${API_BASE_URL}/auth/login`, (req, res, ctx) => {
     return res(
       ctx.delay(2000),
       ctx.json({
@@ -33,7 +35,7 @@ export const authHandler = [
   }),
 
   // 토큰 갱신 API
-  rest.post('/api/auth/refresh', (req, res, ctx) => {
+  rest.post(`${API_BASE_URL}/auth/refresh`, (req, res, ctx) => {
     const hasRefreshToken = hasCookie('refreshToken');
 
     if (!hasRefreshToken) {
@@ -57,7 +59,7 @@ export const authHandler = [
   }),
 
   // 멤버 프로필 정보 조회 API
-  rest.get('/api/me', (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/me`, (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
     if (requestAuthToken === NEW_ACCESS_TOKEN) return res(ctx.status(200), ctx.json(USER_DATA), ctx.delay(400));

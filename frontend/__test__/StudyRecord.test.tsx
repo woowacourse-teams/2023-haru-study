@@ -9,6 +9,8 @@ import StudyRecord from '@Pages/StudyRecord';
 import MemberInfoProvider from '@Contexts/MemberInfoProvider';
 import ModalProvider from '@Contexts/ModalProvider';
 
+import { API_BASE_URL } from '@Apis/httpInstance';
+
 import type { Participant } from '@Types/study';
 
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
@@ -107,15 +109,15 @@ const STUDY_METADATA = {
 };
 
 const server = setupServer(
-  rest.get('/api/studies/1/participants', (_, res, ctx) => {
+  rest.get(`${API_BASE_URL}/studies/1/participants`, (_, res, ctx) => {
     return res(ctx.json(STUDY_MEMBERS));
   }),
 
-  rest.get('/api/studies/:studyId', (_, res, ctx) => {
+  rest.get(`${API_BASE_URL}/studies/:studyId`, (_, res, ctx) => {
     return res(ctx.json(STUDY_METADATA));
   }),
 
-  rest.get('/api/studies/:studyId/contents?participantId=1', (_, res, ctx) => {
+  rest.get(`${API_BASE_URL}/studies/:studyId/contents?participantId=1`, (_, res, ctx) => {
     return res(ctx.json(STUDY_CONTENT));
   }),
 );

@@ -10,6 +10,8 @@ import MemberInfoProvider from '@Contexts/MemberInfoProvider';
 import ModalProvider from '@Contexts/ModalProvider';
 import NotificationProvider from '@Contexts/NotificationProvider';
 
+import { API_BASE_URL } from '@Apis/httpInstance';
+
 jest.mock('react-router-dom', () => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
@@ -24,7 +26,7 @@ jest.mock('react-router-dom', () => {
 });
 
 const server = setupServer(
-  rest.get('/api/temp/studies/:studyId/participants', (_, res, ctx) => {
+  rest.get(`${API_BASE_URL}/temp/studies/:studyId/participants`, (_, res, ctx) => {
     return res(ctx.status(200), ctx.json({ participants: null }));
   }),
 );
@@ -54,7 +56,7 @@ describe('스터디 준비 페이지 테스트', () => {
 
   test('요청한 Participants 데이터가 있다면 이미 스터디 정보가 있다는 폼이 보여진다.', async () => {
     server.use(
-      rest.get('/api/temp/studies/:studyId/participants', (_, res, ctx) => {
+      rest.get(`${API_BASE_URL}/temp/studies/:studyId/participants`, (_, res, ctx) => {
         return res(
           ctx.status(200),
           ctx.json({ participants: [{ participantId: 1, nickname: '하루', isHost: false }] }),
