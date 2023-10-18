@@ -24,7 +24,7 @@ public class ViewController {
     private final ViewService viewService;
 
     @Operation(summary = "스터디 기록 페이지 조회")
-    @GetMapping("/api/view/study-records")
+    @GetMapping("/api/v2/view/study-records")
     public ResponseEntity<StudyRecordsPageResponse> findStudyRecordsPage(
             @Authenticated AuthMember authMember,
             Pageable page,
@@ -38,7 +38,7 @@ public class ViewController {
     }
 
     @Operation(summary = "달력 기반 스터디 기록 조회")
-    @GetMapping("/api/view/calendar/study-records")
+    @GetMapping("/api/v2/view/calendar/study-records")
     public ResponseEntity<CalendarStudyRecordsResponse> findCalendarStudyRecords(
             @Authenticated AuthMember authMember,
             @RequestParam Long memberId,

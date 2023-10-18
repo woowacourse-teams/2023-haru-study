@@ -83,7 +83,7 @@ public class ViewIntegrationTest extends IntegrationTest {
         MultiValueMap<String, String> queryParams = createQueryParams(params);
 
         //when
-        MvcResult mvcResult = mockMvc.perform(get("/api/view/study-records")
+        MvcResult mvcResult = mockMvc.perform(get("/api/v2/view/study-records")
                         .params(queryParams)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, memberDto.createAuthorizationHeader()))
@@ -117,7 +117,7 @@ public class ViewIntegrationTest extends IntegrationTest {
         MultiValueMap<String, String> queryParams = createQueryParams(params);
 
         //when
-        MvcResult mvcResult = mockMvc.perform(get("/api/view/study-records")
+        MvcResult mvcResult = mockMvc.perform(get("/api/v2/view/study-records")
                         .params(queryParams)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, memberDto.createAuthorizationHeader()))
@@ -149,7 +149,7 @@ public class ViewIntegrationTest extends IntegrationTest {
         MultiValueMap<String, String> queryParams = createQueryParams(params);
 
         //then
-        mockMvc.perform(get("/api/view/calendar/study-records")
+        mockMvc.perform(get("/api/v2/view/calendar/study-records")
                         .params(queryParams)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, memberDto.createAuthorizationHeader()))

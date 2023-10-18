@@ -49,7 +49,7 @@ class MemberIntegrationTest extends IntegrationTest {
     void 멤버를_조회할_수_있다() throws Exception {
         // given, when
         MvcResult result = mockMvc.perform(
-                        get("/api/me")
+                        get("/api/v2/me")
                                 .header(HttpHeaders.AUTHORIZATION, memberDto1.createAuthorizationHeader()))
                 .andExpect(status().isOk())
                 .andReturn();

@@ -30,14 +30,14 @@ public class AuthController {
     private final AuthService authService;
 
     @Operation(summary = "비회원 로그인 요청")
-    @PostMapping("/api/auth/guest")
+    @PostMapping("/api/v2/auth/guest")
     public ResponseEntity<TokenResponse> guestLogin() {
         TokenResponse tokenResponse = authService.guestLogin();
         return ResponseEntity.ok(tokenResponse);
     }
 
     @Operation(summary = "소셜 로그인 요청")
-    @PostMapping("/api/auth/login")
+    @PostMapping("/api/v2/auth/login")
     public ResponseEntity<TokenResponse> oauthLogin(
             HttpServletResponse httpServletResponse,
             @RequestBody OauthLoginRequest request
@@ -49,7 +49,7 @@ public class AuthController {
     }
 
     @Operation(summary = "access 토큰, refresh 토큰 갱신")
-    @PostMapping("/api/auth/refresh")
+    @PostMapping("/api/v2/auth/refresh")
     public ResponseEntity<TokenResponse> refresh(
             HttpServletRequest request,
             HttpServletResponse response
@@ -79,7 +79,7 @@ public class AuthController {
     }
 
     @Operation(summary = "로그아웃, access & refresh 토큰 삭제")
-    @PostMapping("/api/auth/logout")
+    @PostMapping("/api/v2/auth/logout")
     public ResponseEntity<Void> logout(
             HttpServletRequest request,
             HttpServletResponse response

@@ -11,7 +11,6 @@ import harustudy.backend.auth.domain.oauth.OauthClients;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
-import harustudy.backend.auth.repository.RefreshTokenRepository;
 import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
@@ -79,7 +78,7 @@ class IntegrationTest {
                 .willReturn(Map.of("name", name, "email", "mock-email", "picture", "mock-picture"));
 
         MvcResult result = mockMvc.perform(
-                        post("/api/auth/login")
+                        post("/api/v2/auth/login")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonRequest))
                 .andReturn();
