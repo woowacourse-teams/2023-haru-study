@@ -125,3 +125,196 @@ export const STUDIES_MOCK_DATA = [
     lastModifiedDate: '2023-10-05T12:33:07.932Z',
   },
 ] as const;
+
+export const STUDIES_DETAIL_MOCK_DATA = {
+  studyName: '하루스터디',
+  contents: [
+    {
+      id: 1,
+      participantId: 2,
+      cycle: 2,
+      plan: {
+        toDo: 'hi',
+        completionCondition: '???????????????????',
+        expectedProbability: 'zz',
+        expectedDifficulty: 'kk',
+        whatCanYouDo: '',
+      },
+      retrospect: {
+        doneAsExpected: 'string',
+        experiencedDifficulty: '',
+        lesson: '',
+      },
+    },
+    {
+      id: 1,
+      participantId: 2,
+      cycle: 2,
+      plan: {
+        toDo: 'hi',
+        completionCondition: '??',
+        expectedProbability: 'zz',
+        expectedDifficulty: 'kk',
+        whatCanYouDo: '',
+      },
+      retrospect: {
+        doneAsExpected: 'string',
+        experiencedDifficulty: '',
+        lesson: '',
+      },
+    },
+    {
+      id: 1,
+      participantId: 2,
+      cycle: 2,
+      plan: {
+        toDo: 'hi',
+        completionCondition: '??',
+        expectedProbability: 'zz',
+        expectedDifficulty: 'kk',
+        whatCanYouDo: '',
+      },
+      retrospect: {
+        doneAsExpected: 'string',
+        experiencedDifficulty: '',
+        lesson: '',
+      },
+    },
+    {
+      id: 1,
+      participantId: 2,
+      cycle: 2,
+      plan: {
+        toDo: 'hi',
+        completionCondition: '??',
+        expectedProbability: 'zz',
+        expectedDifficulty: 'kk',
+        whatCanYouDo: '',
+      },
+      retrospect: {
+        doneAsExpected: 'string',
+        experiencedDifficulty: '',
+        lesson: '',
+      },
+    },
+    {
+      id: 1,
+      participantId: 2,
+      cycle: 2,
+      plan: {
+        toDo: 'hi',
+        completionCondition: '??',
+        expectedProbability: 'zz',
+        expectedDifficulty: 'kk',
+        whatCanYouDo: '',
+      },
+      retrospect: {
+        doneAsExpected: 'string',
+        experiencedDifficulty: '',
+        lesson: '',
+      },
+    },
+    {
+      id: 1,
+      participantId: 2,
+      cycle: 2,
+      plan: {
+        toDo: 'hi',
+        completionCondition: '??',
+        expectedProbability: 'zz',
+        expectedDifficulty: 'kk',
+        whatCanYouDo: '',
+      },
+      retrospect: {
+        doneAsExpected: 'string',
+        experiencedDifficulty: '',
+        lesson: '',
+      },
+    },
+    {
+      id: 1,
+      participantId: 2,
+      cycle: 2,
+      plan: {
+        toDo: 'hi',
+        completionCondition: '??',
+        expectedProbability: 'zz',
+        expectedDifficulty: 'kk',
+        whatCanYouDo: '',
+      },
+      retrospect: {
+        doneAsExpected: 'string',
+        experiencedDifficulty: '',
+        lesson: '',
+      },
+    },
+    {
+      id: 1,
+      participantId: 2,
+      cycle: 2,
+      plan: {
+        toDo: 'hi',
+        completionCondition: '??',
+        expectedProbability: 'zz',
+        expectedDifficulty: 'kk',
+        whatCanYouDo: '',
+      },
+      retrospect: {
+        doneAsExpected: 'string',
+        experiencedDifficulty: '',
+        lesson: '',
+      },
+    },
+    {
+      id: 1,
+      participantId: 2,
+      cycle: 2,
+      plan: {
+        toDo: 'hi',
+        completionCondition: '??',
+        expectedProbability: 'zz',
+        expectedDifficulty: 'kk',
+        whatCanYouDo: '',
+      },
+      retrospect: {
+        doneAsExpected: 'string',
+        experiencedDifficulty: '',
+        lesson: '',
+      },
+    },
+    {
+      id: 1,
+      participantId: 2,
+      cycle: 2,
+      plan: {
+        toDo: 'hi',
+        completionCondition: '??',
+        expectedProbability: 'zz',
+        expectedDifficulty: 'kk',
+        whatCanYouDo: '',
+      },
+      retrospect: {
+        doneAsExpected: 'string',
+        experiencedDifficulty: '',
+        lesson: '',
+      },
+    },
+    {
+      id: 1,
+      participantId: 2,
+      cycle: 2,
+      plan: {
+        toDo: 'hi',
+        completionCondition: '??',
+        expectedProbability: 'zz',
+        expectedDifficulty: 'kk',
+        whatCanYouDo: '',
+      },
+      retrospect: {
+        doneAsExpected: 'string',
+        experiencedDifficulty: '',
+        lesson: '',
+      },
+    },
+  ],
+} as const;
