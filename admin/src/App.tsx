@@ -2,11 +2,15 @@ import { Outlet } from 'react-router-dom';
 
 import ResetStyles from '@Styles/reset';
 
+import ModalProvider from '@Contexts/ModalProvider';
+
 const App = () => {
   return (
     <>
-      <ResetStyles />
-      <Outlet />
+      <ModalProvider>
+        <ResetStyles />
+        <Outlet />
+      </ModalProvider>
     </>
   );
 };
