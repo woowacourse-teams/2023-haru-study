@@ -1,13 +1,13 @@
 package harustudy.backend.admin.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import harustudy.backend.admin.dto.AdminContentResponse;
 import harustudy.backend.admin.dto.AdminContentsResponse;
 import harustudy.backend.admin.dto.AdminMembersResponse;
-import harustudy.backend.admin.dto.AdminParticipantResponse;
 import harustudy.backend.admin.dto.AdminParticipantsResponse;
 import harustudy.backend.admin.dto.AdminStudiesResponse;
 import harustudy.backend.admin.dto.AdminStudyContentResponse;
-import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.content.domain.Content;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
@@ -16,6 +16,8 @@ import harustudy.backend.participant.domain.Step;
 import harustudy.backend.study.domain.Study;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -25,12 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)

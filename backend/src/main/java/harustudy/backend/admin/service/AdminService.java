@@ -1,15 +1,10 @@
 package harustudy.backend.admin.service;
 
-import harustudy.backend.admin.dto.AdminContentResponse;
 import harustudy.backend.admin.dto.AdminContentsResponse;
-import harustudy.backend.admin.dto.AdminMemberResponse;
 import harustudy.backend.admin.dto.AdminMembersResponse;
-import harustudy.backend.admin.dto.AdminParticipantCodeResponse;
-import harustudy.backend.admin.dto.AdminParticipantResponse;
 import harustudy.backend.admin.dto.AdminParticipantsResponse;
 import harustudy.backend.admin.dto.AdminStudiesResponse;
 import harustudy.backend.admin.dto.AdminStudyContentResponse;
-import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.content.domain.Content;
 import harustudy.backend.content.repository.ContentRepository;
 import harustudy.backend.member.domain.LoginType;
@@ -21,15 +16,13 @@ import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
