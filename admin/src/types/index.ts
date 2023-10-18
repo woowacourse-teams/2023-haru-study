@@ -9,12 +9,28 @@ export type AdminDataType =
   | 'contents';
 
 export type Study = {
-  id: 0;
-  name: 'haru';
-  totalCycle: 0;
-  timePerCycle: 0;
-  currentCycle: 0;
-  step: 'planning';
-  createdDate: '2023-10-05T12:33:07.932Z';
-  lastModifiedDate: '2023-10-05T12:33:07.932Z';
+  id: number;
+  name: string;
+  totalCycle: number;
+  timePerCycle: number;
+  currentCycle: number;
+  step: string;
+  createdDate: string;
+  lastModifiedDate: string;
+};
+
+export type Plan = 'toDo' | 'completionCondition' | 'expectedProbability' | 'expectedDifficulty' | 'whatCanYouDo';
+
+export type PlanList = Record<Plan, string>;
+
+export type Retrospect = 'doneAsExpected' | 'experiencedDifficulty' | 'lesson';
+
+export type RetrospectList = Record<Retrospect, string>;
+
+export type Content = {
+  id: number;
+  participantId: string;
+  cycle: number;
+  plan: Partial<PlanList>;
+  retrospect: Partial<RetrospectList>;
 };

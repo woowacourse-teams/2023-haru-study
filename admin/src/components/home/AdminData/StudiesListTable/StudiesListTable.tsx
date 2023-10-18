@@ -2,18 +2,25 @@ import { styled } from 'styled-components';
 
 import useFetch from '@Hooks/useFetch';
 
-import { getKeys } from '@Utils/index';
+import { STUDIES_KEY } from '@Constants/index';
+
+import { useModal } from '@Contexts/ModalProvider';
+
+import { getKeys, invariantOf } from '@Utils/index';
 
 import type { ResponseStudies } from '@Types/api';
 
 import Pagenation from '../Pagination/Pagination';
+import StudiesDetailTable from '../StudiesDetailTable/StudiesDetailTable';
 
 const StudiesListTable = () => {
   const { page, changePage, result: studies } = useFetch<ResponseStudies>('studies');
 
+  const { openModal } = useModal();
+
   if (!studies || studies.data.length === 0) return <div>조회된 데이터가 없습니다.</div>;
 
-  const keys = getKeys(studies.data[0], ['detail']);
+  const keys = getKeys(invariantOf(studies.data[0]), ['detail']);
 
   return (
     <>
@@ -21,7 +28,7 @@ const StudiesListTable = () => {
         <thead>
           <tr>
             {keys.map((key) => (
-              <Th key={key}>{key}</Th>
+              <Th key={key}>{STUDIES_KEY[key]}</Th>
             ))}
           </tr>
         </thead>
@@ -30,7 +37,11 @@ const StudiesListTable = () => {
             <tr key={index}>
               {keys.map((key) => (
                 <Td key={key}>
-                  {key === 'detail' ? <Button onClick={() => console.log(study.id)}>상세보기</Button> : study[key]}
+                  {key === 'detail' ? (
+                    <Button onClick={() => openModal(<StudiesDetailTable studyId={study.id} />)}>보기</Button>
+                  ) : (
+                    study[key]
+                  )}
                 </Td>
               ))}
             </tr>
