@@ -7,7 +7,17 @@ import StudiesListTable from './StudiesListTable/StudiesListTable';
 const AdminData = () => {
   const { adminDataType } = useAdminDataType();
 
-  return <Layout>{adminDataType === 'studies' ? <StudiesListTable /> : adminDataType}</Layout>;
+  return (
+    <Layout>
+      {adminDataType === 'studies' ? (
+        <StudiesListTable url="studies" />
+      ) : adminDataType === 'todayDoneStudies' ? (
+        <StudiesListTable url="studies/done" />
+      ) : (
+        adminDataType
+      )}
+    </Layout>
+  );
 };
 
 export default AdminData;

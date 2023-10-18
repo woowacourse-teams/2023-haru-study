@@ -13,8 +13,12 @@ import type { ResponseStudies } from '@Types/api';
 import Pagenation from '../Pagination/Pagination';
 import StudiesDetailTable from '../StudiesDetailTable/StudiesDetailTable';
 
-const StudiesListTable = () => {
-  const { page, changePage, result: studies } = useFetch<ResponseStudies>('studies');
+type Props = {
+  url: string;
+};
+
+const StudiesListTable = ({ url }: Props) => {
+  const { page, changePage, result: studies } = useFetch<ResponseStudies>(url);
 
   const { openModal } = useModal();
 
