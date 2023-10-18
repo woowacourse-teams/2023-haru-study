@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 
 import useCacheMutation from '@Hooks/api/useCacheMutation';
 
+import debouncing from '@Utils/debouncing';
+
 import { requestGetMemberListRecord } from '@Apis/index';
 
 import type { StudyInfo } from '@Types/study';
@@ -30,7 +32,7 @@ const useMemberListRecord = ({ memberId }: Props) => {
   const shiftPage = (page: number) => updatePage(page);
 
   useEffect(() => {
-    mutate();
+    debouncing(mutate);
   }, [triggerSearchRecord]);
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import useCacheMutation from '@Hooks/api/useCacheMutation';
 
+import debouncing from '@Utils/debouncing';
 import format from '@Utils/format';
 
 import { requestGetMemberCalendarRecord } from '@Apis/index';
@@ -42,19 +43,7 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
   });
 
   useEffect(() => {
-    const currentDate = new Date();
-    const searchedDate = monthStorage.find((storage) => storage.state === 'cur')!.date;
-
-    if (currentDate < searchedDate) {
-      setCalendarRecord(
-        monthStorage.map((item) => {
-          return { ...item, records: [], restRecordsNumber: 0 };
-        }),
-      );
-
-      return;
-    }
-    mutate();
+    debouncing(mutate);
   }, [startDate, endDate]);
 
   useEffect(() => {
