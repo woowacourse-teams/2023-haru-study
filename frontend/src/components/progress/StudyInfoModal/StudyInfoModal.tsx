@@ -23,8 +23,9 @@ type Props = {
 
 const StudyInfoModal = ({ studyInfo }: Props) => {
   const { studyId, name, totalCycle, timePerCycle, currentCycle, progressStep } = studyInfo;
+
   const navigate = useNavigate();
-  const { closeModal } = useModal();
+  const { openConfirm, closeModal } = useModal();
 
   const { result: studySubmitStatus } = useFetch(
     async () => {
@@ -36,10 +37,11 @@ const StudyInfoModal = ({ studyInfo }: Props) => {
   );
 
   const handleExitStudy = () => {
-    if (confirm('정말로 진행 중인 스터디를 나가시겠습니까?')) {
+    closeModal();
+    openConfirm('정말로 진행 중인 스터디를 나가시겠습니까?', () => {
       navigate(ROUTES_PATH.landing);
       closeModal();
-    }
+    });
   };
 
   const getSubmitStatusText = (progressStep: Step, isSubmitted: boolean) => {

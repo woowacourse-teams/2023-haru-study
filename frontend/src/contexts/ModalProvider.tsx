@@ -3,11 +3,13 @@ import { createContext, useCallback, useContext, useState } from 'react';
 
 import Modal from '@Components/common/Modal/Modal';
 import Alert from '@Components/common/Modal/Template/Alert';
+import Confirm from '@Components/common/Modal/Template/Confirm';
 
 export type ModalContextType = {
   isOpen: boolean;
   openModal: (modalContents: ReactNode) => void;
   openAlert: (message: string, onClose?: () => void) => void;
+  openConfirm: (message: string, onConfirm: () => void, onCancel?: () => void) => void;
   closeModal: () => void;
 };
 
@@ -28,10 +30,17 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
     [closeModal],
   );
 
+  const openConfirm = useCallback(
+    (message: string, onConfirm: () => void, onCancel?: () => void) =>
+      setModalContents(<Confirm message={message} closeModal={closeModal} onConfirm={onConfirm} onCancel={onCancel} />),
+    [closeModal],
+  );
+
   const value = {
     isOpen,
     openModal,
     openAlert,
+    openConfirm,
     closeModal,
   };
 

@@ -22,7 +22,7 @@ import usePlanningForm from '../hooks/usePlanningForm';
 
 const PlanningForm = () => {
   const { isShow: isOpenOptionalQuestion, toggleShow: toggleOptionalQuestion } = useDisplay();
-  const { openModal } = useModal();
+  const { openModal, openConfirm } = useModal();
   const { send } = useNotification();
 
   const { isHost } = useParticipantInfo();
@@ -45,13 +45,15 @@ const PlanningForm = () => {
   const moveToStudyingStep = async () => {
     const isAllParticipantSubmitted = await checkAllParticipantSubmitted();
 
-    if (
-      !isAllParticipantSubmitted &&
-      !confirm('아직 목표 제출을 하지 않은 스터디원이 있습니다. 그래도 학습 단계로 넘어가시겠습니까?')
-    )
+    if (!isAllParticipantSubmitted) {
+      openConfirm(
+        '아직 목표 제출을 하지 않은 스터디원이 있습니다.\n그래도 학습 단계로 넘어가시겠습니까?',
+        moveToNextStep,
+      );
       return;
+    }
 
-    await moveToNextStep();
+    moveToNextStep();
   };
 
   return (
