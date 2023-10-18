@@ -13,6 +13,8 @@ const AdminData = () => {
         <StudiesListTable url="studies" />
       ) : adminDataType === 'todayDoneStudies' ? (
         <StudiesListTable url="studies/done" />
+      ) : adminDataType === 'todayCreatedStudies' ? (
+        <StudiesListTable url="studies/created" />
       ) : (
         adminDataType
       )}
