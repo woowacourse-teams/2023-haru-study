@@ -1,8 +1,10 @@
-import { unstable_useBlocker, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 import ParticipantCodeCopier from '@Components/lobby/ParticipantCodeCopier/ParticipantCodeCopier';
+
+import useConfirmBeforeRouting from '@Hooks/common/useRouteBlocker';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
@@ -28,6 +30,7 @@ const StudyLobbyContents = () => {
 
   const navigateToHome = () => {
     navigate(ROUTES_PATH.landing);
+    console.log(132);
   };
 
   const handleStartStudy = async () => {
@@ -37,22 +40,12 @@ const StudyLobbyContents = () => {
     navigate(`${ROUTES_PATH.progress}/${studyId}`, { state: { block: false } });
   };
 
-  unstable_useBlocker(({ nextLocation }) => {
-    const state = nextLocation.state as { block: boolean } | null;
-    if (state?.block === false) return false;
-
-    if (confirm('정말로 스터디를 나가시겠습니까?')) {
-      exitStudy();
-      return false;
-    }
-
-    return true;
-  });
+  useConfirmBeforeRouting('정말로 스터디를 나가시겠습니까?', exitStudy);
 
   return (
     participantCode && (
       <Layout>
-        <ParticipantCodeCopier participantCode={participantCode}></ParticipantCodeCopier>
+        <ParticipantCodeCopier participantCode={participantCode} />
         <ParticipantList studyId={studyId} />
         <BottomButtonWrapper>
           {isHost ? (
