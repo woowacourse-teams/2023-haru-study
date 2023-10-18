@@ -1,7 +1,6 @@
 package harustudy.backend.admin.dto;
 
 import harustudy.backend.content.domain.Content;
-
 import java.util.Map;
 
 public record AdminContentResponse(Long id, Long participantId, Integer cycle,

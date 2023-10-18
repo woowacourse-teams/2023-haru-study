@@ -1,7 +1,6 @@
 package harustudy.backend.admin.dto;
 
 import harustudy.backend.study.domain.Study;
-
 import java.time.LocalDateTime;
 
 public record AdminStudyResponse(Long id, String name, Integer totalCycle, Integer timePerCycle, Integer currentCycle,

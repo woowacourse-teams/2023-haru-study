@@ -1,8 +1,11 @@
 package harustudy.backend.admin.service;
 
 import harustudy.backend.admin.dto.AdminContentResponse;
+import harustudy.backend.admin.dto.AdminContentsResponse;
 import harustudy.backend.admin.dto.AdminMembersResponse;
 import harustudy.backend.admin.dto.AdminParticipantResponse;
+import harustudy.backend.admin.dto.AdminParticipantsResponse;
+import harustudy.backend.admin.dto.AdminStudiesResponse;
 import harustudy.backend.admin.dto.AdminStudyContentResponse;
 import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.content.domain.Content;
@@ -70,7 +73,7 @@ class AdminServiceTest {
         AdminMembersResponse response = adminService.findMembers(pageRequest, "GUEST");
 
         // then
-        assertThat(response.totalCount()).isEqualTo(15);
+        assertThat(response.totalPage()).isEqualTo(3);
         assertThat(response.members()).hasSize(5);
     }
 
@@ -87,7 +90,7 @@ class AdminServiceTest {
         AdminMembersResponse response = adminService.findMembers(pageRequest, "GOOGLE");
 
         // then
-        assertThat(response.totalCount()).isEqualTo(1);
+        assertThat(response.totalPage()).isEqualTo(1);
         assertThat(response.members()).hasSize(1);
     }
 
@@ -98,10 +101,11 @@ class AdminServiceTest {
         PageRequest pageRequest = PageRequest.of(1, 5);
 
         // when
-        List<AdminStudyResponse> studies = adminService.findStudies(pageRequest);
+        AdminStudiesResponse response = adminService.findStudies(pageRequest);
 
         // then
-        assertThat(studies).hasSize(5);
+        assertThat(response.totalPage()).isEqualTo(3);
+        assertThat(response.data()).hasSize(5);
     }
 
     @Test
@@ -110,10 +114,11 @@ class AdminServiceTest {
         PageRequest pageRequest = PageRequest.of(1, 5);
 
         // when
-        List<AdminParticipantResponse> participants = adminService.findParticipants(pageRequest);
+        AdminParticipantsResponse response = adminService.findParticipants(pageRequest);
 
         // then
-        assertThat(participants).hasSize(5);
+        assertThat(response.totalPage()).isEqualTo(3);
+        assertThat(response.data()).hasSize(5);
     }
 
     @Test
@@ -122,10 +127,11 @@ class AdminServiceTest {
         PageRequest pageRequest = PageRequest.of(1, 5);
 
         // when
-        List<AdminContentResponse> contents = adminService.findContents(pageRequest);
+        AdminContentsResponse response = adminService.findContents(pageRequest);
 
         // then
-        assertThat(contents).hasSize(5);
+        assertThat(response.totalPage()).isEqualTo(3);
+        assertThat(response.data()).hasSize(5);
     }
 
     @Test
@@ -146,10 +152,11 @@ class AdminServiceTest {
                 .executeUpdate();
 
         // when
-        List<AdminStudyResponse> studies = adminService.findStudiesCreatedToday(pageRequest);
+        AdminStudiesResponse response = adminService.findStudiesCreatedToday(pageRequest);
 
         // then
-        assertThat(studies).hasSize(16);
+        assertThat(response.totalPage()).isEqualTo(1);
+        assertThat(response.data()).hasSize(16);
     }
 
     @Test
@@ -176,10 +183,10 @@ class AdminServiceTest {
                 .executeUpdate();
 
         // when
-        List<AdminStudyResponse> studies = adminService.findStudiesDoneToday(pageRequest);
+        AdminStudiesResponse response = adminService.findStudiesDoneToday(pageRequest);
 
         // then
-        assertThat(studies)
+        assertThat(response.data())
                 .hasSize(1)
                 .allMatch(each -> each.step().equals(Step.DONE.name()));
     }

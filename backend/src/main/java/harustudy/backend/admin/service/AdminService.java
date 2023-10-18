@@ -1,10 +1,13 @@
 package harustudy.backend.admin.service;
 
 import harustudy.backend.admin.dto.AdminContentResponse;
+import harustudy.backend.admin.dto.AdminContentsResponse;
 import harustudy.backend.admin.dto.AdminMemberResponse;
 import harustudy.backend.admin.dto.AdminMembersResponse;
 import harustudy.backend.admin.dto.AdminParticipantCodeResponse;
 import harustudy.backend.admin.dto.AdminParticipantResponse;
+import harustudy.backend.admin.dto.AdminParticipantsResponse;
+import harustudy.backend.admin.dto.AdminStudiesResponse;
 import harustudy.backend.admin.dto.AdminStudyContentResponse;
 import harustudy.backend.admin.dto.AdminStudyResponse;
 import harustudy.backend.content.domain.Content;
@@ -12,6 +15,7 @@ import harustudy.backend.content.repository.ContentRepository;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
+import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
 import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
@@ -38,60 +42,50 @@ public class AdminService {
     private final ContentRepository contentRepository;
     private final ParticipantCodeRepository participantCodeRepository;
 
-    public List<AdminStudyResponse> findStudies(Pageable pageable) {
-        return studyRepository.findAll(pageable)
-                .map(AdminStudyResponse::from)
-                .toList();
+    public AdminStudiesResponse findStudies(Pageable pageable) {
+        Page<Study> studyPages = studyRepository.findAll(pageable);
+        return AdminStudiesResponse.from(studyPages);
     }
 
-    public List<AdminParticipantResponse> findParticipants(Pageable pageable) {
-        return participantRepository.findAll(pageable)
-                .map(AdminParticipantResponse::from)
-                .toList();
+    public AdminParticipantsResponse findParticipants(Pageable pageable) {
+        Page<Participant> participantPages = participantRepository.findAll(pageable);
+        return AdminParticipantsResponse.from(participantPages);
     }
 
     public AdminMembersResponse findMembers(Pageable pageable, String loginType) {
         Page<Member> memberPages = memberRepository.findAllByLoginTypeIs(pageable, LoginType.from(loginType));
-
-        long totalCount = memberPages.getTotalElements();
-        List<AdminMemberResponse> responses = memberPages.map(AdminMemberResponse::from)
-                .toList();
-
-        return AdminMembersResponse.of(totalCount, responses);
+        return AdminMembersResponse.of(memberPages);
     }
 
-    public List<AdminContentResponse> findContents(Pageable pageable) {
-        return contentRepository.findAll(pageable)
-                .map(AdminContentResponse::from)
-                .toList();
+    public AdminContentsResponse findContents(Pageable pageable) {
+        Page<Content> contentPages = contentRepository.findAll(pageable);
+        return AdminContentsResponse.from(contentPages);
     }
 
-    public List<AdminParticipantCodeResponse> findParticipantCodes(Pageable pageable) {
-        return participantCodeRepository.findAll(pageable)
-                .map(AdminParticipantCodeResponse::from)
-                .toList();
+    public AdminParticipantsResponse findParticipantCodes(Pageable pageable) {
+        Page<Participant> participantPages = participantRepository.findAll(pageable);
+        return AdminParticipantsResponse.from(participantPages);
     }
 
-    public List<AdminStudyResponse> findStudiesCreatedToday(Pageable pageable) {
+    public AdminStudiesResponse findStudiesCreatedToday(Pageable pageable) {
         LocalDateTime midnightTime = findMidnightTime();
+        Page<Study> studyPages = studyRepository
+                .findAllByCreatedDateBetween(pageable, midnightTime, LocalDateTime.now());
 
-        return studyRepository.findAllByCreatedDateBetween(pageable, midnightTime, LocalDateTime.now())
-                .map(AdminStudyResponse::from)
-                .toList();
+        return AdminStudiesResponse.from(studyPages);
     }
 
-    public List<AdminStudyResponse> findStudiesDoneToday(Pageable pageable) {
+    public AdminStudiesResponse findStudiesDoneToday(Pageable pageable) {
         LocalDateTime midnightTime = findMidnightTime();
+        Page<Study> studyPages = studyRepository.findAllByLastModifiedDateBetweenAndStepIs(pageable, midnightTime,
+                LocalDateTime.now(), Step.DONE);
 
-        return studyRepository.findAllByLastModifiedDateBetweenAndStepIs(pageable, midnightTime,
-                        LocalDateTime.now(), Step.DONE)
-                .map(AdminStudyResponse::from)
-                .toList();
+        return AdminStudiesResponse.from(studyPages);
     }
 
     public AdminStudyContentResponse findContentsOfStudies(Pageable pageable, Long studyId) {
         Study study = studyRepository.findByIdIfExists(studyId);
-        List<Content> contents = contentRepository.findAllByStudy(pageable, study);
+        Page<Content> contents = contentRepository.findAllByStudy(pageable, study);
 
         return AdminStudyContentResponse.of(study, contents);
     }
