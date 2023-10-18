@@ -318,3 +318,36 @@ export const STUDIES_DETAIL_MOCK_DATA = {
     },
   ],
 } as const;
+
+export const STUDIES_DONE_MOCK_DATA = [
+  {
+    id: 0,
+    name: 'haru',
+    totalCycle: 0,
+    timePerCycle: 0,
+    currentCycle: 0,
+    step: 'done',
+    createdDate: '2023-10-05T12:33:07.932Z',
+    lastModifiedDate: '2023-10-05T12:33:07.932Z',
+  },
+  {
+    id: 1,
+    name: 'haru',
+    totalCycle: 0,
+    timePerCycle: 0,
+    currentCycle: 0,
+    step: 'done',
+    createdDate: '2023-10-05T12:33:07.932Z',
+    lastModifiedDate: '2023-10-05T12:33:07.932Z',
+  },
+  {
+    id: 2,
+    name: 'haru',
+    totalCycle: 0,
+    timePerCycle: 0,
+    currentCycle: 0,
+    step: 'done',
+    createdDate: '2023-10-05T12:33:07.932Z',
+    lastModifiedDate: '2023-10-05T12:33:07.932Z',
+  },
+];
