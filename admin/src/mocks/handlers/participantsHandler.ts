@@ -2,7 +2,7 @@ import { rest } from 'msw';
 
 import { PARTICIPANTS_MOCK_DATA } from '../mockData';
 
-export const partipantsHandler = [
+export const participantsHandler = [
   rest.get('/admin/participants', (req, res, ctx) => {
     const query = req.url.searchParams;
     const page = Number(query.get('page') || 0);
