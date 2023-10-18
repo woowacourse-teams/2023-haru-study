@@ -68,6 +68,8 @@ const Typography = ({ variant, fontSize, fontWeight, color, $style, children, ..
 };
 
 const StyledTypography = styled.div<Props>`
+  white-space: pre-line;
+
   ${({ variant, fontSize, fontWeight, color, $style }) => css`
     font-size: ${fontSize || FONT_STYLE.fontSize[variant]};
     font-weight: ${fontWeight || FONT_STYLE.fontWeight[variant]};
