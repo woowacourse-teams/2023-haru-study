@@ -445,3 +445,36 @@ export const PARTICIPANTS_MOCK_DATA = [
     isHost: true,
   },
 ] as const;
+
+export const PARTICIPANT_CODES_MOCK_DATA = [
+  {
+    id: 0,
+    studyId: 0,
+    code: 'abcdef',
+  },
+  {
+    id: 0,
+    studyId: 0,
+    code: 'efefef',
+  },
+  {
+    id: 0,
+    studyId: 0,
+    code: 'sssscc',
+  },
+  {
+    id: 0,
+    studyId: 0,
+    code: 'kkkkkk',
+  },
+  {
+    id: 0,
+    studyId: 0,
+    code: 'abcdef',
+  },
+  {
+    id: 0,
+    studyId: 0,
+    code: 'abcdef',
+  },
+] as const;

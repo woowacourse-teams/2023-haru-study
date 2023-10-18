@@ -38,4 +38,10 @@ export const PARTICIPANT_KEYWORDS = {
   memberId: '멤버 아이디',
   nickname: '닉네임',
   isHost: '방장여부',
-};
+} as const;
+
+export const PARTICIPANT_CODES_KEYWORDS = {
+  id: '참여 코드 아이디',
+  studyId: '스터디 아이디',
+  code: '참여 코드',
+} as const;

@@ -42,3 +42,9 @@ export type Participant = {
   nickname: string;
   isHost: boolean;
 };
+
+export type ParticipantCodes = {
+  id: number;
+  studyId: number;
+  code: string;
+};
