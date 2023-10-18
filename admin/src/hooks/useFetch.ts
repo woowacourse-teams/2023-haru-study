@@ -14,7 +14,7 @@ const useFetch = <T>(url: string) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/admin/${url}/?size=10&page=${page - 1}`)
+    fetch(`/admin/${url}?size=10&page=${page - 1}`)
       .then((response) => response.json())
       .then((result: T) => setResult(result))
       .catch((error: Error) => {
