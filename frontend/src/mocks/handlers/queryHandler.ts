@@ -3,7 +3,7 @@ import { rest } from 'msw';
 
 import format from '@Utils/format';
 
-import { API_BASIC_URL } from '@Apis/index';
+import { API_BASE_URL } from '@Apis/httpInstance';
 
 import {
   ACCESS_TOKEN,
@@ -20,7 +20,7 @@ import {
 
 export const queryHandler = [
   // 스터디 기록 페이지 조회 API
-  rest.get(`${API_BASIC_URL}/view/study-records`, (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/view/study-records`, (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
     const searchParams: Record<string, string> = {};
@@ -80,7 +80,7 @@ export const queryHandler = [
   }),
 
   // 달력 기반 스터디 기록 조회 API
-  rest.get(`${API_BASIC_URL}/view/calendar/study-records`, (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/view/calendar/study-records`, (req, res, ctx) => {
     const requestAuthToken = req.headers.get('Authorization')?.split(' ')[1];
 
     const searchParams: Record<string, string> = {};

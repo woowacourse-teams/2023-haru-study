@@ -1,13 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { rest } from 'msw';
 
-import { API_BASIC_URL } from '@Apis/index';
+import { API_BASE_URL } from '@Apis/httpInstance';
 
 import { STUDY_INFO, STUDY_PARTICIPANT_LIST } from '../mockData';
 
 export const pollingHandler = [
   // 대기방 참여자 조회 API
-  rest.get(`${API_BASIC_URL}/waiting`, (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/waiting`, (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -19,7 +19,7 @@ export const pollingHandler = [
   }),
 
   // 스터디원 별 제출 여부 조회 API
-  rest.get(`${API_BASIC_URL}/submitted`, (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/submitted`, (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -42,7 +42,7 @@ export const pollingHandler = [
     );
   }),
 
-  rest.get(`${API_BASIC_URL}/progress`, (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/progress`, (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({

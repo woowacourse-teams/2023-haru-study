@@ -9,7 +9,7 @@ import StudyRecord from '@Pages/StudyRecord';
 import MemberInfoProvider from '@Contexts/MemberInfoProvider';
 import ModalProvider from '@Contexts/ModalProvider';
 
-import { API_BASIC_URL } from '@Apis/index';
+import { API_BASE_URL } from '@Apis/httpInstance';
 
 import type { Participant } from '@Types/study';
 
@@ -109,15 +109,15 @@ const STUDY_METADATA = {
 };
 
 const server = setupServer(
-  rest.get(`${API_BASIC_URL}/studies/1/participants`, (_, res, ctx) => {
+  rest.get(`${API_BASE_URL}/studies/1/participants`, (_, res, ctx) => {
     return res(ctx.json(STUDY_MEMBERS));
   }),
 
-  rest.get(`${API_BASIC_URL}/studies/:studyId`, (_, res, ctx) => {
+  rest.get(`${API_BASE_URL}/studies/:studyId`, (_, res, ctx) => {
     return res(ctx.json(STUDY_METADATA));
   }),
 
-  rest.get(`${API_BASIC_URL}/studies/:studyId/contents?participantId=1`, (_, res, ctx) => {
+  rest.get(`${API_BASE_URL}/studies/:studyId/contents?participantId=1`, (_, res, ctx) => {
     return res(ctx.json(STUDY_CONTENT));
   }),
 );
