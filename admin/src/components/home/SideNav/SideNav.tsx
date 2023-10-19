@@ -12,8 +12,7 @@ const SideNav = () => {
       <NavItem onClick={() => changeAdminDataType('todayCreatedStudies')}>오늘 생성된 스터디 조회</NavItem>
       <NavItem onClick={() => changeAdminDataType('participants')}>참여자 정보 조회</NavItem>
       <NavItem onClick={() => changeAdminDataType('participantsCode')}>참여 코드 조회</NavItem>
-      <NavItem onClick={() => changeAdminDataType('memberUser')}>회원 유저 조회</NavItem>
-      <NavItem onClick={() => changeAdminDataType('guestUser')}>비회원 유저 조회</NavItem>
+      <NavItem onClick={() => changeAdminDataType('member')}>멤버 조회</NavItem>
       <NavItem onClick={() => changeAdminDataType('contents')}>컨텐츠 조회</NavItem>
     </Layout>
   );

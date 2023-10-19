@@ -4,8 +4,7 @@ export type AdminDataType =
   | 'todayCreatedStudies'
   | 'participants'
   | 'participantsCode'
-  | 'memberUser'
-  | 'guestUser'
+  | 'member'
   | 'contents';
 
 export type Study = {
@@ -47,4 +46,12 @@ export type ParticipantCodes = {
   id: number;
   studyId: number;
   code: string;
+};
+
+export type MemberInfo = {
+  id: number;
+  name: string;
+  email: string;
+  imageUrl: string;
+  loginType: string;
 };
