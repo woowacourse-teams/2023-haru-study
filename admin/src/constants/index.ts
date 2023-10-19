@@ -1,4 +1,4 @@
-export const STUDIES_KEY = {
+export const STUDIES_KEYWORDS = {
   id: '아이디',
   name: '스터디 이름',
   totalCycle: '총 사이클',
@@ -10,7 +10,7 @@ export const STUDIES_KEY = {
   detail: '상세보기',
 } as const;
 
-export const STUDIES_DETAIL_KEY = {
+export const STUDIES_DETAIL_KEYWORDS = {
   id: '아이디',
   participantId: '참여자 아이디',
   cycle: '사이클',
@@ -45,3 +45,11 @@ export const PARTICIPANT_CODES_KEYWORDS = {
   studyId: '스터디 아이디',
   code: '참여 코드',
 } as const;
+
+export const MEMBER_LIST_KEYWORDS = {
+  id: '멤버 아이디',
+  name: '멤버 이름',
+  email: '이메일',
+  imageUrl: '이미지',
+  loginType: '로그인 방식',
+};

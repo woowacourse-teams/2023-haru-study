@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 
 import useFetch from '@Hooks/useFetch';
 
-import { STUDIES_KEY } from '@Constants/index';
+import { STUDIES_KEYWORDS } from '@Constants/index';
 
 import { useModal } from '@Contexts/ModalProvider';
 
@@ -32,7 +32,7 @@ const StudiesListTable = ({ url }: Props) => {
         <thead>
           <tr>
             {keys.map((key) => (
-              <Th key={key}>{STUDIES_KEY[key]}</Th>
+              <Th key={key}>{STUDIES_KEYWORDS[key]}</Th>
             ))}
           </tr>
         </thead>

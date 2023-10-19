@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 
 import useFetch from '@Hooks/useFetch';
 
-import { PLAN_KEYWORDS, RETROSPECT_KEYWORDS, STUDIES_DETAIL_KEY } from '@Constants/index';
+import { PLAN_KEYWORDS, RETROSPECT_KEYWORDS, STUDIES_DETAIL_KEYWORDS } from '@Constants/index';
 
 import { transformJsonToString, getKeys, invariantOf } from '@Utils/index';
 
@@ -28,7 +28,7 @@ const StudiesDetailTable = ({ studyId }: Props) => {
         <thead>
           <tr>
             {keys.map((key) => (
-              <Th key={key}>{STUDIES_DETAIL_KEY[key]}</Th>
+              <Th key={key}>{STUDIES_DETAIL_KEYWORDS[key]}</Th>
             ))}
           </tr>
         </thead>
