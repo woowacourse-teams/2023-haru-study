@@ -93,7 +93,7 @@ const Contents = styled.section`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    height: calc(100vh - 130px);
+    height: calc(var(--vh) - 130px);
 
     padding: 30px 20px;
   }
