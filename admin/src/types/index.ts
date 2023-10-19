@@ -4,8 +4,7 @@ export type AdminDataType =
   | 'todayCreatedStudies'
   | 'participants'
   | 'participantsCode'
-  | 'member'
-  | 'contents';
+  | 'member';
 
 export type Study = {
   id: number;

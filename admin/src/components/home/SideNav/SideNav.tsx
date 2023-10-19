@@ -13,7 +13,6 @@ const SideNav = () => {
       <NavItem onClick={() => changeAdminDataType('participants')}>참여자 정보 조회</NavItem>
       <NavItem onClick={() => changeAdminDataType('participantsCode')}>참여 코드 조회</NavItem>
       <NavItem onClick={() => changeAdminDataType('member')}>멤버 조회</NavItem>
-      <NavItem onClick={() => changeAdminDataType('contents')}>컨텐츠 조회</NavItem>
     </Layout>
   );
 };
