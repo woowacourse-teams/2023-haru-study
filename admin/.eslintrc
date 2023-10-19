@@ -1,0 +1,117 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "ignorePatterns": ["*.js"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:import/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "airbnb-typescript",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module",
+    "project": "./admin/tsconfig.json"
+  },
+  "plugins": ["react", "react-hooks", "import", "jsx-a11y", "@typescript-eslint"],
+  "rules": {
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/display-name": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-redeclare": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-shadow": "off",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-throw-literal": "off",
+    "import/no-unresolved": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", ["parent", "sibling"], "index", "unknown"],
+        "pathGroups": [
+          {
+            "pattern": "react*,react*/**",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "@Components/**/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@Hooks/**/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@Pages/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@Styles/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@Constants/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@Contexts/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@Assets/**/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@Utils/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@Apis/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@Types/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@Errors/*",
+            "group": "internal",
+            "position": "after"
+          }
+        ],
+        "newlines-between": "always",
+        "pathGroupsExcludedImportTypes": [],
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
+    ]
+  }
+}

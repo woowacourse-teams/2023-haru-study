@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('github') {
+            steps {
+                git branch: 'develop', credentialsId: 'repo-and-hook-access-token-username-and-password', url: 'https://github.com/woowacourse-teams/2023-haru-study/'
+            }
+        }
+        stage('build') {
+            steps {
+                dir('admin') {
+                    nodejs('NodeJS 18.16.0') {
+                        sh 'yarn && yarn build'
+                    }
+                }
+            }
+        }
+        stage('deploy') {
+            steps {
+                dir('admin') {
+                    sshPublisher(publishers: [sshPublisherDesc(configName: 'haru-study-develop', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/2023-haru-study/develop/admin', remoteDirectorySDF: false, removePrefix: 'dist', sourceFiles: 'dist/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                }
+            }
+        }
+    }
+} 
