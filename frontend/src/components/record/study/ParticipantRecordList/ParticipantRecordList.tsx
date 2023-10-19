@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import Accordion from '@Components/common/Accordion/Accordion';
 import AccordionSkeleton from '@Components/common/Accordion/AccordionSkeleton';
 import Typography from '@Components/common/Typography/Typography';
@@ -9,17 +7,12 @@ import ParticipantRecordItem from '../ParticipantRecordItem/ParticipantRecordIte
 
 type Props = {
   studyId: string;
-  isRefetch: boolean;
 };
 
-const ParticipantRecordList = ({ studyId, isRefetch }: Props) => {
-  const { participants, isLoading, refetch } = useStudyParticipants(studyId);
+const ParticipantRecordList = ({ studyId }: Props) => {
+  const { participants, isLoading } = useStudyParticipants(studyId);
 
-  useEffect(() => {
-    if (isRefetch) refetch();
-  }, [isRefetch, refetch]);
-
-  if (isLoading || isRefetch) {
+  if (isLoading) {
     return <AccordionSkeleton />;
   }
 
