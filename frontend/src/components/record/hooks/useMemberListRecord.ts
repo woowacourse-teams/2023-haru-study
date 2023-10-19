@@ -24,7 +24,7 @@ const useMemberListRecord = ({ memberId }: Props) => {
     () => requestGetMemberListRecord(memberId, page - 1, 20, startDate, endDate),
     {
       cacheKey: [startDate || '', endDate || '', String(page)],
-      cacheTime: 60 * 60 * 1000,
+      cacheTime: 30 * 1000,
       enabled: false,
     },
   );
@@ -48,7 +48,7 @@ const useMemberListRecord = ({ memberId }: Props) => {
 
     prefetch(() => requestGetMemberListRecord(memberId, page, 20, startDate, endDate), {
       cacheKey: [startDate || '', endDate || '', String(page + 1)],
-      cacheTime: 60 * 60 * 1000,
+      cacheTime: 30 * 1000,
     });
   }, [result]);
 

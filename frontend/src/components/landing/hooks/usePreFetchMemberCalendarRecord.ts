@@ -5,7 +5,7 @@ import format from '@Utils/format';
 
 import { requestGetMemberCalendarRecord } from '@Apis/index';
 
-const usePreFetchMemberRecord = (memberId: string | undefined) => {
+const usePreFetchMemberCalendarRecord = (memberId: string | undefined) => {
   const { prefetch } = usePreFetch();
 
   if (!memberId) return;
@@ -22,8 +22,8 @@ const usePreFetchMemberRecord = (memberId: string | undefined) => {
 
   prefetch(() => requestGetMemberCalendarRecord(memberId, startDate, endDate), {
     cacheKey: [startDate, endDate],
-    cacheTime: 60 * 60 * 1000,
+    cacheTime: 60 * 1000,
   });
 };
 
-export default usePreFetchMemberRecord;
+export default usePreFetchMemberCalendarRecord;

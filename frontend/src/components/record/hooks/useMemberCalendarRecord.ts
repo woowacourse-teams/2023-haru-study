@@ -33,7 +33,7 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
     () => requestGetMemberCalendarRecord(memberId, startDate, endDate),
     {
       cacheKey: [startDate, endDate],
-      cacheTime: 60 * 60 * 1000,
+      cacheTime: 30 * 1000,
       enabled: false,
     },
   );
@@ -69,12 +69,12 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
 
     prefetch(() => requestGetMemberCalendarRecord(memberId, prevMonthStartDate, prevMonthEndDate), {
       cacheKey: [prevMonthStartDate, prevMonthEndDate],
-      cacheTime: 60 * 60 * 1000,
+      cacheTime: 30 * 1000,
     });
 
     prefetch(() => requestGetMemberCalendarRecord(memberId, nextMonthStartDate, nextMonthEndDate), {
       cacheKey: [nextMonthStartDate, nextMonthEndDate],
-      cacheTime: 60 * 60 * 1000,
+      cacheTime: 30 * 1000,
     });
   };
 
