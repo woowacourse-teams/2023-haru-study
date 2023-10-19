@@ -1,23 +1,29 @@
+import { useState } from 'react';
+
 import useMutation from '@Hooks/api/useMutation';
 import useQuestionTextarea from '@Hooks/common/useQuestionTextarea';
 
-import { useProgressInfo, useStudyInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
+import { useParticipantInfo, useStudyInfo } from '@Contexts/StudyProgressProvider';
 
 import { requestWriteRetrospect } from '@Apis/index';
 
 const useRetrospectForm = () => {
-  const { studyId, totalCycle } = useStudyInfo();
-  const { progressId, currentCycle } = useProgressInfo();
-  const { onNextStep } = useStudyProgressAction();
+  const { studyId } = useStudyInfo();
+  const { participantId } = useParticipantInfo();
 
-  const { mutate: submitForm, isLoading: isSubmitLoading } = useMutation(async () => {
-    await requestWriteRetrospect(studyId, progressId, {
-      doneAsExpected: questionTextareaProps.doneAsExpected.value,
-      experiencedDifficulty: questionTextareaProps.experiencedDifficulty.value,
-      lesson: questionTextareaProps.lesson.value,
-    });
-    await onNextStep();
-  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const { mutate: submitForm, isLoading: isSubmitLoading } = useMutation(
+    () =>
+      requestWriteRetrospect(studyId, participantId, {
+        doneAsExpected: questionTextareaProps.doneAsExpected.value,
+        experiencedDifficulty: questionTextareaProps.experiencedDifficulty.value,
+        lesson: questionTextareaProps.lesson.value,
+      }),
+    {
+      onSuccess: () => setIsSubmitted(true),
+    },
+  );
 
   const questionTextareaProps = {
     doneAsExpected: useQuestionTextarea({
@@ -39,9 +45,7 @@ const useRetrospectForm = () => {
     questionTextareaProps.lesson.errorMessage
   );
 
-  const isLastCycle = totalCycle === currentCycle;
-
-  return { questionTextareaProps, isInvalidForm, isLastCycle, isSubmitLoading, submitForm };
+  return { questionTextareaProps, isInvalidForm, isSubmitLoading, isSubmitted, submitForm };
 };
 
 export default useRetrospectForm;

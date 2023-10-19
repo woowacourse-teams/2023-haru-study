@@ -9,29 +9,29 @@ import useMutation from '@Hooks/api/useMutation';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
-import { requestDeleteProgress } from '@Apis/index';
+import { requestDeleteParticipant } from '@Apis/index';
 
 type Props = {
   studyName: string;
   studyId: string;
-  progressId: number;
+  participantId: string;
   nickname: string;
   showMemberRegister: () => void;
 };
 
-const MemberRestart = ({ studyName, nickname, studyId, progressId, showMemberRegister }: Props) => {
+const MemberRestart = ({ studyName, nickname, studyId, participantId, showMemberRegister }: Props) => {
   const navigate = useNavigate();
 
-  const { mutate } = useMutation(() => requestDeleteProgress(studyId, progressId));
+  const { mutate: deleteParticipant } = useMutation(() => requestDeleteParticipant(studyId, participantId));
 
   const handleOnClickContinueStart = async () => {
     navigate(`${ROUTES_PATH.progress}/${studyId}`);
   };
 
   const restart = async () => {
-    const result = await mutate();
+    await deleteParticipant();
 
-    if (result?.ok) return showMemberRegister();
+    return showMemberRegister();
   };
 
   return (

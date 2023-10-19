@@ -6,23 +6,54 @@ import Typography from '@Components/common/Typography/Typography';
 
 import useDisplay from '@Hooks/common/useDisplay';
 
+import color from '@Styles/color';
+
 import { PLAN_QUESTIONS } from '@Constants/study';
 
 import { useModal } from '@Contexts/ModalProvider';
+import { useNotification } from '@Contexts/NotificationProvider';
+import { useParticipantInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
 
 import ArrowIcon from '@Assets/icons/ArrowIcon';
 
 import GuideModal from '../GuideModal/GuideModal';
+import useParticipantsSubmit from '../hooks/useParticipantsSubmit';
 import usePlanningForm from '../hooks/usePlanningForm';
 
 const PlanningForm = () => {
-  const { questionTextareaProps, isInvalidForm, isSubmitLoading, submitForm } = usePlanningForm();
-
   const { isShow: isOpenOptionalQuestion, toggleShow: toggleOptionalQuestion } = useDisplay();
-  const { openModal } = useModal();
+  const { openModal, openConfirm } = useModal();
+  const { send } = useNotification();
 
-  const handleClickGuideButton = (question: 'toDo' | 'completionCondition') => () => {
+  const { isHost } = useParticipantInfo();
+  const { questionTextareaProps, isInvalidForm, isSubmitLoading, isSubmitted, submitForm } = usePlanningForm();
+  const { checkAllParticipantSubmitted, checkParticipantSubmittedLoading } = useParticipantsSubmit();
+  const { moveToNextStep, moveToNextStepLoading } = useStudyProgressAction();
+
+  const openGuide = (question: 'toDo' | 'completionCondition') => () => {
     openModal(<GuideModal question={question} />);
+  };
+
+  const submitPlanningForm = async () => {
+    await submitForm();
+    send({
+      message: '학습 목표 제출에 성공했습니다!',
+      type: 'success',
+    });
+  };
+
+  const moveToStudyingStep = async () => {
+    const isAllParticipantSubmitted = await checkAllParticipantSubmitted();
+
+    if (!isAllParticipantSubmitted) {
+      openConfirm(
+        '아직 목표 제출을 하지 않은 스터디원이 있습니다.\n그래도 학습 단계로 넘어가시겠습니까?',
+        moveToNextStep,
+      );
+      return;
+    }
+
+    moveToNextStep();
   };
 
   return (
@@ -34,12 +65,14 @@ const PlanningForm = () => {
         <QuestionList>
           <QuestionTextarea
             question={PLAN_QUESTIONS.toDo}
-            onClickGuideButton={handleClickGuideButton('toDo')}
+            onClickGuideButton={openGuide('toDo')}
+            disabled={isSubmitted}
             {...questionTextareaProps.toDo}
           />
           <QuestionTextarea
             question={PLAN_QUESTIONS.completionCondition}
-            onClickGuideButton={handleClickGuideButton('completionCondition')}
+            onClickGuideButton={openGuide('completionCondition')}
+            disabled={isSubmitted}
             {...questionTextareaProps.completionCondition}
           />
         </QuestionList>
@@ -53,19 +86,44 @@ const PlanningForm = () => {
           <QuestionList>
             <QuestionTextarea
               question={PLAN_QUESTIONS.expectedProbability}
+              disabled={isSubmitted}
               {...questionTextareaProps.expectedProbability}
             />
             <QuestionTextarea
               question={PLAN_QUESTIONS.expectedDifficulty}
+              disabled={isSubmitted}
               {...questionTextareaProps.expectedDifficulty}
             />
-            <QuestionTextarea question={PLAN_QUESTIONS.whatCanYouDo} {...questionTextareaProps.whatCanYouDo} />
+            <QuestionTextarea
+              question={PLAN_QUESTIONS.whatCanYouDo}
+              disabled={isSubmitted}
+              {...questionTextareaProps.whatCanYouDo}
+            />
           </QuestionList>
         )}
       </QuestionLayout>
-      <Button variant="primary" type="submit" onClick={submitForm} isLoading={isSubmitLoading} disabled={isInvalidForm}>
-        학습 시작하기
-      </Button>
+      <ButtonContainer>
+        <StyledButton
+          variant="primary"
+          type="submit"
+          onClick={submitPlanningForm}
+          isLoading={isSubmitLoading}
+          disabled={isInvalidForm || isSubmitted}
+        >
+          {isSubmitted ? '제출 완료' : '목표 제출하기'}
+        </StyledButton>
+        {isHost && (
+          <StyledButton
+            variant="outlined"
+            loadingCircleColor={color.blue[500]}
+            onClick={moveToStudyingStep}
+            isLoading={checkParticipantSubmittedLoading || moveToNextStepLoading}
+          >
+            학습 단계로
+            <ArrowIcon direction="right" color={color.blue[500]} />
+          </StyledButton>
+        )}
+      </ButtonContainer>
     </Layout>
   );
 };
@@ -130,4 +188,32 @@ const OptionalQuestionToggle = styled.button`
   display: flex;
   align-items: center;
   gap: 10px;
+`;
+
+const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 20px;
+
+  @media screen and (max-width: 768px) {
+    gap: 10px;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  padding-left: 0;
+  padding-right: 0;
+
+  flex: 1;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 2rem;
+  }
 `;

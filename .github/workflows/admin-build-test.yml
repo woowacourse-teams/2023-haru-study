@@ -1,0 +1,47 @@
+name: admin-frontend-build-test
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+    types: [opened, synchronize, reopened]
+
+defaults:
+  run:
+    working-directory: ./admin
+
+jobs:
+  build:
+    # label이 admin과 feature일때 혹은 admin과 refactor일때 워크플로우를 실행시킨다.
+    if: |
+      (contains(github.event.pull_request.labels.*.id, 6050305097) && 
+      contains(github.event.pull_request.labels.*.id, 5681142648)) ||
+      (contains(github.event.pull_request.labels.*.id, 6050305097) && 
+      contains(github.event.pull_request.labels.*.id, 5681143873)) 
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: yarn install --immutable --immutable-cache --check-cache
+
+      - name: Build
+        run: yarn build
+      
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: Github Action # default: 8398a7@action-slack
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always()

@@ -1,4 +1,4 @@
-import { css, styled } from 'styled-components';
+import { styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 import Typography from '@Components/common/Typography/Typography';
@@ -52,34 +52,15 @@ const GuideModal = ({ question }: Props) => {
           </Typography>
         ))}
       </Description>
-      <Button
-        variant="outlined"
-        $style={css`
-          color: ${color.blue[500]};
-          border: none;
-          &:hover {
-            &:enabled {
-              background-color: ${color.blue[50]};
-            }
-          }
-        `}
-        size="x-small"
-        $block={false}
-        onClick={closeModal}
-      >
+      <StyledButton variant="outlined" size="x-small" $block={false} onClick={closeModal}>
         확인
-      </Button>
+      </StyledButton>
     </GuideLayout>
   );
 };
 
 const GuideLayout = styled.div`
   padding: 5px 10px;
-
-  button {
-    margin-top: 18px;
-    float: right;
-  }
 `;
 
 const Separator = styled.div`
@@ -95,6 +76,21 @@ const Description = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+`;
+
+const StyledButton = styled(Button)`
+  width: fit-content;
+
+  margin-top: 18px;
+
+  color: ${color.blue[500]};
+  border: none;
+
+  float: right;
+
+  &:hover:enabled {
+    background-color: ${color.blue[50]};
+  }
 `;
 
 export default GuideModal;

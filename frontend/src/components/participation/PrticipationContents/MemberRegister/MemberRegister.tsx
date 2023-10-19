@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
 import Typography from '@Components/common/Typography/Typography';
-import useRegisterProgress from '@Components/participation/hooks/useRegisterProgress';
+import useRegisterParticipants from '@Components/participation/hooks/useRegisterParticipants';
 
 import useInput from '@Hooks/common/useInput';
 
@@ -21,11 +21,14 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
 
   const nickNameInput = useInput(true);
 
-  const { isLoading, registerProgress } = useRegisterProgress(nickNameInput.state ?? '', studyId);
+  const { isLoading, registerParticipants } = useRegisterParticipants(nickNameInput.state ?? '', studyId);
 
   const handleOnClickStartButton = async () => {
-    const result = await registerProgress();
-    if (result?.ok) return navigate(`${ROUTES_PATH.progress}/${studyId}`);
+    await registerParticipants();
+
+    return navigate(`${ROUTES_PATH.lobby}/${studyId}`, {
+      state: { studyName },
+    });
   };
 
   return (
@@ -47,7 +50,7 @@ const MemberRegister = ({ studyId, studyName }: Props) => {
         onClick={handleOnClickStartButton}
         isLoading={isLoading}
       >
-        스터디 시작하기
+        스터디 입장하기
       </Button>
     </>
   );

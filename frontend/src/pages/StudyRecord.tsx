@@ -1,4 +1,4 @@
-import StudyRecordContents from '@Components/record/StudyRecordContents/StudyRecordContents';
+import StudyRecordContents from '@Components/record/study/StudyRecordContents/StudyRecordContents';
 
 import RecordLayout from './layout/RecordLayout';
 

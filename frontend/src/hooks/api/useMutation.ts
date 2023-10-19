@@ -21,9 +21,11 @@ const useMutation = <T>(request: () => Promise<T>, { errorBoundary = true, onSuc
       await onSuccess?.(result);
       return result;
     } catch (reason) {
-      if (!(reason instanceof Error)) throw reason;
-      setError(reason);
-      onError?.(reason);
+      if (reason instanceof Error) {
+        setError(reason);
+        onError?.(reason);
+      }
+      throw reason;
     } finally {
       setIsLoading(false);
     }

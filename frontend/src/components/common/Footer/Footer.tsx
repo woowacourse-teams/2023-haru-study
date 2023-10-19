@@ -1,5 +1,5 @@
-import color from '@Styles/color';
 import { styled } from 'styled-components';
+
 import Typography from '../Typography/Typography';
 
 const URL = {
@@ -17,12 +17,12 @@ const Footer = () => {
         Copyright © 2023 하루스터디 - All rights reserved.
       </Typography>
       <LinkContainer>
-        <a target="_blank" href={URL.github}>
+        <a target="_blank" href={URL.github} rel="noreferrer">
           <Typography variant="p3" fontSize="12px">
             Github
           </Typography>
         </a>
-        <a target="_blank" href={URL.feedback}>
+        <a target="_blank" href={URL.feedback} rel="noreferrer">
           <Typography variant="p3" fontSize="12px">
             사용자 피드백
           </Typography>

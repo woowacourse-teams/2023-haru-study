@@ -1,4 +1,4 @@
-import MemberRecordContents from '@Components/record/MemberRecordContents/MemberRecordContents';
+import MemberRecordContents from '@Components/record/member/MemberRecordContents/MemberRecordContents';
 
 import RecordLayout from './layout/RecordLayout';
 

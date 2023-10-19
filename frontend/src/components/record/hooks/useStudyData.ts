@@ -1,14 +1,15 @@
-import useFetch from '@Hooks/api/useFetch';
+import useCacheFetch from '@Hooks/api/useCacheFetch';
 
-import { requestGetStudyData } from '@Apis/index';
+import { requestGetStudyInfo } from '@Apis/index';
 
 const useStudyData = (studyId: string) => {
-  const { result, isLoading } = useFetch(() => requestGetStudyData(studyId), {
-    suspense: false,
+  const { result, isLoading } = useCacheFetch(() => requestGetStudyInfo(studyId), {
+    cacheKey: ['studyData', studyId],
+    cacheTime: 30 * 1000,
+    enabled: true,
   });
-  const studyBasicInfo = result?.data;
 
-  return { studyBasicInfo, isLoading };
+  return { studyBasicInfo: result, isLoading };
 };
 
 export default useStudyData;

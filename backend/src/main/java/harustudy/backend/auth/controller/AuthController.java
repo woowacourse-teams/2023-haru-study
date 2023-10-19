@@ -30,14 +30,14 @@ public class AuthController {
     private final AuthService authService;
 
     @Operation(summary = "비회원 로그인 요청")
-    @PostMapping("/api/auth/guest")
+    @PostMapping("/api/v2/auth/guest")
     public ResponseEntity<TokenResponse> guestLogin() {
         TokenResponse tokenResponse = authService.guestLogin();
         return ResponseEntity.ok(tokenResponse);
     }
 
     @Operation(summary = "소셜 로그인 요청")
-    @PostMapping("/api/auth/login")
+    @PostMapping("/api/v2/auth/login")
     public ResponseEntity<TokenResponse> oauthLogin(
             HttpServletResponse httpServletResponse,
             @RequestBody OauthLoginRequest request
@@ -49,15 +49,15 @@ public class AuthController {
     }
 
     @Operation(summary = "access 토큰, refresh 토큰 갱신")
-    @PostMapping("/api/auth/refresh")
+    @PostMapping("/api/v2/auth/refresh")
     public ResponseEntity<TokenResponse> refresh(
-            HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse
+            HttpServletRequest request,
+            HttpServletResponse response
     ) {
-        String refreshToken = extractRefreshTokenFromCookie(httpServletRequest);
+        String refreshToken = extractRefreshTokenFromCookie(request);
         TokenResponse tokenResponse = authService.refresh(refreshToken);
         Cookie cookie = setUpRefreshTokenCookie(tokenResponse);
-        httpServletResponse.addCookie(cookie);
+        response.addCookie(cookie);
         return ResponseEntity.ok(tokenResponse);
     }
 
@@ -65,14 +65,43 @@ public class AuthController {
         Cookie cookie = new Cookie("refreshToken", tokenResponse.refreshToken().toString());
         cookie.setMaxAge(refreshTokenExpireLength.intValue() / 1000);
         cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
         return cookie;
     }
 
-    private String extractRefreshTokenFromCookie(HttpServletRequest httpServletRequest) {
-        return Arrays.stream(httpServletRequest.getCookies())
+    private String extractRefreshTokenFromCookie(HttpServletRequest request) {
+        return Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals("refreshToken"))
                 .map(Cookie::getValue)
                 .findAny()
                 .orElseThrow(RefreshTokenNotExistsException::new);
+    }
+
+    @Operation(summary = "로그아웃, access & refresh 토큰 삭제")
+    @PostMapping("/api/v2/auth/logout")
+    public ResponseEntity<Void> logout(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        String refreshToken = extractRefreshTokenFromCookie(request);
+        authService.deleteStringifiedRefreshToken(refreshToken);
+
+        deleteRefreshTokenFromCookie(request, response);
+
+        return ResponseEntity.ok().build();
+    }
+
+    private void deleteRefreshTokenFromCookie(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("refreshToken")) {
+                    cookie.setPath("/");
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                }
+            }
+        }
     }
 }

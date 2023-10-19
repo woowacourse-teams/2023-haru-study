@@ -3,7 +3,7 @@ const color = {
   black: '#000000',
   yellow: '#fcd34d',
   brand: {
-    kakao: '#ffe812',
+    kakao: '#FEE500',
   },
   red: {
     200: '#cf8080',

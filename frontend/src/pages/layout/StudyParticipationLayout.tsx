@@ -18,6 +18,11 @@ const StudyParticipationLayout = ({ headerText, children }: Props) => {
           variant="h2"
           $style={css`
             margin-bottom: 80px;
+
+            @media screen and (max-width: 768px) {
+              margin-bottom: 50px;
+              font-size: 3.2rem;
+            }
           `}
         >
           {headerText}
@@ -37,10 +42,6 @@ const Layout = styled.div`
 
   @media screen and (max-width: 768px) {
     width: 90%;
-
-    h2 {
-      font-size: 3.2rem;
-    }
 
     input {
       font-size: 1.8rem;

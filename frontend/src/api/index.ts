@@ -1,108 +1,145 @@
 import type {
-  ResponseMemberProgress,
   ResponseAuthToken,
-  ResponseCreateStudy,
   ResponseMemberInfo,
-  ResponseMemberRecordContents,
-  ResponseOneStudyInfo,
+  ResponseParticipantRecordContents,
+  ResponseStudyInfo,
   ResponseMemberContents,
   ResponseStudies,
-  ResponseStudyData,
-  ResponseStudyDataList,
-  ResponseStudyMembers,
-  ResponseCheckProgresses,
+  ResponseMemberListRecord,
+  ResponseMemberCalenderRecord,
+  ResponseStudyParticipants,
+  ResponseParticipantCode,
+  ResponseLobbyInfo,
+  ResponseCheckParticipants,
+  ResponseMemberSubmitStatus,
+  ResponseCurrentStep,
 } from '@Types/api';
 import type { OAuthProvider } from '@Types/auth';
 import type { PlanList, RetrospectList, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
 import http from './httpInstance';
 
-export const requestGetStudyData = (studyId: string) => http.get<ResponseStudyData>(`/api/studies/${studyId}`);
+export const requestGetMemberListRecord = (
+  memberId: string,
+  page: number,
+  size: number,
+  startDate?: string,
+  endDate?: string,
+) => {
+  if (startDate && endDate)
+    return http.get<ResponseMemberListRecord>(
+      `/view/study-records?memberId=${memberId}&page=${page}&size=${size}&startDate=${startDate}&endDate=${endDate}&sort=createdDate,desc`,
+    );
 
-export const requestGetMemberStudyListData = (memberId: string) =>
-  http.get<ResponseStudyDataList>(`/api/studies?memberId=${memberId}`);
+  return http.get<ResponseMemberListRecord>(
+    `/view/study-records?memberId=${memberId}&page=${page}&size=${size}&sort=createdDate,desc`,
+  );
+};
 
-export const requestGetStudyMembers = (studyId: string) =>
-  http.get<ResponseStudyMembers>(`/api/studies/${studyId}/progresses`);
+export const requestGetMemberCalendarRecord = (memberId: string, startDate: string, endDate: string) =>
+  http.get<ResponseMemberCalenderRecord>(
+    `/view/calendar/study-records?memberId=${memberId}&startDate=${startDate}&endDate=${endDate}`,
+  );
 
-export const requestGetMemberRecordContents = (studyId: string, progressId: string) =>
-  http.get<ResponseMemberRecordContents>(`/api/studies/${studyId}/contents?progressId=${progressId}`);
+export const requestGetStudyParticipants = (studyId: string) =>
+  http.get<ResponseStudyParticipants>(`/studies/${studyId}/participants`);
 
-export const requestPostGuestLogin = () => http.post<ResponseAuthToken>(`/api/auth/guest`);
+export const requestGetParticipantRecordContents = (studyId: string, participantId: string) =>
+  http.get<ResponseParticipantRecordContents>(`/studies/${studyId}/contents?participantId=${participantId}`);
+
+export const requestPostGuestLogin = () => http.post<ResponseAuthToken>(`/auth/guest`);
 
 export const requestPostOAuthLogin = (provider: OAuthProvider, code: string) =>
-  http.post<ResponseAuthToken>(`/api/auth/login`, {
+  http.post<ResponseAuthToken>(`/auth/login`, {
     body: JSON.stringify({ oauthProvider: provider, code }),
   });
 
-export const requestGetMemberInfo = () => http.get<ResponseMemberInfo>('/api/me');
+export const requestPostLogout = () => http.post(`/auth/logout`);
 
-export const requestGetOneStudyData = async (studyId: string) => {
-  const { data } = await http.get<ResponseOneStudyInfo>(`/api/studies/${studyId}`);
+export const requestGetMemberInfo = () => http.get<ResponseMemberInfo>(`/me`);
 
-  return data;
+export const requestGetStudyInfo = async (studyId: string) => {
+  const { data: studyInfo } = await http.get<ResponseStudyInfo>(`/studies/${studyId}`);
+
+  return studyInfo;
 };
 
-export const requestGetMemberProgress = async (studyId: string, memberId: string) => {
-  const { data } = await http.get<ResponseMemberProgress>(`/api/studies/${studyId}/progresses?memberId=${memberId}`);
-
-  return data.progresses[0];
-};
-
-export const requestGetMemberContents = async (studyId: string, progressId: string, cycle: number) => {
+export const requestGetMemberPlan = async (studyId: string, participantId: string, cycle: number) => {
   const { data } = await http.get<ResponseMemberContents>(
-    `/api/studies/${studyId}/contents?progressId=${progressId}&cycle=${cycle}`,
+    `/studies/${studyId}/contents?participantId=${participantId}&cycle=${cycle}`,
   );
 
   return data.content[0].plan;
 };
 
-export const requestWritePlan = (studyId: string, progressId: string, plan: PlanList) =>
-  http.post(`/api/studies/${studyId}/contents/write-plan`, {
-    body: JSON.stringify({ progressId, plan: plan }),
+export const requestWritePlan = (studyId: string, participantId: string, plan: PlanList) =>
+  http.post(`/studies/${studyId}/contents/write-plan`, {
+    body: JSON.stringify({ participantId, plan: plan }),
   });
 
-export const requestWriteRetrospect = (studyId: string, progressId: string, retrospect: RetrospectList) =>
-  http.post(`/api/studies/${studyId}/contents/write-retrospect`, {
-    body: JSON.stringify({ progressId, retrospect: retrospect }),
+export const requestWriteRetrospect = (studyId: string, participantId: string, retrospect: RetrospectList) =>
+  http.post(`/studies/${studyId}/contents/write-retrospect`, {
+    body: JSON.stringify({ participantId, retrospect: retrospect }),
   });
-
-export const requestNextStep = (studyId: string, progressId: string) =>
-  http.post(`/api/studies/${studyId}/progresses/${progressId}/next-step`);
 
 export const requestPostCreateStudy = async (
   studyName: string,
   totalCycle: TotalCycleOptions | null,
   timePerCycle: StudyTimePerCycleOptions | null,
 ) => {
-  const response = await http.post<ResponseCreateStudy>(`/api/studies`, {
+  const response = await http.post(`/studies`, {
     body: JSON.stringify({ name: studyName, totalCycle, timePerCycle }),
   });
 
   const locationHeader = response.headers.get('Location');
   const studyId = locationHeader?.split('/').pop() as string;
 
-  const data = response.data;
-
-  return { studyId, data };
+  return { studyId };
 };
 
 export const requestGetAuthenticateParticipationCode = async (participantCode: string) => {
-  const response = http.get<ResponseStudies>(`/api/studies?participantCode=${participantCode}`);
+  const response = await http.get<ResponseStudies>(`/studies?participantCode=${participantCode}`);
 
-  return (await response).data;
+  return response.data;
 };
 
-export const requestGetCheckProgresses = async (studyId: string, memberId: string) => {
-  const response = http.get<ResponseCheckProgresses>(`/api/temp/studies/${studyId}/progresses?memberId=${memberId}`);
+export const requestGetCheckParticipants = async (studyId: string, memberId: string) => {
+  const response = await http.get<ResponseCheckParticipants>(
+    `/temp/studies/${studyId}/participants?memberId=${memberId}`,
+  );
 
-  return (await response).data;
+  return response.data;
 };
 
-export const requestPostRegisterProgress = (nickname: string, studyId: string, memberId: string) =>
-  http.post(`/api/studies/${studyId}/progresses`, {
+export const requestPostRegisterParticipants = (nickname: string, studyId: string, memberId: string) =>
+  http.post(`/studies/${studyId}/participants`, {
     body: JSON.stringify({ memberId, nickname }),
   });
 
-export const requestDeleteProgress = (studyId: string, progressId: number) =>
-  http.delete(`/api/studies/${studyId}/progresses/${progressId}`);
+export const requestDeleteParticipant = (studyId: string, participantId: string) =>
+  http.delete(`/studies/${studyId}/participants/${participantId}`);
+
+export const requestGetParticipantCode = async (studyId: string) => {
+  const response = await http.get<ResponseParticipantCode>(`/participant-codes?studyId=${studyId}`);
+
+  return response.data.participantCode;
+};
+
+export const requestGetParticipant = async (studyId: string, memberId: string) => {
+  const response = await http.get<ResponseStudyParticipants>(`/studies/${studyId}/participants?memberId=${memberId}`);
+
+  return response.data.participants[0];
+};
+
+export const requestGetLobbyInfo = async (studyId: string) => {
+  const response = await http.get<ResponseLobbyInfo>(`/waiting?studyId=${studyId}`);
+
+  return response.data;
+};
+
+export const requestPostNextStep = (studyId: string) => http.post(`/studies/${studyId}/next-step`);
+
+export const requestGetMemberSubmitStatus = (studyId: string) =>
+  http.get<ResponseMemberSubmitStatus>(`/submitted?studyId=${studyId}`);
+
+export const requestGetCurrentStep = (studyId: string) => http.get<ResponseCurrentStep>(`/progress?studyId=${studyId}`);

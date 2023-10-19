@@ -3,7 +3,11 @@ import { styled } from 'styled-components';
 
 import color from '@Styles/color';
 
+import { ROUTES_PATH } from '@Constants/routes';
+
 import ResetIcon from '@Assets/icons/ResetIcon';
+
+import { ApiError } from '@Errors/index';
 
 import Button from '../Button/Button';
 import Typography from '../Typography/Typography';
@@ -15,7 +19,7 @@ export type ErrorFallbackProps = {
 };
 
 const ErrorFallback = ({ error, resetErrorBoundary, layoutHeight = '100vh' }: ErrorFallbackProps) => {
-  const errorMessage = error.message || '알 수 없는 에러입니다.';
+  const errorMessage = error instanceof ApiError ? error.message : '서버에 문제가 발생했습니다.';
   return (
     <Layout height={layoutHeight}>
       <Typography variant="h3">문제가 발생했습니다.</Typography>
@@ -23,7 +27,7 @@ const ErrorFallback = ({ error, resetErrorBoundary, layoutHeight = '100vh' }: Er
       <Button $block={false} size="small" variant="secondary" onClick={resetErrorBoundary}>
         <ResetIcon /> 다시 시도하기
       </Button>
-      <Link to={'/'} onClick={resetErrorBoundary}>
+      <Link to={ROUTES_PATH.landing} onClick={resetErrorBoundary}>
         홈으로 이동하기
       </Link>
     </Layout>
@@ -51,5 +55,11 @@ const Layout = styled.section<{ height: string }>`
   a {
     color: ${color.blue[500]};
     text-decoration: underline;
+  }
+
+  button > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 `;

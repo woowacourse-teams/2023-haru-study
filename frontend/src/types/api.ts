@@ -1,15 +1,12 @@
 import type { MemberInfo } from './member';
 import type {
-  ProgressInfo,
   RetrospectList,
   StudyInfo,
-  MemberProgress,
-  MemberRecordContent,
+  Participant,
+  ParticipantRecordContent,
   PlanList,
+  StudyStatus,
   Step,
-  StudyBasicInfo,
-  StudyTimePerCycleOptions,
-  TotalCycleOptions,
 } from './study';
 
 export type ResponseAPIError = {
@@ -17,50 +14,28 @@ export type ResponseAPIError = {
   code: number;
 };
 
-export type ResponseCreateStudy = { participantCode: string; studyName: string };
-
-type ResponseStudyInfo = {
-  studyId: string;
-  name: string;
-  totalCycle: TotalCycleOptions;
-  timePerCycle: StudyTimePerCycleOptions;
-  createdDateTime: Date;
-};
-
 export type ResponseStudies = {
-  studies: ResponseStudyInfo[];
+  studies: StudyInfo[];
 };
 
-export type ResponseMemberStudyMetadata = {
-  currentCycle: number;
-  step: Step;
-} & StudyBasicInfo;
+type ResponseParticipantInfo = Participant;
+
+export type ResponseCheckParticipants = {
+  participants: ResponseParticipantInfo[] | null;
+};
 
 export type ResponsePlanList = PlanList;
 
-export type ResponseStudyData = StudyBasicInfo;
-
-export type ResponseStudyDataList = {
-  studies: StudyBasicInfo[];
+export type ResponseMemberRecords = {
+  studies: StudyInfo[];
 };
 
-export type ResponseStudyMembers = {
-  progresses: MemberProgress[];
+export type ResponseStudyParticipants = {
+  participants: Participant[];
 };
 
-export type ResponseMemberRecordContents = {
-  content: MemberRecordContent[];
-};
-
-type ResponseProgress = {
-  progressId: number;
-  nickname: string;
-  currentCycle: number;
-  step: Step;
-};
-
-export type ResponseCheckProgresses = {
-  progresses: ResponseProgress[] | null;
+export type ResponseParticipantRecordContents = {
+  content: ParticipantRecordContent[];
 };
 
 export type ResponseAuthToken = {
@@ -69,16 +44,44 @@ export type ResponseAuthToken = {
 
 export type ResponseMemberInfo = MemberInfo;
 
-export type ResponseOneStudyInfo = StudyInfo;
-
-export type ResponseMemberProgress = {
-  progresses: ProgressInfo[];
-};
+export type ResponseStudyInfo = StudyInfo;
 
 export type ResponseMemberContents = {
   content: {
     cycle: number;
-    plan: PlanList;
-    retrospect: RetrospectList;
+    plan: Partial<PlanList>;
+    retrospect: Partial<RetrospectList>;
   }[];
+};
+
+export type ResponseParticipantCode = {
+  participantCode: string;
+};
+
+export type ResponseLobbyInfo = {
+  studyStep: StudyStatus;
+  participants: Participant[];
+};
+
+export type ResponseMemberSubmitStatus = {
+  status: {
+    nickname: string;
+    submitted: boolean;
+  }[];
+};
+
+export type ResponseCurrentStep = {
+  progressStep: Step;
+};
+
+export type ResponseMemberListRecord = {
+  studyRecords: StudyInfo[];
+  pageInfo: {
+    pageNum: number;
+    totalPages: number;
+  };
+};
+
+export type ResponseMemberCalenderRecord = {
+  studyRecords: Record<string, StudyInfo[]>;
 };

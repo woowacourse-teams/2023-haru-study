@@ -7,6 +7,7 @@ import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.dto.MemberResponse;
+import harustudy.backend.testutils.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,10 +24,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class MemberServiceTest {
 
-    @PersistenceContext
-    private EntityManager entityManager;
     @Autowired
     private MemberService memberService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private Member member1;
     private Member member2;
@@ -40,8 +42,7 @@ class MemberServiceTest {
 
         entityManager.persist(member1);
         entityManager.persist(member2);
-        entityManager.flush();
-        entityManager.clear();
+        EntityManagerUtil.flushAndClearContext(entityManager);
     }
 
     @Test

@@ -8,18 +8,13 @@ import MemberRecord from '@Pages/MemberRecord';
 
 import MemberInfoProvider from '@Contexts/MemberInfoProvider';
 import ModalProvider from '@Contexts/ModalProvider';
+import NotificationProvider from '@Contexts/NotificationProvider';
 
-const STUDY_LIST = {
-  studies: [
-    {
-      studyId: '1',
-      name: '안오면 지상렬',
-      totalCycle: 3,
-      timePerCycle: 60,
-      createdDateTime: '2023-08-16T13:33:02.810Z',
-    },
-  ],
-};
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
 
 const USER_MOCK = {
   memberId: '1',
@@ -33,10 +28,6 @@ const server = setupServer(
   rest.get('/api/me', (_, res, ctx) => {
     return res(ctx.json(null));
   }),
-
-  rest.get('/api/studies', (_, res, ctx) => {
-    return res(ctx.json(null));
-  }),
 );
 
 beforeAll(() => server.listen());
@@ -44,30 +35,28 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 describe('나의 스터디 기록 페이지 테스트', () => {
-  test('나의 스터디로 이동하면 참여한 스터디의 이름과 진행한 날짜, 정보가 보여진다.', async () => {
+  test('나의 스터디로 이동하면 달력과 목록을 선택할 수 있는 버튼이 보여진다.', async () => {
     server.use(
       rest.get('/api/me', (_, res, ctx) => {
         return res(ctx.json(USER_MOCK));
-      }),
-
-      rest.get('/api/studies', (_, res, ctx) => {
-        return res(ctx.json(STUDY_LIST));
       }),
     );
 
     render(
       <MemoryRouter initialEntries={['/member-record']}>
         <ModalProvider>
-          <MemberInfoProvider>
-            <MemberRecord />
-          </MemberInfoProvider>
+          <NotificationProvider>
+            <MemberInfoProvider>
+              <MemberRecord />
+            </MemberInfoProvider>
+          </NotificationProvider>
         </ModalProvider>
       </MemoryRouter>,
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 6 }).textContent).toBe('안오면 지상렬 스터디');
-      expect(screen.getByTestId('progress-date').textContent).toBe('2023년 8월 16일');
+      expect(screen.getByText('달력')).toBeInTheDocument();
+      expect(screen.getByText('목록')).toBeInTheDocument();
     });
   });
 });

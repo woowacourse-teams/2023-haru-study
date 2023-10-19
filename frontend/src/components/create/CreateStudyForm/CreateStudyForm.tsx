@@ -119,7 +119,7 @@ const CreateStudyForm = ({ studyMode }: Props) => {
         )}
       </TimeDescription>
       <Button variant="primary" onClick={handleClickCreateStudyButton} disabled={isDisabled()} isLoading={isLoading}>
-        {studyMode === 'solo' ? '공부 시작하기' : '스터디 개설하기'}
+        {studyMode === 'alone' ? '공부 시작하기' : '스터디 개설하기'}
       </Button>
     </Layout>
   );

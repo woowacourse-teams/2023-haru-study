@@ -9,7 +9,11 @@ import type { ResponseAPIError } from '@Types/api';
 
 import { ApiError, UnknownApiError } from '@Errors/index';
 
-const http = new Http(process.env.REACT_APP_BASE_URL, { headers: { 'Content-Type': 'application/json' } });
+const API_PREFIX = '/api/v2';
+
+export const API_BASE_URL = `${process.env.REACT_APP_BASE_URL || ''}${API_PREFIX}`;
+
+const http = new Http(API_BASE_URL, { headers: { 'Content-Type': 'application/json' } });
 
 const refreshAndRefetch = async <T extends object>(response: HttpResponse<T>) => {
   const {

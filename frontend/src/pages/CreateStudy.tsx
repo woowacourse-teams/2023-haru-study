@@ -1,4 +1,4 @@
-import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
+import NotificationBoundary from '@Components/common/NotificationBoundary/NotificationBoundary';
 import CreateStudyForm from '@Components/create/CreateStudyForm/CreateStudyForm';
 
 import url from '@Utils/url';
@@ -11,13 +11,13 @@ import StudyParticipationLayout from './layout/StudyParticipationLayout';
 const CreateStudy = () => {
   const studyMode: StudyMode = url.getQueryString('mode');
 
-  if (!(studyMode === 'together' || studyMode === 'solo')) return <NotFound />;
+  if (!(studyMode === 'group' || studyMode === 'alone')) return <NotFound />;
 
   return (
-    <StudyParticipationLayout headerText={studyMode === 'solo' ? '혼자 공부하기' : '스터디 개설하기'}>
-      <AlertErrorBoundary>
+    <StudyParticipationLayout headerText={studyMode === 'alone' ? '혼자 공부하기' : '스터디 개설하기'}>
+      <NotificationBoundary>
         <CreateStudyForm studyMode={studyMode} />
-      </AlertErrorBoundary>
+      </NotificationBoundary>
     </StudyParticipationLayout>
   );
 };

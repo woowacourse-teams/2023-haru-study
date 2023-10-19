@@ -5,15 +5,14 @@ import useMutation from '@Hooks/api/useMutation';
 import { ROUTES_PATH } from '@Constants/routes';
 
 import { useMemberInfo } from '@Contexts/MemberInfoProvider';
+import { useNotification } from '@Contexts/NotificationProvider';
 
-import { requestPostCreateStudy, requestPostRegisterProgress } from '@Apis/index';
+import { requestPostCreateStudy, requestPostNextStep, requestPostRegisterParticipants } from '@Apis/index';
 
-import type { ResponseCreateStudy } from '@Types/api';
 import type { StudyMode, StudyTimePerCycleOptions, TotalCycleOptions } from '@Types/study';
 
 type CreateStudyResult = {
   studyId: string;
-  data: ResponseCreateStudy;
 };
 
 const useCreateStudy = (
@@ -24,21 +23,27 @@ const useCreateStudy = (
 ) => {
   const memberInfo = useMemberInfo();
   const navigate = useNavigate();
+  const { send } = useNotification();
 
   const { mutate: createStudy, isLoading } = useMutation<CreateStudyResult>(
     () => requestPostCreateStudy(studyName, totalCycle, timePerCycle),
     {
       onSuccess: async (result) => {
-        if (studyMode === 'together') {
+        if (studyMode === 'group') {
           return navigate(`${ROUTES_PATH.preparation}/${result.studyId}`, {
-            state: { participantCode: result.data.participantCode, studyName, isHost: true },
+            state: { studyName },
           });
         }
 
-        const nickname = memberInfo!.name.substring(0, 10);
-        await requestPostRegisterProgress(nickname, result.studyId, memberInfo!.memberId);
+        if (studyMode === 'alone') {
+          const nickname = memberInfo!.name.substring(0, 10);
+          await requestPostRegisterParticipants(nickname, result.studyId, memberInfo!.memberId);
+          await requestPostNextStep(result.studyId);
 
-        return navigate(`${ROUTES_PATH.progress}/${result.studyId}`);
+          send({ message: '스터디가 시작되었습니다.' });
+
+          return navigate(`${ROUTES_PATH.progress}/${result.studyId}`);
+        }
       },
     },
   );
