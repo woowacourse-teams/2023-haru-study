@@ -45,7 +45,7 @@ public class AdminController {
 
     @Operation(summary = "멤버 조회")
     @GetMapping("/api/admin/members")
-    public ResponseEntity<AdminMembersResponse> findMembers(Pageable pageable, @RequestParam String loginType) {
+    public ResponseEntity<AdminMembersResponse> findMembers(Pageable pageable, @RequestParam(required = false) String loginType) {
         AdminMembersResponse response = adminService.findMembers(pageable, loginType);
         return ResponseEntity.ok(response);
     }
