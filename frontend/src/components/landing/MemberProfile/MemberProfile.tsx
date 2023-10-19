@@ -9,6 +9,7 @@ import { ROUTES_PATH } from '@Constants/routes';
 import { useMemberInfo, useMemberInfoAction } from '@Contexts/MemberInfoProvider';
 
 import MenuTrigger from '../MenuTrigger/MenuTrigger';
+import usePreFetchMemberRecord from '../hooks/usePreFetchMemberRecord';
 
 const DEFAULT_MENU_ITEMS: MenuItem[] = [
   {
@@ -33,6 +34,8 @@ const MemberProfile = () => {
   const memberInfo = useMemberInfo();
   const { clearMemberInfo } = useMemberInfoAction();
 
+  usePreFetchMemberRecord(memberInfo?.memberId);
+
   const today = new Date();
 
   if (!memberInfo) {
@@ -40,6 +43,8 @@ const MemberProfile = () => {
   }
 
   const { name, imageUrl, loginType } = memberInfo;
+
+  if (memberInfo.loginType === 'guest') return;
 
   const guestMenu = (
     <Menu.Item onClick={clearMemberInfo} bottomSeparator>
