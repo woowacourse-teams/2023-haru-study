@@ -34,7 +34,6 @@ const useCacheFetch = <T>(
       setResult(cacheData);
 
       setIsLoading(false);
-      updateCacheData();
 
       return;
     }
@@ -48,15 +47,6 @@ const useCacheFetch = <T>(
 
     cacheStorage.add<T>(cacheKey || [], result, cacheTime);
     setIsLoading(false);
-  };
-
-  const updateCacheData = async () => {
-    const result = await request();
-
-    await onSuccess?.(result);
-    setResult(result);
-
-    cacheStorage.add<T>(cacheKey || [], result, cacheTime);
   };
 
   useEffect(() => {

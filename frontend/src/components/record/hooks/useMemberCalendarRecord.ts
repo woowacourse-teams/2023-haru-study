@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 
 import useCacheFetch from '@Hooks/api/useCacheFetch';
 
-import debouncing from '@Utils/debouncing';
 import format from '@Utils/format';
 
 import { requestGetMemberCalendarRecord } from '@Apis/index';
@@ -37,8 +36,7 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
   );
 
   useEffect(() => {
-    if (result) debouncing(mutate);
-    else mutate();
+    mutate();
   }, [startDate, endDate]);
 
   useEffect(() => {
