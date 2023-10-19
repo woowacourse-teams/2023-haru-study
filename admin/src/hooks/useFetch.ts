@@ -15,7 +15,13 @@ const useFetch = <T>(url: string, queryOption?: string) => {
 
   useEffect(() => {
     fetch(`/api/admin/${url}?size=10&page=${page - 1}${queryOption ? '&' + queryOption : ''}`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          return navigate(`${ROUTES_PATH.login}`);
+        }
+
+        return response.json();
+      })
       .then((result: T) => setResult(result))
       .catch((error: Error) => {
         console.error(error);
