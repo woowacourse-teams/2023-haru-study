@@ -1,25 +1,29 @@
 class CacheStorage {
-  #storage = new Map();
+  private storage = new Map();
 
   add = <T>(key: string[], data: T, cacheTime = 300000) => {
     if (key.length === 0) return;
 
     const keyString = key.join(' ');
 
-    this.#storage.set(keyString, data);
+    this.storage.set(keyString, data);
     setTimeout(() => {
       this.delete(keyString);
     }, cacheTime);
   };
 
   find = <T>(key?: string[]): null | T => {
-    if (!key || !this.hasKey(key.join(' '))) return null;
-    return this.#storage.get(key.join(' ')) as T;
+    if (!key) return null;
+
+    const keyString = key.join(' ');
+
+    if (!this.hasKey(keyString)) return null;
+    return this.storage.get(keyString) as T;
   };
 
-  private hasKey = (key: string) => this.#storage.has(key);
+  private hasKey = (key: string) => this.storage.has(key);
 
-  private delete = (key: string) => this.#storage.delete(key);
+  private delete = (key: string) => this.storage.delete(key);
 }
 
 const cacheStorage = new CacheStorage();
