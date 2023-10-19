@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 
 import { useAdminDataType } from '@Contexts/AdminDataTypeProvider';
 
+import MemberListTable from './MemberListTable/MemberListTable';
 import ParticipantCodesListTable from './ParticipantCodesListTable/ParticipantCodesListTable';
 import ParticipantsListTable from './ParticipantsListTable/ParticipantsListTable';
 import StudiesListTable from './StudiesListTable/StudiesListTable';
@@ -21,6 +22,8 @@ const AdminData = () => {
         <ParticipantsListTable />
       ) : adminDataType === 'participantsCode' ? (
         <ParticipantCodesListTable />
+      ) : adminDataType === 'member' ? (
+        <MemberListTable />
       ) : (
         adminDataType
       )}

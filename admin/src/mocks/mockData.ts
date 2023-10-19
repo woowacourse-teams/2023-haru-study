@@ -478,3 +478,41 @@ export const PARTICIPANT_CODES_MOCK_DATA = [
     code: 'abcdef',
   },
 ] as const;
+
+export const MEMBER_MOCK_DATA = [
+  {
+    id: 0,
+    name: 'abcd',
+    email: 'abcd@gmail.com',
+    imageUrl: 'afdfdfdsafd',
+    loginType: 'google',
+  },
+  {
+    id: 0,
+    name: 'acd',
+    email: 'a@gmail.com',
+    imageUrl: 'afdfdfdsafd',
+    loginType: 'kakao',
+  },
+  {
+    id: 0,
+    name: 'kkk',
+    email: 'kkk@gmail.com',
+    imageUrl: 'afdfdfdsafd',
+    loginType: 'google',
+  },
+  {
+    id: 0,
+    name: 'dddd',
+    email: 'ddddd@gmail.com',
+    imageUrl: 'afdfdfdsafd',
+    loginType: 'guest',
+  },
+  {
+    id: 0,
+    name: 'abcd',
+    email: 'abcd@gmail.com',
+    imageUrl: 'afdfdfdsafd',
+    loginType: 'google',
+  },
+] as const;

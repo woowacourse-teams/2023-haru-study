@@ -1,4 +1,4 @@
-import type { Content, Participant, ParticipantCodes, Study } from '.';
+import type { Content, MemberInfo, Participant, ParticipantCodes, Study } from '.';
 
 export type ResponseStudies = {
   totalPage: number;
@@ -19,5 +19,10 @@ export type ResponseParticipant = {
 
 export type ResponseParticipantCodes = {
   totalPage: number;
-  data: ParticipantCodes[]
-}
+  data: ParticipantCodes[];
+};
+
+export type ResponseMemberInfo = {
+  totalPage: number;
+  members: MemberInfo[];
+};
