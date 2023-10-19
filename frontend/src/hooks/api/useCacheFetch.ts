@@ -27,9 +27,9 @@ const useCacheFetch = <T>(
     onError,
   });
 
-  const cacheData = cacheStorage.find<T>(cacheKey);
-
   const cacheFetch = async () => {
+    const cacheData = cacheStorage.find<T>(cacheKey);
+
     if (cacheData) {
       await onSuccess?.(cacheData);
       setResult(cacheData);
