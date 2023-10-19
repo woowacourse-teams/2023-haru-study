@@ -62,7 +62,7 @@ export const queryHandler = [
           pageInfo: STUDY_LIST_WEEK.pageInfo,
         };
 
-    if (requestAuthToken === NEW_ACCESS_TOKEN) return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
+    if (requestAuthToken === NEW_ACCESS_TOKEN) return res(ctx.status(200), ctx.json(studyList), ctx.delay(150));
 
     if (ACCESS_TOKEN !== requestAuthToken)
       return res(
@@ -74,7 +74,7 @@ export const queryHandler = [
         }),
       );
 
-    return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
+    return res(ctx.status(200), ctx.json(studyList), ctx.delay(150));
   }),
 
   // 달력 기반 스터디 기록 조회 API
@@ -111,7 +111,7 @@ export const queryHandler = [
       });
     }, 3000);
 
-    if (requestAuthToken === NEW_ACCESS_TOKEN) return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
+    if (requestAuthToken === NEW_ACCESS_TOKEN) return res(ctx.status(200), ctx.json(studyList), ctx.delay(150));
 
     if (ACCESS_TOKEN !== requestAuthToken)
       return res(
@@ -123,6 +123,6 @@ export const queryHandler = [
         }),
       );
 
-    return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
+    return res(ctx.status(200), ctx.json(studyList), ctx.delay(150));
   }),
 ];
