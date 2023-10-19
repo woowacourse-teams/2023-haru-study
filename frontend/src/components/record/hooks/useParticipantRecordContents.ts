@@ -1,10 +1,11 @@
-import useFetch from '@Hooks/api/useFetch';
+import useCacheMutation from '@Hooks/api/useCacheMutation';
 
 import { requestGetParticipantRecordContents } from '@Apis/index';
 
 const useParticipantRecordContents = (studyId: string, progressId: string) => {
-  const { result, isLoading } = useFetch(() => requestGetParticipantRecordContents(studyId, progressId), {
-    suspense: false,
+  const { result, isLoading } = useCacheMutation(() => requestGetParticipantRecordContents(studyId, progressId), {
+    queryKey: ['participantRecordContent', studyId, progressId],
+    cacheTime: 24 * 60 * 60 * 1000,
   });
   const participantRecordContents = result?.data.content || [];
 

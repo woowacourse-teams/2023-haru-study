@@ -1,10 +1,11 @@
-import useFetch from '@Hooks/api/useFetch';
+import useCacheMutation from '@Hooks/api/useCacheMutation';
 
 import { requestGetStudyInfo } from '@Apis/index';
 
 const useStudyData = (studyId: string) => {
-  const { result, isLoading } = useFetch(() => requestGetStudyInfo(studyId), {
-    suspense: false,
+  const { result, isLoading } = useCacheMutation(() => requestGetStudyInfo(studyId), {
+    queryKey: ['studyData', studyId],
+    cacheTime: 24 * 60 * 60 * 1000,
   });
 
   return { studyBasicInfo: result, isLoading };

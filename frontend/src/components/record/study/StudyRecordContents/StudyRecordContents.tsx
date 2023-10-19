@@ -1,8 +1,6 @@
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
-
-import AccordionSkeleton from '@Components/common/Accordion/AccordionSkeleton';
 
 import ParticipantRecordList from '../ParticipantRecordList/ParticipantRecordList';
 import ResetButton from '../ResetButton/ResetButton';
@@ -26,9 +24,7 @@ const StudyRecordContents = () => {
     <Layout>
       <StudyInformation studyId={studyId} />
       <ResetButton refetchParticipantRecordList={refetchParticipantRecordList} isRefetch={isRefetch} />
-      <Suspense fallback={<AccordionSkeleton />}>
-        <ParticipantRecordList studyId={studyId} isRefetch={isRefetch} />
-      </Suspense>
+      <ParticipantRecordList studyId={studyId} isRefetch={isRefetch} />
     </Layout>
   );
 };

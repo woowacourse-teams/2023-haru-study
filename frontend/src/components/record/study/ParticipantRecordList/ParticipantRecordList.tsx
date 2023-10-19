@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import Accordion from '@Components/common/Accordion/Accordion';
+import AccordionSkeleton from '@Components/common/Accordion/AccordionSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
 import useStudyParticipants from '../../hooks/useStudyParticipants';
@@ -12,11 +13,15 @@ type Props = {
 };
 
 const ParticipantRecordList = ({ studyId, isRefetch }: Props) => {
-  const { participants, refetch } = useStudyParticipants(studyId);
+  const { participants, isLoading, refetch } = useStudyParticipants(studyId);
 
   useEffect(() => {
     if (isRefetch) refetch();
   }, [isRefetch, refetch]);
+
+  if (isLoading || isRefetch) {
+    return <AccordionSkeleton />;
+  }
 
   return (
     <Accordion>
