@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 
-import useCacheMutation from '@Hooks/api/useCacheMutation';
+import useCacheFetch from '@Hooks/api/useCacheFetch';
 
 import debouncing from '@Utils/debouncing';
 import format from '@Utils/format';
@@ -28,10 +28,10 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
   const startDate = format.date(new Date(monthStorage.at(0)!.date), '-');
   const endDate = format.date(new Date(monthStorage.at(-1)!.date), '-');
 
-  const { mutate, result, isLoading } = useCacheMutation(
+  const { mutate, result, isLoading } = useCacheFetch(
     () => requestGetMemberCalendarRecord(memberId, startDate, endDate),
     {
-      queryKey: [startDate, endDate],
+      cacheKey: [startDate, endDate],
       cacheTime: 60 * 60 * 1000,
     },
   );

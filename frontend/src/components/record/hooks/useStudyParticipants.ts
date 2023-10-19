@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import useCacheMutation from '@Hooks/api/useCacheMutation';
+import useCacheFetch from '@Hooks/api/useCacheFetch';
 
 import { requestGetStudyParticipants } from '@Apis/index';
 
@@ -8,8 +8,8 @@ const useStudyParticipants = (studyId: string) => {
     result,
     mutate: refetch,
     isLoading,
-  } = useCacheMutation(() => requestGetStudyParticipants(studyId), {
-    queryKey: ['participants', studyId],
+  } = useCacheFetch(() => requestGetStudyParticipants(studyId), {
+    cacheKey: ['participants', studyId],
     cacheTime: 24 * 60 * 60 * 1000,
   });
   const participants = result?.data.participants || [];

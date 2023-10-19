@@ -1,23 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import cacheStorage from '@Utils/CacheStorage';
 
 import useMutation from './useMutation';
 
 type Options<T> = {
-  queryKey: string[];
+  cacheKey: string[];
   cacheTime?: number;
   errorBoundary?: boolean;
   onSuccess?: (result: T) => void | Promise<void>;
   onError?: (error: Error) => void;
 };
 
-const useCacheMutation = <T>(
+const useCacheFetch = <T>(
   request: () => Promise<T>,
-  { errorBoundary = true, queryKey, cacheTime, onSuccess, onError }: Options<T>,
+  { errorBoundary = true, cacheKey, cacheTime, onSuccess, onError }: Options<T>,
 ) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [result, setResult] = useState<T | null>(null);
   const { mutate, error } = useMutation(request, {
     errorBoundary,
@@ -25,11 +26,9 @@ const useCacheMutation = <T>(
     onError,
   });
 
-  const cacheData = cacheStorage.find<T>(queryKey);
+  const cacheData = cacheStorage.find<T>(cacheKey);
 
   const cacheMutate = async () => {
-    setIsLoading(true);
-
     if (cacheData) {
       await onSuccess?.(cacheData);
       setResult(cacheData);
@@ -40,12 +39,14 @@ const useCacheMutation = <T>(
       return;
     }
 
+    setIsLoading(true);
+
     const result = await mutate();
 
     await onSuccess?.(result);
     setResult(result);
 
-    cacheStorage.add<T>(queryKey || [], result, cacheTime);
+    cacheStorage.add<T>(cacheKey || [], result, cacheTime);
     setIsLoading(false);
   };
 
@@ -55,10 +56,14 @@ const useCacheMutation = <T>(
     await onSuccess?.(result);
     setResult(result);
 
-    cacheStorage.add<T>(queryKey || [], result, cacheTime);
+    cacheStorage.add<T>(cacheKey || [], result, cacheTime);
   };
+
+  useEffect(() => {
+    cacheMutate();
+  }, []);
 
   return { mutate: cacheMutate, result, isLoading, error };
 };
 
-export default useCacheMutation;
+export default useCacheFetch;

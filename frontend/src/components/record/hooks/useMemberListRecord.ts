@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 
-import useCacheMutation from '@Hooks/api/useCacheMutation';
+import useCacheFetch from '@Hooks/api/useCacheFetch';
 
 import debouncing from '@Utils/debouncing';
 
@@ -21,10 +21,10 @@ const useMemberListRecord = ({ memberId }: Props) => {
   const [memberRecords, setMemberRecords] = useState<StudyInfo[] | null>(null);
   const [totalPagesNumber, setTotalPagesNumber] = useState<number>(1);
 
-  const { mutate, result, isLoading } = useCacheMutation(
+  const { mutate, result, isLoading } = useCacheFetch(
     () => requestGetMemberListRecord(memberId, page - 1, 20, startDate, endDate),
     {
-      queryKey: [startDate || '', endDate || '', String(page)],
+      cacheKey: [startDate || '', endDate || '', String(page)],
       cacheTime: 60 * 60 * 1000,
     },
   );
