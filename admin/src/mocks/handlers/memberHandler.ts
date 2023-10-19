@@ -3,7 +3,7 @@ import { rest } from 'msw';
 import { MEMBER_MOCK_DATA } from '../mockData';
 
 export const memberHandler = [
-  rest.get('/admin/members', (req, res, ctx) => {
+  rest.get('/api/admin/members', (req, res, ctx) => {
     const query = req.url.searchParams;
     const page = Number(query.get('page') || 0);
     const size = Number(query.get('size') || 10);

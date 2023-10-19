@@ -23,7 +23,7 @@ const useLogin = () => {
 
     await loginFetch().then((response) => {
       if (response.ok) {
-        return navigate(`${ROUTES_PATH.home}`);
+        return navigate(`/${ROUTES_PATH.home}`);
       }
 
       alert('계정 및 비밀번호를 다시 확인해주세요.');
@@ -31,7 +31,7 @@ const useLogin = () => {
   };
 
   const loginFetch = () => {
-    return fetch('/admin/login', {
+    return fetch('/api/admin/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

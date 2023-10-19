@@ -14,7 +14,7 @@ const useFetch = <T>(url: string, queryOption?: string) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/admin/${url}?size=10&page=${page - 1}${queryOption ? '&' + queryOption : ''}`)
+    fetch(`/api/admin/${url}?size=10&page=${page - 1}${queryOption ? '&' + queryOption : ''}`)
       .then((response) => response.json())
       .then((result: T) => setResult(result))
       .catch((error: Error) => {

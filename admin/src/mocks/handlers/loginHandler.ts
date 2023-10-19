@@ -3,7 +3,7 @@ import { rest } from 'msw';
 import { MOCK_LOGIN_DATA } from '../mockData';
 
 export const loginHandler = [
-  rest.post('admin/login', async (req, res, ctx) => {
+  rest.post('/api/admin/login', async (req, res, ctx) => {
     const contentType = req.headers.get('content-type');
 
     if (contentType === 'application/x-www-form-urlencoded') {
