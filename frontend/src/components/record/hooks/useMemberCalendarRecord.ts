@@ -34,7 +34,7 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
     {
       cacheKey: [startDate, endDate],
       cacheTime: 60 * 60 * 1000,
-      isRunLater: true,
+      enabled: false,
     },
   );
 

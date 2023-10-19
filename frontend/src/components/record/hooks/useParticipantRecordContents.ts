@@ -6,6 +6,7 @@ const useParticipantRecordContents = (studyId: string, progressId: string) => {
   const { result, isLoading } = useCacheFetch(() => requestGetParticipantRecordContents(studyId, progressId), {
     cacheKey: ['participantRecordContent', studyId, progressId],
     cacheTime: 24 * 60 * 60 * 1000,
+    enabled: true,
   });
   const participantRecordContents = result?.data.content || [];
 

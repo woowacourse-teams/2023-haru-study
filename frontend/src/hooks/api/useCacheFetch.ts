@@ -9,14 +9,14 @@ type Options<T> = {
   cacheKey: string[];
   cacheTime?: number;
   errorBoundary?: boolean;
-  isRunLater?: boolean;
+  enabled: boolean;
   onSuccess?: (result: T) => void | Promise<void>;
   onError?: (error: Error) => void;
 };
 
 const useCacheFetch = <T>(
   request: () => Promise<T>,
-  { errorBoundary = true, cacheKey, cacheTime, onSuccess, onError, isRunLater }: Options<T>,
+  { errorBoundary = true, cacheKey, cacheTime, onSuccess, onError, enabled }: Options<T>,
 ) => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -51,7 +51,7 @@ const useCacheFetch = <T>(
   };
 
   useEffect(() => {
-    if (!isRunLater) cacheFetch();
+    if (enabled) cacheFetch();
   }, []);
 
   return { cacheFetch, result, isLoading, error };

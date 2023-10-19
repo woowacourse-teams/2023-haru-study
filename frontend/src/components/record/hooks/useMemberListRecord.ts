@@ -25,7 +25,7 @@ const useMemberListRecord = ({ memberId }: Props) => {
     {
       cacheKey: [startDate || '', endDate || '', String(page)],
       cacheTime: 60 * 60 * 1000,
-      isRunLater: true,
+      enabled: false,
     },
   );
 
