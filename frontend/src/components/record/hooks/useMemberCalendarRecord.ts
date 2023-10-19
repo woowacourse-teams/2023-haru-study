@@ -2,7 +2,9 @@
 import { useEffect, useState } from 'react';
 
 import useCacheFetch from '@Hooks/api/useCacheFetch';
+import usePreFetch from '@Hooks/api/usePreFetch';
 
+import calendar from '@Utils/calendar';
 import format from '@Utils/format';
 
 import { requestGetMemberCalendarRecord } from '@Apis/index';
@@ -27,16 +29,57 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
   const startDate = format.date(new Date(monthStorage.at(0)!.date), '-');
   const endDate = format.date(new Date(monthStorage.at(-1)!.date), '-');
 
-  const { mutate, result, isLoading } = useCacheFetch(
+  const { cacheFetch, result, isLoading } = useCacheFetch(
     () => requestGetMemberCalendarRecord(memberId, startDate, endDate),
     {
       cacheKey: [startDate, endDate],
       cacheTime: 60 * 60 * 1000,
+      isRunLater: true,
     },
   );
 
+  const { prefetch } = usePreFetch();
+
+  const prefetchSidesCalendarData = (calendarRecord: CalendarRecord[]) => {
+    const currentFirstDay = calendarRecord.find((record) => record.state === 'cur')?.date;
+
+    if (!currentFirstDay) return;
+
+    const currentYear = currentFirstDay.getFullYear();
+    const currentMonth = currentFirstDay.getMonth();
+
+    const prevMonth = new Date(currentYear, currentMonth - 1);
+    const nextMonth = new Date(currentYear, currentMonth + 1);
+
+    const [prevMonthStartDate, prevMonthEndDate] = calendar
+      .getMonthFirstLastDate(prevMonth.getFullYear(), prevMonth.getMonth() + 1)
+      .map((date) => {
+        if (!date) return '';
+
+        return format.date(date.date, '-');
+      });
+
+    const [nextMonthStartDate, nextMonthEndDate] = calendar
+      .getMonthFirstLastDate(nextMonth.getFullYear(), nextMonth.getMonth() + 1)
+      .map((date) => {
+        if (!date) return '';
+
+        return format.date(date.date, '-');
+      });
+
+    prefetch(() => requestGetMemberCalendarRecord(memberId, prevMonthStartDate, prevMonthEndDate), {
+      cacheKey: [prevMonthStartDate, prevMonthEndDate],
+      cacheTime: 60 * 60 * 1000,
+    });
+
+    prefetch(() => requestGetMemberCalendarRecord(memberId, nextMonthStartDate, nextMonthEndDate), {
+      cacheKey: [nextMonthStartDate, nextMonthEndDate],
+      cacheTime: 60 * 60 * 1000,
+    });
+  };
+
   useEffect(() => {
-    mutate();
+    cacheFetch();
   }, [startDate, endDate]);
 
   useEffect(() => {
@@ -50,6 +93,7 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
     });
 
     setCalendarRecord(calendarRecord);
+    prefetchSidesCalendarData(calendarRecord);
   }, [result]);
 
   useEffect(() => {
