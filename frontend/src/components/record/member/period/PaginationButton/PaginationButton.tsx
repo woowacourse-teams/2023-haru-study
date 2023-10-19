@@ -9,11 +9,10 @@ import ArrowIcon from '@Assets/icons/ArrowIcon';
 type Props = {
   totalPagesNumber: number;
   currentPageNumber: number;
-  isLoading: boolean;
   shiftPage: (page: number) => void;
 };
 
-const PaginationButton = ({ totalPagesNumber, currentPageNumber, isLoading, shiftPage }: Props) => {
+const PaginationButton = ({ totalPagesNumber, currentPageNumber, shiftPage }: Props) => {
   const { send } = useNotification();
 
   const handleClickPageButton = (page: number) => {
@@ -48,23 +47,18 @@ const PaginationButton = ({ totalPagesNumber, currentPageNumber, isLoading, shif
 
   return (
     <Layout>
-      <Button disabled={isLoading} onClick={() => handleClickPageButton(currentPageNumber - 1)}>
+      <Button onClick={() => handleClickPageButton(currentPageNumber - 1)}>
         <ArrowIcon color={color.neutral[500]} direction="left" />
       </Button>
       {getRenderingPageButtons().map((pageNumber) => {
         const isCurrentButton = currentPageNumber === pageNumber;
         return (
-          <Button
-            disabled={isLoading}
-            key={pageNumber}
-            onClick={() => handleClickPageButton(pageNumber)}
-            $isCurrentButton={isCurrentButton}
-          >
+          <Button key={pageNumber} onClick={() => handleClickPageButton(pageNumber)} $isCurrentButton={isCurrentButton}>
             {pageNumber}
           </Button>
         );
       })}
-      <Button disabled={isLoading} onClick={() => handleClickPageButton(currentPageNumber + 1)}>
+      <Button onClick={() => handleClickPageButton(currentPageNumber + 1)}>
         <ArrowIcon color={color.neutral[500]} direction="right" />
       </Button>
     </Layout>
