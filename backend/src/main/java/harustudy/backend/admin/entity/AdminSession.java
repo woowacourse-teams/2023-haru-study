@@ -2,6 +2,7 @@ package harustudy.backend.admin.entity;
 
 import harustudy.backend.admin.exception.AdminSessionExpiredException;
 import harustudy.backend.common.BaseTimeEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -19,6 +20,7 @@ public class AdminSession extends BaseTimeEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(columnDefinition = "BINARY(16)")
     private UUID uuid;
 
     private LocalDateTime expiredDateTime;
