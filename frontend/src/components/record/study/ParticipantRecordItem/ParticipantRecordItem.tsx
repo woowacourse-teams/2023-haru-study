@@ -1,7 +1,7 @@
+import { Tabs } from 'haru-study-layout';
 import { css, styled } from 'styled-components';
 
 import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
-import Tabs from '@Components/common/Tabs/Tabs';
 import TabsSkeleton from '@Components/common/Tabs/TabsSkeleton';
 import Typography from '@Components/common/Typography/Typography';
 
