@@ -46,6 +46,10 @@ public class AdminService {
     }
 
     public AdminMembersResponse findMembers(Pageable pageable, String loginType) {
+        if (loginType.isEmpty()) {
+            Page<Member> memberPages = memberRepository.findAll(pageable);
+            return AdminMembersResponse.of(memberPages);
+        }
         Page<Member> memberPages = memberRepository.findAllByLoginTypeIs(pageable, LoginType.from(loginType));
         return AdminMembersResponse.of(memberPages);
     }
