@@ -1,4 +1,4 @@
 export const ROUTES_PATH = {
-  home: '/',
-  login: '/login',
+  home: '',
+  login: 'login',
 } as const;
