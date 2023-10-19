@@ -6436,6 +6436,15 @@ handlebars@^4.7.7:
   optionalDependencies:
     uglify-js "^3.1.4"
 
+haru-study-layout@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/haru-study-layout/-/haru-study-layout-1.0.0.tgz#7fa4a6280a2369c0b2e285c332a09ee801c8fb1a"
+  integrity sha512-RA1wgGm/ngQXJhdv+UnReU864ubsKCSKrTqW4vGdAcgQqnMpkvoAkv3guxg0ctAQjJGFCVWEFqGoQijsesXMdA==
+  dependencies:
+    react "^18.2.0"
+    react-dom "^18.2.0"
+    styled-components "^6.1.0"
+
 has-bigints@^1.0.1, has-bigints@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/has-bigints/-/has-bigints-1.0.2.tgz#0871bd3e3d51626f6ca0966668ba35d5602d6eaa"
@@ -8689,6 +8698,15 @@ postcss@^8.4.21, postcss@^8.4.23:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+postcss@^8.4.31:
+  version "8.4.31"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.31.tgz#92b451050a9f914da6755af352bdc0192508656d"
+  integrity sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==
+  dependencies:
+    nanoid "^3.3.6"
+    picocolors "^1.0.0"
+    source-map-js "^1.0.2"
+
 prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
@@ -9851,6 +9869,21 @@ styled-components@^6.0.2:
     css-to-react-native "^3.2.0"
     csstype "^3.1.2"
     postcss "^8.4.23"
+    shallowequal "^1.1.0"
+    stylis "^4.3.0"
+    tslib "^2.5.0"
+
+styled-components@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-6.1.0.tgz#228e3ab9c1ee1daa4b0a06aae30df0ed14fda274"
+  integrity sha512-VWNfYYBuXzuLS/QYEeoPgMErP26WL+dX9//rEh80B2mmlS1yRxRxuL5eax4m6ybYEUoHWlTy2XOU32767mlMkg==
+  dependencies:
+    "@emotion/is-prop-valid" "^1.2.1"
+    "@emotion/unitless" "^0.8.0"
+    "@types/stylis" "^4.0.2"
+    css-to-react-native "^3.2.0"
+    csstype "^3.1.2"
+    postcss "^8.4.31"
     shallowequal "^1.1.0"
     stylis "^4.3.0"
     tslib "^2.5.0"
