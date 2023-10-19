@@ -31,3 +31,8 @@ export const DefaultSkeletonStyle = css`
 
   animation: ${SkeletonAnimation} 5s infinite ease-in-out;
 `;
+
+// IOS vh 글로벌 css 변수 설정
+document.documentElement.style.setProperty('--vh', `${window.innerHeight}px`);
+
+window.addEventListener('resize', () => document.documentElement.style.setProperty('--vh', `${window.innerHeight}px`));

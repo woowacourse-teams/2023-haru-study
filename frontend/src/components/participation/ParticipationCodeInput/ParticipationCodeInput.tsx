@@ -3,7 +3,7 @@ import { css, styled } from 'styled-components';
 
 import Button from '@Components/common/Button/Button';
 import Input from '@Components/common/Input/Input';
-import useParticipationCode from '@Components/participation/hooks/useParticipationCode';
+import useCheckParticipationCode from '@Components/participation/hooks/useCheckParticipationCode';
 
 import useInput from '@Hooks/common/useInput';
 
@@ -14,14 +14,14 @@ const ParticipationCodeInput = () => {
 
   const participantCodeInput = useInput(false);
 
-  const { authenticateParticipationCode, isLoading } = useParticipationCode(participantCodeInput.state ?? '');
+  const { authenticateParticipationCode, isLoading } = useCheckParticipationCode(participantCodeInput.state ?? '');
 
   const handleOnClickParticipateButton = async () => {
-    const result = await authenticateParticipationCode();
+    const studyResult = await authenticateParticipationCode();
 
-    if (result) {
-      navigate(`${ROUTES_PATH.preparation}/${result.studies[0].studyId}`, {
-        state: { participantCode: participantCodeInput.state, studyName: result.studies[0].name, isHost: false },
+    if (studyResult) {
+      navigate(`${ROUTES_PATH.preparation}/${studyResult.studies[0].studyId}`, {
+        state: { studyName: studyResult.studies[0].name },
       });
     }
   };
@@ -41,7 +41,7 @@ const ParticipationCodeInput = () => {
           margin-top: 25px;
         `}
       >
-        스터디 참여하기
+        스터디 찾기
       </Button>
     </Layout>
   );

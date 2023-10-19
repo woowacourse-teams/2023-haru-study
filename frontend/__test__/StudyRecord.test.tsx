@@ -9,6 +9,10 @@ import StudyRecord from '@Pages/StudyRecord';
 import MemberInfoProvider from '@Contexts/MemberInfoProvider';
 import ModalProvider from '@Contexts/ModalProvider';
 
+import { API_BASE_URL } from '@Apis/httpInstance';
+
+import type { Participant } from '@Types/study';
+
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
   unobserve: jest.fn(),
@@ -77,25 +81,22 @@ const STUDY_CONTENT = {
   ],
 };
 
-const STUDY_MEMBERS = {
-  progresses: [
+const STUDY_MEMBERS: { participants: Participant[] } = {
+  participants: [
     {
-      progressId: '1',
+      participantId: '1',
       nickname: '노아',
-      currentCycle: 3,
-      step: 'done',
+      isHost: true,
     },
     {
-      progressId: '2',
+      participantId: '2',
       nickname: '룩소',
-      currentCycle: 2,
-      step: 'planning',
+      isHost: false,
     },
     {
-      progressId: '3',
+      participantId: '3',
       nickname: '엽토',
-      currentCycle: 3,
-      step: 'retrospect',
+      isHost: false,
     },
   ],
 };
@@ -108,15 +109,15 @@ const STUDY_METADATA = {
 };
 
 const server = setupServer(
-  rest.get('/api/studies/1/progresses', (_, res, ctx) => {
+  rest.get(`${API_BASE_URL}/studies/1/participants`, (_, res, ctx) => {
     return res(ctx.json(STUDY_MEMBERS));
   }),
 
-  rest.get('/api/studies/:studyId', (_, res, ctx) => {
+  rest.get(`${API_BASE_URL}/studies/:studyId`, (_, res, ctx) => {
     return res(ctx.json(STUDY_METADATA));
   }),
 
-  rest.get('/api/studies/:studyId/contents?progressId=1', (_, res, ctx) => {
+  rest.get(`${API_BASE_URL}/studies/:studyId/contents?participantId=1`, (_, res, ctx) => {
     return res(ctx.json(STUDY_CONTENT));
   }),
 );

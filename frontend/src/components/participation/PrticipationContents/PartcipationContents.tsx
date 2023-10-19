@@ -1,45 +1,35 @@
-import { useState } from 'react';
 import { styled } from 'styled-components';
 
-import AlertErrorBoundary from '@Components/common/AlertErrorBoundary/AlertErrorBoundary';
-import useCheckProgresses from '@Components/participation/hooks/useCheckProgresses';
+import NotificationBoundary from '@Components/common/NotificationBoundary/NotificationBoundary';
+import useCheckParticipants from '@Components/participation/hooks/useCheckParticipants';
 
 import MemberRegister from './MemberRegister/MemberRegister';
 import MemberRestart from './MemberRestart/MemberRestart';
-import ParticipationCodeCopier from './ParticipationCodeCopier/ParticipationCodeCopier';
 
 type Props = {
-  participantCode: string;
   studyName: string;
-  isHost: boolean;
 };
 
-const ParticipationContents = ({ participantCode, studyName, isHost }: Props) => {
-  const { result, studyId } = useCheckProgresses();
-
-  const [isRegisterShow, setRegisterShow] = useState(false);
-
-  const handleShowMemberRegister = () => {
-    setRegisterShow(true);
-  };
+const ParticipationContents = ({ studyName }: Props) => {
+  const { participantsResult, nickname, participantId, studyId, handleShowMemberRegister, isShownMemeberRestart } =
+    useCheckParticipants();
 
   return (
     <Layout>
-      {isHost && <ParticipationCodeCopier participantCode={participantCode} />}
-      {result && (
-        <AlertErrorBoundary>
-          {result.progresses && !isRegisterShow ? (
+      {participantsResult && (
+        <NotificationBoundary>
+          {isShownMemeberRestart ? (
             <MemberRestart
               studyName={studyName}
-              nickname={result.progresses[0].nickname}
+              nickname={nickname!}
               studyId={studyId}
-              progressId={result.progresses[0].progressId}
+              participantId={participantId!}
               showMemberRegister={handleShowMemberRegister}
             />
           ) : (
             <MemberRegister studyId={studyId} studyName={studyName} />
           )}
-        </AlertErrorBoundary>
+        </NotificationBoundary>
       )}
     </Layout>
   );

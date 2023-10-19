@@ -1,46 +1,53 @@
 import { css, styled } from 'styled-components';
 
+import Button from '@Components/common/Button/Button';
 import Typography from '@Components/common/Typography/Typography';
 
 import color from '@Styles/color';
 
-import { useProgressInfo, useStudyInfo } from '@Contexts/StudyProgressProvider';
+import { useModal } from '@Contexts/ModalProvider';
+import { useStudyInfo } from '@Contexts/StudyProgressProvider';
 
 import type { Step } from '@Types/study';
 
+import StudyInfoModal from '../StudyInfoModal/StudyInfoModal';
 import Timer from '../Timer/Timer';
 
-const SIDEBAR_INFO: Record<Step, { theme: string; stepKeyword: string; paragraph: string }> = {
+const SIDEBAR_INFO: Record<Step, { theme: string; buttonColor: string; paragraph: string }> = {
   planning: {
     theme: color.blue[500],
-    stepKeyword: '목표 설정',
+    buttonColor: color.blue[400],
     paragraph: '학습을 진행하기 전,\n학습 목표를 설정해주세요.',
   },
   studying: {
     theme: color.red[600],
-    stepKeyword: '학습 진행',
+    buttonColor: color.red[400],
     paragraph: '목표 달성을 위해\n학습을 바로 진행하세요.',
   },
   retrospect: {
     theme: color.teal[600],
-    stepKeyword: '회고',
+    buttonColor: color.teal[400],
     paragraph: '분간의 학습이\n어땠는지 회고해보세요.',
   },
 };
 
 const Sidebar = () => {
-  const { timePerCycle } = useStudyInfo();
-  const { step, currentCycle } = useProgressInfo();
+  const { openModal } = useModal();
 
-  if (step === 'done') return;
+  const studyInfo = useStudyInfo();
+  const { timePerCycle, currentCycle, progressStep, lastModifiedDate } = studyInfo;
 
-  const theme = SIDEBAR_INFO[step].theme;
-  const stepKeyword = SIDEBAR_INFO[step].stepKeyword;
   const paragraph =
-    step === 'retrospect' ? `${timePerCycle}${SIDEBAR_INFO[step].paragraph}` : SIDEBAR_INFO[step].paragraph;
+    progressStep === 'retrospect'
+      ? `${timePerCycle}${SIDEBAR_INFO[progressStep].paragraph}`
+      : SIDEBAR_INFO[progressStep].paragraph;
+
+  const openStudyInfo = () => {
+    openModal(<StudyInfoModal studyInfo={studyInfo} />);
+  };
 
   return (
-    <Layout background={theme}>
+    <Layout background={SIDEBAR_INFO[progressStep].theme}>
       <Typography
         variant="h4"
         color={color.white}
@@ -54,10 +61,15 @@ const Sidebar = () => {
       >
         {paragraph}
       </Typography>
-      <Timer studyMinutes={timePerCycle} step={step} />
-      <Typography variant="p1" color={color.white}>
-        {currentCycle}번째 사이클 - {stepKeyword}
-      </Typography>
+      <Timer
+        studyMinutes={timePerCycle}
+        step={progressStep}
+        currentCycle={currentCycle}
+        lastModifiedDate={lastModifiedDate}
+      />
+      <StudyInfoButton variant="primary" background={SIDEBAR_INFO[progressStep].buttonColor} onClick={openStudyInfo}>
+        스터디 현황
+      </StudyInfoButton>
     </Layout>
   );
 };
@@ -73,9 +85,42 @@ const Layout = styled.div<{ background: string }>`
   align-items: center;
   justify-content: space-between;
 
-  padding: 80px 90px;
+  padding: 80px 90px 40px 80px;
 
   background-color: ${({ background }) => background};
 
   transition: background-color 0.5s ease-in-out;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    height: 130px;
+
+    flex-direction: row;
+
+    padding: 30px 20px 20px 20px;
+
+    h4 {
+      display: none;
+    }
+
+    p {
+      font-size: 2rem;
+    }
+  }
+`;
+
+const StudyInfoButton = styled(Button)<{ background: string }>`
+  background-color: ${({ background }) => background};
+
+  &:hover:enabled {
+    background-color: ${({ background }) => background};
+  }
+
+  @media screen and (max-width: 768px) {
+    width: max-content;
+
+    padding: 12px 18px;
+
+    font-size: 2rem;
+  }
 `;

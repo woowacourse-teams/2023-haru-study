@@ -8,13 +8,15 @@ import { ROUTES_PATH } from '@Constants/routes';
 
 import App from '../App';
 
-const Auth = lazy(() => import(/* webpackChunkName: "Auth" */ '@Pages/Auth'));
+const Auth = lazy(() => import('@Pages/Auth'));
 const StudyRecord = lazy(() => import('@Pages/StudyRecord'));
+const StudyMode = lazy(() => import('@Pages/StudyMode'));
 const CreateStudy = lazy(() => import('@Pages/CreateStudy'));
 const MemberRecord = lazy(() => import('@Pages/MemberRecord'));
 const StudyProgress = lazy(() => import('@Pages/StudyProgress'));
 const StudyPreparation = lazy(() => import('@Pages/StudyPreparation'));
 const StudyParticipation = lazy(() => import('@Pages/StudyParticipation'));
+const StudyLobby = lazy(() => import('@Pages/StudyLobby'));
 
 const router = createBrowserRouter([
   {
@@ -51,8 +53,16 @@ const router = createBrowserRouter([
         element: <StudyParticipation />,
       },
       {
-        path: ROUTES_PATH.memberRecord,
+        path: `${ROUTES_PATH.memberRecord}/:mode`,
         element: <MemberRecord />,
+      },
+      {
+        path: ROUTES_PATH.mode,
+        element: <StudyMode />,
+      },
+      {
+        path: `${ROUTES_PATH.lobby}/:studyId`,
+        element: <StudyLobby />,
       },
     ],
   },

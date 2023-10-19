@@ -112,20 +112,6 @@ class PollingServiceTest {
     }
 
     @Test
-    void 진행_단계에서는_제출_인원을_확인하려_하면_예외가_발생한다() {
-        // given
-        study.proceed();
-        study.proceed();
-
-        entityManager.merge(study);
-        EntityManagerUtil.flushAndClearContext(entityManager);
-
-        // when, then
-        assertThatThrownBy(() -> pollingService.findSubmitters(study.getId()))
-                .isInstanceOf(CannotSeeSubmittersException.class);
-    }
-
-    @Test
     void 회고_단계에서는_제출_인원을_확인할_수_있다() {
         study.proceed();
         study.proceed();
@@ -183,5 +169,21 @@ class PollingServiceTest {
             softly.assertThat(response.participants().size()).isEqualTo(3);
             softly.assertThat(response.participants()).containsExactlyInAnyOrderElementsOf(expected);
         });
+    }
+
+    @Test
+    void 대기방에서_방장이_나가면_참여자가_없는_것으로_반환된다() {
+        // given
+        Participant participant = entityManager.merge(participant1);
+        Content content = entityManager.merge(content1);
+        entityManager.remove(participant);
+        entityManager.remove(content);
+        EntityManagerUtil.flushAndClearContext(entityManager);
+
+        // when
+        WaitingResponse response = pollingService.pollWaiting(study.getId());
+
+        // then
+        assertThat(response.participants()).hasSize(0);
     }
 }

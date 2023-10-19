@@ -24,10 +24,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class MemberServiceTest {
 
-    @PersistenceContext
-    private EntityManager entityManager;
     @Autowired
     private MemberService memberService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private Member member1;
     private Member member2;

@@ -104,6 +104,7 @@ type Props = {
   variant: keyof typeof VARIANT_TYPE;
   size?: ButtonSizeType;
   isLoading?: boolean;
+  loadingCircleColor?: string;
   $block?: boolean;
   $style?: CSSProp;
 };
@@ -114,6 +115,7 @@ const Button = ({
   onClick,
   disabled,
   isLoading,
+  loadingCircleColor,
   size = 'medium',
   $block = true,
   $style,
@@ -125,14 +127,14 @@ const Button = ({
       variant={variant}
       isLoading={isLoading}
       size={size}
-      disabled={disabled}
+      disabled={disabled || isLoading}
       $block={$block}
       $style={$style}
       {...props}
     >
       {isLoading && (
         <CircularProgressLayout>
-          <CircularProgress size={size} />
+          <CircularProgress size={size} circleColor={loadingCircleColor} />
         </CircularProgressLayout>
       )}
       <ButtonText isLoading={isLoading}>{children}</ButtonText>
@@ -168,9 +170,9 @@ const StyledButton = styled.button<Props>`
 
 type ButtonTextProps = Pick<Props, 'isLoading'>;
 
-const ButtonText = styled.p<ButtonTextProps>`
+const ButtonText = styled.div<ButtonTextProps>`
   ${({ isLoading }) => css`
-    color: ${isLoading && 'transparent'};
+    visibility: ${isLoading && 'hidden'};
   `}
 `;
 

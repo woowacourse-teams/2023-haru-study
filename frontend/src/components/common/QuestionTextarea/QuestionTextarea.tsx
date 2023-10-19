@@ -1,5 +1,5 @@
 import type { InputHTMLAttributes } from 'react';
-import { css, styled } from 'styled-components';
+import { styled } from 'styled-components';
 
 import Typography from '@Components/common/Typography/Typography';
 
@@ -17,18 +17,7 @@ const QuestionTextarea = ({ question, errorMessage, onClickGuideButton, ...props
   return (
     <Layout>
       <Question>
-        <Typography
-          variant="h6"
-          $style={css`
-            width: ${onClickGuideButton ? 'calc(100% - 100px)' : '100%'};
-            min-height: 42px;
-
-            display: flex;
-            align-items: center;
-          `}
-        >
-          {question}
-        </Typography>
+        <Typography variant="h6">{question}</Typography>
         {onClickGuideButton && (
           <div>
             <Button variant="secondary" size="x-small" $block={false} onClick={onClickGuideButton}>
@@ -50,9 +39,8 @@ const QuestionTextarea = ({ question, errorMessage, onClickGuideButton, ...props
 
 export default QuestionTextarea;
 
-const Layout = styled.div`
+const Layout = styled.div<{ disabled?: boolean }>`
   width: 100%;
-  min-width: 500px;
 
   padding: 16px 30px 10px 30px;
   background-color: #fff;
@@ -71,6 +59,16 @@ const Question = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  word-break: keep-all;
+
+  h6 {
+    min-height: 42px;
+
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
 
   button {
     font-weight: 700;
@@ -93,6 +91,11 @@ const Textarea = styled.textarea`
   resize: none;
   outline: none;
   border: none;
+
+  &:disabled {
+    background-color: #fff;
+    color: ${color.neutral[400]};
+  }
 `;
 
 const ErrorMessageWrapper = styled.div`

@@ -27,7 +27,7 @@ public class StudyController {
     private final StudyService studyService;
 
     @Operation(summary = "단일 스터디 정보 조회")
-    @GetMapping("/api/studies/{studyId}")
+    @GetMapping("/api/v2/studies/{studyId}")
     public ResponseEntity<StudyResponse> findStudy(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId
@@ -37,7 +37,7 @@ public class StudyController {
     }
 
     @Operation(summary = "필터링 조건으로 스터디 조회")
-    @GetMapping("/api/studies")
+    @GetMapping("/api/v2/studies")
     public ResponseEntity<StudiesResponse> findStudiesWithFilter(
             @Authenticated AuthMember authMember,
             @RequestParam(required = false) Long memberId,
@@ -49,18 +49,18 @@ public class StudyController {
 
     @Operation(summary = "스터디 생성")
     @ApiResponse(responseCode = "201")
-    @PostMapping("/api/studies")
+    @PostMapping("/api/v2/studies")
     public ResponseEntity<Void> createStudy(
             @Authenticated AuthMember authMember,
             @RequestBody CreateStudyRequest request
     ) {
         Long studyId = studyService.createStudy(request);
-        return ResponseEntity.created(URI.create("/api/studies/" + studyId)).build();
+        return ResponseEntity.created(URI.create("/api/v2/studies/" + studyId)).build();
     }
 
     @Operation(summary = "다음 스터디 단계로 이동")
     @ApiResponse(responseCode = "204")
-    @PostMapping("/api/studies/{studyId}/next-step")
+    @PostMapping("/api/v2/studies/{studyId}/next-step")
     public ResponseEntity<Void> proceed(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId

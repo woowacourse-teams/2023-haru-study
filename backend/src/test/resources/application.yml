@@ -22,6 +22,12 @@ oauth2:
       redirect-uri: http://www.test.com
       token-uri: http://www.test.com
       user-info-uri: http://www.test.com
+    kakao:
+      client-id: test-client-id
+      client-secret: test-client-secret
+      redirect-uri: http://www.test.com
+      token-uri: http://www.test.com
+      user-info-uri: http://www.test.com
 
 jwt:
   expire-length: 12345

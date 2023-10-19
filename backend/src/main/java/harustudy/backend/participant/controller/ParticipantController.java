@@ -29,7 +29,7 @@ public class ParticipantController {
     private final ParticipantService participantService;
 
     @Operation(summary = "단일 스터디 참여자 조회")
-    @GetMapping("/api/studies/{studyId}/participants/{participantId}")
+    @GetMapping("/api/v2/studies/{studyId}/participants/{participantId}")
     public ResponseEntity<ParticipantResponse> findParticipant(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId,
@@ -41,7 +41,7 @@ public class ParticipantController {
     }
 
     @Operation(summary = "필터링 조건으로 참여자 조회")
-    @GetMapping("/api/studies/{studyId}/participants")
+    @GetMapping("/api/v2/studies/{studyId}/participants")
     public ResponseEntity<ParticipantsResponse> findParticipantsWithFilter(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId,
@@ -53,7 +53,7 @@ public class ParticipantController {
     }
 
     @Operation(summary = "필터링 조건으로 스터디 참여자 조회(임시)")
-    @GetMapping("/api/temp/studies/{studyId}/participants")
+    @GetMapping("/api/v2/temp/studies/{studyId}/participants")
     public ResponseEntity<ParticipantsResponse> findParticipantsWithFilterTemp(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId,
@@ -66,7 +66,7 @@ public class ParticipantController {
 
     @Operation(summary = "스터디 참여")
     @ApiResponse(responseCode = "201")
-    @PostMapping("/api/studies/{studyId}/participants")
+    @PostMapping("/api/v2/studies/{studyId}/participants")
     public ResponseEntity<Void> participate(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId,
@@ -74,12 +74,12 @@ public class ParticipantController {
     ) {
         Long participantId = participantService.participateStudy(authMember, studyId, request);
         return ResponseEntity.created(
-                URI.create("/api/studies/" + studyId + "/participants/" + participantId)).build();
+                URI.create("/api/v2/studies/" + studyId + "/participants/" + participantId)).build();
     }
 
     @Operation(summary = "스터디 참여자 삭제")
     @ApiResponse(responseCode = "204")
-    @DeleteMapping("/api/studies/{studyId}/participants/{participantId}")
+    @DeleteMapping("/api/v2/studies/{studyId}/participants/{participantId}")
     public ResponseEntity<Void> delete(
             @Authenticated AuthMember authMember,
             @PathVariable Long studyId,

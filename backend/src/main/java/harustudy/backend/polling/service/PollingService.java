@@ -12,6 +12,7 @@ import harustudy.backend.polling.dto.SubmitterResponse;
 import harustudy.backend.polling.dto.SubmittersResponse;
 import harustudy.backend.polling.dto.WaitingResponse;
 import harustudy.backend.polling.exception.CurrentCycleContentNotExistsException;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +30,12 @@ public class PollingService {
 
     public WaitingResponse pollWaiting(Long studyId) {
         Study study = studyRepository.findByIdIfExists(studyId);
-        return WaitingResponse.of(study, study.getParticipants());
+        if (doesHostExists(study.getParticipants())) {
+            return WaitingResponse.of(study, study.getParticipants());
+        }
+        return WaitingResponse.of(study, Collections.emptyList());
     }
+
     public ProgressResponse pollProgress(Long studyId) {
         Step step = studyRepository.findStepById(studyId)
                 .orElseThrow(StudyNotFoundException::new);
@@ -41,6 +46,11 @@ public class PollingService {
         Study study = studyRepository.findByIdIfExists(studyId);
         List<Participant> participants = participantRepository.findByStudy(study);
         return generateSubmitterResponses(study, participants);
+    }
+
+    private boolean doesHostExists(List<Participant> participants) {
+        return participants.stream()
+                .anyMatch(Participant::getIsHost);
     }
 
     private SubmittersResponse generateSubmitterResponses(Study study, List<Participant> participants) {

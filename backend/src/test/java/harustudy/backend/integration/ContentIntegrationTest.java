@@ -65,7 +65,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         // when, then
         mockMvc.perform(
-                        post("/api/studies/{studyId}/contents/write-plan", study.getId())
+                        post("/api/v2/studies/{studyId}/contents/write-plan", study.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(body)
                                 .header(HttpHeaders.AUTHORIZATION, memberDto.createAuthorizationHeader()))
@@ -90,7 +90,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         // when, then
         mockMvc.perform(
-                        post("/api/studies/{studyId}/contents/write-retrospect", study.getId())
+                        post("/api/v2/studies/{studyId}/contents/write-retrospect", study.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(body)
                                 .header(HttpHeaders.AUTHORIZATION, memberDto.createAuthorizationHeader()))
@@ -114,7 +114,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         // when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/{studyId}/contents", study.getId())
+                        get("/api/v2/studies/{studyId}/contents", study.getId())
                                 .param("participantId", String.valueOf(participant.getId()))
                                 .param("memberId", String.valueOf(memberDto.member().getId()))
                                 .param("cycle", String.valueOf(content.getCycle()))
@@ -154,7 +154,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         // when
         MvcResult result = mockMvc.perform(
-                        get("/api/studies/{studyId}/contents", study.getId())
+                        get("/api/v2/studies/{studyId}/contents", study.getId())
                                 .param("participantId", String.valueOf(participant.getId()))
                                 .header(HttpHeaders.AUTHORIZATION, memberDto.createAuthorizationHeader()))
                 .andExpect(status().isOk())

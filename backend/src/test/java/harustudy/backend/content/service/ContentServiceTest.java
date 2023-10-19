@@ -3,6 +3,7 @@ package harustudy.backend.content.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import harustudy.backend.auth.dto.AuthMember;
 import harustudy.backend.content.domain.Content;
@@ -36,10 +37,11 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 class ContentServiceTest {
 
-    @PersistenceContext
-    private EntityManager entityManager;
     @Autowired
     private ContentService contentService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private Study study;
     private Member member;
@@ -101,17 +103,23 @@ class ContentServiceTest {
     }
 
     @Test
-    void 계획이_작성되어_있지_않은_경우_회고를_작성하려_하면_예외를_던진다() {
+    void 계획이_작성되어_있지_않은_경우에도_회고를_작성할_수_있다() {
         // given
+        study.proceed();
+        study.proceed();
+        study.proceed();
+
+        entityManager.merge(study);
+        EntityManagerUtil.flushAndClearContext(entityManager);
+
         AuthMember authMember = new AuthMember(member.getId());
         WriteRetrospectRequest request = new WriteRetrospectRequest(participant.getId(),
                 Map.of("retrospect", "abc"));
 
         // when, then
-        assertThatThrownBy(
-                () -> contentService.writeRetrospect(authMember, study.getId(),
-                        request))
-                .isInstanceOf(StudyStepException.class);
+        assertDoesNotThrow(
+                () -> contentService.writeRetrospect(authMember, study.getId(), request)
+        );
     }
 
     @Test

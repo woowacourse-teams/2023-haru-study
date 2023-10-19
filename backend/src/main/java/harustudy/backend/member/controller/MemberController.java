@@ -19,7 +19,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @Operation(summary = "멤버 Oauth 프로필 정보 조회")
-    @GetMapping("/api/me")
+    @GetMapping("/api/v2/me")
     public ResponseEntity<MemberResponse> findOauthProfile(
             @Authenticated AuthMember authMember
     ) {

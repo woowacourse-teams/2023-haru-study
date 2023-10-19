@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
-type Options = {
+type Options<T> = {
   errorBoundary?: boolean;
 
-  onSuccess?: <T>(result: T) => void;
+  onSuccess?: (result: T) => void | Promise<void>;
   onError?: (error: Error) => void;
 };
 
-const useMutation = <T>(request: () => Promise<T>, { errorBoundary = true, onSuccess, onError }: Options = {}) => {
+const useMutation = <T>(request: () => Promise<T>, { errorBoundary = true, onSuccess, onError }: Options<T> = {}) => {
   const [result, setResult] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<unknown | null>(null);
@@ -18,12 +18,14 @@ const useMutation = <T>(request: () => Promise<T>, { errorBoundary = true, onSuc
     try {
       const result = await request();
       setResult(result);
-      onSuccess?.(result);
+      await onSuccess?.(result);
       return result;
     } catch (reason) {
-      if (!(reason instanceof Error)) throw reason;
-      setError(reason);
-      onError?.(reason);
+      if (reason instanceof Error) {
+        setError(reason);
+        onError?.(reason);
+      }
+      throw reason;
     } finally {
       setIsLoading(false);
     }

@@ -22,21 +22,21 @@ public class PollingController {
     private final PollingService pollingService;
 
     @Operation(summary = "진행 페이지 폴링")
-    @GetMapping("/api/progress")
+    @GetMapping("/api/v2/progress")
     public ResponseEntity<ProgressResponse> progressPolling(
             @Authenticated AuthMember authMember, @RequestParam Long studyId
     ) {
         ProgressResponse progressResponse = pollingService.pollProgress(studyId);
         return ResponseEntity.ok(progressResponse);
     }
-    @GetMapping("/api/waiting")
+    @GetMapping("/api/v2/waiting")
     public ResponseEntity<WaitingResponse> pollWaiting(@Authenticated AuthMember authMember, @RequestParam Long studyId) {
         WaitingResponse waitingResponse = pollingService.pollWaiting(studyId);
         return ResponseEntity.ok(waitingResponse);
     }
 
     @Operation(summary = "스터디원 별 제출 여부 조회")
-    @GetMapping("/api/submitted")
+    @GetMapping("/api/v2/submitted")
     public ResponseEntity<SubmittersResponse> findSubmitters(
             @Authenticated AuthMember authMember,
             @RequestParam Long studyId

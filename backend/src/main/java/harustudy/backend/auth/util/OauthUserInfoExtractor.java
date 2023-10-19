@@ -1,5 +1,7 @@
 package harustudy.backend.auth.util;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import harustudy.backend.auth.dto.UserInfo;
 import harustudy.backend.auth.exception.InvalidProviderNameException;
 import java.util.Arrays;
@@ -16,6 +18,22 @@ public enum OauthUserInfoExtractor {
                     .name(String.valueOf(attributes.get("name")))
                     .email(String.valueOf(attributes.get("email")))
                     .imageUrl(String.valueOf(attributes.get("picture")))
+                    .build();
+        }
+    },
+    KAKAO("kakao") {
+        @Override
+        public UserInfo from(Map<String, Object> attributes) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.valueToTree(attributes);
+            String nickname = jsonNode.findValue("nickname").asText();
+            String imageUrl = jsonNode.findValue("profile_image_url").asText();
+            String email = jsonNode.findValue("email").asText();
+
+            return UserInfo.builder()
+                    .name(nickname)
+                    .email(email)
+                    .imageUrl(imageUrl)
                     .build();
         }
     };
