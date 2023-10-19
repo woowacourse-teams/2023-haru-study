@@ -12,6 +12,7 @@ import color from '@Styles/color';
 import { ROUTES_PATH } from '@Constants/routes';
 import { RETROSPECT_QUESTIONS } from '@Constants/study';
 
+import { useModal } from '@Contexts/ModalProvider';
 import { useNotification } from '@Contexts/NotificationProvider';
 import { useParticipantInfo, useStudyInfo, useStudyProgressAction } from '@Contexts/StudyProgressProvider';
 
@@ -22,6 +23,7 @@ import useRetrospectForm from '../hooks/useRetrospectForm';
 
 const RetrospectForm = () => {
   const navigate = useNavigate();
+  const { openConfirm } = useModal();
   const { isShow: isOpenOptionalQuestion, toggleShow: toggleOptionalQuestion } = useDisplay();
   const { send } = useNotification();
 
@@ -41,13 +43,20 @@ const RetrospectForm = () => {
 
   const moveToNextCycle = async () => {
     const isAllParticipantSubmitted = await checkAllParticipantSubmitted();
+
+    const onNext = async () => {
+      await moveToNextStep();
+      if (isLastCycle) navigate(`${ROUTES_PATH.record}/${studyId}`);
+    };
+
     const notiMessage = isLastCycle ? '그래도 스터디를 종료하시겠습니까?' : '그래도 다음 사이클로 넘어가시겠습니까?';
 
-    if (!isAllParticipantSubmitted && !confirm(`아직 제출을 하지 않은 스터디원이 있습니다. ${notiMessage}`)) return;
+    if (!isAllParticipantSubmitted) {
+      openConfirm(`아직 제출을 하지 않은 스터디원이 있습니다.\n${notiMessage}`, onNext);
+      return;
+    }
 
-    await moveToNextStep();
-
-    if (isLastCycle) navigate(`${ROUTES_PATH.record}/${studyId}`);
+    onNext();
   };
 
   return (
