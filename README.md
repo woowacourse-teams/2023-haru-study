@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="600" alt="logo" src="https://github.com/woowacourse-teams/2023-haru-study/assets/73513965/ff20624e-09b3-4dd2-89a5-b3f607cb408b">
+<img width="600" alt="banner" src="https://github.com/woowacourse-teams/2023-haru-study/assets/73513965/33446e58-0c24-49d6-84f5-3845a6eb02f0">
 
 ### 효율적인 공부 방법을 원한다면? 하루스터디 📖
 
