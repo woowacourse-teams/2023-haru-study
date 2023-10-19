@@ -1,6 +1,6 @@
+import { Accordion } from 'haru-study-layout';
 import { useEffect } from 'react';
 
-import Accordion from '@Components/common/Accordion/Accordion';
 import Typography from '@Components/common/Typography/Typography';
 
 import useStudyParticipants from '../../hooks/useStudyParticipants';
