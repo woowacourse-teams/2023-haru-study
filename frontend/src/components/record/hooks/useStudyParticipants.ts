@@ -1,14 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-
-import useFetch from '@Hooks/api/useFetch';
+import useCacheFetch from '@Hooks/api/useCacheFetch';
 
 import { requestGetStudyParticipants } from '@Apis/index';
 
 const useStudyParticipants = (studyId: string) => {
-  const { result, refetch } = useFetch(() => requestGetStudyParticipants(studyId));
+  const { result, isLoading } = useCacheFetch(() => requestGetStudyParticipants(studyId), {
+    cacheKey: ['participants', studyId],
+    cacheTime: 24 * 60 * 60 * 1000,
+    enabled: true,
+  });
   const participants = result?.data.participants || [];
 
-  return { participants, refetch };
+  return { participants, isLoading };
 };
 
 export default useStudyParticipants;

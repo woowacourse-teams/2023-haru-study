@@ -1,10 +1,12 @@
-import useFetch from '@Hooks/api/useFetch';
+import useCacheFetch from '@Hooks/api/useCacheFetch';
 
 import { requestGetParticipantRecordContents } from '@Apis/index';
 
 const useParticipantRecordContents = (studyId: string, progressId: string) => {
-  const { result, isLoading } = useFetch(() => requestGetParticipantRecordContents(studyId, progressId), {
-    suspense: false,
+  const { result, isLoading } = useCacheFetch(() => requestGetParticipantRecordContents(studyId, progressId), {
+    cacheKey: ['participantRecordContent', studyId, progressId],
+    cacheTime: 24 * 60 * 60 * 1000,
+    enabled: true,
   });
   const participantRecordContents = result?.data.content || [];
 

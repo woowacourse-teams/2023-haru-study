@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 
-import useMutation from '@Hooks/api/useMutation';
+import useCacheFetch from '@Hooks/api/useCacheFetch';
+import usePreFetch from '@Hooks/api/usePreFetch';
 
+import calendar from '@Utils/calendar';
 import format from '@Utils/format';
 
 import { requestGetMemberCalendarRecord } from '@Apis/index';
@@ -27,37 +29,72 @@ const useMemberCalendarRecord = ({ monthStorage, calendarRef, memberId }: Props)
   const startDate = format.date(new Date(monthStorage.at(0)!.date), '-');
   const endDate = format.date(new Date(monthStorage.at(-1)!.date), '-');
 
-  const { mutate, isLoading } = useMutation(() => requestGetMemberCalendarRecord(memberId, startDate, endDate), {
-    onSuccess: (result) => {
-      const studyRecords = result.data.studyRecords;
+  const { cacheFetch, result, isLoading } = useCacheFetch(
+    () => requestGetMemberCalendarRecord(memberId, startDate, endDate),
+    {
+      cacheKey: [startDate, endDate],
+      cacheTime: 60 * 60 * 1000,
+      enabled: false,
+    },
+  );
 
-      const calendarRecord = monthStorage.map((item) => {
-        const records = studyRecords[format.date(item.date, '-')] || [];
+  const { prefetch } = usePreFetch();
 
-        const restRecordsNumber = records && records.length > 3 ? records.length - 3 : 0;
+  const prefetchSidesCalendarData = (calendarRecord: CalendarRecord[]) => {
+    const currentFirstDay = calendarRecord.find((record) => record.state === 'cur')?.date;
 
-        return { ...item, records, restRecordsNumber };
+    if (!currentFirstDay) return;
+
+    const currentYear = currentFirstDay.getFullYear();
+    const currentMonth = currentFirstDay.getMonth();
+
+    const prevMonth = new Date(currentYear, currentMonth - 1);
+    const nextMonth = new Date(currentYear, currentMonth + 1);
+
+    const [prevMonthStartDate, prevMonthEndDate] = calendar
+      .getMonthFirstLastDate(prevMonth.getFullYear(), prevMonth.getMonth() + 1)
+      .map((date) => {
+        if (!date) return '';
+
+        return format.date(date.date, '-');
       });
 
-      setCalendarRecord(calendarRecord);
-    },
-  });
+    const [nextMonthStartDate, nextMonthEndDate] = calendar
+      .getMonthFirstLastDate(nextMonth.getFullYear(), nextMonth.getMonth() + 1)
+      .map((date) => {
+        if (!date) return '';
+
+        return format.date(date.date, '-');
+      });
+
+    prefetch(() => requestGetMemberCalendarRecord(memberId, prevMonthStartDate, prevMonthEndDate), {
+      cacheKey: [prevMonthStartDate, prevMonthEndDate],
+      cacheTime: 60 * 60 * 1000,
+    });
+
+    prefetch(() => requestGetMemberCalendarRecord(memberId, nextMonthStartDate, nextMonthEndDate), {
+      cacheKey: [nextMonthStartDate, nextMonthEndDate],
+      cacheTime: 60 * 60 * 1000,
+    });
+  };
 
   useEffect(() => {
-    const currentDate = new Date();
-    const searchedDate = monthStorage.find((storage) => storage.state === 'cur')!.date;
-
-    if (currentDate < searchedDate) {
-      setCalendarRecord(
-        monthStorage.map((item) => {
-          return { ...item, records: [], restRecordsNumber: 0 };
-        }),
-      );
-
-      return;
-    }
-    mutate();
+    cacheFetch();
   }, [startDate, endDate]);
+
+  useEffect(() => {
+    if (!result) return;
+
+    const studyRecords = result.data.studyRecords;
+    const calendarRecord = monthStorage.map((item) => {
+      const records = studyRecords[format.date(item.date, '-')] || [];
+      const restRecordsNumber = records && records.length > 3 ? records.length - 3 : 0;
+      return { ...item, records, restRecordsNumber };
+    });
+
+    setCalendarRecord(calendarRecord);
+    prefetchSidesCalendarData(calendarRecord);
+  }, [result]);
 
   useEffect(() => {
     const calendarResizeObserver = new ResizeObserver(([calendar]) => {

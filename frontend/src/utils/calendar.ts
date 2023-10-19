@@ -15,6 +15,12 @@ const calendar = {
     return [...prevMonthStorage, ...currentMonthStorage, ...nextMonthStorage];
   },
 
+  getMonthFirstLastDate: (year: number, month: number) => {
+    const monthStorage = calendar.getMonthStorage(year, month);
+
+    return [monthStorage[0], monthStorage.at(-1)];
+  },
+
   // 이전달의 마지막 날
   getLastDatePrevMonth: (year: number, month: number) => new Date(year, month - 1, 0),
 

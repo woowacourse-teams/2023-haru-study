@@ -37,9 +37,6 @@ const MemberRecordListModal = ({ fullDate, studies, handleClickStudyItem }: Prop
           />
         ))}
       </StudyList>
-      <Button variant="secondary" size="x-small" onClick={() => closeModal()} $block={false}>
-        닫기
-      </Button>
     </Layout>
   );
 };
@@ -52,9 +49,6 @@ const Layout = styled.div`
   gap: 20px;
 
   padding: 10px;
-
-  max-height: 600px;
-  overflow-y: auto;
 
   button {
     align-self: flex-end;
@@ -72,6 +66,9 @@ const StudyList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  max-height: 600px;
+  overflow-y: auto;
 
   overflow: auto;
 `;

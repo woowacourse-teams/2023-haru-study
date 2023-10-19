@@ -27,7 +27,6 @@ const MemberRecordPeriod = ({ memberId }: Props) => {
         <PaginationButton
           totalPagesNumber={totalPagesNumber}
           currentPageNumber={currentPageNumber}
-          isLoading={isLoading}
           shiftPage={shiftPage}
         />
       )}
@@ -36,7 +35,6 @@ const MemberRecordPeriod = ({ memberId }: Props) => {
         <PaginationButton
           totalPagesNumber={totalPagesNumber}
           currentPageNumber={currentPageNumber}
-          isLoading={isLoading}
           shiftPage={shiftPage}
         />
       )}

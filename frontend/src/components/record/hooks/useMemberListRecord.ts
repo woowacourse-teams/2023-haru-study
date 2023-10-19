@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 
-import useMutation from '@Hooks/api/useMutation';
+import useCacheFetch from '@Hooks/api/useCacheFetch';
+import usePreFetch from '@Hooks/api/usePreFetch';
 
 import { requestGetMemberListRecord } from '@Apis/index';
 
@@ -19,14 +20,21 @@ const useMemberListRecord = ({ memberId }: Props) => {
   const [memberRecords, setMemberRecords] = useState<StudyInfo[] | null>(null);
   const [totalPagesNumber, setTotalPagesNumber] = useState<number>(1);
 
-  const { mutate, result, isLoading } = useMutation(() =>
-    requestGetMemberListRecord(memberId, page - 1, 20, startDate, endDate),
+  const { cacheFetch, result, isLoading } = useCacheFetch(
+    () => requestGetMemberListRecord(memberId, page - 1, 20, startDate, endDate),
+    {
+      cacheKey: [startDate || '', endDate || '', String(page)],
+      cacheTime: 60 * 60 * 1000,
+      enabled: false,
+    },
   );
+
+  const { prefetch } = usePreFetch();
 
   const shiftPage = (page: number) => updatePage(page);
 
   useEffect(() => {
-    mutate();
+    cacheFetch();
   }, [triggerSearchRecord]);
 
   useEffect(() => {
@@ -37,6 +45,11 @@ const useMemberListRecord = ({ memberId }: Props) => {
     setMemberRecords(studyRecords || []);
     if (totalPagesNumber === 1 || pageInfo.totalPages !== pageInfo.totalPages + 1)
       setTotalPagesNumber(pageInfo.totalPages);
+
+    prefetch(() => requestGetMemberListRecord(memberId, page, 20, startDate, endDate), {
+      cacheKey: [startDate || '', endDate || '', String(page + 1)],
+      cacheTime: 60 * 60 * 1000,
+    });
   }, [result]);
 
   return { memberRecords, isLoading, totalPagesNumber, shiftPage, currentPageNumber: page };

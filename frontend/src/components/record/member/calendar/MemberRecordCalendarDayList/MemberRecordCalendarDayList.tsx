@@ -9,7 +9,6 @@ import type { MonthStorage } from '@Types/record';
 
 import useMemberCalendarRecord from '../../../hooks/useMemberCalendarRecord';
 import MemberRecordCalendarDayItem from '../MemberRecordCalendarDayItem/MemberRecordCalendarDayItem';
-import MemberRecordCalendarDayItemSkeleton from '../MemberRecordCalendarDayItem/MemberRecordCalendarDayItemSkeleton';
 
 type Props = {
   monthStorage: MonthStorage;
@@ -20,16 +19,12 @@ type Props = {
 const MemberRecordCalendarDayList = ({ monthStorage, memberId, calendarRef }: Props) => {
   const { calendarRecord, calendarData, isLoading } = useMemberCalendarRecord({ monthStorage, calendarRef, memberId });
 
-  if (isLoading && calendarData === 'name') {
-    return <MemberRecordCalendarDayItemSkeleton monthStorage={monthStorage} />;
-  }
-
   return (
     <>
-      {isLoading && calendarData === 'count' && (
+      {isLoading && (
         <LoadingBar>
           <CircularProgress
-            size="small"
+            size="x-large"
             $style={css`
               border: 2px solid ${color.blue[500]};
               border-color: ${color.blue[500]} transparent transparent transparent;

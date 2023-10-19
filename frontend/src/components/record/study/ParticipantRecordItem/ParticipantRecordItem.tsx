@@ -1,4 +1,4 @@
-import { css, styled } from 'styled-components';
+import { styled } from 'styled-components';
 
 import QuestionAnswer from '@Components/common/QuestionAnswer/QuestionAnswer';
 import Tabs from '@Components/common/Tabs/Tabs';
@@ -27,12 +27,6 @@ type Props = {
 const ParticipantRecordItem = ({ studyId, nickname, participantId }: Props) => {
   const { participantRecordContents, isLoading } = useParticipantRecordContents(studyId, participantId);
 
-  const isDoneCycle = (selectedTabCycle: number) => {
-    const retrospect = participantRecordContents[selectedTabCycle - 1].retrospect;
-
-    return 'doneAsExpected' in retrospect;
-  };
-
   const getPostPosition = (name: string) => {
     const charCode = name.charCodeAt(name.length - 1);
     const consonantCode = (charCode - 0xac00) % 28;
@@ -53,50 +47,38 @@ const ParticipantRecordItem = ({ studyId, nickname, participantId }: Props) => {
       <Tabs>
         {participantRecordContents?.map((content) => (
           <Tabs.Item key={content.cycle} label={`${content.cycle}번째 사이클`}>
-            {isDoneCycle(content.cycle) ? (
-              <TabItemContainer>
-                <TabItemSection>
-                  <Typography variant="h5">
-                    <GoalIcon color={color.blue[500]} />
-                    {nickname}
-                    {getPostPosition(nickname)} 작성한 목표
-                  </Typography>
-                  {getKeys<Plan>(PLAN_KEYWORDS).map((key) => (
-                    <QuestionAnswer
-                      key={key}
-                      question={PLAN_KEYWORDS[key]}
-                      answer={content.plan[key]}
-                      iconColor={color.blue[500]}
-                    />
-                  ))}
-                </TabItemSection>
-                <TabItemSection>
-                  <Typography variant="h5">
-                    <PencilIcon color={color.teal[500]} />
-                    {nickname}
-                    {getPostPosition(nickname)} 작성한 회고
-                  </Typography>
-                  {getKeys<Retrospect>(RETROSPECT_KEYWORDS).map((key) => (
-                    <QuestionAnswer
-                      key={key}
-                      question={RETROSPECT_KEYWORDS[key]}
-                      answer={content.retrospect[key]}
-                      iconColor={color.teal[500]}
-                    />
-                  ))}
-                </TabItemSection>
-              </TabItemContainer>
-            ) : (
-              <Typography
-                variant="p2"
-                key={content.cycle}
-                $style={css`
-                  margin-top: 40px;
-                `}
-              >
-                아직 사이클을 완료하지 않았어요. 사이클을 완료하면 기록을 볼 수 있어요.
-              </Typography>
-            )}
+            <TabItemContainer>
+              <TabItemSection>
+                <Typography variant="h5">
+                  <GoalIcon color={color.blue[500]} />
+                  {nickname}
+                  {getPostPosition(nickname)} 작성한 목표
+                </Typography>
+                {getKeys<Plan>(PLAN_KEYWORDS).map((key) => (
+                  <QuestionAnswer
+                    key={key}
+                    question={PLAN_KEYWORDS[key]}
+                    answer={content.plan[key]}
+                    iconColor={color.blue[500]}
+                  />
+                ))}
+              </TabItemSection>
+              <TabItemSection>
+                <Typography variant="h5">
+                  <PencilIcon color={color.teal[500]} />
+                  {nickname}
+                  {getPostPosition(nickname)} 작성한 회고
+                </Typography>
+                {getKeys<Retrospect>(RETROSPECT_KEYWORDS).map((key) => (
+                  <QuestionAnswer
+                    key={key}
+                    question={RETROSPECT_KEYWORDS[key]}
+                    answer={content.retrospect[key]}
+                    iconColor={color.teal[500]}
+                  />
+                ))}
+              </TabItemSection>
+            </TabItemContainer>
           </Tabs.Item>
         ))}
       </Tabs>

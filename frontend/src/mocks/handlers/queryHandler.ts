@@ -64,7 +64,7 @@ export const queryHandler = [
           pageInfo: STUDY_LIST_WEEK.pageInfo,
         };
 
-    if (requestAuthToken === NEW_ACCESS_TOKEN) return res(ctx.status(200), ctx.json(studyList), ctx.delay(1000));
+    if (requestAuthToken === NEW_ACCESS_TOKEN) return res(ctx.status(200), ctx.json(studyList), ctx.delay(150));
 
     if (ACCESS_TOKEN !== requestAuthToken)
       return res(
@@ -76,7 +76,7 @@ export const queryHandler = [
         }),
       );
 
-    return res(ctx.status(200), ctx.json(studyList), ctx.delay(1000));
+    return res(ctx.status(200), ctx.json(studyList), ctx.delay(150));
   }),
 
   // 달력 기반 스터디 기록 조회 API
@@ -98,7 +98,22 @@ export const queryHandler = [
     const studyList =
       startDate === '2023-07-30' ? STUDY_LIST_8 : startDate === '2023-08-27' ? STUDY_LIST_9 : STUDY_LIST_10;
 
-    if (requestAuthToken === NEW_ACCESS_TOKEN) return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
+    setTimeout(() => {
+      const addDate =
+        startDate === '2023-07-30' ? '2023-08-18' : startDate === '2023-08-27' ? '2023-09-03' : '2023-10-10';
+
+      studyList.studyRecords[addDate] = Array.from({ length: 2 }).map((_, index) => {
+        return {
+          studyId: String(index),
+          name: `안오면 지상렬${index + 1} 8월`,
+          totalCycle: Math.floor(Math.random() * 8) + 1,
+          timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
+          createdDate: '2023-08-16T13:33:02.810Z',
+        };
+      });
+    }, 3000);
+
+    if (requestAuthToken === NEW_ACCESS_TOKEN) return res(ctx.status(200), ctx.json(studyList), ctx.delay(150));
 
     if (ACCESS_TOKEN !== requestAuthToken)
       return res(
@@ -110,6 +125,6 @@ export const queryHandler = [
         }),
       );
 
-    return res(ctx.status(200), ctx.json(studyList), ctx.delay(400));
+    return res(ctx.status(200), ctx.json(studyList), ctx.delay(150));
   }),
 ];
