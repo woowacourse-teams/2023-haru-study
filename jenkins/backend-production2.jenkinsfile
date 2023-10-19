@@ -7,12 +7,6 @@ pipeline {
         JAVA_HOME = "tool amazon-corretto-17"
     }
     stages {
-        stage('git clone') {
-            steps {
-                git branch: 'main', credentialsId: 'repo-and-hook-access-token-username-and-password', url: 'https://github.com/woowacourse-teams/2023-haru-study/'
-            }
-        }
-
         stage('build') {
             steps {
                 dir('backend') {

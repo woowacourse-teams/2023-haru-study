@@ -2,11 +2,6 @@ pipeline {
     agent any
     
     stages {
-        stage('github') {
-            steps {
-                git branch: 'develop', credentialsId: 'repo-and-hook-access-token-username-and-password', url: 'https://github.com/woowacourse-teams/2023-haru-study/'
-            }
-        }
         stage('build') {
             steps {
                 dir('admin') {
