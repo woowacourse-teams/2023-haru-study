@@ -2,6 +2,7 @@ package harustudy.backend.admin.service;
 
 import harustudy.backend.admin.dto.AdminContentsResponse;
 import harustudy.backend.admin.dto.AdminMembersResponse;
+import harustudy.backend.admin.dto.AdminParticipantCodesResponse;
 import harustudy.backend.admin.dto.AdminParticipantsResponse;
 import harustudy.backend.admin.dto.AdminStudiesResponse;
 import harustudy.backend.admin.dto.AdminStudyContentResponse;
@@ -13,6 +14,7 @@ import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
 import harustudy.backend.participant.repository.ParticipantRepository;
+import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
@@ -59,9 +61,9 @@ public class AdminService {
         return AdminContentsResponse.from(contentPages);
     }
 
-    public AdminParticipantsResponse findParticipantCodes(Pageable pageable) {
-        Page<Participant> participantPages = participantRepository.findAll(pageable);
-        return AdminParticipantsResponse.from(participantPages);
+    public AdminParticipantCodesResponse findParticipantCodes(Pageable pageable) {
+        Page<ParticipantCode> participantCodePages = participantCodeRepository.findAll(pageable);
+        return AdminParticipantCodesResponse.from(participantCodePages);
     }
 
     public AdminStudiesResponse findStudiesCreatedToday(Pageable pageable) {

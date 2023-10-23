@@ -3,6 +3,7 @@ package harustudy.backend.admin.controller;
 import harustudy.backend.admin.dto.AdminContentsResponse;
 import harustudy.backend.admin.dto.AdminLoginRequest;
 import harustudy.backend.admin.dto.AdminMembersResponse;
+import harustudy.backend.admin.dto.AdminParticipantCodesResponse;
 import harustudy.backend.admin.dto.AdminParticipantsResponse;
 import harustudy.backend.admin.dto.AdminStudiesResponse;
 import harustudy.backend.admin.dto.AdminStudyContentResponse;
@@ -73,8 +74,8 @@ public class AdminController {
 
     @Operation(summary = "참여코드 조회")
     @GetMapping("/api/admin/participant-codes")
-    public ResponseEntity<AdminParticipantsResponse> findParticipantCodes(Pageable pageable) {
-        AdminParticipantsResponse response = adminService.findParticipantCodes(pageable);
+    public ResponseEntity<AdminParticipantCodesResponse> findParticipantCodes(Pageable pageable) {
+        AdminParticipantCodesResponse response = adminService.findParticipantCodes(pageable);
         return ResponseEntity.ok(response);
     }
 
