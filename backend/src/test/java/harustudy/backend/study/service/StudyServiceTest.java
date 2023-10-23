@@ -87,6 +87,7 @@ class StudyServiceTest {
                 .isInstanceOf(ParticipantCodeNotFoundException.class);
     }
 
+    @Test
     void 스터디를_생성한다() {
         // given
         CreateStudyRequest request = new CreateStudyRequest("study", 8, 40);
@@ -146,7 +147,7 @@ class StudyServiceTest {
         entityManager.clear();
 
         // when
-        studyService.proceed(new AuthMember(host.getId()), study.getId());
+        studyService.proceed(new AuthMember(hostMember.getId()), study.getId());
 
         // then
         Study foundStudy = entityManager.find(Study.class, study.getId());
