@@ -1,6 +1,11 @@
 package harustudy.backend.study.service;
 
 import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.member.domain.Member;
+import harustudy.backend.member.repository.MemberRepository;
+import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.participant.exception.ParticipantNotFoundException;
+import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.participantcode.domain.GenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
@@ -23,6 +28,8 @@ import java.util.Objects;
 @Service
 public class StudyService {
 
+    private final MemberRepository memberRepository;
+    private final ParticipantRepository participantRepository;
     private final StudyRepository studyRepository;
     private final GenerationStrategy generationStrategy;
     private final ParticipantCodeRepository participantCodeRepository;
@@ -82,6 +89,10 @@ public class StudyService {
     }
 
     private void validateIsHost(AuthMember authMember, Study study) {
-        // TODO: 방장인지 확인 로직 추가
+        Member member = memberRepository.findByIdIfExists(authMember.id());
+        Participant participant = participantRepository.findByStudyAndMember(study, member)
+                .orElseThrow(ParticipantNotFoundException::new);
+
+        participant.validateIsHost();
     }
 }

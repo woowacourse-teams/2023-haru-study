@@ -4,8 +4,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.member.domain.Member;
+import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.participant.domain.Step;
+import harustudy.backend.participant.exception.ParticipantIsNotHostException;
+import harustudy.backend.study.domain.Study;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 class StudyServiceTest {
 //
-//    @Autowired
-//    private StudyService studyService;
-//
-//    private EntityManager entityManager;
+    @Autowired
+    private StudyService studyService;
+    @Autowired
+    private EntityManager entityManager;
 //
 //    @Autowired
 //    private GenerationStrategy generationStrategy;
@@ -131,4 +140,59 @@ class StudyServiceTest {
 //                () -> studyService.findStudyWithFilter(null, notStudiesCode.getCode()))
 //                .isInstanceOf(StudyNotFoundException.class);
 //    }
+
+    @Test
+    void 방장이_아니라면_스터디_단계를_넘길_수_없다() {
+        // given
+        Study study = new Study("name", 1, 20);
+        Member hostMember = Member.guest();
+        Member participantMember = Member.guest();
+
+        Participant host = Participant
+                .instantiateParticipantWithContents(study, hostMember, "host");
+        Participant participant = Participant
+                .instantiateParticipantWithContents(study, participantMember, "notHost");
+
+        entityManager.persist(study);
+        entityManager.persist(hostMember);
+        entityManager.persist(participantMember);
+        entityManager.persist(host);
+        entityManager.persist(participant);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        // when, then
+        assertThatThrownBy(() -> studyService.proceed(new AuthMember(participantMember.getId()), study.getId()))
+                .isInstanceOf(ParticipantIsNotHostException.class);
+    }
+
+    @Test
+    void 방장이라면_스터디_단계를_넘길_수_있다() {
+        // given
+        Study study = new Study("name", 1, 20);
+        Member hostMember = Member.guest();
+        Member participantMember = Member.guest();
+
+        Participant host = Participant
+                .instantiateParticipantWithContents(study, hostMember, "host");
+        Participant participant = Participant
+                .instantiateParticipantWithContents(study, participantMember, "notHost");
+
+        entityManager.persist(study);
+        entityManager.persist(hostMember);
+        entityManager.persist(participantMember);
+        entityManager.persist(host);
+        entityManager.persist(participant);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        // when
+        studyService.proceed(new AuthMember(host.getId()), study.getId());
+
+        // then
+        Study foundStudy = entityManager.find(Study.class, study.getId());
+        assertThat(foundStudy.getStep()).isEqualTo(Step.PLANNING);
+    }
 }

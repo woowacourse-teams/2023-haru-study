@@ -4,6 +4,7 @@ import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.content.domain.Content;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.exception.NicknameLengthException;
+import harustudy.backend.participant.exception.ParticipantIsNotHostException;
 import harustudy.backend.study.domain.Study;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -87,5 +88,11 @@ public class Participant extends BaseTimeEntity {
 
     public boolean isNotIncludedIn(Study other) {
         return !study.getId().equals(other.getId());
+    }
+
+    public void validateIsHost() {
+        if (!isHost) {
+            throw new ParticipantIsNotHostException();
+        }
     }
 }
