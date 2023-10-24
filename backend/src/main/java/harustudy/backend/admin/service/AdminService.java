@@ -13,7 +13,6 @@ import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
 import harustudy.backend.participant.repository.ParticipantRepository;
-import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
 import java.time.LocalDateTime;
@@ -33,7 +32,6 @@ public class AdminService {
     private final ParticipantRepository participantRepository;
     private final MemberRepository memberRepository;
     private final ContentRepository contentRepository;
-    private final ParticipantCodeRepository participantCodeRepository;
 
     public AdminStudiesResponse findStudies(Pageable pageable) {
         Page<Study> studyPages = studyRepository.findAll(pageable);
