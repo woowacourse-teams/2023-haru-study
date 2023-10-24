@@ -53,15 +53,15 @@ public class Participant extends BaseTimeEntity {
         this.isHost = isHost;
     }
 
-    public static Participant instantiateParticipantWithContents(Study study, Member member, String nickname) {
+    public static Participant of(Study study, Member member, String nickname) {
         validateNicknameLength(nickname);
-        Participant participant = new Participant(study, member, nickname, study.isEmptyParticipants());
+        Participant participant = new Participant(study, member, nickname, study.hasEmptyParticipants());
         study.addParticipant(participant);
         return participant;
     }
 
     private static void validateNicknameLength(String nickname) {
-        if (nickname.length() < 1 || nickname.length() > 10) {
+        if (nickname.isEmpty() || nickname.length() > 10) {
             throw new NicknameLengthException();
         }
     }
@@ -77,7 +77,7 @@ public class Participant extends BaseTimeEntity {
         return this.study.getId().equals(study.getId());
     }
 
-    public boolean isOwnedBy(Member member) {
+    public boolean isNotCreatedBy(Member member) {
         return this.member.getId().equals(member.getId());
     }
 

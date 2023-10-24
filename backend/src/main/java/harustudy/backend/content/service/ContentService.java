@@ -51,7 +51,7 @@ public class ContentService {
 
     private void validateParticipantIsCreatedByMember(Participant participant, Long memberId) {
         Member member = memberRepository.findByIdIfExists(memberId);
-        if (!participant.isOwnedBy(member)) {
+        if (participant.isNotCreatedBy(member)) {
             throw new AuthorizationException();
         }
     }
@@ -126,7 +126,7 @@ public class ContentService {
 
     private void validateParticipantIsCreatedByMember(Long memberId, Participant participant) {
         Member member = memberRepository.findByIdIfExists(memberId);
-        if (!participant.isOwnedBy(member)) {
+        if (participant.isNotCreatedBy(member)) {
             throw new AuthorizationException();
         }
     }
