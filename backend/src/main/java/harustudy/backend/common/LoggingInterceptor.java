@@ -15,7 +15,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 @Component
 public class LoggingInterceptor implements HandlerInterceptor {
 
-    public static final String HTTP_LOG_FORMAT = """
+    private static final String HTTP_LOG_FORMAT = """
                                     
             request:
                 requestURI: {} {}
