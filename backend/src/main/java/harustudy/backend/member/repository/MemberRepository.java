@@ -17,8 +17,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
                 .orElseThrow(MemberNotFoundException::new);
     }
 
-    Optional<Member> findByEmail(String email);
-
     Page<Member> findAllByLoginTypeIs(Pageable pageable, LoginType loginType);
   
     Optional<Member> findByEmailAndLoginType(String email, LoginType loginType);
