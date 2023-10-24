@@ -52,8 +52,7 @@ public class Study extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private Step step;
 
-    public Study(@NotNull String name, @NotNull Integer totalCycle,
-                 @NotNull Integer timePerCycle) {
+    public Study(String name, Integer totalCycle, Integer timePerCycle) {
         validate(name, totalCycle, timePerCycle);
         this.totalCycle = totalCycle;
         this.timePerCycle = timePerCycle;
