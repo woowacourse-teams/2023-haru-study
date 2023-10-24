@@ -7,13 +7,13 @@ import harustudy.backend.auth.domain.RefreshToken;
 import java.util.UUID;
 
 @JsonInclude(Include.NON_NULL)
-public record TokenResponse(String accessToken, @JsonIgnore UUID refreshToken) {
+public record TokenResponse(String accessToken, @JsonIgnore UUID refreshToken, @JsonIgnore Long expireLength) {
 
-    public static TokenResponse forLoggedIn(String accessToken, RefreshToken refreshToken) {
-        return new TokenResponse(accessToken, refreshToken.getUuid());
+    public static TokenResponse forLoggedIn(String accessToken, RefreshToken refreshToken, Long expireLength) {
+        return new TokenResponse(accessToken, refreshToken.getUuid(), expireLength);
     }
 
     public static TokenResponse forGuest(String accessToken) {
-        return new TokenResponse(accessToken, null);
+        return new TokenResponse(accessToken, null, null);
     }
 }

@@ -15,6 +15,7 @@ import harustudy.backend.member.repository.MemberRepository;
 import io.jsonwebtoken.JwtException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +33,7 @@ public class AuthService {
         Member member = saveOrUpdateMember(request.oauthProvider(), userInfo);
         String accessToken = generateAccessToken(member.getId());
         RefreshToken refreshToken = saveRefreshTokenOf(member);
-        return TokenResponse.forLoggedIn(accessToken, refreshToken);
+        return TokenResponse.forLoggedIn(accessToken, refreshToken, tokenConfig.refreshTokenExpireLength());
     }
 
     private Member saveOrUpdateMember(String oauthProvider, UserInfo userInfo) {
@@ -79,7 +80,7 @@ public class AuthService {
         refreshToken.validateExpired();
         refreshToken.updateUuidAndExpireDateTime(tokenConfig.refreshTokenExpireLength());
         String accessToken = generateAccessToken(refreshToken.getMember().getId());
-        return TokenResponse.forLoggedIn(accessToken, refreshToken);
+        return TokenResponse.forLoggedIn(accessToken, refreshToken, tokenConfig.refreshTokenExpireLength());
     }
 
     public void validateAccessToken(String accessToken) {
