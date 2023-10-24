@@ -20,17 +20,23 @@ public class AdminInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        if (HttpMethod.OPTIONS.matches(request.getMethod())) {
+        if (isPreflightRequest(request)) {
             return true;
         }
-
         HttpSession session = request.getSession(false);
-        if (session == null) {
-            throw new AuthorizationException();
-        }
-
+        validateSessionIsNonNull(session);
         UUID uuid = (UUID) session.getAttribute("SESSION");
         adminAuthService.validateSession(uuid);
         return true;
+    }
+
+    private boolean isPreflightRequest(HttpServletRequest request) {
+        return HttpMethod.OPTIONS.matches(request.getMethod());
+    }
+
+    private void validateSessionIsNonNull(HttpSession session) {
+        if (session == null) {
+            throw new AuthorizationException();
+        }
     }
 }
