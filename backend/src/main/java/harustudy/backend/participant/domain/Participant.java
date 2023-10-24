@@ -78,7 +78,7 @@ public class Participant extends BaseTimeEntity {
     }
 
     public boolean isNotCreatedBy(Member member) {
-        return this.member.getId().equals(member.getId());
+        return !this.member.getId().equals(member.getId());
     }
 
     public boolean hasSameNicknameWith(Participant participant) {
