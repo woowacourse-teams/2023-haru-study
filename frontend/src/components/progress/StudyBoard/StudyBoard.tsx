@@ -6,7 +6,7 @@ import { styled } from 'styled-components';
 import LoadingFallback from '@Components/common/LodingFallback/LoadingFallback';
 import NotificationBoundary from '@Components/common/NotificationBoundary/NotificationBoundary';
 
-import useConfirmBeforeRouting from '@Hooks/common/useRouteBlocker';
+import useConfirmBeforeRouting from '@Hooks/common/useConfirmBerforeRouting';
 
 import color from '@Styles/color';
 

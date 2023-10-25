@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 import Button from '@Components/common/Button/Button';
 import ParticipantCodeCopier from '@Components/lobby/ParticipantCodeCopier/ParticipantCodeCopier';
 
-import useConfirmBeforeRouting from '@Hooks/common/useRouteBlocker';
+import useConfirmBeforeRouting from '@Hooks/common/useConfirmBerforeRouting';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
