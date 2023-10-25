@@ -6,11 +6,14 @@ import { styled } from 'styled-components';
 import LoadingFallback from '@Components/common/LodingFallback/LoadingFallback';
 import NotificationBoundary from '@Components/common/NotificationBoundary/NotificationBoundary';
 
+import useConfirmBeforeRouting from '@Hooks/common/useRouteBlocker';
+
 import color from '@Styles/color';
 
 import { FAVICON_PATH } from '@Constants/asset';
 import { ROUTES_PATH } from '@Constants/routes';
 
+import { useModal } from '@Contexts/ModalProvider';
 import { useNotification } from '@Contexts/NotificationProvider';
 import { useStudyInfo } from '@Contexts/StudyProgressProvider';
 
@@ -32,17 +35,20 @@ const StudyBoard = () => {
   const navigate = useNavigate();
   const { studyId, name, studyStep, progressStep } = useStudyInfo();
   const { send } = useNotification();
+  const { closeModal } = useModal();
 
   useEffect(() => {
+    closeModal();
+
     if (studyStep === 'waiting') {
       send({ message: '스터디가 아직 시작되지 않았습니다.\n스터디 대기방으로 이동합니다.' });
-      navigate(`${ROUTES_PATH.lobby}/${studyId}`, { state: { studyName: name } });
+      navigate(`${ROUTES_PATH.lobby}/${studyId}`, { state: { studyName: name, block: false } });
       return;
     }
 
     if (studyStep === 'done') {
       send({ message: '스터디가 종료되었습니다.\n스터디 기록 페이지로 이동합니다.' });
-      navigate(`${ROUTES_PATH.record}/${studyId}`);
+      navigate(`${ROUTES_PATH.record}/${studyId}`, { state: { block: false } });
       return;
     }
 
@@ -51,6 +57,13 @@ const StudyBoard = () => {
 
     return () => dom.updateFavicon(FAVICON_PATH.default);
   }, [progressStep, studyStep]);
+
+  useConfirmBeforeRouting(
+    '정말로 진행중인 스터디를 나가시겠습니까?\n스터디를 종료할 경우, 메인페이지로 이동합니다.',
+    () => {
+      navigate(ROUTES_PATH.landing, { state: { block: false } });
+    },
+  );
 
   return (
     <Container>
