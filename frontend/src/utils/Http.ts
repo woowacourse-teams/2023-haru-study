@@ -49,7 +49,7 @@ class Http {
   }
 
   request<T extends object = object>(url: string, config: RequestInit) {
-    if (!url.startsWith('http') && !url.startsWith('https')) {
+    if (!url.startsWith('http')) {
       url = `${this.baseURL}${url}`;
     }
 
