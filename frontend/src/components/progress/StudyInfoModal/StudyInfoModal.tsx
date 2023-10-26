@@ -33,7 +33,7 @@ const StudyInfoModal = ({ studyInfo }: Props) => {
 
       return data.status;
     },
-    { suspense: false, refetchInterval: 2000 },
+    { suspense: false, refetchInterval: 2000, errorBoundary: false },
   );
 
   const handleExitStudy = () => {

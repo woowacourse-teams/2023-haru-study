@@ -30,7 +30,6 @@ const StudyLobbyContents = () => {
 
   const navigateToHome = () => {
     navigate(ROUTES_PATH.landing);
-    console.log(132);
   };
 
   const handleStartStudy = async () => {
