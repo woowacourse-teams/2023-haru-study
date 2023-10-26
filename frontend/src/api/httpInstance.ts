@@ -18,7 +18,7 @@ const http = new Http(API_BASE_URL, { headers: { 'Content-Type': 'application/js
 const refreshAndRefetch = async <T extends object>(response: HttpResponse<T>) => {
   const {
     data: { accessToken },
-  } = await http.post<{ accessToken: string }>('/api/auth/refresh');
+  } = await http.post<{ accessToken: string }>('/auth/refresh');
 
   tokenStorage.setAccessToken(accessToken);
 
