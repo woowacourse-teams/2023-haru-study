@@ -29,7 +29,6 @@ public class StudyController {
     @Operation(summary = "단일 스터디 정보 조회")
     @GetMapping("/api/v2/studies/{studyId}")
     public ResponseEntity<StudyResponse> findStudy(
-            @Authenticated AuthMember authMember,
             @PathVariable Long studyId
     ) {
         StudyResponse response = studyService.findStudy(studyId);
@@ -39,7 +38,6 @@ public class StudyController {
     @Operation(summary = "필터링 조건으로 스터디 조회")
     @GetMapping("/api/v2/studies")
     public ResponseEntity<StudiesResponse> findStudiesWithFilter(
-            @Authenticated AuthMember authMember,
             @RequestParam(required = false) Long memberId,
             @RequestParam(required = false) String participantCode
     ) {
@@ -51,7 +49,6 @@ public class StudyController {
     @ApiResponse(responseCode = "201")
     @PostMapping("/api/v2/studies")
     public ResponseEntity<Void> createStudy(
-            @Authenticated AuthMember authMember,
             @RequestBody CreateStudyRequest request
     ) {
         Long studyId = studyService.createStudy(request);
