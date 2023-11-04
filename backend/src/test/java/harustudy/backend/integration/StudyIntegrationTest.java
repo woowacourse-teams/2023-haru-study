@@ -10,6 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
+import harustudy.backend.participantcode.domain.GenerationStrategy;
+import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.dto.CreateStudyRequest;
 import harustudy.backend.study.dto.StudiesResponse;
@@ -40,9 +42,13 @@ class StudyIntegrationTest extends IntegrationTest {
     @Autowired
     private EntityManager entityManager;
 
+    @Autowired
+    private GenerationStrategy generationStrategy;
+
     private Study study1;
     private Study study2;
     private MemberDto memberDto1;
+    private ParticipantCode participantCode;
 
     @BeforeEach
     void setUp() {
@@ -51,9 +57,11 @@ class StudyIntegrationTest extends IntegrationTest {
         study2 = new Study("study2", 4, 30);
         memberDto1 = createMember("member1");
         Participant participant1 = Participant.instantiateParticipantWithContents(study1, memberDto1.member(), "nickname");
+        participantCode = new ParticipantCode(study1, generationStrategy);
         entityManager.persist(study1);
         entityManager.persist(study2);
         entityManager.persist(participant1);
+        entityManager.persist(participantCode);
         EntityManagerUtil.flushAndClearContext(entityManager);
     }
 
@@ -85,33 +93,34 @@ class StudyIntegrationTest extends IntegrationTest {
         });
     }
 
-//    @Test
-//    void 참여코드로_스터디를_조회한다() throws Exception {
-//        // given
-//
-//        // when
-//        MvcResult result = mockMvc.perform(get("/api/v2/studies")
-//                        .param("participantCode", participantCode1.getCode())
-//                        .accept(MediaType.APPLICATION_JSON)
-//                        .header(HttpHeaders.AUTHORIZATION, memberDto1.createAuthorizationHeader()))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//
-//        // then
-//        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-//        StudyResponse response = objectMapper.readValue(jsonResponse,
-//                StudyResponse.class);
-//
-//        assertSoftly(softly -> {
-//            softly.assertThat(response.studyId()).isEqualTo(study1.getId());
-//            softly.assertThat(response.name()).isEqualTo(study1.getName());
-//            softly.assertThat(response.totalCycle()).isEqualTo(study1.getTotalCycle());
-//            softly.assertThat(response.timePerCycle()).isEqualTo(study1.getTimePerCycle());
-//            softly.assertThat(response.currentCycle()).isEqualTo(study1.getCurrentCycle());
-//            softly.assertThat(response.studyStep()).isEqualTo(study1.getStep().name().toLowerCase());
-//            softly.assertThat(response.progress()).isEqualTo(study1.getStep().name().toLowerCase());
-//        });
-//    }
+    @Test
+    void 참여코드로_스터디를_조회한다() throws Exception {
+        // given
+        StudyResponse expected = StudyResponse.from(study1);
+
+        // when
+        MvcResult result = mockMvc.perform(get("/api/v2/studies")
+                        .param("participantCode", participantCode.getCode())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, memberDto1.createAuthorizationHeader()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // then
+        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+        StudiesResponse studiesResponse = objectMapper.readValue(jsonResponse, StudiesResponse.class);
+        StudyResponse response = studiesResponse.studies().get(0);
+
+        assertSoftly(softly -> {
+            softly.assertThat(response.studyId()).isEqualTo(expected.studyId());
+            softly.assertThat(response.name()).isEqualTo(expected.name());
+            softly.assertThat(response.totalCycle()).isEqualTo(expected.totalCycle());
+            softly.assertThat(response.timePerCycle()).isEqualTo(expected.timePerCycle());
+            softly.assertThat(response.currentCycle()).isEqualTo(expected.currentCycle());
+            softly.assertThat(response.studyStep()).isEqualTo(expected.studyStep());
+            softly.assertThat(response.progressStep()).isEqualTo(expected.progressStep());
+        });
+    }
 
     @Test
     void 멤버_아이디로_스터디를_조회한다() throws Exception {
