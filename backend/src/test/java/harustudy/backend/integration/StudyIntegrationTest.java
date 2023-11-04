@@ -151,6 +151,35 @@ class StudyIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    void 멤버_아이디와_참여_코드로_스터디를_조회한다() throws Exception {
+        // given, when
+        StudyResponse expected = StudyResponse.from(study1);
+
+        MvcResult result = mockMvc.perform(get("/api/v2/studies")
+                        .param("memberId", String.valueOf(memberDto1.member().getId()))
+                        .param("participantCode", participantCode.getCode())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, memberDto1.createAuthorizationHeader()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // then
+        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+        StudiesResponse studiesResponse = objectMapper.readValue(jsonResponse, StudiesResponse.class);
+        StudyResponse response = studiesResponse.studies().get(0);
+
+        assertSoftly(softly -> {
+            softly.assertThat(response.studyId()).isEqualTo(expected.studyId());
+            softly.assertThat(response.name()).isEqualTo(expected.name());
+            softly.assertThat(response.totalCycle()).isEqualTo(expected.totalCycle());
+            softly.assertThat(response.timePerCycle()).isEqualTo(expected.timePerCycle());
+            softly.assertThat(response.currentCycle()).isEqualTo(expected.currentCycle());
+            softly.assertThat(response.studyStep()).isEqualTo(expected.studyStep());
+            softly.assertThat(response.progressStep()).isEqualTo(expected.progressStep());
+        });
+    }
+
+    @Test
     void 모든_스터디를_조회한다() throws Exception {
         // given, when
         MvcResult result = mockMvc.perform(get("/api/v2/studies")
