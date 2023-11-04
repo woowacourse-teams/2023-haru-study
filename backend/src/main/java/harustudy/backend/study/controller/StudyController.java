@@ -10,7 +10,9 @@ import harustudy.backend.study.service.StudyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.net.URI;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +37,7 @@ public class StudyController {
     @GetMapping("/api/v2/studies")
     public ResponseEntity<StudiesResponse> findStudiesWithFilter(
             @ModelAttribute StudyFilterRequest request
-            ) {
+    ) {
         StudiesResponse response = studyService.findStudyWithFilter(request);
         return ResponseEntity.ok(response);
     }
