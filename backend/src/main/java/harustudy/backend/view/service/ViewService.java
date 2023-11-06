@@ -5,7 +5,6 @@ import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
 import harustudy.backend.view.dto.CalendarStudyRecordsResponse;
-import harustudy.backend.view.dto.StudyRecordResponse;
 import harustudy.backend.view.dto.StudyRecordsPageResponse;
 import harustudy.backend.view.utils.LocalDateConverter;
 import java.time.LocalDate;

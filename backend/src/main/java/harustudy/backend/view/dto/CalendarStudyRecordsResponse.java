@@ -3,7 +3,6 @@ package harustudy.backend.view.dto;
 import harustudy.backend.study.domain.Study;
 import java.time.LocalDate;
 import java.util.List;
-import org.springframework.data.domain.Page;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
