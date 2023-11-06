@@ -26,35 +26,24 @@ public class ViewService {
 
     private final StudyRepository studyRepository;
 
-    public StudyRecordsPageResponse findStudyRecordsPage(
-            AuthMember authMember,
-            Pageable page,
-            Long memberId,
-            LocalDate startDate,
-            LocalDate endDate
-    ) {
+    public StudyRecordsPageResponse findStudyRecordsPage(AuthMember authMember, Pageable page,
+            Long memberId, LocalDate startDate, LocalDate endDate) {
         validateAuthorizedMember(authMember, memberId);
         Page<Study> studyPage = studyRepository.findPageByMemberIdAndCreatedDate(memberId,
                 LocalDateConverter.convertStartDate(startDate), LocalDateConverter.convertEndDate(endDate),
                 page);
-        return StudyRecordsPageResponse.from(studyPage.map(StudyRecordResponse::from));
+
+        return StudyRecordsPageResponse.from(studyPage);
     }
 
-    public CalendarStudyRecordsResponse findStudyRecordsForCalendar(
-            AuthMember authMember,
-            Long memberId,
-            LocalDate startDate,
-            LocalDate endDate
-    ) {
+    public CalendarStudyRecordsResponse findStudyRecordsForCalendar(AuthMember authMember, Long memberId,
+            LocalDate startDate, LocalDate endDate) {
         validateAuthorizedMember(authMember, memberId);
         List<Study> studies = studyRepository.findByMemberIdAndCreatedDateSortedBy(memberId,
                 LocalDateConverter.convertStartDate(startDate), LocalDateConverter.convertEndDate(endDate),
                 Sort.by(Direction.ASC, "createdDate"));
 
-        List<StudyRecordResponse> studyRecords = studies.stream()
-                .map(StudyRecordResponse::from)
-                .toList();
-        return CalendarStudyRecordsResponse.from(studyRecords);
+        return CalendarStudyRecordsResponse.from(studies);
     }
 
     private void validateAuthorizedMember(AuthMember authMember, Long memberId) {
