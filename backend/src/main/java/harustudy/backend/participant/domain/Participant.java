@@ -53,7 +53,7 @@ public class Participant extends BaseTimeEntity {
         this.isHost = isHost;
     }
 
-    public static Participant of(Study study, Member member, String nickname) {
+    public static Participant createParticipantOfStudy(Study study, Member member, String nickname) {
         validateNicknameLength(nickname);
         Participant participant = new Participant(study, member, nickname, study.hasEmptyParticipants());
         study.addParticipant(participant);

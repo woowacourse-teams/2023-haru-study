@@ -112,7 +112,7 @@ public class ParticipantService {
         validateIsSameMemberId(authMember, request.memberId());
         Study study = studyRepository.findByIdIfExists(studyId);
         validateIsWaiting(study);
-        Participant participant = Participant.of(study, member, request.nickname());
+        Participant participant = Participant.createParticipantOfStudy(study, member, request.nickname());
         participant.generateContents(study.getTotalCycle());
         Participant saved = participantRepository.save(participant);
         return saved.getId();

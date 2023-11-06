@@ -36,7 +36,7 @@ class ContentRepositoryTest {
     void setUp() {
         Study study = new Study("studyName", 3, 20);
         Member member = new Member("member", "email", "imageUrl", LoginType.GUEST);
-        participant = Participant.of(study, member, "nickname");
+        participant = Participant.createParticipantOfStudy(study, member, "nickname");
 
         testEntityManager.persist(study);
         testEntityManager.persist(member);

@@ -50,7 +50,7 @@ class AdminServiceTest {
         for (int i = 0; i < DUMMY_SIZE; i++) {
             study = new Study("name", 1, 20);
             Member member = new Member("name", "email", "imageUrl", LoginType.GUEST);
-            Participant participant = Participant.of(study, member, "nickname");
+            Participant participant = Participant.createParticipantOfStudy(study, member, "nickname");
             content = new Content(participant, 1);
 
             entityManager.persist(study);

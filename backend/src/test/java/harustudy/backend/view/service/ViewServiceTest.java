@@ -70,9 +70,9 @@ class ViewServiceTest {
                     .setParameter("id", study2.getId())
                     .executeUpdate();
 
-            entityManager.persist(Participant.of(study1,
+            entityManager.persist(Participant.createParticipantOfStudy(study1,
                     member, "nickname"));
-            entityManager.persist(Participant.of(study2,
+            entityManager.persist(Participant.createParticipantOfStudy(study2,
                     member, "nickname"));
 
             dateTime = dateTime.minusDays(1L);
