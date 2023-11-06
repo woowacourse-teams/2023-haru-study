@@ -77,8 +77,10 @@ class AdminServiceTest {
         AdminMembersResponse response = adminService.findMembers(pageRequest, "GUEST");
 
         // then
-        assertThat(response.totalPage()).isEqualTo(3);
-        assertThat(response.members()).hasSize(5);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(response.totalPage()).isEqualTo(3);
+            softly.assertThat(response.members()).hasSize(5);
+        });
     }
 
     @Test
@@ -94,8 +96,10 @@ class AdminServiceTest {
         AdminMembersResponse response = adminService.findMembers(pageRequest, "GOOGLE");
 
         // then
-        assertThat(response.totalPage()).isEqualTo(1);
-        assertThat(response.members()).hasSize(1);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(response.totalPage()).isEqualTo(1);
+            softly.assertThat(response.members()).hasSize(1);
+        });
     }
 
 
@@ -108,8 +112,10 @@ class AdminServiceTest {
         AdminStudiesResponse response = adminService.findStudies(pageRequest);
 
         // then
-        assertThat(response.totalPage()).isEqualTo(3);
-        assertThat(response.data()).hasSize(5);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(response.totalPage()).isEqualTo(3);
+            softly.assertThat(response.data()).hasSize(5);
+        });
     }
 
     @Test
@@ -121,8 +127,10 @@ class AdminServiceTest {
         AdminParticipantCodesResponse response = adminService.findParticipantCodes(pageRequest);
 
         // then
-        assertThat(response.totalPage()).isEqualTo(3);
-        assertThat(response.data()).hasSize(5);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(response.totalPage()).isEqualTo(3);
+            softly.assertThat(response.data()).hasSize(5);
+        });
     }
 
     @Test
@@ -134,8 +142,10 @@ class AdminServiceTest {
         AdminParticipantsResponse response = adminService.findParticipants(pageRequest);
 
         // then
-        assertThat(response.totalPage()).isEqualTo(3);
-        assertThat(response.data()).hasSize(5);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(response.totalPage()).isEqualTo(3);
+            softly.assertThat(response.data()).hasSize(5);
+        });
     }
 
     @Test
@@ -147,8 +157,10 @@ class AdminServiceTest {
         AdminContentsResponse response = adminService.findContents(pageRequest);
 
         // then
-        assertThat(response.totalPage()).isEqualTo(3);
-        assertThat(response.data()).hasSize(5);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(response.totalPage()).isEqualTo(3);
+            softly.assertThat(response.data()).hasSize(5);
+        });
     }
 
     @Test
@@ -172,8 +184,10 @@ class AdminServiceTest {
         AdminStudiesResponse response = adminService.findStudiesCreatedToday(pageRequest);
 
         // then
-        assertThat(response.totalPage()).isEqualTo(1);
-        assertThat(response.data()).hasSize(16);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(response.totalPage()).isEqualTo(1);
+            softly.assertThat(response.data()).hasSize(16);
+        });
     }
 
     @Test
