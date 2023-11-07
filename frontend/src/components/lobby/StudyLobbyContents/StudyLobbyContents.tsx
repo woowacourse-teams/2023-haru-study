@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 import Button from '@Components/common/Button/Button';
 import ParticipantCodeCopier from '@Components/lobby/ParticipantCodeCopier/ParticipantCodeCopier';
 
-import useConfirmBeforeRouting from '@Hooks/common/useRouteBlocker';
+import useConfirmBeforeRouting from '@Hooks/common/useConfirmBerforeRouting';
 
 import { ROUTES_PATH } from '@Constants/routes';
 
@@ -30,7 +30,6 @@ const StudyLobbyContents = () => {
 
   const navigateToHome = () => {
     navigate(ROUTES_PATH.landing);
-    console.log(132);
   };
 
   const handleStartStudy = async () => {

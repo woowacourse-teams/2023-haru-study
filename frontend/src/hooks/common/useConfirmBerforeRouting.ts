@@ -11,8 +11,8 @@ const useConfirmBeforeRouting = (message: string, onConfirm?: () => void) => {
     if (state?.block === false) return false;
 
     openConfirm(message, () => {
-      onConfirm?.();
       navigate(nextLocation, { state: { block: false } });
+      onConfirm?.();
     });
 
     return true;
