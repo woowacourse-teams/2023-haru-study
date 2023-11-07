@@ -12,6 +12,7 @@ import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.dto.CreateStudyRequest;
 import harustudy.backend.study.dto.StudiesResponse;
+import harustudy.backend.study.dto.StudyFilterRequest;
 import harustudy.backend.study.dto.StudyResponse;
 import harustudy.backend.study.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.study.exception.StudyNotFoundException;
@@ -41,15 +42,15 @@ public class StudyService {
     }
 
     @Transactional(readOnly = true)
-    public StudiesResponse findStudyWithFilter(Long memberId, String code) {
-        if (Objects.nonNull(code)) {
-            ParticipantCode participantCode = participantCodeRepository.findByCode(code)
+    public StudiesResponse findStudyWithFilter(StudyFilterRequest request) {
+        if (Objects.nonNull(request.participantCode())) {
+            ParticipantCode participantCode = participantCodeRepository.findByCode(request.participantCode())
                     .orElseThrow(ParticipantCodeNotFoundException::new);
             Study study = participantCode.getStudy();
             return StudiesResponse.from(List.of(study));
         }
-        if (Objects.nonNull(memberId)) {
-            return findStudyByMemberId(memberId);
+        if (Objects.nonNull(request.memberId())) {
+            return findStudyByMemberId(request.memberId());
         }
 
         return StudiesResponse.from(studyRepository.findAll());
