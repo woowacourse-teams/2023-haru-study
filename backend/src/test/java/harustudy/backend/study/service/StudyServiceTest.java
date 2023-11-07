@@ -13,6 +13,7 @@ import harustudy.backend.participantcode.domain.GenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.dto.CreateStudyRequest;
+import harustudy.backend.study.dto.StudyFilterRequest;
 import harustudy.backend.study.dto.StudyResponse;
 import harustudy.backend.study.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.study.exception.StudyNotFoundException;
@@ -74,6 +75,7 @@ class StudyServiceTest {
     void 참여코드에_해당하는_스터디_조회시_참여코드가_없으면_예외를_던진다() {
         // given
         Study study = new Study("study", 8, 40);
+        StudyFilterRequest request = new StudyFilterRequest(-1L, "!@#!@#");
         ParticipantCode participantCode = new ParticipantCode(study, generationStrategy);
         entityManager.persist(study);
         entityManager.persist(participantCode);
@@ -83,7 +85,7 @@ class StudyServiceTest {
 
         // when, then
         assertThatThrownBy(
-                () -> studyService.findStudyWithFilter(null, "!@#!@#"))
+                () -> studyService.findStudyWithFilter(request))
                 .isInstanceOf(ParticipantCodeNotFoundException.class);
     }
 
@@ -107,9 +109,9 @@ class StudyServiceTest {
         Member participantMember = Member.guest();
 
         Participant host = Participant
-                .instantiateParticipantWithContents(study, hostMember, "host");
+                .createParticipantOfStudy(study, hostMember, "host");
         Participant participant = Participant
-                .instantiateParticipantWithContents(study, participantMember, "notHost");
+                .createParticipantOfStudy(study, participantMember, "notHost");
 
         entityManager.persist(study);
         entityManager.persist(hostMember);
@@ -133,9 +135,9 @@ class StudyServiceTest {
         Member participantMember = Member.guest();
 
         Participant host = Participant
-                .instantiateParticipantWithContents(study, hostMember, "host");
+                .createParticipantOfStudy(study, hostMember, "host");
         Participant participant = Participant
-                .instantiateParticipantWithContents(study, participantMember, "notHost");
+                .createParticipantOfStudy(study, participantMember, "notHost");
 
         entityManager.persist(study);
         entityManager.persist(hostMember);
