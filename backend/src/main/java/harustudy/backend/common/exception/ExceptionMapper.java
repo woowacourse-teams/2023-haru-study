@@ -4,6 +4,7 @@ import harustudy.backend.auth.exception.*;
 import harustudy.backend.content.exception.ContentNotFoundException;
 import harustudy.backend.member.exception.MemberNotFoundException;
 import harustudy.backend.participant.exception.NicknameLengthException;
+import harustudy.backend.participant.exception.ParticipantIsNotHostException;
 import harustudy.backend.participant.exception.ParticipantNotFoundException;
 import harustudy.backend.participant.exception.StudyStepException;
 import harustudy.backend.participant.exception.ParticipantNotBelongToStudyException;
@@ -54,6 +55,8 @@ public class ExceptionMapper {
                 ExceptionSituation.of("해당 스터디에 참여한 기록이 없습니다.", BAD_REQUEST, 1203));
         mapper.put(NicknameLengthException.class,
                 ExceptionSituation.of("닉네임 길이가 유효하지 않습니다.", BAD_REQUEST, 1204));
+        mapper.put(ParticipantIsNotHostException.class,
+                ExceptionSituation.of("방장이 아닙니다.", FORBIDDEN, 1205));
     }
 
     private static void setUpStudyException() {
