@@ -35,6 +35,7 @@ public class AdminService {
     private final ParticipantRepository participantRepository;
     private final MemberRepository memberRepository;
     private final ContentRepository contentRepository;
+    private final ParticipantCodeRepository participantCodeRepository;
 
     public AdminStudiesResponse findStudies(Pageable pageable) {
         Page<Study> studyPages = studyRepository.findAll(pageable);
