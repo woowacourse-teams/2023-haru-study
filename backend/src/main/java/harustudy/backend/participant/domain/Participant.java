@@ -1,10 +1,12 @@
 package harustudy.backend.participant.domain;
 
+import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.content.domain.Content;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.exception.NicknameLengthException;
 import harustudy.backend.participant.exception.ParticipantIsNotHostException;
+import harustudy.backend.participant.exception.ParticipantNotBelongToStudyException;
 import harustudy.backend.study.domain.Study;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -93,6 +95,18 @@ public class Participant extends BaseTimeEntity {
     public void validateIsHost() {
         if (!isHost) {
             throw new ParticipantIsNotHostException();
+        }
+    }
+
+    public void validateIsBelongsTo(Study study) {
+        if (!this.study.getId().equals(study.getId())) {
+            throw new ParticipantNotBelongToStudyException();
+        }
+    }
+
+    public void validateIsCreatedByMember(Member member) {
+        if (isNotCreatedBy(member)) {
+            throw new AuthorizationException();
         }
     }
 }
