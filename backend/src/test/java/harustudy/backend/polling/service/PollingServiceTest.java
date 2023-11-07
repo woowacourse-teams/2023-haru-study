@@ -59,9 +59,9 @@ class PollingServiceTest {
         member2 = new Member("member2", "email", "url", LoginType.GUEST);
         member3 = new Member("member3", "email", "url", LoginType.GUEST);
 
-        participant1 = Participant.instantiateParticipantWithContents(study, member1, "parti1");
-        participant2 = Participant.instantiateParticipantWithContents(study, member2, "parti2");
-        participant3 = Participant.instantiateParticipantWithContents(study, member3, "parti3");
+        participant1 = Participant.createParticipantOfStudy(study, member1, "parti1");
+        participant2 = Participant.createParticipantOfStudy(study, member2, "parti2");
+        participant3 = Participant.createParticipantOfStudy(study, member3, "parti3");
 
         content1 = new Content(participant1, 1);
         content2 = new Content(participant2, 1);

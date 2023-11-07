@@ -44,7 +44,7 @@ public class Content extends BaseTimeEntity {
     @Convert(converter = MapStringConverter.class)
     private Map<String, String> retrospect = new HashMap<>();
 
-    public Content(Participant participant, @NotNull Integer cycle) {
+    public Content(Participant participant, Integer cycle) {
         this.participant = participant;
         this.cycle = cycle;
         this.plan = Map.of();

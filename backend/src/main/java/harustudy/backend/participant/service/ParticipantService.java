@@ -9,7 +9,6 @@ import harustudy.backend.participant.domain.Step;
 import harustudy.backend.participant.dto.ParticipateStudyRequest;
 import harustudy.backend.participant.dto.ParticipantResponse;
 import harustudy.backend.participant.dto.ParticipantsResponse;
-import harustudy.backend.participant.dto.ParticipateStudyRequest;
 import harustudy.backend.participant.exception.ParticipantNotBelongToStudyException;
 import harustudy.backend.participant.exception.ParticipantNotFoundException;
 import harustudy.backend.participant.repository.ParticipantRepository;
@@ -113,7 +112,7 @@ public class ParticipantService {
         validateIsSameMemberId(authMember, request.memberId());
         Study study = studyRepository.findByIdIfExists(studyId);
         validateIsWaiting(study);
-        Participant participant = Participant.instantiateParticipantWithContents(study, member, request.nickname());
+        Participant participant = Participant.createParticipantOfStudy(study, member, request.nickname());
         participant.generateContents(study.getTotalCycle());
         Participant saved = participantRepository.save(participant);
         return saved.getId();
@@ -140,7 +139,7 @@ public class ParticipantService {
 
     private void validateMemberOwns(Participant participant, AuthMember authMember) {
         Member member = memberRepository.findByIdIfExists(authMember.id());
-        if (!participant.isOwnedBy(member)) {
+        if (participant.isNotCreatedBy(member)) {
             throw new AuthorizationException();
         }
     }

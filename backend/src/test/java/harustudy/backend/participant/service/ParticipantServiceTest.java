@@ -86,8 +86,8 @@ class ParticipantServiceTest {
     @Test
     void 스터디의_모든_참여자_정보를_조회할_수_있다() {
         // given
-        Participant participant = Participant.instantiateParticipantWithContents(study2, member1, "nickname1");
-        Participant anotherParticipant = Participant.instantiateParticipantWithContents(study2, member2, "nickname2");
+        Participant participant = Participant.createParticipantOfStudy(study2, member1, "nickname1");
+        Participant anotherParticipant = Participant.createParticipantOfStudy(study2, member2, "nickname2");
         AuthMember authMember1 = new AuthMember(member1.getId());
 
         entityManager.persist(participant);
@@ -123,8 +123,8 @@ class ParticipantServiceTest {
     @Test
     void 특정_멤버의_참여자_정보자_정보를_조회할_수_있다() {
         // given
-        Participant participant = Participant.instantiateParticipantWithContents(study2, member1, "nickname1");
-        Participant anotherParticipant = Participant.instantiateParticipantWithContents(study2, member2, "nickname2");
+        Participant participant = Participant.createParticipantOfStudy(study2, member1, "nickname1");
+        Participant anotherParticipant = Participant.createParticipantOfStudy(study2, member2, "nickname2");
         AuthMember authMember1 = new AuthMember(member1.getId());
 
         entityManager.persist(participant);
@@ -147,7 +147,7 @@ class ParticipantServiceTest {
     @Test
     void 자신의_소유가_아닌_참여자_정보는_조회할_수_없다() {
         // given
-        Participant participant = Participant.instantiateParticipantWithContents(study2, member1, "nickname1");
+        Participant participant = Participant.createParticipantOfStudy(study2, member1, "nickname1");
         AuthMember authMember = new AuthMember(member2.getId());
 
         entityManager.persist(participant);
@@ -162,8 +162,8 @@ class ParticipantServiceTest {
     @Test
     void 해당_스터디의_참여자가_아니라면_조회할_수_없다() {
         // given
-        Participant participant1 = Participant.instantiateParticipantWithContents(study1, member1, "nickname1");
-        Participant participant2 = Participant.instantiateParticipantWithContents(study2, member1, "nickname1");
+        Participant participant1 = Participant.createParticipantOfStudy(study1, member1, "nickname1");
+        Participant participant2 = Participant.createParticipantOfStudy(study2, member1, "nickname1");
         AuthMember authMember = new AuthMember(member1.getId());
 
         entityManager.persist(participant1);

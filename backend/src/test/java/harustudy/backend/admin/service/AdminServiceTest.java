@@ -52,15 +52,13 @@ class AdminServiceTest {
 
         for (int i = 0; i < DUMMY_SIZE; i++) {
             study = new Study("name", 1, 20);
-            entityManager.persist(study);
-
             Member member = new Member("name", "email", "imageUrl", LoginType.GUEST);
-            entityManager.persist(member);
-
-            Participant participant = Participant.instantiateParticipantWithContents(study, member, "nickname");
-            entityManager.persist(participant);
-
+            Participant participant = Participant.createParticipantOfStudy(study, member, "nickname");
             content = new Content(participant, 1);
+
+            entityManager.persist(study);
+            entityManager.persist(member);
+            entityManager.persist(participant);
             entityManager.persist(content);
 
             ParticipantCode participantCode = new ParticipantCode(study, new CodeGenerationStrategy());

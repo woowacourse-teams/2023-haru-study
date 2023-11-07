@@ -42,7 +42,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         study = new Study("studyName", 2, 20);
         memberDto = createMember("member1");
-        participant = Participant.instantiateParticipantWithContents(study, memberDto.member(), "nickname");
+        participant = Participant.createParticipantOfStudy(study, memberDto.member(), "nickname");
         content = new Content(participant, 1);
 
         entityManager.persist(study);

@@ -52,7 +52,7 @@ class ContentServiceTest {
     void setUp() {
         study = new Study("studyName", 1, 20);
         member = new Member("nickname", "email", "imageUrl", LoginType.GUEST);
-        participant = Participant.instantiateParticipantWithContents(study, member, "nickname");
+        participant = Participant.createParticipantOfStudy(study, member, "nickname");
 
         content = new Content(participant, 1);
 

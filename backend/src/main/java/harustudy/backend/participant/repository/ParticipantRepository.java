@@ -15,12 +15,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     Optional<Participant> findByStudyAndMember(Study study,
             Member member);
 
-    @Query("select p from Participant p join fetch p.member where p.study = :study")
-    List<Participant> findAllByStudyFetchMember(
-            @Param("study") Study study);
-
-    List<Participant> findByMember(Member member);
-
     List<Participant> findByStudy(Study study);
 
     default Participant findByIdIfExists(Long id) {

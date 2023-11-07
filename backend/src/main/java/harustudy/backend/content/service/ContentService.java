@@ -13,12 +13,10 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
-import harustudy.backend.participant.exception.ParticipantNotFoundException;
 import harustudy.backend.participant.exception.StudyStepException;
 import harustudy.backend.participant.exception.ParticipantNotBelongToStudyException;
 import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.study.domain.Study;
-import harustudy.backend.study.exception.StudyNotFoundException;
 import harustudy.backend.study.repository.StudyRepository;
 import jakarta.annotation.Nullable;
 import java.util.List;
@@ -39,12 +37,10 @@ public class ContentService {
 
     @Transactional(readOnly = true)
     public ContentsResponse findContentsWithFilter(
-            AuthMember authMember, Long studyId, Long participantId, @Nullable Integer cycle
-    ) {
-        List<Participant> participants = getParticipantsIfAuthorized(
-                authMember, studyId);
-        Participant participant = filterSingleParticipantById(
-                participants, participantId);
+            AuthMember authMember, Long studyId, Long participantId, @Nullable Integer cycle) {
+        Participant participant = participantRepository.findByIdIfExists(participantId);
+        validateParticipantIsCreatedByMember(participant, authMember.id());
+        validateParticipantBelongsToStudy(participant, studyId);
 
         List<Content> contents = participant.getContents();
         if (Objects.isNull(cycle)) {
@@ -53,30 +49,18 @@ public class ContentService {
         return getContentsResponseWithCycleFilter(contents, cycle);
     }
 
-    private List<Participant> getParticipantsIfAuthorized(AuthMember authMember, Long studyId) {
-        Study study = studyRepository.findById(studyId)
-                .orElseThrow(StudyNotFoundException::new);
-        List<Participant> participants = participantRepository.findAllByStudyFetchMember(
-                study);
-        Member member = memberRepository.findByIdIfExists(authMember.id());
-        if (isParticipantNotRelatedToMember(participants, member)) {
+    private void validateParticipantIsCreatedByMember(Participant participant, Long memberId) {
+        Member member = memberRepository.findByIdIfExists(memberId);
+        if (participant.isNotCreatedBy(member)) {
             throw new AuthorizationException();
         }
-        return participants;
     }
 
-    private boolean isParticipantNotRelatedToMember(List<Participant> participants,
-            Member member) {
-        return participants.stream()
-                .noneMatch(participant -> participant.isOwnedBy(member));
-    }
-
-    private Participant filterSingleParticipantById(
-            List<Participant> participants, Long participantId) {
-        return participants.stream()
-                .filter(participant -> participant.getId().equals(participantId))
-                .findFirst()
-                .orElseThrow(ParticipantNotFoundException::new);
+    private void validateParticipantBelongsToStudy(Participant participant, Long studyId) {
+        Study study = studyRepository.findByIdIfExists(studyId);
+        if (!participant.isParticipantOf(study)) {
+            throw new AuthorizationException();
+        }
     }
 
     private ContentsResponse getContentsResponseWithoutCycleFilter(List<Content> contents) {
@@ -86,8 +70,7 @@ public class ContentService {
         return ContentsResponse.from(contentResponses);
     }
 
-    private ContentsResponse getContentsResponseWithCycleFilter(
-            List<Content> contents, Integer cycle) {
+    private ContentsResponse getContentsResponseWithCycleFilter(List<Content> contents, Integer cycle) {
         List<ContentResponse> contentResponses = contents.stream()
                 .filter(content -> content.getCycle().equals(cycle))
                 .map(ContentResponse::from)
@@ -96,12 +79,11 @@ public class ContentService {
     }
 
     public void writePlan(AuthMember authMember, Long studyId, WritePlanRequest request) {
-        Member member = memberRepository.findByIdIfExists(authMember.id());
         Study study = studyRepository.findByIdIfExists(studyId);
         Participant participant = participantRepository.findByIdIfExists(request.participantId());
 
         validateParticipantBelongsToStudy(study, participant);
-        validateMemberOwnsParticipant(member, participant);
+        validateParticipantIsCreatedByMember(authMember.id(), participant);
         validateStudyIsPlanning(study);
 
         Content recentContent = findContentWithSameCycle(study, participant);
@@ -131,20 +113,20 @@ public class ContentService {
     }
 
     public void writeRetrospect(AuthMember authMember, Long studyId, WriteRetrospectRequest request) {
-        Member member = memberRepository.findByIdIfExists(authMember.id());
         Study study = studyRepository.findByIdIfExists(studyId);
         Participant participant = participantRepository.findByIdIfExists(request.participantId());
 
         validateParticipantBelongsToStudy(study, participant);
-        validateMemberOwnsParticipant(member, participant);
+        validateParticipantIsCreatedByMember(authMember.id(), participant);
         validateStudyIsRetrospect(study);
 
         Content recentContent = findContentWithSameCycle(study, participant);
         recentContent.changeRetrospect(request.retrospect());
     }
 
-    private void validateMemberOwnsParticipant(Member member, Participant participant) {
-        if (!participant.isOwnedBy(member)) {
+    private void validateParticipantIsCreatedByMember(Long memberId, Participant participant) {
+        Member member = memberRepository.findByIdIfExists(memberId);
+        if (participant.isNotCreatedBy(member)) {
             throw new AuthorizationException();
         }
     }
