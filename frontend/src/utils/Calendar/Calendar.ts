@@ -17,6 +17,12 @@ const calendar = {
     ];
   },
 
+  getMonthFirstLastDate: (year: number, month: number) => {
+    const calendarStorage = calendar.getCalendarStorage(year, month);
+
+    return [calendarStorage[0], calendarStorage.at(-1)];
+  },
+
   getPrevMonthLastWeekDays: (year: number, month: number): CalendarStorage => {
     const prevMonthLastDateObject = new Date(year, month - 1, 0);
 

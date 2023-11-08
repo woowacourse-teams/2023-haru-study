@@ -11,7 +11,7 @@ import ArrowIcon from '@Assets/icons/ArrowIcon';
 
 import format from '@Utils/format';
 
-import CalendarDayOfWeeks from '../../calendar/CalendarDayOfWeeks/CalendarDayOfWeeks';
+import CalendarDayOfWeeks from '../../CalendarDayOfWeeks/CalendarDayOfWeeks';
 
 const MENU_STYLE = css`
   & > div {
