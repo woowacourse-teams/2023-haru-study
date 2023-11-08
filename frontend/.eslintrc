@@ -86,7 +86,7 @@
             "position": "after"
           },
           {
-            "pattern": "@Utils/*",
+            "pattern": "@Utils/**/*",
             "group": "internal",
             "position": "after"
           },
