@@ -47,7 +47,8 @@ export const LimitCountCalendar202309: Story = {
     year: 2023,
     month: 9,
     limit: 3,
-    onClickRestData: (date) => window.alert(format.date(new Date(date), '-')),
+    onClickRestDataCount: (date) => window.alert(format.date(new Date(date), '-')),
+    onClickTotalDataCount: (date) => window.alert(format.date(new Date(date), '-')),
     children: STUDY_LIST_9_ARRAY.map((item, index) => {
       return (
         <Calendar.Item key={index} date={item.createdDate}>
@@ -55,5 +56,16 @@ export const LimitCountCalendar202309: Story = {
         </Calendar.Item>
       );
     }),
+  },
+};
+
+/**
+ * `LimitCountCalendar202309`는 데이터의 개수가 제한된 스토리입니다.
+ */
+export const ClickDayCalendar: Story = {
+  args: {
+    year: 2023,
+    month: 9,
+    onClickDay: (date) => window.alert(format.date(new Date(date), '-')),
   },
 };
