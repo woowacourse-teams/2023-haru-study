@@ -15,17 +15,6 @@ const DayList = ({ calendarRef }: Props) => {
 
   return (
     <Layout $numberOfWeeks={calendarStorage.length / 7} ref={calendarRef}>
-      {/* {isLoading && (
-        <LoadingBar>
-          <CircularProgress
-            size="x-large"
-            $style={css`
-              border: 2px solid ${color.blue[500]};
-              border-color: ${color.blue[500]} transparent transparent transparent;
-            `}
-          />
-        </LoadingBar>
-      )} */}
       {calendarStorage.map((data, index) => (
         <DayItem key={index} data={data} />
       ))}
@@ -34,19 +23,6 @@ const DayList = ({ calendarRef }: Props) => {
 };
 
 export default DayList;
-
-const LoadingBar = styled.div`
-  position: absolute;
-
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
 type DaysProps = {
   $numberOfWeeks: number;

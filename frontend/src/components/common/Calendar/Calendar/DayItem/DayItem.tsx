@@ -1,4 +1,4 @@
-import { useState, type PropsWithChildren, type ReactElement, useEffect } from 'react';
+import { useState, type ReactElement, useEffect } from 'react';
 import { styled } from 'styled-components';
 
 import color from '@Styles/color';
@@ -12,17 +12,21 @@ type Props = {
     date: Date;
     dayOfWeek: number;
     state: 'prev' | 'cur' | 'next';
+    children?: ReactElement[];
   };
 };
 
-const DayItem = ({ data }: PropsWithChildren<Props>) => {
-  const { state, date, day, dayOfWeek } = data;
-  const { getCalendarDayChildren, isToday } = useCalendar();
+const DayItem = ({ data }: Props) => {
+  const { state, date, day, dayOfWeek, children } = data;
+
+  const { calendarDataFormat, getCalendarDayChildren, isToday, onClickDay } = useCalendar();
 
   const [calendarDayChildrenProps, setCalendarDayChildrenProps] = useState<{
     restDataCount: number;
     onClickRestDataCount: () => void;
     onClickDay: () => void;
+    fullDataCount: number;
+    onClickFullDataCount: () => void;
   } | null>(null);
 
   const calendarDayChildren = getCalendarDayChildren(date) as ReactElement;
@@ -37,6 +41,8 @@ const DayItem = ({ data }: PropsWithChildren<Props>) => {
       restDataCount: number;
       onClickRestDataCount: () => void;
       onClickDay: () => void;
+      fullDataCount: number;
+      onClickFullDataCount: () => void;
     };
     setCalendarDayChildrenProps(props);
   }, [calendarDayChildren]);
@@ -46,33 +52,29 @@ const DayItem = ({ data }: PropsWithChildren<Props>) => {
       <DayContainer>
         <Day
           isToday={isToday(date)}
-          onClick={calendarDayChildrenProps?.onClickDay}
-          hasClick={!!calendarDayChildrenProps && 'onClickDay' in calendarDayChildrenProps}
+          onClick={() => onClickDay && onClickDay(date)}
+          hasClick={!!onClickDay}
           isCurrentMonthDay={state === 'cur'}
           dayOfWeek={dayOfWeek}
         >
           {day}
         </Day>
-        {calendarDayChildrenProps && calendarDayChildrenProps.restDataCount > 0 && (
+        {calendarDayChildrenProps && calendarDataFormat === 'long' && calendarDayChildrenProps.restDataCount > 0 && (
           <RestRecords onClick={calendarDayChildrenProps.onClickRestDataCount}>
             +{calendarDayChildrenProps.restDataCount}
           </RestRecords>
         )}
       </DayContainer>
-      {/* {calendarDayChildren === 'name' ? (
-        <Records>
-          {records.slice(0, 3).map(({ studyId, name }) => (
-            <Record test-id="study-id" key={studyId} onClick={() => handleClickStudyItem(studyId)}>
-              {name}
-            </Record>
-          ))}
-        </Records>
-      ) : (
-        <TotalRecordCount onClick={() => openRecordsDetail(format.date(date), records)}>
-          {records.length > 0 ? <span>{records.length}</span> : ''}
+      {calendarDayChildrenProps &&
+      calendarDayChildrenProps.fullDataCount &&
+      calendarDayChildren &&
+      calendarDataFormat === 'short' ? (
+        <TotalRecordCount onClick={calendarDayChildrenProps?.onClickFullDataCount}>
+          <span>{calendarDayChildrenProps?.fullDataCount}</span>
         </TotalRecordCount>
-      )} */}
-      {calendarDayChildren && calendarDayChildren}
+      ) : (
+        children?.map((item) => item)
+      )}
     </Layout>
   );
 };
@@ -105,24 +107,6 @@ const RestRecords = styled.div`
 
   border-radius: 50%;
   background-color: ${color.blue[50]};
-
-  cursor: pointer;
-`;
-
-const Records = styled.ul`
-  display: grid;
-  row-gap: 4px;
-`;
-
-const Record = styled.li`
-  padding: 2px;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  background-color: ${color.neutral[100]};
-  border-radius: 5px;
 
   cursor: pointer;
 `;

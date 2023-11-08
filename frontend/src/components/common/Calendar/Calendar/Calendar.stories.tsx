@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { STUDY_LIST_9 } from 'mocks/mockData';
+import { STUDY_LIST_9_ARRAY } from 'mocks/mockData';
 
 import Calendar from './Calendar';
 
@@ -21,29 +21,16 @@ export default meta;
 export const DefaultCalendar: Story = {};
 
 /**
- * `Calendar202309`는 2023년 9월 달력으로 외부에서 데이터를 받습니다.
+ * `Calendar202309`는 2023년 9월 달력으로 외부에서 데이터를 받는 스토리입니다.
  */
 export const Calendar202309: Story = {
   args: {
     year: 2023,
     month: 9,
-    onChangeCalendar: (year, month) => {
-      console.log(year, month);
-    },
-    children: Object.entries(STUDY_LIST_9.studyRecords).map(([date, data], index) => {
+    children: STUDY_LIST_9_ARRAY.map((item, index) => {
       return (
-        <Calendar.Item
-          key={index}
-          date={date}
-          restDataCount={data.length - 3}
-          onClickRestDataCount={() => window.alert('모달 창 열기')}
-          onClickDay={() => window.alert('날짜 클릭하기')}
-        >
-          <ul>
-            {data.slice(0, 3).map(({ studyId, name }) => (
-              <li key={studyId}>{name}</li>
-            ))}
-          </ul>
+        <Calendar.Item key={index} date={item.createdDate}>
+          {item.name}
         </Calendar.Item>
       );
     }),

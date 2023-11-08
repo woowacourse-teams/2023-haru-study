@@ -1,8 +1,11 @@
+import type { ReactElement } from 'react';
+
 export type CalendarStorage = {
   day: number;
   dayOfWeek: number;
   date: Date;
   state: 'prev' | 'next' | 'cur';
+  children?: ReactElement[];
 }[];
 
 const calendar = {

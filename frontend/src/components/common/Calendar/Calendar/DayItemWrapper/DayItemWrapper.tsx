@@ -17,10 +17,15 @@ type Props = {
    */
   onClickRestDataCount?: () => void;
   /**
-   * Day을 클릭하면 발생되는 이벤트. Day에 해당하는 데이터가 있는 경우 이벤트를 등록할 수 있음.
+   * 전체 데이터의 개수를 보여주기 위한 값. 해당 속성을 지정하면 달력의 너비가 750px보다 작아지면 전체 데이터의 개수가 달력에 렌더링 됨.
    *
    */
-  onClickDay?: () => void;
+  fullDataCount?: number;
+  /**
+   * 전체 데이터의 개수를 클릭하면 발생되는 이벤트. 달력의 너비가 750px보다 작아지면 전체 데이터 개수에 이벤트를 등록할 수 있음.
+   *
+   */
+  onClickFullDataCount?: () => void;
 };
 
 const DayItemWrapper = ({ children }: PropsWithChildren<Props>) => {
