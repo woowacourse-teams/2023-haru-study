@@ -1,4 +1,4 @@
-import { useState, type ReactElement, useEffect } from 'react';
+import { type ReactElement } from 'react';
 import { styled } from 'styled-components';
 
 import color from '@Styles/color';
@@ -19,33 +19,9 @@ type Props = {
 const DayItem = ({ data }: Props) => {
   const { state, date, day, dayOfWeek, children } = data;
 
-  const { calendarDataFormat, getCalendarDayChildren, isToday, onClickDay } = useCalendar();
+  const { limit, calendarDataFormat, isToday, onClickDay, onClickRestData } = useCalendar();
 
-  const [calendarDayChildrenProps, setCalendarDayChildrenProps] = useState<{
-    restDataCount: number;
-    onClickRestDataCount: () => void;
-    onClickDay: () => void;
-    fullDataCount: number;
-    onClickFullDataCount: () => void;
-  } | null>(null);
-
-  const calendarDayChildren = getCalendarDayChildren(date) as ReactElement;
-
-  useEffect(() => {
-    if (!calendarDayChildren) {
-      setCalendarDayChildrenProps(null);
-      return;
-    }
-
-    const props = calendarDayChildren.props as {
-      restDataCount: number;
-      onClickRestDataCount: () => void;
-      onClickDay: () => void;
-      fullDataCount: number;
-      onClickFullDataCount: () => void;
-    };
-    setCalendarDayChildrenProps(props);
-  }, [calendarDayChildren]);
+  const renderCalendarItems = limit ? children?.slice(0, limit) : children;
 
   return (
     <Layout>
@@ -53,27 +29,22 @@ const DayItem = ({ data }: Props) => {
         <Day
           isToday={isToday(date)}
           onClick={() => onClickDay && onClickDay(date)}
-          hasClick={!!onClickDay}
+          hasClick={!onClickDay}
           isCurrentMonthDay={state === 'cur'}
           dayOfWeek={dayOfWeek}
         >
           {day}
         </Day>
-        {calendarDayChildrenProps && calendarDataFormat === 'long' && calendarDayChildrenProps.restDataCount > 0 && (
-          <RestRecords onClick={calendarDayChildrenProps.onClickRestDataCount}>
-            +{calendarDayChildrenProps.restDataCount}
-          </RestRecords>
+        {limit && children && calendarDataFormat === 'long' && children.length - limit > 0 && (
+          <RestRecords onClick={() => onClickRestData && onClickRestData(date)}>+{children.length - limit}</RestRecords>
         )}
       </DayContainer>
-      {calendarDayChildrenProps &&
-      calendarDayChildrenProps.fullDataCount &&
-      calendarDayChildren &&
-      calendarDataFormat === 'short' ? (
-        <TotalRecordCount onClick={calendarDayChildrenProps?.onClickFullDataCount}>
-          <span>{calendarDayChildrenProps?.fullDataCount}</span>
+      {calendarDataFormat === 'short' && children?.length ? (
+        <TotalRecordCount>
+          <span>{children?.length}</span>
         </TotalRecordCount>
       ) : (
-        children?.map((item) => item)
+        renderCalendarItems
       )}
     </Layout>
   );

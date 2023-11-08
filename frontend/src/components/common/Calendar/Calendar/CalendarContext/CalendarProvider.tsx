@@ -10,6 +10,7 @@ type CalendarContext = {
   month: number;
   navigationYear: number;
   navigationMonth: number;
+  limit?: number;
   calendarStorage: CalendarStorage;
   calendarDataFormat: 'long' | 'short';
   isToday: (date: Date) => boolean;
@@ -17,18 +18,20 @@ type CalendarContext = {
   navigateYear: (year: number) => void;
   navigateMonth: (month: number) => void;
   navigate: (year?: number, month?: number) => void;
-  getCalendarDayChildren: (date: Date) => ReactNode;
   onClickDay?: (date: Date) => void;
+  onClickRestData?: (date: Date) => void;
 };
 
 type Props = {
   initYear: number;
   initMonth: number;
+  limit?: number;
   formatChangedWidth: number;
   calendarDataChildren: ReactNode;
   calendarRef: RefObject<HTMLUListElement>;
   onChangeCalendar?: (year: number, month: number) => void;
   onClickDay?: (date: Date) => void;
+  onClickRestData?: (date: Date) => void;
 };
 
 const CalendarContext = createContext<CalendarContext | null>(null);
@@ -36,12 +39,14 @@ const CalendarContext = createContext<CalendarContext | null>(null);
 const CalendarProvider = ({
   initYear,
   initMonth,
+  limit,
   formatChangedWidth,
   calendarDataChildren,
   children,
   calendarRef,
   onChangeCalendar,
   onClickDay,
+  onClickRestData,
 }: PropsWithChildren<Props>) => {
   const [year, setYear] = useState(initYear);
   const [month, setMonth] = useState(initMonth);
@@ -49,15 +54,6 @@ const CalendarProvider = ({
   const [navigationMonth, setNavigationMonth] = useState(initMonth);
   const [calendarStorage, setCalendarStorage] = useState<CalendarStorage>(calendar.getCalendarStorage(year, month));
   const [calendarDataFormat, setCalendarDataFormat] = useState<'long' | 'short'>('long');
-
-  const getCalendarDayChildren = (date: Date) => {
-    return Children.toArray(calendarDataChildren).find((child) => {
-      const item = child as ReactElement;
-      const { date: inputDate } = item.props as { date: string };
-
-      if (format.date(date, '-') === inputDate) return item;
-    });
-  };
 
   const isToday = (date: Date) => {
     const today = format.date(new Date());
@@ -165,6 +161,7 @@ const CalendarProvider = ({
     month,
     navigationYear,
     navigationMonth,
+    limit,
     calendarStorage,
     calendarDataFormat,
     isToday,
@@ -172,8 +169,8 @@ const CalendarProvider = ({
     navigateYear,
     navigateMonth,
     navigate,
-    getCalendarDayChildren,
     onClickDay,
+    onClickRestData,
   };
 
   return <CalendarContext.Provider value={initValue}>{children}</CalendarContext.Provider>;

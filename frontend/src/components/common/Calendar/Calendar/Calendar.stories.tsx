@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { STUDY_LIST_9_ARRAY } from 'mocks/mockData';
 
+import format from '@Utils/format';
+
 import Calendar from './Calendar';
 
 type Story = StoryObj<typeof Calendar>;
@@ -27,6 +29,25 @@ export const Calendar202309: Story = {
   args: {
     year: 2023,
     month: 9,
+    children: STUDY_LIST_9_ARRAY.map((item, index) => {
+      return (
+        <Calendar.Item key={index} date={item.createdDate}>
+          {item.name}
+        </Calendar.Item>
+      );
+    }),
+  },
+};
+
+/**
+ * `LimitCountCalendar202309`는 데이터의 개수가 제한된 스토리입니다.
+ */
+export const LimitCountCalendar202309: Story = {
+  args: {
+    year: 2023,
+    month: 9,
+    limit: 3,
+    onClickRestData: (date) => window.alert(format.date(new Date(date), '-')),
     children: STUDY_LIST_9_ARRAY.map((item, index) => {
       return (
         <Calendar.Item key={index} date={item.createdDate}>
