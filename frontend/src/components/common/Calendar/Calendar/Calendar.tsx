@@ -14,13 +14,13 @@ type Props = {
    *
    *  * @default 2023
    */
-  year: number;
+  year?: number;
   /**
    * 달력의 월을 지정하는 속성.
    *
    *  * @default 11
    */
-  month: number;
+  month?: number;
   /**
    * 달력 내 Data 개수를 제한하는 속성.
    *
@@ -33,9 +33,15 @@ type Props = {
    */
   formatChangedWidth?: number;
   /**
+   * 달력에 렌더링되는 Data의 로딩 상태를 지정하는 속성
+   *
+   */
+  dataLoading?: boolean;
+  /**
    * 달력의 년, 월이 바뀔 때 호출되는 함수. year, month를 매개변수로 받음.
    *
    */
+
   onChangeCalendar?: (year: number, month: number) => void;
   /**
    * 달력의 Day의 클릭할 때 호출되는 함수. 해당 Day의 Date 객체를 매개변수로 받음.
@@ -60,6 +66,7 @@ const Calendar = ({
   limit,
   formatChangedWidth = 750,
   children,
+  dataLoading = false,
   onChangeCalendar,
   onClickDay,
   onClickRestDataCount,
@@ -75,6 +82,7 @@ const Calendar = ({
       formatChangedWidth={formatChangedWidth}
       calendarDataChildren={children}
       calendarRef={calendarRef}
+      dataLoading={dataLoading}
       onChangeCalendar={onChangeCalendar}
       onClickDay={onClickDay}
       onClickRestDataCount={onClickRestDataCount}

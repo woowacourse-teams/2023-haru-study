@@ -46,7 +46,7 @@ const DayItem = ({ data }: Props) => {
           <span>{children?.length}</span>
         </TotalRecordCount>
       ) : (
-        renderCalendarItems
+        <Wrapper>{renderCalendarItems}</Wrapper>
       )}
     </Layout>
   );
@@ -115,4 +115,10 @@ const TotalRecordCount = styled.div`
       height: 32px;
     }
   }
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 `;

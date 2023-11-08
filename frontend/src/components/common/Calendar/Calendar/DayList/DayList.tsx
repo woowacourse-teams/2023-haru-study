@@ -1,5 +1,7 @@
 import React from 'react';
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
+
+import CircularProgress from '@Components/common/CircularProgress/CircularProgress';
 
 import color from '@Styles/color';
 
@@ -11,10 +13,21 @@ type Props = {
 };
 
 const DayList = ({ calendarRef }: Props) => {
-  const { calendarStorage } = useCalendar();
+  const { calendarStorage, dataLoading } = useCalendar();
 
   return (
     <Layout $numberOfWeeks={calendarStorage.length / 7} ref={calendarRef}>
+      {dataLoading && (
+        <LoadingBar>
+          <CircularProgress
+            size="x-large"
+            $style={css`
+              border: 2px solid ${color.blue[500]};
+              border-color: ${color.blue[500]} transparent transparent transparent;
+            `}
+          />
+        </LoadingBar>
+      )}
       {calendarStorage.map((data, index) => (
         <DayItem key={index} data={data} />
       ))}
@@ -43,4 +56,17 @@ const Layout = styled.ul<DaysProps>`
     font-size: 1.4rem;
     grid-template-rows: ${({ $numberOfWeeks }) => `repeat(${$numberOfWeeks}, minmax(80px, auto))`};
   }
+`;
+
+const LoadingBar = styled.div`
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

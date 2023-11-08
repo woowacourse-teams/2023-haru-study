@@ -13,6 +13,7 @@ type CalendarContext = {
   limit?: number;
   calendarStorage: CalendarStorage;
   calendarDataFormat: 'long' | 'short';
+  dataLoading: boolean;
   isToday: (date: Date) => boolean;
   shiftMonth: (type: 'next' | 'prev' | 'today') => void;
   navigateYear: (year: number) => void;
@@ -30,6 +31,7 @@ type Props = {
   formatChangedWidth: number;
   calendarDataChildren: ReactNode;
   calendarRef: RefObject<HTMLUListElement>;
+  dataLoading: boolean;
   onChangeCalendar?: (year: number, month: number) => void;
   onClickDay?: (date: Date) => void;
   onClickRestDataCount?: (date: Date) => void;
@@ -46,6 +48,7 @@ const CalendarProvider = ({
   calendarDataChildren,
   children,
   calendarRef,
+  dataLoading,
   onChangeCalendar,
   onClickDay,
   onClickRestDataCount,
@@ -144,6 +147,7 @@ const CalendarProvider = ({
 
     Children.forEach(calendarDataChildren, (child) => {
       const item = child as ReactElement;
+
       const { date } = item.props as { date: Date };
 
       const formatDate = format.date(date, '-');
@@ -169,6 +173,7 @@ const CalendarProvider = ({
     limit,
     calendarStorage,
     calendarDataFormat,
+    dataLoading,
     isToday,
     shiftMonth,
     navigateYear,
