@@ -31,7 +31,7 @@ export const Calendar202309: Story = {
     month: 9,
     children: STUDY_LIST_9_ARRAY.map((item, index) => {
       return (
-        <Calendar.Item key={index} date={item.createdDate}>
+        <Calendar.Item key={index} date={new Date(item.createdDate)}>
           {item.name}
         </Calendar.Item>
       );
@@ -51,7 +51,7 @@ export const LimitCountCalendar202309: Story = {
     onClickTotalDataCount: (date) => window.alert(format.date(new Date(date), '-')),
     children: STUDY_LIST_9_ARRAY.map((item, index) => {
       return (
-        <Calendar.Item key={index} date={item.createdDate}>
+        <Calendar.Item key={index} date={new Date(item.createdDate)}>
           {item.name}
         </Calendar.Item>
       );

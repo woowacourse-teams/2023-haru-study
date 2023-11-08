@@ -140,21 +140,23 @@ const CalendarProvider = ({
   }, [calendarRef, formatChangedWidth]);
 
   useEffect(() => {
-    const calendarDataMap: Record<string, ReactElement[]> = {};
+    const calendarDataObject: Record<string, ReactElement[]> = {};
 
     Children.forEach(calendarDataChildren, (child) => {
       const item = child as ReactElement;
       const { date } = item.props as { date: Date };
 
-      const formatDate = format.date(new Date(date), '-');
-      calendarDataMap[formatDate] = calendarDataMap[formatDate] ? [...calendarDataMap[formatDate], item] : [item];
+      const formatDate = format.date(date, '-');
+      calendarDataObject[formatDate] = calendarDataObject[formatDate]
+        ? [...calendarDataObject[formatDate], item]
+        : [item];
     });
 
     setCalendarStorage(
       calendar.getCalendarStorage(year, month).map((item) => {
-        const formatDate = format.date(new Date(item.date), '-');
+        const formatDate = format.date(item.date, '-');
 
-        return { ...item, children: calendarDataMap[formatDate] };
+        return { ...item, children: calendarDataObject[formatDate] };
       }),
     );
   }, [year, month, calendarDataFormat, calendarDataChildren]);
