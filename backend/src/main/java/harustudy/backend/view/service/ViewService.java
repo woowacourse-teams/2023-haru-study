@@ -29,8 +29,7 @@ public class ViewService {
             Long memberId, LocalDate startDate, LocalDate endDate) {
         validateAuthorizedMember(authMember, memberId);
         Page<Study> studyPage = studyRepository.findPageByMemberIdAndCreatedDate(memberId,
-                LocalDateConverter.convertStartDate(startDate), LocalDateConverter.convertEndDate(endDate),
-                page);
+                LocalDateConverter.convertStartDate(startDate), LocalDateConverter.convertEndDate(endDate), page);
 
         return StudyRecordsPageResponse.from(studyPage);
     }

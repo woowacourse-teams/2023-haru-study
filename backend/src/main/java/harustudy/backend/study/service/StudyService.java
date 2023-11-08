@@ -37,23 +37,27 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public StudyResponse findStudy(Long studyId) {
-        return StudyResponse.from(studyRepository.findById(studyId)
-                .orElseThrow(StudyNotFoundException::new));
+        Study study = studyRepository.findById(studyId)
+                .orElseThrow(StudyNotFoundException::new);
+        return StudyResponse.from(study);
     }
 
     @Transactional(readOnly = true)
     public StudiesResponse findStudyWithFilter(StudyFilterRequest request) {
         if (Objects.nonNull(request.participantCode())) {
-            ParticipantCode participantCode = participantCodeRepository.findByCode(request.participantCode())
-                    .orElseThrow(ParticipantCodeNotFoundException::new);
-            Study study = participantCode.getStudy();
-            return StudiesResponse.from(List.of(study));
+            return findStudyByParticipantCode(request);
         }
         if (Objects.nonNull(request.memberId())) {
             return findStudyByMemberId(request.memberId());
         }
+        return findAllStudies();
+    }
 
-        return StudiesResponse.from(studyRepository.findAll());
+    private StudiesResponse findStudyByParticipantCode(StudyFilterRequest request) {
+        ParticipantCode participantCode = participantCodeRepository.findByCode(request.participantCode())
+                .orElseThrow(ParticipantCodeNotFoundException::new);
+        Study study = participantCode.getStudy();
+        return StudiesResponse.from(List.of(study));
     }
 
     private StudiesResponse findStudyByMemberId(Long memberId) {
@@ -61,13 +65,17 @@ public class StudyService {
         return StudiesResponse.from(studies);
     }
 
-    public Long createStudy(CreateStudyRequest request) {
-        Study study = new Study(request.name(), request.totalCycle(),
-                request.timePerCycle());
-        Study savedStudy = studyRepository.save(study);
-        participantCodeRepository.save(generateUniqueCode(savedStudy));
+    private StudiesResponse findAllStudies() {
+        List<Study> studies = studyRepository.findAll();
+        return StudiesResponse.from(studies);
+    }
 
-        return savedStudy.getId();
+    public Long createStudy(CreateStudyRequest request) {
+        Study study = new Study(request.name(), request.totalCycle(), request.timePerCycle());
+        studyRepository.save(study);
+        participantCodeRepository.save(generateUniqueCode(study));
+
+        return study.getId();
     }
 
     private ParticipantCode generateUniqueCode(Study study) {

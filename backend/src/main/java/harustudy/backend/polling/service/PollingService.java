@@ -36,7 +36,12 @@ public class PollingService {
         return WaitingResponse.of(study, Collections.emptyList());
     }
 
-    public ProgressResponse pollProgress(Long studyId) {
+    private boolean doesHostExists(List<Participant> participants) {
+        return participants.stream()
+                .anyMatch(Participant::getIsHost);
+    }
+
+    public ProgressResponse pollInProgress(Long studyId) {
         Step step = studyRepository.findStepById(studyId)
                 .orElseThrow(StudyNotFoundException::new);
         return ProgressResponse.from(step);
@@ -48,17 +53,11 @@ public class PollingService {
         return generateSubmitterResponses(study, participants);
     }
 
-    private boolean doesHostExists(List<Participant> participants) {
-        return participants.stream()
-                .anyMatch(Participant::getIsHost);
-    }
-
     private SubmittersResponse generateSubmitterResponses(Study study, List<Participant> participants) {
         List<SubmitterResponse> submitterResponses = new ArrayList<>();
 
         for (Participant participant : participants) {
             Content currentCycleContent = extractCurrentCycleContent(study, participant);
-
             submitterResponses.add(SubmitterResponse.of(
                     participant.getNickname(),
                     SubmitterCheckingStrategy.isSubmitted(study.getStep(), currentCycleContent)));

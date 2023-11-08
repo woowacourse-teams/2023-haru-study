@@ -22,7 +22,7 @@ public class PollingController {
     @Operation(summary = "진행 페이지 폴링")
     @GetMapping("/api/v2/progress")
     public ResponseEntity<ProgressResponse> progressPolling(@RequestParam Long studyId) {
-        ProgressResponse progressResponse = pollingService.pollProgress(studyId);
+        ProgressResponse progressResponse = pollingService.pollInProgress(studyId);
         return ResponseEntity.ok(progressResponse);
     }
 
