@@ -46,7 +46,12 @@ type Props = {
    * 달력에 보여지지 않는 Data의 개수를 클릭했을 때 호출되는 함수. 해당 Data가 위치한 Date 객체를 매개변수로 받음.
    *
    */
-  onClickRestData?: (date: Date) => void;
+  onClickRestDataCount?: (date: Date) => void;
+  /**
+   * formatChangedWidth 속성의 값보다 달력의 너비가 줄어들었을 때, 렌덩이 되는 전체 데이터 개수를 클릭했을 때 호출되는 함수. 해당 Data가 위치한 Date 객체를 매개변수로 받음.
+   *
+   */
+  onClickTotalDataCount?: (date: Date) => void;
 };
 
 const Calendar = ({
@@ -57,7 +62,8 @@ const Calendar = ({
   children,
   onChangeCalendar,
   onClickDay,
-  onClickRestData,
+  onClickRestDataCount,
+  onClickTotalDataCount,
 }: PropsWithChildren<Props>) => {
   const calendarRef = useRef<HTMLUListElement>(null);
 
@@ -71,7 +77,8 @@ const Calendar = ({
       calendarRef={calendarRef}
       onChangeCalendar={onChangeCalendar}
       onClickDay={onClickDay}
-      onClickRestData={onClickRestData}
+      onClickRestDataCount={onClickRestDataCount}
+      onClickTotalDataCount={onClickTotalDataCount}
     >
       <Layout>
         <ControlBar />

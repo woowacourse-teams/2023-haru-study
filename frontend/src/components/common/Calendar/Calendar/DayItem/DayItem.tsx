@@ -19,7 +19,7 @@ type Props = {
 const DayItem = ({ data }: Props) => {
   const { state, date, day, dayOfWeek, children } = data;
 
-  const { limit, calendarDataFormat, isToday, onClickDay, onClickRestData } = useCalendar();
+  const { limit, calendarDataFormat, isToday, onClickDay, onClickRestDataCount, onClickTotalDataCount } = useCalendar();
 
   const renderCalendarItems = limit ? children?.slice(0, limit) : children;
 
@@ -29,18 +29,20 @@ const DayItem = ({ data }: Props) => {
         <Day
           isToday={isToday(date)}
           onClick={() => onClickDay && onClickDay(date)}
-          hasClick={!onClickDay}
+          hasClick={!!onClickDay}
           isCurrentMonthDay={state === 'cur'}
           dayOfWeek={dayOfWeek}
         >
           {day}
         </Day>
         {limit && children && calendarDataFormat === 'long' && children.length - limit > 0 && (
-          <RestRecords onClick={() => onClickRestData && onClickRestData(date)}>+{children.length - limit}</RestRecords>
+          <RestRecords onClick={() => onClickRestDataCount && onClickRestDataCount(date)}>
+            +{children.length - limit}
+          </RestRecords>
         )}
       </DayContainer>
       {calendarDataFormat === 'short' && children?.length ? (
-        <TotalRecordCount>
+        <TotalRecordCount onClick={() => onClickTotalDataCount && onClickTotalDataCount(date)}>
           <span>{children?.length}</span>
         </TotalRecordCount>
       ) : (

@@ -19,7 +19,8 @@ type CalendarContext = {
   navigateMonth: (month: number) => void;
   navigate: (year?: number, month?: number) => void;
   onClickDay?: (date: Date) => void;
-  onClickRestData?: (date: Date) => void;
+  onClickRestDataCount?: (date: Date) => void;
+  onClickTotalDataCount?: (date: Date) => void;
 };
 
 type Props = {
@@ -31,7 +32,8 @@ type Props = {
   calendarRef: RefObject<HTMLUListElement>;
   onChangeCalendar?: (year: number, month: number) => void;
   onClickDay?: (date: Date) => void;
-  onClickRestData?: (date: Date) => void;
+  onClickRestDataCount?: (date: Date) => void;
+  onClickTotalDataCount?: (date: Date) => void;
 };
 
 const CalendarContext = createContext<CalendarContext | null>(null);
@@ -46,7 +48,8 @@ const CalendarProvider = ({
   calendarRef,
   onChangeCalendar,
   onClickDay,
-  onClickRestData,
+  onClickRestDataCount,
+  onClickTotalDataCount,
 }: PropsWithChildren<Props>) => {
   const [year, setYear] = useState(initYear);
   const [month, setMonth] = useState(initMonth);
@@ -170,7 +173,8 @@ const CalendarProvider = ({
     navigateMonth,
     navigate,
     onClickDay,
-    onClickRestData,
+    onClickRestDataCount,
+    onClickTotalDataCount,
   };
 
   return <CalendarContext.Provider value={initValue}>{children}</CalendarContext.Provider>;
