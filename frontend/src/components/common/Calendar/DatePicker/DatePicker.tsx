@@ -8,13 +8,26 @@ import DayList from './DayList/DayList';
 import DayOfWeeks from '../common/DayOfWeeks/DayOfWeeks';
 
 type Props = {
+  /**
+   * 시작일을 지정하는 속성.
+   *
+   */
   startDate?: Date;
+  /**
+   * 마지막일을 지정하는 속성.
+   *
+   */
   endDate?: Date;
+  /**
+   * startDate, endDate가 바뀔 때 호출되는 함수. startDate, endDate를 매개변수로 받음.
+   *
+   */
+  onChangeDate?: (startDate?: Date, endDate?: Date) => void;
 };
 
-const DatePicker = ({ startDate, endDate }: Props) => {
+const DatePicker = ({ startDate, endDate, onChangeDate }: Props) => {
   return (
-    <DatePickerProvider initStartDate={startDate} initEndDate={endDate}>
+    <DatePickerProvider initStartDate={startDate} initEndDate={endDate} onChangeDate={onChangeDate}>
       <Layout>
         <ControlBar />
         <DayOfWeeks position="center" />

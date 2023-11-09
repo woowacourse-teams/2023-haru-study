@@ -26,9 +26,10 @@ const DatePickerContext = createContext<DatePickerContext | null>(null);
 type Props = {
   initStartDate?: Date;
   initEndDate?: Date;
+  onChangeDate?: (startDate?: Date, endDate?: Date) => void;
 };
 
-const DatePickerProvider = ({ initStartDate, initEndDate, children }: PropsWithChildren<Props>) => {
+const DatePickerProvider = ({ initStartDate, initEndDate, children, onChangeDate }: PropsWithChildren<Props>) => {
   const [startDate, setStart] = useState(initStartDate);
   const [endDate, setEnd] = useState(initEndDate);
 
@@ -41,30 +42,34 @@ const DatePickerProvider = ({ initStartDate, initEndDate, children }: PropsWithC
   const calendarStorage = calendar.getCalendarStorage(year, month);
 
   const handleMonthShift = (type: 'next' | 'prev' | 'today') => {
+    let newYear = year;
+    let newMonth = month;
+
     if (type === 'today') {
       const today = new Date();
 
-      setYear(today.getFullYear());
-      setMonth(today.getMonth() + 1);
-
-      return;
+      newYear = today.getFullYear();
+      newMonth = today.getMonth() + 1;
     }
 
     const changedMonth = month + (type === 'next' ? +1 : -1);
 
-    if (changedMonth === 0) {
-      setYear((prev) => prev - 1);
-      setMonth(12);
-      return;
+    if (type !== 'today' && changedMonth === 0) {
+      newYear -= 1;
+      newMonth = 12;
     }
 
-    if (changedMonth === 13) {
-      setYear((prev) => prev + 1);
-      setMonth(1);
-      return;
+    if (type !== 'today' && changedMonth === 13) {
+      newYear += 1;
+      newMonth = 1;
     }
 
-    setMonth(changedMonth);
+    if (type !== 'today' && changedMonth > 0 && changedMonth < 13) {
+      newMonth = changedMonth;
+    }
+
+    setYear(newYear);
+    setMonth(newMonth);
   };
 
   const handleNavigationYear = (year: number) => setYear(year);
@@ -136,6 +141,8 @@ const DatePickerProvider = ({ initStartDate, initEndDate, children }: PropsWithC
 
     setStart(newStartDate);
     setEnd(newEndDate);
+
+    if (onChangeDate) onChangeDate(newStartDate, newEndDate);
   };
 
   const initValue = {

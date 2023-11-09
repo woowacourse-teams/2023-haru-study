@@ -41,7 +41,6 @@ type Props = {
    * 달력의 년, 월이 바뀔 때 호출되는 함수. year, month를 매개변수로 받음.
    *
    */
-
   onChangeCalendar?: (year: number, month: number) => void;
   /**
    * 달력의 Day의 클릭할 때 호출되는 함수. 해당 Day의 Date 객체를 매개변수로 받음.

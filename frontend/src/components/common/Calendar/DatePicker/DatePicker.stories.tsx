@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import type { Meta, StoryObj } from '@storybook/react';
 
 import DatePicker from './DatePicker';
@@ -26,5 +27,16 @@ export const StartEndDatePicker: Story = {
   args: {
     startDate: new Date('2023-11-02'),
     endDate: new Date('2023-11-09'),
+  },
+};
+
+/**
+ * `OnChangeDatePicker`는 startDate와 endDate를 onChangeDate 속성을 통해 받아올 수 있는 DatePicker의 스토리입니다.
+ */
+export const OnChangeDatePicker: Story = {
+  args: {
+    onChangeDate: (startDate, endDate) => {
+      window.alert(`${startDate || ''}, ${endDate || ''}`);
+    },
   },
 };
