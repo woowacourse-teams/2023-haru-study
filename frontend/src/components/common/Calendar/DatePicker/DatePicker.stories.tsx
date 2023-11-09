@@ -49,3 +49,14 @@ export const DoubleDatePicker: Story = {
     mode: 'double',
   },
 };
+
+/**
+ * `ButtonDatePicker`는 확인, 취소 버튼이 있는 DatePicker 스토리입니다.
+ */
+export const ButtonDatePicker: Story = {
+  args: {
+    hasButton: true,
+    onClickConfirm: (startDate, endDate) => console.log(startDate, endDate),
+    onClickCancel: () => window.alert('취소'),
+  },
+};

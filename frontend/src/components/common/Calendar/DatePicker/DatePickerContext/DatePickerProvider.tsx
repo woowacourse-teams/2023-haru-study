@@ -21,6 +21,8 @@ type DatePickerContext = {
   getDayBackgroundColor: (date: Date) => string;
   updateHoverDays: (date: Date) => void;
   updateStartEndDate: (date: Date) => void;
+  onClickConfirm?: (startDate?: Date, endDate?: Date) => void;
+  onClickCancel?: () => void;
 };
 
 const DatePickerContext = createContext<DatePickerContext | null>(null);
@@ -30,9 +32,19 @@ type Props = {
   initEndDate?: Date;
   mode: 'single' | 'double';
   onChangeDate?: (startDate?: Date, endDate?: Date) => void;
+  onClickConfirm?: (startDate?: Date, endDate?: Date) => void;
+  onClickCancel?: () => void;
 };
 
-const DatePickerProvider = ({ initStartDate, initEndDate, mode, children, onChangeDate }: PropsWithChildren<Props>) => {
+const DatePickerProvider = ({
+  initStartDate,
+  initEndDate,
+  mode,
+  children,
+  onChangeDate,
+  onClickConfirm,
+  onClickCancel,
+}: PropsWithChildren<Props>) => {
   const [startDate, setStart] = useState(initStartDate);
   const [endDate, setEnd] = useState(initEndDate);
 
@@ -173,6 +185,8 @@ const DatePickerProvider = ({ initStartDate, initEndDate, mode, children, onChan
     getDayBackgroundColor,
     updateHoverDays,
     updateStartEndDate,
+    onClickConfirm,
+    onClickCancel,
   };
 
   return <DatePickerContext.Provider value={initValue}>{children}</DatePickerContext.Provider>;
