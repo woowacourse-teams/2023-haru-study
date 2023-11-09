@@ -18,3 +18,13 @@ export default meta;
  * `DefaultDatePicker`는 기본적인 DatePicker의 스토리입니다.
  */
 export const DefaultDatePicker: Story = {};
+
+/**
+ * `StartEndDatePicker`는 startDate와 endDate가 정해진 DatePicker의 스토리입니다.
+ */
+export const StartEndDatePicker: Story = {
+  args: {
+    startDate: new Date('2023-11-02'),
+    endDate: new Date('2023-11-09'),
+  },
+};
