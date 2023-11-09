@@ -40,3 +40,12 @@ export const OnChangeDatePicker: Story = {
     },
   },
 };
+
+/**
+ * `DoubleDatePicker`는 두 개의 DatePicker 달력을 보여주는 스토리입니다.
+ */
+export const DoubleDatePicker: Story = {
+  args: {
+    mode: 'double',
+  },
+};

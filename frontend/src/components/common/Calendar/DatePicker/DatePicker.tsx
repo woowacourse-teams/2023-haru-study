@@ -19,15 +19,20 @@ type Props = {
    */
   endDate?: Date;
   /**
+   * 달력의 개수를 지정하는 속성
+   *
+   */
+  mode?: 'single' | 'double';
+  /**
    * startDate, endDate가 바뀔 때 호출되는 함수. startDate, endDate를 매개변수로 받음.
    *
    */
   onChangeDate?: (startDate?: Date, endDate?: Date) => void;
 };
 
-const DatePicker = ({ startDate, endDate, onChangeDate }: Props) => {
+const DatePicker = ({ startDate, endDate, mode = 'single', onChangeDate }: Props) => {
   return (
-    <DatePickerProvider initStartDate={startDate} initEndDate={endDate} onChangeDate={onChangeDate}>
+    <DatePickerProvider initStartDate={startDate} initEndDate={endDate} onChangeDate={onChangeDate} mode={mode}>
       <Layout>
         <ControlBar />
         <DayOfWeeks position="center" />

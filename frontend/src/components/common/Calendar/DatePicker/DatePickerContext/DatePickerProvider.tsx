@@ -13,6 +13,8 @@ type DatePickerContext = {
   year: number;
   month: number;
   calendarStorage: CalendarStorage;
+  nextCalendarInformation: { calendarStorage: CalendarStorage; year: number; month: number } | null;
+  mode: 'single' | 'double';
   handleMonthShift: (type: 'next' | 'prev' | 'today') => void;
   handleNavigationYear: (year: number) => void;
   handleNavigationMonth: (year: number) => void;
@@ -26,10 +28,11 @@ const DatePickerContext = createContext<DatePickerContext | null>(null);
 type Props = {
   initStartDate?: Date;
   initEndDate?: Date;
+  mode: 'single' | 'double';
   onChangeDate?: (startDate?: Date, endDate?: Date) => void;
 };
 
-const DatePickerProvider = ({ initStartDate, initEndDate, children, onChangeDate }: PropsWithChildren<Props>) => {
+const DatePickerProvider = ({ initStartDate, initEndDate, mode, children, onChangeDate }: PropsWithChildren<Props>) => {
   const [startDate, setStart] = useState(initStartDate);
   const [endDate, setEnd] = useState(initEndDate);
 
@@ -41,32 +44,43 @@ const DatePickerProvider = ({ initStartDate, initEndDate, children, onChangeDate
 
   const calendarStorage = calendar.getCalendarStorage(year, month);
 
-  const handleMonthShift = (type: 'next' | 'prev' | 'today') => {
-    let newYear = year;
-    let newMonth = month;
+  const nextCalendarInformation =
+    mode === 'double'
+      ? {
+          calendarStorage: calendar.getCalendarStorage(year, month + 1),
+          year: month === 12 ? year + 1 : year,
+          month: month === 12 ? 1 : month + 1,
+        }
+      : null;
 
+  const handleMonthShift = (type: 'next' | 'prev' | 'today') => {
     if (type === 'today') {
       const today = new Date();
 
-      newYear = today.getFullYear();
-      newMonth = today.getMonth() + 1;
+      const newYear = today.getFullYear();
+      const newMonth = today.getMonth() + 1;
+
+      setYear(newYear);
+      setMonth(newMonth);
+
+      return;
     }
 
-    const changedMonth = month + (type === 'next' ? +1 : -1);
+    const getMonth = () => {
+      let number = 0;
 
-    if (type !== 'today' && changedMonth === 0) {
-      newYear -= 1;
-      newMonth = 12;
-    }
+      if (type === 'next') number += 1;
+      if (type === 'prev') number -= 1;
 
-    if (type !== 'today' && changedMonth === 13) {
-      newYear += 1;
-      newMonth = 1;
-    }
+      if (mode === 'double') number *= 2;
 
-    if (type !== 'today' && changedMonth > 0 && changedMonth < 13) {
-      newMonth = changedMonth;
-    }
+      return month + number;
+    };
+
+    const newDate = new Date(year, getMonth() - 1);
+
+    const newYear = newDate.getFullYear();
+    const newMonth = newDate.getMonth() + 1;
 
     setYear(newYear);
     setMonth(newMonth);
@@ -150,7 +164,9 @@ const DatePickerProvider = ({ initStartDate, initEndDate, children, onChangeDate
     endDate,
     year,
     month,
+    mode,
     calendarStorage,
+    nextCalendarInformation,
     handleMonthShift,
     handleNavigationYear,
     handleNavigationMonth,
