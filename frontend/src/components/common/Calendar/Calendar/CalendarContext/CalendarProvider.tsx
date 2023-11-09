@@ -171,7 +171,7 @@ export default CalendarProvider;
 export const useCalendar = () => {
   const value = useContext(CalendarContext);
 
-  if (!value) throw new Error('calendar가 적절하지 않는 곳에서 호출되었습니다.');
+  if (!value) throw new Error('적절하지 않는 곳에서 useCalendar를 호출했습니다.');
 
   return value;
 };

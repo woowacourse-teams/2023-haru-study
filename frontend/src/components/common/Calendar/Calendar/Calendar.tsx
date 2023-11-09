@@ -6,7 +6,7 @@ import CalendarProvider from './CalendarContext/CalendarProvider';
 import ControlBar from './ControlBar/ControlBar';
 import DayItemWrapper from './DayItemWrapper/DayItemWrapper';
 import DayList from './DayList/DayList';
-import DayOfWeeks from './DayOfWeeks/DayOfWeeks';
+import DayOfWeeks from '../common/DayOfWeeks/DayOfWeeks';
 
 type Props = {
   /**
