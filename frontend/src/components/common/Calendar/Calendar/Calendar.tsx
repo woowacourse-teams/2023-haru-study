@@ -12,13 +12,11 @@ type Props = {
   /**
    * 달력의 년도를 지정하는 속성.
    *
-   *  * @default 2023
    */
   year: number;
   /**
    * 달력의 월을 지정하는 속성.
    *
-   *  * @default 11
    */
   month: number;
   /**
@@ -35,6 +33,7 @@ type Props = {
   /**
    * 달력에 렌더링되는 Data의 로딩 상태를 지정하는 속성
    *
+   * * @default false
    */
   dataLoading?: boolean;
   /**

@@ -31,6 +31,7 @@ type Props = {
   initStartDate?: Date;
   initEndDate?: Date;
   mode: 'single' | 'double';
+  isOnlyOneDay: boolean;
   onChangeDate?: (startDate?: Date, endDate?: Date) => void;
   onClickConfirm?: (startDate?: Date, endDate?: Date) => void;
   onClickCancel?: () => void;
@@ -41,6 +42,7 @@ const DatePickerProvider = ({
   initEndDate,
   mode,
   children,
+  isOnlyOneDay,
   onChangeDate,
   onClickConfirm,
   onClickCancel,
@@ -139,6 +141,8 @@ const DatePickerProvider = ({
   };
 
   const updateHoverDays = (date: Date) => {
+    if (isOnlyOneDay) return;
+
     if (!startDate) return;
     if (startDate && endDate) return;
 
@@ -146,6 +150,12 @@ const DatePickerProvider = ({
   };
 
   const updateStartEndDate = (date: Date) => {
+    if (isOnlyOneDay) {
+      setStart(date);
+      if (onChangeDate) onChangeDate(date);
+      return;
+    }
+
     setHoveredDay(date);
 
     let newStartDate: undefined | Date = undefined;

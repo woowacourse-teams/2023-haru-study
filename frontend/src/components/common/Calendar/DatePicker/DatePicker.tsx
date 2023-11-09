@@ -12,6 +12,7 @@ type Props = {
   /**
    * 시작일을 지정하는 속성.
    *
+   *
    */
   startDate?: Date;
   /**
@@ -22,13 +23,21 @@ type Props = {
   /**
    * 달력의 개수를 지정하는 속성
    *
+   *  * @default "single"
    */
   mode?: 'single' | 'double';
   /**
    * Date 선택 후 확인, 취소 버튼을 통해 startDate, endDate를 반환할 수 있는 버튼을 지정하는 속성.
    *
+   *  * @default false
    */
   hasButton?: boolean;
+  /**
+   * 하루를 선택할지 혹은 기간을 선택할지를 지정하는 속성.
+   *
+   *  * @default false
+   */
+  isOnlyOneDay?: boolean;
   /**
    * startDate, endDate가 바뀔 때 호출되는 함수. startDate, endDate를 매개변수로 받음.
    *
@@ -51,6 +60,7 @@ const DatePicker = ({
   endDate,
   mode = 'single',
   hasButton = false,
+  isOnlyOneDay = false,
   onClickCancel,
   onClickConfirm,
   onChangeDate,
@@ -59,8 +69,9 @@ const DatePicker = ({
     <DatePickerProvider
       initStartDate={startDate}
       initEndDate={endDate}
-      onChangeDate={onChangeDate}
       mode={mode}
+      isOnlyOneDay={isOnlyOneDay}
+      onChangeDate={onChangeDate}
       onClickCancel={onClickCancel}
       onClickConfirm={onClickConfirm}
     >

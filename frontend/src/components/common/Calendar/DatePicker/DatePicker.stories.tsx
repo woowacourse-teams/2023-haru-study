@@ -60,3 +60,13 @@ export const ButtonDatePicker: Story = {
     onClickCancel: () => window.alert('취소'),
   },
 };
+
+/**
+ * `OnlyOneDayDatePicker`는 특정 하루만 선택할 수 있는 DatePicker 스토리입니다.
+ */
+export const OnlyOneDayDatePicker: Story = {
+  args: {
+    isOnlyOneDay: true,
+    onChangeDate: (date) => console.log(date),
+  },
+};
