@@ -21,6 +21,9 @@ const useMemberCalendarRecord = (memberId: string) => {
   const year = Number(searchParams.year);
   const month = Number(searchParams.month);
 
+  const [renderYear, setRenderYear] = useState<number | null>(null);
+  const [renderMonth, setRenderMonth] = useState<number | null>(null);
+
   const [calendarData, setCalendarData] = useState<StudyInfo[] | null>(null);
 
   const [startDate, endDate] = calendar.getMonthFirstLastDate(year, month).map((item) => {
@@ -89,6 +92,9 @@ const useMemberCalendarRecord = (memberId: string) => {
 
     const studyRecords = result.data.studyRecords;
 
+    setRenderYear(year);
+    setRenderMonth(month);
+
     setCalendarData(Object.values(studyRecords).flat());
   }, [result]);
 
@@ -96,7 +102,14 @@ const useMemberCalendarRecord = (memberId: string) => {
     prefetchSidesCalendarData();
   }, [year, month]);
 
-  return { year, month, calendarData, isLoading, getStudies, updateYearMonth };
+  return {
+    year: renderYear || year,
+    month: renderMonth || month,
+    calendarData,
+    isLoading,
+    getStudies,
+    updateYearMonth,
+  };
 };
 
 export default useMemberCalendarRecord;

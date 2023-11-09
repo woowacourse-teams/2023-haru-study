@@ -25,8 +25,8 @@ type CalendarContext = {
 };
 
 type Props = {
-  initYear: number;
-  initMonth: number;
+  year: number;
+  month: number;
   limit?: number;
   formatChangedWidth: number;
   calendarDataChildren: ReactNode;
@@ -41,8 +41,8 @@ type Props = {
 const CalendarContext = createContext<CalendarContext | null>(null);
 
 const CalendarProvider = ({
-  initYear,
-  initMonth,
+  year,
+  month,
   limit,
   formatChangedWidth,
   calendarDataChildren,
@@ -54,11 +54,8 @@ const CalendarProvider = ({
   onClickRestDataCount,
   onClickTotalDataCount,
 }: PropsWithChildren<Props>) => {
-  const [year, setYear] = useState(initYear);
-  const [month, setMonth] = useState(initMonth);
-  const [navigationYear, setNavigationYear] = useState(initYear);
-  const [navigationMonth, setNavigationMonth] = useState(initMonth);
-  const [calendarStorage, setCalendarStorage] = useState<CalendarStorage>(calendar.getCalendarStorage(year, month));
+  const [navigationYear, setNavigationYear] = useState(year);
+  const [navigationMonth, setNavigationMonth] = useState(month);
   const [calendarDataFormat, setCalendarDataFormat] = useState<'long' | 'short'>('long');
 
   const isToday = (date: Date) => {
@@ -95,12 +92,8 @@ const CalendarProvider = ({
       newMonth = changedMonth;
     }
 
-    setYear(newYear);
-    setMonth(newMonth);
     setNavigationYear(newYear);
     setNavigationMonth(newMonth);
-
-    setCalendarStorage(calendar.getCalendarStorage(newYear, newMonth));
 
     if (onChangeCalendar) onChangeCalendar(newYear, newMonth);
   };
@@ -111,19 +104,9 @@ const CalendarProvider = ({
 
   const navigate = (year?: number, month?: number) => {
     if (year && month) {
-      setYear(year);
-      setMonth(month);
-
-      setCalendarStorage(calendar.getCalendarStorage(year, month));
-
       if (onChangeCalendar) onChangeCalendar(year, month);
       return;
     }
-
-    setYear(navigationYear);
-    setMonth(navigationMonth);
-
-    setCalendarStorage(calendar.getCalendarStorage(navigationYear, navigationMonth));
 
     if (onChangeCalendar) onChangeCalendar(navigationYear, navigationMonth);
   };
@@ -142,28 +125,24 @@ const CalendarProvider = ({
     calendarResizeObserver.observe(calendarRef.current);
   }, [calendarRef, formatChangedWidth]);
 
-  useEffect(() => {
-    const calendarDataObject: Record<string, ReactElement[]> = {};
+  const calendarDataObject: Record<string, ReactElement[]> = {};
 
-    Children.forEach(calendarDataChildren, (child) => {
-      const item = child as ReactElement;
+  Children.forEach(calendarDataChildren, (child) => {
+    const item = child as ReactElement;
 
-      const { date } = item.props as { date: Date };
+    const { date } = item.props as { date: Date };
 
-      const formatDate = format.date(date, '-');
-      calendarDataObject[formatDate] = calendarDataObject[formatDate]
-        ? [...calendarDataObject[formatDate], item]
-        : [item];
-    });
+    const formatDate = format.date(date, '-');
+    calendarDataObject[formatDate] = calendarDataObject[formatDate]
+      ? [...calendarDataObject[formatDate], item]
+      : [item];
+  });
 
-    setCalendarStorage(
-      calendar.getCalendarStorage(year, month).map((item) => {
-        const formatDate = format.date(item.date, '-');
+  const calendarStorage = calendar.getCalendarStorage(year, month).map((item) => {
+    const formatDate = format.date(item.date, '-');
 
-        return { ...item, children: calendarDataObject[formatDate] };
-      }),
-    );
-  }, [year, month, calendarDataFormat, calendarDataChildren]);
+    return { ...item, children: calendarDataObject[formatDate] };
+  });
 
   const initValue = {
     year,

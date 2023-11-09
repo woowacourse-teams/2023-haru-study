@@ -14,13 +14,13 @@ type Props = {
    *
    *  * @default 2023
    */
-  year?: number;
+  year: number;
   /**
    * 달력의 월을 지정하는 속성.
    *
    *  * @default 11
    */
-  month?: number;
+  month: number;
   /**
    * 달력 내 Data 개수를 제한하는 속성.
    *
@@ -61,8 +61,8 @@ type Props = {
 };
 
 const Calendar = ({
-  year = new Date().getFullYear(),
-  month = new Date().getMonth() + 1,
+  year,
+  month,
   limit,
   formatChangedWidth = 750,
   children,
@@ -76,8 +76,8 @@ const Calendar = ({
 
   return (
     <CalendarProvider
-      initYear={year}
-      initMonth={month}
+      year={year}
+      month={month}
       limit={limit}
       formatChangedWidth={formatChangedWidth}
       calendarDataChildren={children}

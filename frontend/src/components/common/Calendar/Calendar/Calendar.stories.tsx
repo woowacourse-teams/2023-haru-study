@@ -20,7 +20,12 @@ export default meta;
 /**
  * `DefaultCalendar`는 현재 년, 월을 렌더링한 기본적인 Calendar의 스토리입니다.
  */
-export const DefaultCalendar: Story = {};
+export const DefaultCalendar: Story = {
+  args: {
+    year: 2023,
+    month: 11,
+  },
+};
 
 /**
  * `Calendar202309`는 2023년 9월 달력으로 외부에서 데이터를 받는 스토리입니다.
