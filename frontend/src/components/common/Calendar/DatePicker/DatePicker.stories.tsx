@@ -55,7 +55,7 @@ export const DoubleDatePicker: Story = {
  */
 export const ButtonDatePicker: Story = {
   args: {
-    hasButton: true,
+    showButtons: true,
     onClickConfirm: (startDate, endDate) => console.log(startDate, endDate),
     onClickCancel: () => window.alert('취소'),
   },
@@ -68,5 +68,7 @@ export const OnlyOneDayDatePicker: Story = {
   args: {
     isOnlyOneDay: true,
     onChangeDate: (date) => console.log(date),
+    startDate: new Date('2023-11-02'),
+    endDate: new Date('2023-11-09'),
   },
 };

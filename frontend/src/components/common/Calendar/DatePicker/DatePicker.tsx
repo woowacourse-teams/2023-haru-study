@@ -12,7 +12,6 @@ type Props = {
   /**
    * 시작일을 지정하는 속성.
    *
-   *
    */
   startDate: Date | null;
   /**
@@ -31,9 +30,9 @@ type Props = {
    *
    *  * @default false
    */
-  hasButton?: boolean;
+  showButtons?: boolean;
   /**
-   * 하루를 선택할지 혹은 기간을 선택할지를 지정하는 속성.
+   * 하루를 선택할지 혹은 기간을 선택할지를 지정하는 속성. 해당 속성을 true로 할 경우 endDate 속성은 무시됨.
    *
    *  * @default false
    */
@@ -59,7 +58,7 @@ const DatePicker = ({
   startDate,
   endDate,
   mode = 'single',
-  hasButton = false,
+  showButtons = false,
   isOnlyOneDay = false,
   onClickCancel,
   onClickConfirm,
@@ -79,7 +78,7 @@ const DatePicker = ({
         <ControlBar />
         <DayOfWeeks position="center" />
         <DayList />
-        {hasButton && <ConfirmCancelButton />}
+        {showButtons && <ConfirmCancelButton />}
       </Layout>
     </DatePickerProvider>
   );

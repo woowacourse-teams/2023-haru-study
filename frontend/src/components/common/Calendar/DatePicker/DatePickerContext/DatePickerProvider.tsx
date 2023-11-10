@@ -48,7 +48,7 @@ const DatePickerProvider = ({
   onClickCancel,
 }: PropsWithChildren<Props>) => {
   const [startDate, setStart] = useState(initStartDate);
-  const [endDate, setEnd] = useState(initEndDate);
+  const [endDate, setEnd] = useState(isOnlyOneDay ? null : initEndDate);
 
   const today = new Date();
 
