@@ -23,8 +23,8 @@ export const requestGetMemberListRecord = (
   memberId: string,
   page: number,
   size: number,
-  startDate?: string,
-  endDate?: string,
+  startDate: string | null,
+  endDate: string | null,
 ) => {
   if (startDate && endDate)
     return http.get<ResponseMemberListRecord>(
