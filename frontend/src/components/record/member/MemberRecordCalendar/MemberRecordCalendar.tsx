@@ -9,6 +9,7 @@ import color from '@Styles/color';
 import { ROUTES_PATH } from '@Constants/routes';
 
 import { useModal } from '@Contexts/ModalProvider';
+import { useNotification } from '@Contexts/NotificationProvider';
 
 import format from '@Utils/format';
 
@@ -21,12 +22,24 @@ type Props = {
 const MemberRecordCalendar = ({ memberId }: Props) => {
   const navigate = useNavigate();
   const { openModal } = useModal();
+  const { send } = useNotification();
 
   const { year, month, calendarData, isLoading, getStudies, updateYearMonth } = useMemberCalendarRecord(memberId);
 
   const handleClickStudyItem = (studyId: string) => navigate(`${ROUTES_PATH.record}/${studyId}`);
 
   const handleOpenMemberRecordListModal = (date: Date) => {
+    const studies = getStudies(date);
+    const fullDate = format.date(date);
+
+    if (studies.length === 0) {
+      send({
+        type: 'error',
+        message: `${fullDate}에 진행한 스터디가 없어요.`,
+      });
+      return;
+    }
+
     openModal(
       <MemberRecordListModal
         fullDate={format.date(date)}
