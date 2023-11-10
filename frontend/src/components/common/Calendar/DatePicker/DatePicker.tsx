@@ -14,12 +14,12 @@ type Props = {
    *
    *
    */
-  startDate?: Date;
+  startDate: Date | null;
   /**
    * 마지막일을 지정하는 속성.
    *
    */
-  endDate?: Date;
+  endDate: Date | null;
   /**
    * 달력의 개수를 지정하는 속성
    *
@@ -42,12 +42,12 @@ type Props = {
    * startDate, endDate가 바뀔 때 호출되는 함수. startDate, endDate를 매개변수로 받음.
    *
    */
-  onChangeDate?: (startDate?: Date, endDate?: Date) => void;
+  onChangeDate?: (startDate: Date | null, endDate: Date | null) => void;
   /**
    * Date 선택 후 확인버튼을 누를 때 호출되는 함수. startDate, endDate를 매개변수로 받음.
    *
    */
-  onClickConfirm?: (startDate?: Date, endDate?: Date) => void;
+  onClickConfirm?: (startDate: Date | null, endDate: Date | null) => void;
   /**
    * Date 선택 후 취소버튼을 누를 때 호출되는 함수. startDate, endDate를 매개변수로 받음.
    *
@@ -97,6 +97,4 @@ const Layout = styled.div`
   border-radius: 4px;
 
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-
-  z-index: 5;
 `;

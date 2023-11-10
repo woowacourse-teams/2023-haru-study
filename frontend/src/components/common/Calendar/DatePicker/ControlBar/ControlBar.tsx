@@ -125,9 +125,6 @@ const ShiftButton = styled.div`
 `;
 
 const TodayButton = styled.div`
-  position: relative;
-  top: 2px;
-
   cursor: pointer;
 `;
 

@@ -8,8 +8,8 @@ import calendar from '@Utils/Calendar/Calendar';
 import format from '@Utils/format';
 
 type DatePickerContext = {
-  startDate?: Date;
-  endDate?: Date;
+  startDate: Date | null;
+  endDate: Date | null;
   year: number;
   month: number;
   calendarStorage: CalendarStorage;
@@ -21,19 +21,19 @@ type DatePickerContext = {
   getDayBackgroundColor: (date: Date) => string;
   updateHoverDays: (date: Date) => void;
   updateStartEndDate: (date: Date) => void;
-  onClickConfirm?: (startDate?: Date, endDate?: Date) => void;
+  onClickConfirm?: (startDate: Date | null, endDate: Date | null) => void;
   onClickCancel?: () => void;
 };
 
 const DatePickerContext = createContext<DatePickerContext | null>(null);
 
 type Props = {
-  initStartDate?: Date;
-  initEndDate?: Date;
+  initStartDate: Date | null;
+  initEndDate: Date | null;
   mode: 'single' | 'double';
   isOnlyOneDay: boolean;
-  onChangeDate?: (startDate?: Date, endDate?: Date) => void;
-  onClickConfirm?: (startDate?: Date, endDate?: Date) => void;
+  onChangeDate?: (startDate: Date | null, endDate: Date | null) => void;
+  onClickConfirm?: (startDate: Date | null, endDate: Date | null) => void;
   onClickCancel?: () => void;
 };
 
@@ -54,7 +54,7 @@ const DatePickerProvider = ({
 
   const [year, setYear] = useState(startDate ? startDate.getFullYear() : today.getFullYear());
   const [month, setMonth] = useState(startDate ? startDate.getMonth() + 1 : today.getMonth() + 1);
-  const [hoveredDay, setHoveredDay] = useState<Date | undefined>();
+  const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
 
   const calendarStorage = calendar.getCalendarStorage(year, month);
 
@@ -152,14 +152,14 @@ const DatePickerProvider = ({
   const updateStartEndDate = (date: Date) => {
     if (isOnlyOneDay) {
       setStart(date);
-      if (onChangeDate) onChangeDate(date);
+      if (onChangeDate) onChangeDate(date, endDate);
       return;
     }
 
     setHoveredDay(date);
 
-    let newStartDate: undefined | Date = undefined;
-    let newEndDate: undefined | Date = undefined;
+    let newStartDate: null | Date = null;
+    let newEndDate: null | Date = null;
 
     if (!startDate) newStartDate = date;
 
