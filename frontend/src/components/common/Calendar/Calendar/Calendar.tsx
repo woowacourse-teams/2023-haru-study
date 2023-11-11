@@ -3,8 +3,8 @@ import { useRef } from 'react';
 import { styled } from 'styled-components';
 
 import CalendarProvider from './CalendarContext/CalendarProvider';
+import CalendarItem from './CalendarItem/CalendarItem';
 import ControlBar from './ControlBar/ControlBar';
-import DayItemWrapper from './DayItemWrapper/DayItemWrapper';
 import DayList from './DayList/DayList';
 import DayOfWeeks from '../common/DayOfWeeks/DayOfWeeks';
 
@@ -97,7 +97,7 @@ const Calendar = ({
   );
 };
 
-Calendar.Item = DayItemWrapper;
+Calendar.Item = CalendarItem;
 
 export default Calendar;
 

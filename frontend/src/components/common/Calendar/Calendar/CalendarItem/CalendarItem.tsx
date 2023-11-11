@@ -16,7 +16,7 @@ type Props = {
   onClickCalendarItem?: (date: Date) => void;
 } & ComponentPropsWithoutRef<'div'>;
 
-const DayItemWrapper = ({ date, onClickCalendarItem, children, ...rest }: PropsWithChildren<Props>) => {
+const CalendarItem = ({ date, onClickCalendarItem, children, ...rest }: PropsWithChildren<Props>) => {
   return (
     <div onClick={() => onClickCalendarItem && onClickCalendarItem(date)} {...rest}>
       {children}
@@ -24,4 +24,4 @@ const DayItemWrapper = ({ date, onClickCalendarItem, children, ...rest }: PropsW
   );
 };
 
-export default DayItemWrapper;
+export default CalendarItem;
