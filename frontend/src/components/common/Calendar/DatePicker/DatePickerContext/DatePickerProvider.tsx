@@ -3,8 +3,8 @@ import { createContext, useContext, useState } from 'react';
 
 import color from '@Styles/color';
 
-import type { CalendarStorage } from '@Utils/Calendar/Calendar';
-import calendar from '@Utils/Calendar/Calendar';
+import type { CalendarStorage } from '@Utils/calendar';
+import calendar from '@Utils/calendar';
 import format from '@Utils/format';
 
 type DatePickerContext = {

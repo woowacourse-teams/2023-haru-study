@@ -1,8 +1,8 @@
 import type { PropsWithChildren, ReactElement, ReactNode, RefObject } from 'react';
 import { Children, createContext, useContext, useEffect, useState } from 'react';
 
-import type { CalendarStorage } from '@Utils/Calendar/Calendar';
-import calendar from '@Utils/Calendar/Calendar';
+import type { CalendarStorage } from '@Utils/calendar';
+import calendar from '@Utils/calendar';
 import format from '@Utils/format';
 
 type CalendarContext = {

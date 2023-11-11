@@ -5,7 +5,7 @@ import useCacheFetch from '@Hooks/api/useCacheFetch';
 import usePreFetch from '@Hooks/api/usePreFetch';
 import useSearchParams from '@Hooks/common/useSearchParams';
 
-import calendar from '@Utils/Calendar/Calendar';
+import calendar from '@Utils/calendar';
 import format from '@Utils/format';
 
 import { requestGetMemberCalendarRecord } from '@Apis/index';
