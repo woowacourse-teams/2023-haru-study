@@ -39,6 +39,7 @@ public class ParticipantService {
         return ParticipantResponse.from(participant);
     }
 
+    @Transactional(readOnly = true)
     public ParticipantsResponse tempFindParticipantWithFilter(AuthMember authMember, Long studyId, Long memberId) {
         Study study = studyRepository.findByIdIfExists(studyId);
         if (Objects.isNull(memberId)) {
