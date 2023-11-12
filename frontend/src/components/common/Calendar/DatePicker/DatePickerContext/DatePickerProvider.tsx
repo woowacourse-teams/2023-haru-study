@@ -113,7 +113,7 @@ const DatePickerProvider = ({
 
     if (isSoonSelectedDate(date) || isIncludeSelectDate(date)) return color.blue[100];
 
-    if (fullDate === format.date(today)) return color.neutral[100];
+    if (fullDate === format.date(today, '-')) return color.neutral[100];
 
     return 'transparent';
   };

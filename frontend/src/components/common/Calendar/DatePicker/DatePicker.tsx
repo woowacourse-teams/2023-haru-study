@@ -48,7 +48,7 @@ type Props = {
    */
   onClickConfirm?: (startDate: Date | null, endDate: Date | null) => void;
   /**
-   * Date 선택 후 취소버튼을 누를 때 호출되는 함수. startDate, endDate를 매개변수로 받음.
+   * Date 선택 후 취소버튼을 누를 때 호출되는 함수.
    *
    */
   onClickCancel?: () => void;
