@@ -117,7 +117,6 @@ public class ParticipantService {
         Member member = memberRepository.findByIdIfExists(authMember.id());
         Participant participant = participantRepository.findByIdIfExists(participantId);
 
-        validateEverParticipated(authMember, study);
         participant.validateIsCreatedByMember(member);
         participant.validateIsBelongsTo(study);
 
