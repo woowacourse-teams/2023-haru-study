@@ -24,8 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
-public class ViewIntegrationTest extends IntegrationTest {
+class ViewIntegrationTest extends IntegrationTest {
 
     private MemberDto memberDto;
 

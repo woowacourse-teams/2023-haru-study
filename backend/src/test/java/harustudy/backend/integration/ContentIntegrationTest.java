@@ -27,8 +27,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-public class ContentIntegrationTest extends IntegrationTest {
+class ContentIntegrationTest extends IntegrationTest {
 
     private Study study;
     private MemberDto memberDto;

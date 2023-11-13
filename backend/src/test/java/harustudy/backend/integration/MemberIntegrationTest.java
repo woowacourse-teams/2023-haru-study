@@ -18,7 +18,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MvcResult;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
 class MemberIntegrationTest extends IntegrationTest {
 
     private Study study;
