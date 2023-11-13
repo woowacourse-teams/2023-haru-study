@@ -35,15 +35,6 @@ import org.springframework.test.web.servlet.MvcResult;
 @SuppressWarnings("NonAsciiCharacters")
 class StudyIntegrationTest extends IntegrationTest {
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private EntityManager entityManager;
-
-    @Autowired
-    private GenerationStrategy generationStrategy;
-
     private Study study1;
     private Study study2;
     private MemberDto memberDto1;

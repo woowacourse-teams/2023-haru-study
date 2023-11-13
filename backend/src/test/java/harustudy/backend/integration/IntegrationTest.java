@@ -14,6 +14,7 @@ import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
+import harustudy.backend.participantcode.domain.GenerationStrategy;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.Cookie;
@@ -49,13 +50,13 @@ class IntegrationTest {
     protected MockMvc mockMvc;
 
     @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     private TokenConfig tokenConfig;
+
+    @Autowired
+    protected GenerationStrategy generationStrategy;
 
     @MockBean
     private OauthClients oauthClients;
