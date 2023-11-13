@@ -1,6 +1,8 @@
 package harustudy.backend.integration;
 
 import harustudy.backend.auth.domain.RefreshToken;
+import harustudy.backend.auth.dto.OauthLoginRequest;
+import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.member.domain.Member;
 import jakarta.servlet.http.Cookie;
@@ -11,8 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -98,5 +103,27 @@ class AuthIntegrationTest extends IntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(cookie().maxAge("refreshToken", 0))
                 .andReturn();
+    }
+
+    private LoginResponse 구글_로그인(String name) throws Exception {
+        OauthLoginRequest request = new OauthLoginRequest("google", "oauthLoginCode");
+        String jsonRequest = objectMapper.writeValueAsString(request);
+
+        given(oauthClients.requestOauthToken(any(String.class), any(String.class)))
+                .willReturn(new OauthTokenResponse("mock-token-type", "mock-access-token",
+                        "mock-scope"));
+        given(oauthClients.requestOauthUserInfo(any(String.class), any(String.class)))
+                .willReturn(Map.of("name", name, "email", "mock-email", "picture", "mock-picture"));
+
+        MvcResult result = mockMvc.perform(
+                        post("/api/v2/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonRequest))
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+        Cookie refreshToken = result.getResponse().getCookie("refreshToken");
+        TokenResponse tokenResponse = objectMapper.readValue(jsonResponse, TokenResponse.class);
+        return new LoginResponse(tokenResponse, refreshToken);
     }
 }

@@ -59,28 +59,15 @@ class IntegrationTest {
     protected GenerationStrategy generationStrategy;
 
     @MockBean
-    private OauthClients oauthClients;
+    protected OauthClients oauthClients;
 
-    public LoginResponse 구글_로그인(String name) throws Exception {
-        OauthLoginRequest request = new OauthLoginRequest("google", "oauthLoginCode");
-        String jsonRequest = objectMapper.writeValueAsString(request);
-
-        given(oauthClients.requestOauthToken(any(String.class), any(String.class)))
-                .willReturn(new OauthTokenResponse("mock-token-type", "mock-access-token",
-                        "mock-scope"));
-        given(oauthClients.requestOauthUserInfo(any(String.class), any(String.class)))
-                .willReturn(Map.of("name", name, "email", "mock-email", "picture", "mock-picture"));
-
-        MvcResult result = mockMvc.perform(
-                        post("/api/v2/auth/login")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(jsonRequest))
-                .andReturn();
-
-        String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        Cookie refreshToken = result.getResponse().getCookie("refreshToken");
-        TokenResponse tokenResponse = objectMapper.readValue(jsonResponse, TokenResponse.class);
-        return new LoginResponse(tokenResponse, refreshToken);
+    protected MemberDto createMember(String name) {
+        Member member = generateAndSaveMemberNamedWith(name);
+        String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(member.getId()),
+                tokenConfig.accessTokenExpireLength(), tokenConfig.secretKey());
+        RefreshToken refreshToken = generateAndSaveRefreshTokenOf(member);
+        Cookie cookie = new Cookie("refreshToken", refreshToken.getUuid().toString());
+        return new MemberDto(member, accessToken, cookie);
     }
 
     protected Member generateAndSaveMemberNamedWith(String name) {
@@ -94,14 +81,5 @@ class IntegrationTest {
                 tokenConfig.refreshTokenExpireLength());
         entityManager.persist(refreshToken);
         return refreshToken;
-    }
-
-    protected MemberDto createMember(String name) {
-        Member member = generateAndSaveMemberNamedWith(name);
-        String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(member.getId()),
-                tokenConfig.accessTokenExpireLength(), tokenConfig.secretKey());
-        RefreshToken refreshToken = generateAndSaveRefreshTokenOf(member);
-        Cookie cookie = new Cookie("refreshToken", refreshToken.getUuid().toString());
-        return new MemberDto(member, accessToken, cookie);
     }
 }
