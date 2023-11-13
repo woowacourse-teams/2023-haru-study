@@ -3,10 +3,8 @@ package harustudy.backend.integration;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.dto.ParticipantResponse;
 import harustudy.backend.study.domain.Study;
-import harustudy.backend.testutils.EntityManagerUtil;
+import harustudy.backend.testutils.EntityManagerUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -31,7 +29,7 @@ class ParticipantIntegrationTest extends IntegrationTest {
 
         entityManager.persist(study);
         entityManager.persist(participant);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
     }
 
     @Test

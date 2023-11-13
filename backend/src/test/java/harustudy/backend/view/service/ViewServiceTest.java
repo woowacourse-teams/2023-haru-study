@@ -10,7 +10,7 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
-import harustudy.backend.testutils.EntityManagerUtil;
+import harustudy.backend.testutils.EntityManagerUtils;
 import harustudy.backend.view.dto.CalendarStudyRecordsResponse;
 import harustudy.backend.view.dto.StudyRecordsPageResponse;
 import jakarta.persistence.EntityManager;
@@ -50,7 +50,7 @@ class ViewServiceTest {
         member = new Member("hiiro", "email", "imageUrl", LoginType.GUEST);
         entityManager.persist(member);
         setUpWithNativeQuery();
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
     }
 
     private void setUpWithNativeQuery() {

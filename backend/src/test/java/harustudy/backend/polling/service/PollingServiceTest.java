@@ -10,7 +10,7 @@ import harustudy.backend.polling.dto.SubmitterResponse;
 import harustudy.backend.polling.dto.SubmittersResponse;
 import harustudy.backend.polling.dto.WaitingResponse;
 import harustudy.backend.polling.exception.CannotSeeSubmittersException;
-import harustudy.backend.testutils.EntityManagerUtil;
+import harustudy.backend.testutils.EntityManagerUtils;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -77,7 +77,7 @@ class PollingServiceTest {
         entityManager.persist(content1);
         entityManager.persist(content2);
         entityManager.persist(content3);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
     }
 
     @Test
@@ -95,7 +95,7 @@ class PollingServiceTest {
 
         entityManager.merge(study);
         entityManager.merge(content1);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
 
         SubmittersResponse expected = new SubmittersResponse(List.of(
                 new SubmitterResponse("parti1", true),
@@ -122,7 +122,7 @@ class PollingServiceTest {
         entityManager.merge(study);
         entityManager.merge(content1);
         entityManager.merge(content2);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
 
         // when
         SubmittersResponse submitters = pollingService.findSubmitters(study.getId());
@@ -147,7 +147,7 @@ class PollingServiceTest {
         study.proceed();
 
         entityManager.merge(study);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
 
         // when, then
         assertThatThrownBy(() -> pollingService.findSubmitters(study.getId()))
@@ -178,7 +178,7 @@ class PollingServiceTest {
         Content content = entityManager.merge(content1);
         entityManager.remove(participant);
         entityManager.remove(content);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
 
         // when
         WaitingResponse response = pollingService.pollWaiting(study.getId());

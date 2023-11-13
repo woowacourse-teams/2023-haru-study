@@ -4,7 +4,7 @@ import harustudy.backend.participantcode.domain.CodeGenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participantcode.dto.ParticipantCodeResponse;
 import harustudy.backend.study.domain.Study;
-import harustudy.backend.testutils.EntityManagerUtil;
+import harustudy.backend.testutils.EntityManagerUtils;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -34,7 +34,7 @@ class ParticipantCodeServiceTest {
         ParticipantCode participantCode = new ParticipantCode(study, new CodeGenerationStrategy());
         entityManager.persist(study);
         entityManager.persist(participantCode);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
 
         // when
         ParticipantCodeResponse result = participantCodeService.findParticipantCodeByStudyId(

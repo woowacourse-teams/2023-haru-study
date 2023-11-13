@@ -7,27 +7,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
-import harustudy.backend.participantcode.domain.GenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.dto.CreateStudyRequest;
 import harustudy.backend.study.dto.StudiesResponse;
 import harustudy.backend.study.dto.StudyResponse;
-import harustudy.backend.testutils.EntityManagerUtil;
-import jakarta.persistence.EntityManager;
+import harustudy.backend.testutils.EntityManagerUtils;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -51,7 +44,7 @@ class StudyIntegrationTest extends IntegrationTest {
         entityManager.persist(study2);
         entityManager.persist(participant1);
         entityManager.persist(participantCode);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
     }
 
     @Test
