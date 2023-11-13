@@ -53,7 +53,6 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@Disabled("무중단 배포를 위한 API 버저닝으로 인한 임시 disabled")
 class AcceptanceTest {
 
     @MockBean
@@ -131,7 +130,7 @@ class AcceptanceTest {
                 .parseSubject(로그인_정보.tokenResponse().accessToken(), tokenConfig.secretKey()));
 
         MvcResult result = mockMvc.perform(
-                        get("/api/studies")
+                        get("/api/v2/studies")
                                 .param("memberId", String.valueOf(memberId))
                                 .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isOk())
@@ -145,7 +144,7 @@ class AcceptanceTest {
     }
 
     private LoginResponse 비회원_로그인을_진행한다() throws Exception {
-        MvcResult result = mockMvc.perform(post("/api/auth/guest"))
+        MvcResult result = mockMvc.perform(post("/api/v2/auth/guest"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -166,7 +165,7 @@ class AcceptanceTest {
                         "mock-picture"));
 
         MvcResult result = mockMvc.perform(
-                        post("/api/auth/login")
+                        post("/api/v2/auth/login")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonRequest))
                 .andExpect(status().isOk())
@@ -182,7 +181,7 @@ class AcceptanceTest {
         CreateStudyRequest request = new CreateStudyRequest("studyName", 1, 20);
         String jsonRequest = objectMapper.writeValueAsString(request);
         MvcResult result = mockMvc.perform(
-                        post("/api/studies")
+                        post("/api/v2/studies")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonRequest)
                                 .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
@@ -192,7 +191,7 @@ class AcceptanceTest {
 
         String[] parsed = locationHeader.split("/");
         System.out.println(locationHeader);
-        return Long.parseLong(parsed[3]);
+        return Long.parseLong(parsed[4]);
     }
 
     private Long 스터디에_참여한다(LoginResponse 로그인_정보, Long 스터디_아이디) throws Exception {
@@ -202,7 +201,7 @@ class AcceptanceTest {
         String jsonRequest = objectMapper.writeValueAsString(request);
 
         MvcResult result = mockMvc.perform(
-                        post("/api/studies/{studyId}/participants", 스터디_아이디)
+                        post("/api/v2/studies/{studyId}/participants", 스터디_아이디)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonRequest)
                                 .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
@@ -220,7 +219,7 @@ class AcceptanceTest {
         WritePlanRequest request = new WritePlanRequest(참여자_아이디, Map.of("plan", "test"));
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(post("/api/studies/{studyId}/contents/write-plan", 스터디_아이디)
+        mockMvc.perform(post("/api/v2/studies/{studyId}/contents/write-plan", 스터디_아이디)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest)
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
@@ -229,7 +228,7 @@ class AcceptanceTest {
 
     private void 스터디_상태를_다음_단계로_넘긴다(LoginResponse 로그인_정보, Long 스터디_아이디)
             throws Exception {
-        mockMvc.perform(post("/api/studies/{studyId}/next-step", 스터디_아이디)
+        mockMvc.perform(post("/api/v2/studies/{studyId}/next-step", 스터디_아이디)
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isNoContent());
     }
@@ -239,7 +238,7 @@ class AcceptanceTest {
                 Map.of("retrospect", "test"));
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(post("/api/studies/{studyId}/contents/write-retrospect",
+        mockMvc.perform(post("/api/v2/studies/{studyId}/contents/write-retrospect",
                         스터디_아이디)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest)
@@ -248,7 +247,7 @@ class AcceptanceTest {
     }
 
     private void 스터디_종료_후_결과_조회(LoginResponse 로그인_정보, Long 스터디_아이디) throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/studies/{studyId}/participants", 스터디_아이디)
+        MvcResult result = mockMvc.perform(get("/api/v2/studies/{studyId}/participants", 스터디_아이디)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isOk())
@@ -268,7 +267,7 @@ class AcceptanceTest {
     }
 
     private String 스터디_아이디로_참여_코드를_얻는다(LoginResponse 로그인_정보, Long 스터디_아이디) throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/participant-codes")
+        MvcResult result = mockMvc.perform(get("/api/v2/participant-codes")
                         .param("studyId", 스터디_아이디.toString())
                         .accept(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
@@ -284,7 +283,7 @@ class AcceptanceTest {
     }
 
     private void 참여_코드로_스터디_아이디를_얻는다(LoginResponse 로그인_정보, String 참여_코드) throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/studies")
+        MvcResult result = mockMvc.perform(get("/api/v2/studies")
                         .param("participantCode", 참여_코드)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
