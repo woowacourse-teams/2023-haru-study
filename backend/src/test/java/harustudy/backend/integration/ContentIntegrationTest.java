@@ -37,8 +37,6 @@ class ContentIntegrationTest extends IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        super.setUp();
-
         study = new Study("studyName", 2, 20);
         memberDto = createMember("member1");
         participant = Participant.createParticipantOfStudy(study, memberDto.member(), "nickname");

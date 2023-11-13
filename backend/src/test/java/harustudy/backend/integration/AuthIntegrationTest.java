@@ -20,11 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SuppressWarnings("NonAsciiCharacters")
 class AuthIntegrationTest extends IntegrationTest {
 
-    @BeforeEach
-    void setUp() {
-        super.setUp();
-    }
-
     @Test
     void 구글_로그인을_한다() throws Exception {
         // TODO : 실제 구글 id로 Oauth 기능 테스트하기

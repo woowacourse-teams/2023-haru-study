@@ -41,7 +41,6 @@ class PollingIntegrationTest extends IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        super.setUp();
         study = new Study("studyName", 3, 20);
         memberDto1 = createMember("member1");
         memberDto2 = createMember("member2");

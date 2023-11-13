@@ -26,8 +26,6 @@ class MemberIntegrationTest extends IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        super.setUp();
-
         study = new Study("studyName", 1, 20);
 
         memberDto1 = createMember("member1");

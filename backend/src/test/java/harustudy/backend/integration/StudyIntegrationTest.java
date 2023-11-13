@@ -51,7 +51,6 @@ class StudyIntegrationTest extends IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        super.setMockMvc();
         study1 = new Study("study1", 3, 20);
         study2 = new Study("study2", 4, 30);
         memberDto1 = createMember("member1");

@@ -32,6 +32,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @AutoConfigureMockMvc
 @Transactional
@@ -44,6 +45,7 @@ class IntegrationTest {
     @Autowired
     protected ObjectMapper objectMapper;
 
+    @Autowired
     protected MockMvc mockMvc;
 
     @Autowired
@@ -57,14 +59,6 @@ class IntegrationTest {
 
     @MockBean
     private OauthClients oauthClients;
-
-    void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
-    protected void setMockMvc() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
 
     public LoginResponse 구글_로그인(String name) throws Exception {
         OauthLoginRequest request = new OauthLoginRequest("google", "oauthLoginCode");

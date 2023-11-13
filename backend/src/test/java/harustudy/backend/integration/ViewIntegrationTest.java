@@ -30,7 +30,6 @@ class ViewIntegrationTest extends IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        super.setUp();
         memberDto = createMember("member");
         setUpWithNativeQuery();
         EntityManagerUtil.flushAndClearContext(entityManager);
