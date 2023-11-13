@@ -1,6 +1,7 @@
 package harustudy.backend.acceptance;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -55,28 +56,20 @@ import org.springframework.web.context.WebApplicationContext;
 @Transactional
 class AcceptanceTest {
 
-    @MockBean
-    private OauthClients oauthClients;
+    @Autowired
+    private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private MockMvc mockMvc;
+    @MockBean
+    private OauthClients oauthClients;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     private TokenConfig tokenConfig;
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @BeforeEach
-    void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
 
     @Test
     void 회원으로_스터디를_진행한다() throws Exception {
@@ -94,9 +87,9 @@ class AcceptanceTest {
 
     @Test
     void 회원으로_진행했었던_스터디_목록을_조회한다() throws Exception {
-        회원으로_스터디를_진행한다();
-        회원으로_스터디를_진행한다();
         LoginResponse 로그인_정보 = 구글_로그인을_진행한다();
+        회원으로_스터디를_진행한다();
+        회원으로_스터디를_진행한다();
         List<StudyResponse> 회원으로_완료한_스터디_목록 = 회원으로_진행했던_모든_스터디_목록을_조회한다(로그인_정보);
         for (StudyResponse 스터디_정보 : 회원으로_완료한_스터디_목록) {
             스터디_종료_후_결과_조회(로그인_정보, 스터디_정보.studyId());
@@ -124,10 +117,9 @@ class AcceptanceTest {
         참여_코드로_스터디_아이디를_얻는다(로그인_정보, 참여_코드);
     }
 
-    private List<StudyResponse> 회원으로_진행했던_모든_스터디_목록을_조회한다(LoginResponse 로그인_정보)
-            throws Exception {
-        long memberId = Long.parseLong(jwtTokenProvider
-                .parseSubject(로그인_정보.tokenResponse().accessToken(), tokenConfig.secretKey()));
+    private List<StudyResponse> 회원으로_진행했던_모든_스터디_목록을_조회한다(LoginResponse 로그인_정보) throws Exception {
+        long memberId = Long.parseLong(
+                jwtTokenProvider.parseSubject(로그인_정보.tokenResponse().accessToken(), tokenConfig.secretKey()));
 
         MvcResult result = mockMvc.perform(
                         get("/api/v2/studies")
@@ -137,8 +129,7 @@ class AcceptanceTest {
                 .andReturn();
 
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        StudiesResponse StudiesResponse = objectMapper.readValue(jsonResponse,
-                StudiesResponse.class);
+        StudiesResponse StudiesResponse = objectMapper.readValue(jsonResponse, StudiesResponse.class);
 
         return StudiesResponse.studies();
     }
@@ -150,6 +141,7 @@ class AcceptanceTest {
 
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
         TokenResponse tokenResponse = objectMapper.readValue(jsonResponse, TokenResponse.class);
+
         return new LoginResponse(tokenResponse, null);
     }
 
@@ -174,6 +166,7 @@ class AcceptanceTest {
         String jsonResponse = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
         Cookie refreshToken = result.getResponse().getCookie("refreshToken");
         TokenResponse tokenResponse = objectMapper.readValue(jsonResponse, TokenResponse.class);
+
         return new LoginResponse(tokenResponse, refreshToken);
     }
 
@@ -187,10 +180,10 @@ class AcceptanceTest {
                                 .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isCreated())
                 .andReturn();
-        String locationHeader = result.getResponse().getHeader(HttpHeaders.LOCATION);
 
+        String locationHeader = result.getResponse().getHeader(HttpHeaders.LOCATION);
         String[] parsed = locationHeader.split("/");
-        System.out.println(locationHeader);
+
         return Long.parseLong(parsed[4]);
     }
 
@@ -226,8 +219,7 @@ class AcceptanceTest {
                 .andExpect(status().isOk());
     }
 
-    private void 스터디_상태를_다음_단계로_넘긴다(LoginResponse 로그인_정보, Long 스터디_아이디)
-            throws Exception {
+    private void 스터디_상태를_다음_단계로_넘긴다(LoginResponse 로그인_정보, Long 스터디_아이디) throws Exception {
         mockMvc.perform(post("/api/v2/studies/{studyId}/next-step", 스터디_아이디)
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isNoContent());
@@ -238,8 +230,7 @@ class AcceptanceTest {
                 Map.of("retrospect", "test"));
         String jsonRequest = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(post("/api/v2/studies/{studyId}/contents/write-retrospect",
-                        스터디_아이디)
+        mockMvc.perform(post("/api/v2/studies/{studyId}/contents/write-retrospect", 스터디_아이디)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest)
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
@@ -275,8 +266,7 @@ class AcceptanceTest {
                 .andReturn();
 
         String response = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        ParticipantCodeResponse jsonResponse = objectMapper.readValue(response,
-                ParticipantCodeResponse.class);
+        ParticipantCodeResponse jsonResponse = objectMapper.readValue(response, ParticipantCodeResponse.class);
 
         assertThat(jsonResponse.participantCode()).hasSize(6);
         return jsonResponse.participantCode();
@@ -289,8 +279,10 @@ class AcceptanceTest {
                         .header(HttpHeaders.AUTHORIZATION, 로그인_정보.createAuthorizationHeader()))
                 .andExpect(status().isOk())
                 .andReturn();
+
         String response = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        Assertions.assertDoesNotThrow(() -> objectMapper.readValue(response,
-                StudyResponse.class));
+
+        assertThatCode(() -> objectMapper.readValue(response, StudyResponse.class))
+                .doesNotThrowAnyException();
     }
 }
