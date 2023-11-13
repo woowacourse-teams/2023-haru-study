@@ -197,7 +197,6 @@ class StudyIntegrationTest extends IntegrationTest {
         });
     }
 
-    @Disabled("무중단 배포를 위한 API 버저닝으로 인한 임시 disabled")
     @Test
     void 스터디를_개설한다() throws Exception {
         // given
@@ -217,7 +216,7 @@ class StudyIntegrationTest extends IntegrationTest {
         String location = result.getResponse().getHeader("Location");
         SoftAssertions.assertSoftly(softly -> {
             Assertions.assertThat(location).isNotNull();
-            Assertions.assertThat(location.split("/")).hasSize(4);
+            Assertions.assertThat(location.split("/")).hasSize(5);
         });
     }
 
