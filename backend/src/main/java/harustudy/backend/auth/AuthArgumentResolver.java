@@ -30,7 +30,6 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
                                       NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String authorizationHeader = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
         String accessToken = bearerAuthorizationParser.parse(authorizationHeader);
-        long memberId = Long.parseLong(authService.parseMemberId(accessToken));
-        return new AuthMember(memberId);
+        return new AuthMember(authService.parseMemberId(accessToken));
     }
 }

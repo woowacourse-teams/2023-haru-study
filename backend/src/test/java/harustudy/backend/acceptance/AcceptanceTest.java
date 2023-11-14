@@ -1,6 +1,7 @@
 package harustudy.backend.acceptance;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -13,7 +14,7 @@ import harustudy.backend.auth.domain.oauth.OauthClients;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
-import harustudy.backend.auth.util.JwtTokenProvider;
+import harustudy.backend.auth.util.AesTokenProvider;
 import harustudy.backend.content.dto.WritePlanRequest;
 import harustudy.backend.content.dto.WriteRetrospectRequest;
 import harustudy.backend.integration.LoginResponse;
@@ -27,7 +28,6 @@ import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -66,7 +66,7 @@ class AcceptanceTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private AesTokenProvider aesTokenProvider;
 
     @Autowired
     private TokenConfig tokenConfig;
@@ -127,8 +127,8 @@ class AcceptanceTest {
 
     private List<StudyResponse> 회원으로_진행했던_모든_스터디_목록을_조회한다(LoginResponse 로그인_정보)
             throws Exception {
-        long memberId = Long.parseLong(jwtTokenProvider
-                .parseSubject(로그인_정보.tokenResponse().accessToken(), tokenConfig.secretKey()));
+        Long memberId = aesTokenProvider.parseSubject(로그인_정보.tokenResponse().accessToken(),
+                tokenConfig.secretKey());
 
         MvcResult result = mockMvc.perform(
                         get("/api/studies")
@@ -196,8 +196,8 @@ class AcceptanceTest {
     }
 
     private Long 스터디에_참여한다(LoginResponse 로그인_정보, Long 스터디_아이디) throws Exception {
-        Long memberId = Long.valueOf(jwtTokenProvider
-                .parseSubject(로그인_정보.tokenResponse().accessToken(), tokenConfig.secretKey()));
+        Long memberId = aesTokenProvider.parseSubject(로그인_정보.tokenResponse().accessToken(),
+                tokenConfig.secretKey());
         ParticipateStudyRequest request = new ParticipateStudyRequest(memberId, "nickname");
         String jsonRequest = objectMapper.writeValueAsString(request);
 
@@ -291,7 +291,6 @@ class AcceptanceTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String response = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-        Assertions.assertDoesNotThrow(() -> objectMapper.readValue(response,
-                StudyResponse.class));
+        assertDoesNotThrow(() -> objectMapper.readValue(response, StudyResponse.class));
     }
 }

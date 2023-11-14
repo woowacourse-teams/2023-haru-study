@@ -11,7 +11,7 @@ import harustudy.backend.auth.domain.oauth.OauthClients;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
-import harustudy.backend.auth.util.JwtTokenProvider;
+import harustudy.backend.auth.util.AesTokenProvider;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import jakarta.persistence.EntityManager;
@@ -51,7 +51,7 @@ class IntegrationTest {
     private WebApplicationContext webApplicationContext;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private AesTokenProvider aesTokenProvider;
 
     @Autowired
     private TokenConfig tokenConfig;
@@ -104,7 +104,7 @@ class IntegrationTest {
 
     protected MemberDto createMember(String name) {
         Member member = generateAndSaveMemberNamedWith(name);
-        String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(member.getId()),
+        String accessToken = aesTokenProvider.createAccessToken(member.getId(),
                 tokenConfig.accessTokenExpireLength(), tokenConfig.secretKey());
         RefreshToken refreshToken = generateAndSaveRefreshTokenOf(member);
         Cookie cookie = new Cookie("refreshToken", refreshToken.getUuid().toString());

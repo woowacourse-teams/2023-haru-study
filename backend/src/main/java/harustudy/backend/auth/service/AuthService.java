@@ -5,17 +5,14 @@ import harustudy.backend.auth.domain.RefreshToken;
 import harustudy.backend.auth.dto.OauthLoginRequest;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
-import harustudy.backend.auth.exception.InvalidAccessTokenException;
 import harustudy.backend.auth.exception.InvalidRefreshTokenException;
 import harustudy.backend.auth.repository.RefreshTokenRepository;
-import harustudy.backend.auth.util.JwtTokenProvider;
+import harustudy.backend.auth.util.AesTokenProvider;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
-import io.jsonwebtoken.JwtException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final AesTokenProvider aesTokenProvider;
     private final TokenConfig tokenConfig;
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -44,11 +41,8 @@ public class AuthService {
     }
 
     private String generateAccessToken(Long memberId) {
-        return jwtTokenProvider.builder()
-                .subject(String.valueOf(memberId))
-                .accessTokenExpireLength(tokenConfig.accessTokenExpireLength())
-                .secretKey(tokenConfig.secretKey())
-                .build();
+        return aesTokenProvider.createAccessToken(memberId, tokenConfig.accessTokenExpireLength(),
+                tokenConfig.secretKey());
     }
 
     private RefreshToken saveRefreshTokenOf(Member member) {
@@ -67,11 +61,8 @@ public class AuthService {
     }
 
     private String generateGuestAccessToken(Long memberId) {
-        return jwtTokenProvider.builder()
-                .subject(String.valueOf(memberId))
-                .accessTokenExpireLength(tokenConfig.guestAccessTokenExpireLength())
-                .secretKey(tokenConfig.secretKey())
-                .build();
+        return aesTokenProvider.createAccessToken(memberId,
+                tokenConfig.guestAccessTokenExpireLength(), tokenConfig.secretKey());
     }
 
     public TokenResponse refresh(String refreshTokenRequest) {
@@ -80,19 +71,16 @@ public class AuthService {
         refreshToken.validateExpired();
         refreshToken.updateUuidAndExpireDateTime(tokenConfig.refreshTokenExpireLength());
         String accessToken = generateAccessToken(refreshToken.getMember().getId());
-        return TokenResponse.forLoggedIn(accessToken, refreshToken, tokenConfig.refreshTokenExpireLength());
+        return TokenResponse.forLoggedIn(accessToken, refreshToken,
+                tokenConfig.refreshTokenExpireLength());
     }
 
     public void validateAccessToken(String accessToken) {
-        try {
-            jwtTokenProvider.validateAccessToken(accessToken, tokenConfig.secretKey());
-        } catch (JwtException e) {
-            throw new InvalidAccessTokenException();
-        }
+        aesTokenProvider.validateAccessToken(accessToken, tokenConfig.secretKey());
     }
 
-    public String parseMemberId(String accessToken) {
-        return jwtTokenProvider.parseSubject(accessToken, tokenConfig.secretKey());
+    public Long parseMemberId(String accessToken) {
+        return aesTokenProvider.parseSubject(accessToken, tokenConfig.secretKey());
     }
 
     public void deleteStringifiedRefreshToken(String refreshToken) {

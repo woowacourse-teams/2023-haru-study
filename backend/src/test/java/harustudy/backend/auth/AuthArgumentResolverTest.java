@@ -43,7 +43,7 @@ class AuthArgumentResolverTest {
     void 액세스_토큰의_파싱된_아이디에_해당하는_인증_멤버가_반환된다() {
         // given
         String accessToken = "access-token";
-        String mockedAuthMemberId = "1";
+        Long mockedAuthMemberId = 1L;
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         NativeWebRequest nativeWebRequest = new ServletWebRequest(request);
@@ -56,6 +56,6 @@ class AuthArgumentResolverTest {
                 modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
 
         // then
-        assertThat(authMember.id()).isEqualTo(Long.valueOf(mockedAuthMemberId));
+        assertThat(authMember.id()).isEqualTo(mockedAuthMemberId);
     }
 }

@@ -17,7 +17,7 @@ import harustudy.backend.auth.dto.OauthTokenResponse;
 import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.dto.UserInfo;
 import harustudy.backend.auth.exception.InvalidAccessTokenException;
-import harustudy.backend.auth.util.JwtTokenProvider;
+import harustudy.backend.auth.util.AesTokenProvider;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import jakarta.persistence.EntityManager;
@@ -45,7 +45,7 @@ class AuthServiceTest {
     private AuthService authService;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private AesTokenProvider aesTokenProvider;
 
     @Autowired
     private TokenConfig tokenConfig;
@@ -72,7 +72,7 @@ class AuthServiceTest {
         TokenResponse response = oauthLoginFacade.oauthLogin(request);
 
         // then
-        String memberId = authService.parseMemberId(response.accessToken());
+        Long memberId = authService.parseMemberId(response.accessToken());
         Member foundMember = entityManager.find(Member.class, memberId);
 
         assertSoftly(softly -> {
@@ -91,7 +91,7 @@ class AuthServiceTest {
         TokenResponse response = authService.guestLogin();
 
         // then
-        String memberId = authService.parseMemberId(response.accessToken());
+        Long memberId = authService.parseMemberId(response.accessToken());
         Member foundMember = entityManager.find(Member.class, memberId);
 
         assertSoftly(softly -> {
@@ -123,11 +123,8 @@ class AuthServiceTest {
     void 유효한_액세스_토큰의_유효성_검사_시_예외를_반환하지_않는다() {
         // given
         Long memberId = 1L;
-        String accessToken = jwtTokenProvider.builder()
-                .subject(String.valueOf(memberId))
-                .accessTokenExpireLength(999999L)
-                .secretKey(tokenConfig.secretKey())
-                .build();
+        String accessToken = aesTokenProvider.createAccessToken(memberId, 999999L,
+                tokenConfig.secretKey());
 
         // when, then
         assertDoesNotThrow(() -> authService.validateAccessToken(accessToken));
@@ -137,11 +134,8 @@ class AuthServiceTest {
     void 만료된_액세스_토큰의_유효성_검사_시_예외를_반환한다() {
         // given
         Long memberId = 1L;
-        String accessToken = jwtTokenProvider.builder()
-                .subject(String.valueOf(memberId))
-                .accessTokenExpireLength(0L)
-                .secretKey(tokenConfig.secretKey())
-                .build();
+        String accessToken = aesTokenProvider.createAccessToken(memberId, -1L,
+                tokenConfig.secretKey());
 
         // when, then
         assertThatThrownBy(() -> authService.validateAccessToken(accessToken)).isInstanceOf(
@@ -189,7 +183,7 @@ class AuthServiceTest {
 
         // when
         TokenResponse tokenResponse = oauthLoginFacade.oauthLogin(request);
-        Long memberId = Long.parseLong(authService.parseMemberId(tokenResponse.accessToken()));
+        Long memberId = authService.parseMemberId(tokenResponse.accessToken());
 
         // then
         SoftAssertions.assertSoftly(softly -> {
@@ -198,5 +192,4 @@ class AuthServiceTest {
             softly.assertThat(googleLoginMember.getId()).isNotEqualTo(memberId);
         });
     }
-
 }

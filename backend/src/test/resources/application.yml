@@ -34,6 +34,11 @@ jwt:
   guest-expire-length: 12345
   secret-key: test-secret-key-test-secret-key-test-secret-key-test-secret-key-test-secret-key-test-secret-key
 
+access-token:
+  expire-length: 12345
+  guest-expire-length: 12345
+  secret-key: 12345678901234567890123456789012
+
 refresh-token:
   expire-length: 12345
 
