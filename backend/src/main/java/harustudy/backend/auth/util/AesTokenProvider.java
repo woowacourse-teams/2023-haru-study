@@ -41,16 +41,6 @@ public class AesTokenProvider {
         return Base64.getEncoder().encodeToString(encrypted);
     }
 
-    public void validateAccessToken(String accessToken, String secretKey) {
-        try {
-            String[] splitted = decrypt(accessToken, secretKey);
-            validateLength(splitted);
-            validateExpiration(splitted);
-        } catch (Exception e) {
-            throw new InvalidAccessTokenException(e);
-        }
-    }
-
     public Long parseSubject(String accessToken, String secretKey) {
         try {
             String[] splitted = decrypt(accessToken, secretKey);

@@ -127,7 +127,7 @@ class AuthServiceTest {
                 tokenConfig.secretKey());
 
         // when, then
-        assertDoesNotThrow(() -> authService.validateAccessToken(accessToken));
+        assertDoesNotThrow(() -> authService.parseMemberId(accessToken));
     }
 
     @Test
@@ -138,7 +138,7 @@ class AuthServiceTest {
                 tokenConfig.secretKey());
 
         // when, then
-        assertThatThrownBy(() -> authService.validateAccessToken(accessToken)).isInstanceOf(
+        assertThatThrownBy(() -> authService.parseMemberId(accessToken)).isInstanceOf(
                 InvalidAccessTokenException.class);
     }
 

@@ -75,10 +75,6 @@ public class AuthService {
                 tokenConfig.refreshTokenExpireLength());
     }
 
-    public void validateAccessToken(String accessToken) {
-        aesTokenProvider.validateAccessToken(accessToken, tokenConfig.secretKey());
-    }
-
     public Long parseMemberId(String accessToken) {
         return aesTokenProvider.parseSubject(accessToken, tokenConfig.secretKey());
     }

@@ -46,7 +46,7 @@ class AesTokenProviderTest {
         String invalidAccessToken = "invalid-access-token";
 
         // when, then
-        assertThatThrownBy(() -> aesTokenProvider.validateAccessToken(invalidAccessToken,
+        assertThatThrownBy(() -> aesTokenProvider.parseSubject(invalidAccessToken,
                 tokenConfig.secretKey()))
                 .isInstanceOf(InvalidAccessTokenException.class);
     }
@@ -59,7 +59,7 @@ class AesTokenProviderTest {
                 tokenConfig.secretKey());
 
         // when, then
-        assertThatThrownBy(() -> aesTokenProvider.validateAccessToken(expiredAccessToken,
+        assertThatThrownBy(() -> aesTokenProvider.parseSubject(expiredAccessToken,
                 tokenConfig.secretKey()))
                 .isInstanceOf(InvalidAccessTokenException.class);
     }

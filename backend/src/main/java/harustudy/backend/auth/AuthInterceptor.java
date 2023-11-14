@@ -25,7 +25,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         String accessToken = bearerAuthorizationParser.parse(authorizationHeader);
-        authService.validateAccessToken(accessToken);
+        Long memberId = authService.parseMemberId(accessToken);
+        request.setAttribute("memberId", memberId);
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 }
