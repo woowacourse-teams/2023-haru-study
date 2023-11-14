@@ -20,25 +20,25 @@ public class AesTokenProvider {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMddHH:mm:ssyyyy");
 
     public String createAccessToken(Long subject, Long accessTokenExpireLength, String secretKey) {
-        try {
-            Date now = new Date();
-            Date expireAt = new Date(now.getTime() + accessTokenExpireLength);
-            String formatted = DATE_FORMAT.format(expireAt);
-            String text = subject + " " + formatted;
-            return encrypt(text, secretKey);
-        } catch (Exception e) {
-            throw new InvalidAccessTokenException(e);
-        }
+        Date now = new Date();
+        Date expireAt = new Date(now.getTime() + accessTokenExpireLength);
+        String formatted = DATE_FORMAT.format(expireAt);
+        String text = subject + " " + formatted;
+        return encrypt(text, secretKey);
     }
 
-    private String encrypt(String text, String secretKey) throws GeneralSecurityException {
-        Cipher cipher = Cipher.getInstance(alg);
-        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
-        IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());
-        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
+    private String encrypt(String text, String secretKey) {
+        try {
+            Cipher cipher = Cipher.getInstance(alg);
+            SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
+            IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());
+            cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec);
 
-        byte[] encrypted = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(encrypted);
+            byte[] encrypted = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
+            return Base64.getEncoder().encodeToString(encrypted);
+        } catch (GeneralSecurityException e) {
+            throw new InvalidAccessTokenException(e);
+        }
     }
 
     public Long parseSubject(String accessToken, String secretKey) {
