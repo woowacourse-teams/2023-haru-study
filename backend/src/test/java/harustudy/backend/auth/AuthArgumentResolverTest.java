@@ -34,13 +34,6 @@ class AuthArgumentResolverTest {
     @Mock
     private BearerAuthorizationParser bearerAuthorizationParser;
 
-    @Mock
-    private MethodParameter methodParameter;
-    @Mock
-    private ModelAndViewContainer modelAndViewContainer;
-    @Mock
-    private WebDataBinderFactory webDataBinderFactory;
-
     @Test
     void 액세스_토큰의_파싱된_아이디에_해당하는_인증_멤버가_반환된다() {
         // given
@@ -56,8 +49,7 @@ class AuthArgumentResolverTest {
                 .willReturn(mockedAuthMemberId);
 
         // when
-        AuthMember authMember = authArgumentResolver.resolveArgument(methodParameter,
-                modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
+        AuthMember authMember = authArgumentResolver.resolveArgument(null, null, nativeWebRequest, null);
 
         // then
         assertThat(authMember.id()).isEqualTo(Long.valueOf(mockedAuthMemberId));
