@@ -1,37 +1,29 @@
 package harustudy.backend.integration;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import harustudy.backend.auth.config.TokenConfig;
 import harustudy.backend.auth.domain.RefreshToken;
 import harustudy.backend.auth.domain.oauth.OauthClients;
-import harustudy.backend.auth.dto.OauthLoginRequest;
-import harustudy.backend.auth.dto.OauthTokenResponse;
-import harustudy.backend.auth.dto.TokenResponse;
 import harustudy.backend.auth.util.JwtTokenProvider;
 import harustudy.backend.member.domain.LoginType;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participantcode.domain.GenerationStrategy;
+import io.jsonwebtoken.Clock;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.Cookie;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
+import java.util.Date;
 
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -55,14 +47,23 @@ class IntegrationTest {
     @Autowired
     private TokenConfig tokenConfig;
 
-    @Autowired
-    protected GenerationStrategy generationStrategy;
-
     @MockBean
     protected OauthClients oauthClients;
 
+    @MockBean
+    protected Clock customClock;
+
+    @Autowired
+    protected GenerationStrategy generationStrategy;
+
+    @BeforeEach
+    void setUp() {
+        when(customClock.now()).thenReturn(new Date());
+    }
+
     protected MemberDto createMember(String name) {
         Member member = generateAndSaveMemberNamedWith(name);
+        when(customClock.now()).thenReturn(new Date());
         String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(member.getId()),
                 tokenConfig.accessTokenExpireLength(), tokenConfig.secretKey());
         RefreshToken refreshToken = generateAndSaveRefreshTokenOf(member);
