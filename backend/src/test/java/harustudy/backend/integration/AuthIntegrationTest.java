@@ -64,8 +64,6 @@ class AuthIntegrationTest extends IntegrationTest {
         // given
         MemberDto memberDto = createMember("member1");
 
-        // access token을 재발급 하더라도 Date는 초 단위의 시간 정보를 담은 액세스 토큰을 생성하기 때문에
-        // 같은 access token이 만들어지는 문제가 있어서 갱신된다는 것을 검증하기 위해 사용
         Date now = new Date();
         when(customClock.now()).thenReturn(new Date(now.getTime() + 1000L));
 
