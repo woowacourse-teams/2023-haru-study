@@ -59,7 +59,7 @@ public class AesTokenProvider {
             byte[] decrypted = cipher.doFinal(decodedBytes);
             String string = new String(decrypted, StandardCharsets.UTF_8);
             return string.split(" ");
-        } catch (GeneralSecurityException e) {
+        } catch (GeneralSecurityException | IllegalArgumentException e) {
             throw new InvalidAccessTokenException();
         }
     }
