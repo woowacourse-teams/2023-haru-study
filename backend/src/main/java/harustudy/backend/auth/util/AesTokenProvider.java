@@ -42,26 +42,26 @@ public class AesTokenProvider {
     }
 
     public Long parseSubject(String accessToken, String secretKey) {
-        try {
-            String[] splitted = decrypt(accessToken, secretKey);
-            validateLength(splitted);
-            validateExpiration(splitted);
-            return parseSubject(splitted);
-        } catch (Exception e) {
-            throw new InvalidAccessTokenException(e);
-        }
+        String[] splitted = decrypt(accessToken, secretKey);
+        validateLength(splitted);
+        validateExpiration(splitted);
+        return parseSubject(splitted);
     }
 
-    private String[] decrypt(String accessToken, String secretKey) throws GeneralSecurityException {
-        Cipher cipher = Cipher.getInstance(alg);
-        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
-        IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());
-        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParamSpec);
+    private String[] decrypt(String accessToken, String secretKey) {
+        try {
+            Cipher cipher = Cipher.getInstance(alg);
+            SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
+            IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());
+            cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParamSpec);
 
-        byte[] decodedBytes = Base64.getDecoder().decode(accessToken);
-        byte[] decrypted = cipher.doFinal(decodedBytes);
-        String string = new String(decrypted, StandardCharsets.UTF_8);
-        return string.split(" ");
+            byte[] decodedBytes = Base64.getDecoder().decode(accessToken);
+            byte[] decrypted = cipher.doFinal(decodedBytes);
+            String string = new String(decrypted, StandardCharsets.UTF_8);
+            return string.split(" ");
+        } catch (GeneralSecurityException e) {
+            throw new InvalidAccessTokenException();
+        }
     }
 
     private void validateLength(String[] splitted) {
@@ -70,9 +70,17 @@ public class AesTokenProvider {
         }
     }
 
-    private void validateExpiration(String[] splitted) throws ParseException {
-        Date expireAt = DATE_FORMAT.parse(splitted[1]);
+    private void validateExpiration(String[] splitted) {
+        Date expireAt = parseExpirationDate(splitted);
         if (expireAt.before(new Date())) {
+            throw new InvalidAccessTokenException();
+        }
+    }
+
+    private Date parseExpirationDate(String[] splitted) {
+        try {
+            return DATE_FORMAT.parse(splitted[1]);
+        } catch (ParseException e) {
             throw new InvalidAccessTokenException();
         }
     }
