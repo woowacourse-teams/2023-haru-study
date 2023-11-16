@@ -1,6 +1,5 @@
 package harustudy.backend.auth.util;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import harustudy.backend.auth.config.TokenConfig;
@@ -34,8 +33,8 @@ class AesTokenProviderTest {
 
         // then
         SoftAssertions.assertSoftly(softly -> {
-            assertThat(accessToken.length()).isGreaterThan(0);
-            assertThat(aesTokenProvider.parseSubject(accessToken, tokenConfig.secretKey()))
+            softly.assertThat(accessToken.length()).isGreaterThan(0);
+            softly.assertThat(aesTokenProvider.parseSubject(accessToken, tokenConfig.secretKey()))
                     .isEqualTo(memberId);
         });
     }
