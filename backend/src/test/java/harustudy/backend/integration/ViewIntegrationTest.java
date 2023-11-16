@@ -2,7 +2,7 @@ package harustudy.backend.integration;
 
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.study.domain.Study;
-import harustudy.backend.testutils.EntityManagerUtil;
+import harustudy.backend.testutils.EntityManagerUtils;
 import harustudy.backend.view.dto.StudyRecordsPageResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -24,17 +22,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
-public class ViewIntegrationTest extends IntegrationTest {
+class ViewIntegrationTest extends IntegrationTest {
 
     private MemberDto memberDto;
 
     @BeforeEach
     void setUp() {
-        super.setUp();
         memberDto = createMember("member");
         setUpWithNativeQuery();
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
     }
 
     private void setUpWithNativeQuery() {

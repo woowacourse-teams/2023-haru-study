@@ -10,14 +10,14 @@ import harustudy.backend.study.domain.Study;
 
 import java.util.Map;
 
-import harustudy.backend.testutils.EntityManagerUtil;
+import harustudy.backend.testutils.EntityManagerUtils;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
@@ -25,7 +25,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 class ContentRepositoryTest {
 
     @Autowired
-    private TestEntityManager testEntityManager;
+    private EntityManager entityManager;
 
     @Autowired
     private ContentRepository contentRepository;
@@ -38,11 +38,11 @@ class ContentRepositoryTest {
         Member member = new Member("member", "email", "imageUrl", LoginType.GUEST);
         participant = Participant.createParticipantOfStudy(study, member, "nickname");
 
-        testEntityManager.persist(study);
-        testEntityManager.persist(member);
-        testEntityManager.persist(participant);
+        entityManager.persist(study);
+        entityManager.persist(member);
+        entityManager.persist(participant);
 
-        EntityManagerUtil.flushAndClearContext(testEntityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
     }
 
     @Test
@@ -52,9 +52,9 @@ class ContentRepositoryTest {
                 "80%");
         Content content = new Content(participant, 1);
         content.changePlan(plan);
-        testEntityManager.persist(content);
+        entityManager.persist(content);
 
-        EntityManagerUtil.flushAndClearContext(testEntityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
 
         // when
         Content found = contentRepository.findById(content.getId())
@@ -75,9 +75,9 @@ class ContentRepositoryTest {
         Content content = new Content(participant, 1);
         content.changePlan(plan);
         content.changeRetrospect(retrospect);
-        testEntityManager.persist(content);
+        entityManager.persist(content);
 
-        EntityManagerUtil.flushAndClearContext(testEntityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
 
         // when
         Content found = contentRepository.findById(content.getId())

@@ -9,16 +9,13 @@ import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.study.domain.Study;
 import java.nio.charset.StandardCharsets;
 
-import harustudy.backend.testutils.EntityManagerUtil;
+import harustudy.backend.testutils.EntityManagerUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MvcResult;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(ReplaceUnderscores.class)
 class MemberIntegrationTest extends IntegrationTest {
 
     private Study study;
@@ -27,8 +24,6 @@ class MemberIntegrationTest extends IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        super.setUp();
-
         study = new Study("studyName", 1, 20);
 
         memberDto1 = createMember("member1");
@@ -42,7 +37,7 @@ class MemberIntegrationTest extends IntegrationTest {
         entityManager.persist(study);
         entityManager.persist(participant1);
         entityManager.persist(participant2);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
     }
 
     @Test

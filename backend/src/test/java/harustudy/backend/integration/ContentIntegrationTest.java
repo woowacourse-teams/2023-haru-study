@@ -17,18 +17,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
-import harustudy.backend.testutils.EntityManagerUtil;
+import harustudy.backend.testutils.EntityManagerUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-public class ContentIntegrationTest extends IntegrationTest {
+class ContentIntegrationTest extends IntegrationTest {
 
     private Study study;
     private MemberDto memberDto;
@@ -38,8 +35,6 @@ public class ContentIntegrationTest extends IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        super.setUp();
-
         study = new Study("studyName", 2, 20);
         memberDto = createMember("member1");
         participant = Participant.createParticipantOfStudy(study, memberDto.member(), "nickname");
@@ -49,7 +44,7 @@ public class ContentIntegrationTest extends IntegrationTest {
         entityManager.persist(participant);
         entityManager.persist(content);
 
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
     }
 
     @Test
@@ -61,7 +56,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         study.proceed();
         entityManager.merge(study);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
 
         // when, then
         mockMvc.perform(
@@ -82,7 +77,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         entityManager.merge(study);
         entityManager.merge(content);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
 
         WriteRetrospectRequest request = new WriteRetrospectRequest(participant.getId(),
                 Map.of("retrospect", "test"));
@@ -110,7 +105,7 @@ public class ContentIntegrationTest extends IntegrationTest {
 
         entityManager.merge(study);
         entityManager.merge(content);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
 
         // when
         MvcResult result = mockMvc.perform(
@@ -150,7 +145,7 @@ public class ContentIntegrationTest extends IntegrationTest {
         entityManager.merge(content);
         entityManager.merge(participant);
         entityManager.persist(anotherContent);
-        EntityManagerUtil.flushAndClearContext(entityManager);
+        EntityManagerUtils.flushAndClearContext(entityManager);
 
         // when
         MvcResult result = mockMvc.perform(
