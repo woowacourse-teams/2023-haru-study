@@ -3,6 +3,8 @@ package harustudy.backend.study.domain;
 import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
+import harustudy.backend.participant.exception.StudyStepException;
+import harustudy.backend.study.exception.StudyAlreadyStartedException;
 import harustudy.backend.study.exception.StudyNameLengthException;
 import harustudy.backend.study.exception.TimePerCycleException;
 import harustudy.backend.study.exception.TotalCycleException;
@@ -108,5 +110,23 @@ public class Study extends BaseTimeEntity {
 
     public void addParticipant(Participant participant) {
         participants.add(participant);
+    }
+
+    public void validateIsWaiting() {
+        if (!isStep(Step.WAITING)) {
+            throw new StudyAlreadyStartedException();
+        }
+    }
+
+    public void validateIsPlanning() {
+        if (!isStep(Step.PLANNING)) {
+            throw new StudyStepException();
+        }
+    }
+
+    public void validateIsRetrospect() {
+        if (!isStep(Step.RETROSPECT)) {
+            throw new StudyStepException();
+        }
     }
 }
