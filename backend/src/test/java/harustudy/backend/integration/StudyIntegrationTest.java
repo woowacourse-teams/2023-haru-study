@@ -208,8 +208,8 @@ class StudyIntegrationTest extends IntegrationTest {
         // then
         String location = result.getResponse().getHeader("Location");
         SoftAssertions.assertSoftly(softly -> {
-            Assertions.assertThat(location).isNotNull();
-            Assertions.assertThat(location.split("/")).hasSize(5);
+            softly.assertThat(location).isNotNull();
+            softly.assertThat(location.split("/")).hasSize(5);
         });
     }
 
