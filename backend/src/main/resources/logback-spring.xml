@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <springProfile name = "develop">
-    <property name="LOG_PATH" value="./backend/logs/develop"/>
-  </springProfile>
-
-  <springProfile name = "production">
-    <property name="LOG_PATH" value="./backend/logs/production"/>
-  </springProfile>
-
-  <springProfile name = "default">
-    <property name="LOG_PATH" value="./backend/logs/local"/>
-  </springProfile>
+  <property name="LOG_PATH" value="./logs"/>
 
   <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
   <property name="CONSOLE_LOG_PATTERN" value="%green(%d{yyyy-MM-dd HH:mm:ss.SSS, ${logback.timezone:-Asia/Seoul}}) %magenta([%thread]) %clr(%5level) %cyan(%logger) - %yellow(%msg%n)" />
