@@ -179,7 +179,7 @@ class AcceptanceTest {
         String locationHeader = result.getResponse().getHeader(HttpHeaders.LOCATION);
         String[] parsed = locationHeader.split("/");
 
-        return Long.parseLong(parsed[4]);
+        return Long.parseLong(parsed[parsed.length - 1]);
     }
 
     private Long 스터디에_참여한다(LoginResponse 로그인_정보, Long 스터디_아이디) throws Exception {
