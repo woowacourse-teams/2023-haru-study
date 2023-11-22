@@ -12,11 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-@SpringBootTest
 class BearerAuthorizationParserTest {
-
-    @Autowired
-    private BearerAuthorizationParser bearerAuthorizationParser;
 
     @Test
     void 인증_헤더에서_액세스_토큰을_파싱한다() {
@@ -26,7 +22,7 @@ class BearerAuthorizationParserTest {
         String authorizationHeader = tokenType + " " + accessToken;
 
         // when
-        String parsed = bearerAuthorizationParser.parse(authorizationHeader);
+        String parsed = BearerAuthorizationParser.parse(authorizationHeader);
 
         // then
         assertThat(parsed).isEqualTo(accessToken);
@@ -35,7 +31,7 @@ class BearerAuthorizationParserTest {
     @Test
     void 인증_헤더가_없으면_예외를_던진다() {
         // given, when, then
-        assertThatThrownBy(() -> bearerAuthorizationParser.parse(null))
+        assertThatThrownBy(() -> BearerAuthorizationParser.parse(null))
                 .isInstanceOf(InvalidAuthorizationHeaderException.class);
     }
 
@@ -47,7 +43,7 @@ class BearerAuthorizationParserTest {
         String authorizationHeader = tokenType + " " + email;
 
         // when, then
-        assertThatThrownBy(() -> bearerAuthorizationParser.parse(authorizationHeader))
+        assertThatThrownBy(() -> BearerAuthorizationParser.parse(authorizationHeader))
                 .isInstanceOf(InvalidAuthorizationHeaderException.class);
     }
 }
