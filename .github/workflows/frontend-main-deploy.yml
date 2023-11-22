@@ -14,6 +14,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.SUBMODULE_JAEHEE329 }}
+          submodules: true
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
