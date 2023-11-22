@@ -40,7 +40,7 @@ jobs:
           host: ${{ secrets.HOST_WAS1 }}
           key: ${{ secrets.PRIVATE_KEY_WAS1 }}
           script: |
-            sudo /home/ubuntu/deploy/deploy.sh
+            sudo /home/ubuntu/backend/deploy.sh
 
       - name: action-slack
         uses: 8398a7/action-slack@v3
