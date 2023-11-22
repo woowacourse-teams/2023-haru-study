@@ -7,9 +7,15 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 
 import harustudy.backend.auth.service.AuthService;
+import harustudy.backend.auth.util.BearerAuthorizationParser;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,14 +25,16 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class AuthInterceptorTest {
 
-    @Autowired
+    @InjectMocks
     private AuthInterceptor authInterceptor;
 
-    @MockBean
+    @Mock
     private AuthService authService;
+    @Spy
+    private BearerAuthorizationParser bearerAuthorizationParser = new BearerAuthorizationParser();
 
     @Test
     void preflight_요청시_예외를_던지지_않는다() {

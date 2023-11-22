@@ -1,6 +1,7 @@
 package harustudy.backend.auth.util;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
+
+    private final Clock clock;
 
     @Builder
     public String createAccessToken(String subject, Long accessTokenExpireLength, String secretKey) {
@@ -28,7 +31,7 @@ public class JwtTokenProvider {
     }
 
     private Claims generateClaims(String subject, Long accessTokenExpireLength) {
-        Date now = new Date();
+        Date now = clock.now();
         Date expiredAt = new Date(now.getTime() + accessTokenExpireLength);
 
         return Jwts.claims()
