@@ -27,18 +27,18 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           username: ubuntu
-          host: ${{ secrets.HOST1 }}
-          key: ${{ secrets.PRIVATE_KEY1 }}
+          host: ${{ secrets.HOST_WAS1 }}
+          key: ${{ secrets.PRIVATE_KEY_WAS1 }}
           source: "./backend/build/libs/*.jar"
-          target: "/home/ubuntu/deploy"
+          target: "/home/ubuntu/backend"
           strip_components: 3
 
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
           username: ubuntu
-          host: ${{ secrets.HOST1 }}
-          key: ${{ secrets.PRIVATE_KEY1 }}
+          host: ${{ secrets.HOST_WAS1 }}
+          key: ${{ secrets.PRIVATE_KEY_WAS1 }}
           script: |
             sudo /home/ubuntu/deploy/deploy.sh
 
