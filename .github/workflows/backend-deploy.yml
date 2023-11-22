@@ -1,4 +1,4 @@
-name: CD
+name: backend-deploy
 
 on:
   workflow_dispatch:

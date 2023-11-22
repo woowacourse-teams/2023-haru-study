@@ -1,4 +1,4 @@
-name: frontend-build-test
+name: frontend-main-deploy
 
 on:
   workflow_dispatch:
