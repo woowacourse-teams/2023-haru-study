@@ -38,7 +38,7 @@ jobs:
           username: ubuntu
           host: ${{ secrets.HOST_WS }}
           key: ${{ secrets.PRIVATE_KEY_WS }}
-          source: "./dist/*"
+          source: "./frontend/dist/*"
           target: "/home/ubuntu/frontend-production/html"
           strip_components: 1
 
@@ -48,7 +48,7 @@ jobs:
           username: ubuntu
           host: ${{ secrets.HOST_WS }}
           key: ${{ secrets.PRIVATE_KEY_WS }}
-          source: "./storybook-static/*"
+          source: "./frontend/storybook-static/*"
           target: "/home/ubuntu/frontend-production/storybook"
           strip_components: 1
 
