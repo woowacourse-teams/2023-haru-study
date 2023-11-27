@@ -11,15 +11,13 @@ export type Period = keyof typeof PERIOD;
 
 export type MemberRecordPeriodContextType = {
   period: Period;
-  startDate?: string;
-  endDate?: string;
+  startDate: Date | null;
+  endDate: Date | null;
   page: number;
   hasSelectedCustomPeriod: boolean;
   triggerSearchRecord: number;
-  isMiddleSelectedCustomDate: (date: Date) => boolean;
   updatePeriod: (period: Period) => void;
-  updateStartEndDate: (date: Date) => void;
-  updateHoverDays: (date: Date) => void;
+  updateStartEndDate: (startDate: Date | null, endDate: Date | null) => void;
   updatePage: (page: number) => void;
 };
 
@@ -34,7 +32,6 @@ const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
   }>();
 
   const [triggerSearchRecord, setTriggerSearchRecord] = useState(0);
-  const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
 
   const updatePeriod = (period: Period) => {
     const today = new Date();
@@ -73,74 +70,22 @@ const MemberRecordPeriodProvider = ({ children }: PropsWithChildren) => {
     setTriggerSearchRecord((prev) => prev + 1);
   };
 
-  const updateStartEndDate = (date: Date) => {
-    setHoveredDay(date);
-
-    let newStartDate: null | string = null;
-    let newEndDate: null | string = null;
-
-    if (!searchParams.start) newStartDate = format.date(new Date(date), '-');
-
-    if (searchParams.start && !searchParams.end && new Date(searchParams.start) > date) {
-      newStartDate = format.date(new Date(date), '-');
-      newEndDate = searchParams.start;
-    }
-
-    if (searchParams.start && !searchParams.end && new Date(searchParams.start) < date) {
-      newStartDate = searchParams.start;
-      newEndDate = format.date(new Date(date), '-');
-    }
-
-    if (searchParams.start && searchParams.end) newStartDate = format.date(new Date(date), '-');
-
+  const updateStartEndDate = (startDate: Date | null, endDate: Date | null) => {
     updateSearchParams({
-      start: newStartDate,
-      end: newEndDate,
+      start: startDate ? format.date(new Date(startDate), '-') : null,
+      end: endDate ? format.date(new Date(endDate), '-') : null,
     });
-  };
-
-  const isSoonSelectedDate = (date: Date) => {
-    if (!hoveredDay || !searchParams.start) return false;
-
-    const startDateObject = new Date(searchParams.start);
-
-    if (hoveredDay > startDateObject) {
-      if (startDateObject <= date && hoveredDay >= date) return true;
-
-      return false;
-    } else {
-      if (startDateObject >= date && hoveredDay <= date) return true;
-
-      return false;
-    }
-  };
-
-  const isIncludeSelectDate = (date: Date) => {
-    if (!searchParams.start || !searchParams.end) return false;
-
-    if (new Date(searchParams.start) < date && new Date(searchParams.end) >= date) return true;
-
-    return false;
-  };
-
-  const updateHoverDays = (date: Date) => {
-    if (!searchParams.start) return;
-    if (searchParams.start && searchParams.end) return;
-
-    setHoveredDay(date);
   };
 
   const value = {
     period: searchParams.period,
-    startDate: searchParams.start,
-    endDate: searchParams.end,
+    startDate: searchParams.start ? new Date(searchParams.start) : null,
+    endDate: searchParams.end ? new Date(searchParams.end) : null,
     page: searchParams.page ? Number(searchParams.page) : 1,
     hasSelectedCustomPeriod: !!searchParams.start || !!searchParams.end,
     triggerSearchRecord,
-    isMiddleSelectedCustomDate: (date: Date) => isSoonSelectedDate(date) || isIncludeSelectDate(date),
     updatePeriod,
     updateStartEndDate,
-    updateHoverDays,
     updatePage,
   };
   return <MemberRecordPeriodContext.Provider value={value}>{children}</MemberRecordPeriodContext.Provider>;

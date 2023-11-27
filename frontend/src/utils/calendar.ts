@@ -1,49 +1,40 @@
-import type { MonthStorage } from '@Types/record';
+import type { ReactElement } from 'react';
+
+export type CalendarStorage = {
+  day: number;
+  dayOfWeek: number;
+  date: Date;
+  state: 'prev' | 'next' | 'cur';
+  children?: ReactElement[];
+}[];
 
 const calendar = {
-  // year, month에 해당하는 요일을 담은 저장소 가져오기
-  getMonthStorage: (year: number, month: number) => {
-    const lastDatePrevMonth = calendar.getLastDatePrevMonth(year, month);
-    const firstDateNextMonth = calendar.getFirstDateNextMonth(year, month);
-    const firstDateCurrentMonth = calendar.getFirstDateCurrentMonth(year, month);
-    const lastDateCurrentMonth = calendar.getLastDateCurrentMonth(year, month);
-
-    const prevMonthStorage = calendar.getDatesPrevMonth(lastDatePrevMonth);
-    const nextMonthStorage = calendar.getDatesNextMonth(firstDateNextMonth);
-    const currentMonthStorage = calendar.getDatesCurrentMonth(firstDateCurrentMonth, lastDateCurrentMonth);
-
-    return [...prevMonthStorage, ...currentMonthStorage, ...nextMonthStorage];
+  getCalendarStorage: (year: number, month: number): CalendarStorage => {
+    return [
+      ...calendar.getPrevMonthLastWeekDays(year, month),
+      ...calendar.getCurMonthDays(year, month),
+      ...calendar.getNextMonthFirstWeekDays(year, month),
+    ];
   },
 
   getMonthFirstLastDate: (year: number, month: number) => {
-    const monthStorage = calendar.getMonthStorage(year, month);
+    const calendarStorage = calendar.getCalendarStorage(year, month);
 
-    return [monthStorage[0], monthStorage.at(-1)];
+    return [calendarStorage[0], calendarStorage.at(-1)];
   },
 
-  // 이전달의 마지막 날
-  getLastDatePrevMonth: (year: number, month: number) => new Date(year, month - 1, 0),
+  getPrevMonthLastWeekDays: (year: number, month: number): CalendarStorage => {
+    const prevMonthLastDateObject = new Date(year, month - 1, 0);
 
-  // 다음달의 첫번째 날
-  getFirstDateNextMonth: (year: number, month: number) => new Date(year, month, 1),
+    const prevYear = prevMonthLastDateObject.getFullYear(); // 이전 달의 년도
+    const prevMonth = prevMonthLastDateObject.getMonth(); // 이전 달
+    const prevLastDayOfWeek = prevMonthLastDateObject.getDay(); // 이전 달의 마지막 요일
+    const prevLastDay = prevMonthLastDateObject.getDate(); // 이전 달의 마지막 일
 
-  // 이번달의 첫번째 날
-  getFirstDateCurrentMonth: (year: number, month: number) => new Date(year, month - 1),
+    if (prevLastDayOfWeek === 6) return []; // 이전 달의 마지막 요일이 토요일인 경우
 
-  // 이번달의 마지막 날
-  getLastDateCurrentMonth: (year: number, month: number) => new Date(year, month, 0),
-
-  // 지난 달의 마지막 주 가져오기
-  getDatesPrevMonth: (lastDatePrevMonth: Date): MonthStorage => {
-    const lastDate = lastDatePrevMonth.getDate(); // 이전달의 마지막 일
-    const lastDay = lastDatePrevMonth.getDay(); // 이전달의 마지막 요일
-    const prevMonth = lastDatePrevMonth.getMonth(); // 이전 달
-    const prevYear = lastDatePrevMonth.getFullYear(); // 이전 년도
-
-    if (lastDay === 6) return []; // 이전 달의 마지막 요일이 토요일 경우
-
-    return Array.from({ length: lastDay + 1 }).map((_, index) => {
-      const day = lastDate - lastDay + index;
+    return Array.from({ length: prevLastDayOfWeek + 1 }).map((_, index) => {
+      const day = prevLastDay - prevLastDayOfWeek + index;
       const dayOfWeek = index;
 
       return {
@@ -55,38 +46,39 @@ const calendar = {
     });
   },
 
-  // 이번달 가져오기
-  getDatesCurrentMonth: (firstDateCurrentMonth: Date, lastDateCurrentMonth: Date): MonthStorage => {
-    const firstDay = firstDateCurrentMonth.getDay(); // 이번달의 첫번째 요일
-    const lastDate = lastDateCurrentMonth.getDate(); // 이번달의 마지막 일
-    const currentMonth = firstDateCurrentMonth.getMonth(); // 이번 달
-    const currentYear = firstDateCurrentMonth.getFullYear(); // 이번 년도
+  getCurMonthDays: (year: number, month: number): CalendarStorage => {
+    const curMonthFirstDateObject = new Date(year, month - 1); // 이번 달의 첫 번째 날
+    const curMonthLastDateObject = new Date(year, month, 0); // 이번 달의 마지막 날
 
-    return Array.from({ length: lastDate }).map((_, index) => {
-      const day = index + 1;
-      const dayOfWeek = (firstDay + index) % 7;
+    const curFirstDayOfWeek = curMonthFirstDateObject.getDay(); // 이번 달의 첫 번째 요일
+    const curLastDay = curMonthLastDateObject.getDate(); // 이번 달의 마지막 일
+
+    return Array.from({ length: curLastDay }).map((_, index) => {
+      const day = index + 1; // 일은 index에 1을 더한 값
+      const dayOfWeek = (curFirstDayOfWeek + index) % 7; // 첫 번째 요일과 index를 더한 값을 7로 나눈 값의 나머지
 
       return {
         day,
         dayOfWeek,
-        date: new Date(currentYear, currentMonth, day),
+        date: new Date(year, month - 1, day),
         state: 'cur',
       };
     });
   },
 
-  // 다음 달의 첫번째 주 가져오기
-  getDatesNextMonth: (firstDateNextMonth: Date): MonthStorage => {
-    const firstDate = firstDateNextMonth.getDate(); // 다음달의 첫번째 일
-    const firstDay = firstDateNextMonth.getDay(); // 다음달의 첫번째 요일
-    const nextMonth = firstDateNextMonth.getMonth(); // 다음 달
-    const nextYear = firstDateNextMonth.getFullYear(); // 다음 년도
+  getNextMonthFirstWeekDays: (year: number, month: number): CalendarStorage => {
+    const nextMonthFirstDateObject = new Date(year, month);
 
-    if (firstDay === 0) return []; // 다음 달의 첫번째 요일이 일요일 경우
+    const nextYear = nextMonthFirstDateObject.getFullYear(); // 다음 달의 년도
+    const nextMonth = nextMonthFirstDateObject.getMonth(); // 다음 달
+    const nextFirstDayOfWeek = nextMonthFirstDateObject.getDay(); // 다음 달의 마지막 요일
+    const nextFirstDay = nextMonthFirstDateObject.getDate(); // 다음 달의 마지막 일
 
-    return Array.from({ length: 7 - firstDay }).map((_, index) => {
-      const day = firstDate + index;
-      const dayOfWeek = firstDay + index;
+    if (nextFirstDayOfWeek === 0) return []; // 다음 달의 첫 번재 날이 일요일인 경우
+
+    return Array.from({ length: 7 - nextFirstDayOfWeek }).map((_, index) => {
+      const day = nextFirstDay + index;
+      const dayOfWeek = nextFirstDayOfWeek + index;
 
       return {
         day,

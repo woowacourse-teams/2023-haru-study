@@ -13,6 +13,8 @@ import { useNotification } from '@Contexts/NotificationProvider';
 
 import CalenderIcon from '@Assets/icons/CalenderIcon';
 
+import format from '@Utils/format';
+
 import type { Period } from '../../../contexts/MemberRecordPeriodProvider';
 import { useMemberRecordPeriod } from '../../../contexts/MemberRecordPeriodProvider';
 import PeriodSelectCalendar from '../PeriodSelectCalendar/PeriodSelectCalendar';
@@ -61,9 +63,9 @@ const PeriodSelectionBar = () => {
           <SelectedDate $hasSelectedCustomPeriod={hasSelectedCustomPeriod}>
             {hasSelectedCustomPeriod ? (
               <>
-                <div>{startDate && startDate}</div>
+                <div>{startDate && format.date(startDate, '-')}</div>
                 <div>~</div>
-                <div>{endDate && endDate}</div>
+                <div>{endDate && format.date(endDate, '-')}</div>
               </>
             ) : (
               '날짜를 선택해주세요.'

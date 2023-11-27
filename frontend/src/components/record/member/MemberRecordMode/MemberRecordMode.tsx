@@ -1,5 +1,5 @@
 import MemberRecordPeriodProvider from '../../contexts/MemberRecordPeriodProvider';
-import MemberRecordCalendar from '../calendar/MemberRecordCalendar/MemberRecordCalendar';
+import MemberRecordCalendar from '../MemberRecordCalendar/MemberRecordCalendar';
 import MemberRecordPeriod from '../period/MemberRecordPeriod/MemberRecordPeriod';
 
 type Props = {
