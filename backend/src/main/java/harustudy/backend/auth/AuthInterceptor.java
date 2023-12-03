@@ -15,7 +15,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class AuthInterceptor implements HandlerInterceptor {
 
     private final AuthService authService;
-    private final BearerAuthorizationParser bearerAuthorizationParser;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
@@ -24,7 +23,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String accessToken = bearerAuthorizationParser.parse(authorizationHeader);
+        String accessToken = BearerAuthorizationParser.parse(authorizationHeader);
         Long memberId = authService.parseMemberId(accessToken);
         request.setAttribute("memberId", memberId);
         return HandlerInterceptor.super.preHandle(request, response, handler);
