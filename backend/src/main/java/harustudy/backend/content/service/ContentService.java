@@ -1,6 +1,7 @@
 package harustudy.backend.content.service;
 
 import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.content.domain.Content;
 import harustudy.backend.content.dto.ContentResponse;
 import harustudy.backend.content.dto.ContentsResponse;
@@ -11,6 +12,7 @@ import harustudy.backend.content.repository.ContentRepository;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.member.repository.MemberRepository;
 import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.participant.exception.ParticipantNotFoundException;
 import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.repository.StudyRepository;
@@ -33,14 +35,33 @@ public class ContentService {
     @Transactional(readOnly = true)
     public ContentsResponse findContentsWithFilter(AuthMember authMember, Long studyId,
                                                    Long participantId, Integer cycle) {
-        Participant participant = participantRepository.findByIdIfExists(participantId);
         Study study = studyRepository.findByIdIfExists(studyId);
+        List<Participant> participants = participantRepository.findByStudy(study);
         Member member = memberRepository.findByIdIfExists(authMember.id());
 
-        participant.validateIsCreatedByMember(member);
-        participant.validateIsBelongsTo(study);
+        validateMemberIncludedIn(participants, member);
+        Participant participant = findParticipantById(participants, participantId);
 
         return getContentsResponseByCycleFilter(cycle, participant);
+    }
+
+    private static Participant findParticipantById(List<Participant> participants, Long participantId) {
+        return participants.stream()
+                .filter(participant -> participant.isSameId(participantId))
+                .findFirst()
+                .orElseThrow(ParticipantNotFoundException::new);
+    }
+
+    private List<Participant> validateMemberIncludedIn(List<Participant> participants, Member member) {
+        if (isMemberIncludedInParticipants(member, participants)) {
+            throw new AuthorizationException();
+        }
+        return participants;
+    }
+
+    private static boolean isMemberIncludedInParticipants(Member member, List<Participant> participants) {
+        return participants.stream()
+                .noneMatch(participant -> participant.isCreatedBy(member));
     }
 
     private ContentsResponse getContentsResponseByCycleFilter(Integer cycle, Participant participant) {
