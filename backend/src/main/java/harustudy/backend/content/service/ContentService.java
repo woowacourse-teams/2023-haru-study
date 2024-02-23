@@ -45,23 +45,22 @@ public class ContentService {
         return getContentsResponseByCycleFilter(cycle, participant);
     }
 
-    private static Participant findParticipantById(List<Participant> participants, Long participantId) {
+    private void validateMemberIncludedIn(List<Participant> participants, Member member) {
+        if (isMemberIncludedInParticipants(member, participants)) {
+            throw new AuthorizationException();
+        }
+    }
+
+    private boolean isMemberIncludedInParticipants(Member member, List<Participant> participants) {
+        return participants.stream()
+                .noneMatch(participant -> participant.isCreatedBy(member));
+    }
+
+    private Participant findParticipantById(List<Participant> participants, Long participantId) {
         return participants.stream()
                 .filter(participant -> participant.isSameId(participantId))
                 .findFirst()
                 .orElseThrow(ParticipantNotFoundException::new);
-    }
-
-    private List<Participant> validateMemberIncludedIn(List<Participant> participants, Member member) {
-        if (isMemberIncludedInParticipants(member, participants)) {
-            throw new AuthorizationException();
-        }
-        return participants;
-    }
-
-    private static boolean isMemberIncludedInParticipants(Member member, List<Participant> participants) {
-        return participants.stream()
-                .noneMatch(participant -> participant.isCreatedBy(member));
     }
 
     private ContentsResponse getContentsResponseByCycleFilter(Integer cycle, Participant participant) {
