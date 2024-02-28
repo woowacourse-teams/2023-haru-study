@@ -76,20 +76,20 @@ public class Participant extends BaseTimeEntity {
         }
     }
 
+    public boolean isSameId(Long id) {
+        return this.id.equals(id);
+    }
+
     public boolean isParticipantOf(Study study) {
         return this.study.getId().equals(study.getId());
     }
 
-    public boolean isNotCreatedBy(Member member) {
-        return !this.member.getId().equals(member.getId());
+    public boolean isCreatedBy(Member member) {
+        return this.member.getId().equals(member.getId());
     }
 
     public boolean hasSameNicknameWith(Participant participant) {
         return this.nickname.equals(participant.nickname);
-    }
-
-    public boolean isNotIncludedIn(Study other) {
-        return !study.getId().equals(other.getId());
     }
 
     public void validateIsHost() {
@@ -105,7 +105,7 @@ public class Participant extends BaseTimeEntity {
     }
 
     public void validateIsCreatedByMember(Member member) {
-        if (isNotCreatedBy(member)) {
+        if (!isCreatedBy(member)) {
             throw new AuthorizationException();
         }
     }
