@@ -46,12 +46,12 @@ public class ContentService {
     }
 
     private void validateMemberIncludedIn(List<Participant> participants, Member member) {
-        if (isMemberIncludedInParticipants(member, participants)) {
+        if (isMemberNotIncludedInParticipants(member, participants)) {
             throw new AuthorizationException();
         }
     }
 
-    private boolean isMemberIncludedInParticipants(Member member, List<Participant> participants) {
+    private boolean isMemberNotIncludedInParticipants(Member member, List<Participant> participants) {
         return participants.stream()
                 .noneMatch(participant -> participant.isCreatedBy(member));
     }
