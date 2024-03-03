@@ -58,6 +58,13 @@ public class AuthController {
         return ResponseEntity.ok(tokenResponse);
     }
 
+    private Cookie setUpRefreshTokenCookie(TokenResponse tokenResponse) {
+        Cookie cookie = new Cookie("refreshToken", tokenResponse.refreshToken().toString());
+        cookie.setMaxAge(refreshTokenExpireLength.intValue() / 1000);
+        cookie.setPath("/");
+        return cookie;
+    }
+
     private String extractRefreshTokenFromCookie(HttpServletRequest request) {
         return Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals("refreshToken"))
