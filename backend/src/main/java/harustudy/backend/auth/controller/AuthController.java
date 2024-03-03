@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,13 +55,6 @@ public class AuthController {
         Cookie cookie = setUpRefreshTokenCookie(tokenResponse);
         response.addCookie(cookie);
         return ResponseEntity.ok(tokenResponse);
-    }
-
-    private Cookie setUpRefreshTokenCookie(TokenResponse tokenResponse) {
-        Cookie cookie = new Cookie("refreshToken", tokenResponse.refreshToken().toString());
-        cookie.setMaxAge(refreshTokenExpireLength.intValue() / 1000);
-        cookie.setPath("/");
-        return cookie;
     }
 
     private String extractRefreshTokenFromCookie(HttpServletRequest request) {
