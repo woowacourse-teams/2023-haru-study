@@ -1,10 +1,9 @@
 package harustudy.backend.auth;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.times;
+import static org.mockito.BDDMockito.given;
 
 import harustudy.backend.auth.service.AuthService;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -49,16 +48,9 @@ class AuthInterceptorTest {
         Object handler = new Object();
         request.addHeader("Authorization", "Bearer access-token");
 
-        willDoNothing()
-                .given(authService)
-                .validateAccessToken(any(String.class));
+        given(authService.parseMemberId(any(String.class))).willReturn(1L);
 
-        // when
-        authInterceptor.preHandle(request, response, handler);
-
-        // then
-        then(authService)
-                .should(times(1))
-                .validateAccessToken(any(String.class));
+        // when, then
+        assertThat(authInterceptor.preHandle(request, response, handler)).isTrue();
     }
 }

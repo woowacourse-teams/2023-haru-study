@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public record TokenConfig(
-        @Value("${jwt.secret-key}") String secretKey,
-        @Value("${jwt.expire-length}") long accessTokenExpireLength,
-        @Value("${jwt.guest-expire-length}") long guestAccessTokenExpireLength,
+        @Value("${access-token.secret-key}") String secretKey,
+        @Value("${access-token.expire-length}") long accessTokenExpireLength,
+        @Value("${access-token.guest-expire-length}") long guestAccessTokenExpireLength,
         @Value("${refresh-token.expire-length}") long refreshTokenExpireLength) {
 
 }

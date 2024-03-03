@@ -23,9 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
-    @Value("${refresh-token.expire-length}")
-    private Long refreshTokenExpireLength;
-
     private final OauthLoginFacade oauthLoginFacade;
     private final AuthService authService;
 
@@ -76,6 +73,15 @@ public class AuthController {
                 .orElseThrow(RefreshTokenNotExistsException::new);
     }
 
+    private Cookie setUpRefreshTokenCookie(TokenResponse tokenResponse) {
+        Cookie cookie = new Cookie("refreshToken", tokenResponse.refreshToken().toString());
+        cookie.setMaxAge(tokenResponse.expireLength().intValue() / 1000);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        return cookie;
+    }
+
     @Operation(summary = "로그아웃, access & refresh 토큰 삭제")
     @PostMapping("/api/v2/auth/logout")
     public ResponseEntity<Void> logout(
@@ -84,7 +90,6 @@ public class AuthController {
     ) {
         String refreshToken = extractRefreshTokenFromCookie(request);
         authService.deleteStringifiedRefreshToken(refreshToken);
-
         deleteRefreshTokenFromCookie(request, response);
 
         return ResponseEntity.ok().build();
@@ -93,13 +98,20 @@ public class AuthController {
     private void deleteRefreshTokenFromCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("refreshToken")) {
-                    cookie.setPath("/");
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
-                }
-            }
+            deleteRefreshTokenIfPresent(response, cookies);
         }
+    }
+
+    private void deleteRefreshTokenIfPresent(HttpServletResponse response, Cookie[] cookies) {
+        Arrays.stream(cookies)
+                .filter(cookie -> cookie.getName().equals("refreshToken"))
+                .findFirst()
+                .ifPresent(cookie -> deleteCookie(response, cookie));
+    }
+
+    private void deleteCookie(HttpServletResponse response, Cookie cookie) {
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
     }
 }

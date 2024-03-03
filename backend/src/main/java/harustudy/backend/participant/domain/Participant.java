@@ -1,9 +1,12 @@
 package harustudy.backend.participant.domain;
 
+import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.content.domain.Content;
 import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.exception.NicknameLengthException;
+import harustudy.backend.participant.exception.ParticipantIsNotHostException;
+import harustudy.backend.participant.exception.ParticipantNotBelongToStudyException;
 import harustudy.backend.study.domain.Study;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -53,15 +56,15 @@ public class Participant extends BaseTimeEntity {
         this.isHost = isHost;
     }
 
-    public static Participant instantiateParticipantWithContents(Study study, Member member, String nickname) {
+    public static Participant createParticipantOfStudy(Study study, Member member, String nickname) {
         validateNicknameLength(nickname);
-        Participant participant = new Participant(study, member, nickname, study.isEmptyParticipants());
+        Participant participant = new Participant(study, member, nickname, study.hasEmptyParticipants());
         study.addParticipant(participant);
         return participant;
     }
 
     private static void validateNicknameLength(String nickname) {
-        if (nickname.length() < 1 || nickname.length() > 10) {
+        if (nickname.isEmpty() || nickname.length() > 10) {
             throw new NicknameLengthException();
         }
     }
@@ -73,11 +76,15 @@ public class Participant extends BaseTimeEntity {
         }
     }
 
+    public boolean isSameId(Long id) {
+        return this.id.equals(id);
+    }
+
     public boolean isParticipantOf(Study study) {
         return this.study.getId().equals(study.getId());
     }
 
-    public boolean isOwnedBy(Member member) {
+    public boolean isCreatedBy(Member member) {
         return this.member.getId().equals(member.getId());
     }
 
@@ -85,7 +92,21 @@ public class Participant extends BaseTimeEntity {
         return this.nickname.equals(participant.nickname);
     }
 
-    public boolean isNotIncludedIn(Study other) {
-        return !study.getId().equals(other.getId());
+    public void validateIsHost() {
+        if (!isHost) {
+            throw new ParticipantIsNotHostException();
+        }
+    }
+
+    public void validateIsBelongsTo(Study study) {
+        if (!this.study.getId().equals(study.getId())) {
+            throw new ParticipantNotBelongToStudyException();
+        }
+    }
+
+    public void validateIsCreatedByMember(Member member) {
+        if (!isCreatedBy(member)) {
+            throw new AuthorizationException();
+        }
     }
 }

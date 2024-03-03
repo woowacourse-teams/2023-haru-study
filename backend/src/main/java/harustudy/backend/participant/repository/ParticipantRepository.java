@@ -4,22 +4,13 @@ import harustudy.backend.member.domain.Member;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.exception.ParticipantNotFoundException;
 import harustudy.backend.study.domain.Study;
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
-    Optional<Participant> findByStudyAndMember(Study study,
-            Member member);
-
-    @Query("select p from Participant p join fetch p.member where p.study = :study")
-    List<Participant> findAllByStudyFetchMember(
-            @Param("study") Study study);
-
-    List<Participant> findByMember(Member member);
+    Optional<Participant> findByStudyAndMember(Study study, Member member);
 
     List<Participant> findByStudy(Study study);
 

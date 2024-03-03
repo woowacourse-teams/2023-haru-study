@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.auth.exception.AuthorizationException;
 import harustudy.backend.content.domain.Content;
 import harustudy.backend.content.dto.ContentResponse;
 import harustudy.backend.content.dto.ContentsResponse;
@@ -45,6 +46,7 @@ class ContentServiceTest {
 
     private Study study;
     private Member member;
+    private Member member2;
     private Participant participant;
     private Content content;
 
@@ -52,12 +54,13 @@ class ContentServiceTest {
     void setUp() {
         study = new Study("studyName", 1, 20);
         member = new Member("nickname", "email", "imageUrl", LoginType.GUEST);
-        participant = Participant.instantiateParticipantWithContents(study, member, "nickname");
-
+        member2 = new Member("nickname2", "email2", "imageUrl2", LoginType.GUEST);
+        participant = Participant.createParticipantOfStudy(study, member, "nickname");
         content = new Content(participant, 1);
 
         entityManager.persist(study);
         entityManager.persist(member);
+        entityManager.persist(member2);
         entityManager.persist(participant);
         entityManager.persist(content);
 
@@ -225,6 +228,26 @@ class ContentServiceTest {
     }
 
     @Test
+    void 스터디원은_같은_스터디_내_다른_멤버의_콘텐츠를_조회할_수_있다() {
+        // given
+        AuthMember authMember = new AuthMember(member.getId());
+        Participant participant2 = Participant.createParticipantOfStudy(study, member2, "nickname2");
+        Content contentOfMember2 = new Content(participant2, 1);
+
+        entityManager.persist(participant2);
+        entityManager.persist(contentOfMember2);
+
+        EntityManagerUtil.flushAndClearContext(entityManager);
+
+        // when
+        ContentsResponse contentsWithFilter = contentService.findContentsWithFilter(authMember,
+                study.getId(), participant2.getId(), null);
+
+        // then
+        assertThat(contentsWithFilter.content().size()).isEqualTo(1);
+    }
+
+    @Test
     void 스터디에_참여한_특정_스터디원의_콘텐츠를_조회시_스터디가_없으면_예외를_던진다() {
         // given
         AuthMember authMember = new AuthMember(member.getId());
@@ -246,5 +269,15 @@ class ContentServiceTest {
                 () -> contentService.findContentsWithFilter(authMember,
                         study.getId(), 999L, null))
                 .isInstanceOf(ParticipantNotFoundException.class);
+    }
+
+    @Test
+    void 같은_스터디에_참여하지_않은_멤버가_다른_스터디_멤버의_콘텐츠를_조회하면_예외를_던진다() {
+        // given
+        AuthMember authMember = new AuthMember(member2.getId());
+
+        // when, then
+        assertThatThrownBy(() -> contentService.findContentsWithFilter(authMember,
+                study.getId(), participant.getId(), null)).isInstanceOf(AuthorizationException.class);
     }
 }

@@ -7,7 +7,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,26 +45,5 @@ public class Member extends BaseTimeEntity {
         this.email = email;
         this.imageUrl = imageUrl;
         return this;
-    }
-
-    public boolean isDifferentMember(Member other) {
-        return !this.equals(other);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (other == null || getClass() != other.getClass()) {
-            return false;
-        }
-        Member otherMember = (Member) other;
-        return getId().equals(otherMember.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 }

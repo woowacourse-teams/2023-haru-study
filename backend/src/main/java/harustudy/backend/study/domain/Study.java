@@ -3,6 +3,8 @@ package harustudy.backend.study.domain;
 import harustudy.backend.common.BaseTimeEntity;
 import harustudy.backend.participant.domain.Participant;
 import harustudy.backend.participant.domain.Step;
+import harustudy.backend.participant.exception.StudyStepException;
+import harustudy.backend.study.exception.StudyAlreadyStartedException;
 import harustudy.backend.study.exception.StudyNameLengthException;
 import harustudy.backend.study.exception.TimePerCycleException;
 import harustudy.backend.study.exception.TotalCycleException;
@@ -52,8 +54,7 @@ public class Study extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private Step step;
 
-    public Study(@NotNull String name, @NotNull Integer totalCycle,
-                 @NotNull Integer timePerCycle) {
+    public Study(String name, Integer totalCycle, Integer timePerCycle) {
         validate(name, totalCycle, timePerCycle);
         this.totalCycle = totalCycle;
         this.timePerCycle = timePerCycle;
@@ -103,11 +104,29 @@ public class Study extends BaseTimeEntity {
         return this.step == step;
     }
 
-    public boolean isEmptyParticipants() {
+    public boolean hasEmptyParticipants() {
         return participants.isEmpty();
     }
 
     public void addParticipant(Participant participant) {
         participants.add(participant);
+    }
+
+    public void validateIsWaiting() {
+        if (!isStep(Step.WAITING)) {
+            throw new StudyAlreadyStartedException();
+        }
+    }
+
+    public void validateIsPlanning() {
+        if (!isStep(Step.PLANNING)) {
+            throw new StudyStepException();
+        }
+    }
+
+    public void validateIsRetrospect() {
+        if (!isStep(Step.RETROSPECT)) {
+            throw new StudyStepException();
+        }
     }
 }

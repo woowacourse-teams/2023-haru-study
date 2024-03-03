@@ -1,12 +1,18 @@
 package harustudy.backend.study.service;
 
 import harustudy.backend.auth.dto.AuthMember;
+import harustudy.backend.member.domain.Member;
+import harustudy.backend.member.repository.MemberRepository;
+import harustudy.backend.participant.domain.Participant;
+import harustudy.backend.participant.exception.ParticipantNotFoundException;
+import harustudy.backend.participant.repository.ParticipantRepository;
 import harustudy.backend.participantcode.domain.GenerationStrategy;
 import harustudy.backend.participantcode.domain.ParticipantCode;
 import harustudy.backend.participantcode.repository.ParticipantCodeRepository;
 import harustudy.backend.study.domain.Study;
 import harustudy.backend.study.dto.CreateStudyRequest;
 import harustudy.backend.study.dto.StudiesResponse;
+import harustudy.backend.study.dto.StudyFilterRequest;
 import harustudy.backend.study.dto.StudyResponse;
 import harustudy.backend.study.exception.ParticipantCodeNotFoundException;
 import harustudy.backend.study.exception.StudyNotFoundException;
@@ -23,29 +29,35 @@ import java.util.Objects;
 @Service
 public class StudyService {
 
+    private final MemberRepository memberRepository;
+    private final ParticipantRepository participantRepository;
     private final StudyRepository studyRepository;
     private final GenerationStrategy generationStrategy;
     private final ParticipantCodeRepository participantCodeRepository;
 
     @Transactional(readOnly = true)
     public StudyResponse findStudy(Long studyId) {
-        return StudyResponse.from(studyRepository.findById(studyId)
-                .orElseThrow(StudyNotFoundException::new));
+        Study study = studyRepository.findById(studyId)
+                .orElseThrow(StudyNotFoundException::new);
+        return StudyResponse.from(study);
     }
 
     @Transactional(readOnly = true)
-    public StudiesResponse findStudyWithFilter(Long memberId, String code) {
-        if (Objects.nonNull(code)) {
-            ParticipantCode participantCode = participantCodeRepository.findByCode(code)
-                    .orElseThrow(ParticipantCodeNotFoundException::new);
-            Study study = participantCode.getStudy();
-            return StudiesResponse.from(List.of(study));
+    public StudiesResponse findStudyWithFilter(StudyFilterRequest request) {
+        if (Objects.nonNull(request.participantCode())) {
+            return findStudyByParticipantCode(request);
         }
-        if (Objects.nonNull(memberId)) {
-            return findStudyByMemberId(memberId);
+        if (Objects.nonNull(request.memberId())) {
+            return findStudyByMemberId(request.memberId());
         }
+        return findAllStudies();
+    }
 
-        return StudiesResponse.from(studyRepository.findAll());
+    private StudiesResponse findStudyByParticipantCode(StudyFilterRequest request) {
+        ParticipantCode participantCode = participantCodeRepository.findByCode(request.participantCode())
+                .orElseThrow(ParticipantCodeNotFoundException::new);
+        Study study = participantCode.getStudy();
+        return StudiesResponse.from(List.of(study));
     }
 
     private StudiesResponse findStudyByMemberId(Long memberId) {
@@ -53,13 +65,17 @@ public class StudyService {
         return StudiesResponse.from(studies);
     }
 
-    public Long createStudy(CreateStudyRequest request) {
-        Study study = new Study(request.name(), request.totalCycle(),
-                request.timePerCycle());
-        Study savedStudy = studyRepository.save(study);
-        participantCodeRepository.save(generateUniqueCode(savedStudy));
+    private StudiesResponse findAllStudies() {
+        List<Study> studies = studyRepository.findAll();
+        return StudiesResponse.from(studies);
+    }
 
-        return savedStudy.getId();
+    public Long createStudy(CreateStudyRequest request) {
+        Study study = new Study(request.name(), request.totalCycle(), request.timePerCycle());
+        studyRepository.save(study);
+        participantCodeRepository.save(generateUniqueCode(study));
+
+        return study.getId();
     }
 
     private ParticipantCode generateUniqueCode(Study study) {
@@ -82,6 +98,10 @@ public class StudyService {
     }
 
     private void validateIsHost(AuthMember authMember, Study study) {
-        // TODO: 방장인지 확인 로직 추가
+        Member member = memberRepository.findByIdIfExists(authMember.id());
+        Participant participant = participantRepository.findByStudyAndMember(study, member)
+                .orElseThrow(ParticipantNotFoundException::new);
+
+        participant.validateIsHost();
     }
 }

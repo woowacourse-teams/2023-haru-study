@@ -29,7 +29,7 @@ class ParticipantTest {
     @ValueSource(strings = {"", "12345678901"})
     void 멤버의_닉네임이_1자_미만_10자_초과이면_예외를_던진다(String nickname) {
         // given, when, then
-        assertThatThrownBy(() -> Participant.instantiateParticipantWithContents(study, member, nickname))
+        assertThatThrownBy(() -> Participant.createParticipantOfStudy(study, member, nickname))
                 .isInstanceOf(NicknameLengthException.class);
     }
 
@@ -37,15 +37,15 @@ class ParticipantTest {
     @ValueSource(strings = {"1", "1234567890"})
     void 멤버의_닉네임이_1자_이상_10자_이하이면_정상_케이스이다(String nickname) {
         // given, when, then
-        assertThatCode(() -> Participant.instantiateParticipantWithContents(study, member, nickname))
+        assertThatCode(() -> Participant.createParticipantOfStudy(study, member, nickname))
                 .doesNotThrowAnyException();
     }
 
     @Test
     void 닉네임이_동일한지_확인할_수_있다() {
         // given
-        Participant participant = Participant.instantiateParticipantWithContents(study, member, "nickname");
-        Participant otherParticipant = Participant.instantiateParticipantWithContents(study, member, "nickname");
+        Participant participant = Participant.createParticipantOfStudy(study, member, "nickname");
+        Participant otherParticipant = Participant.createParticipantOfStudy(study, member, "nickname");
 
         // when, then
         assertThat(participant.hasSameNicknameWith(otherParticipant)).isTrue();
@@ -54,8 +54,8 @@ class ParticipantTest {
     @Test
     void 닉네임이_다른지_확인할_수_있다() {
         // given
-        Participant participant = Participant.instantiateParticipantWithContents(study, member, "nickname");
-        Participant otherParticipant = Participant.instantiateParticipantWithContents(study, member, "another");
+        Participant participant = Participant.createParticipantOfStudy(study, member, "nickname");
+        Participant otherParticipant = Participant.createParticipantOfStudy(study, member, "another");
 
         // when, then
         assertThat(participant.hasSameNicknameWith(otherParticipant)).isFalse();
@@ -64,7 +64,7 @@ class ParticipantTest {
     @Test
     void 스터디에_참여하면_스터디의_참여_인원이_증가한다() {
         // given, when
-        Participant participant = Participant.instantiateParticipantWithContents(study, member, "nickname");
+        Participant participant = Participant.createParticipantOfStudy(study, member, "nickname");
 
         // then
         assertThat(participant.getStudy().getParticipants()).hasSize(1);
@@ -73,7 +73,7 @@ class ParticipantTest {
     @Test
     void 스터디에_첫_번째로_참여하면_방장이다() {
         // given, when
-        Participant host = Participant.instantiateParticipantWithContents(study, member, "host");
+        Participant host = Participant.createParticipantOfStudy(study, member, "host");
 
         // then
         assertThat(host.getIsHost()).isTrue();
@@ -82,8 +82,8 @@ class ParticipantTest {
     @Test
     void 스터디에_첫_번째_이후로_참여하면_방장이_아니다() {
         // given, when
-        Participant.instantiateParticipantWithContents(study, member, "host");
-        Participant participant = Participant.instantiateParticipantWithContents(study, member, "parti");
+        Participant.createParticipantOfStudy(study, member, "host");
+        Participant participant = Participant.createParticipantOfStudy(study, member, "parti");
 
         // then
         assertThat(participant.getIsHost()).isFalse();
