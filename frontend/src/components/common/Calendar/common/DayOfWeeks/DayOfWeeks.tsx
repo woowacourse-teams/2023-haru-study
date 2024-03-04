@@ -14,7 +14,7 @@ const DAY_COLOR = {
 
 const DAY_OF_WEEKS = ['일', '월', '화', '수', '목', '금', '토'] as const;
 
-const CalendarDayOfWeeks = ({ position = 'left' }: { position?: 'left' | 'center' }) => {
+const DayOfWeeks = ({ position = 'left' }: { position?: 'left' | 'center' }) => {
   return (
     <Layout>
       {DAY_OF_WEEKS.map((dayOfWeek) => (
@@ -26,7 +26,7 @@ const CalendarDayOfWeeks = ({ position = 'left' }: { position?: 'left' | 'center
   );
 };
 
-export default CalendarDayOfWeeks;
+export default DayOfWeeks;
 
 const Layout = styled.ul`
   display: flex;

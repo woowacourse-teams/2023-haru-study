@@ -9,39 +9,17 @@ import color from '@Styles/color';
 
 import ArrowIcon from '@Assets/icons/ArrowIcon';
 
-type Props = {
-  year: number;
-  month: number;
-  navigationYear: number;
-  handleMonthShift: (type: 'next' | 'prev' | 'today') => void;
-  handleNavigationYear: (type: 'next' | 'prev') => void;
-  handleNavigationMonth: (month: number) => void;
-  updateMonth: (type: 'next' | 'prev' | 'today') => void;
-  updateDate: (year: number, month: number) => void;
-};
+import { useCalendar } from '../CalendarContext/CalendarProvider';
 
-const MemberRecordCalendarControlBar = ({
-  year,
-  month,
-  navigationYear,
-  handleMonthShift,
-  handleNavigationYear,
-  handleNavigationMonth,
-  updateMonth,
-  updateDate,
-}: Props) => {
+const ControlBar = () => {
+  const { year, month, navigationYear, navigate, navigateYear, shiftMonth } = useCalendar();
+
   const [isOpenCalendarNavigation, setIsOpenCalendarNavigation] = useState(false);
 
   const ref = useOutsideClick<HTMLDivElement>(() => setIsOpenCalendarNavigation(false));
 
-  const handleClickMonthShiftButton = (type: 'prev' | 'next' | 'today') => {
-    handleMonthShift(type);
-    updateMonth(type);
-  };
-
   const handleClickMonthNavigation = (month: number) => {
-    handleNavigationMonth(month);
-    updateDate(navigationYear, month);
+    navigate(navigationYear, month);
     setIsOpenCalendarNavigation(false);
   };
 
@@ -52,21 +30,21 @@ const MemberRecordCalendarControlBar = ({
         <ArrowIcon direction="down" />
       </Typography>
       <MonthShiftButtonContainer>
-        <MonthShiftButton onClick={() => handleClickMonthShiftButton('prev')}>
+        <MonthShiftButton onClick={() => shiftMonth('prev')}>
           <ArrowIcon direction="left" />
         </MonthShiftButton>
-        <MonthShiftButton onClick={() => handleClickMonthShiftButton('next')}>
+        <MonthShiftButton onClick={() => shiftMonth('next')}>
           <ArrowIcon direction="right" />
         </MonthShiftButton>
-        <ShiftTodayButton onClick={() => handleClickMonthShiftButton('today')}>오늘</ShiftTodayButton>
+        <ShiftTodayButton onClick={() => shiftMonth('today')}>오늘</ShiftTodayButton>
       </MonthShiftButtonContainer>
       {isOpenCalendarNavigation && (
         <CalendarNavigation>
           <YearNavigation>
             <div>{navigationYear}</div>
             <YearNavigationButton>
-              <ArrowIcon direction="left" onClick={() => handleNavigationYear('prev')} />
-              <ArrowIcon direction="right" onClick={() => handleNavigationYear('next')} />
+              <ArrowIcon direction="left" onClick={() => navigateYear(navigationYear - 1)} />
+              <ArrowIcon direction="right" onClick={() => navigateYear(navigationYear + 1)} />
             </YearNavigationButton>
           </YearNavigation>
           <MonthNavigation>
@@ -86,7 +64,7 @@ const MemberRecordCalendarControlBar = ({
   );
 };
 
-export default MemberRecordCalendarControlBar;
+export default ControlBar;
 
 const Layout = styled.div`
   position: relative;

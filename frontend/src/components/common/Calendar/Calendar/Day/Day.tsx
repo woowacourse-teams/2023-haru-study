@@ -4,15 +4,15 @@ import { css, styled } from 'styled-components';
 import color from '@Styles/color';
 
 type Props = {
-  hasStudy?: boolean;
+  hasClick?: boolean;
   isToday: boolean;
   isCurrentMonthDay: boolean;
   dayOfWeek: number;
 } & ComponentPropsWithoutRef<'div'>;
 
-const CalendarDay = ({
+const Day = ({
   children,
-  hasStudy = false,
+  hasClick = false,
   isToday,
   isCurrentMonthDay,
   dayOfWeek,
@@ -27,28 +27,28 @@ const CalendarDay = ({
   };
 
   return (
-    <Day
-      $hasStudy={hasStudy}
+    <DayContainer
+      $hasClick={hasClick}
       $isToday={isToday}
       $isCurrentMonthDay={isCurrentMonthDay}
       $fontColor={getDayFontColor(dayOfWeek)}
       {...rest}
     >
       {children}
-    </Day>
+    </DayContainer>
   );
 };
 
-export default CalendarDay;
+export default Day;
 
 type DayProps = {
   $isToday: boolean;
-  $hasStudy: boolean;
+  $hasClick: boolean;
   $isCurrentMonthDay: boolean;
   $fontColor: string;
 };
 
-const Day = styled.div<DayProps>`
+const DayContainer = styled.div<DayProps>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,11 +58,11 @@ const Day = styled.div<DayProps>`
   width: 30px;
   height: 30px;
 
-  ${({ $isToday, $hasStudy, $isCurrentMonthDay, $fontColor }) => css`
+  ${({ $isToday, $hasClick, $isCurrentMonthDay, $fontColor }) => css`
     background-color: ${$isToday && color.neutral[100]};
     opacity: ${$isCurrentMonthDay ? 1 : 0.4};
     color: ${$fontColor};
-    cursor: ${$hasStudy && 'pointer'};
+    cursor: ${$hasClick && 'pointer'};
   `}
 
   @media screen and (max-width: 360px) {

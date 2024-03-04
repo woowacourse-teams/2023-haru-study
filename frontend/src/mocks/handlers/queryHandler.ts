@@ -9,6 +9,7 @@ import {
   ACCESS_TOKEN,
   NEW_ACCESS_TOKEN,
   STUDY_LIST_10,
+  STUDY_LIST_11,
   STUDY_LIST_8,
   STUDY_LIST_9,
   STUDY_LIST_ALL,
@@ -96,22 +97,13 @@ export const queryHandler = [
     const startDate = 'startDate' in searchParams ? searchParams.startDate : null;
 
     const studyList =
-      startDate === '2023-07-30' ? STUDY_LIST_8 : startDate === '2023-08-27' ? STUDY_LIST_9 : STUDY_LIST_10;
-
-    setTimeout(() => {
-      const addDate =
-        startDate === '2023-07-30' ? '2023-08-18' : startDate === '2023-08-27' ? '2023-09-03' : '2023-10-10';
-
-      studyList.studyRecords[addDate] = Array.from({ length: 2 }).map((_, index) => {
-        return {
-          studyId: String(index),
-          name: `안오면 지상렬${index + 1} 8월`,
-          totalCycle: Math.floor(Math.random() * 8) + 1,
-          timePerCycle: (Math.floor(Math.random() * (12 - 1 + 1)) + 1) * 5,
-          createdDate: '2023-08-16T13:33:02.810Z',
-        };
-      });
-    }, 3000);
+      startDate === '2023-07-30'
+        ? STUDY_LIST_8
+        : startDate === '2023-08-27'
+        ? STUDY_LIST_9
+        : startDate === '2023-10-01'
+        ? STUDY_LIST_10
+        : STUDY_LIST_11;
 
     if (requestAuthToken === NEW_ACCESS_TOKEN) return res(ctx.status(200), ctx.json(studyList), ctx.delay(150));
 

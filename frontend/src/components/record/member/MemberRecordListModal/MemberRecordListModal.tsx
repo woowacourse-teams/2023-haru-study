@@ -7,7 +7,7 @@ import { useModal } from '@Contexts/ModalProvider';
 
 import type { StudyInfo } from '@Types/study';
 
-import MemberRecordItem from '../../MemberRecordItem/MemberRecordItem';
+import MemberRecordItem from '../MemberRecordItem/MemberRecordItem';
 
 type Props = {
   fullDate: string;
