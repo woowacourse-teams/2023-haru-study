@@ -5,8 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import harustudy.backend.auth.exception.InvalidAccessTokenException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 public class AccessTokenUtils {
 
@@ -47,11 +48,12 @@ public class AccessTokenUtils {
     }
 
     @Getter
-    @RequiredArgsConstructor
+    @NoArgsConstructor
+    @AllArgsConstructor
     private static class RawToken {
 
-        private final Long subject;
+        private Long subject;
 
-        private final Date expireAt;
+        private Date expireAt;
     }
 }
